@@ -5,21 +5,40 @@
 
 {% if this.body %}{{ this.body }}{% endif %}
 
-{# Handles both roles:
-   - At /elements/ — children are prematter_index and toc; we
-     inline each group's listings.
-   - At /elements/books/ — children are books directly.
+{# Books are no longer direct children of their definitions, etc.
+   Each book has child section_index records (definitions, postulates,
+   commonnotions, propositions), and the leaf records hang under
+   those. This macro counts a book's leaves by walking through its
+   section index of the given model. #}
+{% macro count_for(book, child_model) -%}
+  {%- set sections = book.children.filter(F._model == "section_index") -%}
+  {%- set section = sections.filter(F.child_model == child_model).first() -%}
+  {{- section.children.count() if section else 0 -}}
+{%- endmacro %}
 
-   Iterating by explicit model order keeps Prematter ahead of Books
-   (matches the original site's order: background material first). #}
+{% macro book_entry(b) %}
+  {% set d_count = count_for(b, "definition")|int   %}
+  {% set p_count = count_for(b, "postulate")|int    %}
+  {% set c_count = count_for(b, "commonnotion")|int %}
+  {% set q_count = count_for(b, "proposition")|int  %}
+  <dl>
+    <dt><b><a href="{{ b|url }}">{{ b.title }}</a>.</b>
+      {%- if b.short_description %} {{ b.short_description }}{% endif %}
+    </dt>
+    {% if d_count %}<dd><a href="{{ b|url }}#defs">Definitions</a> ({{ d_count }})</dd>{% endif %}
+    {% if p_count %}<dd><a href="{{ b|url }}#posts">Postulates</a> ({{ p_count }})</dd>{% endif %}
+    {% if c_count %}<dd><a href="{{ b|url }}#cns">Common Notions</a> ({{ c_count }})</dd>{% endif %}
+    {% if q_count %}<dd><a href="{{ b|url }}#props">Propositions</a> ({{ q_count }})</dd>{% endif %}
+  </dl>
+{% endmacro %}
 
+{# Explicit-order child grouping: Prematter first, then Books. #}
 {% set prematter_groups = this.children.filter(F._model == "prematter_index") %}
 {% set toc_groups       = this.children.filter(F._model == "toc")             %}
 {% set direct_books     = this.children.filter(F._model == "book")            %}
 
-{# 1. Prematter groups (only present at /elements/) #}
+{# 1. Prematter (only at /elements/) #}
 {% for c in prematter_groups %}
-  <hr size="4">
   <h2><a href="{{ c|url }}">{{ c.title }}</a></h2>
   {% set pages = c.children.filter(F._model == "prematter") %}
   <ul>
@@ -29,42 +48,17 @@
   </ul>
 {% endfor %}
 
-{# 2. Books-index groups (only present at /elements/, child = /books/) #}
+{# 2. Books index (only at /elements/) #}
 {% for c in toc_groups %}
-  <hr size="4">
   <h2><a href="{{ c|url }}">{{ c.title }}</a></h2>
   {% for b in c.children.filter(F._model == "book") %}
-    {% set defs   = b.children.filter(F._model == "definition")   %}
-    {% set posts  = b.children.filter(F._model == "postulate")    %}
-    {% set cns    = b.children.filter(F._model == "commonnotion") %}
-    {% set props  = b.children.filter(F._model == "proposition")  %}
-    <dl>
-      <dt><b><a href="{{ b|url }}">{{ b.title }}</a>.</b>
-        {%- if b.short_description %} {{ b.short_description }}{% endif %}
-      </dt>
-      {% if defs.count() %}<dd><a href="{{ b|url }}#defs">Definitions</a> ({{ defs.count() }})</dd>{% endif %}
-      {% if posts.count() %}<dd><a href="{{ b|url }}#posts">Postulates</a> ({{ posts.count() }})</dd>{% endif %}
-      {% if cns.count() %}<dd><a href="{{ b|url }}#cns">Common Notions</a> ({{ cns.count() }})</dd>{% endif %}
-      {% if props.count() %}<dd><a href="{{ b|url }}#props">Propositions</a> ({{ props.count() }})</dd>{% endif %}
-    </dl>
+    {{ book_entry(b) }}
   {% endfor %}
 {% endfor %}
 
-{# 3. Direct book children (only at /elements/books/) #}
+{# 3. Direct book children (at /elements/books/) #}
 {% for b in direct_books %}
-  {% set defs   = b.children.filter(F._model == "definition")   %}
-  {% set posts  = b.children.filter(F._model == "postulate")    %}
-  {% set cns    = b.children.filter(F._model == "commonnotion") %}
-  {% set props  = b.children.filter(F._model == "proposition")  %}
-  <dl>
-    <dt><b><a href="{{ b|url }}">{{ b.title }}</a>.</b>
-      {%- if b.short_description %} {{ b.short_description }}{% endif %}
-    </dt>
-    {% if defs.count() %}<dd><a href="{{ b|url }}#defs">Definitions</a> ({{ defs.count() }})</dd>{% endif %}
-    {% if posts.count() %}<dd><a href="{{ b|url }}#posts">Postulates</a> ({{ posts.count() }})</dd>{% endif %}
-    {% if cns.count() %}<dd><a href="{{ b|url }}#cns">Common Notions</a> ({{ cns.count() }})</dd>{% endif %}
-    {% if props.count() %}<dd><a href="{{ b|url }}#props">Propositions</a> ({{ props.count() }})</dd>{% endif %}
-  </dl>
+  {{ book_entry(b) }}
 {% endfor %}
 
 {% endblock %}

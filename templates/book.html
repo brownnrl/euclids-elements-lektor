@@ -1,29 +1,36 @@
 {% extends "layout.html" %}
 {% block content %}
 
-{% set defs   = this.children.filter(F._model == "definition")   %}
-{% set posts  = this.children.filter(F._model == "postulate")    %}
-{% set cns    = this.children.filter(F._model == "commonnotion") %}
-{% set props  = this.children.filter(F._model == "proposition")  %}
+{# Children are section_index pages (definitions, postulates,
+   commonnotions, propositions). Pull them in explicit order. #}
 
-{# Table of Contents for this book page. Per-section counts and the
-   Guide entry jump to the anchored sections further down. Matches
-   the master /elements/ TOC's shape so visitors who click
-   "Definitions (23)" there land on the right anchor here. #}
+{% set sections = this.children.filter(F._model == "section_index") %}
+
+{# Order: Definitions, Postulates, Common Notions, Propositions. #}
+{% set defs_section  = sections.filter(F.child_model == "definition").first()   %}
+{% set posts_section = sections.filter(F.child_model == "postulate").first()    %}
+{% set cns_section   = sections.filter(F.child_model == "commonnotion").first() %}
+{% set props_section = sections.filter(F.child_model == "proposition").first()  %}
+
+{# Counts for the top-of-page Table of Contents. Each section's
+   children are the actual leaf pages it contains. #}
+{% set defs   = defs_section.children  if defs_section  else [] %}
+{% set posts  = posts_section.children if posts_section else [] %}
+{% set cns    = cns_section.children   if cns_section   else [] %}
+{% set props  = props_section.children if props_section else [] %}
+
 <h2>Table of Contents</h2>
 <ul>
-  {% if defs.count() %}<li><a href="#defs">Definitions</a> ({{ defs.count() }})</li>{% endif %}
-  {% if posts.count() %}<li><a href="#posts">Postulates</a> ({{ posts.count() }})</li>{% endif %}
-  {% if cns.count() %}<li><a href="#cns">Common Notions</a> ({{ cns.count() }})</li>{% endif %}
-  {% if props.count() %}<li><a href="#props">Propositions</a> ({{ props.count() }})</li>{% endif %}
-  {% if this.body %}<li><a href="#guide">Guide to {{ this.title }}</a></li>{% endif %}
+  {% if defs_section  %}<li><a href="#defs">Definitions</a> ({{ defs.count() }})</li>{% endif %}
+  {% if posts_section %}<li><a href="#posts">Postulates</a> ({{ posts.count() }})</li>{% endif %}
+  {% if cns_section   %}<li><a href="#cns">Common Notions</a> ({{ cns.count() }})</li>{% endif %}
+  {% if props_section %}<li><a href="#props">Propositions</a> ({{ props.count() }})</li>{% endif %}
+  {% if this.body     %}<li><a href="#guide">Guide to {{ this.title }}</a></li>{% endif %}
 </ul>
 
-{# Per-section listings, anchored. Each item links to its own page. #}
-
-{% if defs.count() %}
+{% if defs_section %}
   <hr size="4">
-  <h2 id="defs">Definitions</h2>
+  <h2 id="defs"><a href="{{ defs_section|url }}">Definitions</a></h2>
   <ol>
     {% for d in defs %}
       <li>
@@ -36,9 +43,9 @@
   </ol>
 {% endif %}
 
-{% if posts.count() %}
+{% if posts_section %}
   <hr size="4">
-  <h2 id="posts">Postulates</h2>
+  <h2 id="posts"><a href="{{ posts_section|url }}">Postulates</a></h2>
   <ol>
     {% for p in posts %}
       <li>
@@ -51,9 +58,9 @@
   </ol>
 {% endif %}
 
-{% if cns.count() %}
+{% if cns_section %}
   <hr size="4">
-  <h2 id="cns">Common Notions</h2>
+  <h2 id="cns"><a href="{{ cns_section|url }}">Common Notions</a></h2>
   <ol>
     {% for c in cns %}
       <li>
@@ -66,9 +73,9 @@
   </ol>
 {% endif %}
 
-{% if props.count() %}
+{% if props_section %}
   <hr size="4">
-  <h2 id="props">Propositions</h2>
+  <h2 id="props"><a href="{{ props_section|url }}">Propositions</a></h2>
   <ol>
     {% for p in props %}
       <li><a href="{{ p|url }}">{{ p.title }}</a></li>

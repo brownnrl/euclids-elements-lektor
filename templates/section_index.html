@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>{{ this.title }}</h1>
+
+{% if this.body %}{{ this.body }}{% endif %}
+
+{# Auto-list children matching the configured child_model. Inline
+   if-filter on the for loop because Lektor's Query expression
+   doesn't resolve `this.<field>` reliably as a comparison RHS. #}
+<ol>
+  {% for k in this.children %}
+    {% if k._model == this.child_model %}
+      <li>
+        <a href="{{ k|url }}">
+          {%- if k.short_label %}{{ k.short_label }} {% endif -%}
+          {{ k.title }}
+        </a>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ol>
+
+{% endblock %}
