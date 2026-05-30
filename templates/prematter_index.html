@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>{{ this.title }}</h1>
+
+{% if this.body %}{{ this.body }}{% endif %}
+
+{# Auto-listed prematter children — the ported prose pages. #}
+{% set pages = this.children.filter(F._model == "prematter") %}
+{% if pages.count() %}
+  <hr size="4">
+  <ul>
+    {% for p in pages %}
+      <li><a href="{{ p|url }}">{{ p.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% endblock %}
