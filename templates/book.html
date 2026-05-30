@@ -26,15 +26,16 @@
 </ul>
 
 {# Macro for a single item in any of the lists. Matches the source
-   bookI.html presentation: <dt> with bolded label (red for
-   constructions, normal otherwise) linking to the page, then <dd>
-   with the statement text. #}
+   bookI.html presentation: <dt> with bolded label linking to the
+   page, then <dd> with the statement text. Items with
+   red_highlight: yes (author's call — usually Q.E.F. constructions
+   but the field is a generic visual marker) get a class on both
+   <dt> and <dd> so the styling is uniform across the whole entry. #}
 {% macro entry(item) %}
-  <p><dt>
-    {% if item.is_construction %}<font class="construction">{% endif %}
+  {% set cls = " class=\"red-highlight\"" if item.red_highlight else "" %}
+  <p><dt{{ cls|safe }}>
     <b><a href="{{ item|url }}">{{ item.title }}</a>.</b>
-    {% if item.is_construction %}</font>{% endif %}
-  <dd>{{ item.statement }}
+  <dd{{ cls|safe }}>{{ item.statement }}
 {% endmacro %}
 
 {% if defs_section %}

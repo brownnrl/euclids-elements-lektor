@@ -11,14 +11,13 @@
 <dl>
   {% for k in this.children %}
     {% if k._model == this.child_model %}
-      <p><dt>
-        {% if k.is_construction %}<font class="construction">{% endif %}
+      {% set cls = " class=\"red-highlight\"" if k.red_highlight else "" %}
+      <p><dt{{ cls|safe }}>
         <b><a href="{{ k|url }}">
           {%- if k.short_label %}{{ k.short_label }} {% endif -%}
           {{ k.title }}
         </a>.</b>
-        {% if k.is_construction %}</font>{% endif %}
-      <dd>{{ k.statement }}
+      <dd{{ cls|safe }}>{{ k.statement }}
     {% endif %}
   {% endfor %}
 </dl>
