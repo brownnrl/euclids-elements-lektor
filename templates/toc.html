@@ -1,34 +1,69 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>Table of Contents</h1>
+<h1>{{ this.title }}</h1>
 
 {% if this.body %}{{ this.body }}{% endif %}
 
-{% set books = this.children.filter(F._model == "book") %}
+{# Handles both roles:
+   - At /elements/ — children are prematter_index and toc; we
+     inline each group's listings.
+   - At /elements/books/ — children are books directly.
 
-{% for b in books %}
+   Iterating by explicit model order keeps Prematter ahead of Books
+   (matches the original site's order: background material first). #}
+
+{% set prematter_groups = this.children.filter(F._model == "prematter_index") %}
+{% set toc_groups       = this.children.filter(F._model == "toc")             %}
+{% set direct_books     = this.children.filter(F._model == "book")            %}
+
+{# 1. Prematter groups (only present at /elements/) #}
+{% for c in prematter_groups %}
+  <hr size="4">
+  <h2><a href="{{ c|url }}">{{ c.title }}</a></h2>
+  {% set pages = c.children.filter(F._model == "prematter") %}
+  <ul>
+    {% for p in pages %}
+      <li><a href="{{ p|url }}">{{ p.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endfor %}
+
+{# 2. Books-index groups (only present at /elements/, child = /books/) #}
+{% for c in toc_groups %}
+  <hr size="4">
+  <h2><a href="{{ c|url }}">{{ c.title }}</a></h2>
+  {% for b in c.children.filter(F._model == "book") %}
+    {% set defs   = b.children.filter(F._model == "definition")   %}
+    {% set posts  = b.children.filter(F._model == "postulate")    %}
+    {% set cns    = b.children.filter(F._model == "commonnotion") %}
+    {% set props  = b.children.filter(F._model == "proposition")  %}
+    <dl>
+      <dt><b><a href="{{ b|url }}">{{ b.title }}</a>.</b>
+        {%- if b.short_description %} {{ b.short_description }}{% endif %}
+      </dt>
+      {% if defs.count() %}<dd><a href="{{ b|url }}#defs">Definitions</a> ({{ defs.count() }})</dd>{% endif %}
+      {% if posts.count() %}<dd><a href="{{ b|url }}#posts">Postulates</a> ({{ posts.count() }})</dd>{% endif %}
+      {% if cns.count() %}<dd><a href="{{ b|url }}#cns">Common Notions</a> ({{ cns.count() }})</dd>{% endif %}
+      {% if props.count() %}<dd><a href="{{ b|url }}#props">Propositions</a> ({{ props.count() }})</dd>{% endif %}
+    </dl>
+  {% endfor %}
+{% endfor %}
+
+{# 3. Direct book children (only at /elements/books/) #}
+{% for b in direct_books %}
   {% set defs   = b.children.filter(F._model == "definition")   %}
   {% set posts  = b.children.filter(F._model == "postulate")    %}
   {% set cns    = b.children.filter(F._model == "commonnotion") %}
   {% set props  = b.children.filter(F._model == "proposition")  %}
-
   <dl>
     <dt><b><a href="{{ b|url }}">{{ b.title }}</a>.</b>
       {%- if b.short_description %} {{ b.short_description }}{% endif %}
     </dt>
-    {% if defs.count() %}
-      <dd><a href="{{ b|url }}#defs">Definitions</a> ({{ defs.count() }})</dd>
-    {% endif %}
-    {% if posts.count() %}
-      <dd><a href="{{ b|url }}#posts">Postulates</a> ({{ posts.count() }})</dd>
-    {% endif %}
-    {% if cns.count() %}
-      <dd><a href="{{ b|url }}#cns">Common Notions</a> ({{ cns.count() }})</dd>
-    {% endif %}
-    {% if props.count() %}
-      <dd><a href="{{ b|url }}#props">Propositions</a> ({{ props.count() }})</dd>
-    {% endif %}
+    {% if defs.count() %}<dd><a href="{{ b|url }}#defs">Definitions</a> ({{ defs.count() }})</dd>{% endif %}
+    {% if posts.count() %}<dd><a href="{{ b|url }}#posts">Postulates</a> ({{ posts.count() }})</dd>{% endif %}
+    {% if cns.count() %}<dd><a href="{{ b|url }}#cns">Common Notions</a> ({{ cns.count() }})</dd>{% endif %}
+    {% if props.count() %}<dd><a href="{{ b|url }}#props">Propositions</a> ({{ props.count() }})</dd>{% endif %}
   </dl>
 {% endfor %}
 
