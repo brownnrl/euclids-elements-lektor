@@ -7,21 +7,55 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Euclid's Elements{% if this.title %} &mdash; {{ this.title }}{% endif %}</title>
+<title>Euclid's Elements{% if this.title and this.path != "/" %} &mdash; {{ this.title }}{% endif %}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="/css/style.css">
-<script src="/js/header-footer.js"></script>
 <script src="https://unpkg.com/@brownnrl/geomlib@{{ geomlib_version }}/dist/bundle.js" type="text/javascript"></script>
 </head>
 <body>
 
-<div id="header"></div>
-<script>loadHeader();</script>
+{# Static header rendered by Lektor at build time — works with JS
+   disabled (matches the existing site's noscript intent for the
+   diagram fallbacks).
+
+   Three shapes depending on where the page sits in the content tree:
+
+   - Root (`/`): wordmark only, no breadcrumb.
+   - Book intro (`/bookI/`): wordmark + book title; book title is the
+     current page so it isn't a link.
+   - Proposition (`/bookI/propI1/`): wordmark + book breadcrumb +
+     proposition title; the book breadcrumb links back to the book
+     intro.
+
+   Plus secondary cases (`/aboutText`, `/Euclid`, etc.) — fall through
+   to wordmark + page title. #}
+<header class="site-header">
+  <a href="/" class="wordmark">Euclid&rsquo;s <i>Elements</i></a>
+  {% if this.parent and this.parent.path != "/" %}
+    {# parent isn't the root → render parent as a breadcrumb link #}
+    <span class="crumb-sep">&raquo;</span>
+    <a href="{{ this.parent|url }}" class="crumb">{{ this.parent.title }}</a>
+  {% endif %}
+  {% if this.path != "/" and this.title %}
+    <span class="crumb-sep">&raquo;</span>
+    <span class="crumb crumb-current">{{ this.title }}</span>
+  {% endif %}
+</header>
 
 {% block content %}{% endblock %}
 
-<div id="footer"></div>
-<script>loadFooter("1996, 2002, 2026");</script>
+<footer class="site-footer">
+  <hr>
+  <p>
+    <a href="/">Home</a>
+    &middot;
+    <a href="https://github.com/brownnrl/euclids-elements-lektor">Source</a>
+    &middot;
+    Original content &copy; David E. Joyce (Professor Emeritus,
+    <a href="https://www.clarku.edu/">Clark University</a>),
+    republished by permission.
+  </p>
+</footer>
 
 </body>
 </html>
