@@ -28,6 +28,11 @@ div.theorem {
   height:auto;
   width:auto;
   padding:5px;
+  /* Contain floated children (figure/diagram, div.just) so the beige
+     background extends to enclose them. Without this the theorem
+     box ends at the last in-flow text, leaving floats hanging out
+     the bottom — same bug the hand-authored site had. */
+  display: flow-root;
 }
 
 div.theorem p {
@@ -83,6 +88,7 @@ div.statement {
 div.just {
   text-align:right;
   float:right;
+  clear:right;
   font-weight:normal;
   font-size:75%;
   border:0px solid #000000;

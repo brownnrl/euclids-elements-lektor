@@ -1,3 +1,18 @@
-{# Thin wrapper; identical to leaf.html. Lektor maps model name to
-   template filename, so each leaf model needs its own template file. #}
-{% extends "leaf.html" %}
+{% extends "layout.html" %}
+{% block content %}
+{# A proposition renders the theorem box (title + statement +
+   construction & proof) together on the beige background, then the
+   Guide commentary below. `proof` and `body` are both markdown;
+   marginal justifications inside the proof use raw inline HTML
+   (<div class="just">…</div>). #}
+<div class="theorem">
+<h1>{{ this.title }}</h1>
+<div class="statement">{{ this.statement }}</div>
+{% if this.proof %}{{ this.proof }}{% endif %}
+</div>
+
+{% if this.body %}
+<h2 id="guide">Guide</h2>
+{{ this.body }}
+{% endif %}
+{% endblock %}
