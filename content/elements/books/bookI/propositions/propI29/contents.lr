@@ -8,4 +8,125 @@ short_label: I.29
 ---
 statement: A straight line falling on parallel straight lines makes the alternate angles equal to one another, the exterior angle equal to the interior and opposite angle, and the sum of the interior angles on the same side equal to two right angles.
 ---
+proof:
+
+Let the straight line *EF* fall on the parallel straight lines *AB* and *CD.*
+
+I say that it makes the alternate angles *AGH* and *GHD* equal, the exterior angle *EGB* equal to the interior and opposite angle *GHD,* and the sum of the interior angles on the same side, namely *BGH* and *GHD,* equal to two right angles.
+
+<figure class="diagram">
+<canvas id="canvas_0" width="220" height="210" tabindex="0"></canvas>
+<noscript><img alt="I.29 diagram" src="propI29.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "I.29",
+        elements: [
+            "A;point;free;40,80",
+            "B;point;free;180,80",
+            "AB;line;connect;A,B",
+            "C;point;free;40,120",
+            "D';point;parallelogram;C,A,B;0;0",
+            "D;point;lineSlider;C,D',180,40",
+            "CD;line;connect;C,D",
+            "E;point;free;70,40",
+            "F;point;free;120,170",
+            "EF;line;connect;E,F",
+            "G;point;intersection;A,B,E,F",
+            "H;point;intersection;C,D,E,F"
+        ],
+    });
+</script>
+</figure>
+
+If the angle *AGH* does not equal the angle *GHD,* then one of them is greater. Let the angle *AGH* be greater.
+
+Add the angle *BGH* to each. Therefore the sum of the angles *AGH* and *BGH* is greater than the sum of the angles *BGH* and *GHD.*
+
+<div class="just"><a href="../propI13/">I.13</a></div>
+
+But sum of the angles *AGH* and *BGH* equals two right angles. Therefore the sum of the angles *BGH* and *GHD* is less than two right angles.
+
+<div class="just"><a href="../../postulates/post5/">Post.5</a></div>
+
+But straight lines produced indefinitely from angles less than two right angles meet. Therefore *AB* and *CD,* if produced indefinitely, will meet. But they do not meet, because they are by hypothesis parallel.
+
+Therefore the angle *AGH* is not unequal to the angle *GHD,* and therefore equals it.
+
+<div class="just"><a href="../propI15/">I.15</a>, <a href="../../commonnotions/cn1/">C.N.1</a></div>
+
+Again, the angle *AGH* equals the angle *EGB.* Therefore the angle *EGB* also equals the angle *GHD.*
+
+<div class="just"><a href="../../commonnotions/cn2/">C.N.2</a></div>
+
+Add the angle *BGH* to each. Therefore the sum of the angles *EGB* and *BGH* equals the sum of the angles *BGH* and *GHD.*
+
+<div class="just"><a href="../propI13/">I.13</a><br><a href="../../commonnotions/cn1/">C.N.1</a></div>
+
+But the sum of the angles *EGB* and *BGH* equals two right angles. Therefore the sum of the angles *BGH* and *GHD* also equals two right angles.
+
+Therefore *a straight line falling on parallel straight lines makes the alternate angles equal to one another, the exterior angle equal to the interior and opposite angle, and the sum of the interior angles on the same side equal to two right angles.*
+
+<div class="qed">Q.E.D.</div>
+---
 body:
+
+The statement of this proposition includes three parts, one the converse of [I.27](../propI27/), the other two the converse of [I.28](../propI28/). Like those propositions, this one assumes an ambient plane containing all the three lines.
+
+This is the first proposition which depends on the parallel postulate. As such it does not hold in hyperbolic geometry.
+
+#### Hyperbolic geometry
+
+Two important geometries alternative to Euclidean geometry are elliptic geometry and hyperbolic geometry. Elliptic geometry was discussed in the [note](../propI16/#elliptic) after Proposition I.16, that being the first proposition which doesn't hold in elliptic geometry. This, I.29, is the first which doesn't hold in hyperbolic geometry.
+
+These three geometries can be distinguished by the number of lines parallel to a given line passing through a given point. For elliptic geometry, there is no such parallel line; for Euclidean geometry (which may be called parabolic geometry), there is exactly one; and for hyperbolic geometry, there are infinitely many.
+
+It is not possible to illustrate hyperbolic geometry with correct distances on a flat surface since a flat surface is Euclidean. Poincaré, however, described a useful model of hyperbolic geometry where the "points" in a hyperbolic plane are taken to be points inside a fixed circle (but not the points on the circumference). The "lines" in the hyperbolic plane are the parts of circles orthogonal, that is, at right angles to the fixed circle. And in this model, "angles" in the hyperbolic plane are angles between these arcs, or, more precisely, angles between the tangents to the arcs at the point of intersection. Since "angles" are just angles, this model is called a *conformal* model. Distances in the hyperbolic plane, however, are not measured by distances along the arcs. There is a more complicated relation between distances so that near the edge of the fixed circle a very short arc models a very long "line."
+
+<figure class="diagram rdiagram">
+<canvas id="canvas_1" width="300" height="300" tabindex="0"></canvas>
+<noscript><img alt="Poincare disk" src="propI29a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_1",
+        background: "0,0,100",
+        title: "Poincare disk",
+        elements: [
+            "O;point;free;150,150;0;0",
+            "P;point;free;270,150;0;0",
+            "disk;circle;radius;O,P;0;0;0;random",
+            "A;point;free;100,140",
+            "B;point;free;150,140",
+            "C;point;free;125,100",
+            "A*;point;proportion;O,A,O,P,O,P,O,A;0;0",
+            "ABcirc;circle;circumcircle;A,B,A*;0;0;0;0",
+            "A'B';line;bichord;disk,ABcirc;0;0;0",
+            "A';point;first;A'B';0;0",
+            "B';point;last;A'B';0;0",
+            "AB;sector;arc;B',B,A';0;0;black;0",
+            "C*;point;proportion;O,C,O,P,O,P,O,C;0;0",
+            "A'Ccirc;circle;circumcircle;A',C,C*;0;0;0;0",
+            "Apar;line;bichord;disk,A'Ccirc;0;0;0",
+            "A1;point;first;Apar;0;0",
+            "A2;point;last;Apar;0;0",
+            "Ap;sector;arc;A2,C,A1;0;0;black;0",
+            "B'Ccirc;circle;circumcircle;B',C,C*;0;0;0;0",
+            "Bpar;line;bichord;disk,B'Ccirc;0;0;0",
+            "B1;point;first;Bpar;0;0",
+            "B2;point;last;Bpar;0;0",
+            "Bp;sector;arc;B2,C,B1;0;0;black;0"
+        ],
+    });
+</script>
+</figure>
+
+Once this model is accepted, it is easy to see why there are infinitely many "lines" parallel to a given "line" through a given "point." That is just that there are infinitely many circles orthogonal to the fixed circle which don't intersect the given circle orthogonal to the fixed circle but do pass through the given point.
+
+In the diagram, *AB* is a "line" in the hyperbolic plane, that is, a circle orthogonal to the circumference of the shaded disk which represents the hyperbolic plane. A "point" *C* lies in that plane. Two "lines" are shown passing through *C,* one gets close to the line *AB* in the direction of *A,* the other gets close in the direction of *B.* But these two "lines" don't intersect *AB* since the arcs representing them only intersect on the circumference of the disk, and points on the circumference don't represent "points" in the hyperbolic plane.
+
+These two parallel "lines" are called the *asymptotic* parallels of *AB* since they approach *AB* at one end or the other. There are infinitely many parallels between them. (In much of the literature on hyperbolic geometry, the word "parallels" is used for what are called "asymptotic parallels" here, while "nonintersecting lines" is used for what are called "parallels" here.)
+
+#### Use of Proposition 29
+
+This proposition is used in very frequently in Book I starting with the next proposition. It is also used frequently in Book II, VI, and XI, and once in Book XII.

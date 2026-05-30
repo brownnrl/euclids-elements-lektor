@@ -10,4 +10,100 @@ red_highlight: yes
 ---
 statement: To bisect a given rectilinear angle.
 ---
+proof:
+
+Let the angle *BAC* be the given rectilinear angle.
+
+<figure class="diagram">
+<canvas id="canvas_0" width="300" height="260" tabindex="0"></canvas>
+<noscript><img alt="I.9 diagram" src="propI9.gif"/></noscript>
+<script type="text/javascript">
+geomlib.init({
+    canvasid: "canvas_0",
+    background: "35,19,100",
+    title: "I.9",
+    pivot: "F",
+    elements: [
+        "A;point;free;150,40",
+        "B;point;free;50,150",
+        "C;point;free;250,150",
+        "D;point;lineSlider;A,B,75,90",
+        "E;point;cutoff;A,C,A,D",
+        "AB;line;connect;A,B",
+        "AC;line;connect;A,C",
+        "EDF;polygon;equilateralTriangle;E,D;0;0;black;random",
+        "F;point;vertex;EDF,3;black;green",
+        "AF;line;connect;A,F"
+    ],
+});
+</script>
+</figure>
+
+It is required to bisect it.
+
+<div class="just"><a href="../propI3/">I.3</a><br><a href="../../postulates/post1/">I.Post.1</a>, <a href="../propI1/">I.1</a></div>
+
+Take an arbitrary point *D* on *AB.* Cut off *AE* from *AC* equal to *AD,* and join *DE.* Construct the equilateral triangle *DEF* on *DE,* and join *AF.*
+
+I say that the angle *BAC* is bisected by the straight line *AF.*
+
+Since *AD* equals *AE,* and *AF* is common, therefore the two sides *AD* and *AF* equal the two sides *EA* and *AF* respectively.
+
+<div class="just"><a href="../../definitions/defI20/">I.Def.20</a>, <a href="../propI8/">I.8</a></div>
+
+And the base *DF* equals the base *EF,* therefore the angle *DAF* equals the angle *EAF.*
+
+Therefore the given rectilinear angle *BAC* is bisected by the straight line *AF.*
+
+<div class="qed">Q.E.F.</div>
+<br clear="all">
+---
 body:
+
+#### Construction steps
+
+When using a compass and a straightedge to perform this construction, three circles and the final bisecting line need to be drawn. One circle with center *A* and radius *AD* is needed to determine the point *E.* The other two circles with centers at *D* and *E* and common radius *DE* intersect to give the point *F.* The sides of the equilateral triangle aren't needed for the construction.
+
+There is an alternate construction where the circles centered at *D* and *E* have a different radius, namely, *AD,* which equals *AE.* A different proof is required to show that this alternate construction works.
+
+<figure class="diagram rdiagram">
+<canvas id="canvas_1" width="320" height="260" tabindex="0"></canvas>
+<noscript><img alt="I.9 construction steps" src="propI9a.gif"/></noscript>
+<script type="text/javascript">
+geomlib.init({
+    canvasid: "canvas_1",
+    background: "0,0,100",
+    title: "I.9",
+    pivot: "F",
+    elements: [
+        "A;point;free;160,30",
+        "B;point;free;90,220",
+        "C;point;free;230,220",
+        "AB;line;connect;A,B",
+        "AC;line;connect;A,C",
+        "D;point;lineSlider;A,B,80,140",
+        "E;point;cutoff;A,C,A,D",
+        "ADE;sector;sector;A,D,E;0;0;black;0",
+        "DEcirc;circle;radius;D,E",
+        "EDcirc;circle;radius;E,D",
+        "FF';line;bichord;DEcirc,EDcirc;0;0;0",
+        "F;point;first;FF';black;green",
+        "AF;line;connect;A,F;0;0;blue"
+    ],
+});
+</script>
+</figure>
+
+#### On angle trisection
+
+Angle bisection is an easy construction to make using Euclidean tools of straightedge and compass. Also, line bisection is quite easy (see the next proposition [I.10](../propI10/)), and division of a line into any number of equal parts is not especially difficult (see proposition [VI.9](/elements/books/bookVI/propositions/propVI9/)).
+
+Dividing an angle into an odd number of equal parts is not so easy, in fact, it is impossible to trisect a 60°-angle using Euclidean tools (the Postulates 1 through 3). Euclid's predecessors employed a variety higher curves for this purpose. Archimedes, after Euclid, created two constructions: his spiral could divide an angle into any number of parts, and his neusis construction could trisect angles (see the note on [I.Post.2](../../postulates/post2/)). By Pappus' time it was believed that angle trisection was not possible using Euclidean tools, but that wasn't proven until 1837 when Wantzel (1814–1838) published his proof.
+
+Nevertheless, amateur geometers continue to search in vain for such a construction and frequently bother mathematicians with their purported solutions. Their solutions are of two forms. Sometimes they simply construct approximate trisections. Other times they use neusis or some other other tool that goes beyond Euclid's tools.
+
+Students of geometry are cautioned not to waste their time on this problem and, if they do, not to bother others with their purported solutions. Much better would be to study Galois theory, the mathematics that proves the impossibility of angle trisection.
+
+#### Use of Proposition 9
+
+The construction of this proposition is used in the next one and a few propositions in Books IV, VI, and XIII.

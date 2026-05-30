@@ -10,4 +10,123 @@ statement: To place a straight line equal to a given straight line with one end 
 ---
 red_highlight: yes
 ---
+proof:
+
+Let *A* be the given point, and *BC* the given straight line.
+
+<figure class="diagram">
+<canvas id="canvas_0" width="340" height="320" tabindex="0"></canvas>
+<noscript><img alt="I.2 diagram" src="propI2.gif"/></noscript>
+<script type="text/javascript">
+geomlib.init({
+    canvasid: "canvas_0",
+    background: "35,19,100",
+    title: "I.2",
+    pivot: "D",
+    elements: [
+        "A;point;free;160,190",
+        "B;point;free;190,160",
+        "C;point;free;180,90",
+        "BC;line;connect;B,C",
+        "DAB;polygon;equilateralTriangle;A,B;0;0;0;0",
+        "D;point;vertex;DAB,3;black;green",
+        "AL;line;extend;D,A,B,C",
+        "L;point;last;AL",
+        "LE;line;extend;A,L,A,B",
+        "E;point;last;LE;black;0",
+        "BG;line;extend;D,B,B,C",
+        "G;point;last;BG",
+        "GF;line;extend;B,G,A,B",
+        "F;point;last;GF;black;0",
+        "CGH;circle;radius;BC;0;0;0;0",
+        "BH;line;extend;G,B,G,B;0;0;0",
+        "H;point;last;BH;black;0",
+        "GKL;circle;radius;D,G;0;0;black;darker",
+        "CGH*;circle;radius;BC;0;0;black;brighter",
+        "DK;line;extend;G,D,G,D;0;0;0",
+        "K;point;last;DK;black;0",
+        "DAB*;polygon;equilateralTriangle;A,B;0;0;black;random"
+    ],
+});
+</script>
+</figure>
+
+It is required to place a straight line equal to the given straight line *BC* with one end at the point *A.*
+
+<div class="just"><a href="../../postulates/post1/">Post. 1</a>, <a href="../propI1/">I.1.</a></div>
+
+Join the straight line *AB* from the point *A* to the point *B,* and construct the equilateral triangle *DAB* on it.
+
+<div class="just"><a href="../../postulates/post2/">Post.2</a><br><a href="../../postulates/post3/">Post.3</a></div>
+
+Produce the straight lines *AE* and *BF* in a straight line with *DA* and *DB.* Describe the circle *CGH* with center *B* and radius *BC,* and again, describe the circle *GKL* with center *D* and radius *DG.*
+
+<div class="just"><a href="../../definitions/defI15/">I.Def.15</a></div>
+
+Since the point *B* is the center of the circle *CGH,* therefore *BC* equals *BG.* Again, since the point *D* is the center of the circle *GKL,* therefore *DL* equals *DG.*
+
+<div class="just"><a href="../../commonnotions/cn3/">C.N.3</a></div>
+
+And in these *DA* equals *DB,* therefore the remainder *AL* equals the remainder *BG.*
+
+<div class="just"><a href="../../commonnotions/cn1/">C.N.1</a></div>
+
+But *BC* was also proved equal to *BG,* therefore each of the straight lines *AL* and *BC* equals *BG.* And things which equal the same thing also equal one another, therefore *AL* also equals *BC.*
+
+Therefore the straight line *AL* equal to the given straight line *BC* has been placed with one end at the given point *A.*
+
+<div class="qed">Q.E.F.</div>
+<br clear="all">
+---
 body:
+
+This is a very clever construction to solve what seems to be a simple problem. One would like simply to slide the line *BC* along so that one end coincides with the point *A.* But there is no motion in the geometry of Euclid. There is something like motion used in proposition [I.4](../propI4/), but nothing is actually moved there. The only basic constructions that Euclid allows are those described in Postulates 1, 2, and 3. Euclid then builds new constructions (such as the one in this proposition) out of previously described constructions. So at this point, the only constructions available are those of the three postulates and the construction in proposition [I.1](../propI1/), and Euclid uses all four here.
+
+Another, different, expectation is that one might use a compass to transfer the distance *BC* over to the point *A.* It is clear from Euclid's use of postulate 3 that the point to be used for the center and a point that will be on the circumference must be constructed before applying the postulate; postulate 3 is not used to transfer distance. Sometimes postulate 3 is likened to a collapsing compass, that is, when the compass is lifted off the drawing surface, it collapses.
+
+It could well be that in some earlier Greek geometric theory abstracted compasses that could transfer distances. If that speculation is correct, then this proposition would be a late addition to the theory. The construction of the proposition allows a weaker postulate (namely postulate 3) to be assumed.
+
+#### Construction steps
+
+When using a compass and a straightedge to perform this construction there are more circles drawn than shown in the diagram that accompanies the proposition. These are the two circles needed to construct the equilateral triangle *ABD.* One side, *AB,* of that triangle isn't necessary for the construction.
+
+Altogether, four circles and two lines are required for this construction.
+
+<figure class="diagram rdiagram">
+<canvas id="canvas_1" width="300" height="320" tabindex="0"></canvas>
+<noscript><img alt="I.2 construction steps" src="propI2a.gif"/></noscript>
+<script type="text/javascript">
+geomlib.init({
+    canvasid: "canvas_1",
+    background: "0,0,100",
+    title: "I.2",
+    pivot: "D",
+    elements: [
+        "A;point;free;150,190",
+        "B;point;free;180,160",
+        "C;point;free;170,90",
+        "BC;line;connect;B,C;0;0;blue",
+        "ABcirc;circle;radius;A,B",
+        "BAcirc;circle;radius;B,A",
+        "D'D;line;bichord;ABcirc,BAcirc;0;0;0",
+        "D;point;last;D'D;black;green",
+        "DA;line;connect;D,A",
+        "DB;line;connect;D,B",
+        "BCcirc;circle;radius;B,C",
+        "G;point;extend;D,B,B,C",
+        "BG;line;connect;B,G;0;0;blue",
+        "DGcirc;circle;radius;D,G",
+        "L;point;extend;D,A,B,C",
+        "AL;line;connect;A,L;0;0;blue",
+        "LE;line;extend;A,L,A,B",
+        "GF;line;extend;B,G,A,B"
+    ],
+});
+</script>
+</figure>
+
+#### Use of Proposition 2
+
+The construction in this proposition is only used in Proposition [I.3](../propI3/).
+
+Note that this construction assumes that all the point *A* and the line *BC* lie in a plane. It may also be used in space, however, since Proposition [XI.2](/elements/books/bookXI/propositions/propXI2/) implies that *A* and *BC* do lie in a plane.

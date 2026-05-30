@@ -10,4 +10,98 @@ red_highlight: yes
 ---
 statement: To construct a rectilinear angle equal to a given rectilinear angle on a given straight line and at a point on it.
 ---
+proof:
+
+Let the angle *DCE* be the given rectilinear angle, *AB* the given straight line, and *A* the point on it.
+
+<figure class="diagram">
+<canvas id="canvas_0" width="340" height="220" tabindex="0"></canvas>
+<noscript><img alt="I.23 diagram" src="propI23.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "I.23",
+        elements: [
+            "D;point;free;260,40",
+            "C;point;free;190,80",
+            "E;point;free;270,180",
+            "D1;line;extend;C,D,C,D;0;0",
+            "E1;line;extend;C,E,C,E;0;0",
+            "CDE;polygon;triangle;C,D,E;0;0;0,0,0;random",
+            "A;point;free;40,180",
+            "B;point;free;200,180",
+            "AB;line;connect;A,B",
+            "DE;line;connect;D,E",
+            "G;point;cutoff;A,B,C,E",
+            "AGF;polygon;similar;A,G,C,E,D;0;0;0,0,0;random",
+            "F;point;vertex;AGF,3"
+        ],
+    });
+</script>
+</figure>
+
+It is required to construct a rectilinear angle equal to the given rectilinear angle *DCE* on the given straight line *AB* and at the point *A* on it.
+
+<div class="just"><a href="../../postulates/post1/">I.Post.1</a><br><a href="../propI22/">I.22</a></div>
+
+Take the points *D* and *E* at random on the straight lines *CD* and *CE* respectively, and join *DE.* Out of three straight lines which equal the three straight lines *CD, DE,* and *CE* construct the triangle *AFG* in such a way that *CD* equals *AF, CE* equals *AG,* and *DE* equals *FG.*
+
+<div class="just"><a href="../propI8/">I.8</a></div>
+
+Since the two sides *DC* and *CE* equal the two sides *FA* and *AG* respectively, and the base *DE* equals the base *FG,* therefore the angle *DCE* equals the angle *FAG.*
+
+Therefore on the given straight line *AB,* and at the point *A* on it, the rectilinear angle *FAG* has been constructed equal to the given rectilinear angle *DCE.*
+
+<div class="qed">Q.E.F.</div>
+---
 body:
+
+As Proclus and Heath point out, a very minor variant of the construction in [I.22](../propI22/) is needed to make the triangle *AFG.* The problem is that in I.22 the triangle is placed not at the end of line, but somewhere beyond that, and in I.23, the triangle needs to be placed right at the end *A* of the line.
+
+#### Construction steps
+
+<figure class="diagram rdiagram">
+<canvas id="canvas_1" width="330" height="230" tabindex="0"></canvas>
+<noscript><img alt="I.23 construction steps" src="propI23a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_1",
+        background: "0,0,100",
+        title: "I.23",
+        elements: [
+            "D;point;free;270,30",
+            "C;point;free;200,80",
+            "Ccirc;circle;radius;C,D;0;0;0;0",
+            "E;point;circleSlider;Ccirc,280,130",
+            "D1;point;extend;C,D,C,D;0;0",
+            "E1;point;extend;C,E,C,E;0;0",
+            "CD1;line;connect;C,D1",
+            "CE1;line;connect;C,E1",
+            "CDE;sector;sector;C,E,D;0;0;black",
+            "A;point;free;50,180",
+            "B;point;free;210,180",
+            "AB;line;connect;A,B",
+            "Acirc;circle;radius;A,C,D;0;0;black;0",
+            "G;point;cutoff;A,B,C,D",
+            "Gcirc;circle;radius;G,D,E;0;0;black;0",
+            "F'F;line;bichord;Acirc,Gcirc;0;0",
+            "F;point;last;F'F",
+            "AF;line;connect;A,F",
+            "AGF;sector;sector;A,G,F;0;0;0"
+        ],
+    });
+</script>
+</figure>
+
+This construction that moves an angle requires a number of steps involving a straightedge and compass. Unless there is some special reason for selecting particular points *D* and *E* on the sides of the angle *C,* they might as well be taken equidistant from *C* as Apollonius suggested. Then only two distances need to be transferred instead of three.
+
+In order to make *CE* equal to *CD,* one circle is required. Next, in order to transfer the distance *CD* to *A,* four circles (not shown) are required as per Propositions [I.2](../propI2/) and [I.1](../propI1/), and four more circles (also not shown) to transfer *ED* to *G.* Finally, two more circles are required, one with center *A* and radius *CD* (which has been transferred), the other with center *G* and radius *ED.* These last two circles meet at the point *F,* and the line *AF* is the other side of the required angle.
+
+In all there are ten circles and one line that must be drawn. The lines in the intermediate stages may be suppressed as usual since they're only needed to verify the construction is correct.
+
+#### Use of Proposition 23
+
+The construction in this proposition is used in the next one and a couple others in Book I. It is also used frequently in the later books. It is also used frequently in BookS III and VI and occasionally in Books IV and XI.
+
+Although it may appear that the triangles are to be in the same plane, that is not necessary. Indeed, the construction in this proposition is used to construct an angle in a different plane in proposition [XI.31](/elements/books/bookXI/propositions/propXI31/).

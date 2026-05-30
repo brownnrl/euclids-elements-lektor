@@ -10,4 +10,92 @@ red_highlight: yes
 ---
 statement: To draw a straight line at right angles to a given straight line from a given point on it.
 ---
+proof:
+
+Let *AB* be the given straight line, and *C* the given point on it.
+
+It is required to draw a straight line at right angles to the straight line *AB* from the point *C.*
+
+<figure class="diagram">
+<canvas id="canvas_0" width="280" height="190" tabindex="0"></canvas>
+<noscript><img alt="I.11 diagram" src="propI11.gif"/></noscript>
+<script type="text/javascript">
+geomlib.init({
+    canvasid: "canvas_0",
+    background: "35,19,100",
+    title: "I.11",
+    pivot: "F",
+    elements: [
+        "A;point;free;30,150",
+        "B;point;free;240,150",
+        "AB;line;connect;A,B",
+        "C;point;lineSlider;AB,135,150",
+        "D;point;lineSlider;AB,70,150",
+        "E;point;extend;D,C,D,C",
+        "DEF;polygon;equilateralTriangle;D,E;0;0;0;random",
+        "F;point;vertex;DEF,3;black;green",
+        "DF;line;connect;D,F",
+        "EF;line;connect;E,F",
+        "CF;line;connect;C,F"
+    ],
+});
+</script>
+</figure>
+
+<div class="just"><a href="../propI3/">I.3</a>, <a href="../propI1/">I.1</a><br><a href="../../postulates/post1/">I.Post.1</a></div>
+
+Take an arbitrary point *D* on *AC.* Make *CE* equal to *CD.* Construct the equilateral triangle *FDE* on *DE,* and join *CF.*
+
+I say that the straight line *CF* has been drawn at right angles to the given straight line *AB* from *C* the given point on it.
+
+<div class="just"><a href="../../definitions/defI20/">I.Def.20</a><br><a href="../propI8/">I.8</a></div>
+
+Since *CD* equals *CE,* and *CF* is common, therefore the two sides *CD* and *CF* equal the two sides *CE* and *CF* respectively, and the base *DF* equals the base *EF.* Therefore the angle *DCF* equals the angle *ECF,* and they are adjacent angles.
+
+<div class="just"><a href="../../definitions/defI10/">I.Def.10</a></div>
+
+But, when a straight line standing on a straight line makes the adjacent angles equal to one another, each of the equal angles is right, therefore each of the angles *DCF* and *FCE* is right.
+
+Therefore the straight line *CF* has been drawn at right angles to the given straight line *AB* from the given point *C* on it.
+
+<div class="qed">Q.E.F.</div>
+---
 body:
+
+This and the next proposition both construct a perpendicular to a line through a given point. The difference is that the given point lies on the line in this proposition but doesn't in the next.
+
+#### Construction steps
+
+The actual construction here is the same double-equilateral-triangle construction of the previous proposition that is used to bisect the line *DE,* except that it is preceded by the selection of points *D* and *E* on *AB* equidistant from *C.*
+
+This construction actually only requires drawing three circles and the one line *FG*.
+
+<figure class="diagram rdiagram">
+<canvas id="canvas_1" width="371" height="272" tabindex="0"></canvas>
+<noscript><img alt="I.11 construction steps" src="propI11a.gif"/></noscript>
+<script type="text/javascript">
+geomlib.init({
+    canvasid: "canvas_1",
+    background: "0,0,100",
+    title: "I.11",
+    elements: [
+        "A;point;free;75,136",
+        "B;point;free;295,136",
+        "AB;line;connect;A,B",
+        "C;point;lineSlider;AB,185,136",
+        "D;point;lineSlider;AB,125,136",
+        "Ccirc;circle;radius;C,D",
+        "E;point;extend;D,C,D,C",
+        "Dcirc;circle;radius;D,E",
+        "Ecirc;circle;radius;E,D",
+        "GF;line;bichord;Dcirc,Ecirc",
+        "G;point;first;GF",
+        "F;point;last;GF"
+    ],
+});
+</script>
+</figure>
+
+#### Use of Proposition 11
+
+This construction is used in propositions [I.13](../propI13/), [I.46](../propI46/), [I.48](../propI48/), and numerous propositions in Books II, III, VI, VI, XI, XII, and XIII.
