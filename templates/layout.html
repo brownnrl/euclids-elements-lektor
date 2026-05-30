@@ -5,6 +5,13 @@
 {% set model_id = this._model or "" %}
 {% set is_book_leaf = (model_id in ["proposition", "definition", "postulate", "commonnotion"]) %}
 {% set is_book = (model_id == "book") %}
+
+{# Recursive walk up the parent chain, emitting an <a> per ancestor
+   separated by `›`. Used by the breadcrumb nav below. #}
+{% macro ancestor_crumbs(node) -%}
+{%- if node.parent -%}{{ ancestor_crumbs(node.parent) }}<span class="crumb-sep">&rsaquo;</span>{%- endif -%}
+<a href="{{ node|url }}">{{ node.title or "Home" }}</a>
+{%- endmacro %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,6 +47,14 @@
   {% endif %}
 {% endif %}
 </header>
+
+{# Hierarchical breadcrumb. Skipped on the root page since there's
+   nowhere to navigate up to. #}
+{% if this.parent %}
+<nav class="breadcrumbs">
+  {{ ancestor_crumbs(this.parent) }}<span class="crumb-sep">&rsaquo;</span><span class="crumb-current">{{ this.title }}</span>
+</nav>
+{% endif %}
 
 {% block content %}{% endblock %}
 
