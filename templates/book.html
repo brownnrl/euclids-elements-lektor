@@ -1,7 +1,70 @@
 {% extends "layout.html" %}
 {% block content %}
-{# Book intro pages aren't wrapped in a .theorem box — they're the
-   table of contents listing definitions, postulates, common notions,
-   and propositions. #}
-{{ this.body }}
+
+{# Optional intro body authored on the book page itself. #}
+{% if this.body %}{{ this.body }}{% endif %}
+
+{# Group children by model so the TOC reads as in the original site:
+   Definitions → Postulates → Common Notions → Propositions.
+
+   Each group only renders if it has at least one child, so a book
+   page with only definitions doesn't show empty headers for the
+   other sections. #}
+
+{% set defs   = this.children.filter(F._model == "definition")   %}
+{% set posts  = this.children.filter(F._model == "postulate")    %}
+{% set cns    = this.children.filter(F._model == "commonnotion") %}
+{% set props  = this.children.filter(F._model == "proposition")  %}
+
+{% if defs.count() %}
+  <h2>Definitions</h2>
+  <ol>
+    {% for d in defs %}
+      <li>
+        <a href="{{ d|url }}">
+          {%- if d.short_label %}{{ d.short_label }} {% endif -%}
+          {{ d.title }}
+        </a>
+      </li>
+    {% endfor %}
+  </ol>
+{% endif %}
+
+{% if posts.count() %}
+  <h2>Postulates</h2>
+  <ol>
+    {% for p in posts %}
+      <li>
+        <a href="{{ p|url }}">
+          {%- if p.short_label %}{{ p.short_label }} {% endif -%}
+          {{ p.title }}
+        </a>
+      </li>
+    {% endfor %}
+  </ol>
+{% endif %}
+
+{% if cns.count() %}
+  <h2>Common Notions</h2>
+  <ol>
+    {% for c in cns %}
+      <li>
+        <a href="{{ c|url }}">
+          {%- if c.short_label %}{{ c.short_label }} {% endif -%}
+          {{ c.title }}
+        </a>
+      </li>
+    {% endfor %}
+  </ol>
+{% endif %}
+
+{% if props.count() %}
+  <h2>Propositions</h2>
+  <ol>
+    {% for p in props %}
+      <li><a href="{{ p|url }}">{{ p.title }}</a></li>
+    {% endfor %}
+  </ol>
+{% endif %}
+
 {% endblock %}

@@ -1,8 +1,10 @@
-{# Project-wide geomlib pin. Bump here when the library publishes a
-   new release; individual pages can override via the
-   geomlib_version field on the Proposition model. #}
 {% set geomlib_default = "0.3.0" %}
 {% set geomlib_version = (this.geomlib_version or geomlib_default) %}
+{# this._model is a string (the model identifier from the .ini
+   filename, e.g. "proposition" / "book"). #}
+{% set model_id = this._model or "" %}
+{% set is_book_leaf = (model_id in ["proposition", "definition", "postulate", "commonnotion"]) %}
+{% set is_book = (model_id == "book") %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,32 +16,29 @@
 </head>
 <body>
 
-{# Static header rendered by Lektor at build time — works with JS
-   disabled (matches the existing site's noscript intent for the
-   diagram fallbacks).
+{# Static header. Three shapes, matching what the original
+   loadHeader() JS produced:
 
-   Three shapes depending on where the page sits in the content tree:
+   - Root + main-directory pages (Introduction, About, Euclid, Web,
+     Copyright, Trip, Subject Index, the Table of Contents):
+     the pentagonal Euclid's Elements imagemap.
 
-   - Root (`/`): wordmark only, no breadcrumb.
-   - Book intro (`/bookI/`): wordmark + book title; book title is the
-     current page so it isn't a link.
-   - Proposition (`/bookI/propI1/`): wordmark + book breadcrumb +
-     proposition title; the book breadcrumb links back to the book
-     intro.
+   - Book intro pages: imagemap + the book title as h1.
 
-   Plus secondary cases (`/aboutText`, `/Euclid`, etc.) — fall through
-   to wordmark + page title. #}
+   - Pages nested under a book (propositions, definitions,
+     postulates, common notions): centered text-only header,
+     'Euclid's Elements' link + parent book title link, no imagemap.
+#}
 <header class="site-header">
-  <a href="/" class="wordmark">Euclid&rsquo;s <i>Elements</i></a>
-  {% if this.parent and this.parent.path != "/" %}
-    {# parent isn't the root → render parent as a breadcrumb link #}
-    <span class="crumb-sep">&raquo;</span>
-    <a href="{{ this.parent|url }}" class="crumb">{{ this.parent.title }}</a>
+{% if is_book_leaf and this.parent %}
+  <h1><a href="/" class="hover">Euclid&rsquo;s Elements</a></h1>
+  <h1><a href="{{ this.parent|url }}" class="hover">{{ this.parent.title }}</a></h1>
+{% else %}
+  {% include "_imagemap.html" %}
+  {% if is_book %}
+    <h1>{{ this.title }}</h1>
   {% endif %}
-  {% if this.path != "/" and this.title %}
-    <span class="crumb-sep">&raquo;</span>
-    <span class="crumb crumb-current">{{ this.title }}</span>
-  {% endif %}
+{% endif %}
 </header>
 
 {% block content %}{% endblock %}

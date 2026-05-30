@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>Table of Contents</h1>
+
+{% if this.body %}{{ this.body }}{% endif %}
+
+{% set books = this.children.filter(F._model == "book") %}
+
+<ul>
+  {% for b in books %}
+    <li>
+      <a href="{{ b|url }}">{{ b.title }}</a>
+    </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
