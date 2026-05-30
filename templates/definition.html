@@ -1,17 +1,32 @@
 {% extends "layout.html" %}
 {% block content %}
-{# Definitions render a theorem box constructed from fields, plus an
-   optional Guide section for the prose commentary. The .lr body is
-   markdown and contains only the guide; the theorem heading and
-   statement come from `title` and `statement` so the data lives in
-   one place. #}
-<div class="theorem">
-<h1>{{ this.title }}</h1>
-<div class="statement">{{ this.statement }}</div>
-</div>
-
-{% if this.body %}
-<h2 id="guide">Guide</h2>
-{{ this.body }}
+{# Definitions render a theorem box (from `title` + `statement`) and
+   an optional Guide section. If `group` is set, this page is part of
+   a bundled-source group (e.g. defs 15-18) — stack the theorem
+   boxes of every sibling sharing the group, then render the shared
+   guide from the hidden `definition_group` page. #}
+{% if this.group %}
+  {% set group_page = site.get(this.parent.path ~ '/' ~ this.group) %}
+  {% set members = this.parent.children.filter(F.group == this.group).order_by('order') %}
+  {% for d in members %}
+    <div class="theorem">
+    <h1>{{ d.title }}</h1>
+    <div class="statement">{{ d.statement }}</div>
+    </div>
+    {% if not loop.last %}<br>{% endif %}
+  {% endfor %}
+  {% if group_page and group_page.body %}
+    <h2 id="guide">Guide</h2>
+    {{ group_page.body }}
+  {% endif %}
+{% else %}
+  <div class="theorem">
+  <h1>{{ this.title }}</h1>
+  <div class="statement">{{ this.statement }}</div>
+  </div>
+  {% if this.body %}
+    <h2 id="guide">Guide</h2>
+    {{ this.body }}
+  {% endif %}
 {% endif %}
 {% endblock %}
