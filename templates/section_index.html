@@ -5,20 +5,22 @@
 
 {% if this.body %}{{ this.body }}{% endif %}
 
-{# Auto-list children matching the configured child_model. Inline
-   if-filter on the for loop because Lektor's Query expression
-   doesn't resolve `this.<field>` reliably as a comparison RHS. #}
-<ol>
+{# Auto-list children matching the configured child_model. Render in
+   the same <dl>/<dt>/<dd> style the book TOC uses, with red on
+   constructions (Q.E.F.). #}
+<dl>
   {% for k in this.children %}
     {% if k._model == this.child_model %}
-      <li>
-        <a href="{{ k|url }}">
+      <p><dt>
+        {% if k.is_construction %}<font class="construction">{% endif %}
+        <b><a href="{{ k|url }}">
           {%- if k.short_label %}{{ k.short_label }} {% endif -%}
           {{ k.title }}
-        </a>
-      </li>
+        </a>.</b>
+        {% if k.is_construction %}</font>{% endif %}
+      <dd>{{ k.statement }}
     {% endif %}
   {% endfor %}
-</ol>
+</dl>
 
 {% endblock %}
