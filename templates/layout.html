@@ -48,13 +48,15 @@
 {% endif %}
 </header>
 
-{# Hierarchical breadcrumb. Skipped on the root page since there's
-   nowhere to navigate up to. #}
-{% if this.parent %}
+{# Hierarchical breadcrumb. Even on the root page we render a
+   one-entry breadcrumb (just the current page) so the visual layout
+   stays consistent across the whole site. #}
 <nav class="breadcrumbs">
-  {{ ancestor_crumbs(this.parent) }}<span class="crumb-sep">&rsaquo;</span><span class="crumb-current">{{ this.title }}</span>
+  {%- if this.parent -%}
+    {{ ancestor_crumbs(this.parent) }}<span class="crumb-sep">&rsaquo;</span>
+  {%- endif -%}
+  <span class="crumb-current">{{ this.title }}</span>
 </nav>
-{% endif %}
 
 {% block content %}{% endblock %}
 
