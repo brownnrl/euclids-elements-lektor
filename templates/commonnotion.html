@@ -1,3 +1,32 @@
-{# Thin wrapper; identical to leaf.html. Lektor maps model name to
-   template filename, so each leaf model needs its own template file. #}
-{% extends "leaf.html" %}
+{% extends "layout.html" %}
+{% block content %}
+{# When `group` is set, render a single combined theorem box that
+   lists every bundle member's statement as a numbered paragraph
+   (matching the original bookI/cn.html layout), then the shared
+   guide. Otherwise fall back to the standalone single-CN render. #}
+{% if this.group %}
+  {% set group_page = site.get(this.parent.path ~ '/' ~ this.group) %}
+  {% set members = this.parent.children.filter(F.group == this.group).order_by('order') %}
+  <div class="theorem">
+  <h1>{{ group_page.title if group_page else this.title }}</h1>
+  <div class="statement">
+  {% for m in members %}<p>{{ loop.index }}. {{ m.statement }}</p>{% endfor %}
+  </div>
+  </div>
+
+  {% if group_page and group_page.body %}
+    <h2 id="guide">Guide</h2>
+    {{ group_page.body }}
+  {% endif %}
+{% else %}
+  <div class="theorem">
+  <h1>{{ this.title }}</h1>
+  <div class="statement">{{ this.statement }}</div>
+  </div>
+
+  {% if this.body %}
+    <h2 id="guide">Guide</h2>
+    {{ this.body }}
+  {% endif %}
+{% endif %}
+{% endblock %}
