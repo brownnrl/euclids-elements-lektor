@@ -190,6 +190,7 @@ div.threecolumn
 }
 
 .site-footer {
+    clear: both;
     margin-top: 2em;
     font-size: 80%;
     color: #444;
@@ -242,6 +243,31 @@ h4 a:link,    h4 a:visited {
 }
 h2 a:hover, h3 a:hover, h4 a:hover {
     text-decoration: underline;
+}
+
+/* Geomlib applet figure inside a guide body. Floats left so the
+   surrounding prose wraps around it — replaces the old two-column
+   <table> layout with semantic, text-flow-friendly markup.
+   `figure class="diagram rdiagram"` flips to a right float; mobile
+   collapses to a centered block. */
+figure.diagram {
+    float: left;
+    margin: 0.3em 1.2em 0.6em 0;
+    text-align: center;
+}
+figure.diagram.rdiagram {
+    float: right;
+    margin: 0.3em 0 0.6em 1.2em;
+}
+figure.diagram canvas {
+    display: inline-block;
+}
+@media (max-width: 768px) {
+    figure.diagram, figure.diagram.rdiagram {
+        float: none;
+        margin: 1em auto;
+        display: block;
+    }
 }
 
 /* `red_highlight: yes` on a definition / postulate / common notion /
