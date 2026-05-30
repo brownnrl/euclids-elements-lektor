@@ -6,21 +6,18 @@
 {% set cns    = this.children.filter(F._model == "commonnotion") %}
 {% set props  = this.children.filter(F._model == "proposition")  %}
 
-{# Summary at the top: per-section counts that jump to the listings
-   below. Matches the master Table of Contents shape so visitors who
-   click "Definitions (23)" in the TOC land on the right anchor here. #}
-<p>
-  {% if defs.count() %}<a href="#defs">Definitions</a> ({{ defs.count() }})<br>{% endif %}
-  {% if posts.count() %}<a href="#posts">Postulates</a> ({{ posts.count() }})<br>{% endif %}
-  {% if cns.count() %}<a href="#cns">Common Notions</a> ({{ cns.count() }})<br>{% endif %}
-  {% if props.count() %}<a href="#props">Propositions</a> ({{ props.count() }}){% endif %}
-</p>
-
-{# Guide section. The body field is the long-form prose for the book. #}
-{% if this.body %}
-  <h2 id="guide">Guide to {{ this.title }}</h2>
-  {{ this.body }}
-{% endif %}
+{# Table of Contents for this book page. Per-section counts and the
+   Guide entry jump to the anchored sections further down. Matches
+   the master /elements/ TOC's shape so visitors who click
+   "Definitions (23)" there land on the right anchor here. #}
+<h2>Table of Contents</h2>
+<ul>
+  {% if defs.count() %}<li><a href="#defs">Definitions</a> ({{ defs.count() }})</li>{% endif %}
+  {% if posts.count() %}<li><a href="#posts">Postulates</a> ({{ posts.count() }})</li>{% endif %}
+  {% if cns.count() %}<li><a href="#cns">Common Notions</a> ({{ cns.count() }})</li>{% endif %}
+  {% if props.count() %}<li><a href="#props">Propositions</a> ({{ props.count() }})</li>{% endif %}
+  {% if this.body %}<li><a href="#guide">Guide to {{ this.title }}</a></li>{% endif %}
+</ul>
 
 {# Per-section listings, anchored. Each item links to its own page. #}
 
@@ -73,6 +70,12 @@
       <li><a href="{{ p|url }}">{{ p.title }}</a></li>
     {% endfor %}
   </ol>
+{% endif %}
+
+{# Guide section at the bottom — long-form prose from the body field. #}
+{% if this.body %}
+  <h2 id="guide">Guide to {{ this.title }}</h2>
+  {{ this.body }}
 {% endif %}
 
 {% endblock %}
