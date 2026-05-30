@@ -1,3 +1,17 @@
-{# Thin wrapper; identical to leaf.html. Lektor maps model name to
-   template filename, so each leaf model needs its own template file. #}
-{% extends "leaf.html" %}
+{% extends "layout.html" %}
+{% block content %}
+{# Definitions render a theorem box constructed from fields, plus an
+   optional Guide section for the prose commentary. The .lr body is
+   markdown and contains only the guide; the theorem heading and
+   statement come from `title` and `statement` so the data lives in
+   one place. #}
+<div class="theorem">
+<h1>{{ this.title }}</h1>
+<div class="statement">{{ this.statement }}</div>
+</div>
+
+{% if this.body %}
+<h2 id="guide">Guide</h2>
+{{ this.body }}
+{% endif %}
+{% endblock %}
