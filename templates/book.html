@@ -1,23 +1,31 @@
 {% extends "layout.html" %}
 {% block content %}
 
-{# Optional intro body authored on the book page itself. #}
-{% if this.body %}{{ this.body }}{% endif %}
-
-{# Group children by model so the TOC reads as in the original site:
-   Definitions → Postulates → Common Notions → Propositions.
-
-   Each group only renders if it has at least one child, so a book
-   page with only definitions doesn't show empty headers for the
-   other sections. #}
-
 {% set defs   = this.children.filter(F._model == "definition")   %}
 {% set posts  = this.children.filter(F._model == "postulate")    %}
 {% set cns    = this.children.filter(F._model == "commonnotion") %}
 {% set props  = this.children.filter(F._model == "proposition")  %}
 
+{# Summary at the top: per-section counts that jump to the listings
+   below. Matches the master Table of Contents shape so visitors who
+   click "Definitions (23)" in the TOC land on the right anchor here. #}
+<p>
+  {% if defs.count() %}<a href="#defs">Definitions</a> ({{ defs.count() }})<br>{% endif %}
+  {% if posts.count() %}<a href="#posts">Postulates</a> ({{ posts.count() }})<br>{% endif %}
+  {% if cns.count() %}<a href="#cns">Common Notions</a> ({{ cns.count() }})<br>{% endif %}
+  {% if props.count() %}<a href="#props">Propositions</a> ({{ props.count() }}){% endif %}
+</p>
+
+{# Guide section. The body field is the long-form prose for the book. #}
+{% if this.body %}
+  <h2 id="guide">Guide to {{ this.title }}</h2>
+  {{ this.body }}
+{% endif %}
+
+{# Per-section listings, anchored. Each item links to its own page. #}
+
 {% if defs.count() %}
-  <h2>Definitions</h2>
+  <h2 id="defs">Definitions</h2>
   <ol>
     {% for d in defs %}
       <li>
@@ -31,7 +39,7 @@
 {% endif %}
 
 {% if posts.count() %}
-  <h2>Postulates</h2>
+  <h2 id="posts">Postulates</h2>
   <ol>
     {% for p in posts %}
       <li>
@@ -45,7 +53,7 @@
 {% endif %}
 
 {% if cns.count() %}
-  <h2>Common Notions</h2>
+  <h2 id="cns">Common Notions</h2>
   <ol>
     {% for c in cns %}
       <li>
@@ -59,7 +67,7 @@
 {% endif %}
 
 {% if props.count() %}
-  <h2>Propositions</h2>
+  <h2 id="props">Propositions</h2>
   <ol>
     {% for p in props %}
       <li><a href="{{ p|url }}">{{ p.title }}</a></li>
