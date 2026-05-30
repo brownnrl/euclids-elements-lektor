@@ -33,9 +33,8 @@
    <dt> and <dd> so the styling is uniform across the whole entry. #}
 {% macro entry(item) %}
   {% set cls = " class=\"red-highlight\"" if item.red_highlight else "" %}
-  <p><dt{{ cls|safe }}>
-    <b><a href="{{ item|url }}">{{ item.title }}</a>.</b>
-  <dd>{{ item.statement }}
+  <dt{{ cls|safe }}><b><a href="{{ item|url }}">{{ item.title }}</a>.</b></dt>
+  <dd{{ cls|safe }}>{{ item.statement }}</dd>
 {% endmacro %}
 
 {% if defs_section %}
