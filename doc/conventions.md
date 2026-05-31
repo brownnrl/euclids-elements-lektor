@@ -46,17 +46,51 @@ The first canvas on a page (`canvas_0`) almost always lives in the proof. Second
 
 On mobile (`max-width: 480px`) figures stop floating and stack centered. The `canvas` itself has `max-width: 100%; height: auto;` so it shrinks on narrow viewports — geomlib 0.2.0+ remaps Pointer Events through CSS scaling, so hit-testing is preserved.
 
-### Marginal justifications (`<div class="just">`)
+### Marginal justifications (`[!just …]`)
 
-The little right-floated reference column next to each proof step. Markdown links don't render inside raw HTML blocks, so use `<a href>` inline:
+The little right-floated reference column next to each proof step. Use the `[!just …]` directive — the `lektor-eucrefs` plugin (see [Euclid citation shortcodes](#euclid-citation-shortcodes) below) resolves the bare tokens to `<a href>` links and emits the wrapping `<div class="just">`.
 
 ```markdown
-<div class="just"><a href="../../postulates/post3/">I.Post.3</a><br><a href="../../postulates/post1/">I.Post.1</a></div>
+Describe the circle *BCD* with center *A* and radius *AB.* [!just I.Post.3, I.Post.1]
 
-Describe the circle *BCD* with center *A* and radius *AB.* ...
+Now, since the point *A* is the center of the circle *CDB,* therefore *AC* equals *AB.* [!just I.Def.15]
 ```
 
+Inside the directive:
+- `,` keeps refs on the same logical line (rendered with literal `", "` between links).
+- `;` breaks to a new line (rendered as `<br>`).
+
+The directive may appear **anywhere** in a paragraph — at the start, at the end of the sentence it justifies, or on its own line as a standalone block. In all three forms the plugin hoists the rendered `<div class="just">` to **before** the surrounding `<p>` so the float-right CSS lines it up alongside the paragraph it accompanies.
+
+```markdown
+[!just I.Post.3, I.Post.1]                       # block, before the paragraph
+
+Describe the circle BCD... [!just I.Post.3]      # inline at end
+
+[!just I.Post.3] Describe the circle BCD...      # inline at start
+```
+
+All three render identically. Pick whichever reads cleanest in source — for short single-ref justifications, end-of-sentence reads most naturally; for stacked multi-line refs, the block form keeps the sentence uncluttered.
+
 The CSS rule is `float: right; clear: right;` — each `.just` div clears prior right floats so they stack vertically against the right edge instead of left of each other.
+
+### Euclid citation shortcodes
+
+The `lektor-eucrefs` plugin (`packages/lektor-eucrefs/`) recognizes two markdown additions for citations into Euclid's Elements:
+
+| Source | Renders to |
+|---|---|
+| `@I.5` | `<a href="/elements/books/bookI/propositions/propI5/">I.5</a>` |
+| `@I.Def.10` | `<a href="/elements/books/bookI/definitions/defI10/">I.Def.10</a>` |
+| `@I.Post.3` | `<a href="/elements/books/bookI/postulates/post3/">I.Post.3</a>` |
+| `@C.N.1` | `<a href="/elements/books/bookI/commonnotions/cn1/">C.N.1</a>` |
+| `@II.4`, `@XIII.18` | other-book propositions |
+| `@XI.Def.2` | other-book definitions |
+| `[!just I.3, I.46; I.31]` | `<div class="just"><a/>, <a/><br><a/></div>` |
+
+Token grammar: Roman numeral book (`I` through `XIII`), then optional `Def.` or `Post.`, then a number. Common notions are spelled `C.N.{N}` (Book I implied — no other book has common notions). Anything that doesn't fit becomes `<a href="#unresolved-…">` so the issue surfaces visibly in the rendered page.
+
+**Hand-rolled `<div class="just">` HTML still works** if you need a one-off that the resolver can't express (e.g. a cross-work citation into Apollonius later, or an anchor like `propI15/#cor`). The plugin only fires on the bracket-bang directive, not on raw HTML.
 
 ### End-of-proof marker
 

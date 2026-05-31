@@ -72,8 +72,9 @@ Then in the brief:
 
 - **What to extract** — content between `<a name=guide><h2>Guide</h2></a>` and `<div id="footer">` for body; content between `<div class="statement">…</div>` and the closing `</div>` of the theorem div for proof.
 - **What to drop** — `<div class="theorem">`, `<h1>`, `<div class="statement">`, `<h2>Guide</h2>`, layout `<table>`/`<tr>`/`<td>` wrappers around figures, `<p>` tags, header/footer JS.
-- **What to preserve as inline HTML** — `<div class="just">…</div>` (with `<a href>` not markdown links), `<div class="qed">Q.E.F./Q.E.D.</div>`, `<br clear="all">`, `<figure class="diagram"[ rdiagram]>` wrapping canvas+noscript+script.
-- **Markdown rules** — `<i>` → `*`, `<b>` → `**`, `<h4>` → `####`, `<a href>` → `[text](url)` *only in prose*, `<p>` → blank line, `<center>` → `<center>` (keep, with `<i>` inside not `*`), `<ul>` indenter → `> …` blockquote.
+- **What to preserve as inline HTML** — `<div class="qed">Q.E.F./Q.E.D.</div>`, `<br clear="all">`, `<figure class="diagram"[ rdiagram]>` wrapping canvas+noscript+script.
+- **Marginal justifications** — convert source `<div class="just"><a href="…">I.3</a>, <a href="…">I.46</a><br><a href="…">I.31</a></div>` to the directive form `[!just I.3, I.46; I.31]`. The `lektor-eucrefs` plugin resolves the tokens to URLs at build time. Place the directive at the end of the sentence it justifies (it gets hoisted to before the `<p>` automatically). See [conventions.md → Marginal justifications](../conventions.md#marginal-justifications-just-) and [Euclid citation shortcodes](../conventions.md#euclid-citation-shortcodes).
+- **Markdown rules** — `<i>` → `*`, `<b>` → `**`, `<h4>` → `####`, `<a href>` → `[text](url)` *only in prose* (or `@I.5` / `@I.Def.10` / `@I.Post.3` / `@C.N.1` for Elements citations — see plugin), `<p>` → blank line, `<center>` → `<center>` (keep, with `<i>` inside not `*`), `<ul>` indenter → `> …` blockquote.
 - **Entity table** — `&ldquo; &rdquo; &rsquo; &lsquo; &ndash; &mdash; &deg; &nbsp; &pi;` → literal Unicode.
 - **URL conversion table** — see [conventions.md](../conventions.md#url-conventions).
 - **Figure rules** — left float vs right float based on source `<div class="ldiagram">` vs `<div class="rdiagram">` vs `<td>` position. Strip wrappers, keep canvas/noscript/script verbatim, fix stale `title:` in geomlib.init.
