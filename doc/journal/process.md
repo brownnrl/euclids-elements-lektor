@@ -21,9 +21,18 @@ Books II–XIII have placeholder slots in the footer-nav `proptable` but no cont
 3. **Identify red-highlighted entries.** Scan the book's TOC HTML (`bookN.html` source) for `<font color=bb0033>` opens/closes. The earlier-used parser is at `/tmp/fix-red-highlight.py` — adapt it by changing the file paths and re-run. Toggle `red_highlight: yes` on matching leaves.
 4. **Convert content via parallel agents.** See agent-brief template below. Batch ~10–12 leaves per agent, run several in background.
 5. **Build + spot-check.** `lektor build --output-path build/` from the activated venv. Open the rendered HTML for a few leaves, verify figures float correctly, links resolve, Q.E.D./Q.E.F. markers appear.
-6. **Polish.** The agents will preserve some source quirks verbatim (typos in hrefs, mis-positioned figures). Iterate on user feedback or proactively check the patterns documented in [Common edge cases](#common-edge-cases).
-7. **Extend `proptable[i]`** in `assets/js/footer-nav.js` with the book's nav order so Next/Previous works end-to-end.
-8. **Update Book I intro Guide cross-references** where they pointed at "Book IV" / "Book XI" placeholder URLs — they should now resolve to live pages.
+6. **Copy fallback gifs.** Every `<canvas>` figure has a `<noscript><img src="propN{X}.gif"/></noscript>` fallback for users with JS disabled. The agents preserve those `<img src="...">` references but don't copy the actual files. Run the bulk-copy script:
+   ```sh
+   python3 scripts/copy-gif-fallbacks.py
+   ```
+   The script walks every leaf's `contents.lr`, finds all `<img src="*.gif">` references, and copies the file from any of the Joyce mirror paths into the leaf's content folder so Lektor ships it as a page attachment. Sources searched, in priority order:
+   - `/data-mirrored/projects/geometry/euclids-elements.org/elements/bookN/` (the official mirror; sparse for books past I)
+   - `/data-mirrored/projects/geometry/djoyce/converted/elements/bookN/`
+   - `/data-mirrored/projects/geometry/djoyce/converted/java/elements/bookN/` (older JS-applet version; usually has the gif even when the modern mirror doesn't — see propII8)
+   - `/data-mirrored/projects/geometry/djoyce/mirror/aleph0.clarku.edu/~djoyce/elements/bookN/` and the matching java path
+7. **Polish.** The agents will preserve some source quirks verbatim (typos in hrefs, mis-positioned figures). Iterate on user feedback or proactively check the patterns documented in [Common edge cases](#common-edge-cases).
+8. **Extend `proptable[i]`** in `assets/js/footer-nav.js` with the book's nav order so Next/Previous works end-to-end.
+9. **Update Book I intro Guide cross-references** where they pointed at "Book IV" / "Book XI" placeholder URLs — they should now resolve to live pages.
 
 ## Build / verify cycle
 
@@ -122,7 +131,10 @@ Joyce's HTML has a fair number of small bugs that agents reliably flag:
 
 ### Page-attached images
 
-If a leaf references a non-canvas `.gif` (e.g., Joyce embeds a small math image), the agent will preserve the `<img>` tag but the file won't exist in the build. Copy it from `euclids-elements.org/elements/book{N}/<name>.gif` into the leaf's content folder. Book I needed `propI19b.gif` (law of sines) and `propI47a.gif` (xian tu).
+Two distinct cases here, both solved by copying the source `.gif` into the leaf's content folder so it ships as a Lektor page attachment:
+
+1. **Visible non-canvas images** in the Guide body (e.g., Joyce's pre-rendered math diagram for the law of sines, or the *xian tu* raster). The agent preserves the `<img>` tag pointing at the bare filename; we copy the file by hand or as part of step 6 above. Book I needed `propI19b.gif` (law of sines) and `propI47a.gif` (*xian tu*); Book II needed `propII5b/c.gif` and `propII6b.gif`.
+2. **Canvas `<noscript>` fallbacks** — every interactive canvas has a `<noscript><img src="propN{X}.gif"/></noscript>` for users without JS. There are ~100 of these across Book I + II; the bulk-copy is **step 6 in [High-level workflow per book](#high-level-workflow-per-book)** via `scripts/copy-gif-fallbacks.py`. Skipping that step means JS-disabled visitors see broken-image icons where canvases would be.
 
 ### Anchor links in `statement` field
 
@@ -197,8 +209,20 @@ If user mentions a book by name and there's no content yet, scaffold per the wor
 
 ## Open work, not yet started
 
+### Content
+
 - Books II–XIII content (likely Books IV, VI, XI, XIII in highest user-interest order based on references in Book I).
 - Book intro Guides for II–XIII reference live pages that don't exist yet — links currently 404.
 - Master TOC at `/elements/` may need polishing once more books exist.
 - Prematter pages (`/elements/prematter/`) are sparse.
-- Geomlib version pin: currently `0.3.0` in layout.html — bump in lockstep with `brownnrl/euclid` releases.
+
+### Refactors / design
+
+- **Split the JS footer three ways.** Currently `assets/js/footer-nav.js`'s `loadFooter()` renders the whole footer block — Next/Previous links + three `<select>` dropdowns + credit block — all in JS. Tracking on [issue #2](https://github.com/brownnrl/euclids-elements-lektor/issues/2). The intended split:
+  - **Next / Previous → static** (Jinja-rendered from `this.parent.children.filter(F._model == this._model).order_by('order')`). These are deterministic from the current page's `order` field; no need for a client-side scan.
+  - **Three dropdowns → stay in JS** (`assets/js/footer-nav.js`, slimmed to `loadNavDropdowns()`). They list all books / all topics / all entries in the current book and need the `onchange` handler to navigate.
+  - **Credit block → static** (`<footer class="site-footer">` back in `templates/layout.html`). Home / ©dates / David E. Joyce / Copyright Notice / Source. The static version existed before commit `14161eb` — use that diff as the template. Copyright date string lives in `layout.html` (Jinja constant) or `.lektorproject` — avoid per-page customization.
+
+  Net effect: with JS disabled the user still gets working Next/Previous and the full credit attribution. With JS enabled, the dropdowns appear too. Issue #2 has the full implementation sketch.
+
+- **Geomlib version pin**: currently `0.3.0` in `templates/layout.html` — bump in lockstep with `brownnrl/euclid` releases.
