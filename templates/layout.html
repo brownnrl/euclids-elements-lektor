@@ -53,15 +53,14 @@
 {% endif %}
 </header>
 
-{# Hierarchical breadcrumb. Even on the root page we render a
-   one-entry breadcrumb (just the current page) so the visual layout
-   stays consistent across the whole site. #}
+{# Hierarchical breadcrumb. Skipped on the root page where there's
+   no ancestor chain to render — the lone "Introduction" crumb just
+   duplicated the page title. #}
+{% if this.parent %}
 <nav class="breadcrumbs">
-  {%- if this.parent -%}
-    {{ ancestor_crumbs(this.parent) }}<span class="crumb-sep">&rsaquo;</span>
-  {%- endif -%}
-  <span class="crumb-current">{{ this.title }}</span>
+  {{ ancestor_crumbs(this.parent) }}<span class="crumb-sep">&rsaquo;</span><span class="crumb-current">{{ this.title }}</span>
 </nav>
+{% endif %}
 
 {% block content %}{% endblock %}
 
