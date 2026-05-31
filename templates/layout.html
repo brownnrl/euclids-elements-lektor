@@ -20,6 +20,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 <script src="https://unpkg.com/@brownnrl/geomlib@{{ geomlib_version }}/dist/bundle.js" type="text/javascript"></script>
+<script src="/js/footer-nav.js"></script>
 </head>
 <body>
 
@@ -38,8 +39,12 @@
 #}
 <header class="site-header">
 {% if is_book_leaf and this.parent %}
+  {# Walk past the section_index parent up to the book so the stacked
+     h1 reads "Euclid's Elements / Book I" rather than the section
+     name ("Propositions") — matches the original site. #}
+  {% set book_ancestor = this.parent.parent if (this.parent.parent and this.parent.parent._model == "book") else this.parent %}
   <h1><a href="/" class="hover">Euclid&rsquo;s Elements</a></h1>
-  <h1><a href="{{ this.parent|url }}" class="hover">{{ this.parent.title }}</a></h1>
+  <h1><a href="{{ book_ancestor|url }}" class="hover">{{ book_ancestor.title }}</a></h1>
 {% else %}
   {% include "_imagemap.html" %}
   {% if is_book %}
@@ -60,18 +65,14 @@
 
 {% block content %}{% endblock %}
 
-<footer class="site-footer">
-  <hr>
-  <p>
-    <a href="/">Home</a>
-    &middot;
-    <a href="https://github.com/brownnrl/euclids-elements-lektor">Source</a>
-    &middot;
-    Original content &copy; David E. Joyce (Professor Emeritus,
-    <a href="https://www.clarku.edu/">Clark University</a>),
-    republished by permission.
-  </p>
-</footer>
+{# Bottom navigation + copyright is rendered client-side by
+   loadFooter() from /js/footer-nav.js — same pattern (and same
+   layout) as Joyce's original site, with proptable/booktable URLs
+   adapted to this rebuild's /elements/books/<book>/<section>/<leaf>/
+   structure. The copyright dates argument can be customized
+   per-page later if needed. #}
+<div id="footer"></div>
+<script>loadFooter("1996, 1997, 2025");</script>
 
 </body>
 </html>

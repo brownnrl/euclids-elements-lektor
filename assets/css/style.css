@@ -195,21 +195,31 @@ div.threecolumn
     text-decoration: underline;
 }
 
-.site-footer {
+/* Footer rendered by /js/footer-nav.js — both the nav table and the
+   credit/copyright block live inside <div id="footer">. */
+#footer {
     clear: both;
-    margin-top: 2em;
-    font-size: 80%;
-    color: #444;
-    padding: 0.6em 0.9em;
+    margin-top: 1.5em;
 }
-
-.site-footer hr {
+hr.footer-sep {
     border: 0;
     border-top: 1px solid #ccc;
-    margin: 0 0 0.6em;
+    margin: 0.4em 0;
 }
-
-.site-footer a {
+table.footer-nav {
+    margin: 0.6em auto;
+    border-collapse: collapse;
+}
+table.footer-nav td {
+    padding: 0.2em 0.6em;
+    vertical-align: top;
+}
+p.footer-credit {
+    font-size: 80%;
+    color: #444;
+    margin: 0.6em 0.9em;
+}
+p.footer-credit a {
     color: #0020C2;
 }
 
@@ -286,8 +296,18 @@ figure.diagram.rdiagram {
 }
 figure.diagram canvas {
     display: inline-block;
+    /* Let the canvas shrink to fit the viewport on small screens so
+       the auto-margin centering in the mobile rule below actually
+       takes effect. geomlib 0.2.0+ remaps touch coords through its
+       Pointer Events refactor so CSS scaling no longer breaks
+       hit-testing. */
+    max-width: 100%;
+    height: auto;
 }
-@media (max-width: 768px) {
+/* Stack vertically only on true mobile widths. At narrow desktop /
+   tablet sizes the canvas is usually small enough (~280-340px) that
+   floating with text wrapping still reads better than stacked. */
+@media (max-width: 480px) {
     figure.diagram, figure.diagram.rdiagram {
         float: none;
         margin: 1em auto;
