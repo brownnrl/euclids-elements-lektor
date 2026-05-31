@@ -137,8 +137,35 @@ The `statement` field is rendered both on the leaf page AND inside the section_i
 - **One book at a time** — don't fan out across books; they share so few patterns it's not worth the coordination.
 - **~10–12 leaves per agent** — fewer than that and the brief overhead dominates; more and the context gets unwieldy.
 - **Run in background** — `run_in_background: true` so multiple agents can work in parallel. You'll get completion notifications.
-- **Brief is self-contained** — agent doesn't see your conversation context. Re-state the worked example, URL tables, conventions.
+- **Agents do NOT share context.** Each `Agent(...)` call is a fresh process. They can't see this conversation, can't see sibling agents' work, and don't load any per-repo defaults. Every brief has to either inline the rules or tell the agent which file to Read.
+- **Brief is self-contained.** Re-state the worked example, URL tables, figure rules, etc. The brief template above already does this for the bulk of the conversion rules.
+- **Point each agent at `doc/conventions.md` for the slow-moving rules.** The brief should include a line like:
+  > Before starting, Read `/data-mirrored/projects/geometry/euclids-elements-lektor/doc/conventions.md` end-to-end. It documents the canvas background convention (tan vs white), figure float direction (diagram vs rdiagram), marginal-justification HTML, axiom blockquotes, and other rules the agents can't infer from the source HTML alone.
+
+  Agents reliably read it when instructed.
 - **Trust but verify** — agents reliably preserve source quirks (typos, broken hrefs). Skim their oddity reports and spot-check the obvious patterns above.
+
+### Conventions agents have missed in the past
+
+These are the per-leaf details parallel agents have tended to drop. If you skip the "Read `conventions.md`" step, double-check each:
+
+- **Canvas background (`background:` in `geomlib.init`)** — proof canvases use `"35,19,100"` (tan, matches theorem box); Guide canvases use `"0,0,100"` (white, matches page). Joyce's source HTML usually has the right value, but Book II's `<table>`-wrapped Guide canvases inherited the tan value from the surrounding proof figure layout. The fix is a one-line sed across the leaf:
+  ```bash
+  sed -i '/canvasid: "canvas_1"/,/^        title:/ s/background: "35,19,100"/background: "0,0,100"/' contents.lr
+  ```
+  Same pattern for `canvas_2`, etc.
+
+- **Figure position within a subsection** — the figure goes RIGHT AFTER `#### Heading`, before the prose, so floats anchor to the top of their section. Agents often place it after the text (matching source order), which causes float-bleed into the next section.
+
+- **`<ul>` indenter vs list** — Joyce uses `<ul>…prose…</ul>` (no `<li>`) as a CSS indenter. Convert to markdown blockquote (`> …`), not bullet list (`- …`).
+
+- **Anchor links in `statement` field** — must be absolute URLs, not bare `#anchor`. The statement is rendered both on the leaf page and in the section_index `<dd>`; a relative `#anchor` resolves wrong from the section_index.
+
+- **Source-HTML font tags leaking into frontmatter** — when scaffolding from a TOC, stray `<font color=…>` opens/closes around red-flagged entries can leak into the adjacent statement field. Strip with:
+  ```bash
+  sed -i -E 's| *<font color=[a-z0-9]+> *$||; s| *</font color> *$||' contents.lr
+  ```
+  Set `red_highlight: yes` on the leaves that were inside the font wrap.
 
 ## Commit cadence
 

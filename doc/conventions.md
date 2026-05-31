@@ -31,6 +31,19 @@ Float right (text wraps left) — add `rdiagram`:
 
 **Place the figure at the TOP of the subsection it belongs to** (immediately after the `#### Heading`). If you put it after the prose, it floats down into the next section because there's no flow content left in its own section to wrap around.
 
+#### Canvas background
+
+The `background:` parameter passed to `geomlib.init(...)` paints the canvas's own backdrop. Match it to the surrounding page region:
+
+| Region | `background:` value | What it looks like |
+|---|---|---|
+| Proof (inside the beige theorem box) | `"35,19,100"` | Cream / pale tan — blends with the `.theorem` box |
+| Guide (below the theorem box, on the white page) | `"0,0,100"` | White — blends with the page background |
+
+If you use the tan value on a Guide-area canvas, the canvas shows up as a tan rectangle on the white page (visible mismatch). If you use the white value on a proof-area canvas, the canvas shows up as a white rectangle on the beige theorem box (also visible mismatch).
+
+The first canvas on a page (`canvas_0`) almost always lives in the proof. Secondary canvases (`canvas_1`, `canvas_2`, …) almost always live in the Guide. Joyce's source HTML usually uses the right value, but bookII's `<table>` layouts often inherited `35,19,100` for guide-area canvases — those need to be flipped to `0,0,100` during conversion.
+
 On mobile (`max-width: 480px`) figures stop floating and stack centered. The `canvas` itself has `max-width: 100%; height: auto;` so it shrinks on narrow viewports — geomlib 0.2.0+ remaps Pointer Events through CSS scaling, so hit-testing is preserved.
 
 ### Marginal justifications (`<div class="just">`)
