@@ -49,6 +49,24 @@ git rm -rf --quiet . 2>/dev/null || true
 
 cp -a "$LEKTOR_REPO/build/." ./
 
+# Carry over the Cloudflare Workers infrastructure (worker entrypoint
+# + wrangler config + assetsignore) from main so CF Builds has an
+# entry-point. The orphan-style replacement above wipes everything,
+# including these files, even though they're not part of the Lektor
+# build output. Without them CF Builds errors with "Missing
+# entry-point to Worker script or to assets directory".
+echo "==> Copying Cloudflare config from main"
+for cf_file in wrangler.jsonc _worker.js .assetsignore; do
+    if git show "origin/main:${cf_file}" > "${cf_file}" 2>/dev/null; then
+        echo "    + ${cf_file} (from origin/main)"
+    elif git show "main:${cf_file}" > "${cf_file}" 2>/dev/null; then
+        echo "    + ${cf_file} (from main)"
+    else
+        rm -f "${cf_file}"
+        echo "    ! ${cf_file} missing on main — preview deploy will likely fail"
+    fi
+done
+
 git add -A
 COMMIT_MSG="lektor build from ${SOURCE_BRANCH}@${SOURCE_COMMIT}${SOURCE_DIRTY}"
 git commit -m "$COMMIT_MSG" --quiet
