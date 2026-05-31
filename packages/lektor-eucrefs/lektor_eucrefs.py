@@ -38,7 +38,7 @@ ROMAN_VALID = {
 # don't accidentally match arbitrary uppercase letter runs.
 _ROMAN_ALT = "|".join(sorted(ROMAN_VALID, key=len, reverse=True))
 _TOKEN_BARE = (
-    rf"(?:(?:{_ROMAN_ALT})\.(?:Def\.|Post\.)?\d+|C\.N\.\d+)"
+    rf"(?:(?:{_ROMAN_ALT})\.(?:Def\.|Post\.)?\d+|C\.N\.\d*)"
 )
 INLINE_RE = re.compile(rf"@({_TOKEN_BARE})")
 BLOCK_RE = re.compile(r"\[!just\s+(.+?)\]")
@@ -48,6 +48,12 @@ def resolve(token: str) -> str:
     """Map a bare citation token to a URL path."""
     if token.startswith("C.N."):
         n = token[4:]
+        # Bare `C.N.` (no number) is a reference to the common-notions
+        # group as a whole. Link to the first member — cn1 — since each
+        # cn URL serves the combined-view template anyway. Display text
+        # stays as the author wrote it.
+        if not n:
+            return "/elements/books/bookI/commonnotions/cn1/"
         return f"/elements/books/bookI/commonnotions/cn{n}/"
     parts = token.split(".")
     if len(parts) < 2 or parts[0] not in ROMAN_VALID:
