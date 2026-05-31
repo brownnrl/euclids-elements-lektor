@@ -100,7 +100,24 @@ var proptable = [
         ["propositions/propI47/", "I.47"],
         ["propositions/propI48/", "I.48"]
     ],
-    [], [], [], [], [], [], [], [], [], [], [], [] // Books II-XIII (placeholders)
+    [ // Book II
+        ["definitions/defII1/",   "II.Def.1-2"],
+        ["propositions/propII1/", "II.1"],
+        ["propositions/propII2/", "II.2"],
+        ["propositions/propII3/", "II.3"],
+        ["propositions/propII4/", "II.4"],
+        ["propositions/propII5/", "II.5"],
+        ["propositions/propII6/", "II.6"],
+        ["propositions/propII7/", "II.7"],
+        ["propositions/propII8/", "II.8"],
+        ["propositions/propII9/", "II.9"],
+        ["propositions/propII10/", "II.10"],
+        ["propositions/propII11/", "II.11"],
+        ["propositions/propII12/", "II.12"],
+        ["propositions/propII13/", "II.13"],
+        ["propositions/propII14/", "II.14"]
+    ],
+    [], [], [], [], [], [], [], [], [], [], [] // Books III-XIII (placeholders)
 ];
 
 function bookUrl(book) {

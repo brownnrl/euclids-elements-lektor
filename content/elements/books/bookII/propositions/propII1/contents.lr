@@ -9,5 +9,83 @@ short_label: II.1
 statement: If there are two straight lines, and one of them is cut into any number of segments whatever, then the rectangle contained by the two straight lines equals the sum of the rectangles contained by the uncut straight line and each of the segments.
 ---
 proof:
+
+Let *A* and *BC* be two straight lines, and let *BC* be cut at random at the points *D* and *E.*
+
+<figure class="diagram">
+<canvas id="canvas_0" width="330" height="250" tabindex="0"></canvas>
+<noscript><img src="propII1.gif" alt="II.1"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "II.1",
+        elements: [
+            "A0;point;free;-1000,40;0,0",
+            "A3;point;free;1000,40;0,0",
+            "A1;point;lineSlider;A0,A3,90,40;0",
+            "A2;point;lineSlider;A0,A3,200,40;0",
+            "A;line;connect;A1,A2;0,0,0",
+            "B;point;free;40,70",
+            "C';point;parallelogram;B,A;0;0",
+            "C;point;lineSlider;B,C',290,70",
+            "BC;line;connect;B,C",
+            "D;point;lineSlider;BC,110,70",
+            "E;point;lineSlider;BC,220,70",
+            "BF';line;perpendicular;B,C;0;0;0",
+            "F;point;lineSlider;BF',30,210",
+            "BF;line;connect;B,F",
+            "G;point;cutoff;BF,A",
+            "DBGK;polygon;parallelogram;D,B,G;0;0;0,0,0;random",
+            "K;point;vertex;DBGK,4",
+            "EDKL;polygon;parallelogram;E,D,K;0;0;0,0,0;random",
+            "L;point;vertex;EDKL,4",
+            "CELH;polygon;parallelogram;C,E,L;0;0;0,0,0;random",
+            "H;point;vertex;CELH,4"
+        ],
+    });
+</script>
+</figure>
+
+I say that the rectangle *A* by *BC* equals the sum of the rectangle *A* by *BD,* the rectangle *A* by *DE,* and the rectangle *A* by *EC.*
+
+<div class="just"><a href="/elements/books/bookI/propositions/propI11/">I.11</a>, <a href="/elements/books/bookI/propositions/propI3/">I.3</a><br><a href="/elements/books/bookI/propositions/propI31/">I.31</a></div>
+
+Draw *BF* from *B* at right angles to *BC.*  Make *BG* equal to *A.*  Draw *GH* through *G* parallel to *BC.*   Through *D, E,* and *C* draw *DK, EL,* and *CH* parallel to *BG.*
+
+Then *BH* equals the sum of *BK, DL,* and *EH.*
+
+<div class="just"><a href="../../definitions/defII1/">II.Def.1</a><br><a href="/elements/books/bookI/propositions/propI34/">I.34</a></div>
+
+Now *BH* is the rectangle *A* by *BC,* for it is contained by *GB* and *BC,* and *BG* equals *A*; *BK* is the rectangle *A* by *BD,* for it is contained by *GB* and *BD,* and *BG* equals *A*; and *DL* is the rectangle *A* by *DE,* for *DK,* that is *BG,* equals *A.*  Similarly also *EH* is the rectangle *A* by *EC.*
+
+Therefore the rectangle *A* by *BC* equals the sum of the rectangle *A* by *BD,* the rectangle *A* by *DE,* and the rectangle *A* by *EC.*
+
+Therefore *if there are two straight lines, and one of them is cut into any number of segments whatever, then the rectangle contained by the two straight lines equals the sum of the rectangles contained by the uncut straight line and each of the segments.*
+
+<div class="qed">Q.E.D.</div>
+<br clear="all">
 ---
 body:
+
+As described in [II.Def.1](../../definitions/defII1/), the phrase "the rectangle contained by the two straight lines" means any rectangle constructed with two sides equal to the two given sides.  In some sense this is the product of the two lines.
+When the sides have names, such as *A* and *BC,* we will refer to that rectangle by "the rectangle *A* by *BC*" since that is a little clearer than Euclid's terse "the rectangle *A, BC.*"
+
+In this proposition Euclid proves that if
+
+<center><i>BC</i> = <i>BD</i> + <i>DE</i> + <i>EC,</i></center>
+
+then
+
+<center>(<i>A</i> by <i>BC</i>) = (<i>A</i> by <i>BD</i>) + (<i>A</i> by <i>DE</i>) + (<i>A</i> by <i>EC</i>).</center>
+
+In modern algebraic notation this could be stated as follows:
+If *y* = *y*<sub>1</sub> + *y*<sub>2</sub> + ... + *y<sub>n</sub>,* then *xy* = *x* *y*<sub>1</sub> + *x* *y*<sub>2</sub> + ... + *x y<sub>n</sub>.*  This can also be stated in a single equation as
+
+<center><i>x</i> (<i>y</i><sub>1</sub> + <i>y</i><sub>2</sub> + ... + <i>y<sub>n</sub></i>) = <i>x y</i><sub>1</sub> + <i>x y</i><sub>2</sub> + ... + <i>x y<sub>n</sub>.</i></center>
+
+Here *x* and the various *y<sub>i</sub>*'s are all lines, and *n* is an arbitrary number.   In modern terminology this identity is called the *distributive law* for multiplication over addition.
+
+#### Use of this proposition
+
+This proposition is not specifically invoked in the rest of the *Elements.*  The next two propositions, however, are special cases of it, and they are each explicitly used once.
