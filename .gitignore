@@ -4,8 +4,17 @@
 # Lektor's local config + caches
 /.lektor/
 
-# Lektor plugins installed locally
-/packages/
+# Lektor plugins. In-tree plugin source (e.g. packages/lektor-katex/) is
+# tracked; per-plugin pip-install artifacts are not.
+/packages/*.egg-info/
+/packages/**/*.egg-info/
+/packages/**/build/
+
+# Node + KaTeX runtime — installed via `npm install`, ~1MB of fonts/JS.
+# The katex.min.css + fonts copied into assets/css/katex/ stay tracked
+# so deploys don't need npm at build time. node_modules itself is
+# rebuilt from package.json + package-lock.json.
+/node_modules/
 
 # Per-project venv (optional — README documents both per-project and ~/venvs/lektor)
 /.venv/
