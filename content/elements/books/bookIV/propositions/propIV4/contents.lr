@@ -10,6 +10,209 @@ statement: To inscribe a circle in a given triangle.
 ---
 proof:
 
+Let *ABC* be the given triangle.
+
+It is required to inscribe a circle in the triangle *ABC.*
+
+<figure class="diagram">
+<canvas id="canvas_0" width="320" height="260" tabindex="0"></canvas>
+<noscript><img alt="IV.4 diagram" src="propIV4.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "IV.4",
+        pivot: "D",
+        elements: [
+            "A;point;free;210,40",
+            "B;point;free;40,190",
+            "C;point;free;280,220",
+            "ABC;polygon;triangle;A,B,C;0;0;black;random",
+            "BB';line;angleBisector;A,B,C;0;0;0",
+            "CC';line;angleBisector;B,C,A;0;0;0",
+            "D;point;intersection;BB',CC';black;green",
+            "F;point;foot;D,B,C",
+            "E;point;foot;D,A,B",
+            "G;point;foot;D,C,A",
+            "EFG;circle;radius;D,E;0;0;black;random",
+            "BD;line;connect;B,D",
+            "CD;line;connect;C,D",
+            "ED;line;connect;E,D",
+            "FD;line;connect;F,D",
+            "GD;line;connect;G,D"
+        ],
+    });
+</script>
+</figure>
+
+Bisect the angles *ABC* and *ACB* by the straight lines *BD* and *CD,* and let these meet one another at the point *D.* Draw *DE, DF,* and *DG* from *D* perpendicular to the straight lines *AB, BC,* and *CA.* [!just I.9; I.12]
+
+Now, since the angle *ABD* equals the angle *CBD,* and the right angle *BED* also equals the right angle *BFD, EBD* and *FBD* are two triangles having two angles equal to two angles and one side equal to one side, namely that opposite one of the equal angles, which is *BD* common to the triangles, therefore they will also have the remaining sides equal to the remaining sides, therefore *DE* equals *DF.* [!just I.26]
+
+For the same reason *DG* also equals *DF.*
+
+Therefore the three straight lines *DE, DF,* and *DG* equal one another. Therefore the circle described with center *D* and radius one of the straight lines *DE, DF,* or *DG* also passes through the remaining points and touches the straight lines *AB, BC,* and *CA,* because the angles at the points *E, F,* and *G* are right.
+
+For, if it cuts them, the straight line drawn at right angles to the diameter of the circle from its end will be found to fall within the circle, which was proved absurd, therefore the circle described with center *D* and radius one of the straight lines *DE, DF,* or *DG* does not cut the straight lines *AB, BC,* and *CA* Therefore it touches them, and is the circle inscribed in the triangle *ABC.* [!just III.16; IV.Def.5]
+
+Let it be inscribed as *FGE.*
+
+Therefore the circle *EFG* has been inscribed in the given triangle *ABC.*
+
+<div class="qed">Q.E.F.</div>
 ---
 body:
 
+It is easy to supply the missing argument that the angle bisectors *BD* and *CD* do meet.
+
+#### Incircles and excircles
+
+<figure class="diagram rdiagram">
+<canvas id="canvas_1" width="350" height="350" tabindex="0"></canvas>
+<noscript><img alt="Incircle and excircles" src="propIV4a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_1",
+        background: "0,0,100",
+        title: "Incircle and excircles",
+        pivot: "D",
+        elements: [
+            "A;point;free;140,100",
+            "B;point;free;90,160",
+            "C;point;free;200,180",
+            "L0;point;free;0,0;0;0",
+            "L1;point;free;500,0;0;0",
+            "ABend;point;extend;A,B,L0,L1;0;0",
+            "BAend;point;extend;B,A,L0,L1;0;0",
+            "AB;line;connect;ABend,BAend",
+            "ACend;point;extend;A,C,L0,L1;0;0",
+            "CAend;point;extend;C,A,L0,L1;0;0",
+            "AC;line;connect;ACend,CAend",
+            "CBend;point;extend;C,B,L0,L1;0;0",
+            "BCend;point;extend;B,C,L0,L1;0;0",
+            "CB;line;connect;CBend,BCend",
+            "Bbis;line;angleBisector;A,B,C;0;0;0",
+            "Cbis;line;angleBisector;B,C,A;0;0;0",
+            "D;point;intersection;Bbis,Cbis;black;green",
+            "E;point;foot;D,A,B;0;0",
+            "incircle;circle;radius;D,E;0;0;black;random",
+            "Aperp;line;perpendicular;A,D;0;0;0",
+            "Bperp;line;perpendicular;B,D;0;0;0",
+            "Cperp;line;perpendicular;C,D;0;0;0",
+            "A';point;intersection;Bperp,Cperp",
+            "B';point;intersection;Aperp,Cperp",
+            "C';point;intersection;Bperp,Aperp",
+            "A'B'C';polygon;triangle;A',B',C';0;0;black;0",
+            "AA';line;connect;A,A'",
+            "BB';line;connect;B,B'",
+            "CC';line;connect;C,C'",
+            "A'foot;point;foot;A',B,C;0;0",
+            "B'foot;point;foot;B',A,C;0;0",
+            "C'foot;point;foot;C',A,B;0;0",
+            "A'circ;circle;radius;A',A'foot;0;0;black;random",
+            "B'circ;circle;radius;B',B'foot;0;0;black;random",
+            "C'circ;circle;radius;C',C'foot;0;0;black;random"
+        ],
+    });
+</script>
+</figure>
+
+This circle inscribed in a triangle has come to be known as the *incircle* of the triangle, its center the *incenter* of the triangle, and its radius the *inradius* of the triangle.
+
+The incircle is a circle tangent to the three lines *AB, BC,* and *AC.* If these three lines are extended, then there are three other circles also tangent to them, but outside the triangle. They are called the *excircles.*
+
+The points on the internal angle bisector *AD* are equidistant from the two sides of the triangle *AB* and *AC.* The line *KL* is perpendicular to *AD* at *A,* and the points on it are also equidistant from the extended sides *AB* and *AC.* The line *B'C'* is called the *external angle bisector* at *A.* Whereas the incenter *D* lies at the confluence of the three internal angle bisectors, the excenter *B'* lies at the confluence of two external angle bisectors *AB'* and *CB'* and one internal angle bisector *BB'.* Likewise for the other two excenters *A'* and *C'.*
+
+<small>(Drag around the points *A*, *B*, and *C* to see how the figure changes.)</small>
+
+#### Heron's formula
+
+<figure class="diagram">
+<canvas id="canvas_2" width="280" height="300" tabindex="0"></canvas>
+<noscript><img alt="Heron's formula" src="propIV4b.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_2",
+        background: "0,0,100",
+        title: "Heron's formula",
+        pivot: "D",
+        elements: [
+            "A;point;free;160,30",
+            "B;point;free;30,190",
+            "C;point;free;240,260",
+            "Bbis;line;angleBisector;A,B,C;0;0;0",
+            "Cbis;line;angleBisector;B,C,A;0;0;0",
+            "D;point;intersection;Bbis,Cbis;black;green",
+            "F;point;foot;D,B,C",
+            "E;point;foot;D,A,B",
+            "G;point;foot;D,C,A",
+            "ADB;polygon;triangle;A,D,B;0;0;black;random",
+            "CDB;polygon;triangle;C,D,B;0;0;black;random",
+            "CDA;polygon;triangle;C,D,A;0;0;black;random",
+            "ED;line;connect;E,D",
+            "FD;line;connect;F,D",
+            "GD;line;connect;G,D",
+            "incircle;circle;radius;D,E;0;0;lightGray;0"
+        ],
+    });
+</script>
+</figure>
+
+Heron of Alexandria (first century C.E.) was an important Greek mathematician who wrote, among other things, a commentary on the *Elements* which is lost now but was known to Proclus and an-Nairizi. In Heron's *Metrica,* which was rediscovered in 1896, there appears a proof of what is called Heron's formula. It states that the area of a triangle is the square root of *s*(*s* – *a*)(*s* – *b*)(*s* – *c*) where *a* = *BC, b* = *AC,* and *c* = *AB,* the sides of the triangle, and *s* is the semiperimeter (*a* + *b* + *c*)/2. Archimedes may have known this formula, but but we don't have his proof. Heath gives Heron's complete proof, but here we'll just look at the first part that involves the incircle.
+
+Let *D* be the incenter of the triangle *ABC,* and let *DE, DF,* and *DG* be perpendicular lines drawn to the sides as in Euclid's proof. These three lines are radii of the incircle, and therefore have length *r,* the inradius. The triangle *ABD* has base *AB* and height *r,* so its area is *r AB*/2. Likewise, the area of triangle *BCD* is *r BC*/2, and the area of triangle *CAD* is *r CA*/2. Adding these together we find the area of triangle *ABC* is *r* (*AB* + *BC* + *CA*)/2. Therefore we have
+
+<center>Area(<i>ABC</i>) = <i>rs</i></center>
+
+an interesting result in itself.
+
+We'll leave Heron's proof now and consider the corresponding statement for excircles.
+
+<figure class="diagram rdiagram">
+<canvas id="canvas_3" width="280" height="300" tabindex="0"></canvas>
+<noscript><img alt="excircle figure" src="propIV4c.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_3",
+        background: "0,0,100",
+        title: "Heron's formula",
+        elements: [
+            "A;point;free;130,30",
+            "B;point;free;70,110",
+            "C;point;free;180,120",
+            "ABC;polygon;triangle;A,B,C;0;0;black;0",
+            "L0;point;free;0,0;0;0",
+            "L1;point;free;500,0;0;0",
+            "ABend;point;extend;A,B,L0,L1;0;0",
+            "ACend;point;extend;A,C,L0,L1;0;0",
+            "AB;line;connect;B,ABend",
+            "AC;line;connect;C,ACend",
+            "Bperp;line;angleBisector;ABend,B,C;0;0;0",
+            "Cperp;line;angleBisector;ACend,C,B;0;0;0",
+            "A';point;intersection;Bperp,Cperp;black;green",
+            "F';point;foot;A',B,C",
+            "E';point;foot;A',A,B",
+            "G';point;foot;A',C,A",
+            "AA'B;polygon;triangle;A,A',B;0;0;black;random",
+            "CA'B;polygon;triangle;C,A',B;0;0;black;0",
+            "CA'A;polygon;triangle;C,A',A;0;0;black;random",
+            "E'A';line;connect;E',A'",
+            "F'A';line;connect;F',A'",
+            "G'A';line;connect;G',A'",
+            "excircle;circle;radius;A',E';0;0;lightGray;0"
+        ],
+    });
+</script>
+</figure>
+
+Now let *A'* be the excenter on the bisector of the internal angle at *A.* Let *A'E', A'F',* and *A'G'* be the perpendiculars drawn from *A'* to the sides of the triangle. They are radii of the excircle of length *r<sub>A</sub>.* Triangle *ABA'* has base *AB* and height *A'E',* so its area is *r<sub>A</sub> AB*/2. Likewise, the area of triangle *BCA'* is *r<sub>A</sub> BC*/2, and the area of triangle *CAA'* is *r<sub>A</sub> CA*/2. Triangle *ABC* is the sum of triangles *ABA'* and *ACA'* minus triangle *BCA',* so its area is *r<sub>A</sub>* (*AB* + *AC* – *CA*)/2 which equals *r<sub>A</sub>*(*s* – *A*).
+
+From the other excircles we get two more equations. We then have
+
+<center>Area(<i>ABC</i>) = <i>rs</i> = <i>r<sub>A</sub></i>(<i>s</i> – <i>A</i>) = <i>r<sub>B</sub></i>(<i>s</i> – <i>B</i>) = <i>r<sub>C</sub></i>(<i>s</i> – <i>C</i>).</center>
+
+There are other relationships among these radii, for instance,
+
+<center>1/<i>r</i> = 1/<i>r<sub>A</sub></i> + 1/<i>r<sub>B</sub></i> + 1/<i>r<sub>C</sub>,</i></center>
+
+but let's stop here to go on to the circumcircle of a triangle.

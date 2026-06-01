@@ -12,6 +12,57 @@ red_highlight: yes
 ---
 proof:
 
+Let *ABC* be the given circle, and *D* the given straight line not greater than the diameter of the circle
+
+It is required to fit a straight line into the circle *ABC* equal to the straight line *D.*
+
+<figure class="diagram">
+<canvas id="canvas_0" width="300" height="240" tabindex="0"></canvas>
+<noscript><img alt="IV.1 diagram" src="propIV1.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "IV.1",
+        elements: [
+            "B;point;free;30,120",
+            "C;point;free;170,120",
+            "BC;line;connect;B,C",
+            "O;point;midpoint;BC;0;0",
+            "ABC;circle;radius;O,B;0;0;black;random",
+            "D0;point;free;-1000,50;0,0",
+            "D3;point;free;1000,50;0,0",
+            "D1;point;lineSlider;D0,D3,210,30;0",
+            "D2;point;lineSlider;D0,D3,270,30;0",
+            "D;line;connect;D1,D2;black",
+            "E;point;cutoff;C,B,D1,D2",
+            "AEF;circle;radius;C,E;0;0;black;0",
+            "A'A;line;bichord;ABC,AEF",
+            "A;point;last;A'A",
+            "AC;line;connect;A,C",
+            "F;point;perpendicular;C,E;black;0"
+        ],
+    });
+</script>
+</figure>
+
+Draw a diameter *BC* of the circle *ABC.*
+
+If *BC* equals *D,* then that which was proposed is done, for *BC* has been fitted into the circle *ABC* equal to the straight line *D.*
+
+But, if *BC* is greater than *D,* make *CE* equal to *D,* describe the circle *EAF* with center *C* and radius *CE,* and join *CA.* [!just I.3]
+
+Then, since the point *C* is the center of the circle *EAF, CA* equals *CE.*
+
+But *CE* equals *D,* therefore *D* also equals *CA.*
+
+Therefore *CA* has been fitted into the given circle *ABC* equal to the given straight line *D.* [!just IV.Def.7]
+
+<div class="qed">Q.E.F.</div>
+<br clear="all">
 ---
 body:
 
+The hypothesis that the line to be fitted into the circle is no longer than the diameter of the circle is certainly necessary, but Euclid did not show it was sufficient. That is sufficient to conclude the two circles actually meet at a point *A* is never demonstrated. This logical gap has appeared before in the *Elements,* for instance in Propositions @I.1 and @I.22.
+
+This proposition is used in the proofs of @IV.10, @IV.16, and occasionally in Books X, XI, and XII.

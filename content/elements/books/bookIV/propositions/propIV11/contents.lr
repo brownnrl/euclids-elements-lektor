@@ -10,6 +10,193 @@ statement: To inscribe an equilateral and equiangular pentagon in a given circle
 ---
 proof:
 
+Let *ABCDE* be the given circle.
+
+It is required to inscribe an equilateral and equiangular pentagon in the circle *ABCDE.*
+
+Set out the isosceles triangle *FGH* having each of the angles at *G* and *H* double the angle at *F.* [!just IV.10]
+
+Inscribe in the circle *ABCDE* the triangle *ACD* equiangular with the triangle *FGH,* so that the angles *CAD,* *ACD,* and *CDA* equal the angles at *F,* *G,* and *H* respectively.   Therefore each of the angles *ACD* and *CDA* is also double the angle *CAD.* [!just IV.2]
+
+<figure class="diagram">
+<canvas id="canvas_0" width="350" height="250" tabindex="0"></canvas>
+<noscript><img alt="IV.11 diagram" src="propIV11.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "IV.11",
+        elements: [
+            "A;point;free;98,30",
+            "B;point;free;30,80",
+            "ABCDE;polygon;regularPolygon;A,B,5;0;0;black;0",
+            "C;point;vertex;ABCDE,3",
+            "D;point;vertex;ABCDE,4",
+            "E;point;vertex;ABCDE,5",
+            "circ;circle;circumcircle;A,B,C;0;0;black;random",
+            "dupABCDE;polygon;regularPolygon;A,B,5;0;0;0;random",
+            "AC;line;connect;A,C",
+            "AD;line;connect;A,D",
+            "BD;line;connect;B,D",
+            "CE;line;connect;C,E",
+            "G;point;free;210,220",
+            "H;point;free;310,220",
+            "F;point;similar;G,H,C,D,A",
+            "FGH;polygon;triangle;F,G,H;0;0;black;random"
+        ],
+    });
+</script>
+</figure>
+
+Now bisect the angles *ACD* and *CDA* respectively by the straight lines *CE* and *DB,* and join *AB,* *BC,*  *DE,* and *EA.* [!just I.9]
+
+Then, since each of the angles *ACD* and *CDA* is double the angle *CAD,* and they are bisected by the straight lines *CE* and *DB,* therefore the five angles *DAC,* *ACE,* *ECD,* *CDB,* and *BDA* equal one another.
+
+But equal angles stand on equal circumferences, therefore the five circumferences *AB,* *BC,* *CD,* *DE,* and *EA* equal one another. [!just III.26]
+
+But straight lines that cut off equal circumferences are equal, therefore the five straight lines *AB,* *BC,* *CD,* *DE,* and *EA* equal one another.  Therefore the pentagon *ABCDE* is equilateral. [!just III.29]
+
+I say next that it is also equiangular.
+
+For, since the circumference *AB* equals the circumference *DE,* add *BCD* to each, therefore the whole circumference *ABCD* equals the whole circumference *EDCB.*
+
+And the angle *AED* stands on the circumference *ABCD,* and the angle *BAE* on the circumference *EDCB,* therefore the angle *BAE* also equals the angle *AED.* [!just III.27]
+
+For the same reason each of the angles *ABC,* *BCD,* and *CDE* also equals each of the angles *BAE* and *AED,* therefore the pentagon *ABCDE* is equiangular.
+
+But it was also proved equilateral, therefore an equilateral and equiangular pentagon has been inscribed in the given circle.
+
+<div class="qed">Q.E.F.</div>
 ---
 body:
 
+#### Richmond's construction
+
+<figure class="diagram rdiagram">
+<canvas id="canvas_1" width="310" height="330" tabindex="0"></canvas>
+<noscript><img alt="Richmond's construction" src="propIV11a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_1",
+        background: "0,0,100",
+        title: "Richmond's construction",
+        elements: [
+            "O;point;free;150,165",
+            "A;point;free;280,165",
+            "AEB;circle;radius;O,A;0;0;black;white",
+            "OA;line;connect;O,A",
+            "B;point;perpendicular;O,A",
+            "OB;line;connect;O,B",
+            "C;point;midpoint;O,B",
+            "AC;line;connect;A,C",
+            "D;point;angleBisector;O,C,A",
+            "CD;line;connect;C,D",
+            "E';point;perpendicular;D,A;0;0",
+            "EE';line;chord;D,E',AEB;0;0;0",
+            "E;point;first;EE'",
+            "DE;line;connect;D,E",
+            "AE;line;connect;A,E",
+            "F;point;similar;E,O,A,O,E;0;0",
+            "EF;line;connect;E,F;0;0;gray",
+            "G;point;similar;F,O,A,O,E;0;0",
+            "FG;line;connect;F,G;0;0;gray",
+            "H;point;similar;G,O,A,O,E;0;0",
+            "GH;line;connect;G,H;0;0;gray",
+            "HA;line;connect;H,A;0;0;gray"
+        ],
+    });
+</script>
+</figure>
+
+The construction of this proposition is rather tedious to carry out. First, a line has to be cut according to the construction in @II.11. Next, that is used in @IV.10 for the construction of a 36°-72°-72° isosceles triangle.  Next, that triangle is fit into the given circle using the construction @IV.2.  Finally, a couple more lines are drawn to finish the pentagon.
+
+Various alternatives have have been given by others, such as Ptolemy.  One of the nicest was given in 1893 by H. W. Richmond. To inscribe a regular pentagon in a circle, first draw perpendicular radii *OA* and *OB* from the center *O* of a circle.  Let *C* be the midpoint of *OB* and draw *AC.*  Bisect angle *ACO* to meet *OA* at *D.*  Draw a perpendicular *DE* to *OA* to the circle.  Then *AE* is one side of the pentagon.  The remaining sides can then be constructed.
+
+The easiest way to verify that Richmond's construction works is by means of trigonometry.
+
+<br clear="all">
+
+#### The angles and sections in extreme and mean ratio in a pentagram
+
+<figure class="diagram">
+<canvas id="canvas_2" width="380" height="350" tabindex="0"></canvas>
+<noscript><img alt="a pentagram" src="propIV11b.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_2",
+        background: "0,0,100",
+        title: "A pentagram",
+        elements: [
+            "A;point;free;190,28",
+            "B;point;free;41,136",
+            "ABCDE;polygon;regularPolygon;A,B,5;0;0;black;random",
+            "C;point;vertex;ABCDE,3",
+            "D;point;vertex;ABCDE,4",
+            "E;point;vertex;ABCDE,5",
+            "ACEBD;polygon;pentagon;A,C,E,B,D;0;0;black;random",
+            "F;point;intersection;B,D,C,E",
+            "G;point;intersection;A,D,C,E",
+            "H;point;intersection;A,D,B,E",
+            "K;point;intersection;A,C,B,E",
+            "L;point;intersection;B,D,C,A",
+            "FGHKL;polygon;pentagon;F,G,H,K,L;0;0;0;random",
+            "FHLGK;polygon;pentagon;F,H,L,G,K;0;0;black;random",
+            "M;point;intersection;L,H,G,K;0;0",
+            "N;point;intersection;L,H,K,F;0;0",
+            "P;point;intersection;L,G,K,F;0;0",
+            "Q;point;intersection;L,G,H,F;0;0",
+            "R;point;intersection;K,G,H,F;0;0",
+            "MNPQR;polygon;pentagon;M,N,P,Q,R;0;0;0;random",
+            "MPRNQ;polygon;pentagon;M,P,R,N,Q;0;0;black;random"
+        ],
+    });
+</script>
+</figure>
+
+Consider the regular pentagon *ABCDE* constructed in this proposition.
+
+Draw the diagonals of the pentagram to create a regular star pentagram *ACEBD* inside the pentagon. These diagonals meet forming a smaller regular pentagon in the center of the original pentagon.  The diagonals of that pentagon can be drawn to make an inscribed pentagram which, in turn, bound a yet smaller regular pentagon. And so forth.
+
+For purposes of analysis, let *d*<sub>1</sub> and *s*<sub>1</sub> denote the diagonal and side of the first regular pentagon *ABCDE.* Also let *d*<sub>2</sub> and *s*<sub>2</sub> denote the diagonal and side of the second regular pentagon *FGHKL.*  And so forth.
+
+It is evident that there are many lines parallel to the base *CD* of the triangle, namely *BE* and *LG,* as well as innumerable ones in the smaller pentagrams.  That means that there will be many 36°-72°-72° triangles besides the large one *ACD.* The next smaller one is *ALG,* then *FKH,* then many smaller ones.  Also, each of these various sized 36°-72°-72° triangles is congruent many others in the diagram.  For instance, triangles *ALG* and *EAK* are congruent.
+
+There is also a series of obtuse 36°-36°-108° isosceles triangles of varying sizes.
+
+All these parallel lines and similar triangles yield numerous relationships among the various diagonals and sides of the pentagons.  Some of these relationships are additive equations:
+
+> *d*<sub>1</sub> = *s*<sub>1</sub> + *d*<sub>2</sub>
+> <br>
+> *s*<sub>1</sub> = *d*<sub>2</sub> + *s*<sub>2</sub>
+> <br>
+> *d*<sub>2</sub> = *s*<sub>2</sub> + *d*<sub>3</sub>
+> <br>
+> *s*<sub>2</sub> = *d*<sub>3</sub> + *s*<sub>3</sub>
+> <br>
+> and so forth.
+
+Other relationships are based on the property of 36°-72°-72° triangles used in their construction in @IV.10, namely that the square of the base of such a triangle equals the product of a side and the difference between the side and the base.  In terms of the diagonals and sides of the pentagons, this gives the equations:
+
+> *d*<sub>1</sub> *d*<sub>2</sub> = *s*<sub>1</sub><sup>2</sup>
+> <br>
+> *s*<sub>1</sub> *s*<sub>2</sub> = *d*<sub>2</sub><sup>2</sup>
+> <br>
+> *d*<sub>2</sub> *d*<sub>3</sub> = *s*<sub>2</sub><sup>2</sup>
+> <br>
+> *s*<sub>2</sub> *s*<sub>3</sub> = *d*<sub>3</sub><sup>2</sup>
+> <br>
+> and so forth.
+
+After ratios are proportions are developed in [Book V](/elements/books/bookV/) and [Book VI](/elements/books/bookVI/), we can add the following continued proportion to the list of relationships:
+
+> *d*<sub>1</sub>:*s*<sub>1</sub> =
+> *s*<sub>1</sub>:*d*<sub>2</sub> =
+> *d*<sub>2</sub>:*s*<sub>2</sub> =
+> *s*<sub>2</sub>:*d*<sub>3</sub> =
+> ...
+
+See the [Guide](/elements/books/bookX/propositions/propX2/#guide) to proposition X.2 which shows that diagonal and side of a regular pentagon are incommensurable. In more modern terms we would say that their ratio, which is called the "golden ratio," is an irrational number.
+
+#### Use of this proposition
+
+This construction is used in the next proposition to circumscribe a regular pentagon around a circle and later in @IV.16 to construct a regular 15-gon. It is also used in @XIII.16 for the construction of a regular icosahedron (a 20-sided polyhedron each of whose faces is an equilateral triangle).  Surprisingly, it is not used in @XIII.17 for construct a regular dodecahedron (a 12-sided polyhedron each of whose faces is a regular pentagon); the regular pentagons needed for it are constructed in space directly without the help of this proposition.
