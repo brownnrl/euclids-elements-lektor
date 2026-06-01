@@ -30,9 +30,25 @@ Books II–XIII have placeholder slots in the footer-nav `proptable` but no cont
    - `/data-mirrored/projects/geometry/djoyce/converted/elements/bookN/`
    - `/data-mirrored/projects/geometry/djoyce/converted/java/elements/bookN/` (older JS-applet version; usually has the gif even when the modern mirror doesn't — see propII8)
    - `/data-mirrored/projects/geometry/djoyce/mirror/aleph0.clarku.edu/~djoyce/elements/bookN/` and the matching java path
-7. **Polish.** The agents will preserve some source quirks verbatim (typos in hrefs, mis-positioned figures). Iterate on user feedback or proactively check the patterns documented in [Common edge cases](#common-edge-cases).
-8. **Extend `proptable[i]`** in `assets/js/footer-nav.js` with the book's nav order so Next/Previous works end-to-end.
-9. **Update Book I intro Guide cross-references** where they pointed at "Book IV" / "Book XI" placeholder URLs — they should now resolve to live pages.
+7. **Normalize + convert citations.** Run the two scripts in sequence — both default to dry-run so you can eyeball every proposed edit before applying. Idempotent: re-running on already-normalized content is a no-op.
+   ```sh
+   # Pass 1 — rewrite Joyce's variant display text to canonical eucref form.
+   #   Post.4 → I.Post.4         Def.I.5 → I.Def.5         Def.5 → I.Def.5
+   #   I.5.   → I.5  (trailing)  C.N     → C.N.            Post.I.N → I.Post.N
+   #   Postulate N → I.Post.N    Proposition I.N → I.N     Prop.I.N → I.N
+   python3 scripts/normalize-citations.py            # dry-run
+   python3 scripts/normalize-citations.py --write    # apply
+
+   # Pass 2 — convert now-canonical markdown links into eucref shortcodes.
+   #   [I.5](url) → @I.5  (when url matches canonical Lektor leaf)
+   #   <div class="just"><a>X</a>, <a>Y</a><br><a>Z</a></div> → [!just X, Y; Z]
+   python3 scripts/convert-to-eucref.py              # dry-run
+   python3 scripts/convert-to-eucref.py --write      # apply
+   ```
+   The scripts print a "Left as-is for hand-review" tally of cases where the display text matches the eucref grammar but the URL points at a non-canonical leaf — these are real source bugs (Joyce's hand-typed URL is wrong relative to his intended display). Look at each and decide: usually convert to `@TOKEN` form (the canonical URL is what was meant, even if Joyce's URL pointed at a bundle root or the wrong number); occasionally keep the markdown link if there's an intentional anchor (`#guide`, `#cor`) or the citation links into something the resolver can't express (an anchor-suffixed link, a cross-work reference to Apollonius later, etc.).
+8. **Polish.** The agents will preserve some source quirks verbatim (typos in hrefs, mis-positioned figures). Iterate on user feedback or proactively check the patterns documented in [Common edge cases](#common-edge-cases).
+9. **Extend `proptable[i]`** in `assets/js/footer-nav.js` with the book's nav order so Next/Previous works end-to-end.
+10. **Update Book I intro Guide cross-references** where they pointed at "Book IV" / "Book XI" placeholder URLs — they should now resolve to live pages.
 
 ## Build / verify cycle
 
