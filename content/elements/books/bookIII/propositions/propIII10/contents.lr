@@ -10,6 +10,77 @@ statement: A circle does not cut a circle at more than two points.
 ---
 proof:
 
+For, if possible, let the circle *ABC* cut the circle *DEF* at more points than two, namely *B, G, F,* and *H.*
+
+<figure class="diagram">
+<canvas id="canvas_0" width="300" height="300" tabindex="0"></canvas>
+<noscript><img alt="III.10 diagram" src="propIII10.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "III.10",
+        pivot: "P",
+        elements: [
+            "B;point;free;150,40",
+            "F;point;free;150,260",
+            "H;point;free;40,180",
+            "ABC;circle;circumcircle;B,F,H;0;0;black;random",
+            "P;point;center;ABC;black;green",
+            "G;point;circleSlider;ABC,210,150",
+            "HB;line;connect;H,B",
+            "BG;line;connect;B,G",
+            "K;point;midpoint;HB",
+            "L;point;midpoint;BG",
+            "S;point;midpoint;H,F;0;0",
+            "BHY;polygon;equilateralTriangle;B,H;0;0;0;0",
+            "Y;point;vertex;BHY,3;0;0",
+            "Z;point;intersection;H,Y,S,P;0;0",
+            "W;point;intersection;B,Y,L,P;0;0",
+            "X;point;intersection;F,Z,G,W;0;0",
+            "arcFG;sector;sector;X,F,G;0;0;black;0",
+            "arcGB;sector;sector;W,G,B;0;0;black;0",
+            "arcBH;sector;sector;Y,B,H;0;0;black;0",
+            "arcHF;sector;sector;Z,H,F;0;0;black;0",
+            "A;point;cutoff;P,K,P,B",
+            "C;point;extend;A,P,A,P",
+            "AC;line;connect;A,C",
+            "O;point;cutoff;P,L,P,B",
+            "N;point;extend;O,P,O,P",
+            "circGB;circle;radius;W,B;0;0;0;0",
+            "circHF;circle;radius;Z,H;0;0;0;0",
+            "EE';line;chord;N,O,circGB;0;0;0",
+            "MM';line;chord;N,O,circHF;0;0;0",
+            "E;point;last;EE'",
+            "M;point;first;MM'",
+            "EM;line;connect;E,M",
+            "D;point;cutoff;Y,A,Y,B;black;0"
+        ],
+    });
+</script>
+</figure>
+
+Join *BH* and *BG,* and bisect them at the points *K* and *L.* Draw  *KC* and *LM* from *K* and *L* at right angles to *BH* and *BG,*  and carry them through to the points *A* and *E.* [!just I.10; I.11]
+
+<div class="just"><a href="../propIII1/#cor">III.1,Cor</a></div>
+
+Then, since in the circle *ABC* a straight line *AC* cuts a straight line *BH* into two equal parts and at right angles, the center of the circle *ABC* lies on *AC.*  Again, since in the same circle *ABC* a straight line *NO* cuts a straight line *BG* into two equal parts and at right angles, the center of the circle *ABC* lies on *NO.*
+
+But it was also proved to lie on *AC,* and the straight lines *AC* and *NO* meet at no point except at *P,* therefore the point *P* is the center of the circle *ABC.*
+
+Similarly we can prove that *P* is also the center of the circle *DEF,* therefore the two circles *ABC* and *DEF* which cut one another have the same center *P,* which is impossible. [!just III.5]
+
+Therefore *a circle does not cut a circle at more than two points.*
+
+<div class="qed">Q.E.D.</div>
+<br clear=all>
 ---
 body:
 
+The figure is another impossible figure.  Both curves are supposed to be circumferences of circles, but, of course, they cannot both be drawn as circles since the situation is proved not to occur.  Although Euclid names four points where the circles meet, only three, *B, G,* and *H,* are used in the proof.
+
+The proof actually shows that the two circles cannot *meet* in more than two points, where "meet" could be either cut or touch.
+
+Heath remarks that the lines bisecting *BG* and *BH* have not been shown to meet.  In fact, they have, since the center of the circle *ABC* has been shown to be on both.
+
+This proposition is used in @III.24.
