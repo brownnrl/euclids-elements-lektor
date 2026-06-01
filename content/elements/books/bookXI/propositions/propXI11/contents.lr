@@ -12,6 +12,74 @@ red_highlight: yes
 ---
 proof:
 
+Let *A* be the given elevated point, and the plane of reference the given plane.
+
+It is required to draw from the point *A* a straight line perpendicular to the plane of reference.
+
+<figure class="diagram">
+<canvas id="canvas_0" width="310" height="300" tabindex="0"></canvas>
+<noscript><img alt="XI.11 diagram" src="propXI11.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "XI.11",
+        pivot: "F,xyplane",
+        elements: [
+            "origin;point;free;120,160;0;0,50,100",
+            "x;point;fixed;280,160,100;0;darkGray",
+            "yzplane;plane;perpendicular;origin,x;0;0;0;0",
+            "y;point;planeSlider;yzplane,-90,260,40;0;0,50,100",
+            "xyplane;plane;3points;origin,x,y;0;0;lightGray",
+            "z1;point;perpendicular;origin,y,yzplane;0;0",
+            "z;point;lineSlider;origin,z1,50,50,100;0",
+            "Oz;line;connect;origin,z;0;0;lightGray",
+            "ceiling;plane;parallel;xyplane,z;0;0;0;0",
+            "A;point;planeSlider;ceiling,140,100,180",
+            "B;point;planeSlider;xyplane,208,270,140",
+            "C;point;planeSlider;xyplane,245,190,80",
+            "BC;line;connect;B,C",
+            "D;point;foot;A,BC",
+            "AD;line;connect;A,D",
+            "E';point;perpendicular;D,C,xyplane;0;0",
+            "E;point;lineSlider;D,E',100,120,80",
+            "DE;line;connect;D,E",
+            "F;point;foot;A,D,E;black;green",
+            "AF;line;connect;A,F",
+            "G;point;parallelogram;B,D,F",
+            "H;point;parallelogram;C,D,F",
+            "GH;line;connect;G,H"
+        ],
+    });
+</script>
+</figure>
+
+Draw any straight line *BC* at random in the plane of reference, and draw *AD* from the point *A* perpendicular to *BC.* [!just I.12]
+
+Then if *AD* is also perpendicular to the plane of reference, then that which was proposed is done.
+
+But if not, draw *DE* from the point *D* at right angles to *BC* and in the plane of reference, draw *AF* from *A* perpendicular to *DE,* and draw *GH* through the point *F* parallel to *BC.* [!just I.11, I.12; I.31]
+
+Now, since *BC* is at right angles to each of the straight lines *DA* and *DE,* therefore *BC* is also at right angles to the plane through *ED* and *DA.* [!just XI.4]
+
+And *GH* is parallel to it, but if two straight lines are parallel, and one of them is at right angles to any plane, then the remaining one is also at right angles to the same plane, therefore *GH* is also at right angles to the plane through *ED* and *DA.* [!just XI.8]
+
+Therefore *GH* is also at right angles to all the straight lines which meet it and are in the plane through *ED* and *DA.* [!just XI.Def.3]
+
+But *AF* meets it and lies in the plane through *ED* and *DA,* therefore *GH* is at right angles to *FA,* so that *FA* is also at right angles to *GH.* But *AF* is also at right angles to *DE,* therefore *AF* is at right angles to each of the straight lines *GH* and *DE.*
+
+But if a straight is set up at right angles to two straight lines which cut one another at their intersection point, then it also is at right angles to the plane through them. Therefore *FA* is at right angles to the plane through *ED* and *GH.* [!just XI.4]
+
+But the plane through *ED* and *GH* is the plane of reference, therefore *AF* is at right angles to the plane of reference.
+
+Therefore from the given elevated point *A* the straight line *AF* has been drawn perpendicular to the plane of reference.
+
+<div class="qed">Q.E.F.</div>
 ---
 body:
 
+In the proof, before the line *AD* can be drawn from the point *A* perpendicular to the line *BC,* it is necessary to know that the point and line belong to the same plane. Such a plane can be specified by taking the line *BC* and a line from *A* to any point on *BC* since two intersecting lines determine a plane (@XI.2).
+
+#### Use of this proposition
+
+The construction in this proposition is used frequently in the last three books of the *Elements.*

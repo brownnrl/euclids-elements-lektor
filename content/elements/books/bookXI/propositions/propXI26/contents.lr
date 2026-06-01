@@ -12,6 +12,76 @@ red_highlight: yes
 ---
 proof:
 
+Let *A* be the given point on the given straight line *AB,* and let the angle at *D* be the given solid angle contained by the angles *EDC, EDF,* and *FDC.*
+
+It is required to construct at the point *A* on the straight line *AB* a solid angle equal to the solid angle at *D.*
+
+Take a point *F* at random on *DF,* draw *FG* from *F* perpendicular to the plane through *ED* and *DC,* and let it meet the plane at *G.* Join *DG.* [!just XI.11]
+
+<figure class="diagram">
+<canvas id="canvas_0" width="360" height="320" tabindex="0"></canvas>
+<noscript><img alt="XI.26 diagram" src="propXI26.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "XI.26",
+        pivot: "A,xyplane",
+        elements: [
+            "origin;point;free;110,140;0;0,50,100",
+            "x;point;fixed;330,210,100;0;120,50,100",
+            "yzplane;plane;perpendicular;origin,x;0;0;0;0",
+            "y;point;planeSlider;yzplane,-90,202,90;0;0,50,100",
+            "xyplane;plane;3points;origin,x,y;0;0;lightGray",
+            "z1;point;perpendicular;origin,y,yzplane;0;0",
+            "z;point;lineSlider;origin,z1,40,40,100;0",
+            "Oz;line;connect;origin,z;0;0;lightGray",
+            "ceiling;plane;parallel;xyplane,z;0;0;0;0",
+            "A;point;planeSlider;xyplane,180,240,150",
+            "B;point;planeSlider;xyplane,220,220,210",
+            "AB;line;connect;A,B",
+            "C;point;planeSlider;xyplane,150,200,20",
+            "D;point;planeSlider;xyplane,50,210,100",
+            "E;point;planeSlider;xyplane,110,190,160",
+            "F;point;planeSlider;ceiling,160,140,110",
+            "G;point;foot;F,xyplane",
+            "FG;line;connect;F,G",
+            "DCG;polygon;triangle;D,C,G;0;0;black;270,70,100",
+            "DGE;polygon;triangle;D,G,E;0;0;black;270,70,100",
+            "DCF;polygon;triangle;D,C,F;0;0;black;random",
+            "DEF;polygon;triangle;D,E,F;0;0;black;random",
+            "L;point;similar;B,A,xyplane,E,D,C,xyplane",
+            "K';point;similar;B,A,xyplane,E,D,G,xyplane;0;0",
+            "K;point;cutoff;A,K',D,G",
+            "ABK;polygon;triangle;A,B,K;0;0;black;270,70,100",
+            "AKL;polygon;triangle;A,K,L;0;0;black;270,70,100",
+            "KH;line;perpendicular;K,xyplane,F,G",
+            "H;point;last;KH",
+            "ALH;polygon;triangle;A,L,H;0;0;black;random",
+            "ABH;polygon;triangle;A,B,H;0;0;black;random"
+        ],
+    });
+</script>
+</figure>
+
+At the point *A* on the straight line *AB* construct the angle *BAL* equal to the angle *EDC,* and construct the angle *BAK* equal to the angle *EDG.* [!just I.23]
+
+Make *AK* equal to *DG.* Set *KH* up from the point *K* at right angles to the plane through *BA* and *AL.* Make *KH* equal to *GF,* and join *HA.* [!just XI.12]
+
+I say that the solid angle at *A* contained by the angles *BAL, BAH,* and *HAL* equals the solid angle at *D* contained by the angles *EDC, EDF,* and *FDC.*
+
+Cut *AB* and *DE* off equal to one another, and join *HB, KB, FE,* and *GE.*
+
+Then, since *FG* is at right angles to the plane of reference, therefore it is also at right angles with all the straight lines which meet it and are in the plane of reference. Therefore each of the angles *FGD* and *FGE* is right. For the same reason each of the angles *HKA* and *HKB* is also right. [!just XI.Def.3]
+
+And, since the two sides *KA* and *AB* equal the two sides *GD* and *DE* respectively, and they contain equal angles, therefore the base *KB* equals the base *GE.* But *KH* also equals *GF,* and they contain right angles, therefore *HB* also equals *FE.* Again, since the two sides *AK* and *KH* equal the two sides *DG* and *GF,* and they contain right angles, therefore the base *AH* equals the base *FD.* [!just I.4]
+
+But *AB* also equals *DE,* therefore the two sides *HA* and *AB* are equal to the two sides *DF* and *DE.* And the base *HB* is equal to the base *FE,* therefore the angle *BAH* equals the angle *EDF.* For the same reason the angle *HAL* also equals the angle *FDC.* [!just I.8]
+
+And the angle *BAL* also equals the angle *EDC.* Therefore at the point *A* on the straight line *AB* a solid angle has been constructed equal to the given solid angle at *D.*
+
+<div class="qed">Q.E.F.</div>
 ---
 body:
 
+This construction is used in the next one to construct similar parallelepipeds.
