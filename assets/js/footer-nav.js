@@ -425,7 +425,46 @@ var proptable = [
         ["propositions/propXI38/", "XI.38"],
         ["propositions/propXI39/", "XI.39"]
     ],
-    [], [] // Books XII-XIII (placeholders)
+    [ // Book XII
+        ["propositions/propXII1/",  "XII.1"],
+        ["propositions/propXII2/",  "XII.2"],
+        ["propositions/propXII3/",  "XII.3"],
+        ["propositions/propXII4/",  "XII.4"],
+        ["propositions/propXII5/",  "XII.5"],
+        ["propositions/propXII6/",  "XII.6"],
+        ["propositions/propXII7/",  "XII.7"],
+        ["propositions/propXII8/",  "XII.8"],
+        ["propositions/propXII9/",  "XII.9"],
+        ["propositions/propXII10/", "XII.10"],
+        ["propositions/propXII11/", "XII.11"],
+        ["propositions/propXII12/", "XII.12"],
+        ["propositions/propXII13/", "XII.13"],
+        ["propositions/propXII14/", "XII.14"],
+        ["propositions/propXII15/", "XII.15"],
+        ["propositions/propXII16/", "XII.16"],
+        ["propositions/propXII17/", "XII.17"],
+        ["propositions/propXII18/", "XII.18"]
+    ],
+    [ // Book XIII
+        ["propositions/propXIII1/",  "XIII.1"],
+        ["propositions/propXIII2/",  "XIII.2"],
+        ["propositions/propXIII3/",  "XIII.3"],
+        ["propositions/propXIII4/",  "XIII.4"],
+        ["propositions/propXIII5/",  "XIII.5"],
+        ["propositions/propXIII6/",  "XIII.6"],
+        ["propositions/propXIII7/",  "XIII.7"],
+        ["propositions/propXIII8/",  "XIII.8"],
+        ["propositions/propXIII9/",  "XIII.9"],
+        ["propositions/propXIII10/", "XIII.10"],
+        ["propositions/propXIII11/", "XIII.11"],
+        ["propositions/propXIII12/", "XIII.12"],
+        ["propositions/propXIII13/", "XIII.13"],
+        ["propositions/propXIII14/", "XIII.14"],
+        ["propositions/propXIII15/", "XIII.15"],
+        ["propositions/propXIII16/", "XIII.16"],
+        ["propositions/propXIII17/", "XIII.17"],
+        ["propositions/propXIII18/", "XIII.18"]
+    ]
 ];
 
 function bookUrl(book) {
