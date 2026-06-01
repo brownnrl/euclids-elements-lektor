@@ -8,8 +8,101 @@ short_label: VII.1
 ---
 statement: When two unequal numbers are set out, and the less is continually subtracted in turn from the greater, if the number which is left never measures the one before it until a unit is left, then the original numbers are relatively prime.
 ---
+red_highlight: yes
+---
 proof:
 
+The less of two unequal numbers *AB* and *CD* being continually subtracted from the greater, let the number which is left never measure the one before it until a unit is left.
+
+<figure class="diagram">
+<canvas id="canvas_0" width="140" height="270" tabindex="0"></canvas>
+<noscript><img alt="VII.1 diagram" src="propVII1.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "VII.1",
+        elements: [
+            "A0;point;free;30,-1000;0;0",
+            "A3;point;free;30,1000;0;0",
+            "C0;point;free;65,-1000;0;0",
+            "C3;point;free;65,1000;0;0",
+            "E0;point;free;100,-1000;0;0",
+            "E3;point;free;100,1000;0;0",
+            "A;point;lineSlider;A0,A3,30,30",
+            "C;point;lineSlider;C0,C3,60,30",
+            "E1;point;lineSlider;E0,E3,30,30;0",
+            "H;point;lineSlider;A0,A3,30,50",
+            "C1;point;cutoff;C,C3,A,H;0;0",
+            "G;point;cutoff;C1,C3,A,H",
+            "F;point;cutoff;H,A3,C,G",
+            "G1;point;cutoff;G,C3,A,F;0;0",
+            "D;point;cutoff;G1,C3,A,F",
+            "B;point;cutoff;F,A3,C,D",
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "E2;point;cutoff;E1,E3,A,H;0",
+            "E;line;connect;E1,E2;black"
+        ],
+    });
+</script>
+</figure>
+
+I say that *AB* and *CD* are relatively prime, that is, that a unit alone measures *AB* and *CD.* [!just VII.Def.12]
+
+If *AB* and *CD* are not relatively prime, then some number *E* measures them. Let *CD,* measuring *BF,* leave *FA* less than itself, let *AF,* measuring *DG,* leave *GC* less than itself, and let *GC,* measuring *FH,* leave a unit *HA.*
+
+Since, then, *E* measures *CD,* and *CD* measures *BF,* therefore *E* also measures *BF.*
+
+But it also measures the whole *BA,* therefore it measures the remainder *AF.* But *AF* measures *DG,* therefore *E* also measures *DG.* But it also measures the whole *DC,* therefore it also measures the remainder *CG.*
+
+But *CG* measures *FH,* therefore *E* also measures *FH.* But it also measures the whole *FA,* therefore it measures the remainder, the unit *AH,* though it is a number, which is impossible.
+
+Therefore no number measures the numbers *AB* and *CD.* Therefore *AB* and *CD* are relatively prime. [!just VII.Def.12]
+
+Therefore, *when two unequal numbers are set out, and the less is continually subtracted in turn from the greater, if the number which is left never measures the one before it until a unit is left, then the original numbers are relatively prime.*
+
+<div class="qed">Q.E.D.</div>
 ---
 body:
 
+#### Example
+
+Following the algorithm described in this proposition, the numbers 54 and 85 are relatively prime as the following computations show.
+
+<center><table>
+<tr><td align=right>85 – 2 · 31</td><td>=</td><td>23</td></tr>
+<tr><td align=right>31 – 23</td><td>=</td><td>8</td></tr>
+<tr><td align=right>23 – 2 · 8</td><td>=</td><td>7</td></tr>
+<tr><td align=right>8 – 7</td><td>=</td><td>1</td></tr>
+</table></center>
+
+#### Antenaresis, the Euclidean algorithm
+
+Modern terminology uses the word "divides" rather than "measures," and the notation *a* | *b* is used to abbreviate the phrase "*a* divides *b.*"
+
+This proposition assumes that 1 is the result of an antenaresis process. *Antenaresis,* also called the *Euclidean algorithm,* is a kind of reciprocal subtraction. Beginning with two numbers, the smaller, whichever it is, is repeatedly subtracted from the larger.
+
+If the initial two numbers are *a*<sub>1</sub> (*AB* in the proof) and *a*<sub>2</sub> (*CD*), with *a*<sub>1</sub> greater than *a*<sub>2</sub>, then the first stage is to repeatedly subtract *a*<sub>2</sub> from *a*<sub>1</sub> until a remainder *a*<sub>3</sub> (*AF*) less than *a*<sub>2</sub> is found. That can be stated algebraically as
+
+<center><i>a</i><sub>1</sub> – <i>m</i><sub>1</sub> <i>a</i><sub>2</sub> = <i>a</i><sub>3</sub></center>
+
+where *m*<sub>1</sub> is the number of times that *a*<sub>2</sub> was subtracted from *a*<sub>1</sub>.
+
+The next stage repeatedly subtracts *a*<sub>3</sub> from *a*<sub>2</sub> leaving a remainder *a*<sub>4</sub> (*CG*):
+
+<center><i>a</i><sub>2</sub> – <i>m</i><sub>2</sub> <i>a</i><sub>3</sub> = <i>a</i><sub>4</sub>.</center>
+
+For the hypotheses of this proposition, the algorithm stops when a remainder of 1 occurs:
+
+<center><i>a</i><sub><i>n</i>-1</sub> – <i>m</i><sub><i>n</i>-1</sub> <i>a</i><sub><i>n</i></sub> = 1.</center>
+
+(In Euclid's proof, *a*<sub>*n*</sub> is *a*<sub>5</sub> which is *AH.*) The conclusion is that *a*<sub>1</sub> and *a*<sub>2</sub> are relatively prime.
+
+The proof is not difficult. It depends on the observation that if *b* divides (that is, measures) both *c* and *d,* then *b* divides their difference *c* – *d.* So, if some number *b* divides both *a*<sub>1</sub> and *a*<sub>2</sub>, then it divides the remainder *a*<sub>3</sub>, too. And since it divides both *a*<sub>2</sub> and *a*<sub>3</sub>, it divides the remainder *a*<sub>4</sub>. And so forth, with the final conclusion that *b* divides the last remainder 1.
+
+Since there is no number *b* (and by "number" is meant a number greater than 1) which divides 1, there is no number that divides both *a*<sub>1</sub> and *a*<sub>2</sub>. Therefore *a*<sub>1</sub> and *a*<sub>2</sub> are relatively prime.
+
+Compare this proposition to @X.2, a somewhat analogous statement about magnitudes.
+
+This proposition is used in the proof of the next one.

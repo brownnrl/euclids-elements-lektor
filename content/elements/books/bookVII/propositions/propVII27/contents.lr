@@ -10,6 +10,85 @@ statement: If two numbers are relatively prime, and each multiplied by itself ma
 ---
 proof:
 
+Let *A* and *B* be two relatively prime numbers, let *A* multiplied by itself make *C,* and multiplied by *C* make *D,* and let *B* multiplied by itself make *E,* and multiplied by *E* make *F.*
+
+<figure class="diagram">
+<canvas id="canvas_0" width="210" height="290" tabindex="0"></canvas>
+<noscript><img alt="VII.27 diagram" src="propVII27.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "VII.27",
+        elements: [
+            "U1;point;free;1000,0;0;0",
+            "U2;point;free;1000,20;0;0",
+            "A0;point;free;30,-1000;0;0",
+            "A3;point;free;30,1000;0;0",
+            "A1;point;lineSlider;A0,A3,30,30;0",
+            "A2;point;lineSlider;A0,A3,30,62;0",
+            "A;line;connect;A1,A2;black",
+            "B0;point;free;60,-1000;0;0",
+            "B3;point;free;60,1000;0;0",
+            "B1;point;lineSlider;B0,B3,60,30;0",
+            "B2;point;lineSlider;B0,B3,60,75;0",
+            "B;line;connect;B1,B2;black",
+            "C0;point;free;90,-1000;0;0",
+            "C3;point;free;90,1000;0;0",
+            "C1;point;lineSlider;C0,C3,90,30;0",
+            "C2;point;proportion;U1,U2,A1,A2,A1,A2,C1,C3;0",
+            "C;line;connect;C1,C2;black",
+            "D0;point;free;120,-1000;0;0",
+            "D3;point;free;120,1000;0;0",
+            "D1;point;lineSlider;D0,D3,120,30;0",
+            "D2;point;proportion;U1,U2,A1,A2,C1,C2,D1,D3;0",
+            "D;line;connect;D1,D2;black",
+            "E0;point;free;150,-1000;0;0",
+            "E3;point;free;150,1000;0;0",
+            "E1;point;lineSlider;E0,E3,90,30;0",
+            "E2;point;proportion;U1,U2,B1,B2,B1,B2,E1,E3;0",
+            "E;line;connect;E1,E2;black",
+            "F0;point;free;180,-1000;0;0",
+            "F3;point;free;180,1000;0;0",
+            "F1;point;lineSlider;F0,F3,180,30;0",
+            "F2;point;proportion;U1,U2,B1,B2,E1,E2,F1,F3;0",
+            "F;line;connect;F1,F2;black"
+        ],
+    });
+</script>
+</figure>
+
+I say that *C* and *E* are relatively prime, and that *D* and *F* are relatively prime.
+
+Since *A* and *B* are relatively prime, and *A* multiplied by itself makes *C,* therefore *C* and *B* are relatively prime. [!just VII.25]
+
+Since, then, *C* and *B* are relatively prime, and *B* multiplied by itself makes *E,* therefore *C* and *E* are relatively prime.
+
+Again, since *A* and *B* are relatively prime, and *B* multiplied by itself makes *E,* therefore *A* and *E* are relatively prime.
+
+Since, then, the two numbers *A* and *C* are relatively prime to the two numbers *B* and *E,* both to each, therefore the product of *A* and *C* is relatively prime to the product of *B* and *E.* And the product of *A* and *C* is *D,* and the product of *B* and *E* is *F.* [!just VII.26]
+
+Therefore *D* and *F* are relatively prime.
+
+Therefore, *if two numbers are relatively prime, and each multiplied by itself makes a certain number, then the products are relatively prime; and, if the original numbers multiplied by the products make certain numbers, then the latter are also relatively prime.*
+
+<div class="qed">Q.E.D.</div>
+<br clear="all">
 ---
 body:
 
+The proposition states that
+
+<center>if <i>a</i> and <i>b</i> are relatively prime, then <i>a<sup>n</sup></i> and <i>b<sup>n</sup></i> are relatively prime.</center>
+
+Euclid's proof only covers the cases where *n* is 2 or 3, but the way it is used in @VIII.2, any powers need to be relatively prime.
+
+The proof of this proposition uses the last two propositions. Assume that *a* and *b* are relatively prime. Then applying @VII.25 twice, we first get *a*<sup>2</sup> and *b* relatively prime, then we get *a*<sup>2</sup> and *b*<sup>2</sup> relatively prime.
+
+Again, by @VII.25, *a* and *b*<sup>2</sup> are relatively prime. Now, *a* is relatively prime to *b*<sup>2</sup>, and *b* is relatively prime to *a*<sup>2</sup>, so by @VII.26, *a*<sup>3</sup> is relatively prime to *b*<sup>3</sup>.
+
+Likewise, higher powers of *a* and *b* can be shown to be relatively prime.
+
+#### Use of this proposition
+
+This proposition is used in @VIII.2 and @VIII.3.
