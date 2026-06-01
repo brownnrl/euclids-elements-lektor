@@ -15,6 +15,10 @@ Tokens recognized:
   - `{Roman}.Def.{number}`      → definition   e.g. I.Def.10, XI.Def.2
   - `{Roman}.Post.{number}`     → postulate    e.g. I.Post.3
   - `C.N.{number}`              → common notion (Book I)  e.g. C.N.1
+  - `X.Def.{I|II|III}.{number}` → Book X subsection definition
+                                  e.g. X.Def.I.3, X.Def.II.1, X.Def.III.6.
+                                  Maps to global numbering: I.1-4 → X.Def.1-4,
+                                  II.1-6 → X.Def.5-10, III.1-6 → X.Def.11-16.
 
 Anything else (typos, unrecognized prefix) becomes `<a href="#unresolved-…">`
 so it surfaces visibly when proofreading the rendered page.
@@ -37,11 +41,23 @@ ROMAN_VALID = {
 # The Roman-numeral alternation is built from the explicit set above so we
 # don't accidentally match arbitrary uppercase letter runs.
 _ROMAN_ALT = "|".join(sorted(ROMAN_VALID, key=len, reverse=True))
+# Token grammar (order matters — longest match first):
+#   X.Def.{I|II|III}.{N}    — Book X subsection notation
+#   {Roman}.(Def|Post).{N}  — standard def/post citation
+#   {Roman}.{N}             — proposition citation
+#   C.N.{N?}                — common notion (Book I), optional number
 _TOKEN_BARE = (
-    rf"(?:(?:{_ROMAN_ALT})\.(?:Def\.|Post\.)?\d+|C\.N\.\d*)"
+    rf"(?:X\.Def\.(?:III|II|I)\.\d+"
+    rf"|(?:{_ROMAN_ALT})\.(?:Def\.|Post\.)?\d+"
+    rf"|C\.N\.\d*)"
 )
 INLINE_RE = re.compile(rf"@({_TOKEN_BARE})")
 BLOCK_RE = re.compile(r"\[!just\s+(.+?)\]")
+
+
+# Book X subsection-to-global offset. DefsI 1-4 stays as 1-4; DefsII shifts
+# by 4 (II.1 → 5); DefsIII shifts by 10 (III.1 → 11).
+_X_DEF_OFFSET = {"I": 0, "II": 4, "III": 10}
 
 
 def resolve(token: str) -> str:
@@ -68,6 +84,10 @@ def resolve(token: str) -> str:
             return f"/elements/books/book{book}/definitions/def{book}{n}/"
         if kind == "Post":
             return f"/elements/books/book{book}/postulates/post{n}/"
+    if len(parts) == 4 and book == "X" and parts[1] == "Def" and parts[2] in _X_DEF_OFFSET:
+        section, local_n = parts[2], int(parts[3])
+        global_n = _X_DEF_OFFSET[section] + local_n
+        return f"/elements/books/bookX/definitions/defX{global_n}/"
     return f"#unresolved-{token}"
 
 
