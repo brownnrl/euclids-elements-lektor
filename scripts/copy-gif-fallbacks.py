@@ -12,13 +12,17 @@ SOURCES = [
     pathlib.Path("/data-mirrored/projects/geometry/djoyce/converted/elements/bookI"),
     pathlib.Path("/data-mirrored/projects/geometry/djoyce/converted/elements/bookII"),
     pathlib.Path("/data-mirrored/projects/geometry/djoyce/converted/elements/bookIII"),
+    pathlib.Path("/data-mirrored/projects/geometry/djoyce/converted/elements/bookIV"),
     pathlib.Path("/data-mirrored/projects/geometry/djoyce/converted/java/elements/bookI"),
     pathlib.Path("/data-mirrored/projects/geometry/djoyce/converted/java/elements/bookII"),
     pathlib.Path("/data-mirrored/projects/geometry/djoyce/converted/java/elements/bookIII"),
+    pathlib.Path("/data-mirrored/projects/geometry/djoyce/converted/java/elements/bookIV"),
     pathlib.Path("/data-mirrored/projects/geometry/djoyce/mirror/aleph0.clarku.edu/~djoyce/elements/bookI"),
     pathlib.Path("/data-mirrored/projects/geometry/djoyce/mirror/aleph0.clarku.edu/~djoyce/elements/bookIII"),
+    pathlib.Path("/data-mirrored/projects/geometry/djoyce/mirror/aleph0.clarku.edu/~djoyce/elements/bookIV"),
     pathlib.Path("/data-mirrored/projects/geometry/djoyce/mirror/aleph0.clarku.edu/~djoyce/java/elements/bookI"),
     pathlib.Path("/data-mirrored/projects/geometry/djoyce/mirror/aleph0.clarku.edu/~djoyce/java/elements/bookIII"),
+    pathlib.Path("/data-mirrored/projects/geometry/djoyce/mirror/aleph0.clarku.edu/~djoyce/java/elements/bookIV"),
 ]
 
 GIF_RE = re.compile(r'<img[^>]+src="([^"]+\.gif)"', re.IGNORECASE)
