@@ -43,11 +43,13 @@ ROMAN_VALID = {
 _ROMAN_ALT = "|".join(sorted(ROMAN_VALID, key=len, reverse=True))
 # Token grammar (order matters — longest match first):
 #   X.Def.{I|II|III}.{N}    — Book X subsection notation
+#   {Roman}.{N}.Cor         — corollary of proposition N
 #   {Roman}.(Def|Post).{N}  — standard def/post citation
 #   {Roman}.{N}             — proposition citation
 #   C.N.{N?}                — common notion (Book I), optional number
 _TOKEN_BARE = (
     rf"(?:X\.Def\.(?:III|II|I)\.\d+"
+    rf"|(?:{_ROMAN_ALT})\.\d+\.Cor"
     rf"|(?:{_ROMAN_ALT})\.(?:Def\.|Post\.)?\d+"
     rf"|C\.N\.\d*)"
 )
@@ -84,6 +86,8 @@ def resolve(token: str) -> str:
             return f"/elements/books/book{book}/definitions/def{book}{n}/"
         if kind == "Post":
             return f"/elements/books/book{book}/postulates/post{n}/"
+        if kind.isdigit() and n == "Cor":
+            return f"/elements/books/book{book}/propositions/prop{book}{kind}/#cor"
     if len(parts) == 4 and book == "X" and parts[1] == "Def" and parts[2] in _X_DEF_OFFSET:
         section, local_n = parts[2], int(parts[3])
         global_n = _X_DEF_OFFSET[section] + local_n
