@@ -10,6 +10,119 @@ statement: In right-angled triangles the figure on the side opposite the right a
 ---
 proof:
 
+Let *ABC* be a right-angled triangle having the angle *BAC* right.
+
+I say that the figure on *BC* equals the sum of the similar and similarly described figures on *BA* and *AC.*
+
+Draw the perpendicular *AD.* [!just I.12]
+
+<figure class="diagram">
+<canvas id="canvas_0" width="380" height="280" tabindex="0"></canvas>
+<noscript><img alt="VI.31 diagram" src="propVI31.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "VI.31",
+        pivot: "D",
+        elements: [
+            "B;point;free;60,180",
+            "C;point;free;300,180",
+            "M;point;midpoint;B,C;0;0",
+            "circ;circle;radius;M,B;0;0;0;0",
+            "A;point;circleSlider;circ,120,80",
+            "ABC;polygon;triangle;A,B,C;0;0;black;random",
+            "D;point;foot;A,B,C;black;green",
+            "AD;line;connect;A,D",
+            "E;point;free;60,260;0",
+            "F;point;free;300,260;0",
+            "BCFE;polygon;quadrilateral;B,C,F,E;0;0;black;random",
+            "G;point;similar;A,B,B,C,E;0",
+            "H;point;similar;A,B,B,C,F;0",
+            "ABHG;polygon;quadrilateral;A,B,H,G;0;0;black;random",
+            "K;point;similar;C,A,B,C,E;0",
+            "N;point;similar;C,A,B,C,F;0",
+            "CANK;polygon;quadrilateral;C,A,N,K;0;0;black;random"
+        ],
+    });
+</script>
+</figure>
+
+Then, since in the right-angled triangle *ABC, AD* has been drawn from the right angle at *A* perpendicular to the base *BC,* therefore the triangles *DBA* and *DAC* adjoining the perpendicular are similar both to the whole *ABC* and to one another. [!just VI.8]
+
+And, since *ABC* is similar to *DBA,* therefore *BC* is to *BA* as *BA* is to *BD.* [!just VI.Def.1]
+
+And, since three straight lines are proportional, the first is to the third as the figure on the first is to the similar and similarly described figure on the second. [!just VI.19.Cor]
+
+Therefore *BC* is to *BD* as the figure on *BC* is to the similar and similarly described figure on *BA.*
+
+For the same reason also, *BC* is to *CD* as the figure on *BC* is to that on *CA,* so that, in addition, *BC* is to the sum of *BD* and *DC* as the figure on *BC* is to the sum of the similar and similarly described figures on *BA* and *AC.* [!just V.24]
+
+But *BC* equals the sum of *BD* and *DC,* therefore the figure on *BC* equals the sum of the similar and similarly described figures on *BA* and *AC.*
+
+Therefore, *in right-angled triangles the figure on the side opposite the right angle equals the sum of the similar and similarly described figures on the sides containing the right angle.*
+
+<div class="qed">Q.E.D.</div>
+<br clear="all">
 ---
 body:
 
+This proposition is a generalization of @I.47 where the squares in I.47 are replaced by any similar rectilinear figures.
+
+#### Hippocrates' quadrature of lunes
+
+Proclus says that this proposition is Euclid's own, and the proof may be his, but
+the result, if not the proof, was known long before Euclid, at least in the time
+of Hippocrates a century before Euclid.
+
+The broad problem Hippocrates was investigating was that of quadrature of a circle, also called squaring a circle, which is to find a square (or any other polygon) with the same area as a given
+ circle.  Hippocrates did not solve that problem, but he did solve a related one involving lunes.  A *lune* (also called a *crescent*) is a region of nonoverlap of two intersecting circles.
+ Hippocrates did not succeed in squaring an arbitrary lune, but he did succeed in a couple special cases.  Here is a summary of the simplest case.
+
+<figure class="diagram rdiagram">
+<canvas id="canvas_1" width="280" height="280" tabindex="0"></canvas>
+<noscript><img alt="Hippocrates' lune" src="propVI31a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_1",
+        background: "0,0,100",
+        title: "Hippocrates' lune",
+        elements: [
+            "A;point;free;65,250",
+            "C;point;free;250,65",
+            "AC;line;connect;A,C",
+            "E;point;midpoint;AC",
+            "B;point;perpendicular;E,C",
+            "D;point;extend;B,E,B,E",
+            "BD;line;connect;B,D",
+            "F;point;cutoff;D,B,D,A;black;0",
+            "G1;point;midpoint;A,B;0;0",
+            "G;point;cutoff;E,G1,E,A;black;0",
+            "H1;point;midpoint;C,B;0;0",
+            "H;point;cutoff;E,H1,E,A;black;0",
+            "ACsemi;sector;sector;E,C,A;0;0;black;random",
+            "ABC;polygon;triangle;A,B,C;0;0;black;0",
+            "ACsector;sector;sector;D,C,A;0;0;black;35,19,100",
+            "ACD;polygon;triangle;A,C,D;0;0;black;35,19,100"
+        ],
+    });
+</script>
+</figure>
+
+Draw a square *ABCD* with diameters *AC* and *BD* meeting at *E.* Circumscribe a semicircle *AGBHC* about the right isosceles triangle *ABC.*  Draw the arc
+ *AFC* from *A* to *C* of a circle with center *D* and radius *DA.*
+
+Hippocrates finds the area of the lune formed between the semicircle *AGBHC* and the arc *AF* as follows.
+
+Note that there are three segments of circles in the diagram; two of them are small, namely,
+*AGB* with base *AB,* and *BHC* with base *BC,* and one is large, namely, *AFC* with base *AC.*  The first two are congruent, and the third is similar to them since all
+ three are segments in quarters of circles.
+
+Hippocrates then uses a version of this proposition VI.31—generalized so the figures don't have to be rectilinear but may have curved sides— to conclude that the sum of the two small segments, *AGB*&nbsp;+&nbsp;*BHC,* equals the large segment *AFC,* since the bases of the small segments are sides of a right triangle while the base of the large segment is the triangle's hypotenuse.
+
+Therefore, the lune, which is the semicircle minus the large segment, equals the semicircle minus the sum of the small segments.  But the semicircle minus the sum of the small segments is just the right triangle *ABC.*  Thus, a rectilinear figure (the triangle) has been found equal to the lune, as required.
+
+Note that at Hippocrates' time, Eudoxus' theory of proportion had not been developed, so the understanding of the theory of similar figures (Book V) was not as
+ complete as it was after Eudoxus.  Also, Eudoxus' principle of exhaustion (see Book XI and proposition @X.1) for finding areas
+ of curved figures was still to come, so the concept of area of curved figures was on shaky ground, too.  Such a situation is common in mathematics—mathematics advances into new territory long
+ before the foundations of mathematics are developed to logically justify those advances.

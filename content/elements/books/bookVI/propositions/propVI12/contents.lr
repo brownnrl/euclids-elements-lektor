@@ -12,6 +12,133 @@ red_highlight: yes
 ---
 proof:
 
+Let *A* and *B* and *C* be the three given straight lines.
+
+<figure class="diagram">
+<canvas id="canvas_0" width="320" height="250" tabindex="0"></canvas>
+<noscript><img alt="VI.12 diagram" src="propVI12.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "VI.12",
+        elements: [
+            "A0;point;free;-1000,30;0,0",
+            "A3;point;free;1000,30;0,0",
+            "A1;point;lineSlider;A0,A3,30,0;0",
+            "A2;point;lineSlider;A0,A3,160,0;0",
+            "A;line;connect;A1,A2;black",
+            "B0;point;free;-1000,60;0,0",
+            "B3;point;free;1000,60;0,0",
+            "B1;point;lineSlider;B0,B3,30,0;0",
+            "B2;point;lineSlider;B0,B3,140,0;0",
+            "B;line;connect;B1,B2;black",
+            "C0;point;free;-1000,90;0,0",
+            "C3;point;free;1000,90;0,0",
+            "C1;point;lineSlider;C0,C3,30,0;0",
+            "C2;point;lineSlider;C0,C3,110,0;0",
+            "C;line;connect;C1,C2;black",
+            "D;point;free;30,230",
+            "E';point;free;280,50;0",
+            "F';point;free;280,230;0",
+            "G;point;cutoff;D,E',A1,A2",
+            "E;point;extend;D,G,B1,B2",
+            "H;point;cutoff;D,F',C1,C2",
+            "F;point;similar;D,E,D,G,H",
+            "DEF;polygon;triangle;D,E,F;0;0;black;random",
+            "DGH;polygon;triangle;D,G,H;0;0;black;random",
+            "EE';line;connect;E,E'",
+            "FF';line;connect;F,F'"
+        ],
+    });
+</script>
+</figure>
+
+It is required to find a fourth proportional to *A, B,* and *C.*
+
+Set out two straight lines *DE* and *DF* containing any angle *EDF.* Make *DG* equal to *A, GE* equal to *B,* and *DH* equal to *C.* Join *GH,* and draw *EF* through *E* parallel to it. [!just I.3; I.31]
+
+Then since *GH* is parallel to a side *EF* of the triangle *DEF,* therefore *DG* is to *GE* as *DH* is to *HF.* [!just VI.2]
+
+But *DG* equals *A* and *GE* to *B,* and *DH* to *C,* therefore *A* is to *B* as *C* is to *HF.* [!just V.7]
+
+Therefore a fourth proportional *HF* has been found to the three given straight lines *A, B,* and *C.*
+
+<div class="qed">Q.E.F.</div>
+<br clear="all">
 ---
 body:
 
+Of course, the previous proposition is a special case of this one.
+
+#### Descartes' geometric algebra
+
+Descartes (1591–1661) is well known for his coordinate geometry which he and Fermat developed in the 16th century. This subject, also called analytic geometry, places an *x-y*-coordinate system on a plane so that a curve in the plane corresponds to an equation in two variables *x* and *y.* The usual way this correspondence is used is to convert a problem in geometry into an algebraic problem about equations.
+
+Descartes was equally interested is using geometry to solve algebraic problems, but using a method quite distinct from that in the *Elements* which began in Book II.
+
+His idea was to take an equation in one variable and find a geometric figure which can be used to solve the equation. The idea wasn't particularly new as even Menaechmus (fl. about 350 B.C.E) had about 50 years before Euclid intersected two parabolas to find cube roots, which are solutions to particular cubic equations. Furthermore, about 1100, Omar Khayyam solved all cubic equations by means of parabolas and hyperbolas. But Descartes was systematic and was able to use the relatively recent invention of symbolic algebra to make more connections.
+
+Descartes began by interpreting the algebraic operations of addition, subtraction, multiplication, division, and extraction of square roots as geometric constructions on lines. He represented each (positive) magnitude by a line. Addition and subtraction were the same as Euclid's. To add two lines, just extend one by the length of the other. To subtract one line from another, just take the remainder after cutting it off the other. Multiplication and division, however, were different from Euclid's. Euclid represented the product of two lines by a rectangle, the product of three lines by a box in space, and Euclid didn't represent the product of four lines.
+
+<figure class="diagram rdiagram">
+<canvas id="canvas_1" width="250" height="250" tabindex="0"></canvas>
+<noscript><img alt="Descartes multiplies" src="propVI12a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_1",
+        background: "0,0,100",
+        title: "Descartes multiplies",
+        elements: [
+            "A;point;free;30,230;0",
+            "B;point;free;100,160;0",
+            "u;line;connect;A,B;black",
+            "C;point;lineSlider;u,220,30;0",
+            "a;line;connect;B,C;black",
+            "D;point;free;80,230;0",
+            "b;line;connect;A,D;black",
+            "E;point;similar;D,A,B,A,C;0",
+            "ab;line;connect;D,E;black",
+            "BD;line;connect;B,D",
+            "CE;line;connect;C,E"
+        ],
+    });
+</script>
+</figure>
+
+But Descartes took the product of two lines to be another line. That required selecting a unit line, that is, a line of length 1. Then to find the product *ab* of two quantities *a* and *b,* he only needed to find the fourth proportional of 1, *a,* and *b.* This proposition VI.10 does that.
+
+In the diagram to the right, *u* is the unit line, *a* and *b* are to be multiplied, and *ab* is their product, the fourth proportional.
+
+<figure class="diagram rdiagram">
+<canvas id="canvas_2" width="250" height="160" tabindex="0"></canvas>
+<noscript><img alt="Descartes divides" src="propVI12b.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_2",
+        background: "0,0,100",
+        title: "Descartes divides",
+        elements: [
+            "A;point;free;20,130;0",
+            "B;point;free;60,90;0",
+            "b;line;connect;A,B;black",
+            "C;point;lineSlider;b,120,40;0",
+            "c;line;connect;B,C;black",
+            "D;point;free;110,130;0",
+            "u;line;connect;A,D;black",
+            "E;point;similar;D,A,B,A,C;0",
+            "c/b;line;connect;D,E;black",
+            "BD;line;connect;B,D",
+            "CE;line;connect;C,E"
+        ],
+    });
+</script>
+</figure>
+
+This same proposition works to construct the quotient of two quantities. If *b* and *c* are two quantities, then the fourth proportional for *b, c,* and 1 is the quotient *c/b.*
+
+Descartes achieved the fifth operation, extraction of square roots, by means of the semicircle and right angle construction described in the next proposition @VI.13.
+
+#### Use of this proposition
+
+This proposition is used in the proofs of @VI.22, @VI.23, and half a dozen propositions in Book X.
