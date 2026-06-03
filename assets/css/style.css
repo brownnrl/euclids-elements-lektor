@@ -208,6 +208,20 @@ div.threecolumn
     clear: both;
     margin-top: 1.5em;
 }
+/* Static footer for /other-works/ pages (prev / up / next).
+   Needs clear:both for the same reason #footer does — content above
+   often ends with a floated <figure class="diagram"> and without
+   clear the nav table wraps up alongside the figure. The override
+   on table.footer-nav width is so the prev/next links can use the
+   full page width rather than shrinking to text width and crowding
+   into a narrow column. */
+footer.other-works-nav {
+    clear: both;
+    margin-top: 1.5em;
+}
+footer.other-works-nav table.footer-nav {
+    width: 100%;
+}
 hr.footer-sep {
     border: 0;
     border-top: 1px solid #ccc;
@@ -300,6 +314,19 @@ figure.diagram {
 figure.diagram.rdiagram {
     float: right;
     margin: 0.3em 0 0.6em 1.2em;
+}
+/* Block (non-floating) variant. Use when a figure logically belongs
+   ON ITS OWN LINE between two paragraphs rather than alongside prose.
+   The figure sits centered, prose flows above and below it without
+   wrapping. Pairs naturally with an h3/h4 heading marking a new
+   section — keeps the figure visibly tied to its own prose instead
+   of letting wrapping mix it with the next section. */
+figure.diagram.block,
+figure.diagram.block.rdiagram {
+    float: none;
+    clear: both;
+    display: block;
+    margin: 1em auto;
 }
 figure.diagram canvas {
     display: inline-block;

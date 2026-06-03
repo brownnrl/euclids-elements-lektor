@@ -5,6 +5,12 @@
 {% set model_id = this._model or "" %}
 {% set is_book_leaf = (model_id in ["proposition", "definition", "postulate", "commonnotion"]) %}
 {% set is_book = (model_id == "book") %}
+{% set is_other_work = (model_id == "other_work") %}
+{# Series root = a direct child of /other-works/. For compass-geometry
+   that's the page itself; for compass1..7 it's the parent. We use it
+   to render the stacked header for series sub-pages. #}
+{% set is_other_works_series_root = (is_other_work and this.parent and this.parent.path == "/other-works") %}
+{% set is_other_works_sub = (is_other_work and this.parent and this.parent.parent and this.parent.parent.path == "/other-works") %}
 
 {# Recursive walk up the parent chain, emitting an <a> per ancestor
    separated by `›`. Used by the breadcrumb nav below. #}
@@ -46,6 +52,17 @@
   {% set book_ancestor = this.parent.parent if (this.parent.parent and this.parent.parent._model == "book") else this.parent %}
   <h1><a href="/" class="hover">Euclid&rsquo;s Elements</a></h1>
   <h1><a href="{{ book_ancestor|url }}" class="hover">{{ book_ancestor.title }}</a></h1>
+{% elif is_other_works_sub %}
+  {# Series sub-page (e.g. compass1..7). Stack: series root title +
+     this page's title. No Euclid's Elements logo on Joyce's
+     other-works tutorials. #}
+  <h1><a href="{{ this.parent|url }}" class="hover">{{ this.parent.title }}</a></h1>
+  <h1>{{ this.title }}</h1>
+{% elif is_other_work %}
+  {# Top-level work (round, sixeight, desargues, euler) or the
+     /other-works/ index itself, or a series root (compass-geometry).
+     Just the page's own title in the Felipa h1 style. #}
+  <h1>{{ this.title }}</h1>
 {% else %}
   {% include "_imagemap.html" %}
   {% if is_book %}
@@ -65,14 +82,41 @@
 
 {% block content %}{% endblock %}
 
-{# Bottom navigation + copyright is rendered client-side by
-   loadFooter() from /js/footer-nav.js — same pattern (and same
-   layout) as Joyce's original site, with proptable/booktable URLs
-   adapted to this rebuild's /elements/books/<book>/<section>/<leaf>/
-   structure. The copyright dates argument can be customized
-   per-page later if needed. #}
+{# Bottom navigation. For Elements pages we use the JS-driven
+   loadFooter() (booktable + proptable dropdowns + Next/Prev + credit
+   block) that mirrors Joyce's original site. For other-works pages
+   we render a simpler static Next/Prev + Up nav since those
+   tutorials are short standalone series and the dropdown widget
+   would be empty for them. #}
+{% if is_other_work and this.path != "/other-works" %}
+  {% set siblings = this.parent.children.filter(F._model == "other_work").order_by("order", "_path") | list %}
+  {% set ns = namespace(prev=none, next=none) %}
+  {% for s in siblings %}
+    {% if s._id == this._id %}
+      {% if not loop.first %}{% set ns.prev = siblings[loop.index0 - 1] %}{% endif %}
+      {% if not loop.last %}{% set ns.next = siblings[loop.index0 + 1] %}{% endif %}
+    {% endif %}
+  {% endfor %}
+  <footer class="other-works-nav">
+    <hr>
+    <table class="footer-nav">
+      <tr>
+        <td style="text-align:left; width:33%;">
+          {% if ns.prev %}<a href="{{ ns.prev|url }}">&larr;&nbsp;{{ ns.prev.title }}</a>{% endif %}
+        </td>
+        <td style="text-align:center; width:34%;">
+          <a href="{{ this.parent|url }}">{{ this.parent.title }}</a>
+        </td>
+        <td style="text-align:right; width:33%;">
+          {% if ns.next %}<a href="{{ ns.next|url }}">{{ ns.next.title }}&nbsp;&rarr;</a>{% endif %}
+        </td>
+      </tr>
+    </table>
+  </footer>
+{% else %}
 <div id="footer"></div>
 <script>loadFooter("1996, 1997, 2025");</script>
+{% endif %}
 
 </body>
 </html>
