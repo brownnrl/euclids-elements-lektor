@@ -142,12 +142,36 @@ div.twocolumn
   column-count:2;
 }
 
-  
 div.threecolumn
 {
   -moz-column-count:3; /* Firefox */
   -webkit-column-count:3; /* Safari and Chrome */
   column-count:3;
+}
+
+/* Keep each logical group (a book's <dl>, the prematter <dl>) intact
+   within a column — the default browser behavior lets the column
+   break mid-<dl>, splitting Book V's Propositions row away from its
+   Definitions row. Equivalents for older browsers included. */
+div.twocolumn > dl,
+div.threecolumn > dl {
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* Collapse multi-column layouts to a single column at phone widths.
+   Two columns at ~300px per column is too cramped for "Book III.
+   Theory of circles." plus its indented Definitions/Propositions
+   rows; the threshold is generous so portrait iPads still flow
+   in two columns. */
+@media (max-width: 640px) {
+  div.twocolumn,
+  div.threecolumn {
+    -moz-column-count: 1;
+    -webkit-column-count: 1;
+    column-count: 1;
+  }
 }
 
 /* --- Phase 1 mobile-readability patch (issue #4) --- */
