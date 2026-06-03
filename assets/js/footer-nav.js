@@ -729,7 +729,7 @@ function loadFooter(copyrightDates) {
     t += '<p class="footer-credit"><a href="/">Home</a>';
     t += '<br>©' + copyrightDates;
     t += '<br>David E. Joyce (Professor Emeritus, <a href="https://www.clarku.edu/">Clark University</a>)';
-    t += '<br><a href="https://www.euclids-elements.org/copyright.html">Copyright Notice</a>';
+    t += '<br><a href="/elements/prematter/copyright/">Copyright Notice</a>';
     t += '<br><a href="https://github.com/brownnrl/euclids-elements-lektor">Source</a></p>';
     var el = document.getElementById("footer");
     if (el) el.innerHTML = t;
