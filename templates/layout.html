@@ -85,19 +85,21 @@
 {# Bottom navigation. For Elements pages we use the JS-driven
    loadFooter() (booktable + proptable dropdowns + Next/Prev + credit
    block) that mirrors Joyce's original site. For other-works pages
-   we render a simpler static Next/Prev + Up nav since those
-   tutorials are short standalone series and the dropdown widget
-   would be empty for them. #}
-{% if is_other_work and this.path != "/other-works" %}
-  {% set siblings = this.parent.children.filter(F._model == "other_work").order_by("order", "_path") | list %}
-  {% set ns = namespace(prev=none, next=none) %}
-  {% for s in siblings %}
-    {% if s._id == this._id %}
-      {% if not loop.first %}{% set ns.prev = siblings[loop.index0 - 1] %}{% endif %}
-      {% if not loop.last %}{% set ns.next = siblings[loop.index0 + 1] %}{% endif %}
-    {% endif %}
-  {% endfor %}
+   we render a static prev/up/next + credit block — the JS dropdowns
+   would be empty since the tutorials aren't in proptable. #}
+{% if is_other_work %}
+  {% if this.path != "/other-works" %}
+    {% set siblings = this.parent.children.filter(F._model == "other_work").order_by("order", "_path") | list %}
+    {% set ns = namespace(prev=none, next=none) %}
+    {% for s in siblings %}
+      {% if s._id == this._id %}
+        {% if not loop.first %}{% set ns.prev = siblings[loop.index0 - 1] %}{% endif %}
+        {% if not loop.last %}{% set ns.next = siblings[loop.index0 + 1] %}{% endif %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
   <footer class="other-works-nav">
+    {% if this.path != "/other-works" %}
     <hr>
     <table class="footer-nav">
       <tr>
@@ -112,6 +114,15 @@
         </td>
       </tr>
     </table>
+    {% endif %}
+    <hr>
+    <p class="footer-credit">
+      <a href="/">Home</a>
+      <br>&copy;1996, 1997, 2025
+      <br>David E. Joyce (Professor Emeritus, <a href="https://www.clarku.edu/">Clark University</a>)
+      <br><a href="https://www.euclids-elements.org/copyright.html">Copyright Notice</a>
+      <br><a href="https://github.com/brownnrl/euclids-elements-lektor">Source</a>
+    </p>
   </footer>
 {% else %}
 <div id="footer"></div>
