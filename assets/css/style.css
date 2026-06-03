@@ -379,6 +379,49 @@ figure.diagram canvas {
     }
 }
 
+/* --- Mobile-pass: header tightening + footer-nav stacking --- */
+
+/* Stacked-h1 site header (book-leaf pages render "Euclid's Elements"
+   + "Book I" as two h1s, both 200% Felipa). On a phone that's ~64px
+   of header before the page even starts. Halve the line spacing and
+   drop the font down a step at narrow widths. */
+@media (max-width: 640px) {
+    .site-header h1 {
+        font-size: 150%;
+        margin: 0.05em 0;
+    }
+}
+
+/* Stack the JS-driven footer nav table cells vertically on phones.
+   The original two-column layout (Next/Prev on one side, <select>
+   dropdowns on the other) makes both columns ~150px on a 320px
+   phone — too cramped, and the selects can overflow. Force each
+   <td> to render as its own row. Same treatment for the static
+   other-works prev/up/next footer (3-column at desktop width). */
+@media (max-width: 640px) {
+    #footer table.footer-nav,
+    #footer table.footer-nav tbody,
+    #footer table.footer-nav tr,
+    #footer table.footer-nav td,
+    footer.other-works-nav table.footer-nav,
+    footer.other-works-nav table.footer-nav tbody,
+    footer.other-works-nav table.footer-nav tr,
+    footer.other-works-nav table.footer-nav td {
+        display: block;
+        width: auto !important;
+        text-align: center !important;
+    }
+    #footer table.footer-nav td,
+    footer.other-works-nav table.footer-nav td {
+        padding: 0.35em 0;
+    }
+    /* The JS footer's selects sit inside the table cells — give them
+       a sensible max-width so they don't push past the viewport. */
+    #footer table.footer-nav select {
+        max-width: 90%;
+    }
+}
+
 /* `red_highlight: yes` on a definition / postulate / common notion /
    proposition record colors the entry's text in Joyce's red. The
    class is applied to both <dt> and <dd> so the trailing "." after
