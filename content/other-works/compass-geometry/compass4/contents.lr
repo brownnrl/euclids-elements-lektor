@@ -8,3 +8,219 @@ short_label: Compass 4
 ---
 body:
 
+So that the point at infinity, ∞, is not treated separately, the ordinary Euclidean plane is replaced by the sphere. This is most easily seen by means of the well-known stereographic projection. A nice feature of using the sphere is that straight lines in the Euclidean plane correspond to circles on the sphere, so that straight lines and circles are put on the same footing. Furthermore, reflecting across a straight line becomes inversion in a circle on the sphere.
+
+Here's how it works. Take a sphere and a plane in three-space. Typically, the plane is taken to cut through the center of the sphere, or it's taken tangent to the sphere, but it doesn't matter. What's important is the selection of the projection point *N.* It must be on the sphere and on a line through the center of the sphere perpendicular to the given plane. (It also can't be a point in the plane.) In this diagram, the sphere is tangent to the plane at the point *S* (south pole), *O* is the center of the sphere, and *N* (north pole) is the projection point.
+
+<center>
+<figure class="diagram block">
+<canvas id="canvas_0" width="580" height="400" tabindex="0"></canvas>
+<noscript><img alt="stereographic projection" src="compass4a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "0,0,100",
+        title: "Stereographic projection",
+        elements: [
+            "origin;point;fixed;0,400,0;0;0",
+            "1X;point;fixed;100,390,20;0;0",
+            "1Y;point;fixed;10,420,-40;0;0",
+            "1Z;point;fixed;0,420,10;0;0",
+            "floor;plane;3points;origin,1X,1Y;0;0;0;0",
+            "a;point;planeSlider;floor,80,250,0;0",
+            "ab;line;parallel;a,origin,1X;0;0;0",
+            "b;point;lineSlider;ab,600,250,0;0",
+            "ac;line;parallel;a,origin,1Y;0;0;0",
+            "c;point;lineSlider;ac,50,-200,100;0",
+            "abc;polygon;parallelogram;b,a,c;0;0;0,0,50;0,0,90",
+            "S;point;planeSlider;floor,150,-50,50",
+            "Sperp;line;perpendicular;S,floor,origin,1X;0;0;0",
+            "N;point;lineSlider;Sperp,0,0,200",
+            "O;point;midpoint;S,N",
+            "SN;line;connect;S,N",
+            "Sphere;sphere;radius;O,S;0;0;black;random",
+            "Ofloor;plane;parallel;O,floor;0;0;0;0",
+            "equator;circle;radius;O,Ofloor,O,S;0;0;gray;0",
+            "A;point;sphereSlider;Sphere,500,50,200",
+            "B;point;intersection;N,A,floor",
+            "NB;line;connect;N,B",
+        ],
+    });
+</script>
+</figure>
+</center>
+
+A point *A* on the sphere corresponds to a point *B* on the plane when the three points *N, A,* and *B* are collinear. The only point on the sphere that doesn't correspond to a point in the plane is the projection point *N,* and it corresponds to the point at infinity, ∞. Thus, we have a correspondence between the plane with a point of infinity with the sphere.
+<br clear="all">
+
+<figure class="diagram block">
+<canvas id="canvas_1" width="350" height="320" tabindex="0"></canvas>
+<noscript><img alt="stereographic projection" src="compass4b.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_1",
+        background: "0,0,100",
+        title: "Stereographic projection",
+        elements: [
+            "origin;point;fixed;0,400,0;0;0",
+            "1X;point;fixed;100,390,20;0;0",
+            "1Y;point;fixed;10,420,-40;0;0",
+            "1Z;point;fixed;0,420,10;0;0",
+            "floor;plane;3points;origin,1X,1Y;0;0;0;0",
+            "a;point;planeSlider;floor,70,330,200;0",
+            "ab;line;parallel;a,origin,1X;0;0;0",
+            "b;point;lineSlider;ab,350,250,200;0",
+            "ac;line;parallel;a,origin,1Y;0;0;0",
+            "c;point;lineSlider;ac,50,-300,200;0",
+            "abc;polygon;parallelogram;b,a,c;0;0;0,0,50;0,0,90",
+            "S;point;planeSlider;floor,130,150,350",
+            "Sperp;line;perpendicular;S,floor,origin,1X;0;0;0",
+            "N;point;lineSlider;Sperp,0,100,150",
+            "O;point;midpoint;S,N;0",
+            "SN;line;connect;S,N",
+            "Sphere;sphere;radius;O,S;0;0;black;random",
+            "Ofloor;plane;parallel;O,floor;0;0;0;0",
+            "equator;circle;radius;O,Ofloor,O,S;0;0;gray;0",
+            "A;point;sphereSlider;Sphere,300,250,200",
+            "B;point;intersection;N,A,floor",
+            "NB;line;connect;N,B",
+            "C;point;sphereSlider;Sphere,200,300,100",
+            "ACNplane;plane;3points;A,C,N;0;0;0;0",
+            "ACNcircle;circle;circumcircle;A,C,N,ACNplane;0;0;black;0",
+            "D;point;intersection;N,C,floor",
+            "ND;line;connect;N,D",
+            "B1;point;extend;D,B,D,B;0;0",
+            "D1;point;extend;B,D,B,D;0;0",
+            "BD;line;connect;B1,D1;0;0",
+        ],
+    });
+</script>
+</figure>
+
+It's fairly easy to see why a straight line in the plane, like *BD,* corresponds to a circle on the sphere passing through the projection point *N.* Just consider the plane that includes the line *BD* and the point *N.* It will cut the sphere in a circle *ACN.* Conversely, given a circle *ACN* passing through the projection point *N,* the plane of the circle will intersect the base plane in a line *BD.*
+
+It is more difficult to see why a circle in the plane corresponds to a circle on the sphere not passing through the projection point *N.* In the diagram below, we'll show that the circle *ACE* on the sphere is projected to the circle *BDF* on the plane.
+
+<center>
+<figure class="diagram block">
+<canvas id="canvas_2" width="560" height="430" tabindex="0"></canvas>
+<noscript><img alt="stereographic projection" src="compass4c.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_2",
+        background: "0,0,100",
+        title: "Stereographic projection",
+        elements: [
+            "origin;point;fixed;0,400,0;0;0",
+            "1X;point;fixed;100,390,20;0;0",
+            "1Y;point;fixed;10,420,-40;0;0",
+            "1Z;point;fixed;0,420,10;0;0",
+            "floor;plane;3points;origin,1X,1Y;0;0;0;0",
+            "a;point;planeSlider;floor,100,500,0;0",
+            "ab;line;parallel;a,origin,1X;0;0;0",
+            "b;point;lineSlider;ab,540,250,0;0",
+            "ac;line;parallel;a,origin,1Y;0;0;0",
+            "c;point;lineSlider;ac,50,-200,100;0",
+            "abc;polygon;parallelogram;b,a,c;0;0;0,0,50;0,0,90",
+            "S;point;planeSlider;floor,150,-50,50",
+            "Sperp;line;perpendicular;S,floor,origin,1X;0;0;0",
+            "N;point;lineSlider;Sperp,0,0,200",
+            "O;point;midpoint;S,N;0",
+            "SN;line;connect;S,N",
+            "Sphere;sphere;radius;O,S;0;0;black;random",
+            "Ofloor;plane;parallel;O,floor;0;0;0;0",
+            "equator;circle;radius;O,Ofloor,O,S;0;0;gray;0",
+            "A;point;sphereSlider;Sphere,300,250,200",
+            "B;point;intersection;N,A,floor",
+            "NB;line;connect;N,B",
+            "C;point;sphereSlider;Sphere,200,300,100",
+            "E;point;sphereSlider;Sphere,250,200,150",
+            "ACEplane;plane;3points;A,C,E;0;0;0;0",
+            "ACEcircle;circle;circumcircle;A,C,E,ACEplane;0;0;black;0",
+            "D;point;intersection;N,C,floor",
+            "ND;line;connect;N,D",
+            "F;point;intersection;N,E,floor",
+            "NF;line;connect;N,F",
+            "BDFcircle;circle;circumcircle;B,D,F,floor;0;0;black;0",
+        ],
+    });
+</script>
+</figure>
+</center>
+
+The easiest way to see that is to recognize stereographic projection as an inversion in a sphere. Inversions in a sphere are three-dimensional analogues of inversions in a circle. The defining proportion is the same.
+
+Inversion in a sphere has properties similar to inversion in a circle. For instance, inverting a sphere *A* in a sphere *B* results in a sphere *A*<img src="thru.gif" alt=">">*B,* unless the center of the *B* sphere lies on *A,* in which case the result is a plane.
+
+<figure class="diagram block">
+<canvas id="canvas_3" width="280" height="300" tabindex="0"></canvas>
+<noscript><img alt="Inversion in a sphere" src="compass4d.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_3",
+        background: "0,0,100",
+        title: "Inversion in a sphere",
+        pivot: "O",
+        elements: [
+            "O;point;free;100,200",
+            "A;point;free;160,270",
+            "OA;sphere;radius;O,A;0;0;black;random",
+            "P;point;free;205,75",
+            "OP;line;connect;O,P",
+            "B;point;lineSlider;OP,150,100",
+            "PB;sphere;radius;P,B;0;0;black;random",
+            "B1;point;extend;B,P,B,P;0;0",
+            "B';point;proportion;O,B,O,A,O,A,O,B;0;0",
+            "B1';point;proportion;O,B1,O,A,O,A,O,B1;0;0",
+            "M;point;midpoint;B',B1';0;0",
+            "Q;sphere;radius;M,B';0;0;black;random",
+            "C;point;sphereSlider;PB,240,50,30",
+            "BCP;plane;3points;B,C,P;0;0;0;0",
+            "BCcirc;circle;circumcircle;B,B1,C,BCP;0;0;gray;0",
+            "C';point;proportion;O,C,O,A,O,A,O,C;0;0",
+            "B'C'circ;circle;circumcircle;B',B1',C',BCP;0;0;gray;0",
+            "D;point;parallelogram;O,P,C;0;0",
+            "E;point;cutoff;O,D,O,A;0;0",
+            "OE;circle;radius;O,E,BCP;0;0;gray;0",
+        ],
+    });
+</script>
+</figure>
+
+Take the first case where the center *P* of *B* doesn't lie on the sphere *A.* The sphere *A* is generated by rotating a circle around an axis, so take the axis to be line *OP* connecting the centers *P* and *O* of the spheres. Then the sphere *A* intersects that axis at two points *C* and *D,* and *A* is the sphere on the diameter *CD.* Let a plane containing this axis rotate around the axis. That plane intersects *A* in a circle with diameter *CD,* and the inverse of that circle is the circle in that plane on the diameter *C'D',* where *C'* and *D'* are the points inverse to *C* and *D,* respectively. As the plane rotates around the axis, the circles on the diameter *CD* are inverted to the circles on the diameter *C'D'.* Thus, a sphere *A*<img src="thru.gif" alt=">">*B* is generated by the rotating inverse circles.
+
+The other case where the center of *B* does lie on *A* is relevant to stereographic projection. The argument that *A*<img src="thru.gif" alt=">">*B* is a plane is similar to the previous argument, but it depends on the fact that a plane is generated by a rotating line perpendicular to an axis at a point on that axis.
+
+<figure class="diagram block">
+<canvas id="canvas_4" width="360" height="360" tabindex="0"></canvas>
+<noscript><img alt="stereographic projection" src="compass4e.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_4",
+        background: "0,0,100",
+        title: "Stereographic projection",
+        elements: [
+            "b0;point;fixed;-1000,300;0;0",
+            "b1;point;fixed;1000,300;0;0",
+            "base;line;connect;b0,b1",
+            "S;point;lineSlider;b0,b1,90,0",
+            "axis;line;perpendicular;S,b1;0;0;0",
+            "N;point;lineSlider;axis,150,60",
+            "NS;line;connect;N,S",
+            "O;point;midpoint;N,S;0;0",
+            "Ncirc;circle;radius;N,S;0;0;black;random",
+            "NAS;circle;radius;O,S;0;0;black;random",
+            "A;point;circleSlider;NAS,300,255",
+            "B;point;intersection;N,A,base",
+            "NB;line;connect;N,B",
+            "AS;line;connect;A,S",
+        ],
+    });
+</script>
+</figure>
+
+We'll show now that the stereographic projection of a sphere with diameter *NS* to the plane tangent to *S* is actually inversion in a sphere with center *N* and radius *NS.* The diagram to the left shows a cross section, that is, an intersection with a plane containing the axis *NS.* The point *A* on the sphere is projected to the point *B.* Note that we have three similar right triangles: *NSB, NAS,* and *SAB.* Therefore, *NA* : *NS* = *NS* : *AB.* Thus, when *A* is inverted in the circle with radius *NS,* the resulting point is *B.* We conclude that stereographic projection is inversion in a sphere.
+
+Now we can answer why stereographic projection preserves circles. Consider any circle on the sphere that doesn't pass through *N.* It is the intersection of the sphere with a plane. Since stereographic projection is an inversion in a circle, that plane will be inverted to a sphere, and that sphere will intersect the tangent plane is a circle. Thus the image of a circle not passing through *N* is a circle.
+<br clear="all">
+

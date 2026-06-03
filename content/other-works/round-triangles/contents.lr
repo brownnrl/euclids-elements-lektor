@@ -2,5 +2,136 @@ _model: other_work
 ---
 title: Round Triangles
 ---
+order: 2
+---
 body:
 
+In inversive geometry, a triangle *ABC* is bounded by three arcs of circles: *AB*, *BC*, and *CA*. We'll call such triangles *round triangles* for short.
+
+Note that the arcs *AB* and *CA* are parts of circles that intersect at two points, one being *A*, and the other we'll denote *A\**. Similarly, *B\** and *C\** are the other intersections of two other pairs of circles. We'll call these the *dual vertices* of the triangle *ABC*. By exchanging an unstarred point for a starred point other related round triangles are named including a dual triangle *A\*B\*C\**.
+
+<figure class="diagram block">
+<canvas id="canvas_0" width="400" height="300" tabindex="0"></canvas>
+<noscript><img alt="A Round Triangle" src="round1a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "0,0,100",
+        title: "A Round Triangle",
+        elements: [
+            "A;point;free;220,60",
+            "B;point;free;120,150",
+            "C;point;free;200,170",
+            "A*;point;free;130,200",
+            "AB;circle;circumcircle;A,B,A*;0;0;black;0",
+            "B*;point;circleSlider;210,250,AB",
+            "CA;circle;circumcircle;C,A,A*;0;0;black;0",
+            "BC;circle;circumcircle;B,C,B*;0;0;black;0",
+            "BCcenter;point;center;BC;0;0",
+            "CAcenter;point;center;CA;0;0",
+            "Cfoot;point;foot;C,CAcenter,BCcenter;0;0",
+            "C*;point;extend;C,Cfoot,C,Cfoot",
+        ],
+    });
+</script>
+</figure>
+
+In this diagram you may freely move the points *A*, *B*, *C*, and *A\**, and you may slide the point *B\** around the circle *ABA\**. The point *C* is determined by the rest of the points. That gives you nine degrees of freedom to determine the three circles.
+
+### Euclidean geometry modelled by inversive geometry
+
+It may be that the three circles bounding the round triangle *ABC* all pass through one point *P*. In that case, the three dual vertices *A\**, *B\**, and *C\** all coincide at *P*, and we'll call *P* the *pole* of the triangle *ABC*. When this point *P* happens to be the point at infinity of the inversive plane, then triangle *ABC* is a Euclidean triangle with straight lines as sides. There are many very nice properties of Euclidean triangles, and these "polar triangles" in inversive geometry enjoy the same properties. Furthermore, most of these properties can be generalized in some way to round triangles in general.
+
+<figure class="diagram block">
+<canvas id="canvas_1" width="400" height="300" tabindex="0"></canvas>
+<noscript><img alt="A Polar Triangle" src="round1b.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_1",
+        background: "0,0,100",
+        title: "A Polar Triangle",
+        elements: [
+            "A;point;free;80,130",
+            "B;point;free;120,230",
+            "C;point;free;200,180",
+            "P;point;free;380,170",
+            "AB;circle;circumcircle;A,B,P;0;0;0,0,0;0",
+            "BC;circle;circumcircle;B,C,P;0;0;0,0,0;0",
+            "CA;circle;circumcircle;C,A,P;0;0;0,0,0;0",
+        ],
+    });
+</script>
+</figure>
+
+In this diagram, the four points *A*, *B*, *C*, and *P* may be freely moved. As *P* moves to infinity, the sides of the triangle *ABC* appear straighter.
+
+### Hyperbolic geometry modelled by inversive geometry
+
+It may be that the three circles bounding a round triangle *ABC* are all orthogonal to some other circle. In that case we may think of triangle *ABC* as a triangle in the hyperbolic plane modelled as the interior of that circle. The dual vertices *A\**, *B\**, and *C\** may be found by inverting the original vertices in the bounding circle. Any properties of hyperbolic triangles are shared by round triangles of this kind.
+
+<figure class="diagram block">
+<canvas id="canvas_2" width="400" height="300" tabindex="0"></canvas>
+<noscript><img alt="Hyperbolic Triangle" src="round1c.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_2",
+        background: "0,0,100",
+        title: "Hyperbolic Triangle",
+        pivot: "O",
+        elements: [
+            "O;point;fixed;200,150;0;orange",
+            "P;point;free;350,150;0;orange",
+            "disk;circle;radius;O,P;0;0;random;random",
+            "A;point;free;250,190",
+            "B;point;free;300,190",
+            "C;point;free;275,150",
+            "A*;point;invert;A,disk",
+            "B*;point;invert;B,disk",
+            "C*;point;invert;C,disk",
+            "AB;circle;circumcircle;A,B,A*;0;0;black;0",
+            "BC;circle;circumcircle;B,C,B*;0;0;black;0",
+            "CA;circle;circumcircle;C,A,C*;0;0;black;0",
+        ],
+    });
+</script>
+</figure>
+
+You may freely move three vertices of the triangle *ABC*. (You can also change the size of this Poincaré disk model of the hyperbolic plane by moving the orange dots; one is the center of the disk and the other is on the circumference of the disk.)
+
+### Elliptic geometry modelled by inversive geometry
+
+It may be that the three circles bounding a round triangle *ABC* each meet some circle at antipodal points on that circle. In that case we may think of triangle *ABC* as a triangle in the elliptic plane modelled as the interior of that circle along with the points on its circumference where pairs of antipodal points are identified. The dual vertices *A\**, *B\**, and *C\** may be found by inverting the original vertices in the bounding circle, and then reflecting those points through the center of the bounding circle. Any properties of elliptic triangles are shared by round triangles of this kind.
+
+<figure class="diagram block">
+<canvas id="canvas_3" width="400" height="300" tabindex="0"></canvas>
+<noscript><img alt="Elliptic Triangle" src="round1d.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_3",
+        background: "0,0,100",
+        title: "Elliptic Triangle",
+        pivot: "O",
+        elements: [
+            "O;point;fixed;200,150;0;orange",
+            "P;point;free;350,150;0;orange",
+            "disk;circle;radius;O,P;0;0;random;random",
+            "A;point;free;70,140",
+            "B;point;free;150,170",
+            "C;point;free;125,90",
+            "A#;point;invert;A,disk;0;0",
+            "A*;point;extend;A,O,O,A#",
+            "B#;point;invert;B,disk;0;0",
+            "B*;point;extend;B,O,O,B#",
+            "C#;point;invert;C,disk;0;0",
+            "C*;point;extend;C,O,O,C#",
+            "AB;circle;circumcircle;A,B,A*;0;0;black;0",
+            "BC;circle;circumcircle;B,C,B*;0;0;black;0",
+            "CA;circle;circumcircle;C,A,C*;0;0;black;0",
+        ],
+    });
+</script>
+</figure>
+
+You may freely move three vertices of the triangle *ABC*. (You can also change the size of the disk by moving the orange dots; one is the center of the disk and the other is on the circumference of the disk.)
+
+Thus, we see that Euclidean, hyperbolic, and elliptic geometry all have triangles that are special cases of the round triangles of inversive geometry.

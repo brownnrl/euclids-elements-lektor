@@ -8,3 +8,83 @@ short_label: Compass 2
 ---
 body:
 
+It is evident that the first construction is possible by compasses alone; just draw the two circles. We will first show that the other two constructions are possible by means of two other constructions, **PC** and **CN**, which we'll show later can be performed by compasses alone.
+
+- **PC**: construct the inverse *P'* of a point *P* in a circle given its center and point on its circumference
+- **CN**: construct the center of a circle given three points on its circumference
+
+It takes a few steps to use the three circular constructions, **CC**, **PC**, and **CN**, to perform the two constructions involving straight lines, **LC** and **LL**.
+
+**Step 1.** Select an arbitrary circle outside the figure, that is, a circle containing no parts of the figure. Call it the *bounding circle.* Use **PC** to invert in that bounding circle all the specified points of the original figure. The inverted points will all lie inside the bounding circle. This inversion converts the data for circles and lines of the original figure to data for circles in the inverted figure.
+
+**Step 2.** We'll need the centers of the circles in the inverted figure in order to draw the circles. The construction **CN** constructs those centers so long as we have three points on each circle, and we can get those by using **PC** to invert enough points from the original circles and lines.
+
+**Step 3.** Each required intersection of the original figure — whether of two circles, of a circle and a line, or of two lines — corresponds to an intersection of two circles in the inverted figure. Use **CC** to find the intersections in the inverted figure.
+
+**Step 4.** Use **PC** again to invert the intersections in the inverted figure back to the intersections of the original figure.
+
+Thus, the constructions **CC**, **PC**, and **CN** are sufficient to perform the constructions **LC** and **LL**.
+
+<center>
+<figure class="diagram block">
+<canvas id="canvas_0" width="600" height="400" tabindex="0"></canvas>
+<noscript><img alt="Invert figures" src="compass2a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "0,0,100",
+        title: "Invert figures",
+        fontsize: "14",
+        elements: [
+            "A;point;free;165,120",
+            "B;point;free;155,40",
+            "Acirc;circle;radius;A,B;0;0;black;30,50,100",
+            "C;point;free;125,160",
+            "D;point;free;165,220",
+            "Ccirc;circle;radius;C,D;0;0;black;200,50,100",
+            "EF;line;bichord;Acirc,Ccirc;0;0;0",
+            "E;point;first;EF",
+            "F;point;last;EF",
+            "x0;point;fixed;0,-1000",
+            "x1;point;fixed;0,1000",
+            "G;point;free;120,260",
+            "H;point;free;150,300",
+            "H*;point;extend;G,H,x0,x1",
+            "G*;point;extend;H,G,x0,x1",
+            "GH;line;connect;G*,H*",
+            "KL;line;chord;GH,Ccirc;0;0;0",
+            "K;point;first;KL",
+            "L;point;last;KL",
+            "M;point;free;40,360",
+            "N;point;free;500,360",
+            "M*;point;extend;N,M,x0,x1",
+            "N*;point;extend;M,N,x0,x1",
+            "MN;line;connect;M*,N*",
+            "P;point;intersection;GH,MN",
+            "R;point;free;350,35",
+            "S;point;free;400,25",
+            "T;point;free;530,80",
+            "RST;circle;circumcircle;R,S,T;0;0;black;random",
+            "E';point;invert;E,RST",
+            "F';point;invert;F,RST",
+            "B';point;invert;B,RST",
+            "EFB';circle;circumcircle;E',F',B';0;0;black;30,50,100",
+            "D';point;invert;D,RST",
+            "K';point;invert;K,RST",
+            "L';point;invert;L,RST",
+            "DEF';circle;circumcircle;D',E',F';0;0;black;200,50,100",
+            "G';point;invert;G,RST",
+            "H';point;invert;H,RST",
+            "M';point;invert;M,RST",
+            "N';point;invert;N,RST",
+            "P';point;invert;P,RST",
+            "GHP';circle;circumcircle;G',H',P';0;0;black;white",
+            "MNP';circle;circumcircle;M',N',P';0;0;black;white",
+        ],
+    });
+</script>
+</figure>
+</center>
+
+The above diagram shows the original figure of two circles and two lines inverted in a bounding circle *RST.* The large circle *RST* on the right is outside the original figure, and the inverted figure is displayed inside it. Note how the blue and orange circles are inverted to blue and orange circles, but the lines *GH* and *MN* are inverted to (white) circles. All the straight lines from the original figure invert to circles passing through the center of *RST.* The inverted points *A'* and *B'* are not shown because they are not the centers of the inverted circles and play no role in the construction.
+

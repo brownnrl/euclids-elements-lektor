@@ -8,3 +8,133 @@ short_label: Compass 5
 ---
 body:
 
+Let there be given a circle *C* with center *O* and point *A* on its circumference, and a point *P* either outside the circle *C* or inside but more than half the radius away from *O.* Here is a construction to invert *P* in the circle *C* to get *P'* = *P*▻*C.* Draw the circle with center *P* and radius *PO.* Then this new circle meets the circle *C* at two points, *Q* and *Q'.* Draw the two circles with centers *Q* and *Q'* and radii *QO* and *QO',* respectively. Besides *O,* they will meet at another point *P'.*
+
+This point *P'* will be the image of the point *P* inverted in the circle *C.* The usual definition of the inverted point *P'* is that it is situated on the line *OP* from the center of the circle to *P* so that *OP*:*OA* = *OA*:*OP'.* From the symmetry of the construction, *P'* is clearly on that line. To see that the proportion is valid, note that the two triangles *QOP* and *P'OQ* are each isosceles, and they have the same base angles, so they're similar. The proportion immediately follows.
+
+<figure class="diagram block">
+<canvas id="canvas_0" width="400" height="250" tabindex="0"></canvas>
+<noscript><img alt="Invert P in a circle" src="compass5a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "0,0,100",
+        title: "Invert P in a circle",
+        elements: [
+            "O;point;free;100,125",
+            "A;point;free;100,220",
+            "P;point;free;170,125",
+            "Ocirc;circle;radius;O,A;0;0;black;random",
+            "Pcirc;circle;radius;P,O;0;0;black;0",
+            "QQ';line;bichord;Ocirc,Pcirc;0;0;0",
+            "Q;point;first;QQ'",
+            "Q';point;last;QQ'",
+            "Qcirc;circle;radius;Q,O;0;0;black;0",
+            "Q'circ;circle;radius;Q',O;0;0;black;0",
+            "OP';line;bichord;Qcirc,Q'circ;0;0;0",
+            "OPmid;point;midpoint;OP';0;0",
+            "P';point;extend;O,OPmid,O,OPmid",
+        ],
+    });
+</script>
+</figure>
+
+Now, this construction doesn't work if *P* is within half the radius of *O* since the two circles won't intersect to produce the points *Q* and *Q',* so some other construction is needed to invert such *P.* But if *P* is at least a quarter of the radius away from *O,* then we will find the point *R* twice as far from *O* as *P* is, then invert *R* in the circle *C* to get *R'* = *R*▻*C* by the method described above, and then *P'* will be the point twice as far from *O* as *R'* is. This requires a doubling construction **2OP**.
+
+<figure class="diagram block">
+<canvas id="canvas_1" width="300" height="250" tabindex="0"></canvas>
+<noscript><img alt="Double OP" src="compass5b.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_1",
+        background: "0,0,100",
+        title: "Double OP",
+        elements: [
+            "O;point;free;40,125",
+            "P;point;free;120,125",
+            "Ocirc;circle;radius;O,P;0;0;black;random",
+            "Pcirc;circle;radius;P,O;0;0;black;0",
+            "QQ';line;bichord;Ocirc,Pcirc;0;0;0",
+            "Q;point;first;QQ'",
+            "Q';point;last;QQ'",
+            "Qcirc;circle;radius;Q,Q';0;0;black;0",
+            "Q'R;line;bichord;Qcirc,Pcirc;0;0;0",
+            "Q'Rmid;point;midpoint;Q'R;0;0",
+            "R;point;extend;Q',Q'Rmid,Q',Q'Rmid",
+        ],
+    });
+</script>
+</figure>
+
+> **2OP**: given two points *O* and *P,* constuct the point *R* on the line *OP* twice as far from *O* as *P* is.
+
+The construction **2OP** can be effected as follows. Draw the circles with centers *O* and *P* and radius *OP.* Let them intersect at *Q* and *Q'.* Draw the circle with center *Q* and radius *QQ'.* It will intersect the circle with center *P* at the points *Q'* and *R.*
+
+Now we can invert any point *P* in a circle so long as it is at least a quarter of a radius away from the center of the circle.
+
+When *P* is very close to *O,* all we have to do is repeatedly double the distance from *O* until we've got a point at least half the radius from *O,* invert that point, and double the resulting distance the same number of times to get *P'.*
+
+<figure class="diagram block">
+<canvas id="canvas_2" width="400" height="250" tabindex="0"></canvas>
+<noscript><img alt="Invert P in a circle" src="compass5c.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_2",
+        background: "0,0,100",
+        title: "Invert P in a circle",
+        elements: [
+            "O;point;free;100,125",
+            "A;point;free;100,210",
+            "P;point;free;130,125",
+            "R;point;extend;O,P,O,P",
+            "Ocirc;circle;radius;O,A;0;0;black;random",
+            "Rcirc;circle;radius;R,O;0;0;black;0",
+            "QQ';line;bichord;Ocirc,Rcirc;0;0;0",
+            "Q;point;first;QQ'",
+            "Q';point;last;QQ'",
+            "Qcirc;circle;radius;Q,O;0;0;black;0",
+            "Q'circ;circle;radius;Q',O;0;0;black;0",
+            "OR';line;bichord;Qcirc,Q'circ;0;0;0",
+            "OR'mid;point;midpoint;OR';0;0",
+            "R';point;extend;O,OR'mid,O,OR'mid",
+            "P';point;extend;O,R',O,R'",
+        ],
+    });
+</script>
+</figure>
+
+#### Bisecting and multisecting lines
+
+Before going on, we can use inversion in circles to effect a construction to bisect a line segment, or more generally, cut off one *n*-th of a line segment. To bisect a line segment *OP,* use construction **2OP** to double it to *OR,* then construction **PC** to invert *R* in the circle with center *O* and radius *OP* to get the midpoint *M* of *OP.*
+
+<figure class="diagram block">
+<canvas id="canvas_3" width="400" height="250" tabindex="0"></canvas>
+<noscript><img alt="A midpoint construction" src="compass5d.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_3",
+        background: "0,0,100",
+        title: "A midpoint construction",
+        elements: [
+            "O;point;free;100,125",
+            "P;point;free;180,125",
+            "R;point;extend;O,P,O,P",
+            "Ocirc;circle;radius;O,P;0;0;black;random",
+            "Rcirc;circle;radius;R,O;0;0;black;0",
+            "QQ';line;bichord;Ocirc,Rcirc;0;0;0",
+            "Q;point;first;QQ'",
+            "Q';point;last;QQ'",
+            "Qcirc;circle;radius;Q,O;0;0;black;0",
+            "Q'circ;circle;radius;Q',O;0;0;black;0",
+            "OM;line;bichord;Qcirc,Q'circ;0;0;0",
+            "OMmid;point;midpoint;OM;0;0",
+            "M;point;extend;O,OMmid,O,OMmid",
+        ],
+    });
+</script>
+</figure>
+
+We can trisect *OP* by doubling *OP* to *OR* then doubling *PR* to *PS,* so that *OS* is triple *OP,* then inverting *S* in the circle with center *O* and radius *OP* to get *S'.* Then *OS'* will be one-third of *OP*
+
+More generally, we can cut off an *n*-th of *OP* by first extending *OP* by a factor of *n* (which is easily seen as a variant of the doubling construction), then inverting in that same circle.
+

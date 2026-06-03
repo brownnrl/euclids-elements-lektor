@@ -8,3 +8,42 @@ short_label: Compass 6
 ---
 body:
 
+We're not done yet in showing that compasses alone are sufficient to construct all the constructable points in Euclidean geometry. The problem is that all the circle constructions depend on knowing the centers of the circles, and when we invert one circle *C* in another *D* to get a circle *E* = *C*▻*D,* then the center of *E* is not the inverse of the center of *C* inverted in *D.* The center of *E* is determined, however, by three of the points on *E,* and three points on *E* can by found by taking any three points on *C* and inverting them in *D.* Thus, we'll need the construction **C** to find the center of a circle given three points on its circumference.
+
+Let *P,Q,* and *R* be three given points. We are to construct the center *O* of the circle passing through them. We'll find *O* by inverting everything in the circle *C* with center *P* and radius *PQ.*
+
+First, invert the point *R* in *C* to get the point *R'* = *R*▻*C.* Next draw two circles, one with center *Q* and radius *QP,* the other with center *R'* and radius *R'P.* Besides at *P,* these two circles will intersect at another point *O'.* It is evident that this point *O'* is the reflection of *P* in the line *QR',* that is, *O'* = *P*▻*QR'.* Finally, invert *O'* in *C* to get *O.*
+
+Next, we'll show *O* is the center of the circle *PQR.* Now, when the circle *PQR* is inverted in the circle *C,* then the result is the straight line *QR',* since *P* will be sent to the point ∞ at infinity, *Q* is fixed, and *R* is sent to *R'.* Algebraically, that says *PQR*▻*C* = *QR'.* To show that *O* is the center of the circle *PQR,* we only need to show that *O* = ∞ ▻ *PQR.* That will follow from a property of ▻, namely, ▻ distributes over itself on the right, as shown in the next section.
+
+<center>∞ ▻ <i>PQR</i> = (<i>P</i>▻<i>C</i>) ▻ (<i>QR'</i>▻<i>C</i>) = (<i>P</i>▻<i>QR'</i>)▻<i>C</i> = <i>O'</i>▻<i>C</i> = <i>O.</i></center>
+
+Thus, we have constructed *O,* the center of the circle passing through the three points *P,* *Q,* and *R.*
+
+<figure class="diagram block">
+<canvas id="canvas_0" width="400" height="300" tabindex="0"></canvas>
+<noscript><img alt="Circumcenter construction" src="compass6a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "0,0,100",
+        title: "Circumcenter construction",
+        elements: [
+            "P;point;free;120,120",
+            "Q;point;free;200,50",
+            "R;point;free;250,190",
+            "Pcirc;circle;radius;P,Q;0;0;black;random",
+            "R';point;invert;R,Pcirc",
+            "Qcirc;circle;radius;Q,P;0;0;gray;0",
+            "R'circ;circle;radius;R',P;0;0;gray;0",
+            "PO';line;bichord;Qcirc,R'circ;0;0;0",
+            "PO'mid;point;midpoint;PO';0;0",
+            "O';point;extend;P,PO'mid,P,PO'mid",
+            "O;point;invert;O',Pcirc",
+        ],
+    });
+</script>
+</figure>
+
+<br clear="all">
+

@@ -8,3 +8,59 @@ short_label: Compass 1
 ---
 body:
 
+<figure class="diagram block">
+<canvas id="canvas_0" width="250" height="400" tabindex="0"></canvas>
+<noscript><img alt="Three Euclidean constructions" src="compass1a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "0,0,100",
+        title: "Three Euclidean constructions",
+        elements: [
+            "A;point;free;165,120",
+            "B;point;free;155,50",
+            "Acirc;circle;radius;A,B;0;0;black;random",
+            "C;point;free;125,160",
+            "D;point;free;165,220",
+            "Ccirc;circle;radius;C,D;0;0;black;random",
+            "EF;line;bichord;Acirc,Ccirc;0;0;0",
+            "E;point;first;EF",
+            "F;point;last;EF",
+            "x0;point;fixed;0,-1000",
+            "x1;point;fixed;0,1000",
+            "G;point;free;120,260",
+            "H;point;free;150,300",
+            "H';point;extend;G,H,x0,x1",
+            "G';point;extend;H,G,x0,x1",
+            "GH;line;connect;G',H'",
+            "KL;line;chord;GH,Ccirc;0;0;0",
+            "K;point;first;KL",
+            "L;point;last;KL",
+            "M;point;free;40,360",
+            "N;point;free;200,330",
+            "M';point;extend;N,M,x0,x1",
+            "N';point;extend;M,N,x0,x1",
+            "MN;line;connect;M',N'",
+            "P;point;intersection;GH,MN",
+        ],
+    });
+</script>
+</figure>
+
+In [Book I](/elements/books/bookI/) of [Euclid's *Elements*](/elements/) there are four postulates for constructions in plane geometry. Postulates 1 and 2 construct straight lines given two points. Postulate 3 constructs a circle given a center and radius. Postulate 5 constructs points of intersections for nonparallel lines. Although Euclid did not state postulates for constructing intersection points for two circles, and intersection points for a circle and a line, such unstated postulates are used. For instance, an intersection point for two circles is needed in @I.1, and an intersection point for a circle and a line is used in @I.2.
+
+The rest of the constructions in Euclidean geometry are built out of the constructions of the postulates. Such constructions include angle bisection (@I.9), line bisection (@I.10), perpendicular lines (@I.11 and @I.12), triangles given the three sides (@I.22), parallel lines (@I.31), and many others.
+
+Our construction of a compass is precisely that of Euclid's @I.Post.3. This doesn't correspond precisely to what a physical compass can do, since a physical compass can also transfer distances; given three points *A, B,* and *C,* a physical compass can be set to an opening of size *AB,* then moved to draw a circle with center *C* and radius equal to size *AB.* Nonetheless, Postulate 3 is enough, as Euclid shows in @I.3 how to transfer distances.
+
+We are interested in constructing the points of intersections of circles and lines, rather than the circles and lines themselves. Although we cannot construct a line with a compass that only draws circles, we will be able to find the intersection points of that line with other lines and with circles.
+
+Essentially, there are three methods to construct points in Euclidean geometry, **CC**, **LC**, and **LL**.
+
+- **CC**: construct the intersections of two circles given their centers and a point on each circumference. For example, in the diagram at the right, the circle with center *A* and radius *AB* intersects the circle with center *C* and radius *CD* at the two points *E* and *F.*
+- **LC**: construct the intersections of a line given by two points and a circle given its center and a point on its circumference. For example, the intersections of the line *GH* with the circle with center *C* and radius *CD* are the two points *K* and *L.*
+- **LL**: construct the intersection of two lines, each given by two points. For example, the line *GH* intersects the line *MN* at the point *P.*
+
+Frequently, the circles and lines don't intersect, but it is only when they do intersect that the points are constructed, so the possibility of nonintersection is not relevant here.
+<br clear="all">
+

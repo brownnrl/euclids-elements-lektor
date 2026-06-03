@@ -8,3 +8,113 @@ short_label: Compass 7
 ---
 body:
 
+Consider now the algebraic operation of inversion, ▻, and its properties on circles. First, circles remain fixed upon inversion in themselves. Second, inverting twice in the same circle is the identity operation. Third, inversion preserves inversion in the sense that if *B* inverts *A* and *A',* then *B*▻*C* inverts *A*▻*C* and *A'*▻*C.*
+
+<figure class="diagram block">
+<canvas id="canvas_0" width="550" height="350" tabindex="0"></canvas>
+<noscript><img alt="Distributivity" src="compass7a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "0,0,100",
+        title: "Distributivity",
+        elements: [
+            "A1;point;free;45,40;0",
+            "A2;point;free;155,40;0",
+            "A3;point;free;40,80;0",
+            "A;circle;circumcircle;A1,A2,A3;black;0;black;random",
+            "B1;point;free;55,330;0",
+            "B2;point;free;29,160;0",
+            "B3;point;free;150,340;0",
+            "B;circle;circumcircle;B1,B2,B3;black;0;black;random",
+            "C1;point;free;240,80;0",
+            "C2;point;free;210,240;0",
+            "C3;point;free;245,340;0",
+            "C;circle;circumcircle;C1,C2,C3;black;0;black;random",
+            "D1;point;invert;A1,B;0;0",
+            "D2;point;invert;A2,B;0;0",
+            "D3;point;invert;A3,B;0;0",
+            "D;circle;circumcircle;D1,D2,D3;black;0;black;0",
+            "E1;point;invert;A1,C;0;0",
+            "E2;point;invert;A2,C;0;0",
+            "E3;point;invert;A3,C;0;0",
+            "E;circle;circumcircle;E1,E2,E3;black;0;black;0",
+            "F1;point;invert;B1,C;0;0",
+            "F2;point;invert;B2,C;0;0",
+            "F3;point;invert;B3,C;0;0",
+            "F;circle;circumcircle;F1,F2,F3;black;0;black;0",
+            "G1;point;invert;D1,C;0;0",
+            "G2;point;invert;D2,C;0;0",
+            "G3;point;invert;D3,C;0;0",
+            "G;circle;circumcircle;G1,G2,G3;black;0;black;0",
+        ],
+    });
+</script>
+</figure>
+
+In the diagram above, the initial three circles are *A, B,* and *C.* Then *D* = *A*▻*B,* *E* = *A*▻*C,* *F* = *B*▻*C,* and *G* is both (*A*▻*B*)▻*C,* and (*A*▻*C*)▻(*B*▻*C*). In other words, ▻ distributes over itself on the right.
+
+<figure class="diagram block">
+<canvas id="canvas_1" width="350" height="350" tabindex="0"></canvas>
+<noscript><img alt="Distributivity for points" src="compass7b.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_1",
+        background: "0,0,100",
+        title: "Distributivity for points",
+        elements: [
+            "P;point;free;100,50",
+            "B1;point;free;55,290;0",
+            "B2;point;free;35,140;0",
+            "B3;point;free;150,280;0",
+            "B;circle;circumcircle;B1,B2,B3;black;0;black;random",
+            "C1;point;free;220,90;0",
+            "C2;point;free;190,200;0",
+            "C3;point;free;245,300;0",
+            "C;circle;circumcircle;C1,C2,C3;black;0;black;random",
+            "Q;point;invert;P,B",
+            "R;point;invert;P,C",
+            "F1;point;invert;B1,C;0;0",
+            "F2;point;invert;B2,C;0;0",
+            "F3;point;invert;B3,C;0;0",
+            "F;circle;circumcircle;F1,F2,F3;black;0;black;0",
+            "S;point;invert;Q,C",
+            "T;point;free;50,100;0",
+            "PQT;circle;circumcircle;P,Q,T;0;0;gray;0",
+            "U;point;invert;T,C;0",
+            "RSU;circle;circumcircle;R,S,U;0;0;gray;0",
+        ],
+    });
+</script>
+</figure>
+
+In order to verify this statement, it suffices to show that
+
+<center>(<i>P</i>▻<i>B</i>)▻<i>C</i> = (<i>P</i>▻<i>C</i>)▻(<i>B</i>▻<i>C</i>)</center>
+
+when *P* is a point. For if the identity holds for all points *P* of *A,* then it holds for *A* itself.
+
+In the diagram to the right, *P* is a given point, and *B* and *C* are given circles. The point *Q* = *P*▻*B,* *R* = *P*▻*C,* the circle *F* = *B*▻*C* as before, and the point *S* will equal both *Q*▻*C* and *R*▻*F.*
+
+To see that *S* does equal both of these, it is enough to note that *Q* is characterized as the point that all the circles pass through which are orthogonal to *B* and pass through *P,* that *R*▻*F* is analogously characterized as the point that all the circles pass through which are orthogonal to *F* and pass through *R,* and that inversion through *C* preserves circles and orthogonality of circles.
+
+#### Involutive quandles
+
+Algebraically, the three properties of inversion in circles are the following three identities.
+
+> **Q1**. *A*▻*A* = *A.*
+>
+> **Q2**. (*A*▻*B*)▻*B* = *A.*
+>
+> **Q3**. (*A*▻*B*)▻*C* = (*A*▻*C*)▻(*B*▻*C*).
+
+A set equipped with a binary operation ▻ satisfying these three axioms is called a *involutory quandle.* We'll follow the notational convention for ▻ that when parentheses are left out of an expression, operations are to be performed from left to right.
+
+It may appear at first sight that these properties are somewhat mysterious, but they're not. Any time you consider the involutions in a group (elements of order 2 in a group), or a conjugacy class of involutions, then conjugation as a binary operation forms a involutory quandle. That is, when ▻ is defined by *x*▻*y* = *yxy*<sup>-1</sup>, which is the same as *yxy* when *y* is an involution, then ▻ satisfies **Q1** through **Q3**. Each of the three axioms is easily verified.
+
+That's just the situation we have when we consider inversions in circles in inversive geometry. The group is the Möbius group of inversive transformations, transformations that preserve circles. The inversions form a conjugacy class of involutions. (They're not all the involutions; for instance, half-turns are also involutions.)
+
+Incidentally, when any conjugacy class is considered, a quandle results, but it's only an involutory quandle conjugacy classes of involutions are considered. For a quandle, axiom **Q2** is weakened.
+
+<br clear="all">
+
