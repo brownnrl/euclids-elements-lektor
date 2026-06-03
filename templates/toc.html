@@ -37,28 +37,38 @@
 {% set toc_groups       = this.children.filter(F._model == "toc")             %}
 {% set direct_books     = this.children.filter(F._model == "book")            %}
 
-{# 1. Prematter (only at /elements/) #}
-{% for c in prematter_groups %}
-  <h2><a href="{{ c|url }}">{{ c.title }}</a></h2>
-  {% set pages = c.children.filter(F._model == "prematter") %}
-  <ul>
-    {% for p in pages %}
-      <li><a href="{{ p|url }}">{{ p.title }}</a></li>
+{# Master TOC layout (only at /elements/): Prematter and Books flow
+   into a single two-column block, with Prematter as the first entry
+   in column 1 — matches Joyce's master TOC at
+   http://aleph0.clarku.edu/~djoyce/elements/elements.html.
+   The "Books" heading is dropped because book entries already start
+   with bold "Book I.", "Book II." etc. #}
+{% if prematter_groups.count() or toc_groups.count() %}
+<div class="twocolumn">
+  {% for c in prematter_groups %}
+    <dl>
+      <dt><b><a href="{{ c|url }}">{{ c.title }}</a></b></dt>
+      {% for p in c.children.filter(F._model == "prematter") %}
+        <dd><a href="{{ p|url }}">{{ p.title }}</a></dd>
+      {% endfor %}
+    </dl>
+  {% endfor %}
+  {% for c in toc_groups %}
+    {% for b in c.children.filter(F._model == "book").order_by("order") %}
+      {{ book_entry(b) }}
     {% endfor %}
-  </ul>
-{% endfor %}
+  {% endfor %}
+</div>
+{% endif %}
 
-{# 2. Books index (only at /elements/) #}
-{% for c in toc_groups %}
-  <h2><a href="{{ c|url }}">{{ c.title }}</a></h2>
-  {% for b in c.children.filter(F._model == "book") %}
+{# Direct book children (at /elements/books/, where there's no
+   prematter sibling). #}
+{% if direct_books.count() %}
+<div class="twocolumn">
+  {% for b in direct_books.order_by("order") %}
     {{ book_entry(b) }}
   {% endfor %}
-{% endfor %}
-
-{# 3. Direct book children (at /elements/books/) #}
-{% for b in direct_books %}
-  {{ book_entry(b) }}
-{% endfor %}
+</div>
+{% endif %}
 
 {% endblock %}
