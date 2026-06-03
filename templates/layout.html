@@ -6,11 +6,28 @@
 {% set is_book_leaf = (model_id in ["proposition", "definition", "postulate", "commonnotion"]) %}
 {% set is_book = (model_id == "book") %}
 {% set is_other_work = (model_id == "other_work") %}
-{# Series root = a direct child of /other-works/. For compass-geometry
-   that's the page itself; for compass1..7 it's the parent. We use it
-   to render the stacked header for series sub-pages. #}
-{% set is_other_works_series_root = (is_other_work and this.parent and this.parent.path == "/other-works") %}
-{% set is_other_works_sub = (is_other_work and this.parent and this.parent.parent and this.parent.parent.path == "/other-works") %}
+{# Top-level "republished tutorial" sections. /other-works/ holds
+   Joyce's Compass Geometry + spherical tutorials + Euler line.
+   /geomlib/ holds the library's landing + Using diagrams + Joyce's
+   archival Geometry Applet page. Both use the other_work model and
+   share the no-Elements-logo header + static next/prev/up footer.
+
+   Section root paths (whose children are "works"):
+     /other-works/  → wraps multiple distinct works
+     /geomlib/      → is itself a single section with sub-pages
+
+   "Series root" pages (whose direct children get a stacked header,
+   the way compass1..7 get "Compass Geometry / 1. Euclidean ..."):
+     /other-works/compass-geometry/  (detected via parent.parent rule)
+     /geomlib/                       (explicit; its children stack
+                                      "geomlib / Using..." style) #}
+{% set work_section_roots = ["/other-works", "/geomlib"] %}
+{% set series_root_paths  = ["/geomlib"] %}
+{% set is_work_section_root = (is_other_work and this.path in work_section_roots) %}
+{% set is_work_sub = (is_other_work and this.parent and (
+    this.parent.path in series_root_paths
+    or (this.parent.parent and this.parent.parent.path in work_section_roots)
+)) %}
 
 {# Recursive walk up the parent chain, emitting an <a> per ancestor
    separated by `›`. Used by the breadcrumb nav below. #}
@@ -52,10 +69,10 @@
   {% set book_ancestor = this.parent.parent if (this.parent.parent and this.parent.parent._model == "book") else this.parent %}
   <h1><a href="/" class="hover">Euclid&rsquo;s Elements</a></h1>
   <h1><a href="{{ book_ancestor|url }}" class="hover">{{ book_ancestor.title }}</a></h1>
-{% elif is_other_works_sub %}
-  {# Series sub-page (e.g. compass1..7). Stack: series root title +
-     this page's title. No Euclid's Elements logo on Joyce's
-     other-works tutorials. #}
+{% elif is_work_sub %}
+  {# Series sub-page (e.g. compass1..7, or geomlib/using). Stack:
+     series root title + this page's title. No Euclid's Elements
+     logo on republished tutorials. #}
   <h1><a href="{{ this.parent|url }}" class="hover">{{ this.parent.title }}</a></h1>
   <h1>{{ this.title }}</h1>
 {% elif is_other_work %}
@@ -88,7 +105,7 @@
    we render a static prev/up/next + credit block — the JS dropdowns
    would be empty since the tutorials aren't in proptable. #}
 {% if is_other_work %}
-  {% if this.path != "/other-works" %}
+  {% if this.path not in work_section_roots %}
     {% set siblings = this.parent.children.filter(F._model == "other_work").order_by("order", "_path") | list %}
     {% set ns = namespace(prev=none, next=none) %}
     {% for s in siblings %}
@@ -99,7 +116,7 @@
     {% endfor %}
   {% endif %}
   <footer class="other-works-nav">
-    {% if this.path != "/other-works" %}
+    {% if this.path not in work_section_roots %}
     <hr>
     <table class="footer-nav">
       <tr>

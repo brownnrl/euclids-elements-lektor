@@ -1,0 +1,201 @@
+_model: other_work
+---
+title: Geometry Applet (archival)
+---
+order: 2
+---
+body:
+
+*This page reproduces Dr. David E. Joyce's original 1996 documentation
+for the Java* Geometry Applet *that has since been ported to TypeScript
+as [`geomlib`](/geomlib/). The text below appears as Joyce originally
+wrote it. Diagrams are rendered through `geomlib` rather than the
+original Java applet; the figures and interactions are equivalent.*
+
+***
+
+<center>
+<h4>version 2.2</h4>
+</center>
+
+<figure class="diagram block">
+<canvas id="canvas_0" width="400" height="360" tabindex="0"></canvas>
+<noscript><img alt="The icosahedron" src="propXIII16a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "0,0,100",
+        title: "The icosahedron",
+        elements: [
+            "A0;point;free;25,-1000;0;0",
+            "A3;point;free;25,1000;0;0",
+            "A;point;lineSlider;A0,A3,0,40",
+            "B;point;lineSlider;A0,A3,0,320",
+            "AB;line;connect;A,B",
+            "ABmid;point;midpoint;A,B;0;0",
+            "ABcirc;circle;radius;ABmid,B;0;0;0;0",
+            "A1;point;perpendicular;A,B;0;0",
+            "A2;point;extend;A,A1,A,A1;0;0",
+            "A4;point;extend;A,A2,A,A2;0;0",
+            "B1;point;perpendicular;B,A;0;0",
+            "C;point;intersection;A,B,A4,B1;0;0",
+            "D';point;perpendicular;C,A;0;0",
+            "Dch;line;chord;C,D',ABcirc;0;0;0",
+            "D;point;last;Dch;0;0",
+            "a;point;free;220,180;0",
+            "sphere;sphere;radius;a,ABmid,A;0;0;0;0",
+            "X;point;sphereSlider;sphere,310,155,100",
+            "Z;point;extend;X,a,X,a",
+            "b;point;midpoint;B,D;0;0",
+            "V;point;cutoff;a,X,b,B;0;0",
+            "W;point;extend;V,a,V,a;0;0",
+            "Vplane;plane;perpendicular;V,a;0;0;0;0",
+            "Vcirc;circle;radius;V,D,B,Vplane;0;0;0;0",
+            "L;point;circleSlider;Vcirc,240,30,-20",
+            "LEcirc;circle;radius;L,W,Z,Vplane;0;0;0;0",
+            "FE;line;bichord;Vcirc,LEcirc;0;0;0",
+            "E;point;last;FE;0;0",
+            "dec;polygon;regularPolygon;L,E,10,Vplane;0;0;0;0",
+            "P;point;vertex;dec,3",
+            "K;point;vertex;dec,4;0;0",
+            "O;point;vertex;dec,5",
+            "H;point;vertex;dec,6;0;0",
+            "N;point;vertex;dec,7",
+            "G;point;vertex;dec,8;0;0",
+            "M;point;vertex;dec,9",
+            "F;point;vertex;dec,10;0;0",
+            "Q;point;perpendicular;E,Vplane,D,B",
+            "R;point;perpendicular;F,Vplane,D,B",
+            "S;point;perpendicular;G,Vplane,D,B",
+            "T;point;perpendicular;H,Vplane,D,B",
+            "U;point;perpendicular;K,Vplane,D,B",
+            "LQR;polygon;triangle;L,Q,R",
+            "MRS;polygon;triangle;M,R,S",
+            "NST;polygon;triangle;N,S,T",
+            "OUT;polygon;triangle;O,U,T",
+            "QUP;polygon;triangle;Q,U,P",
+            "LMR;polygon;triangle;L,M,R",
+            "MNS;polygon;triangle;M,N,S",
+            "NOT;polygon;triangle;N,O,T",
+            "POU;polygon;triangle;P,O,U",
+            "LPQ;polygon;triangle;L,P,Q",
+            "QRZ;polygon;triangle;Q,R,Z",
+            "RSZ;polygon;triangle;R,S,Z",
+            "STZ;polygon;triangle;S,T,Z",
+            "TUZ;polygon;triangle;T,U,Z",
+            "UQZ;polygon;triangle;U,Q,Z",
+            "LMX;polygon;triangle;L,M,X",
+            "MNX;polygon;triangle;M,N,X",
+            "NOX;polygon;triangle;N,O,X",
+            "OPX;polygon;triangle;O,P,X",
+            "PLX;polygon;triangle;P,L,X",
+        ],
+    });
+</script>
+</figure>
+
+I began writing this applet in Feb. 1996. The current verion is 2.2 which fixes a couple of bugs in 2.0 and has a new construction to find harmonic conjugate points. Version 2.0 (May, 1997) does three-dimensional constructions whereas the earlier version 1.3 only did plane constructions. Version 2.0 also has many minor improvements. It takes a while to test everything. Please send a note if you find any bugs. They'll be fixed as soon as possible. (Note that arcs and sectors on slanted planes cannot yet be illustrated.) Also, there may be still later versions than 2.2 with more functionality.
+
+This geometry applet is being used to illustrate [Euclid's *Elements*](/elements/). Above you see an icosahedron, that is, a regular 20-sided solid, constructed according to Euclid's construction in proposition @XIII.16.
+
+Another example using this Geometry Applet illustrates the [Euler line of a triangle](/other-works/euler-line/).
+
+Here's how you can manipulate the figure that appears above. If you click on a point in the figure, you can usually move it in some way. A free point <span style="color:red">*</span>, usually colored red, can be freely dragged about, and as they move, the rest of the diagram (except the other free points) will adjust appropriately. A sliding point <span style="color:orange">*</span>, usually colored orange, can be dragged about like the free points, except their motion is limited to a straight line, a circle, a plane, or a sphere, depending on the point. Other points can be dragged to translate the entire diagram. But if a pivot point <span style="color:green">*</span> appears, usually colored green, then the diagram will be rotated and scaled around that pivot point.
+
+Try dragging around some of the points in the diagram above.
+
+Also, if you type **r or the space key** while the cursor is over the diagram, then the diagram will be reset to its original configuration. If you type **u or return** the figure will be lifted off the page into a separate window. Typing **d or return** while the cursor is over the original window will return the diagram to the page. Note that you can resize the floating window to make the diagram larger.
+
+#### Parameters:
+
+- background - the background color
+- font - the font for displaying letters in the figure (default TimesRoman)
+- fontsize - the size of the font for displaying letters (default 18)
+- align - the alignment method for positioning letters
+- title - the title of the figure, used for a floating frame
+- debug - the debugging switch, by default, off
+- pivot - the name of a pivot point, if any
+- e[i] - an element. The elements are numbered from 1 on up.
+
+#### Elements
+
+The format for an element is a little complicated. Here's the specification for a typical element:
+
+```
+name=e[1] value="A;point;free;50,50;black;magenta"
+```
+
+Each element has a number, a name, an element class, a construction method, and construction data. Optionally colors may be specified. The number of this element is 1, which means that it is the first element to be created. Its name is A. Its class is point. Its construction method is free, which means it can be freely dragged about. Its construction data is 50,50, which means that it will be initially placed at pixel coordinates (50,50). When it is displayed, its name A will be colored black, but the dot representing the point will be magenta.
+
+#### Element classes and construction methods
+
+Elements come in eight different classes: point, line, circle, polygon, sector, plane, sphere, and polyhedron. Each of these classes has several construction methods with over 60 construction methods in all. Most of the construction methods can use more than one kind of list of construction data. The [eight tables](tables/) briefly explaining these construction methods are found on a separate page.
+
+(Several of the construction classes are supported by subclasses of the Element class as described below.)
+
+#### Colors
+
+Each element may have up to four colors: first the color of the name of the element; second the color of the 0-dimensional parts (points) of the element; third the color of the 1-dimensional parts (lines or arcs) of the element; and fourth the color of the 2-dimensional parts (if any). The background color and the colors of the elements can be declared in a couple of different ways. A single word specifying the color may be given. These possible colors are <span style="color:#000000">*</span> black, <span style="color:#0000ff">*</span> blue, <span style="color:#00ffff">*</span> cyan, <span style="color:#595959">*</span> darkGray, <span style="color:#808080">*</span> gray, <span style="color:#008000">*</span> green, <span style="color:#d3d3d3">*</span> lightGray, <span style="color:#ff00ff">*</span> magenta, <span style="color:#ffa500">*</span> orange, <span style="color:#ffc0cb">*</span> pink, <span style="color:#ff0000">*</span> red, <span style="color:#ffffff;background:#888">*</span> white, and <span style="color:#ffff00;background:#888">*</span> yellow. If the word "random" is specified, then a randomly chosen pastel will be used. If an element is specified as "background", then it will be given the background color; if "brighter", then a brighter version of the background; if "darker", then a darker version of the background; and if "none" then it won't appear.
+
+Specific colors may be given by their red, green, and blue components as six hex digits in an rrggbb format.
+
+Alternatively, a color can be given as a triple of decimal numbers separated by commas to indicate hue (0 to 360), saturation (0 to 100), and brightness (0 to 100).
+
+#### Alignment
+
+Currently, there are five values for alignment: ABOVE, RIGHT, BELOW, LEFT, and CENTRAL (the default). For ABOVE alignment, the names of points appearing in the diagram will appear above points. Analogously for RIGHT, BELOW, and LEFT. For CENTRAL alignment, letters will appear away from the center of the diagram.
+
+### Source files
+
+The [Geometry Applet](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Geometry.java) uses a
+[Slate Canvas](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Slate.java) to put all the Elements on.
+The slate can be lifted off into a separate window, and that uses
+[ClientFrame](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/ClientFrame.java), a subclass of Frame.
+An [Element](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Element.java) is a generic thing which
+is subclassed in eight different ways to give actual elements that can be displayed.
+These eight classes are further subclassed, too.
+
+1. [PointElement](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/PointElement.java) with subclasses
+   [AngleDivider](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/AngleDivider.java),
+   [CircleSlider](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/CircleSlider.java),
+   [FixedPoint](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/FixedPoint.java),
+   [Foot](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Foot.java),
+   [Harmonic](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Harmonic.java),
+   [Intersection](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Intersection.java),
+   [IntersectionPL](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/IntersectionPL.java),
+   [InvertPoint](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/InvertPoint.java),
+   [Layoff](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Layoff.java),
+   [LineSlider](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/LineSlider.java),
+   [MeanProportional](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/MeanProportional.java),
+   [Midpoint](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Midpoint.java),
+   [PlaneFoot](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/PlaneFoot.java),
+   [PlaneSlider](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/PlaneSlider.java),
+   [Proportion](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Proportion.java),
+   [Similar](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Similar.java), and
+   [SphereSlider](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/SphereSlider.java).
+2. [LineElement](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/LineElement.java) with subclasses
+   [Bichord](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Bichord.java),
+   [Chord](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Chord.java),
+   [Perpendicular](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Perpendicular.java), and
+   [PlanePerpendicular](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/PlanePerpendicular.java).
+3. [CircleElement](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/CircleElement.java) with subclasses
+   [Circumcircle](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Circumcircle.java),
+   [IntersectionSS](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/IntersectionSS.java), and
+   [InvertCircle](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/InvertCircle.java).
+4. [PolygonElement](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/PolygonElement.java) with subclasses
+   [Application](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Application.java), and
+   [RegularPolygon](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/RegularPolygon.java).
+5. [SectorElement](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/SectorElement.java) with subclass
+   [Arc](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Arc.java).
+6. [PlaneElement](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/PlaneElement.java) with subclasses
+   [ParallelP](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/ParallelP.java) and
+   [PerpendicularPL](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/PerpendicularPL.java).
+7. [SphereElement](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/SphereElement.java).
+8. [PolyhedronElement](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/PolyhedronElement.java) with subclasses
+   [Prism](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Prism.java) and
+   [Pyramid](https://github.com/brownnrl/euclid/blob/main/geom_applet/source/Pyramid.java).
+
+The Java source files for the original applet are preserved in the
+[`geom_applet/source/`](https://github.com/brownnrl/euclid/tree/main/geom_applet/source)
+directory of the geomlib repository, alongside the 1998 deployable
+`Geometry.zip` archive.

@@ -1,0 +1,67 @@
+_model: other_work
+---
+title: Using geomlib diagrams
+---
+order: 1
+---
+body:
+
+The [`geomlib`](/geomlib/) library is used to illustrate the figures in the *Elements.* With the help of this library, you can manipulate the figures by dragging points.
+
+Any modern browser with JavaScript enabled will display the interactive diagrams; if JavaScript is disabled, the illustrations fall back to static images.
+
+If you click on a point in the figure, you can usually move it in some way. The free points, usually colored red, can be freely dragged about, and as they move, the rest of the diagram (except the other free points) will adjust appropriately. Sliding points, usually colored orange, can be dragged about like the free points, except their motion is limited to either a straight line, a circle, a plane, or a sphere, depending on the point. Other points can be dragged to translate the entire diagram. But if a pivot point appears, usually colored green, then the diagram will be rotated and scaled around that pivot point.
+
+Take, for example, the figure below showing the relation between a tetrahedron and a cube inscribed in a sphere. The diameter of the sphere has length *AB,* and you can drag the endpoints *A* and *B* to change the size of the sphere. The side of the cube has length *BD,* and the side of the tetrahedron has length *AD.* The cube is drawn with red edges while the tetrahedron is shaded light blue and drawn with blue edges. The center of the sphere is the red dot, and you can drag it to move the sphere around. The point *E* can be dragged anywhere on the surface of the sphere. The point *F* has to be at length *BD* from *E* on the surface of the sphere, and so it drags along a certain circle on the sphere. The rest of the cube and tetrahedron are then determined. (See proposition @XIII.15 for background on the mathematics.)
+
+<figure class="diagram block">
+<canvas id="canvas_0" width="440" height="280" tabindex="0"></canvas>
+<noscript><img alt="Cube and tetrahedron" src="propXIII15a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "0,0,100",
+        title: "Cube and tetrahedron",
+        elements: [
+            "A0;point;free;30,-1000;0;0",
+            "A3;point;free;30,1000;0;0",
+            "A;point;lineSlider;A0,A3,0,40",
+            "B;point;lineSlider;A0,A3,0,240",
+            "AB;line;connect;A,B",
+            "ABmid;point;midpoint;A,B;0;0",
+            "ABcirc;circle;radius;ABmid,B;0;0;0;0",
+            "semi;sector;sector;ABmid,B,A;0;0;black;random",
+            "A1;point;perpendicular;A,B;0;0",
+            "A2;point;extend;A,A1,A,A1;0;0",
+            "B1;point;perpendicular;B,A;0;0",
+            "C;point;intersection;A,B,A2,B1",
+            "D';point;perpendicular;C,A;0;0",
+            "Dch;line;chord;C,D',ABcirc;0;0;0",
+            "D;point;last;Dch",
+            "CD;line;connect;C,D",
+            "BD;line;connect;B,D;0;0;red",
+            "AD;line;connect;A,D;0;0;blue",
+            "P;point;free;280,140;0",
+            "Psphere;sphere;radius;P,A,ABmid;0;0;lightGray",
+            "E;point;sphereSlider;Psphere,240,100,-40",
+            "M;point;extend;E,P,P,E",
+            "Esphere;sphere;radius;E,D,B;0;0;0;0",
+            "Fcircle;circle;intersection;Esphere,Psphere;0;0;0;0",
+            "F;point;circleSlider;Fcircle,330,200,30",
+            "N;point;extend;F,P,P,E",
+            "ENplane;plane;perpendicular;E,F;0;0;0;0",
+            "Q;point;midpoint;E,N;0;0",
+            "H;point;perpendicular;Q,E,ENplane",
+            "K;point;parallelogram;E,H,N",
+            "L;point;extend;H,P,P,E",
+            "G;point;extend;K,P,P,E",
+            "cube;polyhedron;parallelepiped;E,F,H,K;0;0;red;0",
+            "tet;polyhedron;tetrahedron;E,N,L,G;0;0;blue;random",
+        ],
+    });
+</script>
+</figure>
+
+Note that you can't drag a point off the diagram, but frequently parts of the diagram will be moved off as you drag other points around. But if you type **r** or the **space key** while the cursor is over the diagram, then the diagram will be reset to its original configuration.
+
+You can also lift the figure off the page into a separate window. When you type **u** or **return** the figure is moved to its own window. Typing **d** or **return** while the cursor is over the original window will return the diagram to the page. Note that you can resize the floating window to make the diagram larger.

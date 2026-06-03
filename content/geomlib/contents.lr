@@ -1,0 +1,157 @@
+_model: other_work
+---
+title: geomlib
+---
+order: 1
+---
+body:
+
+[**geomlib**](https://github.com/brownnrl/euclid) is a TypeScript port
+of Dr. David E. Joyce's *Geometry Applet* (Clark University, 1996,
+Java version 2.2). It renders interactive Euclidean geometry diagrams
+on an HTML5 `<canvas>`: drag a point, and every construction that
+depends on it follows. The original Java applet illustrated Euclid's
+*Elements*; this port does the same job in a modern browser, no JVM
+required.
+
+<figure class="diagram block">
+<canvas id="canvas_0" width="400" height="360" tabindex="0"></canvas>
+<noscript><img alt="The icosahedron" src="propXIII16a.gif"/></noscript>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "0,0,100",
+        title: "The icosahedron",
+        elements: [
+            "A0;point;free;25,-1000;0;0",
+            "A3;point;free;25,1000;0;0",
+            "A;point;lineSlider;A0,A3,0,40",
+            "B;point;lineSlider;A0,A3,0,320",
+            "AB;line;connect;A,B",
+            "ABmid;point;midpoint;A,B;0;0",
+            "ABcirc;circle;radius;ABmid,B;0;0;0;0",
+            "A1;point;perpendicular;A,B;0;0",
+            "A2;point;extend;A,A1,A,A1;0;0",
+            "A4;point;extend;A,A2,A,A2;0;0",
+            "B1;point;perpendicular;B,A;0;0",
+            "C;point;intersection;A,B,A4,B1;0;0",
+            "D';point;perpendicular;C,A;0;0",
+            "Dch;line;chord;C,D',ABcirc;0;0;0",
+            "D;point;last;Dch;0;0",
+            "a;point;free;220,180;0",
+            "sphere;sphere;radius;a,ABmid,A;0;0;0;0",
+            "X;point;sphereSlider;sphere,310,155,100",
+            "Z;point;extend;X,a,X,a",
+            "b;point;midpoint;B,D;0;0",
+            "V;point;cutoff;a,X,b,B;0;0",
+            "W;point;extend;V,a,V,a;0;0",
+            "Vplane;plane;perpendicular;V,a;0;0;0;0",
+            "Vcirc;circle;radius;V,D,B,Vplane;0;0;0;0",
+            "L;point;circleSlider;Vcirc,240,30,-20",
+            "LEcirc;circle;radius;L,W,Z,Vplane;0;0;0;0",
+            "FE;line;bichord;Vcirc,LEcirc;0;0;0",
+            "E;point;last;FE;0;0",
+            "dec;polygon;regularPolygon;L,E,10,Vplane;0;0;0;0",
+            "P;point;vertex;dec,3",
+            "K;point;vertex;dec,4;0;0",
+            "O;point;vertex;dec,5",
+            "H;point;vertex;dec,6;0;0",
+            "N;point;vertex;dec,7",
+            "G;point;vertex;dec,8;0;0",
+            "M;point;vertex;dec,9",
+            "F;point;vertex;dec,10;0;0",
+            "Q;point;perpendicular;E,Vplane,D,B",
+            "R;point;perpendicular;F,Vplane,D,B",
+            "S;point;perpendicular;G,Vplane,D,B",
+            "T;point;perpendicular;H,Vplane,D,B",
+            "U;point;perpendicular;K,Vplane,D,B",
+            "LQR;polygon;triangle;L,Q,R",
+            "MRS;polygon;triangle;M,R,S",
+            "NST;polygon;triangle;N,S,T",
+            "OUT;polygon;triangle;O,U,T",
+            "QUP;polygon;triangle;Q,U,P",
+            "LMR;polygon;triangle;L,M,R",
+            "MNS;polygon;triangle;M,N,S",
+            "NOT;polygon;triangle;N,O,T",
+            "POU;polygon;triangle;P,O,U",
+            "LPQ;polygon;triangle;L,P,Q",
+            "QRZ;polygon;triangle;Q,R,Z",
+            "RSZ;polygon;triangle;R,S,Z",
+            "STZ;polygon;triangle;S,T,Z",
+            "TUZ;polygon;triangle;T,U,Z",
+            "UQZ;polygon;triangle;U,Q,Z",
+            "LMX;polygon;triangle;L,M,X",
+            "MNX;polygon;triangle;M,N,X",
+            "NOX;polygon;triangle;N,O,X",
+            "OPX;polygon;triangle;O,P,X",
+            "PLX;polygon;triangle;P,L,X"
+        ],
+    });
+</script>
+</figure>
+
+The construction above is the icosahedron from @XIII.16 — twenty
+equilateral triangles inscribed in a sphere of diameter *AB*. Drag
+*A*, *B*, *a* (the sphere center), or *X* (a free point on the
+sphere) to move the figure; the rest of the construction follows
+automatically. See [Using geomlib diagrams](/geomlib/using/) for the
+full set of interactions (free points vs sliders vs pivots, reset and
+pop-out shortcuts).
+
+### What it does
+
+The library exposes eight element classes — *point*, *line*, *circle*,
+*polygon*, *sector*, *plane*, *sphere*, *polyhedron* — and ~70
+construction methods. All 465 propositions across Books I–XIII of the
+*Elements* are renderable.
+
+Two reference points for what's available:
+
+- [**Quickstart**](https://github.com/brownnrl/euclid/blob/main/doc/quickstart.md)
+  walks through building Proposition I.1 from scratch — a `<canvas>`,
+  a script tag, and a `geomlib.init({...})` with the ordered
+  constructions.
+- [**Constructions reference**](https://github.com/brownnrl/euclid/blob/main/doc/constructions-reference.md)
+  lists every construction available on each element type, with the
+  expected parameters and return shape.
+
+### Use it on your own page
+
+Drop the bundle in via CDN (no build step):
+
+```html
+<script src="https://unpkg.com/@brownnrl/geomlib@0.3.0/dist/bundle.js"></script>
+```
+
+Or install from npm:
+
+```sh
+npm install @brownnrl/geomlib
+```
+
+Then pair a `<canvas id="...">` with a `geomlib.init({...})` call
+listing the elements you want constructed — see the Quickstart and
+Constructions Reference linked above for the full vocabulary.
+
+### Attribution
+
+The original *Geometry Applet* was created by Dr. David E. Joyce
+(Professor Emeritus, Department of Mathematics and Computer Science,
+[Clark University](https://www.clarku.edu/)) between 1996 and 2020
+for his online edition of Euclid's *Elements*. Nelson Brown received
+Dr. Joyce's permission in May 2026 to republish the *Elements*
+edition and to port the underlying applet to TypeScript as `geomlib`.
+The library is open source under the
+[MIT License](https://github.com/brownnrl/euclid/blob/main/LICENSE)
+with joint copyright: © 1996–2020 David E. Joyce, 2019–2026 Nelson
+Brown.
+
+Joyce's original 1996 *Geometry Applet* documentation page is
+preserved [here](/geomlib/historical/) for historical reference.
+
+### Source + reports
+
+- **Source code**: [github.com/brownnrl/euclid](https://github.com/brownnrl/euclid)
+- **npm package**: [`@brownnrl/geomlib`](https://www.npmjs.com/package/@brownnrl/geomlib)
+- **Code coverage**: [coverage report](/geomlib/coverage/)
+- **Visual regression**: [snapshot report](/geomlib/snapshots/report.html)
