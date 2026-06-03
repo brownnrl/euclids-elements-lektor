@@ -7,16 +7,30 @@ edition of Dr. David E. Joyce's *Euclid's Elements*).
 This is **Phase 2** of the
 [mobile/presentation roadmap](https://github.com/brownnrl/euclids-elements.org/issues/17),
 tracked at [euclids-elements.org#13](https://github.com/brownnrl/euclids-elements.org/issues/13).
-Per-milestone work lives in this repo's own issue tracker.
+Per-milestone work lives in this repo's own issue tracker. Phase 2 is
+near completion; the next phase (cross-highlighting prose↔canvas,
+animated proof step-throughs) needs the structured-field refactor of
+`proposition.model` called out in the roadmap below.
 
 ## Status
 
-**Milestone 1 — scaffold.** A working Lektor project that reproduces
-two Book I pages (the intro stub and Proposition I.1, plus a stub for
-Proposition I.4) in the existing site's visual identity, and a
-deploy-preview script that pushes the built output to a branch on
-`euclids-elements.org` so Cloudflare Workers Builds auto-deploys it
-to a phone-reachable preview URL.
+**Content conversion complete.** All 13 books of the *Elements* —
+definitions, postulates, common notions, and the full corpus of
+~465 propositions — are rendered as markdown content with
+`geomlib.init({...})` canvases. Prematter pages are converted
+(Introduction, Quick Trip, Euclid, About the Text, References on the
+Web, Subject Index, Copyright). Joyce's republished tutorials
+(Compass Geometry's 7-part series, Round Triangles, Six Circles &
+Eight Points, Desargues' Theorem, the Euler Line) live under
+`/other-works/`, and the library's own site (landing + Using
+diagrams + Joyce's 1996 *Geometry Applet* archive + the original
+construction-methods tables) lives under `/geomlib/`. Mobile layouts
+collapse the master TOC and Subject Index across breakpoints and
+stack the footer-nav row on phones.
+
+Per-conversion notes, editorial mismatch reviews, and the per-book
+agent-fan-out playbook live under
+[`doc/journal/`](doc/journal/).
 
 ## Setup
 
@@ -85,40 +99,53 @@ The script assumes the `euclids-elements.org` checkout sits at
 .
 ├── euclids-elements.lektorproject  Project metadata
 ├── requirements.txt                Lektor pin
+├── packages/
+│   ├── lektor-eucrefs/             @I.5 / [!just …] inline + block citations
+│   └── lektor-katex/               Build-time KaTeX rendering
 ├── models/                         Lektor content models (.ini files)
-│   ├── page.ini                    Generic fallback
-│   ├── book.ini                    Book intro pages (e.g. Book I TOC)
-│   └── proposition.ini             Individual proposition pages
-├── templates/                      Jinja2 templates
-│   ├── layout.html                 Base: <head>, header div, footer div, geomlib script
-│   ├── page.html
-│   ├── book.html
-│   └── proposition.html
-├── assets/                         Verbatim-copied static files (css, js)
-│   ├── css/style.css               From euclids-elements.org/css/style.css
-│   └── js/header-footer.js         From euclids-elements.org/js/header-footer.js
+│   ├── book.ini, section_index.ini, toc.ini
+│   ├── definition.ini + definition_group.ini   (bundle pattern, shared Guide)
+│   ├── postulate.ini, commonnotion.ini, commonnotion_group.ini
+│   ├── proposition.ini             Statement + proof + body markdown fields
+│   ├── prematter.ini, prematter_index.ini
+│   ├── other_work.ini              Compass series, round, sixeight, euler, geomlib
+│   └── page.ini                    Generic markdown fallback
+├── templates/                      Jinja2 templates, one per model
+├── assets/                         Static CSS + JS
+│   ├── css/style.css               Mobile-aware (column collapse, footer stack)
+│   ├── js/footer-nav.js            JS-driven booktable + proptable nav
+│   └── css/katex/                  KaTeX font + stylesheet
 ├── content/                        Lektor content tree (one folder per URL)
-│   ├── contents.lr                 Site root
-│   └── bookI/
-│       ├── contents.lr             Book I intro (book model)
-│       ├── propI1/contents.lr      Proposition I.1 (proposition model)
-│       └── propI4/contents.lr      Proposition I.4 stub
-└── scripts/
-    └── deploy-preview.sh           Build + push to euclids-elements.org/lektor/<branch>
+│   ├── contents.lr                 Introduction
+│   ├── elements/                   Master TOC + prematter + bookI…bookXIII
+│   ├── other-works/                Compass Geometry, round, sixeight, desargues, euler
+│   └── geomlib/                    Landing + Using + Joyce archive + reference tables
+├── scripts/
+│   ├── deploy-preview.sh           Build + push to euclids-elements.org/lektor/<branch>
+│   ├── copy-gif-fallbacks.py       Walk content + copy <noscript> .gif assets
+│   ├── normalize-citations.py      Joyce variant spellings → canonical (idempotent)
+│   ├── convert-to-eucref.py        [text](url) markdown links → @TOKEN shortcodes
+│   └── render-katex.js             Build-time math rendering helper
+└── doc/
+    ├── conventions.md              Canvas backgrounds, figure floats, eucref grammar
+    ├── content-model.md            Bundle pattern, frontmatter shapes
+    └── journal/                    Per-milestone notes + per-book agent playbook
 ```
 
 ## Roadmap
 
 Milestones tracked as GitHub issues in this repo. The big arc:
 
-- **M1** (this commit) — scaffold + 2 pages + deploy loop
-- **M2** — full Book I conversion (intro page, all 48 propositions,
+- **M1** ✅ — scaffold + 2 pages + deploy loop
+- **M2** ✅ — full Book I conversion (intro, 48 propositions,
   definitions, postulates, common notions)
-- **M3+** — Books II through XIII, the compass / round / eulerline tutorials
-- **Refactor** — promote `proposition.model`'s raw-HTML `body` field
-  into structured fields (statement / diagrams / proof / guide) so
-  Phase 4a (cross-highlighting prose↔canvas) and Phase 4b
-  (animated step-throughs) can compose against the data model
+- **M3** ✅ — Books II through XIII, the compass / round / euler
+  tutorials, geomlib's own site (landing + Using + Joyce archive)
+- **M4 — structured-field refactor** (next) — promote
+  `proposition.model`'s markdown `body` into structured fields
+  (statement / diagrams / proof / guide) so Phase 4a
+  (cross-highlighting prose↔canvas) and Phase 4b (animated
+  step-throughs) can compose against the data model.
 
 ## Licensing
 
