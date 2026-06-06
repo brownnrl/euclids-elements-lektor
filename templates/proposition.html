@@ -10,10 +10,13 @@
    `anchor` are overrides for the multi-of-a-kind case (Lemma 1 /
    Lemma 2; cor / cor2). proposition-kind sections use the parent
    prop's `title` as their heading and anchor `prop`. note/remark
-   sections render their `guide` inside the box (no separate "Guide"
-   heading); proposition-kind sections render `guide` BELOW the box
-   under an <h2 id="guide">Guide</h2> heading, matching Joyce's
-   layout. lemma/corollary sections typically have only a proof. #}
+   sections render their `guide` inside the box (the box IS the
+   commentary); the proposition's `guide` renders ONCE at the very
+   bottom under an <h2 id="guide">Guide</h2> heading — after every
+   theorem box, so the page reads box1 → box2 → … → Guide regardless
+   of where the proposition section sits in the sequence (matches
+   Joyce's bookX layout where post-prop remarks come before the
+   Guide). lemma/corollary sections typically have only a proof. #}
 {% set sections = this.sections.blocks if this.sections is defined and this.sections else [] %}
 {% for s in sections %}
   {% set rcls = " class=\"red-highlight\"" if s.red_highlight else "" %}
@@ -25,10 +28,10 @@
     {% if s.proof %}{{ s.proof }}{% endif %}
     {% if s.kind in ["note", "remark"] and s.guide %}{{ s.guide }}{% endif %}
   </div>
+{% endfor %}
 
-  {% if s.kind == "proposition" and s.guide %}
-    <h2 id="guide">Guide</h2>
-    {{ s.guide }}
-  {% endif %}
+{% for s in sections if s.kind == "proposition" and s.guide %}
+  <h2 id="guide">Guide</h2>
+  {{ s.guide }}
 {% endfor %}
 {% endblock %}
