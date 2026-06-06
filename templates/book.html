@@ -62,14 +62,19 @@
    calls for one — always in the TOC (Joyce's bookX.html has periods
    on every entry); in H1 headings only for non-proposition kinds
    (Joyce uses "Proposition 29" but "Lemma 1." / "Corollary."). #}
+{# Lektor's url filter omits the trailing slash on slugs that contain a
+   dot (it assumes anything with a dot is a file with extension). For
+   our dotted def slugs (defX.I.1 etc.) that's wrong — they're folder
+   pages. `u(item)` ensures a trailing slash on every entry URL. #}
+{% macro u(item) %}{% set url = item|url %}{{ url if url.endswith('/') else url ~ '/' }}{% endmacro %}
 {% macro sec_label(item, s) %}{{ s.label if s.label else (item.title if s.kind == "proposition" else s.kind|capitalize) }}{% endmacro %}
 {% macro sec_anchor(s) %}{{ s.anchor if s.anchor else ("prop" if s.kind == "proposition" else s.kind) }}{% endmacro %}
 
-{% macro sec_inline(item, s) %}<b><a href="{{ item|url }}#{{ sec_anchor(s) }}">{{ sec_label(item, s) }}.</a></b>{% if s.statement %} {{ s.statement }}{% endif %}{% endmacro %}
+{% macro sec_inline(item, s) %}<b><a href="{{ u(item)|trim }}#{{ sec_anchor(s) }}">{{ sec_label(item, s) }}.</a></b>{% if s.statement %} {{ s.statement }}{% endif %}{% endmacro %}
 
 {% macro entry(item) %}
   {% set cls = " class=\"red-highlight\"" if item.red_highlight else "" %}
-  <dt{{ cls|safe }}><b><a href="{{ item|url }}">{{ item.title }}</a>.</b></dt>
+  <dt{{ cls|safe }}><b><a href="{{ u(item)|trim }}">{{ item.title }}</a>.</b></dt>
   {% set secs = item.sections.blocks if item.sections is defined and item.sections else [] %}
   <dd{{ cls|safe }}>
     {% if secs %}
