@@ -2,8 +2,8 @@
 
 Audit run over 537 pages.
 
-- ✅ Clean (≥ 92% text similarity + no link diffs): **408**
-- ⚠️  Flagged for review: **129**
+- ✅ Clean (≥ 92% text similarity + no link diffs): **428**
+- ⚠️  Flagged for review: **109**
 - ❌ Could not fetch Joyce source: **0**
 
 ## How to read this report
@@ -13,83 +13,6 @@ Audit run over 537 pages.
 - Already-catalogued intentional fixes (see [`doc/journal/mismatch-review.md`](mismatch-review.md)) will appear as link-diff entries here; cross-check before re-fixing.
 
 ## ⚠️ Pages flagged for review
-
-### `content/elements/books/bookX/definitions/defX.I/contents.lr` (vs `bookX/defX.I.html`)
-
-- Text similarity: **0.0%**
-- Joyce link count: 5, ours: 0
-- Missing in our version: 5
-    - `i.47` → `i.47`
-    - `v.def.5` → `v.def.5`
-    - `x.10` → `x.10`
-    - `x.5` → `x.5`
-    - `x.6` → `x.6`
-- Text differences (first 5 passages):
-
-  - Joyce: those magnitudes are said to be commensurable which are measured by the same measure, and those incommensurable which cannot have any common measure.
-    Ours:  (missing)
-
-### `content/elements/books/bookX/definitions/defX.II/contents.lr` (vs `bookX/defX.II.html`)
-
-- Text similarity: **0.0%**
-- Joyce link count: 0, ours: 0
-- Text differences (first 5 passages):
-
-  - Joyce: definition 1. given a rational straight line and a binomial, divided into its terms, such that the square on the greater term is greater than the square on the lesser by the square on a straight line …
-    Ours:  (missing)
-
-### `content/elements/books/bookX/definitions/defX.III/contents.lr` (vs `bookX/defX.III.html`)
-
-- Text similarity: **0.0%**
-- Joyce link count: 0, ours: 0
-- Text differences (first 5 passages):
-
-  - Joyce: definition 1. given a rational straight line and an apotome, if the square on the whole is greater than the square on the annex by the square on a straight line commensurable in length with the whole,…
-    Ours:  (missing)
-
-### `content/elements/books/bookXI/definitions/defXI25_28/contents.lr` (vs `bookXI/defXI25.html`)
-
-- Text similarity: **5.1%**
-- Joyce link count: 6, ours: 6
-- Text differences (first 5 passages):
-
-  - Joyce: a cube
-    Ours:  these are four of the five regular solids. the tetrahedron is not mentioned here since it
-  - Joyce: solid figure contained by six equal squares.
-    Ours:  certain triangular pyramid. it's called simply the "pyramid" in book xiii. the regular tetrahedron is constructed in proposition , the cube in , the octahedron in , the icosahedron in , and the dodeca…
-
-### `content/elements/books/bookII/definitions/defII1_2/contents.lr` (vs `bookII/defII.html`)
-
-- Text similarity: **7.2%**
-- Joyce link count: 0, ours: 0
-- Text differences (first 5 passages):
-
-  - Joyce: any rectangular parallelogram
-    Ours:  euclid didn't a single word for rectangle, but two words meaning right-angled parallelogram. according to the first definition, the rectangle abcd illustrated on the left
-  - Joyce: said to be
-    Ours:  (missing)
-  - Joyce: (missing)
-    Ours:  lines ab and bc, and this rectangle can be called the rectangle ab by bc. of course, it could also be called the rectangle bc by cd, or
-  - Joyce: straight lines containing
-    Ours:  other names. on
-  - Joyce: (missing)
-    Ours:  right, in the parallelogram efgh, there is a diameter eg with a parallelogram lngo about it and the two complements klof and mhnl, and these three parallelograms together make up the gnomon. in other …
-  - …and 1 more passages
-
-### `content/elements/books/bookXI/definitions/defXI12_13/contents.lr` (vs `bookXI/defXI12.html`)
-
-- Text similarity: **8.8%**
-- Joyce link count: 3, ours: 3
-- Text differences (first 5 passages):
-
-  - Joyce: (missing)
-    Ours:  in the diagram below, abcd is
-  - Joyce: (missing)
-    Ours:  with vertex d and triangular base abc. since it's a tetrahedron, it's still a triangular pyramid when any of the other three sides is considered the base. also, efghkl
-  - Joyce: solid figure contained
-    Ours:  prism with opposite triangular sides efg and hkl. definition 12 for pyramids is rather abbreviated, but the intention is clear. note that in definition 13 the term "equal and similar" is used for cong…
-  - Joyce: planes which is constructed from one plane to one point.
-    Ours:  that name, are first discussed in proposition . pyramids are treated in propositions through xii.9 in book xii.
 
 ### `content/elements/prematter/copyright/contents.lr` (vs `copyright.html`)
 
@@ -120,157 +43,6 @@ Audit run over 537 pages.
     Ours:  content and port
   - …and 6 more passages
 
-### `content/elements/books/bookX/propositions/propX17/contents.lr` (vs `bookX/propX17.html`)
-
-- Text similarity: **31.6%**
-- Joyce link count: 13, ours: 14
-- Text differences (first 5 passages):
-
-  - Joyce: (missing)
-    Ours:  lemma. if to any straight line there is applied a parallelogram but falling short by a square, then the applied parallelogram equals the rectangle contained by the segments of the straight line result…
-  - Joyce: db .
-    Ours:  db.
-  - Joyce: cb .
-    Ours:  cb.
-  - Joyce: cb ,
-    Ours:  cb,
-  - Joyce: cd ,
-    Ours:  cd,
-  - …and 12 more passages
-
-### `content/elements/books/bookX/propositions/propX60/contents.lr` (vs `bookX/propX60.html`)
-
-- Text similarity: **35.8%**
-- Joyce link count: 20, ours: 21
-- Text differences (first 5 passages):
-
-  - Joyce: (missing)
-    Ours:  lemma.
-  - Joyce: (missing)
-    Ours:  lemma
-  - Joyce: c ,
-    Ours:  c,
-  - Joyce: cb .
-    Ours:  cb.
-  - Joyce: d .
-    Ours:  d.
-  - …and 10 more passages
-
-### `content/elements/books/bookX/propositions/propX14/contents.lr` (vs `bookX/propX14.html`)
-
-- Text similarity: **39.3%**
-- Joyce link count: 13, ours: 13
-- Text differences (first 5 passages):
-
-  - Joyce: (missing)
-    Ours:  lemma.
-  - Joyce: c .
-    Ours:  c.
-  - Joyce: ab ,
-    Ours:  ab,
-  - Joyce: c ,
-    Ours:  c,
-  - Joyce: db .
-    Ours:  db.
-  - …and 7 more passages
-
-### `content/elements/books/bookX/propositions/propX54/contents.lr` (vs `bookX/propX54.html`)
-
-- Text similarity: **41.7%**
-- Joyce link count: 25, ours: 26
-- Added in our version: 1
-    - `x.91` → `x.91`
-- Text differences (first 5 passages):
-
-  - Joyce: (missing)
-    Ours:  lemma. lemma
-  - Joyce: bc ,
-    Ours:  bc,
-  - Joyce: be .
-    Ours:  be.
-  - Joyce: bg .
-    Ours:  bg.
-  - Joyce: ac .
-    Ours:  ac.
-  - …and 24 more passages
-
-### `content/elements/books/bookX/propositions/propX22/contents.lr` (vs `bookX/propX22.html`)
-
-- Text similarity: **50.8%**
-- Joyce link count: 11, ours: 12
-- Text differences (first 5 passages):
-
-  - Joyce: (missing)
-    Ours:  lemma. if there are two straight lines, then the first is to the second as the square on the first is to the rectangle contained by the two straight lines. lemma
-  - Joyce: eg .
-    Ours:  eg.
-  - Joyce: fe ,
-    Ours:  fe,
-  - Joyce: gd .
-    Ours:  gd.
-  - Joyce: dg ,
-    Ours:  dg,
-  - …and 22 more passages
-
-### `content/elements/books/bookX/propositions/propX33/contents.lr` (vs `bookX/propX33.html`)
-
-- Text similarity: **53.9%**
-- Joyce link count: 16, ours: 17
-- Text differences (first 5 passages):
-
-  - Joyce: (missing)
-    Ours:  lemma.
-  - Joyce: ba ,
-    Ours:  ba,
-  - Joyce: ca ,
-    Ours:  ca,
-  - Joyce: ad ,
-    Ours:  ad,
-  - Joyce: ac ,
-    Ours:  ac,
-  - …and 16 more passages
-
-### `content/elements/books/bookX/propositions/propX111/contents.lr` (vs `bookX/propX111.html`)
-
-- Text similarity: **57.5%**
-- Joyce link count: 16, ours: 16
-- Text differences (first 5 passages):
-
-  - Joyce: dc ,
-    Ours:  dc,
-  - Joyce: df ,
-    Ours:  df,
-  - Joyce: g ,
-    Ours:  g,
-  - Joyce: dg ,
-    Ours:  dg,
-  - Joyce: dg .
-    Ours:  dg.
-  - …and 5 more passages
-
-### `content/elements/books/bookV/definitions/defV5_6/contents.lr` (vs `bookV/defV5.html`)
-
-- Text similarity: **59.8%**
-- Joyce link count: 9, ours: 7
-- Missing in our version: 2
-    - `guide` → `v.14#guide, v.def.3#guide`
-    - `x.def.1` → `x.def..i`
-- Added in our version: 1
-    - `x.def.i.1` → `x.def.i.1`
-- Text differences (first 5 passages):
-
-  - Joyce: magnitudes are said to be in the same ratio, the first to the second and the third to the fourth, when, if any equimultiples whatever are taken of the first and third, and any equimultiples whatever o…
-    Ours:  (missing)
-  - Joyce: (missing)
-    Ours:  mx, then ny mz. it is very convenient to use the shorter notation if nw mx, then ny mz. note that whenever the symbol if n bc m cd, then n abc m acd. note that in order to check this condition, it is …
-  - Joyce: v.11
-    Ours:  (missing)
-  - Joyce: do
-    Ours:  "do
-  - Joyce: exist?
-    Ours:  exist?"
-  - …and 13 more passages
-
 ### `content/elements/books/bookIX/propositions/propIX35/contents.lr` (vs `bookIX/propIX35.html`)
 
 - Text similarity: **60.9%**
@@ -280,23 +52,25 @@ Audit run over 537 pages.
   - Joyce: (missing)
     Ours:  this proposition says if a sequence of numbers a 1 , a 2 , a 3 , ..., a n , a n 1 is in continued proportion a 1 : a 2 a 2 : a 3 ... a n : a n 1 then ( a 2 – a 1 ) : a 1 ( a n 1 – a 1 ) : ( a 1 a 2 ..…
 
-### `content/elements/books/bookX/propositions/propX29/contents.lr` (vs `bookX/propX29.html`)
+### `content/elements/books/bookX/propositions/propX54/contents.lr` (vs `bookX/propX54.html`)
 
-- Text similarity: **64.4%**
-- Joyce link count: 18, ours: 19
+- Text similarity: **62.9%**
+- Joyce link count: 25, ours: 25
+- Added in our version: 1
+    - `x.91` → `x.91`
 - Text differences (first 5 passages):
 
   - Joyce: (missing)
-    Ours:  lemma 1.
-  - Joyce: bc ,
-    Ours:  bc,
-  - Joyce: d .
-    Ours:  d.
-  - Joyce: bd .
-    Ours:  bd.
-  - Joyce: bc ,
-    Ours:  bc,
-  - …and 34 more passages
+    Ours:  let there be two squares ab and bc, and let them be placed so that db is in a straight line with be. then fb is also in a straight line with bg. complete the parallelogram ac. i say that ac is a squar…
+  - Joyce: there be two squares ab and bc , and let them be placed so that db is in a straight line with be . then fb is also in a straight line with bg . complete the parallelogram ac . i say that ac is a squar…
+    Ours:  (missing)
+  - Joyce: ad .
+    Ours:  ad.
+  - Joyce: e ,
+    Ours:  e,
+  - Joyce: ae ,
+    Ours:  ae,
+  - …and 55 more passages
 
 ### `content/elements/books/bookX/propositions/propX20/contents.lr` (vs `bookX/propX20.html`)
 
@@ -316,22 +90,45 @@ Audit run over 537 pages.
     Ours:  bc.
   - …and 5 more passages
 
-### `content/elements/books/bookX/propositions/propX41/contents.lr` (vs `bookX/propX41.html`)
+### `content/elements/books/bookX/propositions/propX14/contents.lr` (vs `bookX/propX14.html`)
 
-- Text similarity: **65.0%**
-- Joyce link count: 12, ours: 12
+- Text similarity: **65.6%**
+- Joyce link count: 13, ours: 13
 - Text differences (first 5 passages):
 
-  - Joyce: de .
-    Ours:  de.
-  - Joyce: bc ,
-    Ours:  bc,
-  - Joyce: bc .
-    Ours:  bc.
-  - Joyce: ac .
-    Ours:  ac.
-  - Joyce: df ,
-    Ours:  df,
+  - Joyce: (missing)
+    Ours:  let ab and c be the given two unequal straight lines, and let ab be the greater of them. it is required to find by what square the square on ab is greater than the square on c. describe the semicircle…
+  - Joyce: let ab
+    Ours:  if four straight lines are proportional,
+  - Joyce: c be the given two unequal straight lines, and let ab be the greater of them. it is required to find by what square
+    Ours:  (missing)
+  - Joyce: ab
+    Ours:  the first
+  - Joyce: c . describe
+    Ours:  (missing)
+  - …and 36 more passages
+
+### `content/elements/books/bookV/definitions/defV5_6/contents.lr` (vs `bookV/defV5.html`)
+
+- Text similarity: **65.9%**
+- Joyce link count: 9, ours: 7
+- Missing in our version: 2
+    - `guide` → `v.14#guide, v.def.3#guide`
+    - `x.def.1` → `x.def..i`
+- Added in our version: 1
+    - `x.def.i.1` → `x.def.i.1`
+- Text differences (first 5 passages):
+
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: (missing)
+    Ours:  mx, then ny mz. it is very convenient to use the shorter notation if nw mx, then ny mz. note that whenever the symbol if n bc m cd, then n abc m acd. note that in order to check this condition, it is …
+  - Joyce: v.11
+    Ours:  (missing)
+  - Joyce: do
+    Ours:  "do
+  - Joyce: exist?
+    Ours:  exist?"
   - …and 13 more passages
 
 ### `content/elements/prematter/Euclid/contents.lr` (vs `Euclid.html`)
@@ -386,6 +183,28 @@ Audit run over 537 pages.
     Ours:  euclid's
   - …and 14 more passages
 
+### `content/elements/books/bookX/propositions/propX6/contents.lr` (vs `bookX/propX6.html`)
+
+- Text similarity: **69.7%**
+- Joyce link count: 11, ours: 11
+- Missing in our version: 1
+    - `x.def.1` → `x.def..i`
+- Added in our version: 1
+    - `x.def.i.1` → `x.def.i.1`
+- Text differences (first 5 passages):
+
+  - Joyce: e .
+    Ours:  e.
+  - Joyce: d ,
+    Ours:  d,
+  - Joyce: e .
+    Ours:  e.
+  - Joyce: d ,
+    Ours:  d,
+  - Joyce: d ,
+    Ours:  d,
+  - …and 21 more passages
+
 ### `content/elements/books/bookIX/propositions/propIX20/contents.lr` (vs `bookIX/propIX20.html`)
 
 - Text similarity: **69.9%**
@@ -394,6 +213,28 @@ Audit run over 537 pages.
 
   - Joyce: (missing)
     Ours:  this proposition states that there are more than any finite number of prime numbers, that is to say, there are infinitely many primes. outline of the proof suppose that there are n primes, a 1 , a 2 ,…
+
+### `content/elements/books/bookX/propositions/propX23/contents.lr` (vs `bookX/propX23.html`)
+
+- Text similarity: **71.2%**
+- Joyce link count: 12, ours: 12
+- Missing in our version: 1
+    - `x.def.3` → `x.def..i#1`
+- Added in our version: 1
+    - `x.def.i.3` → `x.def.i.3`
+- Text differences (first 5 passages):
+
+  - Joyce: is medial. from this it is clear that an area commensurable with a medial area
+    Ours:  (missing)
+  - Joyce: a .
+    Ours:  a.
+  - Joyce: cd .
+    Ours:  cd.
+  - Joyce: a ,
+    Ours:  a,
+  - Joyce: cd .
+    Ours:  cd.
+  - …and 13 more passages
 
 ### `content/elements/books/bookVI/propositions/propVI15/contents.lr` (vs `bookVI/propVI15.html`)
 
@@ -408,38 +249,41 @@ Audit run over 537 pages.
   - Joyce: vi.19
     Ours:  (missing)
 
-### `content/elements/books/bookXI/definitions/defXI21_23/contents.lr` (vs `bookXI/defXI21.html`)
+### `content/elements/books/bookX/propositions/propX22/contents.lr` (vs `bookX/propX22.html`)
 
-- Text similarity: **72.0%**
-- Joyce link count: 0, ours: 0
+- Text similarity: **72.5%**
+- Joyce link count: 11, ours: 11
 - Text differences (first 5 passages):
 
-  - Joyce: when a rectangular parallelogram with one side of those about the right angle remains fixed is carried round and restored again to the same position from which it began to be moved, the figure so comp…
+  - Joyce: (missing)
+    Ours:  if there are two straight lines, then the first is to the second as the square on the first is to the rectangle contained by the two straight lines. let fe and eg be two straight lines. i say that fe …
+  - Joyce: fe and eg be two straight lines. i say that fe is to eg as the square on fe is to the rectangle fe by eg . describe the square df on fe , and complete gd . since then fe is to eg as fd is to dg , and …
     Ours:  (missing)
-  - Joyce: euclid s
-    Ours:  euclid's
-  - Joyce: euclid s
-    Ours:  euclid's
+  - Joyce: bc ,
+    Ours:  bc,
+  - Joyce: cb .
+    Ours:  cb.
+  - Joyce: gf .
+    Ours:  gf.
+  - …and 30 more passages
 
-### `content/elements/books/bookV/definitions/defV14_16/contents.lr` (vs `bookV/defV14.html`)
+### `content/elements/books/bookX/propositions/propX4/contents.lr` (vs `bookX/propX4.html`)
 
-- Text similarity: **75.4%**
-- Joyce link count: 7, ours: 6
-- Missing in our version: 1
-    - `corollary` → `v.19#cor`
+- Text similarity: **74.3%**
+- Joyce link count: 6, ours: 6
 - Text differences (first 5 passages):
 
-  - Joyce: a ratio taken jointly means taking the antecedent together with the consequent as one in relation to the consequent by itself. guide
-    Ours:  (missing)
-  - Joyce: ( u v ): v.
-    Ours:  (u v):v.
-  - Joyce: ( u v ): v
-    Ours:  (u v):v
-  - Joyce: ( u v ): v
-    Ours:  (u v):v
-  - Joyce: ( u v ): u.
-    Ours:  (u v):u.
-  - …and 16 more passages
+  - Joyce: a , b ,
+    Ours:  a, b,
+  - Joyce: a , b ,
+    Ours:  a, b,
+  - Joyce: c .
+    Ours:  c.
+  - Joyce: b .
+    Ours:  b.
+  - Joyce: c ,
+    Ours:  c,
+  - …and 38 more passages
 
 ### `content/elements/books/bookVI/propositions/propVI14/contents.lr` (vs `bookVI/propVI14.html`)
 
@@ -484,114 +328,27 @@ Audit run over 537 pages.
   - Joyce: vi.2
     Ours:  (missing)
 
-### `content/elements/books/bookX/propositions/propX23/contents.lr` (vs `bookX/propX23.html`)
+### `content/elements/books/bookX/propositions/propX9/contents.lr` (vs `bookX/propX9.html`)
 
-- Text similarity: **77.5%**
-- Joyce link count: 12, ours: 12
+- Text similarity: **79.3%**
+- Joyce link count: 9, ours: 9
 - Missing in our version: 1
-    - `x.def.3` → `x.def..i#1`
+    - `viii.26` → `viii.26`
 - Added in our version: 1
-    - `x.def.i.3` → `x.def.i.3`
+    - `viii.26(andconverse)` → `viii.26 (and converse)`
 - Text differences (first 5 passages):
 
-  - Joyce: a .
-    Ours:  a.
-  - Joyce: cd .
-    Ours:  cd.
-  - Joyce: a ,
-    Ours:  a,
-  - Joyce: cd .
-    Ours:  cd.
+  - Joyce: and it is clear from what has been proved that straight lines commensurable in length are always commensurable in square also, but those commensurable in square are not always also commensurable in le…
+    Ours:  (missing)
   - Joyce: b ,
     Ours:  b,
-  - …and 15 more passages
-
-### `content/elements/books/bookV/definitions/defV17_18/contents.lr` (vs `bookV/defV17.html`)
-
-- Text similarity: **77.9%**
-- Joyce link count: 3, ours: 3
-- Missing in our version: 1
-    - `vi.33` → `vii.33`
-- Added in our version: 1
-    - `vii.33` → `vii.33`
-- Text differences (first 5 passages):
-
-  - Joyce: a ratio ex aequali arises when, there being several magnitudes and another set equal to them in multitude which taken two and two are in the same proportion, the first is to the last among the first m…
-    Ours:  (missing)
-  - Joyce: v.22
-    Ours:  (missing)
-  - Joyce: vi.33
-    Ours:  (missing)
-  - Joyce: v.23
-    Ours:  (missing)
-
-### `content/elements/books/bookX/propositions/propX72/contents.lr` (vs `bookX/propX72.html`)
-
-- Text similarity: **78.3%**
-- Joyce link count: 15, ours: 15
-- Text differences (first 5 passages):
-
-  - Joyce: cd .
-    Ours:  cd.
-  - Joyce: cd .
-    Ours:  cd.
-  - Joyce: ef ,
-    Ours:  ef,
-  - Joyce: ef .
-    Ours:  ef.
-  - Joyce: cd ,
-    Ours:  cd,
-  - …and 11 more passages
-
-### `content/elements/books/bookXI/definitions/defXI18_20/contents.lr` (vs `bookXI/defXI18.html`)
-
-- Text similarity: **78.4%**
-- Joyce link count: 0, ours: 0
-- Text differences (first 5 passages):
-
-  - Joyce: when a right triangle with one side of those about the right angle remains fixed is carried round and restored again to the same position from which it began to be moved, the figure so comprehended is…
-    Ours:  (missing)
-  - Joyce: apollonius
-    Ours:  apollonius'
-  - Joyce: euclid s
-    Ours:  euclid's
-  - Joyce: section
-    Ours:  "section
-  - Joyce: cone.
-    Ours:  cone."
-
-### `content/elements/books/bookXII/propositions/propXII8/contents.lr` (vs `bookXII/propXII8.html`)
-
-- Text similarity: **78.8%**
-- Joyce link count: 8, ours: 8
-- Text differences (first 5 passages):
-
-  - Joyce: guide
-    Ours:  corollary from this it is clear that similar pyramids with polygonal bases are also to one another in the triplicate ratio of their corresponding sides. for, if they are divided into the pyramids cont…
-  - Joyce: xii.12
-    Ours:  (missing)
-
-### `content/elements/books/bookX/propositions/propX6/contents.lr` (vs `bookX/propX6.html`)
-
-- Text similarity: **79.7%**
-- Joyce link count: 11, ours: 11
-- Missing in our version: 1
-    - `x.def.1` → `x.def..i`
-- Added in our version: 1
-    - `x.def.i.1` → `x.def.i.1`
-- Text differences (first 5 passages):
-
-  - Joyce: e .
-    Ours:  e.
+  - Joyce: d .
+    Ours:  d.
   - Joyce: d ,
     Ours:  d,
-  - Joyce: e .
-    Ours:  e.
-  - Joyce: d ,
-    Ours:  d,
-  - Joyce: d ,
-    Ours:  d,
-  - …and 20 more passages
+  - Joyce: b ,
+    Ours:  b,
+  - …and 28 more passages
 
 ### `content/elements/books/bookVI/propositions/propVI2/contents.lr` (vs `bookVI/propVI2.html`)
 
@@ -611,34 +368,23 @@ Audit run over 537 pages.
     Ours:  (missing)
   - …and 1 more passages
 
-### `content/elements/books/bookX/propositions/propX4/contents.lr` (vs `bookX/propX4.html`)
+### `content/elements/books/bookX/propositions/propX17/contents.lr` (vs `bookX/propX17.html`)
 
-- Text similarity: **80.0%**
-- Joyce link count: 6, ours: 6
+- Text similarity: **80.3%**
+- Joyce link count: 13, ours: 13
 - Text differences (first 5 passages):
 
-  - Joyce: a , b ,
-    Ours:  a, b,
-  - Joyce: a , b ,
-    Ours:  a, b,
-  - Joyce: c .
-    Ours:  c.
-  - Joyce: b .
-    Ours:  b.
-  - Joyce: c ,
-    Ours:  c,
-  - …and 38 more passages
-
-### `content/elements/books/bookXIII/propositions/propXIII2/contents.lr` (vs `bookXIII/propXIII2.html`)
-
-- Text similarity: **80.2%**
-- Joyce link count: 4, ours: 4
-- Text differences (first 5 passages):
-
-  - Joyce: guide
-    Ours:  lemma that the double ac is greater than bc is to be proved thus. if not, let bc be, if possible, double ca. therefore the square on bc is quadruple the square on ca. therefore the sum of the squares …
-  - Joyce: xiii.1
-    Ours:  (missing)
+  - Joyce: (missing)
+    Ours:  if to any straight line there is applied a parallelogram but falling short by a square, then the applied parallelogram equals the rectangle contained by the segments of the straight line resulting fro…
+  - Joyce: apply to the straight line ab the parallelogram ad but falling short by the square db . i say that ad equals the rectangle ac by cb . this is indeed at once clear, for, since db is a square, dc equals…
+    Ours:  lemma
+  - Joyce: a ,
+    Ours:  a,
+  - Joyce: dc ,
+    Ours:  dc,
+  - Joyce: dc .
+    Ours:  dc.
+  - …and 48 more passages
 
 ### `content/elements/books/bookVI/propositions/propVI7/contents.lr` (vs `bookVI/propVI7.html`)
 
@@ -651,54 +397,38 @@ Audit run over 537 pages.
   - Joyce: next let each of the angles at c and f be supposed not less than a right angle. i say again that, in this case too, the triangle abc is equiangular with the triangle def. with the same construction, w…
     Ours:  (missing)
 
-### `content/elements/books/bookVII/definitions/defVII11_14/contents.lr` (vs `bookVII/defVII11.html`)
-
-- Text similarity: **81.1%**
-- Joyce link count: 0, ours: 0
-- Text differences (first 5 passages):
-
-  - Joyce: 11. a prime number is that which is measured by a unit alone. 12. numbers relatively prime are those which are measured by a unit alone as a common measure. 13. a composite number is that which is mea…
-    Ours:  (missing)
-  - Joyce: aren t
-    Ours:  aren't
-  - Joyce: 6
-    Ours:  "6
-  - Joyce: 35.
-    Ours:  35."
-  - Joyce: aren t
-    Ours:  aren't
-  - …and 2 more passages
-
-### `content/elements/books/bookXI/definitions/defXI1_2/contents.lr` (vs `bookXI/defXI1.html`)
-
-- Text similarity: **81.8%**
-- Joyce link count: 21, ours: 21
-- Text differences (first 5 passages):
-
-  - Joyce: a solid is that which has length, breadth, and depth. guide
-    Ours:  (missing)
-  - Joyce: i.def.2
-    Ours:  (missing)
-  - Joyce: i.def.3
-    Ours:  (missing)
-  - Joyce: i.def.5
-    Ours:  (missing)
-  - Joyce: i.def.6
-    Ours:  (missing)
-  - …and 22 more passages
-
-### `content/elements/books/bookXII/propositions/propXII4/contents.lr` (vs `bookXII/propXII4.html`)
+### `content/elements/books/bookIV/propositions/propIV15/contents.lr` (vs `bookIV/propIV15.html`)
 
 - Text similarity: **82.3%**
-- Joyce link count: 11, ours: 11
+- Joyce link count: 9, ours: 9
 - Text differences (first 5 passages):
 
-  - Joyce: (missing)
-    Ours:  v.16 lemma below
-  - Joyce: guide
-    Ours:  lemma but that the triangle loc is to the triangle rvf as the prism with the triangle loc the base and pmn opposite is to the prism with the triangle rvf the base and stu opposite, we must prove as fo…
-  - Joyce: xii.5
+  - Joyce: from this it is clear that he side of the hexagon equals the radius of the circle. and, in like manner as in the case of the pentagon, if through the points of division on the circle we draw tangents …
     Ours:  (missing)
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: xiii.9
+    Ours:  (missing)
+  - Joyce: (missing)
+    Ours:  from this it is clear that the side of the hexagon equals the radius of the circle. and, in like manner as in the case of the pentagon, if through the points of division on the circle we draw tangents…
+
+### `content/elements/books/bookX/propositions/propX3/contents.lr` (vs `bookX/propX3.html`)
+
+- Text similarity: **82.9%**
+- Joyce link count: 2, ours: 2
+- Text differences (first 5 passages):
+
+  - Joyce: from this it is clear that, if a magnitude measures two magnitudes, then it also measures their greatest common measure .
+    Ours:  (missing)
+  - Joyce: cd .
+    Ours:  cd.
+  - Joyce: cd .
+    Ours:  cd.
+  - Joyce: ab .
+    Ours:  ab.
+  - Joyce: cd .
+    Ours:  cd.
+  - …and 26 more passages
 
 ### `content/elements/books/bookV/definitions/defV7/contents.lr` (vs `bookV/defV7.html`)
 
@@ -720,131 +450,76 @@ Audit run over 537 pages.
     Ours:  (missing)
   - …and 17 more passages
 
-### `content/elements/books/bookIII/definitions/defIII2_3/contents.lr` (vs `bookIII/defIII2.html`)
-
-- Text similarity: **83.3%**
-- Joyce link count: 0, ours: 0
-- Text differences (first 5 passages):
-
-  - Joyce: a straight line is said to touch a circle which, meeting the circle and being produced, does not cut the circle. guide
-    Ours:  (missing)
-
-### `content/elements/books/bookIV/definitions/defIV1_7/contents.lr` (vs `bookIV/defIV.html`)
+### `content/elements/books/bookV/definitions/defV14_16/contents.lr` (vs `bookV/defV14.html`)
 
 - Text similarity: **83.5%**
-- Joyce link count: 0, ours: 0
-- Text differences (first 5 passages):
-
-  - Joyce: a rectilinear figure is said to be inscribed in a rectilinear figure when the respective angles of the inscribed figure lie on the respective sides of that in which it is inscribed. guide
-    Ours:  (missing)
-  - Joyce: 5:the
-    Ours:  5: the
-
-### `content/elements/books/bookVII/definitions/defVII15_19/contents.lr` (vs `bookVII/defVII15.html`)
-
-- Text similarity: **83.7%**
-- Joyce link count: 4, ours: 4
-- Text differences (first 5 passages):
-
-  - Joyce: 15. a number is said to multiply a number when the latter is added as many times as there are units in the former. 16. and, when two numbers having multiplied one another make some number, the number …
-    Ours:  (missing)
-  - Joyce: doesn t
-    Ours:  doesn't
-  - Joyce: vii.28
-    Ours:  (missing)
-  - Joyce: u .
-    Ours:  u.
-  - Joyce: vii.def.20
-    Ours:  (missing)
-  - …and 15 more passages
-
-### `content/elements/books/bookIII/definitions/defIII4_5/contents.lr` (vs `bookIII/defIII4.html`)
-
-- Text similarity: **84.0%**
-- Joyce link count: 0, ours: 0
-- Text differences (first 5 passages):
-
-  - Joyce: straight lines in a circle are said to be equally distant from the center when the perpendiculars drawn to them from the center are equal. guide
-    Ours:  (missing)
-  - Joyce: euclid s
-    Ours:  euclid's
-
-### `content/elements/books/bookX/propositions/propX19/contents.lr` (vs `bookX/propX19.html`)
-
-- Text similarity: **84.4%**
-- Joyce link count: 9, ours: 10
-- Added in our version: 1
-    - `lemma` → `x.19#lemma`
-- Text differences (first 5 passages):
-
-  - Joyce: (missing)
-    Ours:  lemma.
-  - Joyce: guide
-    Ours:  proposition 19 the rectangle contained by rational straight lines commensurable in length is rational. let the rectangle ac be contained by the rational straight lines ab and bc commensurable in lengt…
-  - Joyce: x.def.i.3
-    Ours:  (missing)
-  - Joyce: x.def.i.3
-    Ours:  (missing)
-  - Joyce: ab ,
-    Ours:  ab,
-  - …and 3 more passages
-
-### `content/elements/books/bookX/propositions/propX3/contents.lr` (vs `bookX/propX3.html`)
-
-- Text similarity: **86.5%**
-- Joyce link count: 2, ours: 2
-- Text differences (first 5 passages):
-
-  - Joyce: cd .
-    Ours:  cd.
-  - Joyce: cd .
-    Ours:  cd.
-  - Joyce: ab .
-    Ours:  ab.
-  - Joyce: cd .
-    Ours:  cd.
-  - Joyce: ab ,
-    Ours:  ab,
-  - …and 24 more passages
-
-### `content/elements/books/bookXI/definitions/defXI6_8/contents.lr` (vs `bookXI/defXI6.html`)
-
-- Text similarity: **86.6%**
-- Joyce link count: 3, ours: 3
+- Joyce link count: 7, ours: 6
 - Missing in our version: 1
-    - `i.23` → `i.def.23`
-- Added in our version: 1
-    - `i.def.23` → `i.def.23`
-- Text differences (first 5 passages):
-
-  - Joyce: the inclination of a plane to a plane is the acute angle contained by the straight lines drawn at right angles to the intersection at the same point, one in each of the planes. guide
-    Ours:  (missing)
-  - Joyce: i.23
-    Ours:  (missing)
-  - Joyce: xi.14
-    Ours:  (missing)
-  - Joyce: xi.3
-    Ours:  (missing)
-  - Joyce: don t
-    Ours:  don't
-
-### `content/elements/books/bookXIII/propositions/propXIII18/contents.lr` (vs `bookXIII/propXIII18.html`)
-
-- Text similarity: **87.0%**
-- Joyce link count: 33, ours: 33
+    - `corollary` → `v.19#cor`
 - Text differences (first 5 passages):
 
   - Joyce: guide
-    Ours:  remark i say next that no other figure, besides the said five figures, can be constructed which is contained by equilateral and equiangular figures equal to one another. for a solid angle cannot be co…
-  - Joyce: / s
-    Ours:  /s
-  - Joyce: / s
-    Ours:  /s
-  - Joyce: (missing)
-    Ours:  --- --- ---
-  - Joyce: xiii.13
     Ours:  (missing)
-  - …and 4 more passages
+  - Joyce: ( u v ): v.
+    Ours:  (u v):v.
+  - Joyce: ( u v ): v
+    Ours:  (u v):v
+  - Joyce: ( u v ): v
+    Ours:  (u v):v
+  - Joyce: ( u v ): u.
+    Ours:  (u v):u.
+  - …and 16 more passages
+
+### `content/elements/books/bookV/definitions/defV8_10/contents.lr` (vs `bookV/defV8.html`)
+
+- Text similarity: **83.8%**
+- Joyce link count: 3, ours: 3
+- Text differences (first 5 passages):
+
+  - Joyce: (missing)
+    Ours:  when four magnitudes are continuously proportional, the first is said to have to the fourth the triplicate ratio of that which it has to the second, and so on continually, whatever be the proportion.
+  - Joyce: when four magnitudes are continuously proportional, the first is said to have to the fourth the triplicate ratio of that which it has to the second, and so on continually, whatever be the proportion. …
+    Ours:  (missing)
+  - Joyce: viii ,
+    Ours:  viii,
+  - Joyce: viii.1
+    Ours:  (missing)
+  - Joyce: sequences .
+    Ours:  sequences.
+  - …and 1 more passages
+
+### `content/elements/books/bookIX/propositions/propIX11/contents.lr` (vs `bookIX/propIX11.html`)
+
+- Text similarity: **85.6%**
+- Joyce link count: 1, ours: 1
+- Text differences (first 5 passages):
+
+  - Joyce: and it is clear that, whatever place the measuring number has, reckoned from the unit, the same place also has the number according to which it measures, reckoned from the number measured, in the dire…
+    Ours:  (missing)
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: n - k
+    Ours:  n-k
+  - Joyce: (missing)
+    Ours:  and it is clear that, whatever place the measuring number has, reckoned from the unit, the same place also has the number according to which it measures, reckoned from the number measured, in the dire…
+
+### `content/elements/books/bookIV/propositions/propIV16/contents.lr` (vs `bookIV/propIV16.html`)
+
+- Text similarity: **85.6%**
+- Joyce link count: 9, ours: 7
+- Text differences (first 5 passages):
+
+  - Joyce: and, in like manner as in the case of the pentagon, if through the points of division on the circle we draw tangents to the circle, there will be circumscribed about the circle a fifteen-angled figure…
+    Ours:  (missing)
+  - Joyce: inscribe a side ac of an equilateral triangle and a side ab of an equilateral pentagon in in the circle abcd. therefore, of the equal segments of which there are fifteen in the circle abcd, there will…
+    Ours:  (missing)
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: –1/5
+    Ours:  – 1/5
+  - Joyce: i.1
+    Ours:  (missing)
+  - …and 11 more passages
 
 ### `content/elements/prematter/trip/contents.lr` (vs `trip.html`)
 
@@ -872,44 +547,63 @@ Audit run over 537 pages.
     Ours:  -
   - …and 129 more passages
 
-### `content/elements/books/bookVII/definitions/defVII6_10/contents.lr` (vs `bookVII/defVII6.html`)
+### `content/elements/books/bookXI/definitions/defXI1_2/contents.lr` (vs `bookXI/defXI1.html`)
 
-- Text similarity: **88.0%**
-- Joyce link count: 2, ours: 2
+- Text similarity: **87.6%**
+- Joyce link count: 21, ours: 21
 - Text differences (first 5 passages):
 
-  - Joyce: 6. an even number is that which is divisible into two equal parts. 7. an odd number is that which is not divisible into two equal parts, or that which differs by a unit from an even number. 8. an even…
+  - Joyce: guide
     Ours:  (missing)
-  - Joyce: decade number
-    Ours:  "decade number"
-  - Joyce: undecade number
-    Ours:  "undecade number"
-  - Joyce: ix.22
+  - Joyce: i.def.2
     Ours:  (missing)
-  - Joyce: ix.32
+  - Joyce: i.def.3
     Ours:  (missing)
+  - Joyce: i.def.5
+    Ours:  (missing)
+  - Joyce: i.def.6
+    Ours:  (missing)
+  - …and 22 more passages
 
-### `content/elements/books/bookX/propositions/propX9/contents.lr` (vs `bookX/propX9.html`)
+### `content/elements/books/bookIV/propositions/propIV5/contents.lr` (vs `bookIV/propIV5.html`)
 
-- Text similarity: **88.7%**
-- Joyce link count: 9, ours: 9
+- Text similarity: **87.9%**
+- Joyce link count: 10, ours: 10
+- Text differences (first 5 passages):
+
+  - Joyce: and it is clear that when the center of the circle falls within the triangle, the angle bac, being in a segment greater than the semicircle, is less than a right angle, when the center falls on the st…
+    Ours:  (missing)
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: iii.20
+    Ours:  (missing)
+  - Joyce: ac /(2 r )
+    Ours:  ac/(2r)
+  - Joyce: iv.10
+    Ours:  (missing)
+  - …and 2 more passages
+
+### `content/elements/books/bookI/propositions/propI15/contents.lr` (vs `bookI/propI15.html`)
+
+- Text similarity: **88.5%**
+- Joyce link count: 7, ours: 8
 - Missing in our version: 1
-    - `viii.26` → `viii.26`
-- Added in our version: 1
-    - `viii.26andconverse` → `viii.26 and converse`
+    - `iv.15clarkuniversity` → `iv.15`
+- Added in our version: 2
+    - `corollary` → `/elements/books/booki/propositions/i.15/#cor`
+    - `iv.15` → `iv.15`
 - Text differences (first 5 passages):
 
-  - Joyce: b ,
-    Ours:  b,
-  - Joyce: d .
-    Ours:  d.
-  - Joyce: d ,
-    Ours:  d,
-  - Joyce: b ,
-    Ours:  b,
-  - Joyce: d ,
-    Ours:  d,
-  - …and 26 more passages
+  - Joyce: (missing)
+    Ours:  corollary. if two straight lines cut one another, then they will make the angles at the point of section equal to four right angles.
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: proclus s
+    Ours:  proclus's
+  - Joyce: ii.10
+    Ours:  (missing)
+  - Joyce: iv.15 clark university
+    Ours:  , and a few propositions in book xi. if two straight lines cut one another, then they make the angles at the point of section equal to four right angles. from this it is manifest that, if two straight…
 
 ### `content/elements/books/bookX/propositions/propX24/contents.lr` (vs `bookX/propX24.html`)
 
@@ -929,23 +623,23 @@ Audit run over 537 pages.
     Ours:  ac.
   - …and 15 more passages
 
-### `content/elements/books/bookVII/definitions/defVII3_5/contents.lr` (vs `bookVII/defVII3.html`)
+### `content/elements/books/bookX/propositions/propX33/contents.lr` (vs `bookX/propX33.html`)
 
 - Text similarity: **88.8%**
-- Joyce link count: 3, ours: 3
+- Joyce link count: 16, ours: 16
 - Text differences (first 5 passages):
 
-  - Joyce: 3. a number is a part of a number, the less of the greater, when it measures the greater; 4. but parts when it does not measure it. 5. the greater number is a multiple of the less when it is measured …
+  - Joyce: to find two straight lines incommensurable in square which make the sum of the squares on them rational but the rectangle contained by them medial.
     Ours:  (missing)
-  - Joyce: vii.def.20
-    Ours:  (missing)
-  - Joyce: ratio
-    Ours:  "ratio"
-  - Joyce: measures
-    Ours:  "measures"
-  - Joyce: 2 u ,
-    Ours:  2u,
-  - …and 27 more passages
+  - Joyce: ba ,
+    Ours:  ba,
+  - Joyce: ca ,
+    Ours:  ca,
+  - Joyce: ad ,
+    Ours:  ad,
+  - Joyce: ac ,
+    Ours:  ac,
+  - …and 38 more passages
 
 ### `content/elements/books/bookX/propositions/propX25/contents.lr` (vs `bookX/propX25.html`)
 
@@ -965,23 +659,23 @@ Audit run over 537 pages.
     Ours:  be,
   - …and 32 more passages
 
-### `content/elements/books/bookIV/propositions/propIV16/contents.lr` (vs `bookIV/propIV16.html`)
+### `content/elements/books/bookV/propositions/propV19/contents.lr` (vs `bookV/propV19.html`)
 
 - Text similarity: **89.2%**
-- Joyce link count: 9, ours: 7
+- Joyce link count: 8, ours: 8
 - Text differences (first 5 passages):
 
-  - Joyce: inscribe a side ac of an equilateral triangle and a side ab of an equilateral pentagon in in the circle abcd. therefore, of the equal segments of which there are fifteen in the circle abcd, there will…
+  - Joyce: from this it is manifest that, if magnitudes are proportional taken jointly, then they are also proportional in conversion. v.def.16
     Ours:  (missing)
   - Joyce: guide
-    Ours:  corollary and, in like manner as in the case of the pentagon, if through the points of division on the circle we draw tangents to the circle, there will be circumscribed about the circle a fifteen-ang…
-  - Joyce: –1/5
-    Ours:  – 1/5
-  - Joyce: i.1
     Ours:  (missing)
-  - Joyce: i.46
-    Ours:  (missing)
-  - …and 9 more passages
+  - Joyce: ( u v )
+    Ours:  (u v)
+  - Joyce: ( x y )
+    Ours:  (x y)
+  - Joyce: theon s
+    Ours:  theon's
+  - …and 7 more passages
 
 ### `content/elements/books/bookX/propositions/propX12/contents.lr` (vs `bookX/propX12.html`)
 
@@ -1001,6 +695,42 @@ Audit run over 537 pages.
     Ours:  b,
   - …and 18 more passages
 
+### `content/elements/books/bookX/propositions/propX60/contents.lr` (vs `bookX/propX60.html`)
+
+- Text similarity: **89.3%**
+- Joyce link count: 20, ours: 20
+- Text differences (first 5 passages):
+
+  - Joyce: the square on the binomial straight line applied to a rational straight line produces as breadth the first binomial.
+    Ours:  (missing)
+  - Joyce: c ,
+    Ours:  c,
+  - Joyce: cb .
+    Ours:  cb.
+  - Joyce: d .
+    Ours:  d.
+  - Joyce: c ,
+    Ours:  c,
+  - …and 45 more passages
+
+### `content/elements/books/bookVI/propositions/propVI19/contents.lr` (vs `bookVI/propVI19.html`)
+
+- Text similarity: **89.4%**
+- Joyce link count: 12, ours: 12
+- Text differences (first 5 passages):
+
+  - Joyce: from this it is clear that if three straight lines are proportional, then the first is to the third as the figure described on the first is to that which is similar and similarly described on the seco…
+    Ours:  (missing)
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: vi.22
+    Ours:  (missing)
+  - Joyce: vi.31
+    Ours:  (missing)
+  - Joyce: x.6
+    Ours:  (missing)
+  - …and 1 more passages
+
 ### `content/elements/books/bookI/definitions/defI6/contents.lr` (vs `bookI/defI6.html`)
 
 - Text similarity: **89.5%**
@@ -1019,14 +749,23 @@ Audit run over 537 pages.
     Ours:  "that
   - …and 12 more passages
 
-### `content/elements/books/bookV/definitions/defV1_2/contents.lr` (vs `bookV/defV1.html`)
+### `content/elements/books/bookX/propositions/propX114/contents.lr` (vs `bookX/propX114.html`)
 
 - Text similarity: **89.5%**
-- Joyce link count: 0, ours: 0
+- Joyce link count: 6, ours: 6
 - Text differences (first 5 passages):
 
-  - Joyce: a magnitude is a part of a magnitude, the less of the greater, when it measures the greater. guide
+  - Joyce: and it is clear by this that it is possible for a rational area to be contained by irrational straight lines
     Ours:  (missing)
+  - Joyce: cd ,
+    Ours:  cd,
+  - Joyce: cd ,
+    Ours:  cd,
+  - Joyce: g .
+    Ours:  g.
+  - Joyce: h ,
+    Ours:  h,
+  - …and 14 more passages
 
 ### `content/elements/books/bookI/commonnotions/cn1_5/contents.lr` (vs `bookI/cn.html`)
 
@@ -1045,6 +784,24 @@ Audit run over 537 pages.
   - Joyce: i.19
     Ours:  (missing)
   - …and 23 more passages
+
+### `content/elements/books/bookX/propositions/propX41/contents.lr` (vs `bookX/propX41.html`)
+
+- Text similarity: **89.7%**
+- Joyce link count: 12, ours: 12
+- Text differences (first 5 passages):
+
+  - Joyce: de .
+    Ours:  de.
+  - Joyce: bc ,
+    Ours:  bc,
+  - Joyce: bc .
+    Ours:  bc.
+  - Joyce: ac .
+    Ours:  ac.
+  - Joyce: df ,
+    Ours:  df,
+  - …and 27 more passages
 
 ### `content/elements/books/bookX/propositions/propX55/contents.lr` (vs `bookX/propX55.html`)
 
@@ -1081,17 +838,6 @@ Audit run over 537 pages.
   - Joyce: bc ,
     Ours:  bc,
   - …and 15 more passages
-
-### `content/elements/books/bookIV/propositions/propIV15/contents.lr` (vs `bookIV/propIV15.html`)
-
-- Text similarity: **90.1%**
-- Joyce link count: 9, ours: 9
-- Text differences (first 5 passages):
-
-  - Joyce: guide
-    Ours:  corollary from this it is clear that the side of the hexagon equals the radius of the circle. and, in like manner as in the case of the pentagon, if through the points of division on the circle we dra…
-  - Joyce: xiii.9
-    Ours:  (missing)
 
 ### `content/elements/books/bookX/propositions/propX28/contents.lr` (vs `bookX/propX28.html`)
 
@@ -1169,6 +915,42 @@ Audit run over 537 pages.
     Ours:  e,
   - …and 49 more passages
 
+### `content/elements/books/bookX/propositions/propX29/contents.lr` (vs `bookX/propX29.html`)
+
+- Text similarity: **90.6%**
+- Joyce link count: 18, ours: 18
+- Text differences (first 5 passages):
+
+  - Joyce: to find two square numbers such that their sum is not square. to find two rational straight lines commensurable in square only such that the square on the greater is greater than the square on the les…
+    Ours:  (missing)
+  - Joyce: bc ,
+    Ours:  bc,
+  - Joyce: d .
+    Ours:  d.
+  - Joyce: bd .
+    Ours:  bd.
+  - Joyce: bc ,
+    Ours:  bc,
+  - …and 77 more passages
+
+### `content/elements/books/bookVI/propositions/propVI8/contents.lr` (vs `bookVI/propVI8.html`)
+
+- Text similarity: **90.6%**
+- Joyce link count: 13, ours: 13
+- Text differences (first 5 passages):
+
+  - Joyce: from this it is clear that, if in a right-angled triangle a perpendicular is drawn from the right angle to the base, then the straight line so drawn is a mean proportional between the segments of the …
+    Ours:  (missing)
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: vi.4
+    Ours:  (missing)
+  - Joyce: vi.21
+    Ours:  (missing)
+  - Joyce: i.47
+    Ours:  (missing)
+  - …and 7 more passages
+
 ### `content/elements/books/bookX/propositions/propX98/contents.lr` (vs `bookX/propX98.html`)
 
 - Text similarity: **90.6%**
@@ -1205,28 +987,6 @@ Audit run over 537 pages.
     Ours:  cb.
   - …and 35 more passages
 
-### `content/elements/books/bookI/propositions/propI15/contents.lr` (vs `bookI/propI15.html`)
-
-- Text similarity: **90.9%**
-- Joyce link count: 7, ours: 8
-- Missing in our version: 1
-    - `iv.15clarkuniversity` → `iv.15`
-- Added in our version: 2
-    - `corollary` → `/elements/books/booki/propositions/i.15/#cor`
-    - `iv.15` → `iv.15`
-- Text differences (first 5 passages):
-
-  - Joyce: (missing)
-    Ours:  corollary. if two straight lines cut one another, then they will make the angles at the point of section equal to four right angles.
-  - Joyce: guide
-    Ours:  corollary from this it is manifest that, if two straight lines cut one another, then they make the angles at the point of section equal to four right angles.
-  - Joyce: proclus s
-    Ours:  proclus's
-  - Joyce: ii.10
-    Ours:  (missing)
-  - Joyce: iv.15 clark university
-    Ours:  , and a few propositions in book xi.
-
 ### `content/elements/books/bookX/propositions/propX92/contents.lr` (vs `bookX/propX92.html`)
 
 - Text similarity: **90.9%**
@@ -1245,23 +1005,20 @@ Audit run over 537 pages.
     Ours:  e,
   - …and 39 more passages
 
-### `content/elements/books/bookX/propositions/propX114/contents.lr` (vs `bookX/propX114.html`)
+### `content/elements/books/bookXI/propositions/propXI33/contents.lr` (vs `bookXI/propXI33.html`)
 
 - Text similarity: **91.0%**
-- Joyce link count: 6, ours: 6
+- Joyce link count: 12, ours: 12
 - Text differences (first 5 passages):
 
-  - Joyce: cd ,
-    Ours:  cd,
-  - Joyce: cd ,
-    Ours:  cd,
-  - Joyce: g .
-    Ours:  g.
-  - Joyce: h ,
-    Ours:  h,
-  - Joyce: ml .
-    Ours:  ml.
-  - …and 13 more passages
+  - Joyce: if four straight lines are continuously proportional, then the first is to the fourth as a parallelepipedal solid on the first is to the similar and similarly situated parallelepipedal solid on the se…
+    Ours:  (missing)
+  - Joyce: guide
+    Ours:  corollary if four straight lines are continuously proportional, then the first is to the fourth as a parallelepipedal solid on the first is to the similar and similarly situated parallelepipedal solid…
+  - Joyce: xi.37
+    Ours:  (missing)
+  - Joyce: xii.8
+    Ours:  (missing)
 
 ### `content/elements/books/bookVII/propositions/propVII32/contents.lr` (vs `bookVII/propVII32.html`)
 
@@ -1270,21 +1027,6 @@ Audit run over 537 pages.
 - Text differences (first 5 passages):
 
   - Joyce: guide after the previous proposition, this one really doesn t need to be stated at all.
-    Ours:  (missing)
-
-### `content/elements/books/bookIII/definitions/defIII6_9/contents.lr` (vs `bookIII/defIII6.html`)
-
-- Text similarity: **91.0%**
-- Joyce link count: 2, ours: 2
-- Text differences (first 5 passages):
-
-  - Joyce: a segment of a circle is the figure contained by a straight line and a circumference of a circle. guide
-    Ours:  (missing)
-  - Joyce: iii.16
-    Ours:  (missing)
-  - Joyce: euclid s
-    Ours:  euclid's
-  - Joyce: iii.21
     Ours:  (missing)
 
 ### `content/elements/books/bookX/propositions/propX1/contents.lr` (vs `bookX/propX1.html`)
@@ -1345,24 +1087,6 @@ Audit run over 537 pages.
     Ours:  bg,
   - …and 37 more passages
 
-### `content/elements/books/bookI/definitions/defI15_18/contents.lr` (vs `bookI/defI15.html`)
-
-- Text similarity: **91.3%**
-- Joyce link count: 3, ours: 3
-- Text differences (first 5 passages):
-
-  - Joyce: a circle is a plane figure contained by one line such that all the straight lines falling upon it from one point among those lying within the figure equal one another. guide
-    Ours:  (missing)
-  - Joyce: post.3
-    Ours:  (missing)
-  - Joyce: it s
-    Ours:  it's
-  - Joyce: center
-    Ours:  "center"
-  - Joyce: iii.1
-    Ours:  (missing)
-  - …and 14 more passages
-
 ### `content/elements/books/bookX/propositions/propX35/contents.lr` (vs `bookX/propX35.html`)
 
 - Text similarity: **91.3%**
@@ -1398,26 +1122,6 @@ Audit run over 537 pages.
   - Joyce: ab ,
     Ours:  ab,
   - …and 15 more passages
-
-### `content/elements/books/bookV/definitions/defV11_13/contents.lr` (vs `bookV/defV11.html`)
-
-- Text similarity: **91.4%**
-- Joyce link count: 5, ours: 4
-- Missing in our version: 1
-    - `corollary` → `v.7#cor`
-- Text differences (first 5 passages):
-
-  - Joyce: antecedents are said to correspond to antecedents, and consequents to consequents. guide
-    Ours:  (missing)
-  - Joyce: they re
-    Ours:  they're
-  - Joyce: they re
-    Ours:  they're
-  - Joyce: v.16
-    Ours:  (missing)
-  - Joyce: v.def.5
-    Ours:  (missing)
-  - …and 6 more passages
 
 ### `content/elements/books/bookX/propositions/propX13/contents.lr` (vs `bookX/propX13.html`)
 
@@ -1491,17 +1195,6 @@ Audit run over 537 pages.
     Ours:  ge,
   - …and 20 more passages
 
-### `content/elements/books/bookIX/propositions/propIX11/contents.lr` (vs `bookIX/propIX11.html`)
-
-- Text similarity: **91.6%**
-- Joyce link count: 1, ours: 1
-- Text differences (first 5 passages):
-
-  - Joyce: guide
-    Ours:  corollary and it is clear that, whatever place the measuring number has, reckoned from the unit, the same place also has the number according to which it measures, reckoned from the number measured, i…
-  - Joyce: n - k
-    Ours:  n-k
-
 ### `content/elements/books/bookX/propositions/propX34/contents.lr` (vs `bookX/propX34.html`)
 
 - Text similarity: **91.7%**
@@ -1556,26 +1249,6 @@ Audit run over 537 pages.
     Ours:  cb,
   - …and 17 more passages
 
-### `content/elements/books/bookIII/propositions/propIII1/contents.lr` (vs `bookIII/propIII1.html`)
-
-- Text similarity: **91.9%**
-- Joyce link count: 12, ours: 13
-- Added in our version: 1
-    - `corollary` → `/elements/books/bookiii/propositions/iii.1/#cor`
-- Text differences (first 5 passages):
-
-  - Joyce: (missing)
-    Ours:  corollary. if in a circle a straight line cuts a straight line into two equal parts and at right angles, then the center of the circle lies on the cutting straight line.
-  - Joyce: guide
-    Ours:  corollary from this it is clear that if in a circle a straight line cuts a straight line into two equal parts and at right angles, then the center of the circle lies on the cutting straight line.
-  - Joyce: i.def.15
-    Ours:  (missing)
-  - Joyce: that s
-    Ours:  that's
-  - Joyce: isn t
-    Ours:  isn't
-  - …and 7 more passages
-
 ### `content/elements/books/bookX/propositions/propX102/contents.lr` (vs `bookX/propX102.html`)
 
 - Text similarity: **92.0%**
@@ -1594,42 +1267,25 @@ Audit run over 537 pages.
     Ours:  cd.
   - …and 29 more passages
 
-### `content/elements/books/bookXIII/propositions/propXIII13/contents.lr` (vs `bookXIII/propXIII13.html`)
+### `content/elements/books/bookIII/propositions/propIII1/contents.lr` (vs `bookIII/propIII1.html`)
 
 - Text similarity: **92.0%**
-- Joyce link count: 23, ours: 23
+- Joyce link count: 12, ours: 13
+- Added in our version: 1
+    - `corollary` → `/elements/books/bookiii/propositions/iii.1/#cor`
 - Text differences (first 5 passages):
 
-  - Joyce: (missing)
-    Ours:  cf. vi.8 , iii.31
+  - Joyce: from this it is clear that
+    Ours:  corollary.
   - Joyce: guide
-    Ours:  lemma it is to be proved that ab is to bc as the square on ad is to the square on dc. set out the figure of the semicircle, join db, describe the square ec on ac, and complete the parallelogram fb. si…
-  - Joyce: a pyramid
-    Ours:  "a pyramid"
-  - Joyce: tetragon
-    Ours:  "tetragon"
-  - Joyce: the
-    Ours:  "the
-  - …and 4 more passages
-
-### `content/elements/books/bookXII/propositions/propXII17/contents.lr` (vs `bookXII/propXII17.html`)
-
-- Text similarity: **92.3%**
-- Joyce link count: 27, ours: 27
-- Missing in our version: 2
-    - `vi.18.cor` → `vi.8#cor`
-    - `xii.18.cor` → `xii.8#cor`
-- Added in our version: 2
-    - `vi.8.cor` → `vi.8.cor`
-    - `xii.8.cor` → `xii.8.cor`
-- Text differences (first 5 passages):
-
-  - Joyce: guide
-    Ours:  corollary but if in another sphere a polyhedral solid is inscribed similar to the solid in the sphere bcde, then the polyhedral solid in the sphere bcde has to the polyhedral solid in the other sphere…
-  - Joyce: it s
-    Ours:  it's
-  - Joyce: xii.18
     Ours:  (missing)
+  - Joyce: i.def.15
+    Ours:  (missing)
+  - Joyce: that s
+    Ours:  that's
+  - Joyce: isn t
+    Ours:  isn't
+  - …and 8 more passages
 
 ### `content/elements/books/bookX/propositions/propX113/contents.lr` (vs `bookX/propX113.html`)
 
@@ -1675,25 +1331,25 @@ Audit run over 537 pages.
     Ours:  bc,
   - …and 13 more passages
 
-### `content/elements/books/bookXI/propositions/propXI23/contents.lr` (vs `bookXI/propXI23.html`)
+### `content/elements/books/bookV/definitions/defV11_13/contents.lr` (vs `bookV/defV11.html`)
 
-- Text similarity: **93.5%**
-- Joyce link count: 26, ours: 26
-- Added in our version: 1
-    - `lemmabelow` → `#lemma`
+- Text similarity: **93.8%**
+- Joyce link count: 5, ours: 4
+- Missing in our version: 1
+    - `corollary` → `v.7#cor`
 - Text differences (first 5 passages):
 
-  - Joyce: (missing)
-    Ours:  xi.12 lemma below
   - Joyce: guide
-    Ours:  lemma but how it is possible to take the square on or equal to the square on ab minus the square on lo we can show as follows. set out the straight lines ab and lo, and let ab be the greater. describe…
-  - Joyce: xi.20
     Ours:  (missing)
-  - Joyce: xi.21
+  - Joyce: they re
+    Ours:  they're
+  - Joyce: they re
+    Ours:  they're
+  - Joyce: v.16
     Ours:  (missing)
-  - Joyce: xi.24
+  - Joyce: v.def.5
     Ours:  (missing)
-  - …and 3 more passages
+  - …and 6 more passages
 
 ### `content/elements/books/bookX/propositions/propX105/contents.lr` (vs `bookX/propX105.html`)
 
@@ -1739,35 +1395,15 @@ Audit run over 537 pages.
     Ours:  gc.
   - …and 8 more passages
 
-### `content/elements/books/bookIII/propositions/propIII16/contents.lr` (vs `bookIII/propIII16.html`)
-
-- Text similarity: **95.5%**
-- Joyce link count: 13, ours: 14
-- Added in our version: 1
-    - `corollary` → `/elements/books/bookiii/propositions/iii.16/#cor`
-- Text differences (first 5 passages):
-
-  - Joyce: (missing)
-    Ours:  corollary. from this it is manifest that the straight line drawn at right angles to the diameter of a circle from its end touches the circle.
-  - Joyce: (missing)
-    Ours:  above
-  - Joyce: guide
-    Ours:  corollary from this it is clear that the straight line drawn at right angles to the diameter of a circle from its end touches the circle.
-  - Joyce: i.def.8
-    Ours:  (missing)
-  - Joyce: i.def.9
-    Ours:  (missing)
-  - …and 9 more passages
-
 ### `content/elements/books/bookI/definitions/defI13_14/contents.lr` (vs `bookI/defI13.html`)
 
-- Text similarity: **96.0%**
+- Text similarity: **96.8%**
 - Joyce link count: 10, ours: 11
 - Added in our version: 1
     - `i.def.18` → `i.def.18`
 - Text differences (first 5 passages):
 
-  - Joyce: a boundary is that which is an extremity of anything. guide
+  - Joyce: guide
     Ours:  (missing)
   - Joyce: extremity
     Ours:  "extremity"
@@ -1778,6 +1414,49 @@ Audit run over 537 pages.
   - Joyce: i.def.15
     Ours:  (missing)
   - …and 17 more passages
+
+### `content/elements/books/bookXII/propositions/propXII17/contents.lr` (vs `bookXII/propXII17.html`)
+
+- Text similarity: **96.9%**
+- Joyce link count: 27, ours: 27
+- Missing in our version: 2
+    - `vi.18.cor` → `vi.8#cor`
+    - `xii.18.cor` → `xii.8#cor`
+- Added in our version: 2
+    - `vi.8.cor` → `vi.8.cor`
+    - `xii.8.cor` → `xii.8.cor`
+- Text differences (first 5 passages):
+
+  - Joyce: but if in another sphere a polyhedral solid is inscribed similar to the solid in the sphere bcde, then the polyhedral solid in the sphere bcde has to the polyhedral solid in the other sphere the ratio…
+    Ours:  (missing)
+  - Joyce: (missing)
+    Ours:  corollary but if in another sphere a polyhedral solid is inscribed similar to the solid in the sphere bcde, then the polyhedral solid in the sphere bcde has to the polyhedral solid in the other sphere…
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: it s
+    Ours:  it's
+  - Joyce: xii.18
+    Ours:  (missing)
+
+### `content/elements/books/bookIII/propositions/propIII16/contents.lr` (vs `bookIII/propIII16.html`)
+
+- Text similarity: **97.0%**
+- Joyce link count: 13, ours: 14
+- Added in our version: 1
+    - `corollary` → `/elements/books/bookiii/propositions/iii.16/#cor`
+- Text differences (first 5 passages):
+
+  - Joyce: (missing)
+    Ours:  corollary.
+  - Joyce: clear
+    Ours:  manifest
+  - Joyce: (missing)
+    Ours:  above
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: i.def.8
+    Ours:  (missing)
+  - …and 11 more passages
 
 ### `content/elements/books/bookVII/definitions/defVII20/contents.lr` (vs `bookVII/defVII20.html`)
 
@@ -1923,6 +1602,27 @@ Audit run over 537 pages.
   - Joyce: crescent )
     Ours:  crescent)
   - …and 7 more passages
+
+### `content/elements/books/bookXI/definitions/defXI6_8/contents.lr` (vs `bookXI/defXI6.html`)
+
+- Text similarity: **98.3%**
+- Joyce link count: 3, ours: 3
+- Missing in our version: 1
+    - `i.23` → `i.def.23`
+- Added in our version: 1
+    - `i.def.23` → `i.def.23`
+- Text differences (first 5 passages):
+
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: i.23
+    Ours:  (missing)
+  - Joyce: xi.14
+    Ours:  (missing)
+  - Joyce: xi.3
+    Ours:  (missing)
+  - Joyce: don t
+    Ours:  don't
 
 ### `content/elements/books/bookIX/propositions/propIX23/contents.lr` (vs `bookIX/propIX23.html`)
 
@@ -2113,6 +1813,25 @@ Audit run over 537 pages.
     Ours:  (missing)
   - …and 5 more passages
 
+### `content/elements/books/bookV/definitions/defV17_18/contents.lr` (vs `bookV/defV17.html`)
+
+- Text similarity: **99.2%**
+- Joyce link count: 3, ours: 3
+- Missing in our version: 1
+    - `vi.33` → `vii.33`
+- Added in our version: 1
+    - `vii.33` → `vii.33`
+- Text differences (first 5 passages):
+
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: v.22
+    Ours:  (missing)
+  - Joyce: vi.33
+    Ours:  (missing)
+  - Joyce: v.23
+    Ours:  (missing)
+
 ### `content/elements/books/bookIII/propositions/propIII28/contents.lr` (vs `bookIII/propIII28.html`)
 
 - Text similarity: **99.3%**
@@ -2146,6 +1865,26 @@ Audit run over 537 pages.
     Ours:  (missing)
   - Joyce: ix.20
     Ours:  (missing)
+
+### `content/elements/books/bookXI/propositions/propXI23/contents.lr` (vs `bookXI/propXI23.html`)
+
+- Text similarity: **99.4%**
+- Joyce link count: 26, ours: 26
+- Added in our version: 1
+    - `lemmabelow` → `#lemma`
+- Text differences (first 5 passages):
+
+  - Joyce: (missing)
+    Ours:  xi.12 lemma below
+  - Joyce: (missing)
+    Ours:  lemma
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: xi.20
+    Ours:  (missing)
+  - Joyce: xi.21
+    Ours:  (missing)
+  - …and 4 more passages
 
 ### `content/elements/prematter/subjindex/contents.lr` (vs `subjindex.html`)
 
@@ -2313,10 +2052,11 @@ Audit run over 537 pages.
 
 - `content/elements/books/bookI/definitions/defI1/contents.lr` (96%)
 - `content/elements/books/bookI/definitions/defI10/contents.lr` (99%)
-- `content/elements/books/bookI/definitions/defI11_12/contents.lr` (95%)
+- `content/elements/books/bookI/definitions/defI11_12/contents.lr` (98%)
+- `content/elements/books/bookI/definitions/defI15_18/contents.lr` (96%)
 - `content/elements/books/bookI/definitions/defI19/contents.lr` (96%)
 - `content/elements/books/bookI/definitions/defI2/contents.lr` (97%)
-- `content/elements/books/bookI/definitions/defI20_21/contents.lr` (92%)
+- `content/elements/books/bookI/definitions/defI20_21/contents.lr` (99%)
 - `content/elements/books/bookI/definitions/defI22/contents.lr` (99%)
 - `content/elements/books/bookI/definitions/defI23/contents.lr` (99%)
 - `content/elements/books/bookI/definitions/defI3/contents.lr` (95%)
@@ -2376,6 +2116,7 @@ Audit run over 537 pages.
 - `content/elements/books/bookI/propositions/propI7/contents.lr` (97%)
 - `content/elements/books/bookI/propositions/propI8/contents.lr` (99%)
 - `content/elements/books/bookI/propositions/propI9/contents.lr` (98%)
+- `content/elements/books/bookII/definitions/defII1_2/contents.lr` (96%)
 - `content/elements/books/bookII/propositions/propII1/contents.lr` (98%)
 - `content/elements/books/bookII/propositions/propII10/contents.lr` (99%)
 - `content/elements/books/bookII/propositions/propII11/contents.lr` (99%)
@@ -2392,6 +2133,9 @@ Audit run over 537 pages.
 - `content/elements/books/bookIII/definitions/defIII1/contents.lr` (98%)
 - `content/elements/books/bookIII/definitions/defIII10/contents.lr` (98%)
 - `content/elements/books/bookIII/definitions/defIII11/contents.lr` (97%)
+- `content/elements/books/bookIII/definitions/defIII2_3/contents.lr` (99%)
+- `content/elements/books/bookIII/definitions/defIII4_5/contents.lr` (98%)
+- `content/elements/books/bookIII/definitions/defIII6_9/contents.lr` (99%)
 - `content/elements/books/bookIII/propositions/propIII10/contents.lr` (99%)
 - `content/elements/books/bookIII/propositions/propIII11/contents.lr` (100%)
 - `content/elements/books/bookIII/propositions/propIII12/contents.lr` (100%)
@@ -2425,6 +2169,7 @@ Audit run over 537 pages.
 - `content/elements/books/bookIII/propositions/propIII7/contents.lr` (99%)
 - `content/elements/books/bookIII/propositions/propIII8/contents.lr` (100%)
 - `content/elements/books/bookIII/propositions/propIII9/contents.lr` (99%)
+- `content/elements/books/bookIV/definitions/defIV1_7/contents.lr` (99%)
 - `content/elements/books/bookIV/propositions/propIV1/contents.lr` (98%)
 - `content/elements/books/bookIV/propositions/propIV10/contents.lr` (99%)
 - `content/elements/books/bookIV/propositions/propIV11/contents.lr` (98%)
@@ -2434,7 +2179,6 @@ Audit run over 537 pages.
 - `content/elements/books/bookIV/propositions/propIV2/contents.lr` (96%)
 - `content/elements/books/bookIV/propositions/propIV3/contents.lr` (98%)
 - `content/elements/books/bookIV/propositions/propIV4/contents.lr` (95%)
-- `content/elements/books/bookIV/propositions/propIV5/contents.lr` (93%)
 - `content/elements/books/bookIV/propositions/propIV6/contents.lr` (100%)
 - `content/elements/books/bookIV/propositions/propIV7/contents.lr` (99%)
 - `content/elements/books/bookIX/propositions/propIX1/contents.lr` (98%)
@@ -2464,8 +2208,8 @@ Audit run over 537 pages.
 - `content/elements/books/bookIX/propositions/propIX7/contents.lr` (98%)
 - `content/elements/books/bookIX/propositions/propIX8/contents.lr` (100%)
 - `content/elements/books/bookIX/propositions/propIX9/contents.lr` (100%)
+- `content/elements/books/bookV/definitions/defV1_2/contents.lr` (100%)
 - `content/elements/books/bookV/definitions/defV4/contents.lr` (98%)
-- `content/elements/books/bookV/definitions/defV8_10/contents.lr` (95%)
 - `content/elements/books/bookV/propositions/propV1/contents.lr` (99%)
 - `content/elements/books/bookV/propositions/propV10/contents.lr` (96%)
 - `content/elements/books/bookV/propositions/propV11/contents.lr` (97%)
@@ -2476,7 +2220,6 @@ Audit run over 537 pages.
 - `content/elements/books/bookV/propositions/propV16/contents.lr` (97%)
 - `content/elements/books/bookV/propositions/propV17/contents.lr` (98%)
 - `content/elements/books/bookV/propositions/propV18/contents.lr` (93%)
-- `content/elements/books/bookV/propositions/propV19/contents.lr` (93%)
 - `content/elements/books/bookV/propositions/propV2/contents.lr` (99%)
 - `content/elements/books/bookV/propositions/propV20/contents.lr` (98%)
 - `content/elements/books/bookV/propositions/propV21/contents.lr` (98%)
@@ -2488,7 +2231,7 @@ Audit run over 537 pages.
 - `content/elements/books/bookV/propositions/propV4/contents.lr` (93%)
 - `content/elements/books/bookV/propositions/propV5/contents.lr` (98%)
 - `content/elements/books/bookV/propositions/propV6/contents.lr` (98%)
-- `content/elements/books/bookV/propositions/propV7/contents.lr` (96%)
+- `content/elements/books/bookV/propositions/propV7/contents.lr` (93%)
 - `content/elements/books/bookV/propositions/propV8/contents.lr` (95%)
 - `content/elements/books/bookV/propositions/propV9/contents.lr` (98%)
 - `content/elements/books/bookVI/definitions/defVI1/contents.lr` (97%)
@@ -2501,8 +2244,7 @@ Audit run over 537 pages.
 - `content/elements/books/bookVI/propositions/propVI12/contents.lr` (98%)
 - `content/elements/books/bookVI/propositions/propVI17/contents.lr` (100%)
 - `content/elements/books/bookVI/propositions/propVI18/contents.lr` (99%)
-- `content/elements/books/bookVI/propositions/propVI19/contents.lr` (94%)
-- `content/elements/books/bookVI/propositions/propVI20/contents.lr` (97%)
+- `content/elements/books/bookVI/propositions/propVI20/contents.lr` (95%)
 - `content/elements/books/bookVI/propositions/propVI21/contents.lr` (98%)
 - `content/elements/books/bookVI/propositions/propVI22/contents.lr` (100%)
 - `content/elements/books/bookVI/propositions/propVI24/contents.lr` (99%)
@@ -2516,11 +2258,14 @@ Audit run over 537 pages.
 - `content/elements/books/bookVI/propositions/propVI33/contents.lr` (99%)
 - `content/elements/books/bookVI/propositions/propVI4/contents.lr` (99%)
 - `content/elements/books/bookVI/propositions/propVI6/contents.lr` (99%)
-- `content/elements/books/bookVI/propositions/propVI8/contents.lr` (96%)
 - `content/elements/books/bookVI/propositions/propVI9/contents.lr` (96%)
-- `content/elements/books/bookVII/definitions/defVII1_2/contents.lr` (96%)
+- `content/elements/books/bookVII/definitions/defVII11_14/contents.lr` (95%)
+- `content/elements/books/bookVII/definitions/defVII15_19/contents.lr` (94%)
+- `content/elements/books/bookVII/definitions/defVII1_2/contents.lr` (97%)
 - `content/elements/books/bookVII/definitions/defVII21/contents.lr` (99%)
 - `content/elements/books/bookVII/definitions/defVII22/contents.lr` (99%)
+- `content/elements/books/bookVII/definitions/defVII3_5/contents.lr` (93%)
+- `content/elements/books/bookVII/definitions/defVII6_10/contents.lr` (95%)
 - `content/elements/books/bookVII/propositions/propVII1/contents.lr` (97%)
 - `content/elements/books/bookVII/propositions/propVII10/contents.lr` (96%)
 - `content/elements/books/bookVII/propositions/propVII11/contents.lr` (99%)
@@ -2532,7 +2277,7 @@ Audit run over 537 pages.
 - `content/elements/books/bookVII/propositions/propVII17/contents.lr` (100%)
 - `content/elements/books/bookVII/propositions/propVII18/contents.lr` (99%)
 - `content/elements/books/bookVII/propositions/propVII19/contents.lr` (99%)
-- `content/elements/books/bookVII/propositions/propVII2/contents.lr` (97%)
+- `content/elements/books/bookVII/propositions/propVII2/contents.lr` (95%)
 - `content/elements/books/bookVII/propositions/propVII20/contents.lr` (98%)
 - `content/elements/books/bookVII/propositions/propVII21/contents.lr` (100%)
 - `content/elements/books/bookVII/propositions/propVII22/contents.lr` (99%)
@@ -2569,7 +2314,7 @@ Audit run over 537 pages.
 - `content/elements/books/bookVIII/propositions/propVIII17/contents.lr` (95%)
 - `content/elements/books/bookVIII/propositions/propVIII18/contents.lr` (100%)
 - `content/elements/books/bookVIII/propositions/propVIII19/contents.lr` (100%)
-- `content/elements/books/bookVIII/propositions/propVIII2/contents.lr` (97%)
+- `content/elements/books/bookVIII/propositions/propVIII2/contents.lr` (93%)
 - `content/elements/books/bookVIII/propositions/propVIII20/contents.lr` (98%)
 - `content/elements/books/bookVIII/propositions/propVIII21/contents.lr` (100%)
 - `content/elements/books/bookVIII/propositions/propVIII22/contents.lr` (99%)
@@ -2584,6 +2329,9 @@ Audit run over 537 pages.
 - `content/elements/books/bookVIII/propositions/propVIII7/contents.lr` (99%)
 - `content/elements/books/bookVIII/propositions/propVIII8/contents.lr` (99%)
 - `content/elements/books/bookVIII/propositions/propVIII9/contents.lr` (99%)
+- `content/elements/books/bookX/definitions/defX.I/contents.lr` (97%)
+- `content/elements/books/bookX/definitions/defX.II/contents.lr` (97%)
+- `content/elements/books/bookX/definitions/defX.III/contents.lr` (97%)
 - `content/elements/books/bookX/propositions/propX10/contents.lr` (95%)
 - `content/elements/books/bookX/propositions/propX101/contents.lr` (93%)
 - `content/elements/books/bookX/propositions/propX103/contents.lr` (93%)
@@ -2593,11 +2341,13 @@ Audit run over 537 pages.
 - `content/elements/books/bookX/propositions/propX109/contents.lr` (95%)
 - `content/elements/books/bookX/propositions/propX11/contents.lr` (92%)
 - `content/elements/books/bookX/propositions/propX110/contents.lr` (93%)
+- `content/elements/books/bookX/propositions/propX111/contents.lr` (93%)
 - `content/elements/books/bookX/propositions/propX112/contents.lr` (94%)
 - `content/elements/books/bookX/propositions/propX115/contents.lr` (97%)
 - `content/elements/books/bookX/propositions/propX15/contents.lr` (92%)
 - `content/elements/books/bookX/propositions/propX16/contents.lr` (93%)
 - `content/elements/books/bookX/propositions/propX18/contents.lr` (95%)
+- `content/elements/books/bookX/propositions/propX19/contents.lr` (94%)
 - `content/elements/books/bookX/propositions/propX2/contents.lr` (99%)
 - `content/elements/books/bookX/propositions/propX21/contents.lr` (92%)
 - `content/elements/books/bookX/propositions/propX27/contents.lr` (93%)
@@ -2632,6 +2382,7 @@ Audit run over 537 pages.
 - `content/elements/books/bookX/propositions/propX7/contents.lr` (98%)
 - `content/elements/books/bookX/propositions/propX70/contents.lr` (96%)
 - `content/elements/books/bookX/propositions/propX71/contents.lr` (96%)
+- `content/elements/books/bookX/propositions/propX72/contents.lr` (93%)
 - `content/elements/books/bookX/propositions/propX73/contents.lr` (94%)
 - `content/elements/books/bookX/propositions/propX74/contents.lr` (97%)
 - `content/elements/books/bookX/propositions/propX75/contents.lr` (93%)
@@ -2653,10 +2404,14 @@ Audit run over 537 pages.
 - `content/elements/books/bookX/propositions/propX95/contents.lr` (95%)
 - `content/elements/books/bookX/propositions/propX96/contents.lr` (94%)
 - `content/elements/books/bookXI/definitions/defXI11/contents.lr` (99%)
-- `content/elements/books/bookXI/definitions/defXI14_17/contents.lr` (93%)
+- `content/elements/books/bookXI/definitions/defXI12_13/contents.lr` (95%)
+- `content/elements/books/bookXI/definitions/defXI14_17/contents.lr` (98%)
+- `content/elements/books/bookXI/definitions/defXI18_20/contents.lr` (96%)
+- `content/elements/books/bookXI/definitions/defXI21_23/contents.lr` (96%)
 - `content/elements/books/bookXI/definitions/defXI24/contents.lr` (100%)
-- `content/elements/books/bookXI/definitions/defXI3_5/contents.lr` (94%)
-- `content/elements/books/bookXI/definitions/defXI9_10/contents.lr` (96%)
+- `content/elements/books/bookXI/definitions/defXI25_28/contents.lr` (95%)
+- `content/elements/books/bookXI/definitions/defXI3_5/contents.lr` (99%)
+- `content/elements/books/bookXI/definitions/defXI9_10/contents.lr` (94%)
 - `content/elements/books/bookXI/propositions/propXI1/contents.lr` (98%)
 - `content/elements/books/bookXI/propositions/propXI10/contents.lr` (99%)
 - `content/elements/books/bookXI/propositions/propXI11/contents.lr` (95%)
@@ -2681,8 +2436,7 @@ Audit run over 537 pages.
 - `content/elements/books/bookXI/propositions/propXI30/contents.lr` (100%)
 - `content/elements/books/bookXI/propositions/propXI31/contents.lr` (100%)
 - `content/elements/books/bookXI/propositions/propXI32/contents.lr` (98%)
-- `content/elements/books/bookXI/propositions/propXI33/contents.lr` (95%)
-- `content/elements/books/bookXI/propositions/propXI35/contents.lr` (97%)
+- `content/elements/books/bookXI/propositions/propXI35/contents.lr` (94%)
 - `content/elements/books/bookXI/propositions/propXI36/contents.lr` (100%)
 - `content/elements/books/bookXI/propositions/propXI37/contents.lr` (100%)
 - `content/elements/books/bookXI/propositions/propXI38/contents.lr` (100%)
@@ -2702,19 +2456,24 @@ Audit run over 537 pages.
 - `content/elements/books/bookXII/propositions/propXII15/contents.lr` (100%)
 - `content/elements/books/bookXII/propositions/propXII16/contents.lr` (100%)
 - `content/elements/books/bookXII/propositions/propXII18/contents.lr` (99%)
-- `content/elements/books/bookXII/propositions/propXII2/contents.lr` (93%)
+- `content/elements/books/bookXII/propositions/propXII2/contents.lr` (98%)
+- `content/elements/books/bookXII/propositions/propXII4/contents.lr` (100%)
 - `content/elements/books/bookXII/propositions/propXII5/contents.lr` (100%)
 - `content/elements/books/bookXII/propositions/propXII6/contents.lr` (100%)
-- `content/elements/books/bookXII/propositions/propXII7/contents.lr` (97%)
+- `content/elements/books/bookXII/propositions/propXII7/contents.lr` (95%)
+- `content/elements/books/bookXII/propositions/propXII8/contents.lr` (96%)
 - `content/elements/books/bookXII/propositions/propXII9/contents.lr` (100%)
 - `content/elements/books/bookXIII/propositions/propXIII1/contents.lr` (99%)
 - `content/elements/books/bookXIII/propositions/propXIII10/contents.lr` (99%)
 - `content/elements/books/bookXIII/propositions/propXIII11/contents.lr` (100%)
 - `content/elements/books/bookXIII/propositions/propXIII12/contents.lr` (100%)
+- `content/elements/books/bookXIII/propositions/propXIII13/contents.lr` (99%)
 - `content/elements/books/bookXIII/propositions/propXIII14/contents.lr` (99%)
 - `content/elements/books/bookXIII/propositions/propXIII15/contents.lr` (100%)
-- `content/elements/books/bookXIII/propositions/propXIII16/contents.lr` (97%)
-- `content/elements/books/bookXIII/propositions/propXIII17/contents.lr` (99%)
+- `content/elements/books/bookXIII/propositions/propXIII16/contents.lr` (96%)
+- `content/elements/books/bookXIII/propositions/propXIII17/contents.lr` (98%)
+- `content/elements/books/bookXIII/propositions/propXIII18/contents.lr` (98%)
+- `content/elements/books/bookXIII/propositions/propXIII2/contents.lr` (100%)
 - `content/elements/books/bookXIII/propositions/propXIII3/contents.lr` (100%)
 - `content/elements/books/bookXIII/propositions/propXIII4/contents.lr` (100%)
 - `content/elements/books/bookXIII/propositions/propXIII7/contents.lr` (100%)

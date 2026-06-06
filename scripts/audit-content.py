@@ -224,27 +224,27 @@ def extract_joyce_prop_sections(html: str) -> dict[str, str]:
 
     sections = {"statement": "", "proof": "", "guide": ""}
 
-    # The theorem block holds statement + proof.
-    theorem = soup.find("div", class_="theorem")
-    if theorem:
+    # The theorem block holds statement + proof. Multi-section pages
+    # (X.17, X.29, X.111, etc.) have several sibling theorem boxes —
+    # aggregate the first statement we see + every theorem box's
+    # text. Mirrors our sections data model.
+    stmts = []
+    proofs = []
+    for theorem in soup.find_all("div", class_="theorem"):
         stmt_div = theorem.find("div", class_="statement")
         if stmt_div:
-            sections["statement"] = stmt_div.get_text(" ", strip=True)
+            stmts.append(stmt_div.get_text(" ", strip=True))
             stmt_div.decompose()
-        # Strip the h1 title (we render it from frontmatter)
         for h1 in theorem.find_all("h1"):
             h1.decompose()
-        # Drop margin-citation blocks from the proof TEXT (they're
-        # compared separately as links). Link extraction still sees
-        # them via the global <a href> sweep, so this only affects
-        # the text-similarity comparison.
         for just in theorem.find_all("div", class_="just"):
             just.decompose()
-        # Drop applet / figure equipment — has no markdown counterpart.
         for tag_name in ["applet", "figure", "canvas", "script", "noscript"]:
             for t in theorem.find_all(tag_name):
                 t.decompose()
-        sections["proof"] = theorem.get_text(" ", strip=True)
+        proofs.append(theorem.get_text(" ", strip=True))
+    sections["statement"] = " ".join(s for s in stmts if s)
+    sections["proof"] = " ".join(p for p in proofs if p)
 
     # Guide section: everything after the <h2>Guide</h2> heading.
     # Joyce variously writes `<a name=guide><h2>Guide</h2></a>` or
@@ -645,25 +645,78 @@ def link_diff(joyce_links: list[tuple[str, str]], our_links: list[tuple[str, str
 LINK_PATTERNS: dict[tuple[str, str], list[str]] = {}
 
 
+_SECTION_BLOCK_RE = re.compile(r"^#### prop_section ####\s*$", re.MULTILINE)
+_SECTION_FIELD_RE = re.compile(
+    r"^(?P<key>kind|label|anchor|statement|proof|guide|red_highlight)"
+    r":\s*\n?(?P<val>.*?)(?=^----\s*$|^#### prop_section ####|\Z)",
+    re.MULTILINE | re.DOTALL,
+)
+
+
+def extract_section_text(sections_blob: str) -> str:
+    """Pull statement + proof + guide text out of a `sections:` flow
+    blob, dropping the metaformat scaffolding (#### prop_section ####
+    markers, ---- separators, kind/anchor/label/red_highlight metadata).
+    What remains is comparable to Joyce's flat HTML text."""
+    parts = []
+    for block in _SECTION_BLOCK_RE.split(sections_blob):
+        block = block.strip()
+        if not block:
+            continue
+        for m in _SECTION_FIELD_RE.finditer(block):
+            key = m.group("key")
+            if key in ("statement", "proof", "guide"):
+                parts.append(m.group("val").strip())
+    return "\n".join(p for p in parts if p)
+
+
+def extract_our_text(cl_path: pathlib.Path, fields: dict) -> str:
+    """Combine the content fields for one of our .lr files into a single
+    text blob comparable to Joyce's rendered page text."""
+    model = fields.get("_model", "")
+    if model == "proposition":
+        return extract_section_text(fields.get("sections", ""))
+    if model == "definition_group":
+        # Bundle root — collect the members' statement + guide IN
+        # SOURCE ORDER, then the bundle's own (shared) guide last.
+        # Mirrors Joyce's page layout: theorem boxes first, then
+        # Guide commentary, so the similarity comparison isn't
+        # penalised for reorderings the data model imposes.
+        parts = []
+        bundle_slug = cl_path.parent.name
+        for sibling in sorted(cl_path.parent.parent.iterdir()):
+            if not sibling.is_dir() or sibling.name == bundle_slug:
+                continue
+            sibling_cl = sibling / "contents.lr"
+            if not sibling_cl.exists():
+                continue
+            sib_fields = parse_lr(sibling_cl)
+            if sib_fields.get("group") != bundle_slug:
+                continue
+            parts.append(sib_fields.get("statement", ""))
+            parts.append(sib_fields.get("guide", ""))
+        parts.append(fields.get("guide", ""))
+        return "\n".join(p for p in parts if p)
+    # Definitions / postulates / common notions / books / pages.
+    return "\n".join(
+        fields.get(k, "") for k in ("statement", "guide", "body") if fields.get(k)
+    )
+
+
 def audit_page(match: PageMatch, source: str) -> dict:
     """Return a dict of audit findings for one page."""
     our_fields = parse_lr(match.our_path)
-    # Definitions / books / etc. use `guide` (renamed from `body`);
-    # propositions store their content inside a `sections:` flow field
-    # — concat all section bodies for the text-similarity check.
-    if our_fields.get("_model") == "proposition":
-        sections_blob = our_fields.get("sections", "")
-        our_text_combined = sections_blob
-    else:
-        our_statement = our_fields.get("statement", "")
-        our_guide = our_fields.get("guide", "")
-        our_text_combined = "\n".join([our_statement, our_guide])
+    our_text_combined = extract_our_text(match.our_path, our_fields)
 
     joyce_html = fetch_joyce(source, match.joyce_rel)
     if not joyce_html:
         return {"match": match, "error": f"could not fetch {match.joyce_rel}"}
 
     if match.kind in ("book", "prematter"):
+        joyce_sections = extract_joyce_prose_sections(joyce_html)
+    elif match.kind == "bundle":
+        # Bundle pages have multiple <div class="theorem"> blocks
+        # plus Guide-style commentary in between. Grab everything.
         joyce_sections = extract_joyce_prose_sections(joyce_html)
     else:
         joyce_sections = extract_joyce_prop_sections(joyce_html)

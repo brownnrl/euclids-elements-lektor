@@ -34,16 +34,12 @@ pair that was flagged as a link diff somewhere in the audit. Sorted by frequency
 | 1 | `x23,cor` | `(missing)` | `propX105` |
 | 1 | `x.def.4` | `(missing)` | `subjindex` |
 | 1 | `x.def.2` | `(missing)` | `subjindex` |
-| 1 | `x.6` | `(missing)` | `defX.I` |
-| 1 | `x.5` | `(missing)` | `defX.I` |
 | 1 | `x.11` | `(missing)` | `propXI34` |
-| 1 | `x.10` | `(missing)` | `defX.I` |
 | 1 | `vii.def.11,13` | `(missing)` | `propVII31` |
 | 1 | `vi.def.1.thispropositionisusedintheproofofpropositionxii.12` | `(missing)` | `propVI5` |
 | 1 | `vi.18.cor` | `(missing)` | `propXII17` |
 | 1 | `vi.14` | `(missing)` | `propXIII8` |
 | 1 | `v.def.9-10` | `(missing)` | `defVII20` |
-| 1 | `v.def.5` | `(missing)` | `defX.I` |
 | 1 | `v.9-10` | `(missing)` | `propVIII5` |
 | 1 | `v.11` | `(missing)` | `propVI3` |
 | 1 | `postulatei` | `(missing)` | `propXI3` |
@@ -54,7 +50,6 @@ pair that was flagged as a link diff somewhere in the audit. Sorted by frequency
 | 1 | `ii.4` | `(missing)` | `propVI13` |
 | 1 | `i.def.3` | `(missing)` | `propXIII5` |
 | 1 | `i.5` | `(missing)` | `propVI3` |
-| 1 | `i.47` | `(missing)` | `defX.I` |
 | 1 | `i.23` | `(missing)` | `defXI6_8` |
 | 1 | `i.17` | `(missing)` | `propVI7` |
 | 1 | `http://www.math.ubc.ca/people/faculty/cass/euclid/byrne.html` | `(missing)` | `web` |
@@ -74,7 +69,7 @@ pair that was flagged as a link diff somewhere in the audit. Sorted by frequency
 | 1 | `(added)` | `x.23.cor` | `propX105` |
 | 1 | `(added)` | `waybackmachine` | `web` |
 | 1 | `(added)` | `viii.26converse` | `propIX10` |
-| 1 | `(added)` | `viii.26andconverse` | `propX9` |
+| 1 | `(added)` | `viii.26(andconverse)` | `propX9` |
 | 1 | `(added)` | `viii.2.cor` | `propIX15` |
 | 1 | `(added)` | `vii.def.11` | `propVII31` |
 | 1 | `(added)` | `vi.def.3` | `propXIII5` |
@@ -86,7 +81,6 @@ pair that was flagged as a link diff somewhere in the audit. Sorted by frequency
 | 1 | `(added)` | `thegreatinternetmersenneprimesearch` | `propIX36` |
 | 1 | `(added)` | `numbers&amp;symbols` | `subjindex` |
 | 1 | `(added)` | `lemmabelow` | `propXI23` |
-| 1 | `(added)` | `lemma` | `propX19` |
 | 1 | `(added)` | `ix.15` | `propII4` |
 | 1 | `(added)` | `ix.11.cor` | `propIX12` |
 | 1 | `(added)` | `iv.6` | `propIV9` |
