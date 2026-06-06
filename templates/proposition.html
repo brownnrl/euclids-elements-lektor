@@ -21,7 +21,8 @@
 {% for s in sections %}
   {% set rcls = " class=\"red-highlight\"" if s.red_highlight else "" %}
   {% set label = s.label if s.label else (this.title if s.kind == "proposition" else s.kind|capitalize) %}
-  {% set anchor = s.anchor if s.anchor else ("prop" if s.kind == "proposition" else s.kind) %}
+  {% set _ka = {"proposition": "prop", "corollary": "cor", "lemma": "lemma", "note": "note", "remark": "remark"} %}
+  {% set anchor = s.anchor if s.anchor else _ka.get(s.kind, s.kind) %}
   <div class="theorem"{{ rcls|safe }}>
     <h1 id="{{ anchor }}">{{ label }}{% if s.kind != "proposition" %}.{% endif %}</h1>
     {% if s.statement %}<div class="statement">{{ s.statement }}</div>{% endif %}

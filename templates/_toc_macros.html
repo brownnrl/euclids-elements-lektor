@@ -8,7 +8,11 @@
    on every entry); in H1 headings only for non-proposition kinds
    (Joyce uses "Proposition 29" but "Lemma 1." / "Corollary."). #}
 {% macro sec_label(item, s) %}{{ s.label if s.label else (item.title if s.kind == "proposition" else s.kind|capitalize) }}{% endmacro %}
-{% macro sec_anchor(s) %}{{ s.anchor if s.anchor else ("prop" if s.kind == "proposition" else s.kind) }}{% endmacro %}
+{# Default anchors per kind: prop / cor / lemma / note / remark.
+   Matches the eucref plugin's `#cor` convention. #}
+{% set _kind_anchor = {"proposition": "prop", "corollary": "cor",
+                       "lemma": "lemma", "note": "note", "remark": "remark"} %}
+{% macro sec_anchor(s) %}{{ s.anchor if s.anchor else _kind_anchor.get(s.kind, s.kind) }}{% endmacro %}
 
 {% macro sec_inline(item, s) %}<b><a href="{{ item|url }}#{{ sec_anchor(s) }}">{{ sec_label(item, s) }}.</a></b>{% if s.statement %} {{ s.statement }}{% endif %}{% endmacro %}
 
