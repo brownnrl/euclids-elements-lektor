@@ -2,17 +2,30 @@
 {% block content %}
 {# Definitions render a theorem box (from `title` + `statement`) and
    an optional Guide section. If `group` is set, this page is part of
-   a bundled-source group (e.g. defs 15-18) — stack the theorem
-   boxes of every sibling sharing the group, then render the shared
-   guide from the hidden `definition_group` page. #}
+   a bundled-source group (e.g. defs 15-18). Two Guide-layout
+   patterns coexist:
+     - Per-member: each leaf carries its own `body`, rendered inline
+       right after its theorem box (matches Joyce's defX.I.html,
+       where each definition is followed by its own Guide block).
+     - Shared: the hidden `definition_group` bundle carries a single
+       `body` that discusses the group as a whole, rendered once
+       after the last member (matches Joyce's defI15.html, where one
+       Guide discusses defs 15-18 together).
+   Both can coexist: per-member bodies render inline; the shared
+   group body, if present, renders at the end. #}
 {% if this.group %}
   {% set group_page = site.get(this.parent.path ~ '/' ~ this.group) %}
   {% set members = this.parent.children.filter(F.group == this.group).order_by('order') %}
   {% for d in members %}
+    <a id="{{ d.order }}"></a>
     <div class="theorem">
     <h1>{{ d.title }}</h1>
     <div class="statement">{{ d.statement }}</div>
     </div>
+    {% if d.body %}
+      <h2 id="guide-{{ d.order }}">Guide</h2>
+      {{ d.body }}
+    {% endif %}
     {% if not loop.last %}<br>{% endif %}
   {% endfor %}
   {% if group_page and group_page.body %}

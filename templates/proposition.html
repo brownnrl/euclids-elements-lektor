@@ -4,12 +4,25 @@
    construction & proof) together on the beige background, then the
    Guide commentary below. `proof` and `body` are both markdown;
    marginal justifications inside the proof use raw inline HTML
-   (<div class="just">…</div>). #}
+   (<div class="just">…</div>).
+
+   When `toc_pre` is populated, the proof page actually contains
+   multiple theorem boxes (one or two lemmas, then the proposition).
+   In that case we DO NOT auto-emit the proposition's title +
+   statement at the top — that would label the first box (which
+   holds a lemma) with the proposition's title. Instead the proof
+   source must open each box with its own <h1> + <div class="statement">
+   and close it with </div>. #}
+{% set pre = this.toc_pre.blocks if this.toc_pre is defined and this.toc_pre else [] %}
+{% if pre %}
+{{ this.proof }}
+{% else %}
 <div class="theorem">
 <h1>{{ this.title }}</h1>
 <div class="statement">{{ this.statement }}</div>
 {% if this.proof %}{{ this.proof }}{% endif %}
 </div>
+{% endif %}
 
 {% if this.body %}
 <h2 id="guide">Guide</h2>

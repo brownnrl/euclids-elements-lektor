@@ -1,0 +1,6 @@
+# Audit review log
+
+Each line records the outcome of a manual side-by-side review.
+Run `scripts/audit-review.py` to add to this log.
+
+- `content/elements/books/bookX/definitions/defX11_16/contents.lr` → accepted  _2026-06-06_

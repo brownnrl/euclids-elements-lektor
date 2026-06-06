@@ -17,8 +17,12 @@ Tokens recognized:
   - `C.N.{number}`              → common notion (Book I)  e.g. C.N.1
   - `X.Def.{I|II|III}.{number}` → Book X subsection definition
                                   e.g. X.Def.I.3, X.Def.II.1, X.Def.III.6.
-                                  Maps to global numbering: I.1-4 → X.Def.1-4,
-                                  II.1-6 → X.Def.5-10, III.1-6 → X.Def.11-16.
+                                  Book X follows Heath/Joyce/Heiberg in
+                                  restarting numbering per subsection:
+                                  DefsI has 4, DefsII and DefsIII have 6
+                                  each. The slug carries the Roman
+                                  subsection: `defX.I.3`, `defX.II.1`,
+                                  `defX.III.6`.
 
 Anything else (typos, unrecognized prefix) becomes `<a href="#unresolved-…">`
 so it surfaces visibly when proofreading the rendered page.
@@ -57,9 +61,10 @@ INLINE_RE = re.compile(rf"@({_TOKEN_BARE})")
 BLOCK_RE = re.compile(r"\[!just\s+(.+?)\]")
 
 
-# Book X subsection-to-global offset. DefsI 1-4 stays as 1-4; DefsII shifts
-# by 4 (II.1 → 5); DefsIII shifts by 10 (III.1 → 11).
-_X_DEF_OFFSET = {"I": 0, "II": 4, "III": 10}
+# Book X subsection-restart numbering: each batch has its own 1..N
+# range, matching Heath/Joyce/Heiberg. Folder slugs carry the Roman
+# subsection (defX.I.1 … defX.III.6).
+_X_DEF_SUBSECTIONS = {"I", "II", "III"}
 
 
 def resolve(token: str) -> str:
@@ -83,15 +88,20 @@ def resolve(token: str) -> str:
     if len(parts) == 3:
         kind, n = parts[1], parts[2]
         if kind == "Def":
+            # Book X uses subsection-restart numbering (see 4-part
+            # handler below); a 3-part global-form citation has no
+            # well-defined target there. All Book X def citations
+            # must spell out the Roman subsection.
+            if book == "X":
+                return f"#unresolved-{token}"
             return f"/elements/books/book{book}/definitions/def{book}{n}/"
         if kind == "Post":
             return f"/elements/books/book{book}/postulates/post{n}/"
         if kind.isdigit() and n == "Cor":
             return f"/elements/books/book{book}/propositions/prop{book}{kind}/#cor"
-    if len(parts) == 4 and book == "X" and parts[1] == "Def" and parts[2] in _X_DEF_OFFSET:
-        section, local_n = parts[2], int(parts[3])
-        global_n = _X_DEF_OFFSET[section] + local_n
-        return f"/elements/books/bookX/definitions/defX{global_n}/"
+    if len(parts) == 4 and book == "X" and parts[1] == "Def" and parts[2] in _X_DEF_SUBSECTIONS:
+        section, local_n = parts[2], parts[3]
+        return f"/elements/books/bookX/definitions/defX.{section}.{local_n}/"
     return f"#unresolved-{token}"
 
 

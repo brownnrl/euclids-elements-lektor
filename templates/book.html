@@ -16,12 +16,28 @@
 {% set cns    = cns_section.children   if cns_section   else [] %}
 {% set props  = props_section.children if props_section else [] %}
 
+{# Subsections is an optional Flow field on the book model. When the
+   book.lr file omits it, accessing this.subsections raises an
+   UndefinedError, so we resolve it to a plain list of blocks once
+   here (or an empty list) and reuse below. #}
+{% set subsections = this.subsections.blocks if this.subsections is defined else [] %}
+
 <h2>Table of Contents</h2>
 <ul>
-  {% if defs_section  %}<li><a href="#defs">Definitions</a> ({{ defs.count() }})</li>{% endif %}
+  {% if subsections %}
+    {# Per-subsection links replace the single Definitions /
+       Propositions entries when subsections are populated. #}
+    {% for sub in subsections %}
+      {% set sub_def_count = defs|selectattr('subsection', 'equalto', sub.id)|list|length %}
+      <li><a href="#defs-{{ sub.id }}">{{ sub.def_label }}</a> ({{ sub_def_count }})</li>
+      <li><a href="#props-{{ sub.id }}">{{ sub.prop_label }}</a></li>
+    {% endfor %}
+  {% else %}
+    {% if defs_section  %}<li><a href="#defs">Definitions</a> ({{ defs.count() }})</li>{% endif %}
+    {% if props_section %}<li><a href="#props">Propositions</a> ({{ props.count() }})</li>{% endif %}
+  {% endif %}
   {% if posts_section %}<li><a href="#posts">Postulates</a> ({{ posts.count() }})</li>{% endif %}
   {% if cns_section   %}<li><a href="#cns">Common Notions</a> ({{ cns.count() }})</li>{% endif %}
-  {% if props_section %}<li><a href="#props">Propositions</a> ({{ props.count() }})</li>{% endif %}
   {% if this.body     %}<li><a href="#guide">Guide to {{ this.title }}</a></li>{% endif %}
 </ul>
 
@@ -30,14 +46,76 @@
    page, then <dd> with the statement text. Items with
    red_highlight: yes (author's call — usually Q.E.F. constructions
    but the field is a generic visual marker) get a class on both
-   <dt> and <dd> so the styling is uniform across the whole entry. #}
+   <dt> and <dd> so the styling is uniform across the whole entry.
+
+   Propositions can carry `toc_pre` / `toc_post` flow fields with
+   auxiliary entries (lemmas, corollaries, follow-up propositions).
+   When `toc_pre` is populated, its first entry occupies the <dd>
+   slot, its rest become trailing <p>, and the proposition's own
+   title + statement is then emitted as a closing <p> linking to
+   the page's #prop anchor — matches Joyce/Heath's presentation. When
+   `toc_post` is populated, each entry follows the main <dd> as
+   a <p>. Defs / postulates / common notions don't have these
+   fields; the `is defined` guards keep them on the simple path. #}
+{% macro aux_p(item, aux) %}
+  {% set acls = " class=\"red-highlight\"" if aux.red_highlight else "" %}
+  <p{{ acls|safe }}><b><a href="{{ item|url }}#{{ aux.anchor }}">{{ aux.label }}.</a></b>{% if aux.statement %} {{ aux.statement }}{% endif %}</p>
+{% endmacro %}
+
 {% macro entry(item) %}
   {% set cls = " class=\"red-highlight\"" if item.red_highlight else "" %}
   <dt{{ cls|safe }}><b><a href="{{ item|url }}">{{ item.title }}</a>.</b></dt>
-  <dd{{ cls|safe }}>{{ item.statement }}</dd>
+  {% set pre  = item.toc_pre.blocks  if item.toc_pre  is defined and item.toc_pre  else [] %}
+  {% set post = item.toc_post.blocks if item.toc_post is defined and item.toc_post else [] %}
+  {# All sub-items nest inside a single <dd> so they inherit the
+     parent's indentation. The lead item provides the dd's first line;
+     trailing items render as <p> children of that dd, not siblings. #}
+  <dd{{ cls|safe }}>
+    {% if pre %}
+      {% for aux in pre %}
+        {% if loop.first %}
+          <b><a href="{{ item|url }}#{{ aux.anchor }}">{{ aux.label }}.</a></b>{% if aux.statement %} {{ aux.statement }}{% endif %}
+        {% else %}
+          {{ aux_p(item, aux) }}
+        {% endif %}
+      {% endfor %}
+      <p{{ cls|safe }}><b><a href="{{ item|url }}#prop">{{ item.title }}.</a></b> {{ item.statement }}</p>
+    {% else %}
+      {{ item.statement }}
+    {% endif %}
+    {% for aux in post %}{{ aux_p(item, aux) }}{% endfor %}
+  </dd>
 {% endmacro %}
 
-{% if defs_section %}
+{# Books with a populated `subsections` flow field (currently Book X)
+   render Definitions and Propositions woven together — each
+   subsection's defs are followed immediately by the prop range that
+   uses them. This mirrors Joyce's and Heath's presentation (which
+   matches Heiberg's Greek edition of Book X: DefsI → Props 1–47 →
+   DefsII → Props 48–84 → DefsIII → Props 85–115). For books without
+   subsections, both blocks render flat in the usual order.
+
+   Def membership uses the leaf's `subsection` field (Roman: I, II,
+   III) — matches Heath/Heiberg's subsection-restart numbering. Prop
+   membership uses prop_lo/prop_hi range bounds since props in Book X
+   stay globally numbered 1-115. See flowblocks/book_subsection.ini. #}
+{% if subsections and defs_section and props_section %}
+  {% for sub in subsections %}
+    <hr size="4">
+    <h2 id="defs-{{ sub.id }}"><a href="{{ defs_section|url }}">{{ sub.def_label }}</a></h2>
+    {% if sub.def_caption %}<p><i>{{ sub.def_caption }}.</i>{% endif %}
+    <dl>
+      {% for d in defs if d.subsection == sub.id %}{{ entry(d) }}{% endfor %}
+    </dl>
+
+    <h2 id="props-{{ sub.id }}"><a href="{{ props_section|url }}">{{ sub.prop_label }}</a></h2>
+    <dl>
+      {% for p in props %}
+        {% if p.order|int >= sub.prop_lo and p.order|int <= sub.prop_hi %}{{ entry(p) }}{% endif %}
+      {% endfor %}
+    </dl>
+  {% endfor %}
+{% elif defs_section %}
   <hr size="4">
   <h2 id="defs"><a href="{{ defs_section|url }}">Definitions</a></h2>
   <dl>
@@ -62,7 +140,9 @@
   </dl>
 {% endif %}
 
-{% if props_section %}
+{# Skip the flat Propositions block when the subsections branch above
+   already emitted them interleaved with the defs. #}
+{% if props_section and not subsections %}
   <hr size="4">
   <h2 id="props"><a href="{{ props_section|url }}">Propositions</a></h2>
   <dl>
