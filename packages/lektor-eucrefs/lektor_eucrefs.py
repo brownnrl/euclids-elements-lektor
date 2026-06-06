@@ -113,18 +113,50 @@ def _sub_inline(text: str) -> str:
     return INLINE_RE.sub(lambda m: _link(m.group(1)), text)
 
 
+# Each entry in a [!just ...] directive can carry a parenthesised plain
+# text fragment that becomes literal text in the rendered output.
+#
+#   `VIII.26 (and converse)`  → <a>VIII.26</a> and converse
+#   `(standalone note)`       → standalone note
+#
+# Use it for things Joyce renders as link-plus-trailing-prose (X.9's
+# "VIII.26 and converse") or as a marginal annotation without an
+# accompanying citation. The parens themselves never appear in output.
+_ENTRY_RE = re.compile(r"^(?:(\S+)\s*)?(?:\(([^)]*)\))?$")
+
+
+def _render_entry(entry: str) -> str:
+    """Render one comma-separated entry inside [!just …]."""
+    entry = entry.strip()
+    m = _ENTRY_RE.match(entry)
+    if not m or (not m.group(1) and not m.group(2)):
+        # Doesn't match the (token) / token (text) / (text) shape;
+        # fall back to treating the whole thing as a citation token —
+        # surfaces as `#unresolved-…` so it's visible during review.
+        return _link(entry)
+    token, plain = m.group(1), m.group(2)
+    parts = []
+    if token:
+        parts.append(_link(token))
+    if plain:
+        parts.append(plain)
+    return " ".join(parts)
+
+
 def _render_just(content: str) -> str:
     """Render '[!just I.3, I.46; I.31]' content into a <div class="just">.
 
     Within the directive, `,` keeps refs on the same logical line
-    (rendered with literal ", " between links). `;` breaks to a new
-    line (rendered as `<br>`).
+    (rendered with ", " between entries). `;` breaks to a new line
+    (rendered as `<br>`). Each entry can be a citation token, a
+    parenthesised plain-text annotation, or a citation followed by a
+    parenthesised trailer — see `_render_entry`.
     """
     groups = []
     for line in content.split(";"):
         refs = [r.strip() for r in line.split(",") if r.strip()]
         if refs:
-            groups.append(", ".join(_link(r) for r in refs))
+            groups.append(", ".join(_render_entry(r) for r in refs))
     return '<div class="just">' + "<br>".join(groups) + "</div>"
 
 
