@@ -48,42 +48,46 @@
    but the field is a generic visual marker) get a class on both
    <dt> and <dd> so the styling is uniform across the whole entry.
 
-   Propositions can carry `toc_pre` / `toc_post` flow fields with
-   auxiliary entries (lemmas, corollaries, follow-up propositions).
-   When `toc_pre` is populated, its first entry occupies the <dd>
-   slot, its rest become trailing <p>, and the proposition's own
-   title + statement is then emitted as a closing <p> linking to
-   the page's #prop anchor — matches Joyce/Heath's presentation. When
-   `toc_post` is populated, each entry follows the main <dd> as
-   a <p>. Defs / postulates / common notions don't have these
-   fields; the `is defined` guards keep them on the simple path. #}
-{% macro aux_p(item, aux) %}
-  {% set acls = " class=\"red-highlight\"" if aux.red_highlight else "" %}
-  <p{{ acls|safe }}><b><a href="{{ item|url }}#{{ aux.anchor }}">{{ aux.label }}.</a></b>{% if aux.statement %} {{ aux.statement }}{% endif %}</p>
-{% endmacro %}
+   Propositions carry a `sections` flow field — one section per
+   theorem box on the rendered page. The TOC iterates them in order:
+   the first section occupies the <dd> slot, the rest become trailing
+   <p>s inside the same <dd> (so everything indents under the dt).
+   The kind="proposition" section's label comes from the parent
+   prop's title; other kinds default to capitalised kind + period.
+   Defs / postulates / common notions don't have sections; the
+   `is defined` guard takes them down the simple <dd>{{ statement }}
+   path. #}
+{# Label convention: source data never includes a trailing period on
+   `label` or `title`. Templates add the period where the convention
+   calls for one — always in the TOC (Joyce's bookX.html has periods
+   on every entry); in H1 headings only for non-proposition kinds
+   (Joyce uses "Proposition 29" but "Lemma 1." / "Corollary."). #}
+{% macro sec_label(item, s) %}{{ s.label if s.label else (item.title if s.kind == "proposition" else s.kind|capitalize) }}{% endmacro %}
+{% macro sec_anchor(s) %}{{ s.anchor if s.anchor else ("prop" if s.kind == "proposition" else s.kind) }}{% endmacro %}
+
+{% macro sec_inline(item, s) %}<b><a href="{{ item|url }}#{{ sec_anchor(s) }}">{{ sec_label(item, s) }}.</a></b>{% if s.statement %} {{ s.statement }}{% endif %}{% endmacro %}
 
 {% macro entry(item) %}
   {% set cls = " class=\"red-highlight\"" if item.red_highlight else "" %}
   <dt{{ cls|safe }}><b><a href="{{ item|url }}">{{ item.title }}</a>.</b></dt>
-  {% set pre  = item.toc_pre.blocks  if item.toc_pre  is defined and item.toc_pre  else [] %}
-  {% set post = item.toc_post.blocks if item.toc_post is defined and item.toc_post else [] %}
-  {# All sub-items nest inside a single <dd> so they inherit the
-     parent's indentation. The lead item provides the dd's first line;
-     trailing items render as <p> children of that dd, not siblings. #}
+  {% set secs = item.sections.blocks if item.sections is defined and item.sections else [] %}
   <dd{{ cls|safe }}>
-    {% if pre %}
-      {% for aux in pre %}
+    {% if secs %}
+      {% for s in secs %}
+        {% set scls = " class=\"red-highlight\"" if s.red_highlight else "" %}
         {% if loop.first %}
-          <b><a href="{{ item|url }}#{{ aux.anchor }}">{{ aux.label }}.</a></b>{% if aux.statement %} {{ aux.statement }}{% endif %}
+          {# Simple-prop shortcut: when the first section is the
+             proposition itself (no override label), the dd shows just
+             its statement — the dt already linked to the page so the
+             extra "<b>Proposition N.</b>" link would be redundant. #}
+          {% if s.kind == "proposition" and not s.label %}{{ s.statement }}{% else %}{{ sec_inline(item, s) }}{% endif %}
         {% else %}
-          {{ aux_p(item, aux) }}
+          <p{{ scls|safe }}>{{ sec_inline(item, s) }}</p>
         {% endif %}
       {% endfor %}
-      <p{{ cls|safe }}><b><a href="{{ item|url }}#prop">{{ item.title }}.</a></b> {{ item.statement }}</p>
     {% else %}
       {{ item.statement }}
     {% endif %}
-    {% for aux in post %}{{ aux_p(item, aux) }}{% endfor %}
   </dd>
 {% endmacro %}
 

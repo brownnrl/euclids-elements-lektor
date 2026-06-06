@@ -1,31 +1,34 @@
 {% extends "layout.html" %}
 {% block content %}
-{# A proposition renders the theorem box (title + statement +
-   construction & proof) together on the beige background, then the
-   Guide commentary below. `proof` and `body` are both markdown;
-   marginal justifications inside the proof use raw inline HTML
-   (<div class="just">…</div>).
+{# A proposition's page is one or more theorem boxes, driven entirely
+   by the `sections` flow field. Each section renders its own beige
+   box; the template adds all the <div>/<h1>/<div class="statement">
+   scaffolding so authors keep the source data clean (markdown only,
+   no theorem-div wrappers).
 
-   When `toc_pre` is populated, the proof page actually contains
-   multiple theorem boxes (one or two lemmas, then the proposition).
-   In that case we DO NOT auto-emit the proposition's title +
-   statement at the top — that would label the first box (which
-   holds a lemma) with the proposition's title. Instead the proof
-   source must open each box with its own <h1> + <div class="statement">
-   and close it with </div>. #}
-{% set pre = this.toc_pre.blocks if this.toc_pre is defined and this.toc_pre else [] %}
-{% if pre %}
-{{ this.proof }}
-{% else %}
-<div class="theorem">
-<h1>{{ this.title }}</h1>
-<div class="statement">{{ this.statement }}</div>
-{% if this.proof %}{{ this.proof }}{% endif %}
-</div>
-{% endif %}
+   `kind` drives the default heading label and anchor; `label` and
+   `anchor` are overrides for the multi-of-a-kind case (Lemma 1 /
+   Lemma 2; cor / cor2). proposition-kind sections use the parent
+   prop's `title` as their heading and anchor `prop`. note/remark
+   sections render their `guide` inside the box (no separate "Guide"
+   heading); proposition-kind sections render `guide` BELOW the box
+   under an <h2 id="guide">Guide</h2> heading, matching Joyce's
+   layout. lemma/corollary sections typically have only a proof. #}
+{% set sections = this.sections.blocks if this.sections is defined and this.sections else [] %}
+{% for s in sections %}
+  {% set rcls = " class=\"red-highlight\"" if s.red_highlight else "" %}
+  {% set label = s.label if s.label else (this.title if s.kind == "proposition" else s.kind|capitalize) %}
+  {% set anchor = s.anchor if s.anchor else ("prop" if s.kind == "proposition" else s.kind) %}
+  <div class="theorem"{{ rcls|safe }}>
+    <h1 id="{{ anchor }}">{{ label }}{% if s.kind != "proposition" %}.{% endif %}</h1>
+    {% if s.statement %}<div class="statement">{{ s.statement }}</div>{% endif %}
+    {% if s.proof %}{{ s.proof }}{% endif %}
+    {% if s.kind in ["note", "remark"] and s.guide %}{{ s.guide }}{% endif %}
+  </div>
 
-{% if this.body %}
-<h2 id="guide">Guide</h2>
-{{ this.body }}
-{% endif %}
+  {% if s.kind == "proposition" and s.guide %}
+    <h2 id="guide">Guide</h2>
+    {{ s.guide }}
+  {% endif %}
+{% endfor %}
 {% endblock %}
