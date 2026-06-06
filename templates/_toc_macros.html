@@ -1,0 +1,47 @@
+{# Shared TOC-row macros, imported by book.html and section_index.html.
+   Kept in its own file (no `extends`) so the import doesn't drag the
+   layout context along. #}
+
+{# Label convention: source data never includes a trailing period on
+   `label` or `title`. Templates add the period where the convention
+   calls for one — always in the TOC (Joyce's bookX.html has periods
+   on every entry); in H1 headings only for non-proposition kinds
+   (Joyce uses "Proposition 29" but "Lemma 1." / "Corollary."). #}
+{% macro sec_label(item, s) %}{{ s.label if s.label else (item.title if s.kind == "proposition" else s.kind|capitalize) }}{% endmacro %}
+{% macro sec_anchor(s) %}{{ s.anchor if s.anchor else ("prop" if s.kind == "proposition" else s.kind) }}{% endmacro %}
+
+{% macro sec_inline(item, s) %}<b><a href="{{ item|url }}#{{ sec_anchor(s) }}">{{ sec_label(item, s) }}.</a></b>{% if s.statement %} {{ s.statement }}{% endif %}{% endmacro %}
+
+{# Single TOC row: <dt> with the title link, then <dd> with the
+   first section's content + trailing <p>s for any extra sections.
+   Propositions read `sections`; defs/postulates/common notions fall
+   through to their `statement` field.
+
+   Lektor's url filter omits the trailing slash on slugs that contain
+   a dot — but that's actually what relative-URL breadcrumb math
+   expects, AND the lektor-roman-slug-mimetypes plugin makes the dev
+   server serve the no-slash URL as text/html. So we use {{ item|url }}
+   directly here; the trailing slash is not needed. #}
+{% macro entry(item) %}
+  {% set cls = " class=\"red-highlight\"" if item.red_highlight else "" %}
+  <dt{{ cls|safe }}><b><a href="{{ item|url }}">{{ item.title }}</a>.</b></dt>
+  {% set secs = item.sections.blocks if item.sections is defined and item.sections else [] %}
+  <dd{{ cls|safe }}>
+    {% if secs %}
+      {% for s in secs %}
+        {% set scls = " class=\"red-highlight\"" if s.red_highlight else "" %}
+        {% if loop.first %}
+          {# Simple-prop shortcut: when the first section is the
+             proposition itself (no override label), the dd shows just
+             its statement — the dt already linked to the page so the
+             extra "<b>Proposition N.</b>" link would be redundant. #}
+          {% if s.kind == "proposition" and not s.label %}{{ s.statement }}{% else %}{{ sec_inline(item, s) }}{% endif %}
+        {% else %}
+          <p{{ scls|safe }}>{{ sec_inline(item, s) }}</p>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      {{ item.statement }}
+    {% endif %}
+  </dd>
+{% endmacro %}
