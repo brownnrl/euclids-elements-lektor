@@ -648,10 +648,16 @@ LINK_PATTERNS: dict[tuple[str, str], list[str]] = {}
 def audit_page(match: PageMatch, source: str) -> dict:
     """Return a dict of audit findings for one page."""
     our_fields = parse_lr(match.our_path)
-    our_statement = our_fields.get("statement", "")
-    our_proof = our_fields.get("proof", "")
-    our_body = our_fields.get("body", "")
-    our_text_combined = "\n".join([our_statement, our_proof, our_body])
+    # Definitions / books / etc. use `guide` (renamed from `body`);
+    # propositions store their content inside a `sections:` flow field
+    # — concat all section bodies for the text-similarity check.
+    if our_fields.get("_model") == "proposition":
+        sections_blob = our_fields.get("sections", "")
+        our_text_combined = sections_blob
+    else:
+        our_statement = our_fields.get("statement", "")
+        our_guide = our_fields.get("guide", "")
+        our_text_combined = "\n".join([our_statement, our_guide])
 
     joyce_html = fetch_joyce(source, match.joyce_rel)
     if not joyce_html:
