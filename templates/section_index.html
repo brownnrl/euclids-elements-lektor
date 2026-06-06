@@ -6,14 +6,34 @@
 
 {% if this.body %}{{ this.body }}{% endif %}
 
-{# Reuse the book TOC's entry() macro so each row gets the same
-   treatment as on the parent book's page — propositions render
-   their sections (lemma + main + corollary etc.) inside <dd>;
-   definitions and postulates fall through to their statement field. #}
-<dl>
-  {% for k in this.children if k._model == this.child_model %}
-    {{ entry(k) }}
+{# When the parent book has `subsections` populated (currently Book X
+   for both its `definitions` and `propositions` section_indexes),
+   render the children grouped by subsection — same shape as the
+   parent book's TOC. For books without subsections (I–IX, XI–XIII),
+   fall through to a flat <dl>. #}
+{% set book = this.parent %}
+{% set subsections = book.subsections.blocks if book.subsections is defined and book.subsections else [] %}
+
+{% if subsections %}
+  {% for sub in subsections %}
+    {% if loop.first %}{% else %}<hr size="4">{% endif %}
+    {% if this.child_model == "definition" %}
+      <h2 id="defs-{{ sub.id }}">{{ sub.def_label }}</h2>
+      {% if sub.def_caption %}<p><i>{{ sub.def_caption }}.</i>{% endif %}
+      <dl>
+        {% for k in this.children if k._model == "definition" and k.subsection == sub.id %}{{ entry(k) }}{% endfor %}
+      </dl>
+    {% elif this.child_model == "proposition" %}
+      <h2 id="props-{{ sub.id }}">{{ sub.prop_label }}</h2>
+      <dl>
+        {% for k in this.children if k._model == "proposition" and k.order|int >= sub.prop_lo and k.order|int <= sub.prop_hi %}{{ entry(k) }}{% endfor %}
+      </dl>
+    {% endif %}
   {% endfor %}
-</dl>
+{% else %}
+  <dl>
+    {% for k in this.children if k._model == this.child_model %}{{ entry(k) }}{% endfor %}
+  </dl>
+{% endif %}
 
 {% endblock %}
