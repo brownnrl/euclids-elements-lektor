@@ -90,10 +90,20 @@
 
 {# Hierarchical breadcrumb. Skipped on the root page where there's
    no ancestor chain to render — the lone "Introduction" crumb just
-   duplicated the page title. #}
+   duplicated the page title.
+
+   Book X definitions use subsection-restart numbering, so three
+   different pages all carry `title: Definition 2` (one each from
+   DefsI / DefsII / DefsIII). Disambiguate the current-page crumb by
+   prepending the Roman subsection — "Definition II.2" — when the
+   def carries a `subsection` field. Other pages fall back to their
+   plain `title`. #}
 {% if this.parent %}
+{% set crumb_current = ("Definition " ~ this.subsection ~ "." ~ this.order)
+                       if (this._model == "definition" and this.subsection)
+                       else this.title %}
 <nav class="breadcrumbs">
-  {{ ancestor_crumbs(this.parent) }}<span class="crumb-sep">&rsaquo;</span><span class="crumb-current">{{ this.title }}</span>
+  {{ ancestor_crumbs(this.parent) }}<span class="crumb-sep">&rsaquo;</span><span class="crumb-current">{{ crumb_current }}</span>
 </nav>
 {% endif %}
 
