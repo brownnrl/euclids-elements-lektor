@@ -11,10 +11,10 @@ pair that was flagged as a link diff somewhere in the audit. Sorted by frequency
 |---|---|---|---|
 | 4 | `x.def.iii.2` | `(missing)` | `propX108`, `propX85`, `propX91`, …(+1) |
 | 4 | `x.def.1` | `(missing)` | `defV5_6`, `propX6`, `trip`, …(+1) |
-| 4 | `guide` | `(missing)` | `propIX22`, `defV3`, `defV5_6`, …(+1) |
 | 4 | `(added)` | `x.def.iii.1` | `propX108`, `propX85`, `propX91`, …(+1) |
 | 4 | `(added)` | `x.def.i.1` | `defV5_6`, `propX6`, `trip`, …(+1) |
 | 3 | `x.def.3` | `(missing)` | `propX113`, `propX23`, `subjindex` |
+| 3 | `guide` | `(missing)` | `propIX22`, `defV3`, `defV7` |
 | 3 | `(added)` | `x.def.i.3` | `propX113`, `propX23`, `subjindex` |
 | 3 | `(added)` | `perseusproject` | `aboutText`, `Euclid`, `web` |
 | 3 | `(added)` | `corollary` | `propI15`, `propIII1`, `propIII16` |

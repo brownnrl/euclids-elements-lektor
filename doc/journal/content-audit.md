@@ -55,9 +55,8 @@ Audit run over 537 pages.
 ### `content/elements/books/bookV/definitions/defV5_6/contents.lr` (vs `bookV/defV5.html`)
 
 - Text similarity: **67.6%**
-- Joyce link count: 9, ours: 7
-- Missing in our version: 2
-    - `guide` → `v.14#guide, v.def.3#guide`
+- Joyce link count: 9, ours: 9
+- Missing in our version: 1
     - `x.def.1` → `x.def..i`
 - Added in our version: 1
     - `x.def.i.1` → `x.def.i.1`
@@ -89,23 +88,6 @@ Audit run over 537 pages.
 
   - Joyce: (missing)
     Ours:  this proposition states that there are more than any finite number of prime numbers that is to say there are infinitely many primes outline of the proof suppose that there are n primes a 1 a 2 a n euc…
-
-### `content/elements/prematter/Euclid/contents.lr` (vs `Euclid.html`)
-
-- Text similarity: **71.3%**
-- Joyce link count: 1, ours: 2
-- Added in our version: 1
-    - `perseusproject` → `/`
-- Text differences (first 5 passages):
-
-  - Joyce: (missing)
-    Ours:  all those who have written histories bring to this point their account of the development of this science not long after these men came euclid who brought together the elements systematizing many of t…
-  - Joyce: bretschneider karl anton die geometrie und die geometer vor eukleides ein historischer versuch teubner leipzig 1870 busard h l l first latin translation of euclid s elements commonly ascribe to adelar…
-    Ours:  (missing)
-  - Joyce: kayas g j les el ments cnrs 1978 knorr wilbur richard the evolution of the euclidean elements a study of the theory of incommensurable magnitudes and its significance for greek geometry synthese histo…
-    Ours:  (missing)
-  - Joyce: schmidt robert euclid s recipients commonly called the data golden hind press 1988 taisbak c m colored quadrangles a guide to the tenth book of euclid s elements opuscula graecolatina 24 museum tuscul…
-    Ours:  (missing)
 
 ### `content/elements/books/bookVI/propositions/propVI14/contents.lr` (vs `bookVI/propVI14.html`)
 
@@ -352,6 +334,23 @@ Audit run over 537 pages.
   - Joyce: 2
     Ours:  (missing)
   - …and 4 more passages
+
+### `content/elements/prematter/Euclid/contents.lr` (vs `Euclid.html`)
+
+- Text similarity: **86.8%**
+- Joyce link count: 1, ours: 2
+- Added in our version: 1
+    - `perseusproject` → `/`
+- Text differences (first 5 passages):
+
+  - Joyce: (missing)
+    Ours:  all those who have written histories bring to this point their account of the development of this science not long after these men came euclid who brought together the elements systematizing many of t…
+  - Joyce: (missing)
+    Ours:  eacute
+  - Joyce: (missing)
+    Ours:  eacute
+  - Joyce: (missing)
+    Ours:  eacute
 
 ### `content/elements/prematter/trip/contents.lr` (vs `trip.html`)
 
