@@ -2,8 +2,8 @@
 
 Audit run over 537 pages.
 
-- ✅ Clean (≥ 92% text similarity + no link diffs): **468**
-- ⚠️  Flagged for review: **69**
+- ✅ Clean (≥ 92% text similarity + no link diffs): **467**
+- ⚠️  Flagged for review: **70**
 - ❌ Could not fetch Joyce source: **0**
 
 ## How to read this report
@@ -366,16 +366,37 @@ Audit run over 537 pages.
     Ours:  lemma
   - …and 12 more passages
 
+### `content/elements/books/bookXII/propositions/propXII17/contents.lr` (vs `bookXII/propXII17.html`)
+
+- Text similarity: **90.9%**
+- Joyce link count: 27, ours: 27
+- Missing in our version: 2
+    - `vi.18.cor` → `vi.8#cor`
+    - `xii.18.cor` → `xii.8#cor`
+- Added in our version: 2
+    - `vi.8.cor` → `vi.8.cor`
+    - `xii.8.cor` → `xii.8.cor`
+- Text differences (first 5 passages):
+
+  - Joyce: but if in another sphere a polyhedral solid is inscribed similar to the solid in the sphere bcde then the polyhedral solid in the sphere bcde has to the polyhedral solid in the other sphere the ratio …
+    Ours:  (missing)
+  - Joyce: (missing)
+    Ours:  the detail in the diagram is so small that it s hard to see the detail is expanded to the right the purpose of this proposition and its corollary is to separate concentric spheres so that it can be pr…
+  - Joyce: guide the detail in the diagram is so small that it s hard to see the detail is expanded to the right the purpose of this proposition and its corollary is to separate concentric spheres so that it can…
+    Ours:  (missing)
+
 ### `content/elements/books/bookXI/propositions/propXI33/contents.lr` (vs `bookXI/propXI33.html`)
 
-- Text similarity: **91.1%**
+- Text similarity: **91.2%**
 - Joyce link count: 12, ours: 12
 - Text differences (first 5 passages):
 
   - Joyce: if four straight lines are continuously proportional then the first is to the fourth as a parallelepipedal solid on the first is to the similar and similarly situated parallelepipedal solid on the sec…
     Ours:  (missing)
   - Joyce: guide
-    Ours:  corollary if four straight lines are continuously proportional then the first is to the fourth as a parallelepipedal solid on the first is to the similar and similarly situated parallelepipedal solid …
+    Ours:  (missing)
+  - Joyce: (missing)
+    Ours:  if four straight lines are continuously proportional then the first is to the fourth as a parallelepipedal solid on the first is to the similar and similarly situated parallelepipedal solid on the sec…
 
 ### `content/elements/books/bookVI/propositions/propVI8/contents.lr` (vs `bookVI/propVI8.html`)
 
@@ -389,6 +410,19 @@ Audit run over 537 pages.
     Ours:  (missing)
   - Joyce: (missing)
     Ours:  if in a right angled triangle a perpendicular is drawn from the right angle to the base then the straight line so drawn is a mean proportional between the segments of the base from this it is clear th…
+
+### `content/elements/books/bookXI/propositions/propXI35/contents.lr` (vs `bookXI/propXI35.html`)
+
+- Text similarity: **91.7%**
+- Joyce link count: 14, ours: 14
+- Text differences (first 5 passages):
+
+  - Joyce: from this it is clear that if there are two equal plane angles and if elevated straight lines set up on them which are equal and contain equal angles with the original straight lines respectively then…
+    Ours:  (missing)
+  - Joyce: guide
+    Ours:  (missing)
+  - Joyce: (missing)
+    Ours:  if there are two equal plane angles and if elevated straight lines set up on them which are equal and contain equal angles with the original straight lines respectively then the perpendiculars drawn f…
 
 ### `content/elements/books/bookIII/propositions/propIII1/contents.lr` (vs `bookIII/propIII1.html`)
 
@@ -447,25 +481,6 @@ Audit run over 537 pages.
     Ours:  lemma
   - Joyce: (missing)
     Ours:  lemma
-  - Joyce: guide
-    Ours:  (missing)
-
-### `content/elements/books/bookXII/propositions/propXII17/contents.lr` (vs `bookXII/propXII17.html`)
-
-- Text similarity: **97.0%**
-- Joyce link count: 27, ours: 27
-- Missing in our version: 2
-    - `vi.18.cor` → `vi.8#cor`
-    - `xii.18.cor` → `xii.8#cor`
-- Added in our version: 2
-    - `vi.8.cor` → `vi.8.cor`
-    - `xii.8.cor` → `xii.8.cor`
-- Text differences (first 5 passages):
-
-  - Joyce: but if in another sphere a polyhedral solid is inscribed similar to the solid in the sphere bcde then the polyhedral solid in the sphere bcde has to the polyhedral solid in the other sphere the ratio …
-    Ours:  (missing)
-  - Joyce: (missing)
-    Ours:  corollary but if in another sphere a polyhedral solid is inscribed similar to the solid in the sphere bcde then the polyhedral solid in the sphere bcde has to the polyhedral solid in the other sphere …
   - Joyce: guide
     Ours:  (missing)
 
@@ -1473,7 +1488,6 @@ Audit run over 537 pages.
 - `content/elements/books/bookXI/propositions/propXI30/contents.lr` (100%)
 - `content/elements/books/bookXI/propositions/propXI31/contents.lr` (100%)
 - `content/elements/books/bookXI/propositions/propXI32/contents.lr` (100%)
-- `content/elements/books/bookXI/propositions/propXI35/contents.lr` (94%)
 - `content/elements/books/bookXI/propositions/propXI36/contents.lr` (100%)
 - `content/elements/books/bookXI/propositions/propXI37/contents.lr` (100%)
 - `content/elements/books/bookXI/propositions/propXI38/contents.lr` (100%)
