@@ -171,9 +171,15 @@ def lex_to_words(text: str) -> list[str]:
     # Lowercase, collapse whitespace
     text = text.lower()
     text = _WS_RE.sub(" ", text).strip()
-    # Tokenize by whitespace, keep only word-like (letters / digits)
-    words = re.findall(r"[a-z0-9.,;:!?'\"()/\-–—]+", text)
-    return words
+    # Tokenize: keep only contiguous letter/digit runs. Punctuation is
+    # dropped entirely so that "ab,", "ab .", "ab" all become ["ab"], and
+    # "euclid's", "euclid s" both become ["euclid", "s"]. Joyce's HTML
+    # wraps single letters in <i>…</i>, which BeautifulSoup splits as
+    # separate words once tags are stripped — our markdown asterisks
+    # don't produce that split, so this normaliser is the bridge.
+    # Citation accuracy is checked separately via the link extractor,
+    # so we don't need to preserve `.`/`,` boundaries here.
+    return re.findall(r"[a-z0-9]+", text)
 
 
 # ---------------------------------------------------------------------------
