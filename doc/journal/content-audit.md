@@ -2,8 +2,8 @@
 
 Audit run over 537 pages.
 
-- ✅ Clean (≥ 92% text similarity + no link diffs): **459**
-- ⚠️  Flagged for review: **78**
+- ✅ Clean (≥ 92% text similarity + no link diffs): **464**
+- ⚠️  Flagged for review: **73**
 - ❌ Could not fetch Joyce source: **0**
 
 ## How to read this report
@@ -89,21 +89,6 @@ Audit run over 537 pages.
   - Joyce: (missing)
     Ours:  this proposition states that there are more than any finite number of prime numbers that is to say there are infinitely many primes outline of the proof suppose that there are n primes a 1 a 2 a n euc…
 
-### `content/elements/books/bookVI/propositions/propVI14/contents.lr` (vs `bookVI/propVI14.html`)
-
-- Text similarity: **75.1%**
-- Joyce link count: 11, ours: 8
-- Missing in our version: 1
-    - `v.9` → `v.9`
-- Text differences (first 5 passages):
-
-  - Joyce: next let db be to be as bg is to bf i say that the parallelogram ab equals the parallelogram bc since db is to be as bg is to bf while db is to be as the parallelogram ab is to the parallelogram fe an…
-    Ours:  (missing)
-  - Joyce: vi 16 vi 30
-    Ours:  (missing)
-  - Joyce: x 22
-    Ours:  (missing)
-
 ### `content/elements/books/bookX/propositions/propX23/contents.lr` (vs `bookX/propX23.html`)
 
 - Text similarity: **75.2%**
@@ -133,32 +118,6 @@ Audit run over 537 pages.
     Ours:  if four straight lines are proportional and the square on the first is greater than the square on the second by the square on a straight line commensurable with the first then the square on the third …
   - Joyce: (missing)
     Ours:  a little modern algebra clarifies the situation we assume a b c d then if a b a is a numeric ratio then so is c d c it s simply because a b a c d c the lemma is the same as the lemma for proposition x…
-
-### `content/elements/books/bookVI/propositions/propVI16/contents.lr` (vs `bookVI/propVI16.html`)
-
-- Text similarity: **75.9%**
-- Joyce link count: 8, ours: 6
-- Text differences (first 5 passages):
-
-  - Joyce: next let the rectangle ab by f be equal to the rectangle cd by e i say that the four straight lines are proportional so that ab is to cd as e is to f with the same construction since the rectangle ab …
-    Ours:  (missing)
-  - Joyce: vi 14
-    Ours:  (missing)
-
-### `content/elements/books/bookVI/propositions/propVI3/contents.lr` (vs `bookVI/propVI3.html`)
-
-- Text similarity: **76.8%**
-- Joyce link count: 12, ours: 7
-- Missing in our version: 3
-    - `i.5` → `i.5`
-    - `v.11` → `v.11`
-    - `v.9` → `v.9`
-- Text differences (first 5 passages):
-
-  - Joyce: next let db be to dc as ab is to ac join ad i say that the straight line ad bisects the angle bac with the same construction since db is to dc as ab is to ac and also db is to dc as ab is to ae for ad…
-    Ours:  (missing)
-  - Joyce: vi 2
-    Ours:  (missing)
 
 ### `content/elements/prematter/web/contents.lr` (vs `web.html`)
 
@@ -207,24 +166,6 @@ Audit run over 537 pages.
   - Joyce: guide if a b m n then with c equal to a m it follows that a mc and b nc the proof assumes that magnitudes are divisible not all magnitudes however are constructively divisible for instance a 60 angle …
     Ours:  (missing)
 
-### `content/elements/books/bookVI/propositions/propVI2/contents.lr` (vs `bookVI/propVI2.html`)
-
-- Text similarity: **79.0%**
-- Joyce link count: 13, ours: 9
-- Text differences (first 5 passages):
-
-  - Joyce: next let the sides ab and ac of the triangle abc be cut proportionally so that bd is to ad as ce is to ae join de i say that de is parallel to bc with the same construction since bd is to ad as ce is …
-    Ours:  (missing)
-  - Joyce: vi 1
-    Ours:  (missing)
-  - Joyce: v 7
-    Ours:  (missing)
-  - Joyce: v 9
-    Ours:  (missing)
-  - Joyce: i 37
-    Ours:  (missing)
-  - …and 1 more passages
-
 ### `content/elements/books/bookXI/definitions/defXI1_2/contents.lr` (vs `bookXI/defXI1.html`)
 
 - Text similarity: **80.0%**
@@ -242,17 +183,6 @@ Audit run over 537 pages.
   - Joyce: i def 6
     Ours:  (missing)
   - …and 12 more passages
-
-### `content/elements/books/bookVI/propositions/propVI7/contents.lr` (vs `bookVI/propVI7.html`)
-
-- Text similarity: **80.9%**
-- Joyce link count: 12, ours: 9
-- Missing in our version: 1
-    - `i.17` → `i.17`
-- Text differences (first 5 passages):
-
-  - Joyce: next let each of the angles at c and f be supposed not less than a right angle i say again that in this case too the triangle abc is equiangular with the triangle def with the same construction we can…
-    Ours:  (missing)
 
 ### `content/elements/books/bookX/propositions/propX9/contents.lr` (vs `bookX/propX9.html`)
 
@@ -1557,9 +1487,12 @@ Audit run over 537 pages.
 - `content/elements/books/bookVI/propositions/propVI10/contents.lr` (99%)
 - `content/elements/books/bookVI/propositions/propVI11/contents.lr` (99%)
 - `content/elements/books/bookVI/propositions/propVI12/contents.lr` (99%)
+- `content/elements/books/bookVI/propositions/propVI14/contents.lr` (99%)
 - `content/elements/books/bookVI/propositions/propVI15/contents.lr` (100%)
+- `content/elements/books/bookVI/propositions/propVI16/contents.lr` (99%)
 - `content/elements/books/bookVI/propositions/propVI17/contents.lr` (100%)
 - `content/elements/books/bookVI/propositions/propVI18/contents.lr` (99%)
+- `content/elements/books/bookVI/propositions/propVI2/contents.lr` (99%)
 - `content/elements/books/bookVI/propositions/propVI20/contents.lr` (94%)
 - `content/elements/books/bookVI/propositions/propVI21/contents.lr` (97%)
 - `content/elements/books/bookVI/propositions/propVI22/contents.lr` (100%)
@@ -1569,11 +1502,13 @@ Audit run over 537 pages.
 - `content/elements/books/bookVI/propositions/propVI27/contents.lr` (100%)
 - `content/elements/books/bookVI/propositions/propVI28/contents.lr` (100%)
 - `content/elements/books/bookVI/propositions/propVI29/contents.lr` (100%)
+- `content/elements/books/bookVI/propositions/propVI3/contents.lr` (100%)
 - `content/elements/books/bookVI/propositions/propVI30/contents.lr` (99%)
 - `content/elements/books/bookVI/propositions/propVI32/contents.lr` (100%)
 - `content/elements/books/bookVI/propositions/propVI33/contents.lr` (100%)
 - `content/elements/books/bookVI/propositions/propVI4/contents.lr` (99%)
 - `content/elements/books/bookVI/propositions/propVI6/contents.lr` (98%)
+- `content/elements/books/bookVI/propositions/propVI7/contents.lr` (100%)
 - `content/elements/books/bookVI/propositions/propVI9/contents.lr` (100%)
 - `content/elements/books/bookVII/definitions/defVII11_14/contents.lr` (99%)
 - `content/elements/books/bookVII/definitions/defVII15_19/contents.lr` (96%)

@@ -20,7 +20,6 @@ pair that was flagged as a link diff somewhere in the audit. Sorted by frequency
 | 3 | `(added)` | `corollary` | `propI15`, `propIII1`, `propIII16` |
 | 2 | `viii.26` | `(missing)` | `propIX10`, `propX9` |
 | 2 | `vi.33` | `(missing)` | `defV17_18`, `defV3` |
-| 2 | `v.9` | `(missing)` | `propVI14`, `propVI3` |
 | 2 | `http://aleph0.clarku.edu/~djoyce/java/elements/elements.html` | `(missing)` | `web`, `copyright` |
 | 2 | `corollary` | `(missing)` | `defV11_13`, `defV14_16` |
 | 2 | `cor` | `(missing)` | `propIX12`, `propIX15` |
@@ -41,7 +40,6 @@ pair that was flagged as a link diff somewhere in the audit. Sorted by frequency
 | 1 | `vi.14` | `(missing)` | `propXIII8` |
 | 1 | `v.def.9-10` | `(missing)` | `defVII20` |
 | 1 | `v.9-10` | `(missing)` | `propVIII5` |
-| 1 | `v.11` | `(missing)` | `propVI3` |
 | 1 | `postulatei` | `(missing)` | `propXI3` |
 | 1 | `numbers&symbols` | `(missing)` | `subjindex` |
 | 1 | `ix15` | `(missing)` | `propII4` |
@@ -49,9 +47,7 @@ pair that was flagged as a link diff somewhere in the audit. Sorted by frequency
 | 1 | `iv,15` | `(missing)` | `propIII26` |
 | 1 | `ii.4` | `(missing)` | `propVI13` |
 | 1 | `i.def.3` | `(missing)` | `propXIII5` |
-| 1 | `i.5` | `(missing)` | `propVI3` |
 | 1 | `i.23` | `(missing)` | `defXI6_8` |
-| 1 | `i.17` | `(missing)` | `propVI7` |
 | 1 | `http://www.math.ubc.ca/people/faculty/cass/euclid/byrne.html` | `(missing)` | `web` |
 | 1 | `http://www.claymath.org/euclids-elements-constantinople-888-ad` | `(missing)` | `web` |
 | 1 | `http://farside.ph.utexas.edu/euclid/elements.pdf` | `(missing)` | `web` |
