@@ -2,8 +2,8 @@
 
 Audit run over 537 pages.
 
-- ✅ Clean (≥ 92% text similarity + no link diffs): **467**
-- ⚠️  Flagged for review: **70**
+- ✅ Clean (≥ 92% text similarity + no link diffs): **468**
+- ⚠️  Flagged for review: **69**
 - ❌ Could not fetch Joyce source: **0**
 
 ## How to read this report
@@ -376,15 +376,6 @@ Audit run over 537 pages.
     Ours:  (missing)
   - Joyce: guide
     Ours:  corollary if four straight lines are continuously proportional then the first is to the fourth as a parallelepipedal solid on the first is to the similar and similarly situated parallelepipedal solid …
-
-### `content/elements/books/bookVII/propositions/propVII32/contents.lr` (vs `bookVII/propVII32.html`)
-
-- Text similarity: **91.2%**
-- Joyce link count: 1, ours: 1
-- Text differences (first 5 passages):
-
-  - Joyce: guide after the previous proposition this one really doesn t need to be stated at all
-    Ours:  (missing)
 
 ### `content/elements/books/bookVI/propositions/propVI8/contents.lr` (vs `bookVI/propVI8.html`)
 
@@ -1305,6 +1296,7 @@ Audit run over 537 pages.
 - `content/elements/books/bookVII/propositions/propVII29/contents.lr` (100%)
 - `content/elements/books/bookVII/propositions/propVII3/contents.lr` (100%)
 - `content/elements/books/bookVII/propositions/propVII30/contents.lr` (100%)
+- `content/elements/books/bookVII/propositions/propVII32/contents.lr` (99%)
 - `content/elements/books/bookVII/propositions/propVII33/contents.lr` (100%)
 - `content/elements/books/bookVII/propositions/propVII34/contents.lr` (100%)
 - `content/elements/books/bookVII/propositions/propVII35/contents.lr` (100%)
