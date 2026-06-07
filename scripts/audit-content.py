@@ -102,6 +102,18 @@ _EUCREF_RE = re.compile(
     r"|(?:[IVX]+)\.(?:Def\.|Post\.)?\d+"
     r"|C\.N\.\d*)"
 )
+# Inline citation patterns Joyce embeds as <a> link text (e.g.
+# "I.Def.2", "X.5", "V.11", "X.Def.II.3", "C.N.1"). Our markdown uses
+# `@TOKEN` shortcodes which _EUCREF_RE strips above; this companion
+# regex strips the same tokens from Joyce's rendered prose so the
+# text-similarity pass isn't penalised for the markup asymmetry. Link
+# accuracy is checked separately via the link extractor.
+_INLINE_CITE_RE = re.compile(
+    r"\b(?:X\.Def\.(?:III|II|I)\.\d+"
+    r"|(?:I{1,3}|IV|V|VI{0,3}|IX|X|XI{0,3}|XII|XIII)\.\d+\.Cor"
+    r"|(?:I{1,3}|IV|V|VI{0,3}|IX|X|XI{0,3}|XII|XIII)\.(?:Def\.|Post\.)?\d+"
+    r"|C\.N\.\d*)\b"
+)
 # Strip `[!just …]` margin directives
 _JUST_RE = re.compile(r"\[!just\s+[^\]]+\]")
 # Strip markdown emphasis pairs and headings
@@ -151,6 +163,7 @@ def lex_to_words(text: str) -> list[str]:
     # Link comparison catches citation accuracy separately.
     text = _JUST_RE.sub(" ", text)
     text = _EUCREF_RE.sub(" ", text)
+    text = _INLINE_CITE_RE.sub(" ", text)
     # Markdown markup
     text = _MD_HEADING_RE.sub("", text)
     text = _MD_EMPHASIS_RE.sub(lambda m: m.group(1) or m.group(2) or "", text)
