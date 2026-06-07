@@ -15,12 +15,12 @@ pair that was flagged as a link diff somewhere in the audit. Sorted by frequency
 | 4 | `(added)` | `x.def.iii.1` | `propX108`, `propX85`, `propX91`, …(+1) |
 | 4 | `(added)` | `x.def.i.1` | `defV5_6`, `propX6`, `trip`, …(+1) |
 | 3 | `x.def.3` | `(missing)` | `propX113`, `propX23`, `subjindex` |
-| 3 | `v.9` | `(missing)` | `propVI14`, `propVI15`, `propVI3` |
 | 3 | `(added)` | `x.def.i.3` | `propX113`, `propX23`, `subjindex` |
 | 3 | `(added)` | `perseusproject` | `aboutText`, `Euclid`, `web` |
 | 3 | `(added)` | `corollary` | `propI15`, `propIII1`, `propIII16` |
 | 2 | `viii.26` | `(missing)` | `propIX10`, `propX9` |
 | 2 | `vi.33` | `(missing)` | `defV17_18`, `defV3` |
+| 2 | `v.9` | `(missing)` | `propVI14`, `propVI3` |
 | 2 | `http://aleph0.clarku.edu/~djoyce/java/elements/elements.html` | `(missing)` | `web`, `copyright` |
 | 2 | `corollary` | `(missing)` | `defV11_13`, `defV14_16` |
 | 2 | `cor` | `(missing)` | `propIX12`, `propIX15` |

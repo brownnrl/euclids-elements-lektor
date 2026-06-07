@@ -2,8 +2,8 @@
 
 Audit run over 537 pages.
 
-- ✅ Clean (≥ 92% text similarity + no link diffs): **458**
-- ⚠️  Flagged for review: **79**
+- ✅ Clean (≥ 92% text similarity + no link diffs): **459**
+- ⚠️  Flagged for review: **78**
 - ❌ Could not fetch Joyce source: **0**
 
 ## How to read this report
@@ -89,19 +89,6 @@ Audit run over 537 pages.
 
   - Joyce: (missing)
     Ours:  this proposition states that there are more than any finite number of prime numbers that is to say there are infinitely many primes outline of the proof suppose that there are n primes a 1 a 2 a n euc…
-
-### `content/elements/books/bookVI/propositions/propVI15/contents.lr` (vs `bookVI/propVI15.html`)
-
-- Text similarity: **71.1%**
-- Joyce link count: 8, ours: 5
-- Missing in our version: 1
-    - `v.9` → `v.9`
-- Text differences (first 5 passages):
-
-  - Joyce: next let the sides of the triangles abc and ade be reciprocally proportional that is to say let ae be to ab as ca is to ad i say that the triangle abc equals the triangle ade if bd is again joined sin…
-    Ours:  (missing)
-  - Joyce: vi 19
-    Ours:  (missing)
 
 ### `content/elements/prematter/Euclid/contents.lr` (vs `Euclid.html`)
 
@@ -1571,6 +1558,7 @@ Audit run over 537 pages.
 - `content/elements/books/bookVI/propositions/propVI10/contents.lr` (99%)
 - `content/elements/books/bookVI/propositions/propVI11/contents.lr` (99%)
 - `content/elements/books/bookVI/propositions/propVI12/contents.lr` (99%)
+- `content/elements/books/bookVI/propositions/propVI15/contents.lr` (100%)
 - `content/elements/books/bookVI/propositions/propVI17/contents.lr` (100%)
 - `content/elements/books/bookVI/propositions/propVI18/contents.lr` (99%)
 - `content/elements/books/bookVI/propositions/propVI20/contents.lr` (94%)
