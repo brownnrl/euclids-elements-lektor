@@ -289,18 +289,14 @@ Audit run over 537 pages.
 
 ### `content/elements/books/bookV/definitions/defV7/contents.lr` (vs `bookV/defV7.html`)
 
-- Text similarity: **88.3%**
-- Joyce link count: 5, ours: 4
-- Missing in our version: 1
-    - `guide` → `cn#guide`
+- Text similarity: **88.9%**
+- Joyce link count: 5, ours: 5
 - Text differences (first 5 passages):
 
   - Joyce: guide
     Ours:  (missing)
   - Joyce: (missing)
     Ours:  mx then ny mz definition 7 now says w x
-  - Joyce: see the guide for the common notions
-    Ours:  (missing)
   - Joyce: (missing)
     Ours:  w x and w x y z then u v y z if u v w x and w x y z then u v y z if u v w x and w x y z then u v y z euclid only has the first property which is is proposition its proof depends only on the definition…
   - Joyce: (missing)
