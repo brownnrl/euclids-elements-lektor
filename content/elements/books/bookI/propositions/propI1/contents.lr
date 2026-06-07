@@ -17,7 +17,7 @@ statement: To construct an equilateral triangle on a given finite straight line.
 ----
 proof:
 
-Let *AB* be the given finite straight line.
+Let {AB} be the given finite straight line.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="340" height="260" tabindex="0"></canvas>
@@ -32,9 +32,13 @@ geomlib.init({
         "A;point;free;125,130",
         "B;point;free;215,130",
         "AB;line;connect;A,B",
-        "Acirc;circle;radius;A,B",
-        "Bcirc;circle;radius;B,A",
-        "CD;line;bichord;Bcirc,Acirc;0;0;0",
+        // Circles named for the three labelled points they pass through
+        // (BCD = the circle centred at A through B,C,D; ACE = centred at B
+        // through A,C,E). Joyce's prose uses these three-point names; the
+        // geometry is unchanged from the original Acirc / Bcirc.
+        "BCD;circle;radius;A,B",
+        "ACE;circle;radius;B,A",
+        "CD;line;bichord;ACE,BCD;0;0;0",
         "C;point;first;CD;black;green",
         "AC;line;connect;A,C",
         "BC;line;connect;B,C",
@@ -42,28 +46,37 @@ geomlib.init({
         "E;point;last;AE;black;0",
         "BD;line;extend;B,A,A,B;0;0;0",
         "D;point;last;BD;black;0",
-        "ABC;polygon;triangle;A,B,C;0;0;0;random"
+        "ABC;polygon;triangle;A,B,C;0;0;0;random",
+        // Invisible aliases for the reversed/rotated variants Joyce uses in
+        // prose ("circle CDB" = "circle BCD", "line CA" = "line AC", etc.).
+        // Color "0" on every visible channel keeps them out of the default
+        // render; geomlib still resolves them by name when the prose
+        // shortcode `{CA}` etc. lights up.
+        "CDB;circle;radius;A,B;0;0;0;0",
+        "CAE;circle;radius;B,A;0;0;0;0",
+        "BA;line;connect;B,A;0;0;0",
+        "CA;line;connect;C,A;0;0;0",
+        "CB;line;connect;C,B;0;0;0"
     ],
 });
 </script>
 </figure>
 
-It is required to construct an equilateral triangle on the straight line *AB.*
+It is required to construct an equilateral triangle on the straight line {AB}.
 
-Describe the circle *BCD* with center *A* and radius *AB.* Again describe the circle *ACE* with center *B* and radius *BA.* Join the straight lines *CA* and *CB* from the point *C* at which the circles cut one another to the points *A* and *B.* [!just I.Post.3; I.Post.1]
+Describe the circle {BCD} with center {A} and radius {AB}. Again describe the circle {ACE} with center {B} and radius {BA}. Join the straight lines {CA} and {CB} from the point {C} at which the circles cut one another to the points {A} and {B}. [!just I.Post.3; I.Post.1]
 
-Now, since the point *A* is the center of the circle *CDB,* therefore *AC* equals *AB.* Again, since the point *B* is the center of the circle *CAE,* therefore *BC* equals *BA.* [!just I.Def.15]
+Now, since the point {A} is the center of the circle {CDB}, therefore {AC} equals {AB}. Again, since the point {B} is the center of the circle {CAE}, therefore {BC} equals {BA}. [!just I.Def.15]
 
-But *AC* was proved equal to *AB,* therefore each of the straight lines *AC* and *BC* equals *AB.*
+But {AC} was proved equal to {AB}, therefore each of the straight lines {AC} and {BC} equals {AB}.
 
-And things which equal the same thing also equal one another, therefore *AC* also equals *BC.* [!just C.N.1]
+And things which equal the same thing also equal one another, therefore {AC} also equals {BC}. [!just C.N.1]
 
-Therefore the three straight lines *AC, AB,* and *BC* equal one another.
+Therefore the three straight lines {AC}, {AB}, and {BC} equal one another.
 
-Therefore the triangle *ABC* is equilateral, and it has been constructed on the given finite straight line *AB.* [!just I.Def.20]
+Therefore the triangle {ABC} is equilateral, and it has been constructed on the given finite straight line {AB}. [!just I.Def.20]
 
-<div class="qed">Q.E.F.</div>
-<br clear="all">
+[!qef]
 ----
 guide:
 

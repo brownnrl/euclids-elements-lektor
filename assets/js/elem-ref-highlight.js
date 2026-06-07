@@ -1,0 +1,124 @@
+// Euclid's Elements Lektor — element-reference hover/touch highlighting.
+//
+// Looks at every <span class="elem-ref" data-elem="NAME"> in the page
+// (emitted by the eucref plugin's `{!NAME}` shortcode) and binds:
+//   - mouseenter / mouseleave  →  hover-highlight on desktop
+//   - pointerdown              →  sticky toggle for touch
+// Each handler flips the corresponding geomlib element's `shouldHighlight`
+// flag and calls `slate.update()` to redraw.
+//
+// Target slate resolution (in order):
+//   1. data-canvas="canvas_N"  →  exact id match
+//   2. nearest enclosing div.theorem  →  first slate inside that section
+//   3. fallback: geomlib.slates[0]
+// If no slate in the chosen scope has an element of the requested name,
+// console.warn once and skip binding (the span still renders as italic
+// text but does nothing on hover).
+
+(function () {
+    "use strict";
+
+    function findSlateByCanvasId(id) {
+        if (!window.geomlib || !window.geomlib.slates) return null;
+        for (var i = 0; i < window.geomlib.slates.length; i++) {
+            var s = window.geomlib.slates[i];
+            if (s.canvas && s.canvas.id === id) return s;
+        }
+        return null;
+    }
+
+    function findSlatesInSection(span) {
+        // Walk up to the enclosing div.theorem (each prop_section is one).
+        var section = span.closest("div.theorem");
+        if (!section || !window.geomlib || !window.geomlib.slates) return [];
+        var out = [];
+        for (var i = 0; i < window.geomlib.slates.length; i++) {
+            var s = window.geomlib.slates[i];
+            if (s.canvas && section.contains(s.canvas)) out.push(s);
+        }
+        return out;
+    }
+
+    function resolveTarget(span) {
+        var name = span.getAttribute("data-elem");
+        var canvasId = span.getAttribute("data-canvas");
+        if (!name) return null;
+
+        // Explicit canvas selector wins.
+        if (canvasId) {
+            var s = findSlateByCanvasId(canvasId);
+            if (!s) {
+                console.warn("elem-ref: no canvas with id=" + canvasId
+                             + " for {!" + name + ":" + canvasId + "}");
+                return null;
+            }
+            var el = s.lookupElement(name);
+            if (!el) {
+                console.warn("elem-ref: canvas " + canvasId
+                             + " has no element named '" + name + "'");
+                return null;
+            }
+            return { slate: s, element: el };
+        }
+
+        // Default: first in-section slate that has the named element.
+        var sectionSlates = findSlatesInSection(span);
+        for (var i = 0; i < sectionSlates.length; i++) {
+            var el2 = sectionSlates[i].lookupElement(name);
+            if (el2) return { slate: sectionSlates[i], element: el2 };
+        }
+
+        // Fallback: walk every slate on the page in document order.
+        if (window.geomlib && window.geomlib.slates) {
+            for (var j = 0; j < window.geomlib.slates.length; j++) {
+                var el3 = window.geomlib.slates[j].lookupElement(name);
+                if (el3) return { slate: window.geomlib.slates[j], element: el3 };
+            }
+        }
+
+        console.warn("elem-ref: no element named '" + name + "' found on page");
+        return null;
+    }
+
+    function bindSpan(span) {
+        var target = resolveTarget(span);
+        if (!target) return;
+
+        var slate = target.slate;
+        var elem = target.element;
+
+        function setHighlight(on) {
+            elem.shouldHighlight = !!on;
+            slate.update();
+        }
+
+        span.addEventListener("mouseenter", function () {
+            if (!span.classList.contains("active")) setHighlight(true);
+        });
+        span.addEventListener("mouseleave", function () {
+            if (!span.classList.contains("active")) setHighlight(false);
+        });
+        span.addEventListener("pointerdown", function (e) {
+            // Toggle sticky state; useful for touch where there's no hover.
+            // On mouse this is fine too — click to pin/unpin.
+            var active = span.classList.toggle("active");
+            setHighlight(active);
+            e.preventDefault();
+        });
+    }
+
+    function init() {
+        var spans = document.querySelectorAll("span.elem-ref");
+        for (var i = 0; i < spans.length; i++) bindSpan(spans[i]);
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", function () {
+            // Microtask so the inline <script>geomlib.init(...)</script>
+            // tags inside each <figure> have actually run.
+            setTimeout(init, 0);
+        });
+    } else {
+        setTimeout(init, 0);
+    }
+})();

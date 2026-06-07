@@ -1,16 +1,34 @@
-"""Mistune extension for Euclid's Elements citations.
+"""Mistune extension for Euclid's Elements citations + diagram element
+references + proof markers.
 
 Authoring syntax in markdown bodies:
 
     Inline:   @I.5  @I.Def.10  @I.Post.3  @C.N.1  @II.4  @XI.Def.2
+              {AB}  {BCD}
     Block:    [!just I.3, I.46; I.31]
+              [!qed]
+              [!qef]
+              [!title Lemma 1]
 
-Both forms resolve a citation token to a URL under
-`/elements/books/book{N}/{section}/{slug}/`. The block form renders as
-`<div class="just">…<a/>, <a/><br><a/>…</div>` — same shape the proof
-templates already expect.
+`@TOKEN` resolves to a URL under
+`/elements/books/book{N}/{section}/{slug}/`. The `[!just …]` block
+renders as `<div class="just">…<a/>, <a/><br><a/>…</div>` — same shape
+the proof templates already expect.
 
-Tokens recognized:
+`{NAME}` marks a geometric element reference. Rendered as
+`<span class="elem-ref" data-elem="NAME">NAME</span>`. The browser-side
+`elem-ref-highlight.js` binds hover/touch handlers that flip the
+corresponding geomlib element's `shouldHighlight` flag. The JS resolves
+the target slate by walking up to the enclosing `<div class="theorem">`
+section, then picking the first canvas inside it with a matching
+element (falling back to the first canvas on the page).
+
+`[!qed]` / `[!qef]` emit `<div class="qed">Q.E.D.</div>` and
+`<div class="qed">Q.E.F.</div>` proof-end markers. `[!title TEXT]`
+emits `<div class="title">TEXT</div>` for lemma/sub-section titles.
+These replace raw HTML in markdown source.
+
+Tokens recognized for `@`:
   - `{Roman}.{number}`          → proposition  e.g. I.5, II.13, XIII.18
   - `{Roman}.Def.{number}`      → definition   e.g. I.Def.10, XI.Def.2
   - `{Roman}.Post.{number}`     → postulate    e.g. I.Post.3
@@ -59,6 +77,42 @@ _TOKEN_BARE = (
 )
 INLINE_RE = re.compile(rf"@({_TOKEN_BARE})")
 BLOCK_RE = re.compile(r"\[!just\s+(.+?)\]")
+
+# Element-reference inline shortcode: {NAME}.
+#   NAME — Joyce/Euclid label: letter-led, may carry digits, primes,
+#          hyphens (e.g. A, AB, BCD, A', ABC'). Underscores are
+#          deliberately excluded — mistune's inline lexer stops at `_`
+#          (emphasis prefix), which would split the token.
+#
+# The leading `!` was tried first (`{!AB}`) but mistune also stops at
+# `!`. Bare `{NAME}` arrives intact at the text() walker, no lexer
+# patch required. The constrained NAME pattern (letter-led identifier
+# with no underscores) keeps free-form `{...}` prose from matching.
+#
+# The explicit canvas selector (`{AB:canvas_2}`) is not supported
+# inline: mistune splits `canvas_2` at the underscore. The browser-side
+# JS falls back to the nearest in-section canvas, which covers the
+# expected cases. For the rare edge case where a specific canvas must
+# be targeted from prose, drop to raw inline HTML:
+#   <span class="elem-ref" data-elem="AB" data-canvas="canvas_2">AB</span>
+ELEM_REF_RE = re.compile(
+    r"\{(?P<name>[A-Za-z][A-Za-z0-9'\-]*)\}"
+)
+
+# Standalone block directives that REPLACE the paragraph they sit in.
+# `[!just …]` keeps the existing in-paragraph extraction (floats right
+# alongside the prose); [!qed] / [!qef] / [!title …] are full-width
+# blocks that stand on their own line.
+BLOCK_REPLACE_RE = re.compile(
+    r"^\s*\[!(?P<kind>qed|qef|title)(?:\s+(?P<arg>[^\]]+))?\]\s*$"
+)
+
+# Combined inline pattern: citations AND element refs in one walk. The
+# named groups disambiguate which kind of token matched.
+_INLINE_ANY_RE = re.compile(
+    rf"@(?P<cite>{_TOKEN_BARE})"
+    rf"|\{{(?P<elem>[A-Za-z][A-Za-z0-9'\-]*)\}}"
+)
 
 
 # Book X subsection-restart numbering: each batch has its own 1..N
@@ -143,6 +197,23 @@ def _render_entry(entry: str) -> str:
     return " ".join(parts)
 
 
+def _render_elem_ref(name: str) -> str:
+    """Render a `{NAME}` inline shortcode as a span the browser-side JS
+    binds hover/touch handlers to."""
+    return f'<span class="elem-ref" data-elem="{name}">{name}</span>'
+
+
+def _render_block_replace(kind: str, arg: str | None) -> str:
+    """Render a `[!qed]` / `[!qef]` / `[!title TEXT]` directive."""
+    if kind == "qed":
+        return '<div class="qed">Q.E.D.</div>'
+    if kind == "qef":
+        return '<div class="qed">Q.E.F.</div>'
+    if kind == "title":
+        return f'<div class="title">{arg or ""}</div>'
+    return ""
+
+
 def _render_just(content: str) -> str:
     """Render '[!just I.3, I.46; I.31]' content into a <div class="just">.
 
@@ -165,18 +236,22 @@ class EucrefsRendererMixin:
 
     def text(self, text):
         # The parent text() HTML-escapes its argument, so we can't just
-        # substitute @TOKEN in-place and hand the result up — the <a>
-        # we generated would become &lt;a. Instead, walk the text in
-        # chunks: escape non-match spans via the parent, splice raw
-        # link HTML for each @TOKEN.
-        if "@" not in text:
+        # substitute matched tokens in-place and hand the result up —
+        # the <a>/<span> we generated would become &lt;a. Instead, walk
+        # the text in chunks: escape non-match spans via the parent,
+        # splice raw HTML for each `@TOKEN` citation or `{NAME}`
+        # element reference.
+        if "@" not in text and "{" not in text:
             return super().text(text)
         parts = []
         last = 0
-        for m in INLINE_RE.finditer(text):
+        for m in _INLINE_ANY_RE.finditer(text):
             if m.start() > last:
                 parts.append(super().text(text[last:m.start()]))
-            parts.append(_link(m.group(1)))
+            if m.group("cite"):
+                parts.append(_link(m.group("cite")))
+            else:
+                parts.append(_render_elem_ref(m.group("elem")))
             last = m.end()
         if last == 0:
             return super().text(text)
@@ -185,9 +260,15 @@ class EucrefsRendererMixin:
         return "".join(parts)
 
     def paragraph(self, text):
-        # Extract any [!just …] directives that appear inside this
-        # paragraph — they can be standalone (their own paragraph) or
-        # embedded mid-sentence ("Describe the circle. [!just I.3]").
+        # Standalone-block directives ([!qed]/[!qef]/[!title …]) live on
+        # their own paragraph; replace the whole <p> with the rendered
+        # div so we get full-width block layout rather than inline text.
+        m = BLOCK_REPLACE_RE.match(text)
+        if m:
+            return _render_block_replace(m.group("kind"), m.group("arg")) + "\n"
+        # Otherwise: extract any [!just …] directives that appear inside
+        # this paragraph — they can be standalone (their own paragraph)
+        # or embedded mid-sentence ("Describe the circle. [!just I.3]").
         # Either way, emit them BEFORE the surrounding <p> so the
         # float-right CSS lines them up alongside the paragraph they
         # accompany. Mistune passes the directive text through as
