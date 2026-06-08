@@ -46,18 +46,20 @@ geomlib.init({
         "E;point;last;AE;black;0",
         "BD;line;extend;B,A,A,B;0;0;0",
         "D;point;last;BD;black;0",
-        "ABC;polygon;triangle;A,B,C;0;0;0;random",
-        // Invisible aliases for the reversed/rotated variants Joyce uses in
-        // prose ("circle CDB" = "circle BCD", "line CA" = "line AC", etc.).
-        // Color "0" on every visible channel keeps them out of the default
-        // render; geomlib still resolves them by name when the prose
-        // shortcode `{CA}` etc. lights up.
-        "CDB;circle;radius;A,B;0;0;0;0",
-        "CAE;circle;radius;B,A;0;0;0;0",
-        "BA;line;connect;B,A;0;0;0",
-        "CA;line;connect;C,A;0;0;0",
-        "CB;line;connect;C,B;0;0;0"
+        "ABC;polygon;triangle;A,B,C;0;0;0;random"
     ],
+    // Joyce's prose names the same circle or line by every conventional
+    // letter-permutation ("circle CDB" = "circle BCD", "line BA" = "line
+    // AB", etc.). Register those as aliases so the `{NAME}` shortcode
+    // resolves them to the canonical element without forcing a separate
+    // invisible duplicate per name.
+    aliases: {
+        "CDB": "BCD",
+        "CAE": "ACE",
+        "BA":  "AB",
+        "CA":  "AC",
+        "CB":  "BC"
+    }
 });
 </script>
 </figure>
