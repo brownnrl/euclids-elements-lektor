@@ -18,11 +18,19 @@
 (function () {
     "use strict";
 
+    // Slate exposes a public `canvas` getter in geomlib >= 0.4.0; before
+    // that the canvas was a `_canvas` private field. Fall back so this
+    // glue works against either bundle.
+    function slateCanvas(s) {
+        return s && (s.canvas || s._canvas) || null;
+    }
+
     function findSlateByCanvasId(id) {
         if (!window.geomlib || !window.geomlib.slates) return null;
         for (var i = 0; i < window.geomlib.slates.length; i++) {
             var s = window.geomlib.slates[i];
-            if (s.canvas && s.canvas.id === id) return s;
+            var c = slateCanvas(s);
+            if (c && c.id === id) return s;
         }
         return null;
     }
@@ -44,8 +52,9 @@
         var following = [];
         for (var i = 0; i < window.geomlib.slates.length; i++) {
             var s = window.geomlib.slates[i];
-            if (!s.canvas) continue;
-            var pos = s.canvas.compareDocumentPosition(span);
+            var c = slateCanvas(s);
+            if (!c) continue;
+            var pos = c.compareDocumentPosition(span);
             // DOCUMENT_POSITION_FOLLOWING = 4 means span follows canvas
             if (pos & 4) preceding.push({slate: s, idx: i});
             else following.push({slate: s, idx: i});
