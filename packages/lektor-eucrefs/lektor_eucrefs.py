@@ -49,6 +49,7 @@ Reusability note: when adding Apollonius / Hilbert / Archimedes content
 later, register a second resolver under a different prefix scheme
 (e.g. `@Apol.II.4`) and dispatch on the prefix.
 """
+import os
 import re
 
 from lektor.pluginsystem import Plugin
@@ -292,3 +293,11 @@ class EucrefsPlugin(Plugin):
 
     def on_markdown_config(self, config, **extra):
         config.renderer_mixins.append(EucrefsRendererMixin)
+
+    def on_setup_env(self, **extra):
+        # Local-dev toggle: when EUCLIDS_GEOMLIB_LOCAL is truthy, the
+        # layout swaps the unpkg @brownnrl/geomlib script tag for a
+        # local /geomlib-dev.js (symlinked into assets/ at the geomlib
+        # repo's dist/bundle.js). Templates read this as a global.
+        val = os.environ.get("EUCLIDS_GEOMLIB_LOCAL", "").strip().lower()
+        self.env.jinja_env.globals["geomlib_local"] = val in ("1", "true", "yes", "on")
