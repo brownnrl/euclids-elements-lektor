@@ -27,16 +27,34 @@
         return null;
     }
 
-    function findSlatesInSection(span) {
-        // Walk up to the enclosing div.theorem (each prop_section is one).
-        var section = span.closest("div.theorem");
-        if (!section || !window.geomlib || !window.geomlib.slates) return [];
-        var out = [];
+    // Rank candidate slates for a given span by DOM order:
+    //   1. Slates whose canvas precedes the span — preferred, with the
+    //      latest-preceding canvas first (the span is "talking about"
+    //      the canvas right above it).
+    //   2. Slates whose canvas follows the span — fallback for
+    //      forward-reference cases (prose intro that names elements
+    //      before the canvas appears).
+    // Same span-then-section ordering gives the right answer on
+    // multi-canvas pages like propI.1 (proof figure + Zeno guide
+    // figure): a {NAME} after canvas_1 targets canvas_1, a {NAME}
+    // before canvas_0 targets canvas_0.
+    function rankSlatesByDomOrder(span) {
+        if (!window.geomlib || !window.geomlib.slates) return [];
+        var preceding = [];
+        var following = [];
         for (var i = 0; i < window.geomlib.slates.length; i++) {
             var s = window.geomlib.slates[i];
-            if (s.canvas && section.contains(s.canvas)) out.push(s);
+            if (!s.canvas) continue;
+            var pos = s.canvas.compareDocumentPosition(span);
+            // DOCUMENT_POSITION_FOLLOWING = 4 means span follows canvas
+            if (pos & 4) preceding.push({slate: s, idx: i});
+            else following.push({slate: s, idx: i});
         }
-        return out;
+        // preceding: latest first (closest to span)
+        preceding.sort(function(a, b) { return b.idx - a.idx; });
+        // following: earliest first
+        following.sort(function(a, b) { return a.idx - b.idx; });
+        return preceding.concat(following).map(function(x) { return x.slate; });
     }
 
     function resolveTarget(span) {
@@ -61,19 +79,12 @@
             return { slate: s, element: el };
         }
 
-        // Default: first in-section slate that has the named element.
-        var sectionSlates = findSlatesInSection(span);
-        for (var i = 0; i < sectionSlates.length; i++) {
-            var el2 = sectionSlates[i].lookupElement(name);
-            if (el2) return { slate: sectionSlates[i], element: el2 };
-        }
-
-        // Fallback: walk every slate on the page in document order.
-        if (window.geomlib && window.geomlib.slates) {
-            for (var j = 0; j < window.geomlib.slates.length; j++) {
-                var el3 = window.geomlib.slates[j].lookupElement(name);
-                if (el3) return { slate: window.geomlib.slates[j], element: el3 };
-            }
+        // DOM-order resolution: try the latest preceding slate first,
+        // then earlier ones, then any following slates.
+        var ranked = rankSlatesByDomOrder(span);
+        for (var i = 0; i < ranked.length; i++) {
+            var found = ranked[i].lookupElement(name);
+            if (found) return { slate: ranked[i], element: found };
         }
 
         console.warn("elem-ref: no element named '" + name + "' found on page");

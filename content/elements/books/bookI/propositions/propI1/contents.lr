@@ -130,13 +130,30 @@ geomlib.init({
         "C;point;first;CD",
         "E;point;lineSlider;CD,159,95",
         "ABE;polygon;triangle;A,B,E;0;0;black;random",
-        "CE;line;connect;C,E"
+        "CE;line;connect;C,E",
+        // Invisible target lines for Zeno's conceptual segments. In
+        // Zeno's argument "AC" and "BC" are the straight lines from
+        // A or B up through E to C — the same paths the polygon edge
+        // (A→E, B→E) and the CE line trace, but addressable by name
+        // so {AC} / {BC} highlight the full A↔C and B↔C runs.
+        "AC;line;connect;A,C;0;0;0",
+        "BC;line;connect;B,C;0;0;0"
     ],
+    // Joyce's prose forms: AEC explicitly names E on the line A→C
+    // ("the straight line AEC"); EC reverses CE; CA / CB the
+    // letter-reversed forms.
+    aliases: {
+        "AEC": "AC",
+        "BEC": "BC",
+        "EC":  "CE",
+        "CA":  "AC",
+        "CB":  "BC"
+    }
 });
 </script>
 </figure>
 
-Zeno of Sidon criticized the proof because it was not shown that the sides do not meet before they reach the vertices. Suppose *AC* and *BC* meet at *E* before they reach *C,* that is, the straight lines *AEC* and *BEC* have a common segment *EC.* Then they would contain a triangle *ABE* which is not equilateral, but isosceles.
+Zeno of Sidon criticized the proof because it was not shown that the sides do not meet before they reach the vertices. Suppose {AC} and {BC} meet at {E} before they reach {C}, that is, the straight lines {AEC} and {BEC} have a common segment {EC}. Then they would contain a triangle {ABE} which is not equilateral, but isosceles.
 
 Zeno recognized that in order to destroy his counterexample it was necessary to assume that straight lines cannot have a common segment. Proclus relates a supposed proof of that statement, the same one found in proposition @XI.1, but it is faulty. Proclus and Posidonius quoted properties of lines and circles that were never proven and never explicitly assumed as postulates.
 
