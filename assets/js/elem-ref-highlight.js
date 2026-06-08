@@ -100,31 +100,12 @@
         return null;
     }
 
-    // Override geomlib's per-element highlight colors so a single gold
-    // reads cleanly across name / vertex / edge / face. geomlib 0.4.0+
-    // ships #FFD700 as the default for all four (see brownnrl/euclid#72),
-    // so this override is a no-op there — kept for older bundles and
-    // for any consumer that customises the defaults.
-    var HL_COLOR = "#FFD700";
-
-    function applyHighlightColors(elem) {
-        try {
-            elem.nameHighlightColor   = HL_COLOR;
-            elem.vertexHighlightColor = HL_COLOR;
-            elem.edgeHighlightColor   = HL_COLOR;
-            elem.faceHighlightColor   = HL_COLOR;
-        } catch (e) {
-            // Older bundles may not have all setters; ignore.
-        }
-    }
-
     function bindSpan(span) {
         var target = resolveTarget(span);
         if (!target) return;
 
         var slate = target.slate;
         var elem = target.element;
-        applyHighlightColors(elem);
 
         function setHighlight(on) {
             elem.shouldHighlight = !!on;
