@@ -59,7 +59,66 @@ geomlib.init({
         "BA":  "AB",
         "CA":  "AC",
         "CB":  "BC"
+    },
+    // Slideshow walk-through (geomlib >= 0.5.0). Each slide declares
+    // its visible / highlighted element sets and any marginal
+    // justifications; geomlib renders the "▶ Present" button in the
+    // slate-controls row and walks Next/Prev through these slides.
+    // Justification URLs come from window.eucrefs (emitted further
+    // down on this page).
+    slides: [
+        { text: "Let {AB} be the given finite straight line.",
+          visible: ["AB"] },
+        { text: "It is required to construct an equilateral triangle on the straight line {AB}.",
+          visible: ["AB","ABC"],
+          highlighted: ["ABC"] },
+        { text: "Describe the circle {BCD} with centre {A} and radius {AB}.",
+          visible: ["AB","BCD","D"],
+          justifications: [{ ref: "I.Post.3" }] },
+        { text: "Again describe the circle {ACE} with centre {B} and radius {BA}.",
+          visible: ["AB","BCD","ACE","D","E"],
+          justifications: [{ ref: "I.Post.3" }] },
+        { text: "Join the straight lines {CA} and {CB} from the point {C} at which the circles cut one another.",
+          visible: ["AB","BCD","ACE","C","AC","BC"],
+          justifications: [{ ref: "I.Post.1" }] },
+        { text: "Since the point {A} is the centre of the circle {CDB}, therefore {AC} equals {AB}.",
+          highlighted: ["A","BCD","AC","AB"],
+          justifications: [{ ref: "I.Def.15" }] },
+        { text: "Again, since the point {B} is the centre of the circle {CAE}, therefore {BC} equals {BA}.",
+          highlighted: ["B","ACE","BC","AB"],
+          justifications: [{ ref: "I.Def.15" }] },
+        { text: "But {AC} was proved equal to {AB}.",
+          highlighted: ["AC","AB"] },
+        { text: "Therefore each of the straight lines {AC} and {BC} equals {AB}.",
+          highlighted: ["AC","BC","AB"] },
+        { text: "And things which equal the same thing also equal one another,",
+          highlighted: ["AC","BC","AB"],
+          justifications: [{ ref: "C.N.1" }] },
+        { text: "therefore {AC} also equals {BC}.",
+          highlighted: ["AC","BC"] },
+        { text: "Therefore the three straight lines {AC}, {AB}, and {BC} equal one another.",
+          highlighted: ["AC","AB","BC"] },
+        { text: "Therefore the triangle {ABC} is equilateral, and it has been constructed on the given finite straight line {AB}.",
+          visible: ["A","B","C","D","E","AB","BCD","ACE","CD","AC","BC","AE","BD","ABC"],
+          highlighted: ["A","B","C","AB","AC","BC","ABC"],
+          justifications: [{ ref: "I.Def.20" }] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
     }
+});
+
+// Per-page lookup that the slideshow's resolveJustification callback
+// consults. Hand-authored for propI.1 — once more props get slides,
+// move this into a Jinja filter on the eucref plugin that emits the
+// page's resolved citations site-wide.
+window.eucrefs = (window.eucrefs || {});
+Object.assign(window.eucrefs, {
+    "I.Post.1": "/elements/books/bookI/postulates/post1/",
+    "I.Post.3": "/elements/books/bookI/postulates/post3/",
+    "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+    "I.Def.20": "/elements/books/bookI/definitions/defI20/",
+    "C.N.1":    "/elements/commonnotions/cn1/"
 });
 </script>
 </figure>
