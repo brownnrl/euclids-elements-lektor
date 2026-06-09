@@ -46,6 +46,21 @@ div.theorem p {
   margin:1px;
 }
 
+/* Element reference (emitted by the eucref plugin's `{!NAME}` shortcode).
+   Italic to preserve Joyce's letter-label convention; the dotted underline
+   on hover hints that the span is interactive. `.active` is set by the
+   browser-side JS when a touch/tap toggles sticky highlight. */
+span.elem-ref {
+  font-style: italic;
+  cursor: pointer;
+  border-bottom: 1px dotted transparent;
+  transition: border-bottom-color 120ms ease-out;
+}
+span.elem-ref:hover,
+span.elem-ref.active {
+  border-bottom-color: currentColor;
+}
+
 div.theorem h1 {
   font-family: 'Felipa';
   color:#0020C2; 
