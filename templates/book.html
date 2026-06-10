@@ -25,20 +25,23 @@
 
 <h2>Table of Contents</h2>
 <ul>
+  {# Order matches the body sections below: Definitions, Postulates,
+     Common Notions, Propositions, Guide. Heath/Heiberg sequence. #}
   {% if subsections %}
-    {# Per-subsection links replace the single Definitions /
-       Propositions entries when subsections are populated. #}
+    {# Per-subsection links replace the single Definitions entry; the
+       interleaved Definitions / Propositions pairs match the body's
+       woven rendering for books with subsections (currently Book X). #}
     {% for sub in subsections %}
       {% set sub_def_count = defs|selectattr('subsection', 'equalto', sub.id)|list|length %}
       <li><a href="#defs-{{ sub.id }}">{{ sub.def_label }}</a> ({{ sub_def_count }})</li>
       <li><a href="#props-{{ sub.id }}">{{ sub.prop_label }}</a></li>
     {% endfor %}
-  {% else %}
-    {% if defs_section  %}<li><a href="#defs">Definitions</a> ({{ defs.count() }})</li>{% endif %}
-    {% if props_section %}<li><a href="#props">Propositions</a> ({{ props.count() }})</li>{% endif %}
+  {% elif defs_section %}
+    <li><a href="#defs">Definitions</a> ({{ defs.count() }})</li>
   {% endif %}
   {% if posts_section %}<li><a href="#posts">Postulates</a> ({{ posts.count() }})</li>{% endif %}
   {% if cns_section   %}<li><a href="#cns">Common Notions</a> ({{ cns.count() }})</li>{% endif %}
+  {% if props_section and not subsections %}<li><a href="#props">Propositions</a> ({{ props.count() }})</li>{% endif %}
   {% if this.guide     %}<li><a href="#guide">Guide to {{ this.title }}</a></li>{% endif %}
 </ul>
 
