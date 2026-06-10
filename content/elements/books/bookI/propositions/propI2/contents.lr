@@ -124,7 +124,10 @@ geomlib.init({
           },
           justifications: [{ ref: "I.Post.1" }, { ref: "I.1" }] },
         { text: "Produce the straight lines {AE} and {BF} in a straight line with {DA} and {DB}.",
-          visible: ["BC","AB","D","DAB","AL","L","LE","E","BG","G","GF","F"],
+          // The zero-color highlight-target lines named in the caption
+          // must be IN the visible set for hover emphasis to render —
+          // drawEdge bails on visible=false before checking emphasis.
+          visible: ["BC","AB","D","DAB","AL","L","LE","E","BG","G","GF","F","AE","BF","DA","DB"],
           transition: {
               // Each produced line runs as one continuous gesture:
               // A out to L and on to E, then B out to G and on to F.
@@ -145,7 +148,9 @@ geomlib.init({
           },
           justifications: [{ ref: "I.Post.3" }] },
         { text: "And again, describe the circle {GKL} with center {D} and radius {DG}.",
-          visible: ["BC","AB","D","DAB","AL","L","LE","E","BG","G","GF","F","CGH","H","GKL","K"],
+          // DG included so the caption's {DG} hover can render (see
+          // slide 4's note on zero-color highlight targets).
+          visible: ["BC","AB","D","DAB","AL","L","LE","E","BG","G","GF","F","CGH","H","GKL","K","DG"],
           transition: {
               animations: [
                   { elem: "GKL", name: geomlib.A.Circle.compass }
