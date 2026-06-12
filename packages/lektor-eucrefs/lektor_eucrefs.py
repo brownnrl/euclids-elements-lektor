@@ -79,11 +79,17 @@ _TOKEN_BARE = (
 INLINE_RE = re.compile(rf"@({_TOKEN_BARE})")
 BLOCK_RE = re.compile(r"\[!just\s+(.+?)\]")
 
-# Element-reference inline shortcode: {NAME}.
+# Element-reference inline shortcode: {NAME} or {DISPLAY|element}.
 #   NAME — Joyce/Euclid label: letter-led, may carry digits, primes,
 #          hyphens (e.g. A, AB, BCD, A', ABC'). Underscores are
 #          deliberately excluded — mistune's inline lexer stops at `_`
 #          (emphasis prefix), which would split the token.
+#   The optional `|element` part (display override) renders DISPLAY
+#   but binds the highlight to `element` — for prose names that
+#   collide with another element's name, e.g. "the angle {ABC|angBint}"
+#   where the bare token would resolve to the triangle ABC. The
+#   element part may carry digits (angBint) but follows the same
+#   no-underscore constraint.
 #
 # The leading `!` was tried first (`{!AB}`) but mistune also stops at
 # `!`. Bare `{NAME}` arrives intact at the text() walker, no lexer
@@ -97,7 +103,7 @@ BLOCK_RE = re.compile(r"\[!just\s+(.+?)\]")
 # be targeted from prose, drop to raw inline HTML:
 #   <span class="elem-ref" data-elem="AB" data-canvas="canvas_2">AB</span>
 ELEM_REF_RE = re.compile(
-    r"\{(?P<name>[A-Za-z][A-Za-z0-9'\-]*)\}"
+    r"\{(?P<name>[A-Za-z][A-Za-z0-9'\-]*)(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?\}"
 )
 
 # Standalone block directives that REPLACE the paragraph they sit in.
@@ -112,7 +118,8 @@ BLOCK_REPLACE_RE = re.compile(
 # named groups disambiguate which kind of token matched.
 _INLINE_ANY_RE = re.compile(
     rf"@(?P<cite>{_TOKEN_BARE})"
-    rf"|\{{(?P<elem>[A-Za-z][A-Za-z0-9'\-]*)\}}"
+    rf"|\{{(?P<elem>[A-Za-z][A-Za-z0-9'\-]*)"
+    rf"(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?\}}"
 )
 
 
@@ -198,10 +205,12 @@ def _render_entry(entry: str) -> str:
     return " ".join(parts)
 
 
-def _render_elem_ref(name: str) -> str:
-    """Render a `{NAME}` inline shortcode as a span the browser-side JS
-    binds hover/touch handlers to."""
-    return f'<span class="elem-ref" data-elem="{name}">{name}</span>'
+def _render_elem_ref(name: str, target: str | None = None) -> str:
+    """Render a `{NAME}` / `{DISPLAY|element}` inline shortcode as a
+    span the browser-side JS binds hover/touch handlers to. With a
+    display override, the span shows NAME but binds to `target`."""
+    elem = target or name
+    return f'<span class="elem-ref" data-elem="{elem}">{name}</span>'
 
 
 def _render_block_replace(kind: str, arg: str | None) -> str:
@@ -252,7 +261,7 @@ class EucrefsRendererMixin:
             if m.group("cite"):
                 parts.append(_link(m.group("cite")))
             else:
-                parts.append(_render_elem_ref(m.group("elem")))
+                parts.append(_render_elem_ref(m.group("elem"), m.group("target")))
             last = m.end()
         if last == 0:
             return super().text(text)
