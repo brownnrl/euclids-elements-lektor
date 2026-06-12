@@ -15,13 +15,13 @@ statement: In isosceles triangles the angles at the base equal one another, and,
 ----
 proof:
 
-Let *ABC* be an isosceles triangle having the side *AB* equal to the side *AC,* and let the straight lines *BD* and *CE* be produced further in a straight line with *AB* and *AC.* [!just I.Def.20; I.Post.2]
+Let {ABC} be an isosceles triangle having the side {AB} equal to the side {AC}, and let the straight lines {BD} and {CE} be produced further in a straight line with {AB} and {AC}. [!just I.Def.20; I.Post.2]
 
-I say that the angle *ABC* equals the angle *ACB,* and the angle *CBD* equals the angle *BCE.*
+I say that the angle {ABC|angBint} equals the angle {ACB}, and the angle {CBD} equals the angle {BCE}.
 
 [!just I.3; I.Post.1]
 
-Take an arbitrary point *F* on *BD.* Cut off *AG* from *AE* the greater equal to *AF* the less, and join the straight lines *FC* and *GB.*
+Take an arbitrary point {F} on {BD}. Cut off {AG} from {AE} the greater equal to {AF} the less, and join the straight lines {FC} and {GB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="350" tabindex="0"></canvas>
@@ -47,21 +47,217 @@ geomlib.init({
         "AG;line;cutoff;A,E,A,F;0;0;0",
         "G;point;last;AG",
         "FC;line;connect;F,C",
-        "BG;line;connect;B,G"
+        "BG;line;connect;B,G",
+        // Invisible highlight targets (zero-color; render gold only
+        // under highlight or hover) for the segments and triangles
+        // the prose names.
+        "AB;line;connect;A,B;0;0;0",
+        "AC;line;connect;A,C;0;0;0",
+        "BC;line;connect;B,C;0;0;0",
+        "AF;line;connect;A,F;0;0;0",
+        "AE;line;connect;A,E;0;0;0",
+        "BF;line;connect;B,F;0;0;0",
+        "CG;line;connect;C,G;0;0;0",
+        "AFC;polygon;triangle;A,F,C;0;0;0;0",
+        "AGB;polygon;triangle;A,G,B;0;0;0;0",
+        "BFC;polygon;triangle;B,F,C;0;0;0;0",
+        "CGB;polygon;triangle;C,G,B;0;0;0;0",
+        // Transitory cut-off circle for slide 5 — centre A through F,
+        // cutting AE at G. The one-circle case from I.3's guide: AF
+        // already has an end at A, so a single sweep is the whole
+        // construction; the general I.2/I.1 machinery is assumed.
+        "AFcirc;circle;radius;A,F;0;0;0;0",
+        // Angle markers — zero-color sectors, quarter-radius via
+        // midpoint chains. Arm order picks the interior arc
+        // (sign-checked; see doc/process.md).
+        "mAB;point;midpoint;A,B;0;0",
+        "qAB;point;midpoint;A,mAB;0;0",
+        "angA;sector;sector;A,qAB,C;0;0;0;0",
+        "qBC;point;midpoint;B,M;0;0",
+        "angBint;sector;sector;B,qBC,A;0;0;0;0",
+        "mAC;point;midpoint;A,C;0;0",
+        "qCA;point;midpoint;C,mAC;0;0",
+        "angCint;sector;sector;C,qCA,B;0;0;0;0",
+        "mBF;point;midpoint;B,F;0;0",
+        "qBF;point;midpoint;B,mBF;0;0",
+        "angBext;sector;sector;B,qBF,C;0;0;0;0",
+        "qCB;point;midpoint;C,M;0;0",
+        "angCext;sector;sector;C,qCB,G;0;0;0;0",
+        "mBG;point;midpoint;B,G;0;0",
+        "qBG;point;midpoint;B,mBG;0;0",
+        "angABG;sector;sector;B,qBG,A;0;0;0;0",
+        "angACF;sector;sector;C,qCA,F;0;0;0;0",
+        "mCF;point;midpoint;C,F;0;0",
+        "qFC;point;midpoint;F,mCF;0;0",
+        "angF;sector;sector;F,qFC,B;0;0;0;0",
+        "mGA;point;midpoint;G,A;0;0",
+        "qGA;point;midpoint;G,mGA;0;0",
+        "angG;sector;sector;G,qGA,B;0;0;0;0",
+        "angCBG;sector;sector;B,qBG,C;0;0;0;0",
+        "angBCF;sector;sector;C,qCB,F;0;0;0;0"
     ],
+    // F is introduced mid-proof ("Take an arbitrary point F"), so it
+    // opts out of the slideshow's every-slide draggable auto-union
+    // (geomlib >= 0.7.1) and appears with its slide-4 animation. It
+    // stays draggable from then on.
+    deferDraggables: ["F"],
+    // Letter permutations and angle names → canonical elements. Where
+    // an angle's letters collide with a triangle element name (angle
+    // ABC vs the triangle; AFC/AGB/BFC/CGB likewise), the prose and
+    // captions use the {DISPLAY|element} override instead (geomlib
+    // >= 0.7.1) — e.g. {ABC|angBint} shows "ABC" but binds the angle
+    // marker.
+    aliases: {
+        "ACB": "angCint",
+        "CBD": "angBext",
+        "BCE": "angCext",
+        "FBC": "angBext",
+        "GCB": "angCext",
+        "FAG": "angA",
+        "BAC": "angA",
+        "ACF": "angACF",
+        "ABG": "angABG",
+        "BCF": "angBCF",
+        "CBG": "angCBG",
+        "FA":  "AF",
+        "GA":  "AG",
+        "GB":  "BG"
+    },
+    slides: [
+        { text: "Let {ABC} be an isosceles triangle having the side {AB} equal to the side {AC},",
+          visible: ["ABC"],
+          highlighted: ["AB","AC"],
+          justifications: [{ ref: "I.Def.20" }] },
+        { text: "and let the straight lines {BD} and {CE} be produced further in a straight line with {AB} and {AC}.",
+          visible: ["ABC","BD","D","CE","E"],
+          transition: {
+              animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "CE", name: geomlib.A.Line.straightEdgeExtend }
+              ]
+          },
+          justifications: [{ ref: "I.Post.2" }] },
+        { text: "I say that the angle {ABC|angBint} equals the angle {ACB}, and the angle {CBD} equals the angle {BCE}.",
+          visible: ["ABC","BD","D","CE","E","angBint","angCint","angBext","angCext"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "angBint", name: geomlib.A.Sector.sweep },
+                  { elem: "angCint", name: geomlib.A.Sector.sweep },
+                  { elem: "angBext", name: geomlib.A.Sector.sweep },
+                  { elem: "angCext", name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "Take an arbitrary point {F} on {BD}.",
+          visible: ["ABC","BD","D","CE","E","angBint","angCint","angBext","angCext","F"],
+          transition: {
+              animations: [
+                  { elem: "F", name: geomlib.A.Point.appear }
+              ]
+          } },
+        { text: "Cut off {AG} from {AE} the greater equal to {AF} the less,",
+          visible: ["ABC","BD","D","CE","E","angBint","angCint","angBext","angCext","F","G","AG","AE","AF","AFcirc"],
+          transition: {
+              animations: [
+                  { elem: "AFcirc", name: geomlib.A.Circle.compass },
+                  { elem: "G",      name: geomlib.A.Point.appear }
+              ]
+          },
+          justifications: [{ ref: "I.3" }] },
+        { text: "and join the straight lines {FC} and {GB}.",
+          visible: ["ABC","BD","D","CE","E","angBint","angCint","angBext","angCext","F","G","AG","AE","AF","FC","BG"],
+          transition: {
+              animations: [
+                  { elem: "FC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BG", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          },
+          justifications: [{ ref: "I.Post.1" }] },
+        { text: "Since {AF} equals {AG}, and {AB} equals {AC},",
+          highlighted: ["AF","AG","AB","AC"] },
+        { text: "therefore the two sides {FA} and {AC} equal the two sides {GA} and {AB}, respectively, and they contain a common angle, the angle {FAG}.",
+          visible: ["ABC","BD","D","CE","E","angBint","angCint","angBext","angCext","F","G","AG","AE","AF","FC","BG","angA"],
+          highlighted: ["AF","AC","AG","AB"],
+          transition: {
+              animations: [
+                  { elem: "angA", name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "Therefore the base {FC} equals the base {GB}, the triangle {AFC} equals the triangle {AGB},",
+          visible: ["ABC","BD","D","CE","E","angBint","angCint","angBext","angCext","F","G","AG","AE","AF","FC","BG","angA","AFC","AGB"],
+          highlighted: ["FC","BG","AFC","AGB"],
+          justifications: [{ ref: "I.4" }] },
+        { text: "and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides, that is, the angle {ACF} equals the angle {ABG}, and the angle {AFC|angF} equals the angle {AGB|angG}.",
+          visible: ["ABC","BD","D","CE","E","angBint","angCint","angBext","angCext","F","G","AG","AE","AF","FC","BG","angA","AFC","AGB","angACF","angABG","angF","angG"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "angACF", name: geomlib.A.Sector.sweep },
+                  { elem: "angABG", name: geomlib.A.Sector.sweep },
+                  { elem: "angF",   name: geomlib.A.Sector.sweep },
+                  { elem: "angG",   name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "Since the whole {AF} equals the whole {AG}, and in these {AB} equals {AC}, therefore the remainder {BF} equals the remainder {CG}.",
+          visible: ["ABC","BD","D","CE","E","angBint","angCint","angBext","angCext","F","G","AG","AE","AF","FC","BG","angA","AFC","AGB","angACF","angABG","angF","angG","BF","CG"],
+          highlighted: ["AF","AG","AB","AC","BF","CG"],
+          justifications: [{ ref: "C.N.3" }] },
+        { text: "But {FC} was also proved equal to {GB}, therefore the two sides {BF} and {FC} equal the two sides {CG} and {GB} respectively,",
+          highlighted: ["FC","BG","BF","CG"] },
+        { text: "and the angle {BFC|angF} equals the angle {CGB|angG}, while the base {BC} is common to them.",
+          visible: ["ABC","BD","D","CE","E","angBint","angCint","angBext","angCext","F","G","AG","AE","AF","FC","BG","angA","AFC","AGB","angACF","angABG","angF","angG","BF","CG","BC"],
+          highlighted: ["angF","angG","BC"] },
+        { text: "Therefore the triangle {BFC} also equals the triangle {CGB}, and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides.",
+          visible: ["ABC","BD","D","CE","E","angBint","angCint","angBext","angCext","F","G","AG","AE","AF","FC","BG","angA","AFC","AGB","angACF","angABG","angF","angG","BF","CG","BC","BFC","CGB"],
+          highlighted: ["BFC","CGB"],
+          justifications: [{ ref: "I.4" }] },
+        { text: "Therefore the angle {FBC} equals the angle {GCB}, and the angle {BCF} equals the angle {CBG}.",
+          visible: ["ABC","BD","D","CE","E","angBint","angCint","angBext","angCext","F","G","AG","AE","AF","FC","BG","angA","AFC","AGB","angACF","angABG","angF","angG","BF","CG","BC","BFC","CGB","angBCF","angCBG"],
+          highlighted: ["angBext","angCext"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "angBCF", name: geomlib.A.Sector.sweep },
+                  { elem: "angCBG", name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "Accordingly, since the whole angle {ABG} was proved equal to the angle {ACF}, and in these the angle {CBG} equals the angle {BCF}, the remaining angle {ABC|angBint} equals the remaining angle {ACB}, and they are at the base of the triangle {ABC}.",
+          highlighted: ["angABG","angACF","angCBG","angBCF","angBint","angCint"],
+          justifications: [{ ref: "C.N.3" }] },
+        { text: "But the angle {FBC} was also proved equal to the angle {GCB}, and they are under the base.",
+          highlighted: ["angBext","angCext"] },
+        { text: "Therefore in isosceles triangles the angles at the base equal one another, and, if the equal straight lines are produced further, then the angles under the base equal one another.",
+          highlighted: ["ABC","angBint","angCint","angBext","angCext"],
+          justifications: [{ ref: "Q.E.D." }] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
+});
+
+// Per-page citation lookup for the slideshow's resolveJustification
+// callback — same hand-authored pattern as propI.1 – propI.4.
+window.eucrefs = (window.eucrefs || {});
+Object.assign(window.eucrefs, {
+    "I.Def.20": "/elements/books/bookI/definitions/defI20/",
+    "I.Post.1": "/elements/books/bookI/postulates/post1/",
+    "I.Post.2": "/elements/books/bookI/postulates/post2/",
+    "I.3":      "/elements/books/bookI/propositions/propI3/",
+    "I.4":      "/elements/books/bookI/propositions/propI4/",
+    "C.N.3":    "/elements/books/bookI/commonnotions/cn3/"
 });
 </script>
 </figure>
 
-Since *AF* equals *AG,* and *AB* equals *AC,* therefore the two sides *FA* and *AC* equal the two sides *GA* and *AB,* respectively, and they contain a common angle, the angle *FAG.*
+Since {AF} equals {AG}, and {AB} equals {AC}, therefore the two sides {FA} and {AC} equal the two sides {GA} and {AB}, respectively, and they contain a common angle, the angle {FAG}.
 
-Therefore the base *FC* equals the base *GB,* the triangle *AFC* equals the triangle *AGB,* and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides, that is, the angle *ACF* equals the angle *ABG,* and the angle *AFC* equals the angle *AGB.* [!just I.4]
+Therefore the base {FC} equals the base {GB}, the triangle {AFC} equals the triangle {AGB}, and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides, that is, the angle {ACF} equals the angle {ABG}, and the angle {AFC|angF} equals the angle {AGB|angG}. [!just I.4]
 
-Since the whole *AF* equals the whole *AG,* and in these *AB* equals *AC,* therefore the remainder *BF* equals the remainder *CG.* [!just C.N.3]
+Since the whole {AF} equals the whole {AG}, and in these {AB} equals {AC}, therefore the remainder {BF} equals the remainder {CG}. [!just C.N.3]
 
-But *FC* was also proved equal to *GB,* therefore the two sides *BF* and *FC* equal the two sides *CG* and *GB* respectively, and the angle *BFC* equals the angle *CGB,* while the base *BC* is common to them. Therefore the triangle *BFC* also equals the triangle *CGB,* and the remaining angles  equal the remaining angles respectively, namely those opposite the equal sides. Therefore the angle *FBC* equals the angle *GCB,* and the angle *BCF* equals the angle *CBG.* [!just I.4]
+But {FC} was also proved equal to {GB}, therefore the two sides {BF} and {FC} equal the two sides {CG} and {GB} respectively, and the angle {BFC|angF} equals the angle {CGB|angG}, while the base {BC} is common to them. Therefore the triangle {BFC} also equals the triangle {CGB}, and the remaining angles  equal the remaining angles respectively, namely those opposite the equal sides. Therefore the angle {FBC} equals the angle {GCB}, and the angle {BCF} equals the angle {CBG}. [!just I.4]
 
-Accordingly, since the whole angle *ABG* was proved equal to the angle *ACF,* and in these the angle *CBG* equals the angle *BCF,* the remaining angle *ABC* equals the remaining angle *ACB,* and they are at the base of the triangle *ABC.* But the angle *FBC* was also proved equal to the angle *GCB,* and they are under the base. [!just C.N.3]
+Accordingly, since the whole angle {ABG} was proved equal to the angle {ACF}, and in these the angle {CBG} equals the angle {BCF}, the remaining angle {ABC|angBint} equals the remaining angle {ACB}, and they are at the base of the triangle {ABC}. But the angle {FBC} was also proved equal to the angle {GCB}, and they are under the base. [!just C.N.3]
 
 Therefore *in isosceles triangles the angles at the base equal one another, and, if the equal straight lines are produced further, then the angles under the base equal one another.*
 

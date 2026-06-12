@@ -17,7 +17,7 @@ proof:
 
 Let {ABC} and {DEF} be two triangles having the two sides {AB} and {AC} equal to the two sides {DE} and {DF} respectively, namely {AB} equal to {DE} and {AC} equal to {DF}, and the angle {BAC} equal to the angle {EDF}.
 
-I say that the base {BC} also equals the base {EF}, the triangle {ABC} equals the triangle {DEF}, and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides, that is, the angle {ABC} equals the angle {DEF}, and the angle {ACB} equals the angle {DFE}.
+I say that the base {BC} also equals the base {EF}, the triangle {ABC} equals the triangle {DEF}, and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides, that is, the angle {ABC|angB} equals the angle {DEF|angE}, and the angle {ACB} equals the angle {DFE}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="360" height="250" tabindex="0"></canvas>
@@ -81,10 +81,10 @@ geomlib.init({
         "angF;sector;sector;F,qF,E;0;0;0;0"
     ],
     // Joyce's prose names the angles by their three letters; the
-    // unambiguous ones alias to the zero-color angle markers. (The
-    // angles AT B and AT E would be "ABC"/"DEF" — those names belong
-    // to the triangles, so their caption tokens highlight the
-    // triangle; the slides' own highlighted sets carry the markers.)
+    // unambiguous ones alias to the zero-color angle markers. The
+    // angles AT B and AT E share the triangle names "ABC"/"DEF", so
+    // prose and captions bind them with the {DISPLAY|element}
+    // override instead (geomlib >= 0.7.1): {ABC|angB}, {DEF|angE}.
     aliases: {
         "BAC": "angA",
         "EDF": "angD",
@@ -116,7 +116,7 @@ geomlib.init({
           highlighted: ["BC","EF"] },
         { text: "the triangle {ABC} equals the triangle {DEF}, and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides,",
           highlighted: ["ABC","DEF","AB","AC","BC","DE","DF","EF"] },
-        { text: "that is, the angle {ABC} equals the angle {DEF},",
+        { text: "that is, the angle {ABC|angB} equals the angle {DEF|angE},",
           visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF","angA","angD","angB","angE"],
           transition: {
               mode: "parallel",
@@ -158,7 +158,7 @@ geomlib.init({
               ]
           },
           justifications: [{ ref: "C.N.4" }] },
-        { text: "And the remaining angles also coincide with the remaining angles and equal them, the angle {ABC} equals the angle {DEF}, and the angle {ACB} equals the angle {DFE}.",
+        { text: "And the remaining angles also coincide with the remaining angles and equal them, the angle {ABC|angB} equals the angle {DEF|angE}, and the angle {ACB} equals the angle {DFE}.",
           transition: {
               animations: [
                   { elem: "angB", name: geomlib.A.Sector.sweep },
@@ -201,7 +201,7 @@ But {B} also coincides with {E}, hence the base {BC} coincides with the base {EF
 
 Thus the whole triangle {ABC} coincides with the whole triangle {DEF} and equals it. [!just C.N.4]
 
-And the remaining angles also coincide with the remaining angles and equal them, the angle {ABC} equals the angle {DEF}, and the angle {ACB} equals the angle {DFE}.
+And the remaining angles also coincide with the remaining angles and equal them, the angle {ABC|angB} equals the angle {DEF|angE}, and the angle {ACB} equals the angle {DFE}.
 
 Therefore *if two triangles have two sides equal to two sides respectively, and have the angles contained by the equal straight lines equal, then they also have the base equal to the base, the triangle equals the triangle, and the remaining angles  equal the remaining angles respectively, namely those opposite the equal sides.*
 
