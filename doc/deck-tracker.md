@@ -38,9 +38,9 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 5 | 2 (I.4, I.5) |
+| Book I | 48 | 5 (+ I.6 🚧) | 3 (I.4, I.5, I.6) |
 | Books II–XIII | 417 | 0 | — |
-| **Total** | **465** | **5** | **2** |
+| **Total** | **465** | **5** | **3** |
 
 ---
 
@@ -56,7 +56,7 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.3 | Cut off a line equal to the less | C | ✅ | 10 | Circle.compass, both straightEdge, Point.appear | — | Full cut-off chain shown here |
 | I.4 | SAS congruence | T | ✅ | 22 | Polygon.superpose, Sector.sweep | ⚠ | First superposition; angA–angF markers |
 | I.5 | Isosceles base angles (pons asinorum) | T | ✅ | 18 | Circle.compass, straightEdge×2, Point.appear, Sector.sweep | ⚠ | `deferDraggables:["F"]`; worked example in process.md; many `ang*` markers |
-| I.6 | Converse of I.5 (equal angles ⇒ equal sides) | T | ⬜ | | | ⚠? | Reductio leaning on base angles; angle-dense |
+| I.6 | Converse of I.5 (equal angles ⇒ equal sides) | T | 🚧 | 9 | Sector.sweep, Point.appear, Line.straightEdgeConnect, Polygon.outline | ⚠ | Reductio; containment+gold emphasis (no superpose). Markers old-pattern → #91 rework. Slide 3–4 case-variants + D-slide-back deferred to [euclid#94](https://github.com/brownnrl/euclid/issues/94) + [#95](https://github.com/brownnrl/euclid/issues/95). Pending visual pass |
 | I.7 | Uniqueness of triangle on a base | T | ⬜ | | | ⚠? | Reductio with angle inequalities |
 | I.8 | SSS congruence | T | ⬜ | | | ⚠? | Superposition (`Polygon.superpose` fits); concludes contained angles equal |
 | I.9 | Bisect an angle | C | ⬜ | | | ⚠? | Subject is an angle; wants clean half-angle marking → #91 |
@@ -108,10 +108,28 @@ No decks yet. Add a per-book section here as the work reaches each
 book, mirroring the Book I table. Prose conversion for all of these is
 already complete (see [journal/journal.md](journal/journal.md)).
 
-## When #91 lands
+## Deck polish to-dos (from the visual walk)
 
-1. process.md's angle-marker section gets rewritten for the new
-   construction.
-2. Re-author the ⚠ decks (currently **I.4, I.5**) to drop the
-   midpoint-chain markers for the new angle-marker primitive.
-3. Flip ⚠? estimates to real values as each angle-heavy deck is built.
+- **I.4 — vertex label `C` drops out.** `C` is a derived point
+  (`point;last`), so unlike the free/slider vertices (A, B, D, E, F) it
+  is not auto-unioned into every slide; its label disappears whenever a
+  slide's `visible` set omits it (gone on slide 1, faint by slide 14).
+  Fix: add `"C"` to the slides' `visible` sets so the label stays across
+  all 22 slides. (Pre-existing; not caused by the 0.8.0 migration.)
+
+## 0.8.0 angle-marker migration (#91 shipped 2026-06-13)
+
+geomlib 0.8.0 shipped `E.Sector.angleMarker` (vertex + two arm points,
+auto-interior, fixed radius, palette fill — no midpoint-chain helpers,
+no sign-check). Pin bumped to **0.8.0** in `templates/layout.html`.
+Markers migrated: **I.4 ✅, I.5 ✅ (flat — see open Q1), I.6 ✅.**
+
+## Open questions / deferred
+
+| # | Item | State | Trigger to resolve |
+|---|---|---|---|
+| Q1 | **I.5 same-vertex marker overlap** — 4 markers at B and 4 at C overlap at the default radius (migrated "flat" per author's call). | Migrated, overlapping. | geomlib **0.8.1** auto radius-stepping (deferred there). Then drop any hand-radii. |
+| Q2 | **Markers render in the initial/static figure** — 0.8.0 markers are normal colored elements (always drawn; no `visible=false` via params). The initial/printed figure should match the source diagram (Euclid draws no angle arcs); the modern marker view is wanted only during the slide walk + on highlight. | Requested. | Library session to add a general **initial-visibility parameter** for markers (annotated in coord doc — API shape is their call, not ours). Then author markers initially hidden, revealed via slide `visible` sets / highlight. |
+| Q3 | **I.6 slides 3–4** — the trichotomy two case-variants ("one of them is greater") and the cut-off point **D sliding back between A and B** are stubbed (single figure + `A.Point.appear`). | v1 simple version shipped. | geomlib **#94** (`A.Polygon.translateAside`, case-variant display) + **#95** (`A.Point.slide`, point glide). Handed back to the library session. |
+| Q4 | **process.md angle-marker section** still describes the retired midpoint-chain + sign-check pattern. | Stale. | Rewrite for the `angleMarker` construction (TODO this batch). |
+| Q5 | **Visual pass not yet run** — blocked on the shared `lektor serve` (PID 18738; library session says not theirs). Nothing committed; pin bump + all marker migrations are unverified. | Blocked. | Confirm/kill PID 18738 → single clean `lektor serve` → walk I.1–I.6. |
