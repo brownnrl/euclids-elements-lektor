@@ -38,9 +38,9 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 5 (+ I.6 🚧) | 3 (I.4, I.5, I.6) |
+| Book I | 48 | 6 (I.1–I.6) + I.9 🚧 | markers on 0.8.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
-| **Total** | **465** | **5** | **3** |
+| **Total** | **465** | **6** | — |
 
 ---
 
@@ -59,7 +59,7 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.6 | Converse of I.5 (equal angles ⇒ equal sides) | T | 🚧 | 9 | Sector.sweep, Point.appear, Line.straightEdgeConnect, Polygon.outline | ⚠ | Reductio; containment+gold emphasis (no superpose). Markers old-pattern → #91 rework. Slide 3–4 case-variants + D-slide-back deferred to [euclid#94](https://github.com/brownnrl/euclid/issues/94) + [#95](https://github.com/brownnrl/euclid/issues/95). Pending visual pass |
 | I.7 | Uniqueness of triangle on a base | T | ⬜ | | | ⚠? | Reductio with angle inequalities |
 | I.8 | SSS congruence | T | ⬜ | | | ⚠? | Superposition (`Polygon.superpose` fits); concludes contained angles equal |
-| I.9 | Bisect an angle | C | ⬜ | | | ⚠? | Subject is an angle; wants clean half-angle marking → #91 |
+| I.9 | Bisect an angle | C | 🚧 | 11 | Sector.sweep, Point.appear, Circle.compass, Line.straightEdgeConnect, Polygon.outline | ⚠ | 0.8.0 angleMarker. 3 markers at A (whole ∠BAC + halves ∠DAF/∠EAF) — built flat, overlap until 0.8.1 auto-nesting. Equilateral triangle shown in full — two compass circles (+ the slide-4 cut-off circle = Joyce's three circles), deliberately revived to connect to the Guide's construction-steps canvas. Pending visual pass |
 | I.10 | Bisect a segment | C | ⬜ | | | — | Pure construction; cites I.9/I.1 |
 | I.11 | Erect a perpendicular at a point on a line | C | ⬜ | | | ~ | One right-angle marker at most |
 | I.12 | Drop a perpendicular from a point off a line | C | ⬜ | | | ~ | One right-angle marker at most |
