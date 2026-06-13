@@ -54,31 +54,16 @@ geomlib.init({
         "DE;line;connect;D,E",
         "DF;line;connect;D,F",
         "EF;line;connect;E,F",
-        // Angle markers — zero-color sectors that render in the gold
-        // emphasis stroke only while animated or highlighted. Radius
-        // is a quarter of one arm via Joyce's midpoint-chain trick.
-        "mAB;point;midpoint;A,B;0;0",
-        "qA;point;midpoint;A,mAB;0;0",
-        "angA;sector;sector;A,qA,C;0;0;0;0",
-        // Arm order picks the interior arc (the fixed sweep direction
-        // is inherited from the Java applet — swapping the radial arm
-        // flips interior/reflex; see Joyce's own figures).
-        "mBC;point;midpoint;B,C;0;0",
-        "qB;point;midpoint;B,mBC;0;0",
-        "angB;sector;sector;B,qB,A;0;0;0;0",
-        "mAC;point;midpoint;A,C;0;0",
-        "qC;point;midpoint;C,mAC;0;0",
-        "angC;sector;sector;C,qC,B;0;0;0;0",
-        "mDE;point;midpoint;D,E;0;0",
-        "qD;point;midpoint;D,mDE;0;0",
-        "angD;sector;sector;D,qD,F;0;0;0;0",
-        // Radial on the EF arm (reusing Joyce's a = midpoint of EF),
-        // sweeping toward D — interior arc, same reasoning as angB.
-        "qE;point;midpoint;E,a;0;0",
-        "angE;sector;sector;E,qE,D;0;0;0;0",
-        "mDF;point;midpoint;D,F;0;0",
-        "qF;point;midpoint;F,mDF;0;0",
-        "angF;sector;sector;F,qF,E;0;0;0;0"
+        // Angle markers (geomlib 0.8.0 E.Sector.angleMarker): vertex
+        // first, then the two arm vertices — interior is automatic, no
+        // midpoint-chain radius helpers, no sign-check. Fixed radius,
+        // translucent palette fill + colored edge cycled per marker.
+        "angA;sector;angleMarker;A,B,C",
+        "angB;sector;angleMarker;B,A,C",
+        "angC;sector;angleMarker;C,A,B",
+        "angD;sector;angleMarker;D,E,F",
+        "angE;sector;angleMarker;E,D,F",
+        "angF;sector;angleMarker;F,D,E"
     ],
     // Joyce's prose names the angles by their three letters; the
     // unambiguous ones alias to the zero-color angle markers. The
@@ -93,18 +78,18 @@ geomlib.init({
     },
     slides: [
         { text: "Let {ABC} and {DEF} be two triangles",
-          visible: ["ABC","DEF"] },
+          visible: ["ABC","DEF","C"] },
         { text: "having the two sides {AB} and {AC}",
-          visible: ["AB","AC"] },
+          visible: ["AB","AC","C"] },
         { text: "equal to the two sides {DE} and {DF} respectively,",
-          visible: ["AB","AC","DE","DF"] },
+          visible: ["AB","AC","DE","DF","C"] },
         { text: "namely {AB} equal to {DE},",
-          visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF"],
+          visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF","C"],
           highlighted: ["AB","DE"] },
         { text: "and {AC} equal to {DF},",
           highlighted: ["AC","DF"] },
         { text: "and the angle {BAC} equal to the angle {EDF}.",
-          visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF","angA","angD"],
+          visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF","angA","angD","C"],
           transition: {
               mode: "parallel",
               animations: [
@@ -117,7 +102,7 @@ geomlib.init({
         { text: "the triangle {ABC} equals the triangle {DEF}, and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides,",
           highlighted: ["ABC","DEF","AB","AC","BC","DE","DF","EF"] },
         { text: "that is, the angle {ABC|angB} equals the angle {DEF|angE},",
-          visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF","angA","angD","angB","angE"],
+          visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF","angA","angD","angB","angE","C"],
           transition: {
               mode: "parallel",
               animations: [
@@ -126,7 +111,7 @@ geomlib.init({
               ]
           } },
         { text: "and the angle {ACB} equals the angle {DFE}.",
-          visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF","angA","angD","angB","angE","angC","angF"],
+          visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF","angA","angD","angB","angE","angC","angF","C"],
           transition: {
               mode: "parallel",
               animations: [

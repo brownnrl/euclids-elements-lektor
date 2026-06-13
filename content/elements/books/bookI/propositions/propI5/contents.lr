@@ -67,34 +67,24 @@ geomlib.init({
         // already has an end at A, so a single sweep is the whole
         // construction; the general I.2/I.1 machinery is assumed.
         "AFcirc;circle;radius;A,F;0;0;0;0",
-        // Angle markers — zero-color sectors, quarter-radius via
-        // midpoint chains. Arm order picks the interior arc
-        // (sign-checked; see doc/process.md).
-        "mAB;point;midpoint;A,B;0;0",
-        "qAB;point;midpoint;A,mAB;0;0",
-        "angA;sector;sector;A,qAB,C;0;0;0;0",
-        "qBC;point;midpoint;B,M;0;0",
-        "angBint;sector;sector;B,qBC,A;0;0;0;0",
-        "mAC;point;midpoint;A,C;0;0",
-        "qCA;point;midpoint;C,mAC;0;0",
-        "angCint;sector;sector;C,qCA,B;0;0;0;0",
-        "mBF;point;midpoint;B,F;0;0",
-        "qBF;point;midpoint;B,mBF;0;0",
-        "angBext;sector;sector;B,qBF,C;0;0;0;0",
-        "qCB;point;midpoint;C,M;0;0",
-        "angCext;sector;sector;C,qCB,G;0;0;0;0",
-        "mBG;point;midpoint;B,G;0;0",
-        "qBG;point;midpoint;B,mBG;0;0",
-        "angABG;sector;sector;B,qBG,A;0;0;0;0",
-        "angACF;sector;sector;C,qCA,F;0;0;0;0",
-        "mCF;point;midpoint;C,F;0;0",
-        "qFC;point;midpoint;F,mCF;0;0",
-        "angF;sector;sector;F,qFC,B;0;0;0;0",
-        "mGA;point;midpoint;G,A;0;0",
-        "qGA;point;midpoint;G,mGA;0;0",
-        "angG;sector;sector;G,qGA,B;0;0;0;0",
-        "angCBG;sector;sector;B,qBG,C;0;0;0;0",
-        "angBCF;sector;sector;C,qCB,F;0;0;0;0"
+        // Angle markers (geomlib 0.8.0 E.Sector.angleMarker): vertex
+        // first, then the two arm vertices — interior automatic, no
+        // midpoint-chain helpers, no sign-check. NOTE: the same-vertex
+        // markers (4 at B, 4 at C) overlap at the default radius; they
+        // read cleanly once 0.8.1's auto radius-stepping lands — see
+        // deck-tracker.md. (M, the BC midpoint, is kept — it anchors the
+        // pivot and the apex slider, not just markers.)
+        "angA;sector;angleMarker;A,B,C",
+        "angBint;sector;angleMarker;B,A,C",
+        "angCint;sector;angleMarker;C,A,B",
+        "angBext;sector;angleMarker;B,C,D",
+        "angCext;sector;angleMarker;C,B,E",
+        "angABG;sector;angleMarker;B,A,G",
+        "angACF;sector;angleMarker;C,A,F",
+        "angF;sector;angleMarker;F,B,C",
+        "angG;sector;angleMarker;G,A,B",
+        "angCBG;sector;angleMarker;B,C,G",
+        "angBCF;sector;angleMarker;C,B,F"
     ],
     // F is introduced mid-proof ("Take an arbitrary point F"), so it
     // opts out of the slideshow's every-slide draggable auto-union

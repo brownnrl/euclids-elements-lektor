@@ -88,20 +88,37 @@ a `{NAME}` hover lights them. Two hard rules:
 
 ### Angle markers
 
-A small sector at the vertex: build a quarter-radius point with a
-midpoint chain (`mXY;point;midpoint;X,Y` then `qX;point;midpoint;X,mXY`)
-and `angX;sector;sector;X,qX,Z;0;0;0;0`. The sweep direction is fixed
-(inherited from the Java applet), so **arm order picks interior vs
-reflex** — verify the sign of `Center.angle(A, B, P)` for every
-marker with a node script before the visual pass (negative = interior;
-positive = swap the radial arm). See the `checkI4` pattern in the
-session journal: build the slate headlessly with ts-node in the
-geomlib repo and print the signs.
+A small sector at the vertex marking the interior angle. Use the
+`angleMarker` construction (geomlib 0.8.0+):
+`angX;sector;angleMarker;Vertex,Arm1,Arm2` — vertex first, then any two
+points on the arms. It computes its own fixed radius (≈22px, clamped to
+a fraction of the shorter arm) and **auto-orients to the interior arc**,
+so arm order no longer matters and there is no midpoint-chain radius
+helper and no `Center.angle` sign-check (both retired with the old
+`sector;sector;...;0;0;0;0` pattern). An optional 4th integer overrides
+the radius (`...;Vertex,Arm1,Arm2,38`); the rare reflex (>180°) case is
+`angleMarkerReflex`. Angles with the same rays share one marker (e.g.
+angle AFC = angle BFC when A, B, F are collinear).
 
-Markers animate with `A.Sector.sweep` on the slide where the angle
-first matters, then persist invisibly (zero-color) for later
-highlight-only mentions. Angles with the same rays share one marker
-(e.g. angle AFC = angle BFC when A, B, F are collinear).
+Markers are normal colored elements now (translucent palette fill,
+distinct edge cycled per marker). Reveal them with `A.Sector.sweep` (the
+whole wedge flashes on its transition) on the slide where the angle
+first matters, and keep them in the `visible` set of every slide they
+should appear on.
+
+Two caveats while the library catches up (tracked in
+[deck-tracker.md](deck-tracker.md) open questions):
+
+- **Same-vertex overlap.** Multiple markers at one vertex render at the
+  same radius and overlap until geomlib 0.8.1 adds auto radius-stepping;
+  until then hand-separate with the radius-override integer.
+- **Initial visibility.** Markers currently always render, including in
+  the initial / static figure (no `visible=false` via params yet). The
+  initial figure should match the source diagram — Euclid draws no angle
+  arcs — so an initial-visibility parameter has been requested of the
+  library session. Once it lands, author markers initially hidden and
+  let the slides reveal them; the modern marker view stays a
+  slide-walk / highlight affordance.
 
 ### Names, aliases, collisions
 
