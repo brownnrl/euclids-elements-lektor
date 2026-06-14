@@ -44,6 +44,10 @@ geomlib.init({
         // plain (infinite) line slider on AB, so t<0 reaches past A.
         "D;point;lineSlider;A,B,107,130",
         "DC;line;connect;D,C",
+        // BD (visible) — shown in the slide-3 case ghosts (with DC) to
+        // outline the would-be sub-triangle DBC in each case. It runs
+        // along AB, so it's near-invisible in the main figure.
+        "BD;line;connect;B,D",
         // Invisible highlight targets (zero-color; render gold only
         // under highlight or hover) for the segments and the nested
         // part-triangle the prose names.
@@ -90,7 +94,7 @@ geomlib.init({
                   // (AB > AC) and D past A (t < 0, AB < AC). Copies clear
                   // on advance; desktop / presentation only.
                   { elem: "ABC", name: geomlib.A.Group.cloneAside,
-                    args: { include: ["ABC","D"], autoPlace: true,
+                    args: { include: ["ABC","D","DC","BD"], autoPlace: true,
                             variants: [ { vary: { elem: "D", to: 0.45 } },
                                         { vary: { elem: "D", to: -0.4 } } ] } }
               ]
