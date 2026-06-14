@@ -26,18 +26,23 @@ geomlib.init({
     background: "35,19,100",
     title: "I.6",
     elements: [
-        "A;point;free;180,50",
         "B;point;free;50,250",
         "C;point;free;240,250",
+        // Apex A is constrained to the perpendicular bisector of BC, so
+        // AB = AC and the base angles ABC = ACB stay equal however the
+        // figure is dragged — the hypothesis of I.6 is invariant. (Same
+        // pattern as I.5's apex.) M / MM' are zero-color helpers.
+        "M;point;midpoint;B,C;0;0",
+        "MM';line;perpendicular;M,B;0;0;0",
+        "A;point;lineSlider;MM',145,50",
         "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random",
-        // D is the cut-off BD = AC. Per the fatigue rule (I.3 shown in
-        // full one proposition removed) it is a bare point-appear with
-        // the marginal I.3 ref. A plain line slider on AB — the reader
-        // can shimmy it along the whole line (incl. past A, the AB < AC
-        // case). Initialised at the cut-off. (Future: on slide 4 it
-        // animates "sliding back between A and B" via the point-slide
-        // transition requested in euclid#95.)
-        "D;point;lineSlider;A,B,164,75",
+        // D is the hypothetical cut-off (the proof asserts BD = AC). On
+        // the isosceles figure the true cut-off is at A, so D placed
+        // strictly inside AB (~0.4) makes the nested part-triangle DBC
+        // read clearly — BD is drawn shorter than AC, which is exactly
+        // the asserted-but-undrawable equality the reductio exposes. A
+        // plain (infinite) line slider on AB, so t<0 reaches past A.
+        "D;point;lineSlider;A,B,107,130",
         "DC;line;connect;D,C",
         // Invisible highlight targets (zero-color; render gold only
         // under highlight or hover) for the segments and the nested
@@ -77,16 +82,17 @@ geomlib.init({
           highlighted: ["AB","AC"],
           transition: {
               animations: [
-                  // The two cases of "one of them is greater", shown as
-                  // displaced copies (geomlib 0.9.0 A.Group.cloneAside):
-                  // AB > AC puts the cut-off D between A and B (t in
-                  // (0,1)); AB < AC overshoots, D past A (t < 0 — needs
-                  // the infinite lineSlider). Copies are desktop-only and
-                  // clear on advance.
+                  // The two cases of "one of them is greater", as
+                  // displaced case-variants (geomlib 0.10.0 cloneAside
+                  // autoPlace + variants): the figure centres and both
+                  // copies are placed atomically in the freed space.
+                  // Varying D stands for the two cases — D between A and B
+                  // (AB > AC) and D past A (t < 0, AB < AC). Copies clear
+                  // on advance; desktop / presentation only.
                   { elem: "ABC", name: geomlib.A.Group.cloneAside,
-                    args: { dx: 130, dy: 0, include: ["ABC","D"], vary: { elem: "D", to: 0.45 } } },
-                  { elem: "ABC", name: geomlib.A.Group.cloneAside,
-                    args: { dx: 0, dy: 130, include: ["ABC","D"], vary: { elem: "D", to: -0.4 } } }
+                    args: { include: ["ABC","D"], autoPlace: true,
+                            variants: [ { vary: { elem: "D", to: 0.45 } },
+                                        { vary: { elem: "D", to: -0.4 } } ] } }
               ]
           },
           justifications: [{ ref: "C.N." }] },
@@ -95,9 +101,10 @@ geomlib.init({
           highlighted: ["DB","AC"],
           transition: {
               animations: [
-                  // The case-variants clear; D glides into the cut-off
-                  // position between A and B (BD = AC), then DC is joined.
-                  { elem: "D",  name: geomlib.A.Point.slide, args: { to: 0.125 } },
+                  // Case-variants clear; D is revealed at its cut-off
+                  // position (it never moved — variants restore the real
+                  // slider after snapshotting), then DC is joined.
+                  { elem: "D",  name: geomlib.A.Point.appear },
                   { elem: "DC", name: geomlib.A.Line.straightEdgeConnect }
               ]
           },

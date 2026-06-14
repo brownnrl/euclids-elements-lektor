@@ -116,14 +116,13 @@ already complete (see [journal/journal.md](journal/journal.md)).
   slide's `visible` set omits it (gone on slide 1, faint by slide 14).
   Fix: add `"C"` to the slides' `visible` sets so the label stays across
   all 22 slides. (Pre-existing; not caused by the 0.8.0 migration.)
-- **I.11 — "AC" has no hover-ref.** The proof prose "an arbitrary point
-  D on AC" left `AC` plain — there's no `AC` element on `canvas_0` (only
-  the full `AB`). Fix: add a zero-color `AC;line;connect;A,C;0;0;0`
-  target and tokenize `{AC}` in the caption + prose. Tackle soon.
+- **I.11 — "AC" has no hover-ref.** ✅ Done — added zero-color
+  `AC;line;connect;A,C;0;0;0` target and tokenized `{AC}` in the caption +
+  prose.
 
 ## geomlib migration (markers + animations)
 
-Pinned at **0.9.1**. Angle markers (`E.Sector.angleMarker`) are hidden in
+Pinned at **0.10.0**. Angle markers (`E.Sector.angleMarker`) are hidden in
 the static figure by default and revealed during the walk / on hover
 (#100); markers migrated across **I.4, I.5, I.6, I.9, I.10**. I.6's
 trichotomy + D-slide use `A.Group.cloneAside` (#98) + `A.Point.slide`
@@ -138,7 +137,7 @@ for any editorial aside.
 | Q1 | **Same-vertex marker overlap** — I.5 (4@B/4@C), I.9 (3@A), I.10 (3@C), authored flat. | **Resolved — 0.9.1 pinned** (#103 auto radius-stepping); markers auto-nest into concentric rings. No deck changes. |
 | Q2 | **Cascade pre-render** — elements in a cascade drew fully from t=0 ("appear too soon"): I.2 DAB, I.6, I.9, I.10 (Bcirc fill, the triangle, point C). | **Resolved — 0.9.1 pinned** (#104). Workarounds dropped: I.10 guide slide-2 back to cascade, proposition circles back to filled. Captions are exact source text. |
 | Q3 | Markers in the static figure (must match Euclid's no-arcs diagram). | **Resolved 0.9.0** (#100: hidden by default, `initiallyHidden`, hover reveals a hidden element). |
-| Q4 | I.6 slides 3–4 trichotomy case-variants + D-slide-back. | Wired (`cloneAside` #98 + `Point.slide` #95). **Ghost placement awaits geomlib #99** — cloneAside auto-placement + re-center the source figure before ghosting; until then the copies clamp/overlap on I.6's 320-wide canvas (and only show in ▶ Present ≥520px). Requested as the next library item. |
+| Q4 | I.6 slides 3–4 trichotomy case-variants. | **Done — 0.10.0** (#99 `cloneAside` `autoPlace` + atomic `variants`): the figure centres and both ghost copies place to the sides (top/bottom fallback, both-or-neither). Apex A constrained to BC's perpendicular bisector so ∠ABC = ∠ACB is invariant; slide-4 D = `Point.appear` (variants restore the slider, so no slide-back). |
 
 ## 0.9.1 cleanup (done)
 
