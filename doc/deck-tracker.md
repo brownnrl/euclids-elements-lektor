@@ -119,7 +119,7 @@ already complete (see [journal/journal.md](journal/journal.md)).
 
 ## geomlib migration (markers + animations)
 
-Pinned at **0.9.0**. Angle markers (`E.Sector.angleMarker`) are hidden in
+Pinned at **0.9.1**. Angle markers (`E.Sector.angleMarker`) are hidden in
 the static figure by default and revealed during the walk / on hover
 (#100); markers migrated across **I.4, I.5, I.6, I.9, I.10**. I.6's
 trichotomy + D-slide use `A.Group.cloneAside` (#98) + `A.Point.slide`
@@ -131,15 +131,15 @@ for any editorial aside.
 
 | # | Item | State |
 |---|---|---|
-| Q1 | **Same-vertex marker overlap** — I.5 (4@B/4@C), I.9 (3@A), I.10 (3@C), authored flat. | **Fixed in geomlib 0.9.1** (#103 auto radius-stepping). No deck changes — bump the pin when published; drop any `radiusPx`. |
-| Q2 | **Cascade pre-render** — elements in a cascade drew fully from t=0 ("appear too soon"): I.2 DAB, I.6, I.9, I.10 (Bcirc fill, the triangle, point C). | **Fixed in geomlib 0.9.1** (#104; a 0.9.0 regression). No deck changes — after the 0.9.1 pin, drop the parallel / edge-only / split / slow-appear workarounds and keep captions = exact source text. |
+| Q1 | **Same-vertex marker overlap** — I.5 (4@B/4@C), I.9 (3@A), I.10 (3@C), authored flat. | **Resolved — 0.9.1 pinned** (#103 auto radius-stepping); markers auto-nest into concentric rings. No deck changes. |
+| Q2 | **Cascade pre-render** — elements in a cascade drew fully from t=0 ("appear too soon"): I.2 DAB, I.6, I.9, I.10 (Bcirc fill, the triangle, point C). | **Resolved — 0.9.1 pinned** (#104). Workarounds dropped: I.10 guide slide-2 back to cascade, proposition circles back to filled. Captions are exact source text. |
 | Q3 | Markers in the static figure (must match Euclid's no-arcs diagram). | **Resolved 0.9.0** (#100: hidden by default, `initiallyHidden`, hover reveals a hidden element). |
 | Q4 | I.6 slides 3–4 trichotomy case-variants + D-slide-back. | Wired (`cloneAside` #98 + `Point.slide` #95). **Ghost placement awaits geomlib #99** — cloneAside auto-placement + re-center the source figure before ghosting; until then the copies clamp/overlap on I.6's 320-wide canvas (and only show in ▶ Present ≥520px). Requested as the next library item. |
 
-## After the 0.9.1 pin (cleanup)
+## 0.9.1 cleanup (done)
 
-Drop the interim workarounds the cascade-pre-render forced: I.10 guide
-slide-2 `mode:"parallel"` circles → back to cascade; I.10 proposition
-edge-only circles → filled if desired; any split-for-sequencing slides
-can recombine. Pure simplification; behaviour becomes correct
-automatically.
+Interim cascade-pre-render workarounds dropped: I.10 guide slide-2
+circles back to cascade; I.10 proposition circles back to filled. I.9 /
+I.5 same-vertex markers left flat — #103 auto-nests them. Remaining
+library dependency: **#99** (cloneAside auto-placement + recenter) for
+I.6's trichotomy ghosts — in progress.
