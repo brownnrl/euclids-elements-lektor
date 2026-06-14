@@ -186,6 +186,12 @@ geomlib.init({
         "CB;line;connect;C,B;0;0;0",
         "AE;line;connect;A,E;0;0;0",
         "EB;line;connect;E,B;0;0;0",
+        // Zero-color triangle outlines for the prose's {ACB}/{AEB} hover
+        // refs (the two equilateral triangles). Gold on hover/highlight;
+        // suffixed names so the {ACB} angle alias isn't shadowed — refs
+        // use the {DISPLAY|element} override.
+        "ACBtri;polygon;triangle;A,C,B;0;0;0;0",
+        "AEBtri;polygon;triangle;A,E,B;0;0;0;0",
         "AD;line;connect;A,D;0;0;0",
         "BD;line;connect;B,D;0;0;0",
         // The angle being bisected (shows in the static figure — Q2).
@@ -227,9 +233,9 @@ geomlib.init({
               ]
           },
           justifications: [{ ref: "I.9" }] },
-        { text: "Then an equilateral triangle is constructed on the line {AB}. There are two such equilateral triangles, the one already constructed ACB, and another one, call it AEB.",
+        { text: "Then an equilateral triangle is constructed on the line {AB}. There are two such equilateral triangles, the one already constructed {ACB|ACBtri}, and another one, call it {AEB|AEBtri}.",
           visible: ["AB","Acirc","Bcirc","C","E"],
-          highlighted: ["AE","EB"],
+          highlighted: ["ACBtri","AEBtri"],
           transition: {
               animations: [
                   { elem: "E",  name: geomlib.A.Point.appear },
