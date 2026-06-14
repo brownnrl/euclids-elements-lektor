@@ -116,6 +116,10 @@ already complete (see [journal/journal.md](journal/journal.md)).
   slide's `visible` set omits it (gone on slide 1, faint by slide 14).
   Fix: add `"C"` to the slides' `visible` sets so the label stays across
   all 22 slides. (Pre-existing; not caused by the 0.8.0 migration.)
+- **I.11 — "AC" has no hover-ref.** The proof prose "an arbitrary point
+  D on AC" left `AC` plain — there's no `AC` element on `canvas_0` (only
+  the full `AB`). Fix: add a zero-color `AC;line;connect;A,C;0;0;0`
+  target and tokenize `{AC}` in the caption + prose. Tackle soon.
 
 ## geomlib migration (markers + animations)
 
