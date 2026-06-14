@@ -72,16 +72,32 @@ geomlib.init({
         { text: "I say that the side {AB} also equals the side {AC}.",
           visible: ["ABC"],
           highlighted: ["AB","AC"] },
-        { text: "If {AB} does not equal {AC}, then one of them is greater. Let {AB} be greater.",
+        { text: "If {AB} does not equal {AC}, then one of them is greater.",
           visible: ["ABC"],
-          highlighted: ["AB"],
+          highlighted: ["AB","AC"],
+          transition: {
+              animations: [
+                  // The two cases of "one of them is greater", shown as
+                  // displaced copies (geomlib 0.9.0 A.Group.cloneAside):
+                  // AB > AC puts the cut-off D between A and B (t in
+                  // (0,1)); AB < AC overshoots, D past A (t < 0 — needs
+                  // the infinite lineSlider). Copies are desktop-only and
+                  // clear on advance.
+                  { elem: "ABC", name: geomlib.A.Group.cloneAside,
+                    args: { dx: 130, dy: 0, include: ["ABC","D"], vary: { elem: "D", to: 0.45 } } },
+                  { elem: "ABC", name: geomlib.A.Group.cloneAside,
+                    args: { dx: 0, dy: 130, include: ["ABC","D"], vary: { elem: "D", to: -0.4 } } }
+              ]
+          },
           justifications: [{ ref: "C.N." }] },
-        { text: "Cut off {DB} from {AB} the greater equal to {AC} the less, and join {DC}.",
+        { text: "Let {AB} be greater. Cut off {DB} from {AB} the greater equal to {AC} the less, and join {DC}.",
           visible: ["ABC","D","DB","AC","DC"],
           highlighted: ["DB","AC"],
           transition: {
               animations: [
-                  { elem: "D",  name: geomlib.A.Point.appear },
+                  // The case-variants clear; D glides into the cut-off
+                  // position between A and B (BD = AC), then DC is joined.
+                  { elem: "D",  name: geomlib.A.Point.slide, args: { to: 0.125 } },
                   { elem: "DC", name: geomlib.A.Line.straightEdgeConnect }
               ]
           },

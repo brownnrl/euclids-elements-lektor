@@ -38,9 +38,9 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 6 (I.1–I.6) + I.9 🚧 | markers on 0.8.0 (see open Qs) |
+| Book I | 48 | 7 (I.1–I.6, I.9) + I.10 🚧 | markers on 0.8.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
-| **Total** | **465** | **6** | — |
+| **Total** | **465** | **7** | — |
 
 ---
 
@@ -59,8 +59,8 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.6 | Converse of I.5 (equal angles ⇒ equal sides) | T | 🚧 | 9 | Sector.sweep, Point.appear, Line.straightEdgeConnect, Polygon.outline | ⚠ | Reductio; containment+gold emphasis (no superpose). Markers old-pattern → #91 rework. Slide 3–4 case-variants + D-slide-back deferred to [euclid#94](https://github.com/brownnrl/euclid/issues/94) + [#95](https://github.com/brownnrl/euclid/issues/95). Pending visual pass |
 | I.7 | Uniqueness of triangle on a base | T | ⬜ | | | ⚠? | Reductio with angle inequalities |
 | I.8 | SSS congruence | T | ⬜ | | | ⚠? | Superposition (`Polygon.superpose` fits); concludes contained angles equal |
-| I.9 | Bisect an angle | C | 🚧 | 11 | Sector.sweep, Point.appear, Circle.compass, Line.straightEdgeConnect, Polygon.outline | ⚠ | 0.8.0 angleMarker. 3 markers at A (whole ∠BAC + halves ∠DAF/∠EAF) — built flat, overlap until 0.8.1 auto-nesting. Equilateral triangle shown in full — two compass circles (+ the slide-4 cut-off circle = Joyce's three circles), deliberately revived to connect to the Guide's construction-steps canvas. Pending visual pass |
-| I.10 | Bisect a segment | C | ⬜ | | | — | Pure construction; cites I.9/I.1 |
+| I.9 | Bisect an angle | C | ✅ | 11 | Sector.sweep, Point.appear, Circle.compass, Line.straightEdgeConnect, Polygon.outline | ⚠ | 0.8.0 angleMarker. 3 markers at A (whole ∠BAC + halves ∠DAF/∠EAF) — built flat, overlap until 0.8.1 auto-nesting. Equilateral triangle shown in full — two compass circles (+ the slide-4 cut-off circle = Joyce's three circles), deliberately revived to connect to the Guide's construction-steps canvas. Committed 15a083c |
+| I.10 | Bisect a segment | C | 🚧 | 8 + 9 | canvas_0: Polygon.outline, Point.appear, Sector.sweep, Line.straightEdgeConnect · canvas_1: Circle.compass, Point.appear, Line.straightEdgeConnect, Sector.sweep | ⚠ | **TWO independent slideshows** (author's choice): proposition proof (canvas_0) + Guide construction-steps (canvas_1, Joyce's double-equilateral-triangle narrative). Same two-circle build on both — canvas_0 shows the circles transitorily on the build slide then hides them (back to Joyce's triangle + CD); canvas_1 keeps the circles. 3 markers at C flat. Guide prose hover-refs canvas_1. Pending visual pass |
 | I.11 | Erect a perpendicular at a point on a line | C | ⬜ | | | ~ | One right-angle marker at most |
 | I.12 | Drop a perpendicular from a point off a line | C | ⬜ | | | ~ | One right-angle marker at most |
 | I.13 | Angles on a line sum to two right angles | T | ⬜ | | | ⚠? | |
@@ -117,19 +117,29 @@ already complete (see [journal/journal.md](journal/journal.md)).
   Fix: add `"C"` to the slides' `visible` sets so the label stays across
   all 22 slides. (Pre-existing; not caused by the 0.8.0 migration.)
 
-## 0.8.0 angle-marker migration (#91 shipped 2026-06-13)
+## geomlib migration (markers + animations)
 
-geomlib 0.8.0 shipped `E.Sector.angleMarker` (vertex + two arm points,
-auto-interior, fixed radius, palette fill — no midpoint-chain helpers,
-no sign-check). Pin bumped to **0.8.0** in `templates/layout.html`.
-Markers migrated: **I.4 ✅, I.5 ✅ (flat — see open Q1), I.6 ✅.**
+Pinned at **0.9.0**. Angle markers (`E.Sector.angleMarker`) are hidden in
+the static figure by default and revealed during the walk / on hover
+(#100); markers migrated across **I.4, I.5, I.6, I.9, I.10**. I.6's
+trichotomy + D-slide use `A.Group.cloneAside` (#98) + `A.Point.slide`
+(#95). Captions must match the source text verbatim (proof text for the
+proposition; Joyce's guide prose for a guide slideshow) — `[brackets]`
+for any editorial aside.
 
 ## Open questions / deferred
 
-| # | Item | State | Trigger to resolve |
-|---|---|---|---|
-| Q1 | **I.5 same-vertex marker overlap** — 4 markers at B and 4 at C overlap at the default radius (migrated "flat" per author's call). | Migrated, overlapping. | geomlib **0.8.1** auto radius-stepping (deferred there). Then drop any hand-radii. |
-| Q2 | **Markers render in the initial/static figure** — 0.8.0 markers are normal colored elements (always drawn; no `visible=false` via params). The initial/printed figure should match the source diagram (Euclid draws no angle arcs); the modern marker view is wanted only during the slide walk + on highlight. | Requested. | Library session to add a general **initial-visibility parameter** for markers (annotated in coord doc — API shape is their call, not ours). Then author markers initially hidden, revealed via slide `visible` sets / highlight. |
-| Q3 | **I.6 slides 3–4** — the trichotomy two case-variants ("one of them is greater") and the cut-off point **D sliding back between A and B** are stubbed (single figure + `A.Point.appear`). | v1 simple version shipped. | geomlib **#94** (`A.Polygon.translateAside`, case-variant display) + **#95** (`A.Point.slide`, point glide). Handed back to the library session. |
-| Q4 | **process.md angle-marker section** still describes the retired midpoint-chain + sign-check pattern. | Stale. | Rewrite for the `angleMarker` construction (TODO this batch). |
-| Q5 | **Visual pass not yet run** — blocked on the shared `lektor serve` (PID 18738; library session says not theirs). Nothing committed; pin bump + all marker migrations are unverified. | Blocked. | Confirm/kill PID 18738 → single clean `lektor serve` → walk I.1–I.6. |
+| # | Item | State |
+|---|---|---|
+| Q1 | **Same-vertex marker overlap** — I.5 (4@B/4@C), I.9 (3@A), I.10 (3@C), authored flat. | **Fixed in geomlib 0.9.1** (#103 auto radius-stepping). No deck changes — bump the pin when published; drop any `radiusPx`. |
+| Q2 | **Cascade pre-render** — elements in a cascade drew fully from t=0 ("appear too soon"): I.2 DAB, I.6, I.9, I.10 (Bcirc fill, the triangle, point C). | **Fixed in geomlib 0.9.1** (#104; a 0.9.0 regression). No deck changes — after the 0.9.1 pin, drop the parallel / edge-only / split / slow-appear workarounds and keep captions = exact source text. |
+| Q3 | Markers in the static figure (must match Euclid's no-arcs diagram). | **Resolved 0.9.0** (#100: hidden by default, `initiallyHidden`, hover reveals a hidden element). |
+| Q4 | I.6 slides 3–4 trichotomy case-variants + D-slide-back. | **Done** — `cloneAside` (#98) + `Point.slide` (#95) on 0.9.0. |
+
+## After the 0.9.1 pin (cleanup)
+
+Drop the interim workarounds the cascade-pre-render forced: I.10 guide
+slide-2 `mode:"parallel"` circles → back to cascade; I.10 proposition
+edge-only circles → filled if desired; any split-for-sequencing slides
+can recombine. Pure simplification; behaviour becomes correct
+automatically.
