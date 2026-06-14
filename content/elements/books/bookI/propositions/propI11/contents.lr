@@ -17,9 +17,9 @@ statement: To draw a straight line at right angles to a given straight line from
 ----
 proof:
 
-Let *AB* be the given straight line, and *C* the given point on it.
+Let {AB} be the given straight line, and {C} the given point on it.
 
-It is required to draw a straight line at right angles to the straight line *AB* from the point *C.*
+It is required to draw a straight line at right angles to the straight line {AB} from the point {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="190" tabindex="0"></canvas>
@@ -41,21 +41,120 @@ geomlib.init({
         "F;point;vertex;DEF,3;black;green",
         "DF;line;connect;D,F",
         "EF;line;connect;E,F",
-        "CF;line;connect;C,F"
+        "CF;line;connect;C,F",
+        // Transitory construction circles (filled; initiallyHidden, so
+        // out of the static figure and shown only on the build slides):
+        // Ccirc (centre C through D) fixes E with CE = CD; Dcirc/Ecirc
+        // (centres D, E, radius DE) intersect at the apex F.
+        "Ccirc;circle;radius;C,D;0;0;black;300,30,100",
+        "Dcirc;circle;radius;D,E;0;0;black;300,30,100",
+        "Ecirc;circle;radius;E,D;0;0;black;300,30,100",
+        // Zero-color highlight targets for the prose's {NAME} refs.
+        "CD;line;connect;C,D;0;0;0",
+        "CE;line;connect;C,E;0;0;0",
+        "DE;line;connect;D,E;0;0;0",
+        // The two adjacent right angles at C (0.9.x angleMarker — hidden
+        // in the static figure; same-vertex pair auto-nests via #103).
+        "angDCF;sector;angleMarker;C,D,F",
+        "angECF;sector;angleMarker;C,E,F"
     ],
+    // D is the arbitrary point taken mid-proof; C (also a slider) is the
+    // given point, shown from slide 1, so only D is deferred.
+    deferDraggables: ["D"],
+    initiallyHidden: ["Ccirc","Dcirc","Ecirc"],
+    aliases: {
+        "DCF": "angDCF",
+        "ECF": "angECF",
+        "FCE": "angECF",
+        "FDE": "DEF"
+    },
+    slides: [
+        { text: "Let {AB} be the given straight line, and {C} the given point on it.",
+          visible: ["AB"] },
+        { text: "It is required to draw a straight line at right angles to the straight line {AB} from the point {C}.",
+          visible: ["AB"],
+          highlighted: ["AB","C"] },
+        { text: "Take an arbitrary point {D} on {AC}.",
+          visible: ["AB","D"],
+          transition: {
+              animations: [
+                  { elem: "D", name: geomlib.A.Point.appear }
+              ]
+          } },
+        { text: "Make {CE} equal to {CD}.",
+          visible: ["AB","D","CD","CE","E","Ccirc"],
+          highlighted: ["CD","CE"],
+          transition: {
+              animations: [
+                  { elem: "Ccirc", name: geomlib.A.Circle.compass },
+                  { elem: "E",     name: geomlib.A.Point.appear }
+              ]
+          },
+          justifications: [{ ref: "I.3" }] },
+        { text: "Construct the equilateral triangle {FDE} on {DE}, and join {CF}.",
+          visible: ["AB","D","E","Dcirc","Ecirc","DEF","F","DF","EF","CF"],
+          transition: {
+              animations: [
+                  { elem: "Dcirc", name: geomlib.A.Circle.compass },
+                  { elem: "Ecirc", name: geomlib.A.Circle.compass },
+                  { elem: "F",     name: geomlib.A.Point.appear },
+                  { elem: "DF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DEF",   name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "CF",    name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          },
+          justifications: [{ ref: "I.1" }, { ref: "I.Post.1" }] },
+        { text: "I say that the straight line {CF} has been drawn at right angles to the given straight line {AB} from {C} the given point on it.",
+          visible: ["AB","D","E","DEF","F","DF","EF","CF"],
+          highlighted: ["CF"] },
+        { text: "Since {CD} equals {CE}, and {CF} is common, therefore the two sides {CD} and {CF} equal the two sides {CE} and {CF} respectively, and the base {DF} equals the base {EF}. Therefore the angle {DCF} equals the angle {ECF}, and they are adjacent angles.",
+          visible: ["AB","D","E","DEF","F","DF","EF","CF","CD","CE","angDCF","angECF"],
+          highlighted: ["CD","CE","CF","DF","EF"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "angDCF", name: geomlib.A.Sector.sweep },
+                  { elem: "angECF", name: geomlib.A.Sector.sweep }
+              ]
+          },
+          justifications: [{ ref: "I.Def.20" }, { ref: "I.8" }] },
+        { text: "But, when a straight line standing on a straight line makes the adjacent angles equal to one another, each of the equal angles is right, therefore each of the angles {DCF} and {FCE} is right.",
+          visible: ["AB","D","E","DEF","F","DF","EF","CF","angDCF","angECF"],
+          highlighted: ["angDCF","angECF"],
+          justifications: [{ ref: "I.Def.10" }] },
+        { text: "Therefore the straight line {CF} has been drawn at right angles to the given straight line {AB} from the given point {C} on it.",
+          visible: ["AB","D","E","DEF","F","DF","EF","CF","angDCF","angECF"],
+          highlighted: ["CF","angDCF","angECF"],
+          justifications: [{ ref: "Q.E.F." }] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
+});
+
+// Per-page citation lookup shared by both figures' resolveJustification.
+window.eucrefs = (window.eucrefs || {});
+Object.assign(window.eucrefs, {
+    "I.1":       "/elements/books/bookI/propositions/propI1/",
+    "I.3":       "/elements/books/bookI/propositions/propI3/",
+    "I.8":       "/elements/books/bookI/propositions/propI8/",
+    "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+    "I.Def.10":  "/elements/books/bookI/definitions/defI10/",
+    "I.Def.20":  "/elements/books/bookI/definitions/defI20/"
 });
 </script>
 </figure>
 
-Take an arbitrary point *D* on *AC.* Make *CE* equal to *CD.* Construct the equilateral triangle *FDE* on *DE,* and join *CF.* [!just I.3, I.1; I.Post.1]
+Take an arbitrary point {D} on AC. Make {CE} equal to {CD}. Construct the equilateral triangle {FDE} on {DE}, and join {CF}. [!just I.3, I.1; I.Post.1]
 
-I say that the straight line *CF* has been drawn at right angles to the given straight line *AB* from *C* the given point on it.
+I say that the straight line {CF} has been drawn at right angles to the given straight line {AB} from {C} the given point on it.
 
-Since *CD* equals *CE,* and *CF* is common, therefore the two sides *CD* and *CF* equal the two sides *CE* and *CF* respectively, and the base *DF* equals the base *EF.* Therefore the angle *DCF* equals the angle *ECF,* and they are adjacent angles. [!just I.Def.20; I.8]
+Since {CD} equals {CE}, and {CF} is common, therefore the two sides {CD} and {CF} equal the two sides {CE} and {CF} respectively, and the base {DF} equals the base {EF}. Therefore the angle {DCF} equals the angle {ECF}, and they are adjacent angles. [!just I.Def.20; I.8]
 
-But, when a straight line standing on a straight line makes the adjacent angles equal to one another, each of the equal angles is right, therefore each of the angles *DCF* and *FCE* is right. [!just I.Def.10]
+But, when a straight line standing on a straight line makes the adjacent angles equal to one another, each of the equal angles is right, therefore each of the angles {DCF} and {FCE} is right. [!just I.Def.10]
 
-Therefore the straight line *CF* has been drawn at right angles to the given straight line *AB* from the given point *C* on it.
+Therefore the straight line {CF} has been drawn at right angles to the given straight line {AB} from the given point {C} on it.
 
 <div class="qed">Q.E.F.</div>
 ----
@@ -85,15 +184,50 @@ geomlib.init({
         "Ecirc;circle;radius;E,D",
         "GF;line;bichord;Dcirc,Ecirc",
         "G;point;first;GF",
-        "F;point;last;GF"
+        "F;point;last;GF",
+        "DE;line;connect;D,E"
     ],
+    deferDraggables: ["D"],
+    aliases: {
+        "FG": "GF"
+    },
+    slides: [
+        { text: "This and the next proposition both construct a perpendicular to a line through a given point. The difference is that the given point lies on the line in this proposition but doesn't in the next.",
+          visible: ["AB"] },
+        { text: "The actual construction here is the same double-equilateral-triangle construction of the previous proposition that is used to bisect the line {DE}, except that it is preceded by the selection of points {D} and {E} on {AB} equidistant from {C}.",
+          visible: ["AB","D","Ccirc","E","DE"],
+          highlighted: ["DE"],
+          transition: {
+              animations: [
+                  { elem: "D",     name: geomlib.A.Point.appear },
+                  { elem: "Ccirc", name: geomlib.A.Circle.compass },
+                  { elem: "E",     name: geomlib.A.Point.appear },
+                  { elem: "DE",    name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          } },
+        { text: "This construction actually only requires drawing three circles and the one line {FG|GF}.",
+          visible: ["AB","D","Ccirc","E","DE","Dcirc","Ecirc","G","F","GF"],
+          highlighted: ["GF"],
+          transition: {
+              animations: [
+                  { elem: "Dcirc", name: geomlib.A.Circle.compass },
+                  { elem: "Ecirc", name: geomlib.A.Circle.compass },
+                  { elem: "G",     name: geomlib.A.Point.appear },
+                  { elem: "F",     name: geomlib.A.Point.appear },
+                  { elem: "GF",    name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          } }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
 });
 </script>
 </figure>
 
-The actual construction here is the same double-equilateral-triangle construction of the previous proposition that is used to bisect the line *DE,* except that it is preceded by the selection of points *D* and *E* on *AB* equidistant from *C.*
+The actual construction here is the same double-equilateral-triangle construction of the previous proposition that is used to bisect the line {DE}, except that it is preceded by the selection of points {D} and {E} on {AB} equidistant from {C}.
 
-This construction actually only requires drawing three circles and the one line *FG*.
+This construction actually only requires drawing three circles and the one line {FG|GF}.
 
 #### Use of Proposition 11
 
