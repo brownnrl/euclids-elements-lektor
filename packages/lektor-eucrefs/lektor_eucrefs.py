@@ -330,6 +330,97 @@ def forward_refs(*proof_sources):
     return out
 
 
+# ----------------------------------------------------------------------
+# Reverse-reference ("Referenced by") index.
+#
+# The inverse of forward_refs: for a given page, which OTHER pages list it
+# in a `[!just …]`. Needs one pass over the whole corpus, so it's built
+# once (memoised) by walking `content/elements/**/contents.lr`, pulling
+# each file's `[!just]` tokens, and recording the citing page under every
+# target it resolves to. `referenced_by(record)` then looks up the
+# record's own URL. (Built once per process — restart `lektor server`
+# after editing citations for the index to refresh.)
+# ----------------------------------------------------------------------
+
+_SHORT_LABEL_RE = re.compile(r"^short_label:\s*(.+?)\s*$", re.MULTILINE)
+_reverse_index = None
+
+
+def _content_root():
+    here = os.path.abspath(__file__)
+    root = os.path.dirname(os.path.dirname(os.path.dirname(here)))
+    return os.path.join(root, "content")
+
+
+def _norm_url(u):
+    if u and not u.endswith("/"):
+        u += "/"
+    return u
+
+
+def _url_from_contents_path(fpath, content_root):
+    rel = os.path.relpath(os.path.dirname(fpath), content_root)
+    return "/" + rel.replace(os.sep, "/") + "/"
+
+
+def _build_reverse_index():
+    root = _content_root()
+    rev = {}
+    elements = os.path.join(root, "elements")
+    for dirpath, _dirnames, filenames in os.walk(elements):
+        if "contents.lr" not in filenames:
+            continue
+        fpath = os.path.join(dirpath, "contents.lr")
+        try:
+            with open(fpath, encoding="utf-8") as f:
+                text = f.read()
+        except OSError:
+            continue
+        tokens = set()
+        for jm in BLOCK_RE.finditer(text):
+            for line in jm.group(1).split(";"):
+                for entry in line.split(","):
+                    tok = _entry_token(entry)
+                    if tok:
+                        tokens.add(tok)
+        if not tokens:
+            continue
+        lm = _SHORT_LABEL_RE.search(text)
+        url = _norm_url(_url_from_contents_path(fpath, root))
+        citer = {"label": lm.group(1).strip() if lm else url, "url": url}
+        for tok in tokens:
+            target = resolve(tok).split("#")[0]   # fold #cor onto the prop
+            if not target.startswith("/"):
+                continue                          # skip #unresolved-…
+            rev.setdefault(_norm_url(target), []).append(citer)
+    return rev
+
+
+def referenced_by(record):
+    """Pages whose `[!just]` lists `record`, grouped + sorted by book.
+    Returns the same {"label", "refs":[{"label","url"}]} shape as
+    forward_refs (here `refs[*].label` is the citing page's short label)."""
+    global _reverse_index
+    if _reverse_index is None:
+        _reverse_index = _build_reverse_index()
+    url = _norm_url(getattr(record, "url_path", None) or "")
+    citers = _reverse_index.get(url, [])
+    seen, uniq = set(), []
+    for c in citers:
+        if c["url"] not in seen:
+            seen.add(c["url"])
+            uniq.append(c)
+    groups = {}
+    for c in uniq:
+        label, gsort = _token_group(c["label"])
+        groups.setdefault((gsort, label), []).append(c)
+    out = []
+    for key in sorted(groups):
+        refs = sorted(groups[key], key=lambda c: _item_sort(c["label"]))
+        out.append({"label": key[1], "refs": refs})
+    return out
+
+
 class EucrefsRendererMixin:
     """Mixed into Lektor's Mistune Renderer via on_markdown_config."""
 
@@ -399,5 +490,7 @@ class EucrefsPlugin(Plugin):
         # repo's dist/bundle.js). Templates read this as a global.
         val = os.environ.get("EUCLIDS_GEOMLIB_LOCAL", "").strip().lower()
         self.env.jinja_env.globals["geomlib_local"] = val in ("1", "true", "yes", "on")
-        # Phase-1 forward-reference table (see forward_refs above).
+        # Reference tables: forward_refs = what this page cites;
+        # referenced_by = which pages cite this one (see above).
         self.env.jinja_env.globals["forward_refs"] = forward_refs
+        self.env.jinja_env.globals["referenced_by"] = referenced_by
