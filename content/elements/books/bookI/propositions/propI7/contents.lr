@@ -15,7 +15,7 @@ statement: Given two straight lines constructed from the ends of a straight line
 ----
 proof:
 
-If possible, given two straight lines *AC* and *CB* constructed on the straight line *AB* and meeting at the point *C,* let two other straight lines *AD* and *DB* be constructed on the same straight line *AB,* on the same side of it, meeting in another point *D* and equal to the former two respectively, namely each equal to that from the same end, so that *AC* equals *AD* which has the same end *A,* and *CB* equals *DB* which has the same end *B.*
+If possible, given two straight lines {AC} and {CB} constructed on the straight line {AB} and meeting at the point {C}, let two other straight lines {AD} and {DB} be constructed on the same straight line {AB}, on the same side of it, meeting in another point {D} and equal to the former two respectively, namely each equal to that from the same end, so that {AC} equals {AD} which has the same end {A}, and {CB} equals {DB} which has the same end {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="210" height="200" tabindex="0"></canvas>
@@ -26,26 +26,141 @@ geomlib.init({
     background: "35,19,100",
     title: "I.7",
     elements: [
+        // Euclid's points. A, B are the ends of the base; C is the first
+        // meeting point. D is the hypothetical second meeting point: to
+        // make the isosceles step ∠ACD = ∠ADC genuinely equal (slide 5),
+        // D is constrained so AD = AC always — it rides a hidden circle
+        // centred A through C. Its init (Euclid's 125,50) snaps onto that
+        // arc at ~(120,56), ~8px from the original gif point. (The figure
+        // is still an "impossible diagram": AD = AC is honest, so the lone
+        // un-drawable claim is CB = DB — which is where the contradiction
+        // lands.) Drag D along the arc to roam cases; AD = AC is preserved.
         "A;point;free;40,170",
         "B;point;free;170,170",
         "C;point;free;90,40",
-        "D;point;free;125,50",
-        "ABC;polygon;triangle;A,B,C;0;0;0,0,0;0",
-        "CD;line;connect;C,D",
+        "ACcirc;circle;radius;A,C;0;0;0;0",
+        "D;point;circleSlider;ACcirc,125,50",
+        // The five segments of Joyce's figure (visible; hover targets).
+        "AB;line;connect;A,B",
+        "AC;line;connect;A,C",
+        "CB;line;connect;C,B",
         "AD;line;connect;A,D",
-        "BD;line;connect;B,D"
+        "DB;line;connect;D,B",
+        // CD is joined mid-proof ("Join CD") — revealed on slide 4.
+        "CD;line;connect;C,D",
+        // The four angles of the argument (0.8.0 angleMarker; hidden in the
+        // static figure by #100, swept in on their slide). Named to match
+        // the prose tokens, so no aliases are needed. D lies outside △ABC,
+        // so CB is interior to ∠ACD and DA interior to ∠CDB: at C, ∠DCB
+        // nests inside ∠ACD; at D, ∠ADC nests inside ∠CDB — #103 auto-
+        // nesting draws concentric arcs, showing the part-whole (C.N.5).
+        "ACD;sector;angleMarker;C,A,D",
+        "ADC;sector;angleMarker;D,A,C",
+        "DCB;sector;angleMarker;C,D,B",
+        "CDB;sector;angleMarker;D,C,B"
     ],
+    // D is the hypothetical second point, introduced mid-hypothesis — it
+    // opts out of the every-slide draggable auto-union and appears on
+    // slide 2; draggable along its arc from then on.
+    deferDraggables: ["D"],
+    slides: [
+        { text: "If possible, given two straight lines {AC} and {CB} constructed on the straight line {AB} and meeting at the point {C},",
+          visible: ["AB","AC","CB"],
+          transition: {
+              animations: [
+                  { elem: "AB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CB", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          } },
+        { text: "let two other straight lines {AD} and {DB} be constructed on the same straight line {AB}, on the same side of it, meeting in another point {D} and equal to the former two respectively, namely each equal to that from the same end,",
+          visible: ["AB","AC","CB","D","AD","DB"],
+          transition: {
+              animations: [
+                  { elem: "D",  name: geomlib.A.Point.appear },
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DB", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          } },
+        { text: "so that {AC} equals {AD} which has the same end {A}, and {CB} equals {DB} which has the same end {B}.",
+          visible: ["AB","AC","CB","D","AD","DB"],
+          highlighted: ["AC","AD","CB","DB"] },
+        { text: "Join {CD}.",
+          visible: ["AB","AC","CB","D","AD","DB","CD"],
+          transition: {
+              animations: [
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          },
+          justifications: [{ ref: "I.Post.1" }] },
+        { text: "Since {AC} equals {AD}, therefore the angle {ACD} equals the angle {ADC}.",
+          visible: ["AB","AC","CB","D","AD","DB","CD","ACD","ADC"],
+          highlighted: ["AC","AD","ACD","ADC"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "ACD", name: geomlib.A.Sector.sweep },
+                  { elem: "ADC", name: geomlib.A.Sector.sweep }
+              ]
+          },
+          justifications: [{ ref: "I.5" }] },
+        { text: "Therefore the angle {ADC} is greater than the angle {DCB}.",
+          visible: ["AB","AC","CB","D","AD","DB","CD","ACD","ADC","DCB"],
+          highlighted: ["ADC","DCB"],
+          transition: {
+              animations: [
+                  { elem: "DCB", name: geomlib.A.Sector.sweep }
+              ]
+          },
+          justifications: [{ ref: "C.N.5" }] },
+        { text: "Therefore the angle {CDB} is much greater than the angle {DCB}.",
+          visible: ["AB","AC","CB","D","AD","DB","CD","ACD","ADC","DCB","CDB"],
+          highlighted: ["CDB","DCB"],
+          transition: {
+              animations: [
+                  { elem: "CDB", name: geomlib.A.Sector.sweep }
+              ]
+          },
+          justifications: [{ ref: "C.N." }] },
+        { text: "Again, since {CB} equals {DB}, therefore the angle {CDB} also equals the angle {DCB}.",
+          visible: ["AB","AC","CB","D","AD","DB","CD","ACD","ADC","DCB","CDB"],
+          highlighted: ["CB","DB","CDB","DCB"],
+          justifications: [{ ref: "I.5" }] },
+        { text: "But it was also proved much greater than it, which is impossible.",
+          visible: ["AB","AC","CB","D","AD","DB","CD","ACD","ADC","DCB","CDB"],
+          highlighted: ["CDB","DCB"] },
+        { text: "Therefore given two straight lines constructed from the ends of a straight line and meeting in a point, there cannot be constructed from the ends of the same straight line, and on the same side of it, two other straight lines meeting in another point and equal to the former two respectively, namely each equal to that from the same end.",
+          // D and its whole construction (AD, DB, CD, all four markers)
+          // drop out of the visible set — the impossible second point is
+          // eliminated from consideration, collapsing back to the one
+          // valid figure: AC and CB meeting at C.
+          visible: ["AB","AC","CB"],
+          highlighted: ["AC","CB"],
+          justifications: [{ ref: "Q.E.D." }] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
+});
+
+// Per-page citation lookup for the slideshow's resolveJustification
+// callback — same hand-authored pattern as the earlier props.
+window.eucrefs = (window.eucrefs || {});
+Object.assign(window.eucrefs, {
+    "I.Post.1": "/elements/books/bookI/postulates/post1/",
+    "I.5":      "/elements/books/bookI/propositions/propI5/",
+    "C.N.5":    "/elements/books/bookI/commonnotions/cn5/"
 });
 </script>
 </figure>
 
-Join *CD.* [!just I.Post.1]
+Join {CD}. [!just I.Post.1]
 
-Since *AC* equals *AD,* therefore the angle *ACD* equals the angle *ADC.* Therefore the angle *ADC* is greater than the angle *DCB.* Therefore the angle *CDB* is much greater than the angle *DCB.* [!just I.5; C.N.5]
+Since {AC} equals {AD}, therefore the angle {ACD} equals the angle {ADC}. Therefore the angle {ADC} is greater than the angle {DCB}. Therefore the angle {CDB} is much greater than the angle {DCB}. [!just I.5; C.N.5]
 
 [!just I.5; C.N.]
 
-Again, since *CB* equals *DB,* therefore the angle *CDB* also equals the angle *DCB.* But it was also proved much greater than it, which is impossible.
+Again, since {CB} equals {DB}, therefore the angle {CDB} also equals the angle {DCB}. But it was also proved much greater than it, which is impossible.
 
 Therefore *given two straight lines constructed from the ends of a straight line and meeting in a point, there cannot be constructed from the ends of the same straight line, and on the same side of it, two other straight lines meeting in another point and equal to the former two respectively, namely each equal to that from the same end.*
 

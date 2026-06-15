@@ -38,9 +38,9 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 8 (I.1–I.6, I.9, I.10) + I.11 🚧 | markers on 0.9.1 (see open Qs) |
+| Book I | 48 | 10 (I.1–I.7, I.9–I.11) | markers on 0.11.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
-| **Total** | **465** | **8** | — |
+| **Total** | **465** | **10** | — |
 
 ---
 
@@ -56,8 +56,8 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.3 | Cut off a line equal to the less | C | ✅ | 10 | Circle.compass, both straightEdge, Point.appear | — | Full cut-off chain shown here |
 | I.4 | SAS congruence | T | ✅ | 22 | Polygon.superpose, Sector.sweep | ⚠ | First superposition; angA–angF markers |
 | I.5 | Isosceles base angles (pons asinorum) | T | ✅ | 18 | Circle.compass, straightEdge×2, Point.appear, Sector.sweep | ⚠ | `deferDraggables:["F"]`; worked example in process.md; many `ang*` markers |
-| I.6 | Converse of I.5 (equal angles ⇒ equal sides) | T | 🚧 | 9 | Sector.sweep, Point.appear, Line.straightEdgeConnect, Polygon.outline | ⚠ | Reductio; containment+gold emphasis (no superpose). Markers old-pattern → #91 rework. Slide 3–4 case-variants + D-slide-back deferred to [euclid#94](https://github.com/brownnrl/euclid/issues/94) + [#95](https://github.com/brownnrl/euclid/issues/95). Pending visual pass |
-| I.7 | Uniqueness of triangle on a base | T | ⬜ | | | ⚠? | Reductio with angle inequalities |
+| I.6 | Converse of I.5 (equal angles ⇒ equal sides) | T | ✅ | 9 | Sector.sweep, Point.appear, Line.straightEdgeConnect, Polygon.outline, Group.cloneAside | ⚠ | Reductio; containment+gold emphasis (no superpose). Apex A on BC's perp bisector (∠B=∠C invariant); slide-3 trichotomy ghosts via one `cloneAside` autoPlace+variants (#99, 0.10.0); D rests ~75% toward A, slides to midpoint slide 4. Markers → #91 rework |
+| I.7 | Uniqueness of triangle on a base | T | ✅ | 10 | Line.straightEdgeConnect, Point.appear, Sector.sweep | ⚠ | First single-negation reductio (no cloneAside). D is a `circleSlider` on a hidden circle centred A through C → AD=AC genuine, so the ∠ACD=∠ADC step is honest (free D made them 95° vs 71°); D snaps ~8px off Euclid's gif point. 4 angle markers, nested at C (∠DCB⊂∠ACD) and D (∠ADC⊂∠CDB) via #103. Contradiction = ∠CDB(142°) ≫ ∠DCB(30°) vs claimed ∠CDB=∠DCB. Markers → #91 rework. Pending visual pass |
 | I.8 | SSS congruence | T | ⬜ | | | ⚠? | Superposition (`Polygon.superpose` fits); concludes contained angles equal |
 | I.9 | Bisect an angle | C | ✅ | 11 | Sector.sweep, Point.appear, Circle.compass, Line.straightEdgeConnect, Polygon.outline | ⚠ | 0.8.0 angleMarker. 3 markers at A (whole ∠BAC + halves ∠DAF/∠EAF) — built flat, overlap until 0.8.1 auto-nesting. Equilateral triangle shown in full — two compass circles (+ the slide-4 cut-off circle = Joyce's three circles), deliberately revived to connect to the Guide's construction-steps canvas. Committed 15a083c |
 | I.10 | Bisect a segment | C | 🚧 | 8 + 9 | canvas_0: Polygon.outline, Point.appear, Sector.sweep, Line.straightEdgeConnect · canvas_1: Circle.compass, Point.appear, Line.straightEdgeConnect, Sector.sweep | ⚠ | **TWO independent slideshows** (author's choice): proposition proof (canvas_0) + Guide construction-steps (canvas_1, Joyce's double-equilateral-triangle narrative). Same two-circle build on both — canvas_0 shows the circles transitorily on the build slide then hides them (back to Joyce's triangle + CD); canvas_1 keeps the circles. 3 markers at C flat. Guide prose hover-refs canvas_1. Pending visual pass |
