@@ -101,15 +101,40 @@ Token grammar: Roman numeral book (`I` through `XIII`), then optional `Def.` or 
 
 `Q.E.F.` for constructions (also flagged `red_highlight: yes`); `Q.E.D.` otherwise. The trailing `<br clear="all">` is preserved when present in source and helps clear residual floats inside the theorem box.
 
-### Centered formulas
+### Math (KaTeX)
 
-The source uses `<center>...</center>` for displayed equations:
+Math is **pre-rendered at build time** by the `lektor-katex` plugin
+(`packages/lektor-katex/lektor_katex.py`), which shells out to Node + KaTeX
+via `scripts/render-katex.js` and substitutes the rendered HTML into the page.
+KaTeX's CSS + fonts are vendored under `assets/css/katex/` (matched to KaTeX
+**0.17.0**); there is **no client-side KaTeX JS** — nothing renders in the
+browser, so there are no `$…$`-style delimiters to scan for.
+
+Two authoring forms — both raw HTML, so Mistune passes the TeX through
+verbatim (the plugin's regexes are anchored, so each must sit on its own and
+match the class string exactly):
 
 ```markdown
-<center>If <i>x</i> < <i>y</i> and <i>y</i> = <i>z,</i> then <i>x</i> < <i>z.</i></center>
+<div class="math display">…TeX…</div>      ← displayed (centred block)
+<span class="math">…TeX…</span>            ← inline
 ```
 
-Italics inside the `<center>` need to be HTML (`<i>`), not markdown asterisks. Same rule as figures: raw HTML blocks bypass markdown.
+Write the body as ordinary LaTeX; wrap any prose words in `\text{…}` so they
+stay upright and keep their spaces:
+
+```markdown
+<div class="math display">\text{If } x < y \text{ and } y = z \text{, then } x < z\text{.}</div>
+```
+
+A render failure emits a visible red `<span class="katex-error">` rather than
+breaking the build, so a typo is easy to spot on the page.
+
+**Editorial rule.** Re-typesetting Joyce's `<i>x</i> < <i>y</i>`-style HTML
+math (or `<center>`-wrapped formulas) into KaTeX is purely a *typesetting*
+change: never reword, drop, or add meaning. The prose ("If … and … then …")
+and the relations must read identically — only the rendering gets cleaner.
+Legacy `<center>`+`<i>` formulas still in the content get migrated to this
+form as you touch a page.
 
 ### Axiom blocks
 
@@ -143,7 +168,9 @@ Lektor's asset pipeline ships attachments alongside `index.html` in the build ou
 
 ### `<center>` for displayed prose vs. `text-align: center` for everything else
 
-Inline math: `<center>` (HTML — markdown can't express centering).
+Displayed math: use the KaTeX `<div class="math display">` block (see [Math (KaTeX)](#math-katex)) — **not** `<center>`.
+
+Displayed non-math prose or a centred image (e.g. the `propI19b.gif` law-of-sines panel above): `<center>` (HTML — markdown can't express centering).
 
 Page-level centering (h1/h2 titles, statement boxes): CSS only — never write `<center>` for these, the templates handle it.
 

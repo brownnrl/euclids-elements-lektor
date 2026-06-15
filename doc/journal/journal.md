@@ -2,6 +2,11 @@
 
 Reverse-chronological (most recent first). Each entry is a logical milestone, not a 1:1 with commits.
 
+## I.7 slideshow deck + KaTeX math convention
+
+- **I.7 deck** (uniqueness reductio) — first single-negation reductio (no `cloneAside`). `D` is a `circleSlider` on a hidden circle centred `A` through `C`, so `AD = AC` is genuine and the ∠ACD = ∠ADC step reads as truly equal (a free `D` at Euclid's gif point made them 95° vs 71° — a thin-triangle artifact); `D` snaps ~8px off the gif point onto the arc. Four angle markers nest at `C` and `D` (#103), showing the part-whole (C.N.5) steps; the contradiction is ∠CDB (142°) ≫ ∠DCB (30°) against the claimed `CB = DB` ⟹ ∠CDB = ∠DCB. Slide 10 drops `D` and its whole construction to "eliminate" the impossible point. Proof **and** Guide prose tokenized — the Guide refs bind back to the proposition canvas (added a zero-color `ABC` hover target for the Guide's "triangle ABC").
+- **KaTeX math, documented.** The site already ships a build-time KaTeX path: the `lektor-katex` plugin shells out to Node + `scripts/render-katex.js`; CSS/fonts are vendored under `assets/css/katex/` (0.17.0) with **no client JS**. Authoring is `<div class="math display">…TeX…</div>` (block) / `<span class="math">…TeX…</span>` (inline). Converted I.7's two `<center>` + `<i>` "if … then" magnitude statements into `math display` blocks — editorial only (same prose, same meaning). Convention recorded in [../conventions.md → Math (KaTeX)](../conventions.md#math-katex) and the conversion playbook ([process.md → Displayed / inline math](process.md#displayed--inline-math--katex)).
+
 ## Books III–XIII — bulk markdown conversion
 
 Books III–XIII converted in one extended session via per-book parallel agent fan-out:
