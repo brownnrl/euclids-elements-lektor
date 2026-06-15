@@ -54,7 +54,8 @@ span.elem-ref {
   font-style: italic;
   cursor: pointer;
   border-bottom: 1px dotted transparent;
-  transition: border-bottom-color 120ms ease-out, color 120ms ease-out;
+  transition: border-bottom-color 120ms ease-out, color 120ms ease-out,
+              background-color 120ms ease-out;
 }
 span.elem-ref:hover,
 span.elem-ref.active {
@@ -64,10 +65,21 @@ span.elem-ref.active {
    `geomlib:highlight` event (geomlib >= 0.11.0, #108): every prose
    reference to an element currently highlighted on the canvas — whether
    by hovering any one of its refs, pinning it, or a slide's `highlighted`
-   set — gets the same golden emphasis as the figure. */
+   set — gets the same golden emphasis as the figure.
+
+   A gold highlighter wash + dark amber text reads on the tan page where
+   plain gold text did not. The bold look is faked with `text-shadow`
+   instead of `font-weight` so lighting a ref never reflows the prose
+   (hovering one ref lights every other ref to the same element at once).
+   The padding is balanced by an equal negative margin so the wash never
+   shifts surrounding text. */
 span.elem-ref.lit {
-  color: #b8860b;
-  border-bottom-color: currentColor;
+  color: #4a3a00;
+  background-color: rgba(255, 196, 0, 0.55);
+  border-radius: 2px;
+  padding: 0 2px;
+  margin: 0 -2px;
+  text-shadow: 0.02em 0 0 currentColor, -0.02em 0 0 currentColor;
 }
 
 div.theorem h1 {
