@@ -241,6 +241,95 @@ def _render_just(content: str) -> str:
     return '<div class="just">' + "<br>".join(groups) + "</div>"
 
 
+# ----------------------------------------------------------------------
+# Forward-reference table (phase 1).
+#
+# For a proposition page, collect the UNIQUE set of citations its proof
+# makes via `[!just …]` directives, grouped by book. Exposed to templates
+# as the Jinja global `forward_refs(*proof_sources)` — each argument is a
+# proof field's raw markdown `.source` (the template passes one per
+# section). Reuses BLOCK_RE, _ENTRY_RE and resolve() above; no global
+# index needed since forward refs are per-page.
+# ----------------------------------------------------------------------
+
+_ROMAN_ORDER = {r: i for i, r in enumerate(
+    ["I", "II", "III", "IV", "V", "VI", "VII", "VIII",
+     "IX", "X", "XI", "XII", "XIII"], start=1)}
+
+
+def _num(s):
+    try:
+        return int(s)
+    except (ValueError, TypeError):
+        return 0
+
+
+def _token_group(token):
+    """(group label, group sort key) for a citation token."""
+    if token.startswith("C.N."):
+        return ("Common Notions", 99)
+    head = token.split(".", 1)[0]
+    if head in _ROMAN_ORDER:
+        return (f"Book {head}", _ROMAN_ORDER[head])
+    return ("Other", 100)
+
+
+def _item_sort(token):
+    """Sort within a book: postulates, then definitions, then
+    propositions, then common notions; by number within each."""
+    parts = token.split(".")
+    if token.startswith("C.N."):
+        return (3, _num(parts[-1]))
+    if len(parts) >= 2 and parts[1] == "Post":
+        return (0, _num(parts[2]) if len(parts) > 2 else 0)
+    if len(parts) >= 2 and parts[1] == "Def":
+        return (1, _num(parts[-1]))
+    return (2, _num(parts[1]) if len(parts) > 1 else 0)
+
+
+def _entry_token(entry):
+    """The citation token from one `[!just]` entry, dropping any
+    parenthetical annotation; None for pure-annotation entries."""
+    entry = entry.strip()
+    m = _ENTRY_RE.match(entry)
+    if m and m.group(1):
+        return m.group(1)
+    if entry and "(" not in entry:
+        return entry
+    return None
+
+
+def forward_refs(*proof_sources):
+    """Unique `[!just]` citations across the given proof markdown
+    sources, grouped + sorted by book. Returns a list of
+    {"label": str, "refs": [{"token": str, "url": str}, …]} for the
+    template (key is `refs`, not `items`, to avoid Jinja's dict.items)."""
+    if len(proof_sources) == 1 and isinstance(proof_sources[0], (list, tuple)):
+        proof_sources = proof_sources[0]
+    seen = set()
+    ordered = []
+    for src in proof_sources:
+        if not src:
+            continue
+        for m in BLOCK_RE.finditer(str(src)):
+            for line in m.group(1).split(";"):
+                for entry in line.split(","):
+                    tok = _entry_token(entry)
+                    if tok and tok not in seen:
+                        seen.add(tok)
+                        ordered.append(tok)
+    groups = {}
+    for tok in ordered:
+        label, gsort = _token_group(tok)
+        groups.setdefault((gsort, label), []).append(
+            {"token": tok, "url": resolve(tok)})
+    out = []
+    for key in sorted(groups):
+        refs = sorted(groups[key], key=lambda d: _item_sort(d["token"]))
+        out.append({"label": key[1], "refs": refs})
+    return out
+
+
 class EucrefsRendererMixin:
     """Mixed into Lektor's Mistune Renderer via on_markdown_config."""
 
@@ -310,3 +399,5 @@ class EucrefsPlugin(Plugin):
         # repo's dist/bundle.js). Templates read this as a global.
         val = os.environ.get("EUCLIDS_GEOMLIB_LOCAL", "").strip().lower()
         self.env.jinja_env.globals["geomlib_local"] = val in ("1", "true", "yes", "on")
+        # Phase-1 forward-reference table (see forward_refs above).
+        self.env.jinja_env.globals["forward_refs"] = forward_refs

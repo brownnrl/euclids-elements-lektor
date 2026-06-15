@@ -35,4 +35,20 @@
   <h2 id="guide">Guide</h2>
   {{ s.guide }}
 {% endfor %}
+
+{# Forward-reference table (phase 1): the unique citations this page's
+   proof(s) make via [!just …], grouped by book. Built by the
+   lektor-eucrefs `forward_refs` Jinja global from each proof's raw
+   markdown source. #}
+{% set proofs = [] %}
+{% for s in sections if s.proof %}{% set _ = proofs.append(s.proof.source) %}{% endfor %}
+{% set fwd = forward_refs(proofs) %}
+{% if fwd %}
+<table class="forward-refs">
+  <caption>References</caption>
+  {% for g in fwd %}
+  <tr><th>{{ g.label }}</th><td>{% for r in g.refs %}<a href="{{ r.url }}">{{ r.token }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</td></tr>
+  {% endfor %}
+</table>
+{% endif %}
 {% endblock %}
