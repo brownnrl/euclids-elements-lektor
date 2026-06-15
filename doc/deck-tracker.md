@@ -137,7 +137,7 @@ for any editorial aside.
 | Q1 | **Same-vertex marker overlap** — I.5 (4@B/4@C), I.9 (3@A), I.10 (3@C), authored flat. | **Resolved — 0.9.1 pinned** (#103 auto radius-stepping); markers auto-nest into concentric rings. No deck changes. |
 | Q2 | **Cascade pre-render** — elements in a cascade drew fully from t=0 ("appear too soon"): I.2 DAB, I.6, I.9, I.10 (Bcirc fill, the triangle, point C). | **Resolved — 0.9.1 pinned** (#104). Workarounds dropped: I.10 guide slide-2 back to cascade, proposition circles back to filled. Captions are exact source text. |
 | Q3 | Markers in the static figure (must match Euclid's no-arcs diagram). | **Resolved 0.9.0** (#100: hidden by default, `initiallyHidden`, hover reveals a hidden element). |
-| Q4 | I.6 slides 3–4 trichotomy case-variants. | **Done — 0.10.0** (#99 `cloneAside` `autoPlace` + atomic `variants`): the figure centres and both ghost copies place to the sides (top/bottom fallback, both-or-neither). Apex A constrained to BC's perpendicular bisector so ∠ABC = ∠ACB is invariant; slide-4 D = `Point.appear` (variants restore the slider, so no slide-back). |
+| Q4 | I.6 slides 3–4 trichotomy case-variants. | **Done — 0.10.0** (#99 `cloneAside` `autoPlace` + atomic `variants`): the figure centres and both ghost copies place to the sides (top/bottom fallback, both-or-neither). Apex A constrained to BC's perpendicular bisector so ∠ABC = ∠ACB is invariant; slide-4 D slides in from near B to the midpoint of AB (`Point.slide` to 0.5) after the cases — the main slider never moves during slide 3 (variants restore it). |
 
 ## 0.9.1 cleanup (done)
 

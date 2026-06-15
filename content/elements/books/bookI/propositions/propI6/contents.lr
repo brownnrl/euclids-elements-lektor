@@ -36,13 +36,16 @@ geomlib.init({
         "MM';line;perpendicular;M,B;0;0;0",
         "A;point;lineSlider;MM',145,50",
         "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random",
-        // D is the hypothetical cut-off (the proof asserts BD = AC). On
-        // the isosceles figure the true cut-off is at A, so D placed
-        // strictly inside AB (~0.4) makes the nested part-triangle DBC
-        // read clearly — BD is drawn shorter than AC, which is exactly
-        // the asserted-but-undrawable equality the reductio exposes. A
-        // plain (infinite) line slider on AB, so t<0 reaches past A.
-        "D;point;lineSlider;A,B,107,130",
+        // D is the hypothetical cut-off (the proof asserts BD = AC). It
+        // stays hidden until slide 4 (deferDraggables), where it slides
+        // in from near B to the midpoint of AB — the "cut off DB" gesture
+        // — landing strictly inside AB so the nested part-triangle DBC
+        // reads as a proper part (BD drawn shorter than AC, the
+        // asserted-but-undrawable equality the reductio exposes). A plain
+        // (infinite) line slider on AB, so the slide-3 ghost can vary it
+        // past A (t<0) for the BD > AB case. The init position is just the
+        // slide's start frame (~t=0.85, near B) — invisible until slide 4.
+        "D;point;lineSlider;A,B,64,220",
         "DC;line;connect;D,C",
         // BD (visible) — shown in the slide-3 case ghosts (with DC) to
         // outline the would-be sub-triangle DBC in each case. It runs
@@ -105,10 +108,11 @@ geomlib.init({
           highlighted: ["DB","AC"],
           transition: {
               animations: [
-                  // Case-variants clear; D is revealed at its cut-off
-                  // position (it never moved — variants restore the real
-                  // slider after snapshotting), then DC is joined.
-                  { elem: "D",  name: geomlib.A.Point.appear },
+                  // Case-variants clear; D slides in from near B to the
+                  // midpoint of AB (the "cut off DB" gesture — the main
+                  // slider never moved during slide 3, since variants
+                  // restore it), then DC is joined.
+                  { elem: "D",  name: geomlib.A.Point.slide, args: { to: 0.5 } },
                   { elem: "DC", name: geomlib.A.Line.straightEdgeConnect }
               ]
           },
