@@ -122,10 +122,12 @@ already complete (see [journal/journal.md](journal/journal.md)).
 
 ## geomlib migration (markers + animations)
 
-Pinned at **0.10.0**. Angle markers (`E.Sector.angleMarker`) are hidden in
-the static figure by default and revealed during the walk / on hover
-(#100); markers migrated across **I.4, I.5, I.6, I.9, I.10**. I.6's
-trichotomy + D-slide use `A.Group.cloneAside` (#98) + `A.Point.slide`
+Pinned at **0.11.0** (#107 maximize/presentation recenter + reset-on-exit;
+#108 `geomlib:highlight` bidirectional event — see `elem-ref-highlight.js`).
+Angle markers (`E.Sector.angleMarker`) are hidden in the static figure by
+default and revealed during the walk / on hover (#100); markers migrated
+across **I.4, I.5, I.6, I.9, I.10**. I.6's trichotomy + D-slide use
+`A.Group.cloneAside` (#98/#99 `autoPlace`+`variants`) + `A.Point.slide`
 (#95). Captions must match the source text verbatim (proof text for the
 proposition; Joyce's guide prose for a guide slideshow) — `[brackets]`
 for any editorial aside.
