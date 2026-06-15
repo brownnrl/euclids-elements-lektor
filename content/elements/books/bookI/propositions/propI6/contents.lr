@@ -36,16 +36,17 @@ geomlib.init({
         "MM';line;perpendicular;M,B;0;0;0",
         "A;point;lineSlider;MM',145,50",
         "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random",
-        // D is the hypothetical cut-off (the proof asserts BD = AC). It
-        // stays hidden until slide 4 (deferDraggables), where it slides
-        // in from near B to the midpoint of AB — the "cut off DB" gesture
-        // — landing strictly inside AB so the nested part-triangle DBC
-        // reads as a proper part (BD drawn shorter than AC, the
-        // asserted-but-undrawable equality the reductio exposes). A plain
+        // D is the hypothetical cut-off (the proof asserts BD = AC). Its
+        // init places it ~75% of the way from B toward A (t≈0.25), where
+        // Euclid's original static figure draws it, so the resting diagram
+        // matches the original. In presentation D is deferred
+        // (deferDraggables): hidden on slides 1–3, then on slide 4 it
+        // slides from this rest position to the midpoint of AB (the "cut
+        // off DB" gesture). BD is drawn shorter than AC — the
+        // asserted-but-undrawable equality the reductio exposes. A plain
         // (infinite) line slider on AB, so the slide-3 ghost can vary it
-        // past A (t<0) for the BD > AB case. The init position is just the
-        // slide's start frame (~t=0.85, near B) — invisible until slide 4.
-        "D;point;lineSlider;A,B,64,220",
+        // past A (t<0) for the BD > AB case.
+        "D;point;lineSlider;A,B,121,100",
         "DC;line;connect;D,C",
         // BD (visible) — shown in the slide-3 case ghosts (with DC) to
         // outline the would-be sub-triangle DBC in each case. It runs
@@ -108,10 +109,11 @@ geomlib.init({
           highlighted: ["DB","AC"],
           transition: {
               animations: [
-                  // Case-variants clear; D slides in from near B to the
-                  // midpoint of AB (the "cut off DB" gesture — the main
+                  // Case-variants clear; D slides from its rest position
+                  // (~75% toward A, Euclid's static placement) to the
+                  // midpoint of AB — the "cut off DB" gesture (the main
                   // slider never moved during slide 3, since variants
-                  // restore it), then DC is joined.
+                  // restore it) — then DC is joined.
                   { elem: "D",  name: geomlib.A.Point.slide, args: { to: 0.5 } },
                   { elem: "DC", name: geomlib.A.Line.straightEdgeConnect }
               ]
