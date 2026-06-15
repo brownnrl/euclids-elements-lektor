@@ -54,10 +54,19 @@ span.elem-ref {
   font-style: italic;
   cursor: pointer;
   border-bottom: 1px dotted transparent;
-  transition: border-bottom-color 120ms ease-out;
+  transition: border-bottom-color 120ms ease-out, color 120ms ease-out;
 }
 span.elem-ref:hover,
 span.elem-ref.active {
+  border-bottom-color: currentColor;
+}
+/* `.lit` is set by the browser-side JS in response to geomlib's
+   `geomlib:highlight` event (geomlib >= 0.11.0, #108): every prose
+   reference to an element currently highlighted on the canvas — whether
+   by hovering any one of its refs, pinning it, or a slide's `highlighted`
+   set — gets the same golden emphasis as the figure. */
+span.elem-ref.lit {
+  color: #b8860b;
   border-bottom-color: currentColor;
 }
 

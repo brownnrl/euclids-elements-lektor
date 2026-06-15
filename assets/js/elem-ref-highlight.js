@@ -5,7 +5,16 @@
 //   - mouseenter / mouseleave  →  hover-highlight on desktop
 //   - pointerdown              →  sticky toggle for touch
 // Each handler flips the corresponding geomlib element's `shouldHighlight`
-// flag and calls `slate.update()` to redraw.
+// flag and calls `slate.update()` to redraw.  (text → canvas)
+//
+// Bidirectional binding (canvas → text), geomlib >= 0.11.0 (#108): geomlib
+// dispatches a bubbling `geomlib:highlight` CustomEvent on a slate's canvas
+// whenever its highlighted SET changes — from ANY source (a prose ref
+// hover, a pin, or a slide's `highlighted` set). We listen per canvas and
+// add `.lit` to EVERY prose ref whose element is in that set, so hovering
+// one `{AB}` lights up the canvas AB *and* every other `{AB}` in the prose.
+//   event.detail.highlighted: Array<{ name, aliases: string[] }>
+//   (name = canonical element name; aliases = name + every alias for it)
 //
 // Target slate resolution (in order):
 //   1. data-canvas="canvas_N"  →  exact id match
@@ -17,6 +26,13 @@
 
 (function () {
     "use strict";
+
+    // Registry of successfully-bound spans, so the per-canvas
+    // `geomlib:highlight` listener can find every span on a given slate.
+    // Each entry: { span, slate, element }.
+    var bound = [];
+    // Slates that already have a `geomlib:highlight` listener attached.
+    var listening = [];
 
     // Slate exposes a public `canvas` getter in geomlib >= 0.4.0; before
     // that the canvas was a `_canvas` private field. Fall back so this
@@ -100,12 +116,44 @@
         return null;
     }
 
+    // Light up every prose ref on `slate` whose element is in the
+    // highlighted set just reported by geomlib's `geomlib:highlight` event.
+    function applyHighlightEvent(slate, ev) {
+        var hl = (ev && ev.detail && ev.detail.highlighted) || [];
+        var lit = {};   // set of highlighted names (canonical + aliases)
+        for (var i = 0; i < hl.length; i++) {
+            var h = hl[i];
+            if (!h) continue;
+            if (h.name) lit[h.name] = true;
+            var al = h.aliases;
+            if (al) for (var j = 0; j < al.length; j++) lit[al[j]] = true;
+        }
+        for (var k = 0; k < bound.length; k++) {
+            var b = bound[k];
+            if (b.slate !== slate) continue;
+            b.span.classList.toggle("lit", !!lit[b.element.name]);
+        }
+    }
+
+    // Attach the canvas → text listener once per slate.
+    function ensureHighlightListener(slate) {
+        if (listening.indexOf(slate) !== -1) return;
+        var c = slateCanvas(slate);
+        if (!c || typeof c.addEventListener !== "function") return;
+        c.addEventListener("geomlib:highlight", function (ev) {
+            applyHighlightEvent(slate, ev);
+        });
+        listening.push(slate);
+    }
+
     function bindSpan(span) {
         var target = resolveTarget(span);
         if (!target) return;
 
         var slate = target.slate;
         var elem = target.element;
+        bound.push({ span: span, slate: slate, element: elem });
+        ensureHighlightListener(slate);
 
         function setHighlight(on) {
             elem.shouldHighlight = !!on;
