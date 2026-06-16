@@ -21,7 +21,9 @@ as simple as the proof allows.
    author **before implementing**. Note in the surrounding narrative
    which diagrams get constructions, and flag anything in the text
    that calls for work outside this process.
-4. Implement: figure additions, `slides:` array, prose `{NAME}` refs,
+4. Implement: figure additions, `slides:` array, prose **and guide**
+   `{NAME}` refs (each bound to the canvas it refers to in context —
+   see [Guide / prose refs](#guide--prose-refs-bind-to-the-canvas-in-context)),
    aliases, `window.eucrefs`.
 5. Verify (checklist below), then commit.
 6. Only if the **Not yet implemented** column has entries: geomlib
@@ -68,6 +70,31 @@ to flag in the table's narrative, not the default.
 Only the **proposition canvas** gets slides and animations. Guide
 canvases get `{NAME}` hover refs (and invisible highlight targets as
 needed) but no slideshow.
+
+### Guide / prose refs bind to the canvas in context
+
+Every `{NAME}` in the guide (and in any prose) must refer to **the canvas
+it is talking about in context** — this includes guide prose that
+discusses the *proposition* diagram, not just a guide canvas. The browser
+binds a ref to a canvas by DOM order: the **nearest preceding canvas
+wins** (then any following canvas), per `assets/js/elem-ref-highlight.js`.
+So:
+
+- **Single-canvas page** (just `canvas_0`): every guide ref resolves to
+  `canvas_0` automatically — tokenize the guide's letters freely.
+- **Multi-canvas page** (proposition `canvas_0` + a guide-construction
+  `canvas_1`): a ref placed *after* `canvas_1` binds to `canvas_1`; one
+  *between* the canvases binds to `canvas_0`. Order the prose so each
+  ref's nearest preceding canvas is the one it means.
+- When the wording can't be reordered, target a canvas explicitly with the
+  raw-HTML span —
+  `<span class="elem-ref" data-elem="AB" data-canvas="canvas_0">AB</span>`
+  (the inline `{AB:canvas_0}` form doesn't survive Mistune's underscore
+  split).
+
+Every element a guide ref names must exist on its target canvas; add an
+invisible highlight target there if the prose names something the diagram
+doesn't draw.
 
 ### Invisible highlight targets (the Zeno pattern)
 
@@ -169,7 +196,10 @@ text — that is how `Q.E.F.` / `Q.E.D.` goes on the closing slide.
 5. Walk every slide: animations land, transitory pieces vanish on the
    next slide, caption hovers light the right elements, justification
    links resolve.
-6. Static figure + exit-presentation: matches Joyce's layout, free
+6. Hover the **guide** `{NAME}` refs: each lights the canvas it refers to
+   in context (on multi-canvas pages, confirm a ref means `canvas_0` vs
+   `canvas_1` correctly).
+7. Static figure + exit-presentation: matches Joyce's layout, free
    points drag, the whole construction tracks.
 
 ## Worked example — proposition I.5
