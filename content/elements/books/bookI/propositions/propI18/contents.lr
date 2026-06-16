@@ -15,7 +15,7 @@ statement: In any triangle the angle opposite the greater side is greater.
 ----
 proof:
 
-Let *ABC* be a triangle having the side *AC* greater than *AB.*
+Let {ABC} be a triangle having the side {AC} greater than {AB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="200" tabindex="0"></canvas>
@@ -30,20 +30,101 @@ Let *ABC* be a triangle having the side *AC* greater than *AB.*
             "B;point;free;80,170",
             "C;point;free;220,170",
             "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random",
+            // D cuts AD = AB off the greater side AC; BD joined (△ABD is
+            // isosceles, △BCD the one whose exterior angle is ∠ADB).
             "D;point;cutoff;A,C,A,B",
-            "BD;line;connect;B,D"
+            "BD;line;connect;B,D",
+            "BCD;polygon;triangle;B,C,D;0;0;0;0",
+            // Zero-color hover targets for the sides / cut-off.
+            "AC;line;connect;A,C;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            // Angle markers. Angle at B named CBA (the triangle owns
+            // "ABC"; prose uses {ABC|CBA}). At C, ∠BCA = ∠DCB since D is on
+            // CA — aliases ACB, DCB → BCA. At B, ∠ABD nests inside ∠CBA.
+            "CBA;sector;angleMarker;B,C,A",
+            "BCA;sector;angleMarker;C,B,A",
+            "ADB;sector;angleMarker;D,A,B",
+            "ABD;sector;angleMarker;B,A,D"
         ],
+        aliases: {
+            "ACB": "BCA",
+            "DCB": "BCA"
+        },
+        slides: [
+            { text: "Let {ABC} be a triangle having the side {AC} greater than {AB}.",
+              visible: ["ABC"],
+              highlighted: ["AC","AB"] },
+            { text: "I say that the angle {ABC|CBA} is also greater than the angle {BCA}.",
+              visible: ["ABC","CBA","BCA"],
+              highlighted: ["CBA","BCA"],
+              transition: {
+                  mode: "parallel",
+                  animations: [
+                      { elem: "CBA", name: geomlib.A.Sector.sweep },
+                      { elem: "BCA", name: geomlib.A.Sector.sweep }
+                  ]
+              } },
+            { text: "Since {AC} is greater than {AB}, make {AD} equal to {AB}, and join {BD}.",
+              visible: ["ABC","CBA","BCA","D","BD"],
+              highlighted: ["AD","AB"],
+              transition: {
+                  animations: [
+                      { elem: "D",  name: geomlib.A.Point.appear },
+                      { elem: "BD", name: geomlib.A.Line.straightEdgeConnect }
+                  ]
+              },
+              justifications: [{ ref: "I.3" }, { ref: "I.Post.1" }] },
+            { text: "Since the angle {ADB} is an exterior angle of the triangle {BCD}, therefore it is greater than the interior and opposite angle {DCB}.",
+              visible: ["ABC","CBA","BCA","D","BD","BCD","ADB"],
+              highlighted: ["ADB","DCB"],
+              transition: {
+                  animations: [
+                      { elem: "ADB", name: geomlib.A.Sector.sweep }
+                  ]
+              },
+              justifications: [{ ref: "I.16" }] },
+            { text: "But the angle {ADB} equals the angle {ABD}, since the side {AB} equals {AD}, therefore the angle {ABD} is also greater than the angle {ACB}.",
+              visible: ["ABC","CBA","BCA","D","BD","ADB","ABD"],
+              highlighted: ["ADB","ABD","AB","AD","ACB"],
+              transition: {
+                  animations: [
+                      { elem: "ABD", name: geomlib.A.Sector.sweep }
+                  ]
+              },
+              justifications: [{ ref: "I.5" }] },
+            { text: "Therefore the angle {ABC|CBA} is much greater than the angle {ACB}.",
+              visible: ["ABC","CBA","BCA","D","BD","ABD"],
+              highlighted: ["CBA","ACB"] },
+            { text: "Therefore in any triangle the angle opposite the greater side is greater.",
+              visible: ["ABC","CBA","BCA"],
+              highlighted: ["CBA","BCA"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // callback — same hand-authored pattern as the earlier props.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.5":      "/elements/books/bookI/propositions/propI5/",
+        "I.16":     "/elements/books/bookI/propositions/propI16/"
     });
 </script>
 </figure>
 
-I say that the angle *ABC* is also greater than the angle *BCA.*
+I say that the angle {ABC|CBA} is also greater than the angle {BCA}.
 
-Since *AC* is greater than *AB,* make *AD* equal to *AB,* and join *BD.* [!just I.3, I.Post.1]
+Since {AC} is greater than {AB}, make {AD} equal to {AB}, and join {BD}. [!just I.3, I.Post.1]
 
-Since the angle *ADB* is an exterior angle of the triangle *BCD,* therefore it is greater than the interior and opposite angle *DCB.* [!just I.16]
+Since the angle {ADB} is an exterior angle of the triangle {BCD}, therefore it is greater than the interior and opposite angle {DCB}. [!just I.16]
 
-But the angle *ADB* equals the angle *ABD,* since the side *AB* equals *AD,* therefore the angle *ABD* is also greater than the angle *ACB.* Therefore the angle *ABC* is much greater than the angle *ACB.* [!just I.5]
+But the angle {ADB} equals the angle {ABD}, since the side {AB} equals {AD}, therefore the angle {ABD} is also greater than the angle {ACB}. Therefore the angle {ABC|CBA} is much greater than the angle {ACB}. [!just I.5]
 
 Therefore *in any triangle the angle opposite the greater side is greater.*
 
@@ -67,11 +148,11 @@ In this translation the original word order is abandoned in order to make for mo
 
 It may sound like these two propositions really do say the same thing, but they don't. they're actually disguised converses of each other. I.18 says
 
-<center>if side <i>AC</i> > side <i>AB,</i> then angle <i>ABC</i> > angle <i>BCA</i>,</center>
+<center>if side <span class="elem-ref" data-elem="AC">AC</span> > side <span class="elem-ref" data-elem="AB">AB</span>, then angle <span class="elem-ref" data-elem="CBA">ABC</span> > angle <span class="elem-ref" data-elem="BCA">BCA</span>,</center>
 
 while I.19 says
 
-<center>if angle <i>ABC</i> > angle <i>BCA,</i> then side <i>AC</i> > side <i>AB.</i></center>
+<center>if angle <span class="elem-ref" data-elem="CBA">ABC</span> > angle <span class="elem-ref" data-elem="BCA">BCA</span>, then side <span class="elem-ref" data-elem="AC">AC</span> > side <span class="elem-ref" data-elem="AB">AB</span>.</center>
 
 #### Use of Proposition 18
 

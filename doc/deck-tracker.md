@@ -38,9 +38,9 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 17 (I.1–I.17) | markers on 0.12.0 (see open Qs) |
+| Book I | 48 | 18 (I.1–I.18) | markers on 0.12.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
-| **Total** | **465** | **17** | — |
+| **Total** | **465** | **18** | — |
 
 ---
 
@@ -68,7 +68,7 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.15 | Vertical angles are equal | T | ✅ | 7 | Sector.sweep, Line.straightEdgeConnect, Point.appear | ⚠ | Vertical angles via I.13. AB, CD cross at E (`point;intersection`); 4 markers **tile** the vertex E (CEA/DEB and AED/BEC the vertical pairs) — different sectors, no overlap, no aliases. Separate corollary section (angles = four right angles; injected-duplicate artifact already removed). Markers → #91 rework |
 | I.16 | Exterior angle > either remote interior | T | ✅ | 10 | Line.straightEdgeConnect, Point.appear, Sector.sweep, Polygon.outline | ⚠ | Biggest Book-I deck. Midpoint E of AC, double BE→F (EF=BE), congruent ABE≅CFE (I.4 + vertical ∠AEB=∠FEC via I.15), exterior ∠ACD>∠BAE (C.N.5). **7 markers** (3 at C, nested #103); triangle/angle name collisions handled (angle at B named CBA; "angle ABC" via `{ABC\|CBA}`). Guide carries a 2nd canvas (elliptic geometry); guide refs bound per-canvas (proof→canvas_0, elliptic D/E/F/ABC→canvas_1) — the elliptic ABC a straight-chord stopgap pending [euclid#119](https://github.com/brownnrl/euclid/issues/119). Markers → #91 rework |
 | I.17 | Any two angles sum < two right angles | T | ✅ | 7 | Sector.sweep, Point.appear, Line.straightEdgeConnect | ⚠ | Uses I.16 (ext angle) + I.13. Same triangle base; BC produced to D. 4 markers (angle at B named CBA to dodge the ABC-triangle collision; "angle ABC" via `{ABC\|CBA}`). Guide magnitude property ("if x>y then x+z>y+z") KaTeX'd; guide angle refs tokenized. Markers → #91 rework |
-| I.18 | Greater side ⇒ greater opposite angle | T | ⬜ | | | ⚠? | |
+| I.18 | Greater side ⇒ greater opposite angle | T | ✅ | 7 | Sector.sweep, Point.appear, Line.straightEdgeConnect | ⚠ | Cut off AD=AB (I.3), then I.16 (ext ∠ADB>∠DCB) + I.5 (∠ADB=∠ABD). 4 markers; ∠DCB=∠BCA (D on CA, aliased); angle-at-B named CBA, "angle ABC" via `{ABC\|CBA}`. Guide if-then statements use raw-HTML `elem-ref` spans inside `<center>`. Markers → #91 rework |
 | I.19 | Greater angle ⇒ greater opposite side | T | ⬜ | | | ⚠? | |
 | I.20 | Triangle inequality | T | ⬜ | | | — | |
 | I.21 | Inner cevians: shorter sum, greater angle | T | ⬜ | | | ⚠? | |
