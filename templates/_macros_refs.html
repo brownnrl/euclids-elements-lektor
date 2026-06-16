@@ -1,0 +1,17 @@
+{# "Referenced by" table — the reverse [!just] citation index for a
+   record (a standalone page, or a bundle member). Reads the
+   lektor-eucrefs `referenced_by` Jinja global (available to macros).
+   Shared by proposition / postulate / definition / commonnotion. The
+   optional `heading` lets bundled pages name which member the table is
+   for (e.g. "Referenced by — C.N.1"). #}
+{% macro ref_table(record, heading="Referenced by") -%}
+{% set _refby = referenced_by(record) %}
+{%- if _refby %}
+<h4>{{ heading }}</h4>
+<table class="ref-table">
+  {% for g in _refby -%}
+  <tr><th>{{ g.label }}</th><td>{% for r in g.refs %}<a href="{{ r.url }}">{{ r.label }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</td></tr>
+  {% endfor %}
+</table>
+{%- endif %}
+{%- endmacro %}
