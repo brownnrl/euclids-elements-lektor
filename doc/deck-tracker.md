@@ -38,9 +38,9 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 15 (I.1–I.15) | markers on 0.12.0 (see open Qs) |
+| Book I | 48 | 16 (I.1–I.16) | markers on 0.12.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
-| **Total** | **465** | **15** | — |
+| **Total** | **465** | **16** | — |
 
 ---
 
@@ -66,7 +66,7 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.13 | Angles on a line sum to two right angles | T | ✅ | 9 | Sector.sweep, Line.straightEdgeConnect, Point.appear | ⚠ | Angle-arithmetic proof — **5 angle markers all at B** (CBA, ABD, CBE, EBD, ABE; #103 nests the same-vertex set), auxiliary perpendicular BE (I.11). Permuted spellings (ABC/DBA/EBA/DBE) via aliases; per-slide `visible` manages marker density. Proof + guide tokenized. Markers → #91 rework |
 | I.14 | Converse of I.13 (lines straight) | T | ✅ | 9 | Sector.sweep, Point.appear, Line.straightEdgeConnect | ⚠ | Reductio (cites I.13). Hypothetical ray BE drawn inside ∠ABD so ∠ABE < ∠ABD — the visible "less equals greater"; BE eliminated at the end → CBD straight. D slides on line BC so CBD is genuinely straight (honest hypothesis); E free + deferred. 3 markers at B; proof + guide tokenized. Markers → #91 rework |
 | I.15 | Vertical angles are equal | T | ✅ | 7 | Sector.sweep, Line.straightEdgeConnect, Point.appear | ⚠ | Vertical angles via I.13. AB, CD cross at E (`point;intersection`); 4 markers **tile** the vertex E (CEA/DEB and AED/BEC the vertical pairs) — different sectors, no overlap, no aliases. Separate corollary section (angles = four right angles; injected-duplicate artifact already removed). Markers → #91 rework |
-| I.16 | Exterior angle > either remote interior | T | ⬜ | | | ⚠? | |
+| I.16 | Exterior angle > either remote interior | T | ✅ | 10 | Line.straightEdgeConnect, Point.appear, Sector.sweep, Polygon.outline | ⚠ | Biggest Book-I deck. Midpoint E of AC, double BE→F (EF=BE), congruent ABE≅CFE (I.4 + vertical ∠AEB=∠FEC via I.15), exterior ∠ACD>∠BAE (C.N.5). **7 markers** (3 at C, nested #103); triangle/angle name collisions handled (angle at B named CBA; "angle ABC" via `{ABC\|CBA}`). Guide carries a 2nd canvas (elliptic geometry) — guide refs pending. Markers → #91 rework |
 | I.17 | Any two angles sum < two right angles | T | ⬜ | | | ⚠? | |
 | I.18 | Greater side ⇒ greater opposite angle | T | ⬜ | | | ⚠? | |
 | I.19 | Greater angle ⇒ greater opposite side | T | ⬜ | | | ⚠? | |

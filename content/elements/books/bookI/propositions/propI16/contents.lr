@@ -15,9 +15,9 @@ statement: In any triangle, if one of the sides is produced, then the exterior a
 ----
 proof:
 
-Let *ABC* be a triangle, and let one side of it *BC* be produced to *D.*
+Let {ABC} be a triangle, and let one side of it {BC} be produced to {D}.
 
-I say that the exterior angle *ACD* is greater than either of the interior and opposite angles *CBA* and *BAC.*
+I say that the exterior angle {ACD} is greater than either of the interior and opposite angles {CBA} and {BAC}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="250" tabindex="0"></canvas>
@@ -28,34 +28,176 @@ I say that the exterior angle *ACD* is greater than either of the interior and o
         background: "35,19,100",
         title: "I.16",
         elements: [
+            // Triangle ABC, side BC produced to D (exterior angle at C).
             "A;point;free;80,30",
             "B;point;free;30,180",
             "C;point;free;140,180",
             "ABC;polygon;triangle;A,B,C;0;0;black;random",
             "D;point;lineSlider;B,C,220,180",
             "CD;line;connect;C,D",
+            // E bisects AC; BE is produced to F with EF = BE (E the
+            // midpoint of BF); FC joined; AC produced to G.
             "E;point;midpoint;A,C",
             "F;point;extend;B,E,B,E",
             "BF;line;connect;B,F",
             "FC;line;connect;F,C",
             "G;point;lineSlider;A,C,170,220",
-            "CG;line;connect;C,G"
+            "CG;line;connect;C,G",
+            // The congruent triangles ABE ≅ CFE (zero-color; outlined on
+            // the congruence slide).
+            "ABE;polygon;triangle;A,B,E;0;0;0;0",
+            "CFE;polygon;triangle;C,F,E;0;0;0;0",
+            // Zero-color hover targets for the sides / halves the prose
+            // names.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BE;line;connect;B,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            // Angle markers. Named to dodge the triangle-name collisions:
+            // the angle at B is CBA (not ABC), at A is BAC; the angle ABC
+            // in the prose uses the {ABC|CBA} display override. #103 nests
+            // the same-vertex set at C (ACD, ECF, BCG). Hidden in static.
+            "ACD;sector;angleMarker;C,A,D",
+            "CBA;sector;angleMarker;B,C,A",
+            "BAC;sector;angleMarker;A,B,C",
+            "AEB;sector;angleMarker;E,A,B",
+            "FEC;sector;angleMarker;E,F,C",
+            "ECF;sector;angleMarker;C,E,F",
+            "BCG;sector;angleMarker;C,B,G"
         ],
+        // G (AC produced) is constructed mid-proof; D (BC produced) is part
+        // of the statement, shown from the start.
+        deferDraggables: ["G"],
+        aliases: {
+            "ECD": "ACD",
+            "BAE": "BAC",
+            "EB":  "BE",
+            "CE":  "EC",
+            "FE":  "EF"
+        },
+        slides: [
+            { text: "Let {ABC} be a triangle, and let one side of it {BC} be produced to {D}.",
+              visible: ["ABC","CD"],
+              transition: {
+                  animations: [
+                      { elem: "CD", name: geomlib.A.Line.straightEdgeConnect }
+                  ]
+              } },
+            { text: "I say that the exterior angle {ACD} is greater than either of the interior and opposite angles {CBA} and {BAC}.",
+              visible: ["ABC","CD","ACD","CBA","BAC"],
+              highlighted: ["ACD","CBA","BAC"],
+              transition: {
+                  mode: "parallel",
+                  animations: [
+                      { elem: "ACD", name: geomlib.A.Sector.sweep },
+                      { elem: "CBA", name: geomlib.A.Sector.sweep },
+                      { elem: "BAC", name: geomlib.A.Sector.sweep }
+                  ]
+              } },
+            { text: "Bisect {AC} at {E}. Join {BE}, and produce it in a straight line to {F}.",
+              visible: ["ABC","CD","E","BF","F"],
+              transition: {
+                  animations: [
+                      { elem: "E",  name: geomlib.A.Point.appear },
+                      { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
+                      { elem: "F",  name: geomlib.A.Point.appear }
+                  ]
+              },
+              justifications: [{ ref: "I.10" }, { ref: "I.Post.1" }, { ref: "I.Post.2" }] },
+            { text: "Make {EF} equal to {BE}, join {FC}, and draw {AC} through to {G}.",
+              visible: ["ABC","CD","E","BF","F","FC","G","CG"],
+              transition: {
+                  animations: [
+                      { elem: "FC", name: geomlib.A.Line.straightEdgeConnect },
+                      { elem: "G",  name: geomlib.A.Point.appear },
+                      { elem: "CG", name: geomlib.A.Line.straightEdgeConnect }
+                  ]
+              },
+              justifications: [{ ref: "I.3" }, { ref: "I.Post.1" }, { ref: "I.Post.2" }] },
+            { text: "Since {AE} equals {EC}, and {BE} equals {EF}, therefore the two sides {AE} and {EB} equal the two sides {CE} and {EF} respectively, and the angle {AEB} equals the angle {FEC}, for they are vertical angles.",
+              visible: ["ABC","CD","E","BF","F","FC","G","CG","AEB","FEC"],
+              highlighted: ["AE","EC","BE","EF","AEB","FEC"],
+              transition: {
+                  mode: "parallel",
+                  animations: [
+                      { elem: "AEB", name: geomlib.A.Sector.sweep },
+                      { elem: "FEC", name: geomlib.A.Sector.sweep }
+                  ]
+              },
+              justifications: [{ ref: "I.15" }] },
+            { text: "Therefore the base {AB} equals the base {FC}, the triangle {ABE} equals the triangle {CFE}, and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides.",
+              visible: ["ABC","CD","E","BF","F","FC","G","CG","ABE","CFE"],
+              highlighted: ["AB","FC","ABE","CFE"],
+              transition: {
+                  mode: "parallel",
+                  animations: [
+                      { elem: "ABE", name: geomlib.A.Polygon.outline },
+                      { elem: "CFE", name: geomlib.A.Polygon.outline }
+                  ]
+              },
+              justifications: [{ ref: "I.4" }] },
+            { text: "Therefore the angle {BAE} equals the angle {ECF}.",
+              visible: ["ABC","CD","E","BF","F","FC","G","CG","BAC","ECF"],
+              highlighted: ["BAC","ECF"],
+              transition: {
+                  mode: "parallel",
+                  animations: [
+                      { elem: "BAC", name: geomlib.A.Sector.sweep },
+                      { elem: "ECF", name: geomlib.A.Sector.sweep }
+                  ]
+              } },
+            { text: "But the angle {ECD} is greater than the angle {ECF}, therefore the angle {ACD} is greater than the angle {BAE}.",
+              visible: ["ABC","CD","E","BF","F","FC","G","CG","BAC","ECF","ACD"],
+              highlighted: ["ACD","ECF","BAC"],
+              justifications: [{ ref: "C.N.5" }] },
+            { text: "Similarly, if {BC} is bisected, then the angle {BCG}, that is, the angle {ACD}, can also be proved to be greater than the angle {ABC|CBA}.",
+              visible: ["ABC","CD","E","BF","F","FC","G","CG","ACD","BCG","CBA"],
+              highlighted: ["BCG","ACD","CBA"],
+              transition: {
+                  animations: [
+                      { elem: "BCG", name: geomlib.A.Sector.sweep }
+                  ]
+              },
+              justifications: [{ ref: "I.15" }] },
+            { text: "Therefore in any triangle, if one of the sides is produced, then the exterior angle is greater than either of the interior and opposite angles.",
+              visible: ["ABC","CD","ACD"],
+              highlighted: ["ACD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // callback — same hand-authored pattern as the earlier props.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.10":     "/elements/books/bookI/propositions/propI10/",
+        "I.15":     "/elements/books/bookI/propositions/propI15/",
+        "C.N.5":    "/elements/books/bookI/commonnotions/cn5/"
     });
 </script>
 </figure>
 
-Bisect *AC* at *E.* Join *BE,* and
-produce it in a straight line to *F.* [!just I.10, I.Post.1; I.Post.2]
+Bisect {AC} at {E}. Join {BE}, and
+produce it in a straight line to {F}. [!just I.10, I.Post.1; I.Post.2]
 
-Make *EF* equal to *BE,* join *FC,*
-and draw *AC* through to *G.* [!just I.3, I.Post.1; I.Post.2]
+Make {EF} equal to {BE}, join {FC},
+and draw {AC} through to {G}. [!just I.3, I.Post.1; I.Post.2]
 
-Since *AE* equals *EC,* and *BE* equals *EF,* therefore the two sides *AE* and *EB* equal the two sides *CE* and *EF* respectively, and the angle *AEB* equals the angle *FEC,* for they are vertical angles. Therefore the base *AB* equals the base *FC,* the triangle *ABE* equals the triangle *CFE,* and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides. Therefore the angle *BAE* equals the angle *ECF.* [!just I.15; I.4]
+Since {AE} equals {EC}, and {BE} equals {EF}, therefore the two sides {AE} and {EB} equal the two sides {CE} and {EF} respectively, and the angle {AEB} equals the angle {FEC}, for they are vertical angles. Therefore the base {AB} equals the base {FC}, the triangle {ABE} equals the triangle {CFE}, and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides. Therefore the angle {BAE} equals the angle {ECF}. [!just I.15; I.4]
 
-But the angle *ECD* is greater than the angle *ECF,* therefore the angle *ACD* is greater than the angle *BAE.* [!just C.N.5]
+But the angle {ECD} is greater than the angle {ECF}, therefore the angle {ACD} is greater than the angle {BAE}. [!just C.N.5]
 
-Similarly, if *BC* is bisected, then the angle *BCG,* that is, the angle *ACD,* can also be proved to be greater than the angle *ABC.* [!just I.15]
+Similarly, if {BC} is bisected, then the angle {BCG}, that is, the angle {ACD}, can also be proved to be greater than the angle {ABC|CBA}. [!just I.15]
 
 Therefore *in any triangle, if one of the sides is produced, then the exterior angle is greater than either of the interior and opposite angles.*
 
