@@ -38,9 +38,9 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 13 (I.1–I.13) | markers on 0.12.0 (see open Qs) |
+| Book I | 48 | 14 (I.1–I.14) | markers on 0.12.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
-| **Total** | **465** | **13** | — |
+| **Total** | **465** | **14** | — |
 
 ---
 
@@ -64,7 +64,7 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.11 | Erect a perpendicular at a point on a line | C | 🚧 | 9 + 3 | canvas_0: Circle.compass, Point.appear, Polygon.outlineAndFill, Line.straightEdgeConnect, Sector.sweep · canvas_1: Circle.compass, Point.appear, Line.straightEdgeConnect | ~ | TWO slideshows (proposition + Joyce's guide 3-circle construction, verbatim). Transitory construction circles; two adjacent right-angle markers at C (auto-nest #103). Pending visual pass |
 | I.12 | Drop a perpendicular from a point off a line | C | ✅ | 9 | Circle.compass, Point.appear, Line.straightEdgeConnect, Sector.sweep | ~ | Circle EFG (centre C through D, the random point on the other side) cuts AB at E, G; H bisects EG; CH ⊥ AB. Two adjacent right-angle markers at H (CHG, EHC), like I.11; congruence by I.8 (SSS) + I.Def.15 (radii CG=CE). Markers → #91 rework |
 | I.13 | Angles on a line sum to two right angles | T | ✅ | 9 | Sector.sweep, Line.straightEdgeConnect, Point.appear | ⚠ | Angle-arithmetic proof — **5 angle markers all at B** (CBA, ABD, CBE, EBD, ABE; #103 nests the same-vertex set), auxiliary perpendicular BE (I.11). Permuted spellings (ABC/DBA/EBA/DBE) via aliases; per-slide `visible` manages marker density. Proof + guide tokenized. Markers → #91 rework |
-| I.14 | Converse of I.13 (lines straight) | T | ⬜ | | | ⚠? | |
+| I.14 | Converse of I.13 (lines straight) | T | ✅ | 9 | Sector.sweep, Point.appear, Line.straightEdgeConnect | ⚠ | Reductio (cites I.13). Hypothetical ray BE drawn inside ∠ABD so ∠ABE < ∠ABD — the visible "less equals greater"; BE eliminated at the end → CBD straight. D slides on line BC so CBD is genuinely straight (honest hypothesis); E free + deferred. 3 markers at B; proof + guide tokenized. Markers → #91 rework |
 | I.15 | Vertical angles are equal | T | ⬜ | | | ⚠? | |
 | I.16 | Exterior angle > either remote interior | T | ⬜ | | | ⚠? | |
 | I.17 | Any two angles sum < two right angles | T | ⬜ | | | ⚠? | |
