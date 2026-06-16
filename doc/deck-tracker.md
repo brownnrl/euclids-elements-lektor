@@ -38,9 +38,9 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 11 (I.1–I.11) | markers on 0.11.0 (see open Qs) |
+| Book I | 48 | 12 (I.1–I.12) | markers on 0.12.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
-| **Total** | **465** | **11** | — |
+| **Total** | **465** | **12** | — |
 
 ---
 
@@ -62,7 +62,7 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.9 | Bisect an angle | C | ✅ | 11 | Sector.sweep, Point.appear, Circle.compass, Line.straightEdgeConnect, Polygon.outline | ⚠ | 0.8.0 angleMarker. 3 markers at A (whole ∠BAC + halves ∠DAF/∠EAF) — built flat, overlap until 0.8.1 auto-nesting. Equilateral triangle shown in full — two compass circles (+ the slide-4 cut-off circle = Joyce's three circles), deliberately revived to connect to the Guide's construction-steps canvas. Committed 15a083c |
 | I.10 | Bisect a segment | C | 🚧 | 8 + 9 | canvas_0: Polygon.outline, Point.appear, Sector.sweep, Line.straightEdgeConnect · canvas_1: Circle.compass, Point.appear, Line.straightEdgeConnect, Sector.sweep | ⚠ | **TWO independent slideshows** (author's choice): proposition proof (canvas_0) + Guide construction-steps (canvas_1, Joyce's double-equilateral-triangle narrative). Same two-circle build on both — canvas_0 shows the circles transitorily on the build slide then hides them (back to Joyce's triangle + CD); canvas_1 keeps the circles. 3 markers at C flat. Guide prose hover-refs canvas_1. Pending visual pass |
 | I.11 | Erect a perpendicular at a point on a line | C | 🚧 | 9 + 3 | canvas_0: Circle.compass, Point.appear, Polygon.outlineAndFill, Line.straightEdgeConnect, Sector.sweep · canvas_1: Circle.compass, Point.appear, Line.straightEdgeConnect | ~ | TWO slideshows (proposition + Joyce's guide 3-circle construction, verbatim). Transitory construction circles; two adjacent right-angle markers at C (auto-nest #103). Pending visual pass |
-| I.12 | Drop a perpendicular from a point off a line | C | ⬜ | | | ~ | One right-angle marker at most |
+| I.12 | Drop a perpendicular from a point off a line | C | ✅ | 9 | Circle.compass, Point.appear, Line.straightEdgeConnect, Sector.sweep | ~ | Circle EFG (centre C through D, the random point on the other side) cuts AB at E, G; H bisects EG; CH ⊥ AB. Two adjacent right-angle markers at H (CHG, EHC), like I.11; congruence by I.8 (SSS) + I.Def.15 (radii CG=CE). Markers → #91 rework |
 | I.13 | Angles on a line sum to two right angles | T | ⬜ | | | ⚠? | |
 | I.14 | Converse of I.13 (lines straight) | T | ⬜ | | | ⚠? | |
 | I.15 | Vertical angles are equal | T | ⬜ | | | ⚠? | |
