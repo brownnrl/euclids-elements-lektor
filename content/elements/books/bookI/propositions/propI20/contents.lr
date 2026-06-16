@@ -15,9 +15,9 @@ statement: In any triangle the sum of any two sides is greater than the remainin
 ----
 proof:
 
-Let *ABC* be a triangle.
+Let {ABC} be a triangle.
 
-I say that in the triangle *ABC* the sum of any two sides is greater than the remaining one, that is, the sum of *BA* and *AC* is greater than *BC,* the sum of *AB* and *BC* is greater than *AC,* and the sum of *BC* and *CA* is greater than *AB.*
+I say that in the triangle {ABC} the sum of any two sides is greater than the remaining one, that is, the sum of {BA} and {AC} is greater than {BC}, the sum of {AB} and {BC} is greater than {AC}, and the sum of {BC} and {CA} is greater than {AB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="220" height="220" tabindex="0"></canvas>
@@ -32,26 +32,119 @@ I say that in the triangle *ABC* the sum of any two sides is greater than the re
             "B;point;free;40,180",
             "C;point;free;180,180",
             "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random",
+            // BA produced beyond A by AC to D (so DB = BA + AC); DC joined.
+            // △ACD is isosceles (DA = AC).
             "AD;line;extend;B,A,A,C",
             "D;point;last;AD",
             "CD;line;connect;C,D",
-            "ACD;polygon;triangle;A,C,D;0;0;0;random"
+            "ACD;polygon;triangle;A,C,D;0;0;0;random",
+            // △DCB (the one whose greater angle gives the longer side) +
+            // the long side DB, all zero-color hover targets.
+            "DCB;polygon;triangle;D,C,B;0;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            // Angle markers. ∠ADC = ∠BDC (D on line BA, A between B and D).
+            // ∠ACD's marker is DCA — the name "ACD" already belongs to the
+            // isosceles polygon, so prose uses {ACD|DCA}. At C, ∠ACD nests
+            // inside ∠BCD (#103).
+            "ADC;sector;angleMarker;D,A,C",
+            "DCA;sector;angleMarker;C,D,A",
+            "BCD;sector;angleMarker;C,B,D"
         ],
+        aliases: {
+            "BA":  "AB",
+            "CA":  "AC",
+            "DA":  "AD",
+            "DC":  "CD",
+            "BDC": "ADC"
+        },
+        slides: [
+            { text: "Let {ABC} be a triangle.",
+              visible: ["ABC"] },
+            { text: "I say that in the triangle {ABC} the sum of any two sides is greater than the remaining one, that is, the sum of {BA} and {AC} is greater than {BC}, the sum of {AB} and {BC} is greater than {AC}, and the sum of {BC} and {CA} is greater than {AB}.",
+              visible: ["ABC"],
+              highlighted: ["AB","BC","AC"] },
+            { text: "Draw {BA} through to the point {D}, and make {DA} equal to {CA}.",
+              visible: ["ABC","AD","D"],
+              highlighted: ["AD","AC"],
+              transition: {
+                  animations: [
+                      { elem: "AD", name: geomlib.A.Line.straightEdgeExtend },
+                      { elem: "D",  name: geomlib.A.Point.appear }
+                  ]
+              },
+              justifications: [{ ref: "I.Post.2" }, { ref: "I.3" }] },
+            { text: "Join {DC}.",
+              visible: ["ABC","AD","D","CD","ACD"],
+              transition: {
+                  animations: [
+                      { elem: "CD",  name: geomlib.A.Line.straightEdgeConnect }
+                  ]
+              },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Since {DA} equals {AC}, therefore the angle {ADC} also equals the angle {ACD|DCA}. Therefore the angle {BCD} is greater than the angle {ADC}.",
+              visible: ["ABC","AD","D","CD","ACD","ADC","DCA","BCD"],
+              highlighted: ["AD","AC","ADC","DCA","BCD"],
+              transition: {
+                  mode: "parallel",
+                  animations: [
+                      { elem: "ADC", name: geomlib.A.Sector.sweep },
+                      { elem: "DCA", name: geomlib.A.Sector.sweep },
+                      { elem: "BCD", name: geomlib.A.Sector.sweep }
+                  ]
+              },
+              justifications: [{ ref: "I.5" }, { ref: "C.N.5" }] },
+            { text: "Since {DCB} is a triangle having the angle {BCD} greater than the angle {BDC}, and the side opposite the greater angle is greater, therefore {DB} is greater than {BC}.",
+              visible: ["ABC","AD","D","CD","ACD","ADC","BCD","DCB"],
+              highlighted: ["BCD","BDC","DB","BC"],
+              transition: {
+                  animations: [
+                      { elem: "DCB", name: geomlib.A.Polygon.outline }
+                  ]
+              },
+              justifications: [{ ref: "I.19" }] },
+            { text: "But {DA} equals {AC}, therefore the sum of {BA} and {AC} is greater than {BC}.",
+              visible: ["ABC","AD","D","CD","ACD"],
+              highlighted: ["AD","AC","AB","BC"] },
+            { text: "Similarly we can prove that the sum of {AB} and {BC} is also greater than {CA}, and the sum of {BC} and {CA} is greater than {AB}.",
+              visible: ["ABC"],
+              highlighted: ["AB","BC","AC"] },
+            { text: "Therefore in any triangle the sum of any two sides is greater than the remaining one.",
+              visible: ["ABC"],
+              highlighted: ["AB","BC","AC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // callback — same hand-authored pattern as the earlier props.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.5":      "/elements/books/bookI/propositions/propI5/",
+        "I.19":     "/elements/books/bookI/propositions/propI19/"
     });
 </script>
 </figure>
 
-Draw *BA* through to the point *D,* and make *DA* equal to *CA.* [!just I.Post.2, I.3]
+Draw {BA} through to the point {D}, and make {DA} equal to {CA}. [!just I.Post.2, I.3]
 
-Join *DC.* [!just I.Post.1]
+Join {DC}. [!just I.Post.1]
 
-Since *DA* equals *AC,* therefore the angle *ADC* also equals the angle *ACD.* Therefore the angle *BCD* is greater than the angle *ADC.* [!just I.5, C.N.5]
+Since {DA} equals {AC}, therefore the angle {ADC} also equals the angle {ACD|DCA}. Therefore the angle {BCD} is greater than the angle {ADC}. [!just I.5, C.N.5]
 
-Since *DCB* is a triangle having the angle *BCD* greater than the angle *BDC,* and the side opposite the greater angle is greater, therefore *DB* is greater than *BC.* [!just I.19]
+Since {DCB} is a triangle having the angle {BCD} greater than the angle {BDC}, and the side opposite the greater angle is greater, therefore {DB} is greater than {BC}. [!just I.19]
 
-But *DA* equals *AC,* therefore the sum of *BA* and *AC* is greater than *BC.*
+But {DA} equals {AC}, therefore the sum of {BA} and {AC} is greater than {BC}.
 
-Similarly we can prove that the sum of *AB* and *BC* is also greater than *CA,* and the sum of *BC* and *CA* is greater than *AB.*
+Similarly we can prove that the sum of {AB} and {BC} is also greater than {CA}, and the sum of {BC} and {CA} is greater than {AB}.
 
 Therefore *in any triangle the sum of any two sides is greater than the remaining one.*
 

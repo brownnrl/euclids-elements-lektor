@@ -38,9 +38,9 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 19 (I.1–I.19) | markers on 0.12.0 (see open Qs) |
+| Book I | 48 | 20 (I.1–I.20) | markers on 0.12.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
-| **Total** | **465** | **19** | — |
+| **Total** | **465** | **20** | — |
 
 ---
 
@@ -70,7 +70,7 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.17 | Any two angles sum < two right angles | T | ✅ | 7 | Sector.sweep, Point.appear, Line.straightEdgeConnect | ⚠ | Uses I.16 (ext angle) + I.13. Same triangle base; BC produced to D. 4 markers (angle at B named CBA to dodge the ABC-triangle collision; "angle ABC" via `{ABC\|CBA}`). Guide magnitude property ("if x>y then x+z>y+z") KaTeX'd; guide angle refs tokenized. Markers → #91 rework |
 | I.18 | Greater side ⇒ greater opposite angle | T | ✅ | 7 | Sector.sweep, Point.appear, Line.straightEdgeConnect | ⚠ | Cut off AD=AB (I.3), then I.16 (ext ∠ADB>∠DCB) + I.5 (∠ADB=∠ABD). 4 markers; ∠DCB=∠BCA (D on CA, aliased); angle-at-B named CBA, "angle ABC" via `{ABC\|CBA}`. Guide if-then statements use raw-HTML `elem-ref` spans inside `<center>`. Markers → #91 rework |
 | I.19 | Greater angle ⇒ greater opposite side | T | ✅ | 7 | Sector.sweep | ⚠ | Converse of I.18 by trichotomy reductio: AC=AB ruled out by I.5, AC<AB by I.18. 2 markers (angle-at-B named CBA, "angle ABC" via `{ABC\|CBA}`). Guide has a 2nd canvas (law of sines) — its a/b/c/A/B/C refs bind to canvas_1; the sine-formula image replaced with KaTeX. Markers → #91 rework |
-| I.20 | Triangle inequality | T | ⬜ | | | — | |
+| I.20 | Triangle inequality | T | ✅ | 9 | Line.straightEdgeExtend, Point.appear, Line.straightEdgeConnect, Sector.sweep, Polygon.outline | ⚠ | BA produced to D (DA=AC), DC joined; isosceles △ACD (I.5) ⟹ ∠BCD>∠BDC ⟹ DB>BC (I.19). 3 markers (∠ACD's marker named DCA since "ACD" is the isosceles polygon; prose `{ACD\|DCA}`). **Guide has a big 2nd canvas — Heron's reflection / minimum-distance proof — guide refs PENDING (substantial).** Markers → #91 rework |
 | I.21 | Inner cevians: shorter sum, greater angle | T | ⬜ | | | ⚠? | |
 | I.22 | Triangle from three given lines | C | ⬜ | | | — | Compass-heavy construction |
 | I.23 | Copy an angle onto a line | C | ⬜ | | | ⚠? | Subject is an angle → #91 |
