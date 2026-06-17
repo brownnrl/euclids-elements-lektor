@@ -69,7 +69,13 @@ to flag in the table's narrative, not the default.
 
 Only the **proposition canvas** gets slides and animations. Guide
 canvases get `{NAME}` hover refs (and invisible highlight targets as
-needed) but no slideshow.
+needed) but no slideshow — **except** when a guide canvas is *itself a
+proof* (Joyce sometimes works a full argument in the guide, e.g. I.20's
+Heron minimum-distance construction). Such a canvas may carry its own
+`slides:` array, just like a proposition canvas; its captions follow the
+guide prose verbatim and its `resolveJustification`/`window.eucrefs`
+citations are merged into the page lookup with `Object.assign` (the
+shared `window.eucrefs` is keyed once across all canvases on the page).
 
 ### Guide / prose refs bind to the canvas in context
 

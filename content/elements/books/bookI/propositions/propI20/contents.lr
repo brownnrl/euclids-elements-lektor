@@ -210,6 +210,89 @@ This proposition on the triangle inequality, along with @I.15 on vertical angles
             "BP":  "PB",
             "B'P": "PB'"
         },
+        // The Heron min-distance Guide is itself a proof, so this canvas
+        // also gets a slideshow (an exception to "only the proposition
+        // canvas gets slides"). P, the variable point, is revealed on
+        // slide 2; the rest of the construction is derived.
+        deferDraggables: ["P"],
+        slides: [
+            { text: "Suppose there are two points {A} and {B} on the same side of a line {CD}.",
+              visible: ["CD"],
+              highlighted: ["A","B"],
+              transition: { animations: [ { elem: "CD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "The problem is to find the shortest path which goes first from the point {A} to some point {P} on the line {CD}, then from {P} to the point {B}.",
+              visible: ["CD","P","AP","PB"],
+              transition: { animations: [
+                  { elem: "P",  name: geomlib.A.Point.appear },
+                  { elem: "AP", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "PB", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "But that still leaves us the question of which point {P} to choose on the line {CD} to minimize the sum of the distances {AP} plus {PB}.",
+              visible: ["CD","P","AP","PB"],
+              highlighted: ["AP","PB"] },
+            { text: "The solution is that the shortest path will be the path AEB where angle of incidence, namely, angle {AEC}, equals the angle of reflection, namely, angle {BED}.",
+              visible: ["CD","P","AP","PB","E","AE","EB","AEC","BED"],
+              highlighted: ["AE","EB","AEC","BED"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "E",   name: geomlib.A.Point.appear },
+                  { elem: "EB",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AEC", name: geomlib.A.Sector.sweep },
+                  { elem: "BED", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Draw a perpendicular {BF} from the point {B} to the line {CD}, and extend it to {B'} so that {FB'} = {BF}.",
+              visible: ["CD","E","AE","EB","AEC","BED","F","BB'","B'","BF","FB'"],
+              highlighted: ["AE","BF","FB'"],
+              transition: { animations: [
+                  { elem: "F",   name: geomlib.A.Point.appear },
+                  { elem: "BB'", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "B'",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.12" }, { ref: "I.Post.2" }, { ref: "I.3" }] },
+            { text: "Draw {AB'} and let {E} be the point where {AB'} intersects {CD}. Draw {BE}.",
+              visible: ["CD","E","AE","EB","AEC","BED","F","BB'","B'","BF","FB'","AB'"],
+              highlighted: ["AB'","E"],
+              transition: { animations: [ { elem: "AB'", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, triangles {BFE} and {B'FE} are congruent since they have two sides and the included angle equal, the included angles being right angles.",
+              visible: ["CD","E","AE","EB","AEC","BED","F","BB'","B'","BF","FB'","AB'","BFE","B'FE"],
+              highlighted: ["BFE","B'FE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BFE",  name: geomlib.A.Polygon.outline },
+                  { elem: "B'FE", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "I.4" }] },
+            { text: "Therefore, angles {BFE|angBFE} and {BF'E|angB'FE} are equal. The vertical angle {AEC} across from angle {B'ED} also equals these angles. Thus, the angle of incidence {AEC} equals the angle of reflection {BED}.",
+              visible: ["CD","E","AE","EB","AEC","BED","F","BB'","B'","BF","FB'","AB'","BFE","B'FE","angBFE","angB'FE","B'ED"],
+              highlighted: ["angBFE","angB'FE","AEC","B'ED","BED"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBFE",  name: geomlib.A.Sector.sweep },
+                  { elem: "angB'FE", name: geomlib.A.Sector.sweep },
+                  { elem: "B'ED",    name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.15" }] },
+            { text: "We still have to show that the distance {AE} + {EB} is less than any distance {AP} + {EP} for any point {P} other than {E} that lies on the line {CD}. Let {P} be such a point and draw lines {AP}, {BP}, and {B'P}.",
+              visible: ["CD","P","AP","PB","E","AE","EB","AEC","BED","F","BB'","B'","BF","FB'","AB'","BFE","B'FE","angBFE","angB'FE","B'ED","PB'","EP"],
+              highlighted: ["AP","PB","PB'"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "P",   name: geomlib.A.Point.appear },
+                  { elem: "AP",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "PB",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "PB'", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then by proposition I.20, above, {AP} + {EP} is less than {AB'}. But {AB'} = {AE} + {EB'}, and {EB'} = {EB}, therefore {AP} + {EP} is less than {AE} + {EB}.",
+              visible: ["CD","P","AP","PB","E","AE","EB","AEC","BED","F","BB'","B'","BF","FB'","AB'","BFE","B'FE","angBFE","angB'FE","B'ED","PB'","EP","EB'"],
+              highlighted: ["AP","EP","AB'","AE","EB'","EB"],
+              justifications: [{ ref: "I.20" }] },
+            { text: "Thus, the shortest bent line between two points on the same side of a line that meets that line is the one where the angle of incidence equals the angle of reflection.",
+              visible: ["CD","P","AP","PB","E","AE","EB","AEC","BED","F","BB'","B'","BF","FB'","AB'"],
+              highlighted: ["AE","EB","AEC","BED"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Heron-Guide citations (added to the shared page lookup).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.12": "/elements/books/bookI/propositions/propI12/",
+        "I.4":  "/elements/books/bookI/propositions/propI4/",
+        "I.15": "/elements/books/bookI/propositions/propI15/",
+        "I.20": "/elements/books/bookI/propositions/propI20/"
     });
 </script>
 </figure>
