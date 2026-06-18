@@ -15,9 +15,9 @@ statement: If two triangles have two sides equal to two sides respectively, but 
 ----
 proof:
 
-Let *ABC* and *DEF* be two triangles having the two sides *AB* and *AC* equal to the two sides *DE* and *DF* respectively, so that *AB* equals *DE,* and *AC* equals *DF,* and let the angle at *A* be greater than the angle at *D.*
+Let {ABC} and {DEF} be two triangles having the two sides {AB} and {AC} equal to the two sides {DE} and {DF} respectively, so that {AB} equals {DE}, and {AC} equals {DF}, and let the angle at {A} be greater than the angle at {D}.
 
-I say that the base *BC* is greater than the base *EF.*
+I say that the base {BC} is greater than the base {EF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="330" height="270" tabindex="0"></canvas>
@@ -40,23 +40,112 @@ I say that the base *BC* is greater than the base *EF.*
             "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random",
             "DEG;polygon;similar;D,E,A,B,C;0;0;0,0,0;0",
             "G;point;vertex;DEG,3",
-            "FG;line;connect;F,G"
+            "FG;line;connect;F,G",
+            // Angle markers (subject is angles → #91; same-vertex pairs
+            // auto-nest #103). At D: the given ∠EDF and the copied ∠EDG
+            // (EDG ⊃ EDF). At G: ∠DGF and ∠EGF. At F: ∠DFG and ∠EFG.
+            // ∠EFG's marker is "angEFG" so the name "EFG" stays the triangle
+            // (prose: {EFG|angEFG} for the angle, {EFG} for the triangle).
+            "BAC;sector;angleMarker;A,B,C",
+            "EDF;sector;angleMarker;D,E,F",
+            "EDG;sector;angleMarker;D,E,G",
+            "DGF;sector;angleMarker;G,D,F",
+            "EGF;sector;angleMarker;G,E,F",
+            "DFG;sector;angleMarker;F,D,G",
+            "angEFG;sector;angleMarker;F,E,G",
+            // The I.19 triangle EFG (zero-color outline / hover target).
+            "EFG;polygon;triangle;E,F,G;0;0;0;0",
+            // Zero-color side hover targets (the polygons give no per-edge
+            // hover). FG is already a drawn line above.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "DF;line;connect;D,F;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "EG;line;connect;E,G;0;0;0",
+            "DG;line;connect;D,G;0;0;0"
         ],
+        aliases: {
+            "BA": "AB",
+            "ED": "DE"
+        },
+        slides: [
+            { text: "Let {ABC} and {DEF} be two triangles having the two sides {AB} and {AC} equal to the two sides {DE} and {DF} respectively, so that {AB} equals {DE}, and {AC} equals {DF}, and let the angle at {A} be greater than the angle at {D}.",
+              visible: ["ABC","DEF","BAC","EDF"],
+              highlighted: ["AB","AC","DE","DF","BAC","EDF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BAC", name: geomlib.A.Sector.sweep },
+                  { elem: "EDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that the base {BC} is greater than the base {EF}.",
+              visible: ["ABC","DEF","BAC","EDF"],
+              highlighted: ["BC","EF"] },
+            { text: "Since the angle {BAC} is greater than the angle {EDF}, construct the angle {EDG} equal to the angle {BAC} at the point {D} on the straight line {DE}. Make {DG} equal to either of the two straight lines {AC} or {DF}. Join {EG} and {FG}.",
+              visible: ["ABC","DEF","BAC","EDF","DEG","G","EDG","EG","DG","FG"],
+              highlighted: ["BAC","EDG","DG","AC","DF","EG","FG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G",   name: geomlib.A.Point.appear },
+                  { elem: "DEG", name: geomlib.A.Polygon.outline },
+                  { elem: "FG",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EDG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.23" }, { ref: "I.3" }, { ref: "I.Post.1" }] },
+            { text: "Since {AB} equals {DE}, and {AC} equals {DG}, the two sides {BA} and {AC} equal the two sides {ED} and {DG}, respectively, and the angle {BAC} equals the angle {EDG}, therefore the base {BC} equals the base {EG}.",
+              visible: ["ABC","DEF","BAC","EDF","DEG","G","EDG","EG","DG","FG"],
+              highlighted: ["AB","DE","AC","DG","BAC","EDG","BC","EG"],
+              justifications: [{ ref: "I.4" }] },
+            { text: "Again, since {DF} equals {DG}, therefore the angle {DGF} equals the angle {DFG}. Therefore the angle {DFG} is greater than the angle {EGF}.",
+              visible: ["ABC","DEF","BAC","EDF","DEG","G","EDG","EG","DG","FG","DGF","DFG","EGF"],
+              highlighted: ["DF","DG","DGF","DFG","EGF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "DGF", name: geomlib.A.Sector.sweep },
+                  { elem: "DFG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.5" }] },
+            { text: "Therefore the angle {EFG|angEFG} is much greater than the angle {EGF}.",
+              visible: ["ABC","DEF","BAC","EDF","DEG","G","EDG","EG","DG","FG","DGF","DFG","EGF","angEFG"],
+              highlighted: ["angEFG","EGF"],
+              transition: { animations: [ { elem: "angEFG", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Since {EFG} is a triangle having the angle {EFG|angEFG} greater than the angle {EGF}, and the side opposite the greater angle is greater, therefore the side {EG} is also greater than {EF}.",
+              visible: ["ABC","DEF","BAC","EDF","DEG","G","EDG","EG","DG","FG","DGF","DFG","EGF","angEFG","EFG"],
+              highlighted: ["EFG","angEFG","EGF","EG","EF"],
+              transition: { animations: [ { elem: "EFG", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "I.19" }] },
+            { text: "But {EG} equals {BC}, therefore {BC} is also greater than {EF}.",
+              visible: ["ABC","DEF","BAC","EDF","DEG","G","EDG","EG","DG","FG","DGF","DFG","EGF","angEFG","EFG"],
+              highlighted: ["EG","BC","EF"] },
+            { text: "Therefore if two triangles have two sides equal to two sides respectively, but have one of the angles contained by the equal straight lines greater than the other, then they also have the base greater than the base.",
+              visible: ["ABC","DEF","BAC","EDF","DEG","G","EDG","EG","DG","FG","DGF","DFG","EGF","angEFG","EFG"],
+              highlighted: ["BC","EF","BAC","EDF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.5":      "/elements/books/bookI/propositions/propI5/",
+        "I.19":     "/elements/books/bookI/propositions/propI19/",
+        "I.23":     "/elements/books/bookI/propositions/propI23/"
     });
 </script>
 </figure>
 
-Since the angle *BAC* is greater than the angle *EDF,* construct the angle *EDG* equal to the angle *BAC* at the point *D* on the straight line *DE.* Make *DG* equal to either of the two straight lines *AC* or *DF.* Join *EG* and *FG.* [!just I.23; I.3; I.Post.1]
+Since the angle {BAC} is greater than the angle {EDF}, construct the angle {EDG} equal to the angle {BAC} at the point {D} on the straight line {DE}. Make {DG} equal to either of the two straight lines {AC} or {DF}. Join {EG} and {FG}. [!just I.23; I.3; I.Post.1]
 
-Since *AB* equals *DE,* and *AC* equals *DG,* the two sides *BA* and *AC* equal the two sides *ED* and *DG,* respectively, and the angle *BAC* equals the angle *EDG,* therefore the base *BC* equals the base *EG.* [!just I.4]
+Since {AB} equals {DE}, and {AC} equals {DG}, the two sides {BA} and {AC} equal the two sides {ED} and {DG}, respectively, and the angle {BAC} equals the angle {EDG}, therefore the base {BC} equals the base {EG}. [!just I.4]
 
-Again, since *DF* equals *DG,* therefore the angle *DGF* equals the angle *DFG.* Therefore the angle *DFG* is greater than the angle *EGF.* [!just I.5]
+Again, since {DF} equals {DG}, therefore the angle {DGF} equals the angle {DFG}. Therefore the angle {DFG} is greater than the angle {EGF}. [!just I.5]
 
-Therefore the angle *EFG* is much greater than the angle *EGF.*
+Therefore the angle {EFG|angEFG} is much greater than the angle {EGF}.
 
-Since *EFG* is a triangle having the angle *EFG* greater than the angle *EGF,* and side opposite the greater angle is greater, therefore the side *EG* is also greater than *EF.* [!just I.19]
+Since {EFG} is a triangle having the angle {EFG|angEFG} greater than the angle {EGF}, and side opposite the greater angle is greater, therefore the side {EG} is also greater than {EF}. [!just I.19]
 
-But *EG* equals *BC,* therefore *BC* is also greater than *EF.*
+But {EG} equals {BC}, therefore {BC} is also greater than {EF}.
 
 Therefore *if two triangles have two sides equal to two sides respectively, but have one of the angles contained by the equal straight lines greater than the other, then they also have the base greater than the base.*
 
