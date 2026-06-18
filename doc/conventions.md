@@ -101,6 +101,42 @@ Token grammar: Roman numeral book (`I` through `XIII`), then optional `Def.` or 
 
 `Q.E.F.` for constructions (also flagged `red_highlight: yes`); `Q.E.D.` otherwise. The trailing `<br clear="all">` is preserved when present in source and helps clear residual floats inside the theorem box.
 
+### Editorial footnotes (source corrections)
+
+When Dr. Joyce's source text contains an error (verified against the
+`djoyce/` mirror as original, not a conversion artifact), keep his wording
+**verbatim** and flag it with a numbered superscript marker that links to a
+footnote at the end of the page. Do not silently rewrite the text. Wording of
+the note is neutral and concise — describe *the text as printed*, not the
+author. First used on I.22 (`propI22/contents.lr`).
+
+Marker at the error (in the `proof` or `guide` field, right after the word/
+punctuation):
+
+```html
+<sup class="fn-ref" id="fnref-1"><a href="#fn-1">1</a></sup>
+```
+
+Footnotes section, appended at the **end of the `guide:` field** (it renders
+after the guide prose and before the `referenced_by` table — i.e. the end of
+the page; anchors resolve across the proof/guide fields since they share one
+HTML document):
+
+```html
+<hr class="footnotes-sep">
+<section class="footnotes" id="footnotes">
+<ol>
+<li id="fn-1">As printed, … ; it should read … . <a href="#fnref-1" class="fn-back" aria-label="Back to text">&#8617;</a></li>
+</ol>
+</section>
+```
+
+Numbering is per page (`fnref-1`/`fn-1`, `fnref-2`/`fn-2`, …). CSS lives in
+`assets/css/style.css` (`sup.fn-ref`, `hr.footnotes-sep`, `section.footnotes`,
+`li:target` flash). **Slideshow caveat:** a slide caption is plain text drawn
+on canvas and can't carry a DOM anchor — in a caption use a bare superscript
+character (e.g. `¹`) with no link; the prose body carries the linked marker.
+
 ### Math (KaTeX)
 
 Math is **pre-rendered at build time** by the `lektor-katex` plugin
