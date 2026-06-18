@@ -17,7 +17,7 @@ statement: To construct a rectilinear angle equal to a given rectilinear angle o
 ----
 proof:
 
-Let the angle *DCE* be the given rectilinear angle, *AB* the given straight line, and *A* the point on it.
+Let the angle {DCE} be the given rectilinear angle, {AB} the given straight line, and {A} the point on it.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="340" height="220" tabindex="0"></canvas>
@@ -40,19 +40,77 @@ Let the angle *DCE* be the given rectilinear angle, *AB* the given straight line
             "DE;line;connect;D,E",
             "G;point;cutoff;A,B,C,E",
             "AGF;polygon;similar;A,G,C,E,D;0;0;0,0,0;random",
-            "F;point;vertex;AGF,3"
+            "F;point;vertex;AGF,3",
+            // Zero-color hover/segment targets for the angle sides and the
+            // copied triangle's sides (the polygons give no per-edge hover).
+            "CD;line;connect;C,D;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            // Angle markers: the given angle DCE at C, and the copy FAG at A.
+            // Named vertex-in-the-middle so they don't collide with the
+            // CDE / AGF triangle polygons.
+            "DCE;sector;angleMarker;C,D,E",
+            "FAG;sector;angleMarker;A,F,G"
         ],
+        aliases: {
+            "AFG": "AGF",
+            "DC":  "CD",
+            "FA":  "AF"
+        },
+        slides: [
+            { text: "Let the angle {DCE} be the given rectilinear angle, {AB} the given straight line, and {A} the point on it.",
+              visible: ["CDE","DCE","AB"],
+              highlighted: ["DCE","AB","A"],
+              transition: { animations: [ { elem: "DCE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "It is required to construct a rectilinear angle equal to the given rectilinear angle {DCE} on the given straight line {AB} and at the point {A} on it.",
+              visible: ["CDE","DCE","AB"],
+              highlighted: ["DCE","AB","A"] },
+            { text: "Take the points {D} and {E} at random on the straight lines {CD} and {CE} respectively, and join {DE}.",
+              visible: ["CDE","DCE","AB","DE"],
+              highlighted: ["D","E","CD","CE","DE"],
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Out of three straight lines which equal the three straight lines {CD}, {DE}, and {CE} construct the triangle {AFG} in such a way that {CD} equals {AF}, {CE} equals {AG}, and {DE} equals {FG}.",
+              visible: ["CDE","DCE","AB","DE","G","F","AGF","AF","AG","FG"],
+              highlighted: ["AGF","CD","AF","CE","AG","DE","FG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G",   name: geomlib.A.Point.appear },
+                  { elem: "F",   name: geomlib.A.Point.appear },
+                  { elem: "AGF", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "I.22" }] },
+            { text: "Since the two sides {DC} and {CE} equal the two sides {FA} and {AG} respectively, and the base {DE} equals the base {FG}, therefore the angle {DCE} equals the angle {FAG}.",
+              visible: ["CDE","DCE","AB","DE","G","F","AGF","AF","AG","FG","FAG"],
+              highlighted: ["CD","CE","AF","AG","DE","FG","DCE","FAG"],
+              transition: { animations: [ { elem: "FAG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.8" }] },
+            { text: "Therefore on the given straight line {AB}, and at the point {A} on it, the rectilinear angle {FAG} has been constructed equal to the given rectilinear angle {DCE}.",
+              visible: ["CDE","DCE","AB","DE","G","F","AGF","AF","AG","FG","FAG"],
+              highlighted: ["AB","FAG","DCE"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.8":      "/elements/books/bookI/propositions/propI8/",
+        "I.22":     "/elements/books/bookI/propositions/propI22/"
     });
 </script>
 </figure>
 
-It is required to construct a rectilinear angle equal to the given rectilinear angle *DCE* on the given straight line *AB* and at the point *A* on it.
+It is required to construct a rectilinear angle equal to the given rectilinear angle {DCE} on the given straight line {AB} and at the point {A} on it.
 
-Take the points *D* and *E* at random on the straight lines *CD* and *CE* respectively, and join *DE.* Out of three straight lines which equal the three straight lines *CD, DE,* and *CE* construct the triangle *AFG* in such a way that *CD* equals *AF, CE* equals *AG,* and *DE* equals *FG.* [!just I.Post.1; I.22]
+Take the points {D} and {E} at random on the straight lines {CD} and {CE} respectively, and join {DE}. Out of three straight lines which equal the three straight lines {CD}, {DE}, and {CE} construct the triangle {AFG} in such a way that {CD} equals {AF}, {CE} equals {AG}, and {DE} equals {FG}. [!just I.Post.1; I.22]
 
-Since the two sides *DC* and *CE* equal the two sides *FA* and *AG* respectively, and the base *DE* equals the base *FG,* therefore the angle *DCE* equals the angle *FAG.* [!just I.8]
+Since the two sides {DC} and {CE} equal the two sides {FA} and {AG} respectively, and the base {DE} equals the base {FG}, therefore the angle {DCE} equals the angle {FAG}. [!just I.8]
 
-Therefore on the given straight line *AB,* and at the point *A* on it, the rectilinear angle *FAG* has been constructed equal to the given rectilinear angle *DCE.*
+Therefore on the given straight line {AB}, and at the point {A} on it, the rectilinear angle {FAG} has been constructed equal to the given rectilinear angle {DCE}.
 
 <div class="qed">Q.E.F.</div>
 ----
