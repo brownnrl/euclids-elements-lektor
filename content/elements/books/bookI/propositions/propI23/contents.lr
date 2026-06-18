@@ -156,37 +156,39 @@ As Proclus and Heath point out, a very minor variant of the construction in @I.2
             "CD;line;connect;C,D;0;0;0",
             "CE;line;connect;C,E;0;0;0",
             "DE;line;connect;D,E;0;0;0",
-            // ---- Transfer rig #1: place CD at A (I.2 + I.1), all transitory.
-            // Derived points compute at runtime; the zero-color circles draw
-            // gold only while highlighted on their slide (the "not shown"
-            // circles, shown here). Equilateral on join AC -> apex t1T; then
-            // lay off CD beyond C (t1M) and copy that length from A (t1N).
-            "t1AC;line;connect;A,C;0;0;0",
-            "t1Ka;circle;radius;A,A,C;0;0;0;0",
-            "t1Kc;circle;radius;C,A,C;0;0;0;0",
-            "t1bi;line;bichord;t1Ka,t1Kc;0;0;0",
-            "t1T;point;first;t1bi;0;0",
-            "t1TCx;point;extend;t1T,C,t1T,C;0;0",
-            "t1M;point;cutoff;C,t1TCx,C,D;0;0",
-            "t1K3;circle;radius;C,C,D;0;0;0;0",
-            "t1TAx;point;extend;t1T,A,t1T,A;0;0",
-            "t1N;point;cutoff;t1T,t1TAx,t1T,t1M;0;0",
-            "t1K4;circle;radius;t1T,t1T,t1M;0;0;0;0",
-            // ---- Transfer rig #2: place ED at G (I.2 + I.1), all transitory.
-            "t2GE;line;connect;G,E;0;0;0",
-            "t2Kg;circle;radius;G,G,E;0;0;0;0",
-            "t2Ke;circle;radius;E,G,E;0;0;0;0",
-            "t2bi;line;bichord;t2Kg,t2Ke;0;0;0",
-            "t2T;point;first;t2bi;0;0",
-            "t2TEx;point;extend;t2T,E,t2T,E;0;0",
-            "t2M;point;cutoff;E,t2TEx,E,D;0;0",
-            "t2K3;circle;radius;E,E,D;0;0;0;0",
-            "t2TGx;point;extend;t2T,G,t2T,G;0;0",
-            "t2N;point;cutoff;t2T,t2TGx,t2T,t2M;0;0",
-            "t2K4;circle;radius;t2T,t2T,t2M;0;0;0;0"
+            // ---- Transfer rig #1: place CD at A (I.2 + I.1), shown in full
+            // like the I.2 page. The equilateral triangle, produced sides and
+            // layoff points are drawn (black) and LEFT in the cumulative
+            // visible set; only the circles are zero-color and transitory
+            // (compass-drawn gold on their slide, gone next slide, absent from
+            // the static figure). t1M lays off CD beyond C; t1N copies that
+            // length onto the T->A side so AN = CD. Geometry node-verified.
+            "t1Ka;circle;radius;A,A,C;0;0;0;0",                 // I.1 circle (transitory)
+            "t1Kc;circle;radius;C,A,C;0;0;0;0",                 // I.1 circle (transitory)
+            "t1tri;polygon;equilateralTriangle;A,C;0;0;black;0",// equilateral on AC (LEFT)
+            "t1T;point;vertex;t1tri,3;black;0",                 // apex (LEFT)
+            "t1M;point;extend;t1T,C,C,D;black;0",               // CM = CD beyond C (LEFT)
+            "t1TM;line;connect;t1T,t1M;0;0;black",              // produced side T-C-M (LEFT)
+            "t1Kc2;circle;radius;C,C,D;0;0;0;0",                // circle(C,CD) (transitory)
+            "t1N;point;cutoff;t1T,A,t1T,t1M;black;0",           // TN = TM -> AN = CD (LEFT)
+            "t1TN;line;connect;t1T,t1N;0;0;black",              // produced side T-A-N (LEFT)
+            "t1KT;circle;radius;t1T,t1T,t1M;0;0;0;0",           // circle(T,TM) (transitory)
+            // ---- Transfer rig #2: place ED at G (I.2 + I.1), same pattern.
+            "t2Kg;circle;radius;G,G,E;0;0;0;0",                 // I.1 circle (transitory)
+            "t2Ke;circle;radius;E,G,E;0;0;0;0",                 // I.1 circle (transitory)
+            "t2tri;polygon;equilateralTriangle;G,E;0;0;black;0",// equilateral on GE (LEFT)
+            "t2T;point;vertex;t2tri,3;black;0",                 // apex (LEFT)
+            "t2M;point;extend;t2T,E,E,D;black;0",               // EM = ED beyond E (LEFT)
+            "t2TM;line;connect;t2T,t2M;0;0;black",              // produced side T-E-M (LEFT)
+            "t2Ke2;circle;radius;E,E,D;0;0;0;0",                // circle(E,ED) (transitory)
+            "t2N;point;cutoff;t2T,G,t2T,t2M;black;0",           // TN = TM -> GN = ED (LEFT)
+            "t2TN;line;connect;t2T,t2N;0;0;black",              // produced side T-G-N (LEFT)
+            "t2KT;circle;radius;t2T,t2T,t2M;0;0;0;0"            // circle(T,TM) (transitory)
         ],
         aliases: {
-            "ED": "DE"
+            "ED": "DE",
+            "AN": "t1N",
+            "GN": "t2N"
         },
         slides: [
             { text: "Unless there is some special reason for selecting particular points {D} and {E} on the sides of the angle {C}, they might as well be taken equidistant from {C} as Apollonius suggested — then only two distances need to be transferred instead of three.",
@@ -196,49 +198,51 @@ As Proclus and Heath point out, a very minor variant of the construction in @I.2
               visible: ["CD1","CE1","CDE","AB","Ccirc","CD","CE"],
               highlighted: ["Ccirc","CE","CD"],
               transition: { animations: [ { elem: "Ccirc", name: geomlib.A.Circle.compass } ] } },
-            { text: "Next, to transfer the distance {CD} to {A}, an equilateral triangle is built on the join. These circles are shown here transitorily; they are not drawn in the static diagram.",
-              visible: ["CD1","CE1","CDE","AB","t1AC","t1Ka","t1Kc"],
-              highlighted: ["t1AC","t1Ka","t1Kc"],
+            { text: "Next, to transfer the distance {CD} to {A}, an equilateral triangle is built on the join (the two circles of Proposition I.1). These transfer circles are shown only here, not in the static figure; the triangle and its produced sides are left in place.",
+              visible: ["CD1","CE1","CDE","AB","t1Ka","t1Kc","t1tri","t1T"],
+              highlighted: ["t1Ka","t1Kc","t1tri"],
               transition: { mode: "cascade", animations: [
-                  { elem: "t1Ka", name: geomlib.A.Circle.compass },
-                  { elem: "t1Kc", name: geomlib.A.Circle.compass } ] },
+                  { elem: "t1Ka",  name: geomlib.A.Circle.compass },
+                  { elem: "t1Kc",  name: geomlib.A.Circle.compass },
+                  { elem: "t1tri", name: geomlib.A.Polygon.outline } ] },
               justifications: [{ ref: "I.1" }] },
-            { text: "Two more circles then lay off the length {CD} from {A} — four circles in all for this transfer.",
-              visible: ["CD1","CE1","CDE","AB","G","t1K3","t1K4","CD"],
-              highlighted: ["t1K3","t1K4","CD"],
+            { text: "Producing the sides, two more circles lay off the length {CD} from {A} — four circles in all for this transfer, leaving {AN} equal to {CD}.",
+              visible: ["CD1","CE1","CDE","AB","t1tri","t1T","t1M","t1TM","t1N","t1TN","t1Kc2","t1KT","CD"],
+              highlighted: ["t1Kc2","t1KT","t1M","t1N","CD"],
               transition: { mode: "cascade", animations: [
-                  { elem: "t1K3", name: geomlib.A.Circle.compass },
-                  { elem: "t1K4", name: geomlib.A.Circle.compass } ] },
+                  { elem: "t1Kc2", name: geomlib.A.Circle.compass },
+                  { elem: "t1KT",  name: geomlib.A.Circle.compass } ] },
               justifications: [{ ref: "I.2" }] },
             { text: "Four more circles transfer {ED} to {G}: again an equilateral triangle on the join,",
-              visible: ["CD1","CE1","CDE","AB","G","t2GE","t2Kg","t2Ke"],
-              highlighted: ["t2GE","t2Kg","t2Ke"],
+              visible: ["CD1","CE1","CDE","AB","t1tri","t1T","t1M","t1TM","t1N","t1TN","G","t2Kg","t2Ke","t2tri","t2T"],
+              highlighted: ["t2Kg","t2Ke","t2tri"],
               transition: { mode: "cascade", animations: [
-                  { elem: "t2Kg", name: geomlib.A.Circle.compass },
-                  { elem: "t2Ke", name: geomlib.A.Circle.compass } ] },
+                  { elem: "t2Kg",  name: geomlib.A.Circle.compass },
+                  { elem: "t2Ke",  name: geomlib.A.Circle.compass },
+                  { elem: "t2tri", name: geomlib.A.Polygon.outline } ] },
               justifications: [{ ref: "I.1" }] },
-            { text: "and two more circles to lay off the length {ED} from {G}.",
-              visible: ["CD1","CE1","CDE","AB","G","t2K3","t2K4","DE"],
-              highlighted: ["t2K3","t2K4","DE"],
+            { text: "and two more circles to lay off the length {ED} from {G}, leaving {GN} equal to {ED}.",
+              visible: ["CD1","CE1","CDE","AB","t1tri","t1T","t1M","t1TM","t1N","t1TN","t2tri","t2T","t2M","t2TM","t2N","t2TN","G","t2Ke2","t2KT","DE"],
+              highlighted: ["t2Ke2","t2KT","t2M","t2N","DE"],
               transition: { mode: "cascade", animations: [
-                  { elem: "t2K3", name: geomlib.A.Circle.compass },
-                  { elem: "t2K4", name: geomlib.A.Circle.compass } ] },
+                  { elem: "t2Ke2", name: geomlib.A.Circle.compass },
+                  { elem: "t2KT",  name: geomlib.A.Circle.compass } ] },
               justifications: [{ ref: "I.2" }] },
             { text: "Finally, two more circles are required, one with center {A} and radius {CD}, the other with center {G} and radius {ED}. These last two circles meet at the point {F}.",
-              visible: ["CD1","CE1","CDE","AB","G","Acirc","Gcirc","F","CD","DE"],
+              visible: ["CD1","CE1","CDE","AB","t1tri","t1T","t1M","t1TM","t1N","t1TN","t2tri","t2T","t2M","t2TM","t2N","t2TN","G","Acirc","Gcirc","F","CD","DE"],
               highlighted: ["Acirc","Gcirc","F"],
               transition: { mode: "cascade", animations: [
                   { elem: "Acirc", name: geomlib.A.Circle.compass },
                   { elem: "Gcirc", name: geomlib.A.Circle.compass },
                   { elem: "F",     name: geomlib.A.Point.appear } ] } },
             { text: "The line {AF} is the other side of the required angle.",
-              visible: ["CD1","CE1","CDE","AB","G","F","AF","AGF"],
+              visible: ["CD1","CE1","CDE","AB","t1tri","t1T","t1M","t1TM","t1N","t1TN","t2tri","t2T","t2M","t2TM","t2N","t2TN","G","Acirc","Gcirc","F","AF","AGF"],
               highlighted: ["AF","AGF"],
               transition: { mode: "cascade", animations: [
                   { elem: "AF",  name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "AGF", name: geomlib.A.Sector.sweep } ] } },
             { text: "In all there are ten circles and one line that must be drawn; the intermediate lines may be suppressed since they only verify the construction.",
-              visible: ["CD1","CE1","CDE","AB","G","F","AF","AGF"],
+              visible: ["CD1","CE1","CDE","AB","G","Acirc","Gcirc","F","AF","AGF"],
               highlighted: ["AGF","CDE"] }
         ],
         resolveJustification: function(ref) {
