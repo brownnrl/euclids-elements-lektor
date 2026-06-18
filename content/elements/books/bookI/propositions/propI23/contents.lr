@@ -152,6 +152,10 @@ As Proclus and Heath point out, a very minor variant of the construction in @I.2
             "F;point;last;F'F",
             "AF;line;connect;A,F",
             "AGF;sector;sector;A,G,F;0;0;0",
+            // Angle-marker indicators (in addition to the filled sectors) for
+            // the closing slide: the given angle at C and the copied one at A.
+            "DCE;sector;angleMarker;C,D,E",
+            "FAG;sector;angleMarker;A,G,F",
             // Side hover targets.
             "CD;line;connect;C,D;0;0;0",
             "CE;line;connect;C,E;0;0;0",
@@ -259,9 +263,12 @@ As Proclus and Heath point out, a very minor variant of the construction in @I.2
                   { elem: "t2Ke2", name: geomlib.A.Circle.compass },
                   { elem: "t2KT",  name: geomlib.A.Circle.compass },
                   { elem: "Gcirc", name: geomlib.A.Circle.compass } ] } },
-            { text: "The lines in the intermediate stages may be suppressed as usual, since they are only needed to verify the construction is correct.",
-              visible: ["CD1","CE1","CDE","AB","G","Acirc","Gcirc","F","AF","AGF"],
-              highlighted: ["AGF","CDE"] }
+            { text: "The lines in the intermediate stages may be suppressed as usual, since they are only needed to verify the construction is correct. The constructed angle {FAG} equals the given angle {DCE}.",
+              visible: ["CD1","CE1","CDE","AB","G","Acirc","Gcirc","F","AF","AGF","DCE","FAG"],
+              highlighted: ["DCE","FAG"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "DCE", name: geomlib.A.Sector.sweep },
+                  { elem: "FAG", name: geomlib.A.Sector.sweep } ] } }
         ],
         resolveJustification: function(ref) {
             return (window.eucrefs && window.eucrefs[ref]) || null;
