@@ -104,14 +104,15 @@ Token grammar: Roman numeral book (`I` through `XIII`), then optional `Def.` or 
 ### Editorial footnotes (source corrections)
 
 When Dr. Joyce's source text contains an error (verified against the
-`djoyce/` mirror as original, not a conversion artifact), keep his wording
-**verbatim** and flag it with a numbered superscript marker that links to a
-footnote at the end of the page. Do not silently rewrite the text. Wording of
-the note is neutral and concise — describe *the text as printed*, not the
-author. First used on I.22 (`propI22/contents.lr`).
+`djoyce/` mirror as original, not a conversion artifact), **correct it inline**
+and record the emendation in a numbered footnote at the end of the page,
+flagged with a superscript marker. Never change the text silently — the
+footnote is the audit trail. Note wording is a dated, initialed changelog
+entry: `Typo correction from "<old>" to "<new>." —<initials>, <YYYY-MM-DD>`.
+First used on I.22 (`propI22/contents.lr`).
 
-Marker at the error (in the `proof` or `guide` field, right after the word/
-punctuation):
+Marker at the corrected text (in the `proof` or `guide` field, right after the
+word/punctuation):
 
 ```html
 <sup class="fn-ref" id="fnref-1"><a href="#fn-1">1</a></sup>
@@ -126,7 +127,7 @@ HTML document):
 <hr class="footnotes-sep">
 <section class="footnotes" id="footnotes">
 <ol>
-<li id="fn-1">As printed, … ; it should read … . <a href="#fnref-1" class="fn-back" aria-label="Back to text">&#8617;</a></li>
+<li id="fn-1">Typo correction from &ldquo;…&rdquo; to &ldquo;… .&rdquo; &mdash;NB, 2026-06-17 <a href="#fnref-1" class="fn-back" aria-label="Back to text">&#8617;</a></li>
 </ol>
 </section>
 ```
