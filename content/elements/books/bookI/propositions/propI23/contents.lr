@@ -162,6 +162,7 @@ As Proclus and Heath point out, a very minor variant of the construction in @I.2
             // then cleared on the next slide, leaving only G + the circle on A.
             // Absent from the static figure. t1M lays off CD beyond C; t1N
             // copies that length onto the T->A side so AN = CD (node-verified).
+            "t1AC;line;connect;A,C;0;0;0",                      // join A-C (drawn first)
             "t1Ka;circle;radius;A,A,C;0;0;0;0",                 // I.1 circle
             "t1Kc;circle;radius;C,A,C;0;0;0;0",                 // I.1 circle
             "t1tri;polygon;equilateralTriangle;A,C;0;0;0;0",    // equilateral on AC
@@ -173,6 +174,7 @@ As Proclus and Heath point out, a very minor variant of the construction in @I.2
             "t1TN;line;connect;t1T,t1N;0;0;0",                  // produced side T-A-N
             "t1KT;circle;radius;t1T,t1T,t1M;0;0;0;0",           // circle(T,TM)
             // ---- Transfer rig #2: place ED at G (I.2 + I.1), same pattern.
+            "t2GE;line;connect;G,E;0;0;0",                      // join G-E (drawn first)
             "t2Kg;circle;radius;G,G,E;0;0;0;0",                 // I.1 circle
             "t2Ke;circle;radius;E,G,E;0;0;0;0",                 // I.1 circle
             "t2tri;polygon;equilateralTriangle;G,E;0;0;0;0",    // equilateral on GE
@@ -198,9 +200,10 @@ As Proclus and Heath point out, a very minor variant of the construction in @I.2
               highlighted: ["Ccirc","CE","CD"],
               transition: { animations: [ { elem: "Ccirc", name: geomlib.A.Circle.compass } ] } },
             { text: "Next, to transfer the distance {CD} to {A}, two circles lay off the length {CD} from {A}, leaving {AN} equal to {CD}. The circle with center {A} and radius {AN} then meets {AB} at {G}.",
-              visible: ["CD1","CE1","CDE","AB","t1Ka","t1Kc","t1tri","t1T","t1M","t1TM","t1Kc2","t1N","t1TN","t1KT","Acirc","G","CD"],
-              highlighted: ["t1Ka","t1Kc","t1tri","t1TM","t1TN","t1M","t1N","t1Kc2","t1KT","Acirc","G","CD"],
+              visible: ["CD1","CE1","CDE","AB","t1AC","t1Ka","t1Kc","t1tri","t1TM","t1Kc2","t1TN","t1KT","Acirc","G","CD"],
+              highlighted: ["t1AC","t1Ka","t1Kc","t1tri","t1TM","t1TN","t1Kc2","t1KT","Acirc","CD"],
               transition: { mode: "cascade", animations: [
+                  { elem: "t1AC",  name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "t1Ka",  name: geomlib.A.Circle.compass },
                   { elem: "t1Kc",  name: geomlib.A.Circle.compass },
                   { elem: "t1tri", name: geomlib.A.Polygon.outline },
@@ -215,9 +218,10 @@ As Proclus and Heath point out, a very minor variant of the construction in @I.2
               visible: ["CD1","CE1","CDE","AB","G","Acirc"],
               highlighted: ["G","Acirc"] },
             { text: "In the same way, transfer the distance {ED} to {G}, then draw the circle with center {G} and radius {ED}.",
-              visible: ["CD1","CE1","CDE","AB","G","Acirc","t2Kg","t2Ke","t2tri","t2T","t2M","t2TM","t2Ke2","t2N","t2TN","t2KT","Gcirc","DE"],
-              highlighted: ["t2Kg","t2Ke","t2tri","t2TM","t2TN","t2M","t2N","t2Ke2","t2KT","Gcirc","DE"],
+              visible: ["CD1","CE1","CDE","AB","G","Acirc","t2GE","t2Kg","t2Ke","t2tri","t2TM","t2Ke2","t2TN","t2KT","Gcirc","DE"],
+              highlighted: ["t2GE","t2Kg","t2Ke","t2tri","t2TM","t2TN","t2Ke2","t2KT","Gcirc","DE"],
               transition: { mode: "cascade", animations: [
+                  { elem: "t2GE",  name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "t2Kg",  name: geomlib.A.Circle.compass },
                   { elem: "t2Ke",  name: geomlib.A.Circle.compass },
                   { elem: "t2tri", name: geomlib.A.Polygon.outline },
