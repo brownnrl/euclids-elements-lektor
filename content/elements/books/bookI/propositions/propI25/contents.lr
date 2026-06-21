@@ -15,7 +15,7 @@ statement: If two triangles have two sides equal to two sides respectively, but 
 ----
 proof:
 
-Let *ABC* and *DEF* be two triangles having two sides *AB* and *AC* equal to two sides *DE* and *DF* respectively, namely *AB* to *DE,* and *AC* to *DF,* and let the base *BC* be greater than the base *EF.*
+Let {ABC} and {DEF} be two triangles having two sides {AB} and {AC} equal to two sides {DE} and {DF} respectively, namely {AB} to {DE}, and {AC} to {DF}, and let the base {BC} be greater than the base {EF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="220" tabindex="0"></canvas>
@@ -35,21 +35,73 @@ Let *ABC* and *DEF* be two triangles having two sides *AB* and *AC* equal to two
             "ACcirc;circle;radius;A,D,F;0;0;0;0",
             "B;point;circleSlider;ABcirc,30,170",
             "C;point;circleSlider;ACcirc,135,178",
-            "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random"
+            "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random",
+            // Angle markers: the contained angle of each triangle (#91).
+            // Named vertex-in-the-middle so they don't collide with the
+            // ABC / DEF triangle polygons.
+            "BAC;sector;angleMarker;A,B,C",
+            "EDF;sector;angleMarker;D,E,F",
+            // Zero-color side hover targets (the polygons give no per-edge
+            // hover): the two equal-side pairs and the two compared bases.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "DF;line;connect;D,F;0;0;0",
+            "EF;line;connect;E,F;0;0;0"
         ],
+        slides: [
+            { text: "Let {ABC} and {DEF} be two triangles having two sides {AB} and {AC} equal to two sides {DE} and {DF} respectively, namely {AB} to {DE}, and {AC} to {DF}, and let the base {BC} be greater than the base {EF}.",
+              visible: ["ABC","DEF"],
+              highlighted: ["AB","AC","DE","DF","BC","EF"] },
+            { text: "I say that the angle {BAC} is also greater than the angle {EDF}.",
+              visible: ["ABC","DEF","BAC","EDF"],
+              highlighted: ["BAC","EDF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BAC", name: geomlib.A.Sector.sweep },
+                  { elem: "EDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "If not, it either equals it or is less.",
+              visible: ["ABC","DEF","BAC","EDF"],
+              highlighted: ["BAC","EDF"] },
+            { text: "Now the angle {BAC} does not equal the angle {EDF}, for then the base {BC} would equal the base {EF}, but it is not. Therefore the angle {BAC} does not equal the angle {EDF}.",
+              visible: ["ABC","DEF","BAC","EDF"],
+              highlighted: ["BAC","EDF","BC","EF"],
+              justifications: [{ ref: "I.4" }] },
+            { text: "Neither is the angle {BAC} less than the angle {EDF}, for then the base {BC} would be less than the base {EF}, but it is not. Therefore the angle {BAC} is not less than the angle {EDF}.",
+              visible: ["ABC","DEF","BAC","EDF"],
+              highlighted: ["BAC","EDF","BC","EF"],
+              justifications: [{ ref: "I.24" }] },
+            { text: "But it was proved that it is not equal either. Therefore the angle {BAC} is greater than the angle {EDF}.",
+              visible: ["ABC","DEF","BAC","EDF"],
+              highlighted: ["BAC","EDF"] },
+            { text: "Therefore if two triangles have two sides equal to two sides respectively, but have the base greater than the base, then they also have the one of the angles contained by the equal straight lines greater than the other.",
+              visible: ["ABC","DEF","BAC","EDF"],
+              highlighted: ["BC","EF","BAC","EDF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.4":  "/elements/books/bookI/propositions/propI4/",
+        "I.24": "/elements/books/bookI/propositions/propI24/"
     });
 </script>
 </figure>
 
-I say that the angle *BAC* is also greater than the angle *EDF.*
+I say that the angle {BAC} is also greater than the angle {EDF}.
 
 If not, it either equals it or is less.
 
-Now the angle *BAC* does not equal the angle *EDF,* for then the base *BC* would equal the base *EF,* but it is not. Therefore the angle *BAC* does not equal the angle *EDF.* [!just I.4]
+Now the angle {BAC} does not equal the angle {EDF}, for then the base {BC} would equal the base {EF}, but it is not. Therefore the angle {BAC} does not equal the angle {EDF}. [!just I.4]
 
-Neither is the angle *BAC* less than the angle *EDF,* for then the base *BC* would be less than the base *EF,* but it is not. Therefore the angle *BAC* is not less than the angle *EDF.* [!just I.24]
+Neither is the angle {BAC} less than the angle {EDF}, for then the base {BC} would be less than the base {EF}, but it is not. Therefore the angle {BAC} is not less than the angle {EDF}. [!just I.24]
 
-But it was proved that it is not equal either. Therefore the angle *BAC* is greater than the angle *EDF.*
+But it was proved that it is not equal either. Therefore the angle {BAC} is greater than the angle {EDF}.
 
 Therefore *if two triangles have two sides equal to two sides respectively, but have the base greater than the base, then they also have the one of the angles contained by the equal straight lines greater than the other.*
 
