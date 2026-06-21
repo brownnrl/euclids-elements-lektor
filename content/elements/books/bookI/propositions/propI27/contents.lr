@@ -49,10 +49,12 @@ Let them be produced and meet, in the direction of {B} and {D}, at {G}.
             "BG;line;connect;B,G",
             "DG;line;connect;D,G",
             // The two alternate angles, equal by hypothesis: ∠AEF at E and
-            // ∠EFD at F. In the reductio ∠EFG = ∠EFD (G lies beyond D on
-            // CD), so the prose "angle EFG" → {EFG|EFD}.
+            // ∠EFD at F. ∠EFG is the interior angle of the (illustrative)
+            // reductio triangle GEF at F, toward the off-line meeting point
+            // G — distinct from ∠EFD, so it gets its own marker.
             "AEF;sector;angleMarker;E,A,F",
             "EFD;sector;angleMarker;F,E,D",
+            "EFG;sector;angleMarker;F,E,G",
             // Reductio triangle GEF (zero-color outline / hover target).
             "GEF;polygon;triangle;G,E,F;0;0;0;0"
         ],
@@ -77,10 +79,12 @@ Let them be produced and meet, in the direction of {B} and {D}, at {G}.
                   { elem: "G",  name: geomlib.A.Point.appear },
                   { elem: "BG", name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "DG", name: geomlib.A.Line.straightEdgeConnect } ] } },
-            { text: "Then, in the triangle {GEF}, the exterior angle {AEF} equals the interior and opposite angle {EFG|EFD}, which is impossible.",
-              visible: ["AB","CD","D","EF","AEF","EFD","G","BG","DG","GEF"],
-              highlighted: ["GEF","AEF","EFD"],
-              transition: { animations: [ { elem: "GEF", name: geomlib.A.Polygon.outline } ] },
+            { text: "Then, in the triangle {GEF}, the exterior angle {AEF} equals the interior and opposite angle {EFG}, which is impossible.",
+              visible: ["AB","CD","D","EF","AEF","EFD","G","BG","DG","GEF","EFG"],
+              highlighted: ["GEF","AEF","EFG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "GEF", name: geomlib.A.Polygon.outline },
+                  { elem: "EFG", name: geomlib.A.Sector.sweep } ] },
               justifications: [{ ref: "I.16" }] },
             { text: "Therefore {AB} and {CD} when produced do not meet in the direction of {B} and {D}.",
               visible: ["AB","CD","D","EF","AEF","EFD"],
@@ -111,7 +115,7 @@ Let them be produced and meet, in the direction of {B} and {D}, at {G}.
 </script>
 </figure>
 
-Then, in the triangle {GEF}, the exterior angle {AEF} equals the interior and opposite angle {EFG|EFD}, which is impossible. [!just I.16]
+Then, in the triangle {GEF}, the exterior angle {AEF} equals the interior and opposite angle {EFG}, which is impossible. [!just I.16]
 
 Therefore {AB} and {CD} when produced do not meet in the direction of {B} and {D}.
 
