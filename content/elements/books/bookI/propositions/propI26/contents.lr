@@ -15,9 +15,9 @@ statement: If two triangles have two angles equal to two angles respectively, an
 ----
 proof:
 
-Let *ABC* and *DEF* be two triangles having the two angles *ABC* and *BCA* equal to the two angles *DEF* and *EFD* respectively, namely the angle *ABC* to the angle *DEF,* and the angle *BCA* to the angle *EFD,* and let them also have one side equal to one side, first that adjoining the equal angles, namely *BC* equal to *EF.*
+Let {ABC} and {DEF} be two triangles having the two angles {ABC|CBA} and {BCA} equal to the two angles {DEF|FED} and {EFD} respectively, namely the angle {ABC|CBA} to the angle {DEF|FED}, and the angle {BCA} to the angle {EFD}, and let them also have one side equal to one side, first that adjoining the equal angles, namely {BC} equal to {EF}.
 
-I say that the remaining sides equal the remaining sides respectively, namely *AB* equals *DE* and *AC* equals *DF,* and the remaining angle equals the remaining angle, namely the angle *BAC* equals the angle *EDF.*
+I say that the remaining sides equal the remaining sides respectively, namely {AB} equals {DE} and {AC} equals {DF}, and the remaining angle equals the remaining angle, namely the angle {BAC} equals the angle {EDF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="220" tabindex="0"></canvas>
@@ -38,29 +38,109 @@ I say that the remaining sides equal the remaining sides respectively, namely *A
             "ABC;polygon;similar;A,B,D,E,F",
             "C;point;vertex;ABC,3",
             "G;point;lineSlider;A,B,55,70",
-            "CG;line;connect;C,G"
+            "CG;line;connect;C,G",
+            // Angle markers (#91). Triangle ABC owns "ABC" / DEF owns "DEF",
+            // so the angle at B is CBA (prose {ABC|CBA}) and the angle at E is
+            // FED (prose {DEF|FED}). Same-vertex pair at C (BCA ⊃ GCB) nests
+            // (#103). ∠GBC = ∠ABC (G on ray BA) so prose {GBC|CBA}.
+            "CBA;sector;angleMarker;B,C,A",
+            "BCA;sector;angleMarker;C,B,A",
+            "BAC;sector;angleMarker;A,B,C",
+            "FED;sector;angleMarker;E,F,D",
+            "EFD;sector;angleMarker;F,E,D",
+            "EDF;sector;angleMarker;D,E,F",
+            "GCB;sector;angleMarker;C,G,B",
+            // Reductio sub-triangle GBC (zero-color) + side hover targets.
+            "GBC;polygon;triangle;G,B,C;0;0;0;0",
+            "BG;line;connect;B,G;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "DF;line;connect;D,F;0;0;0"
         ],
+        deferDraggables: ["G"],
+        aliases: {
+            "ACB": "BCA",
+            "DFE": "EFD",
+            "BCG": "GCB",
+            "GB":  "BG",
+            "GC":  "CG"
+        },
+        slides: [
+            { text: "Let {ABC} and {DEF} be two triangles having the two angles {ABC|CBA} and {BCA} equal to the two angles {DEF|FED} and {EFD} respectively, namely the angle {ABC|CBA} to the angle {DEF|FED}, and the angle {BCA} to the angle {EFD}, and let them also have one side equal to one side, first that adjoining the equal angles, namely {BC} equal to {EF}.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD"],
+              highlighted: ["CBA","FED","BCA","EFD","BC","EF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "CBA", name: geomlib.A.Sector.sweep },
+                  { elem: "FED", name: geomlib.A.Sector.sweep },
+                  { elem: "BCA", name: geomlib.A.Sector.sweep },
+                  { elem: "EFD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that the remaining sides equal the remaining sides respectively, namely {AB} equals {DE} and {AC} equals {DF}, and the remaining angle equals the remaining angle, namely the angle {BAC} equals the angle {EDF}.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD","BAC","EDF"],
+              highlighted: ["AB","DE","AC","DF","BAC","EDF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BAC", name: geomlib.A.Sector.sweep },
+                  { elem: "EDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "If {AB} does not equal {DE}, then one of them is greater. Let {AB} be greater. Make {BG} equal to {DE}, and join {GC}.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD","G","CG","GBC"],
+              highlighted: ["AB","DE","BG","GC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "CG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.3" }, { ref: "I.Post.1" }] },
+            { text: "Since {BG} equals {DE}, and {BC} equals {EF}, the two sides {GB} and {BC} equal the two sides {DE} and {EF} respectively, and the angle {GBC|CBA} equals the angle {DEF|FED}, therefore the base {GC} equals the base {DF}, the triangle {GBC} equals the triangle {DEF}, and the remaining angles equal the remaining angles, namely those opposite the equal sides. Therefore the angle {GCB} equals the angle {DFE|EFD}.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD","G","CG","GBC","GCB"],
+              highlighted: ["BG","DE","BC","EF","CBA","FED","GC","DF","GBC","GCB","EFD"],
+              transition: { animations: [ { elem: "GCB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.4" }] },
+            { text: "But the angle {DFE|EFD} equals the angle {ACB|BCA} by hypothesis. Therefore the angle {BCG|GCB} equals the angle {BCA}, the less equals the greater, which is impossible.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD","G","CG","GBC","GCB"],
+              highlighted: ["EFD","BCA","GCB"],
+              justifications: [{ ref: "C.N.1" }] },
+            { text: "Therefore {AB} is not unequal to {DE}, and therefore equals it.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD"],
+              highlighted: ["AB","DE"] },
+            { text: "But {BC} also equals {EF}. Therefore the two sides {AB} and {BC} equal the two sides {DE} and {EF} respectively, and the angle {ABC|CBA} equals the angle {DEF|FED}. Therefore the base {AC} equals the base {DF}, and the remaining angle {BAC} equals the remaining angle {EDF}.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD","BAC","EDF"],
+              highlighted: ["AB","BC","DE","EF","CBA","FED","AC","DF","BAC","EDF"],
+              justifications: [{ ref: "I.4" }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.16":     "/elements/books/bookI/propositions/propI16/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/"
     });
 </script>
 </figure>
 
-If *AB* does not equal *DE,* then one of them is greater.
+If {AB} does not equal {DE}, then one of them is greater.
 
-Let *AB* be greater. Make *BG* equal to *DE,* and join *GC.* [!just I.3, I.Post.1]
+Let {AB} be greater. Make {BG} equal to {DE}, and join {GC}. [!just I.3, I.Post.1]
 
-Since *BG* equals *DE,* and *BC* equals *EF,* the two sides *GB* and *BC* equal the two sides *DE* and *EF* respectively, and the angle *GBC* equals the angle *DEF,* therefore the base *GC* equals the base *DF,* the triangle *GBC* equals the triangle *DEF,* and the remaining angles equal the remaining angles, namely those opposite the equal sides. Therefore the angle *GCB* equals the angle *DFE.* But the angle *DFE* equals the angle *ACB* by hypothesis. Therefore the angle *BCG* equals the angle *BCA,* the less equals the greater, which is impossible. [!just I.4; C.N.1]
+Since {BG} equals {DE}, and {BC} equals {EF}, the two sides {GB} and {BC} equal the two sides {DE} and {EF} respectively, and the angle {GBC|CBA} equals the angle {DEF|FED}, therefore the base {GC} equals the base {DF}, the triangle {GBC} equals the triangle {DEF}, and the remaining angles equal the remaining angles, namely those opposite the equal sides. Therefore the angle {GCB} equals the angle {DFE|EFD}. But the angle {DFE|EFD} equals the angle {ACB|BCA} by hypothesis. Therefore the angle {BCG|GCB} equals the angle {BCA}, the less equals the greater, which is impossible. [!just I.4; C.N.1]
 
-Therefore *AB* is not unequal to *DE,* and therefore equals it.
+Therefore {AB} is not unequal to {DE}, and therefore equals it.
 
-But *BC* also equals *EF.* Therefore the two sides *AB* and *BC* equal the two sides *DE* and *EF* respectively, and the angle *ABC* equals the angle *DEF.* Therefore the base *AC* equals the base *DF,* and the remaining angle *BAC* equals the remaining angle *EDF.* [!just I.4]
+But {BC} also equals {EF}. Therefore the two sides {AB} and {BC} equal the two sides {DE} and {EF} respectively, and the angle {ABC|CBA} equals the angle {DEF|FED}. Therefore the base {AC} equals the base {DF}, and the remaining angle {BAC} equals the remaining angle {EDF}. [!just I.4]
 
 <hr>
 
-Next, let sides opposite equal angles be equal, as *AB* equals *DE.*
+Next, let sides opposite equal angles be equal, as {AB} equals {DE}.
 
-I say again that the remaining sides equal the remaining sides, namely *AC* equals *DF* and *BC* equals *EF,* and further the remaining angle *BAC* equals the remaining angle *EDF.*
+I say again that the remaining sides equal the remaining sides, namely {AC} equals {DF} and {BC} equals {EF}, and further the remaining angle {BAC} equals the remaining angle {EDF}.
 
-If *BC* is unequal to *EF,* then one of them is greater.
+If {BC} is unequal to {EF}, then one of them is greater.
 
 <figure class="diagram">
 <canvas id="canvas_1" width="300" height="220" tabindex="0"></canvas>
@@ -81,21 +161,99 @@ If *BC* is unequal to *EF,* then one of them is greater.
             "ABC;polygon;similar;A,B,D,E,F",
             "C;point;vertex;ABC,3",
             "H;point;lineSlider;B,C,90,180",
-            "AH;line;connect;A,H"
+            "AH;line;connect;A,H",
+            // Angle markers (#91). Angle at B = CBA, at E = FED (triangles
+            // own ABC / DEF). ∠BHA at H is the reductio's exterior angle
+            // (equal to ∠EFD, hence to ∠BCA — impossible by I.16).
+            "CBA;sector;angleMarker;B,C,A",
+            "BCA;sector;angleMarker;C,B,A",
+            "BAC;sector;angleMarker;A,B,C",
+            "FED;sector;angleMarker;E,F,D",
+            "EFD;sector;angleMarker;F,E,D",
+            "EDF;sector;angleMarker;D,E,F",
+            "BHA;sector;angleMarker;H,B,A",
+            // Reductio sub-triangles ABH (≅ DEF) and AHC (the I.16 triangle),
+            // zero-color, + side hover targets.
+            "ABH;polygon;triangle;A,B,H;0;0;0;0",
+            "AHC;polygon;triangle;A,H,C;0;0;0;0",
+            "BH;line;connect;B,H;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "DF;line;connect;D,F;0;0;0"
         ],
+        deferDraggables: ["H"],
+        aliases: {
+            "ACB": "BCA",
+            "DFE": "EFD"
+        },
+        slides: [
+            { text: "Next, let sides opposite equal angles be equal, as {AB} equals {DE}.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD"],
+              highlighted: ["AB","DE","CBA","FED","BCA","EFD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "CBA", name: geomlib.A.Sector.sweep },
+                  { elem: "FED", name: geomlib.A.Sector.sweep },
+                  { elem: "BCA", name: geomlib.A.Sector.sweep },
+                  { elem: "EFD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say again that the remaining sides equal the remaining sides, namely {AC} equals {DF} and {BC} equals {EF}, and further the remaining angle {BAC} equals the remaining angle {EDF}.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD","BAC","EDF"],
+              highlighted: ["AC","DF","BC","EF","BAC","EDF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BAC", name: geomlib.A.Sector.sweep },
+                  { elem: "EDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "If {BC} is unequal to {EF}, then one of them is greater. Let {BC} be greater, if possible. Make {BH} equal to {EF}, and join {AH}.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD","H","AH","BH","ABH"],
+              highlighted: ["BC","EF","BH","AH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "H",  name: geomlib.A.Point.appear },
+                  { elem: "AH", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.3" }, { ref: "I.Post.1" }] },
+            { text: "Since {BH} equals {EF}, and {AB} equals {DE}, the two sides {AB} and {BH} equal the two sides {DE} and {EF} respectively, and they contain equal angles, therefore the base {AH} equals the base {DF}, the triangle {ABH} equals the triangle {DEF}, and the remaining angles equal the remaining angles, namely those opposite the equal sides. Therefore the angle {BHA} equals the angle {EFD}.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD","H","AH","BH","ABH","BHA"],
+              highlighted: ["BH","EF","AB","DE","CBA","FED","AH","DF","ABH","BHA","EFD"],
+              transition: { animations: [ { elem: "BHA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.4" }] },
+            { text: "But the angle {EFD} equals the angle {BCA}, therefore, in the triangle {AHC}, the exterior angle {BHA} equals the interior and opposite angle {BCA}, which is impossible.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD","H","AH","BH","ABH","BHA","AHC"],
+              highlighted: ["EFD","BCA","AHC","BHA"],
+              transition: { animations: [ { elem: "AHC", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "C.N.1" }, { ref: "I.16" }] },
+            { text: "Therefore {BC} is not unequal to {EF}, and therefore equals it.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD"],
+              highlighted: ["BC","EF"] },
+            { text: "But {AB} also equals {DE}. Therefore the two sides {AB} and {BC} equal the two sides {DE} and {EF} respectively, and they contain equal angles. Therefore the base {AC} equals the base {DF}, the triangle {ABC} equals the triangle {DEF}, and the remaining angle {BAC} equals the remaining angle {EDF}.",
+              visible: ["ABC","DEF","C","CBA","BCA","FED","EFD","BAC","EDF"],
+              highlighted: ["AB","BC","DE","EF","CBA","FED","AC","DF","BAC","EDF"],
+              justifications: [{ ref: "I.4" }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.16":     "/elements/books/bookI/propositions/propI16/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/"
     });
 </script>
 </figure>
 
-Let *BC* be greater, if possible. Make *BH* equal to *EF,* and join *AH.* [!just I.3, I.Post.1]
+Let {BC} be greater, if possible. Make {BH} equal to {EF}, and join {AH}. [!just I.3, I.Post.1]
 
-Since *BH* equals *EF,* and *AB* equals *DE,* the two sides *AB* and *BH* equal the two sides *DE* and *EF* respectively, and they contain equal angles, therefore the base *AH* equals the base *DF,* the triangle *ABH* equals the triangle *DEF,* and the remaining angles equal the remaining angles, namely those opposite the equal sides. Therefore the angle *BHA* equals the angle *EFD.* [!just I.4]
+Since {BH} equals {EF}, and {AB} equals {DE}, the two sides {AB} and {BH} equal the two sides {DE} and {EF} respectively, and they contain equal angles, therefore the base {AH} equals the base {DF}, the triangle {ABH} equals the triangle {DEF}, and the remaining angles equal the remaining angles, namely those opposite the equal sides. Therefore the angle {BHA} equals the angle {EFD}. [!just I.4]
 
-But the angle *EFD* equals the angle *BCA,* therefore, in the triangle *AHC,* the exterior angle *BHA* equals the interior and opposite angle *BCA,* which is impossible. [!just C.N.1; I.16]
+But the angle {EFD} equals the angle {BCA}, therefore, in the triangle {AHC}, the exterior angle {BHA} equals the interior and opposite angle {BCA}, which is impossible. [!just C.N.1; I.16]
 
-Therefore *BC* is not unequal to *EF,* and therefore equals it.
+Therefore {BC} is not unequal to {EF}, and therefore equals it.
 
-But *AB* also equals *DE.* Therefore the two sides *AB* and *BC* equal the two sides *DE* and *EF* respectively, and they contain equal angles. Therefore the base *AC* equals the base *DF,* the triangle *ABC* equals the triangle *DEF,* and the remaining angle *BAC* equals the remaining angle *EDF.* [!just I.4]
+But {AB} also equals {DE}. Therefore the two sides {AB} and {BC} equal the two sides {DE} and {EF} respectively, and they contain equal angles. Therefore the base {AC} equals the base {DF}, the triangle {ABC} equals the triangle {DEF}, and the remaining angle {BAC} equals the remaining angle {EDF}. [!just I.4]
 
 Therefore *if two triangles have two angles equal to two angles respectively, and one side equal to one side, namely, either the side adjoining the equal angles, or that opposite one of the equal angles, then the remaining sides equal the remaining sides and the remaining angle equals the remaining angle.*
 
