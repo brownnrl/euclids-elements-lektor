@@ -15,13 +15,13 @@ statement: If a straight line falling on two straight lines makes the alternate 
 ----
 proof:
 
-Let the straight line *EF* falling on the two straight lines *AB* and *CD* make the alternate angles *AEF* and *EFD* equal to one another.
+Let the straight line {EF} falling on the two straight lines {AB} and {CD} make the alternate angles {AEF} and {EFD} equal to one another.
 
-I say that *AB* is parallel to *CD.*
+I say that {AB} is parallel to {CD}.
 
-If not, *AB* and *CD* when produced meet either in the direction of *B* and *D* or towards *A* and *C.*
+If not, {AB} and {CD} when produced meet either in the direction of {B} and {D} or towards {A} and {C}.
 
-Let them be produced and meet, in the direction of *B* and *D,* at *G.*
+Let them be produced and meet, in the direction of {B} and {D}, at {G}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="140" tabindex="0"></canvas>
@@ -47,19 +47,77 @@ Let them be produced and meet, in the direction of *B* and *D,* at *G.*
             "N;point;midpoint;B,D;0;0",
             "G;point;lineSlider;M,N,240,50",
             "BG;line;connect;B,G",
-            "DG;line;connect;D,G"
+            "DG;line;connect;D,G",
+            // The two alternate angles, equal by hypothesis: ∠AEF at E and
+            // ∠EFD at F. In the reductio ∠EFG = ∠EFD (G lies beyond D on
+            // CD), so the prose "angle EFG" → {EFG|EFD}.
+            "AEF;sector;angleMarker;E,A,F",
+            "EFD;sector;angleMarker;F,E,D",
+            // Reductio triangle GEF (zero-color outline / hover target).
+            "GEF;polygon;triangle;G,E,F;0;0;0;0"
         ],
+        deferDraggables: ["G"],
+        slides: [
+            { text: "Let the straight line {EF} falling on the two straight lines {AB} and {CD} make the alternate angles {AEF} and {EFD} equal to one another.",
+              visible: ["AB","CD","EF","AEF","EFD"],
+              highlighted: ["EF","AB","CD","AEF","EFD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "AEF", name: geomlib.A.Sector.sweep },
+                  { elem: "EFD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that {AB} is parallel to {CD}.",
+              visible: ["AB","CD","EF","AEF","EFD"],
+              highlighted: ["AB","CD"] },
+            { text: "If not, {AB} and {CD} when produced meet either in the direction of {B} and {D} or towards {A} and {C}.",
+              visible: ["AB","CD","EF","AEF","EFD"],
+              highlighted: ["AB","CD","B","D","A","C"] },
+            { text: "Let them be produced and meet, in the direction of {B} and {D}, at {G}.",
+              visible: ["AB","CD","EF","AEF","EFD","G","BG","DG"],
+              highlighted: ["BG","DG","G"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "BG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DG", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, in the triangle {GEF}, the exterior angle {AEF} equals the interior and opposite angle {EFG|EFD}, which is impossible.",
+              visible: ["AB","CD","EF","AEF","EFD","G","BG","DG","GEF"],
+              highlighted: ["GEF","AEF","EFD"],
+              transition: { animations: [ { elem: "GEF", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "I.16" }] },
+            { text: "Therefore {AB} and {CD} when produced do not meet in the direction of {B} and {D}.",
+              visible: ["AB","CD","EF","AEF","EFD"],
+              highlighted: ["AB","CD","B","D"] },
+            { text: "Similarly it can be proved that neither do they meet towards {A} and {C}.",
+              visible: ["AB","CD","EF","AEF","EFD"],
+              highlighted: ["AB","CD","A","C"] },
+            { text: "But straight lines which do not meet in either direction are parallel. Therefore {AB} is parallel to {CD}.",
+              visible: ["AB","CD","EF","AEF","EFD"],
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "I.Def.23" }] },
+            { text: "Therefore if a straight line falling on two straight lines makes the alternate angles equal to one another, then the straight lines are parallel to one another.",
+              visible: ["AB","CD","EF","AEF","EFD"],
+              highlighted: ["AB","CD","AEF","EFD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.16":     "/elements/books/bookI/propositions/propI16/",
+        "I.Def.23": "/elements/books/bookI/definitions/defI23/"
     });
 </script>
 </figure>
 
-Then, in the triangle *GEF,* the exterior angle *AEF* equals the interior and opposite angle *EFG,* which is impossible. [!just I.16]
+Then, in the triangle {GEF}, the exterior angle {AEF} equals the interior and opposite angle {EFG|EFD}, which is impossible. [!just I.16]
 
-Therefore *AB* and *CD* when produced do not meet in the direction of *B* and *D.*
+Therefore {AB} and {CD} when produced do not meet in the direction of {B} and {D}.
 
-Similarly it can be proved that neither do they meet towards *A* and *C.*
+Similarly it can be proved that neither do they meet towards {A} and {C}.
 
-But straight lines which do not meet in either direction are parallel. Therefore *AB* is parallel to *CD.* [!just I.Def.23]
+But straight lines which do not meet in either direction are parallel. Therefore {AB} is parallel to {CD}. [!just I.Def.23]
 
 Therefore *if a straight line falling on two straight lines makes the alternate angles equal to one another, then the straight lines are parallel to one another.*
 
@@ -69,7 +127,7 @@ guide:
 
 There is implicitly assumed an ambient plane. The term alternate angles doesn't have a meaning unless the lines all lie in a plane.
 
-Note that Euclid does not consider two other possible ways that the two lines could meet, namely, in the directions *A* and *D* or toward *B* and *C.*
+Note that Euclid does not consider two other possible ways that the two lines could meet, namely, in the directions {A} and {D} or toward {B} and {C}.
 
 #### About logical converses, contrapositives, and inverses
 
