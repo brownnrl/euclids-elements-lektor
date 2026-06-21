@@ -38,7 +38,7 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 27 (I.1–I.27) | markers on 0.12.0 (see open Qs) |
+| Book I | 48 | 28 (I.1–I.28) | markers on 0.12.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
 | **Total** | **465** | **20** | — |
 
@@ -78,7 +78,7 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.25 | Greater base ⇒ greater contained angle | T | ✅ | 7 | Sector.sweep | ⚠ | Converse of I.24 by trichotomy reductio (same shape as I.19): AB=DE, AC=DF, BC>EF ⟹ ∠BAC>∠EDF. ∠BAC=∠EDF ruled out by I.4 (would give BC=EF); ∠BAC<∠EDF ruled out by I.24 (would give BC<EF). 2 markers (BAC@A, EDF@D; vertex-mid names, no collision with ABC/DEF polygons). No aliases (prose all forward-spelled). Markers → #91 rework |
 | I.26 | ASA / AAS congruence | T | ✅ | 7 + 7 | Sector.sweep, Point.appear, Line.straightEdgeConnect, Polygon.outline | ⚠ | Last congruence theorem; **two canvases** (two hypotheses). canvas_0 (ASA, BC between the equal angles): reductio — assume AB>DE, cut BG=DE, △GBC≅△DEF (@I.4) ⟹ ∠GCB=∠DFE=∠ACB ⟹ ∠BCG=∠BCA less=greater, impossible. canvas_1 (AAS, AB opposite an equal angle): reductio — assume BC>EF, cut BH=EF, △ABH≅△DEF (@I.4) ⟹ ∠BHA=∠EFD=∠BCA, but ∠BHA exterior to △AHC ⟹ I.16 impossible. 7 markers/canvas: angle at B=CBA (`{ABC\|CBA}`), at E=FED (`{DEF\|FED}`), C-pair nests (BCA⊃GCB); ∠GBC=∠ABC (G on BA) → `{GBC\|CBA}`. **C is a `vertex` point → added "C" to every visible set so its label shows** (same drop-out as I.4). Cross-canvas refs via raw `data-canvas` spans: guide congruence-def/SSA → canvas_0; case-b intro (between hr & canvas_1) → canvas_1; case-b body binds canvas_1 by DOM order. Filed euclid#130 (highlight one element across both canvases at once). Markers → #91 rework |
 | I.27 | Equal alternate angles ⇒ parallel | T | ✅ | 9 | Sector.sweep, Point.appear, Line.straightEdgeConnect, Polygon.outline | ⚠ | First parallels prop (no Post.5). Transversal EF cuts AB at E, CD at F; alternate ∠AEF=∠EFD given. Reductio: if AB/CD meet at G (toward B,D), △GEF has exterior ∠AEF = interior opposite ∠EFG, impossible (@I.16); similarly toward A,C; so parallel (@I.Def.23). 2 markers (AEF@E, EFD@F); ∠EFG=∠EFD (G beyond D) → `{EFG\|EFD}`. deferDraggables G (hypothetical meeting pt). Guide "directions A/D, B/C" tokenized; the logical-converse table's *P*/*Q* are propositional vars, left untokenized. Markers → #91 rework |
-| I.28 | Equal corresponding / co-interior ⇒ parallel | T | ⬜ | | | ⚠? | |
+| I.28 | Equal corresponding / co-interior ⇒ parallel | T | ✅ | 6 | Sector.sweep | ⚠ | Two more parallel criteria, both reduced to @I.27. Transversal EF cuts AB@G, CD@H. (1) corresponding: ∠EGB=∠GHD given, ∠EGB=∠AGH (vertical, @I.15) ⟹ ∠AGH=∠GHD alternate ⟹ ∥. (2) co-interior: ∠BGH+∠GHD=2rt given, ∠AGH+∠BGH=2rt (@I.13) ⟹ subtract ∠BGH (C.N.3) ⟹ ∠AGH=∠GHD alternate ⟹ ∥. 4 markers: EGB/AGH/BGH @G (nest #103), GHD @H. No polygon collisions (no triangles). G/H intersection pts added to visible. Fixed noscript propI29→propI28.gif. Markers → #91 rework |
 | I.29 | Parallels ⇒ equal alternate / corresponding angles | T | ⬜ | | | ⚠? | |
 | I.30 | Transitivity of parallelism | T | ⬜ | | | — | |
 | I.31 | Draw a parallel through a point | C | ⬜ | | | ~ | Uses I.23 angle copy; marker incidental |
