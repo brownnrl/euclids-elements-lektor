@@ -33,19 +33,22 @@ Let the straight line {EF} falling on the two straight lines {AB} and {CD} make 
             "D';point;parallelogram;C,A,B;0;0",
             "D;point;lineSlider;C,D',190,40",
             "CD;line;connect;C,D",
-            "E;point;free;135,40",
-            "F;point;free;55,175",
+            "E;point;free;70,40",
+            "F;point;free;130,170",
             "EF;line;connect;E,F",
             "G;point;intersection;A,B,E,F",
             "H;point;intersection;C,D,E,F",
             // Angle markers (#91). At G the transversal crosses AB: ∠EGB
             // (exterior), ∠AGH (alternate, vertical to ∠EGB), ∠BGH
-            // (co-interior). At H it crosses CD: ∠GHD. Same-vertex markers
-            // at G auto-nest (#103).
-            "EGB;sector;angleMarker;G,E,B",
-            "AGH;sector;angleMarker;G,A,H",
-            "BGH;sector;angleMarker;G,B,H",
-            "GHD;sector;angleMarker;H,G,D"
+            // (co-interior). At H it crosses CD: ∠GHD. Explicit px radii
+            // pin the size — the #103 auto-nesting otherwise pushes a
+            // same-vertex marker out to ~31–40px. ∠EGB/∠AGH are vertical
+            // (opposite quadrants) so share 22px; ∠BGH shares an arm with
+            // both, so a smaller 14px keeps it distinct.
+            "EGB;sector;angleMarker;G,E,B,22",
+            "AGH;sector;angleMarker;G,A,H,22",
+            "BGH;sector;angleMarker;G,B,H,14",
+            "GHD;sector;angleMarker;H,G,D,22"
         ],
         slides: [
             { text: "Let the straight line {EF} falling on the two straight lines {AB} and {CD} make the exterior angle {EGB} equal to the interior and opposite angle {GHD}, or the sum of the interior angles on the same side, namely {BGH} and {GHD}, equal to two right angles.",
