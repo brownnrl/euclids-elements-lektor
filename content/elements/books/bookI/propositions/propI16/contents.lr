@@ -248,10 +248,11 @@ Plane elliptic geometry is closely related to spherical geometry, but it differs
             "F;point;last;Fchord",
             "F ;point;first;Fchord",
             "FF;sector;arc;F,C,F ;0;0;black;0",
-            // Zero-color hover target for the Guide's "triangle {ABC}" ref
-            // (the elliptic triangle's sides are the arcs above; this is a
-            // straight-chord stand-in just to light the triangle on hover).
-            "ABC;polygon;triangle;A,B,C;0;0;0;0"
+            // The elliptic triangle's CURVED sides (#119, geomlib 0.13.0):
+            // 3 vertices + the 3 circles their arc-sides lie on. Hovering the
+            // Guide's "triangle {ABC}" now lights the actual arcs (AB on
+            // ABcirc, BC on CBcirc, CA on ACcirc), not straight chords.
+            "ABC;polygon;curvedTriangle;A,B,C,ABcirc,CBcirc,ACcirc;0;0;0;0"
         ],
     });
 </script>

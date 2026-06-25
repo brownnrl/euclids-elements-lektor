@@ -192,6 +192,10 @@ This proposition on the triangle inequality, along with @I.15 on vertical angles
             "AE;line;connect;A,E;0;0;0",
             "EP;line;connect;E,P;0;0;0",
             "EB';line;connect;E,B';0;0;0",
+            // The optimal bent path A→E→B as ONE open route (#121, geomlib
+            // 0.13.0), so the Guide's "the path AEB" hover-lights the whole
+            // route instead of two separate segments.
+            "AEB;line;path;A,E,B;0;0;0",
             "AEC;sector;angleMarker;E,A,C",
             "BED;sector;angleMarker;E,B,D",
             // The congruent triangles BFE ≅ B'FE (zero-color outlines) and
@@ -229,9 +233,9 @@ This proposition on the triangle inequality, along with @I.15 on vertical angles
             { text: "But that still leaves us the question of which point {P} to choose on the line {CD} to minimize the sum of the distances {AP} plus {PB}.",
               visible: ["CD","P","AP","PB"],
               highlighted: ["AP","PB"] },
-            { text: "The solution is that the shortest path will be the path AEB where angle of incidence, namely, angle {AEC}, equals the angle of reflection, namely, angle {BED}.",
-              visible: ["CD","P","AP","PB","E","AE","EB","AEC","BED"],
-              highlighted: ["AE","EB","AEC","BED"],
+            { text: "The solution is that the shortest path will be the path {AEB} where angle of incidence, namely, angle {AEC}, equals the angle of reflection, namely, angle {BED}.",
+              visible: ["CD","P","AP","PB","E","AE","EB","AEB","AEC","BED"],
+              highlighted: ["AEB","AEC","BED"],
               transition: { mode: "parallel", animations: [
                   { elem: "E",   name: geomlib.A.Point.appear },
                   { elem: "EB",  name: geomlib.A.Line.straightEdgeConnect },
@@ -299,7 +303,7 @@ This proposition on the triangle inequality, along with @I.15 on vertical angles
 
 Suppose there are two points {A} and {B} on the same side of a line {CD}. The problem is to find the shortest path which goes first from the point {A} to some point {P} on the line {CD}, then from {P} to the point {B}. We will only consider paths that are made out of straight lines; call such a path a *bent line.* But that still leaves us the question of which point {P} to choose on the line {CD} to minimize the sum of the distances {AP} plus {PB}.
 
-The solution is that the shortest path will be the path *AEB* where angle of incidence, namely, angle {AEC}, equals the angle of reflection, namely, angle {BED}.
+The solution is that the shortest path will be the path {AEB} where angle of incidence, namely, angle {AEC}, equals the angle of reflection, namely, angle {BED}.
 
 First, we should show how to construct the bent line where the angle of incidence equals the angle of reflection. Draw a perpendicular {BF} from the point {B} to the line {CD} (@I.12), and extend it to {B'} so that {FB'} = {BF} (@I.Post.2, @I.3). Draw {AB'} and let {E} be the point where {AB'} intersects {CD}. (There will be a point of intersection since {A} and {B'} are on opposite sides of {CD}.) Draw {BE}.
 
