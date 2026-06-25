@@ -42,21 +42,72 @@ Let each of the straight lines *AB* and *CD* be parallel to *EF.*
             "H;point;intersection;E,F,G,K",
             "G';point;extend;K,G,K,G;0;0",
             "K';point;extend;G,K,G,K;0;0",
-            "GK;line;connect;G',K'"
+            "GK;line;connect;G',K'",
+            // The three alternate angles the transversal makes, one per
+            // crossing: ∠AGK at G (on AB), ∠GHF at H (on EF), ∠GKD at K (on
+            // CD). Different vertices, so no #103 nesting.
+            "AGK;sector;angleMarker;G,A,K",
+            "GHF;sector;angleMarker;H,G,F",
+            "GKD;sector;angleMarker;K,G,D"
         ],
+        deferDraggables: ["G", "K"],
+        slides: [
+            { text: "Let each of the straight lines {AB} and {CD} be parallel to {EF}.",
+              visible: ["AB","CD","D","EF","F"],
+              highlighted: ["AB","CD","EF"] },
+            { text: "I say that {AB} is also parallel to {CD}.",
+              visible: ["AB","CD","D","EF","F"],
+              highlighted: ["AB","CD"] },
+            { text: "Let the straight line {GK} fall upon them. Since the straight line {GK} falls on the parallel straight lines {AB} and {EF}, therefore the angle {AGK} equals the angle {GHF}.",
+              visible: ["AB","CD","D","EF","F","G","K","H","GK","AGK","GHF"],
+              highlighted: ["GK","AGK","GHF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G",   name: geomlib.A.Point.appear },
+                  { elem: "K",   name: geomlib.A.Point.appear },
+                  { elem: "GK",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AGK", name: geomlib.A.Sector.sweep },
+                  { elem: "GHF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.29" }] },
+            { text: "Again, since the straight line {GK} falls on the parallel straight lines {EF} and {CD}, therefore the angle {GHF} equals the angle {GKD}.",
+              visible: ["AB","CD","D","EF","F","G","K","H","GK","AGK","GHF","GKD"],
+              highlighted: ["GHF","GKD"],
+              transition: { animations: [ { elem: "GKD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.29" }] },
+            { text: "But the angle {AGK} was also proved equal to the angle {GHF}. Therefore the angle {AGK} also equals the angle {GKD}, and they are alternate.",
+              visible: ["AB","CD","D","EF","F","G","K","H","GK","AGK","GHF","GKD"],
+              highlighted: ["AGK","GHF","GKD"],
+              justifications: [{ ref: "C.N.1" }] },
+            { text: "Therefore {AB} is parallel to {CD}.",
+              visible: ["AB","CD","D","EF","F","G","K","H","GK","AGK","GKD"],
+              highlighted: ["AB","CD","AGK","GKD"] },
+            { text: "Therefore straight lines parallel to the same straight line are also parallel to one another.",
+              visible: ["AB","CD","D","EF","F","G","K","H","GK","AGK","GKD"],
+              highlighted: ["AB","CD","EF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.29":  "/elements/books/bookI/propositions/propI29/",
+        "C.N.1": "/elements/books/bookI/commonnotions/cn1/"
     });
 </script>
 </figure>
 
-I say that *AB* is also parallel to *CD.*
+I say that {AB} is also parallel to {CD}.
 
-Let the straight line *GK* fall upon them. Since the straight line *GK* falls on the parallel straight lines *AB* and *EF,* therefore the angle *AGK* equals the angle *GHF.* [!just I.29]
+Let the straight line {GK} fall upon them. Since the straight line {GK} falls on the parallel straight lines {AB} and {EF}, therefore the angle {AGK} equals the angle {GHF}. [!just I.29]
 
-Again, since the straight line *GK* falls on the parallel straight lines *EF* and *CD,* therefore the angle *GHF* equals the angle *GKD.* [!just I.29]
+Again, since the straight line {GK} falls on the parallel straight lines {EF} and {CD}, therefore the angle {GHF} equals the angle {GKD}. [!just I.29]
 
-But the angle *AGK* was also proved equal to the angle *GHF.* Therefore the angle *AGK* also equals the angle *GKD,* and they are alternate. [!just C.N.1]
+But the angle {AGK} was also proved equal to the angle {GHF}. Therefore the angle {AGK} also equals the angle {GKD}, and they are alternate. [!just C.N.1]
 
-Therefore *AB* is parallel to *CD.*
+Therefore {AB} is parallel to {CD}.
 
 Therefore *straight lines parallel to the same straight line are also parallel to one another.*
 
