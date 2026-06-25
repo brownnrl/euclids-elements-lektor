@@ -38,7 +38,7 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 30 (I.1–I.30) | markers on 0.13.0 (see open Qs) |
+| Book I | 48 | 31 (I.1–I.31) | markers on 0.13.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
 | **Total** | **465** | **20** | — |
 
@@ -81,7 +81,7 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.28 | Equal corresponding / co-interior ⇒ parallel | T | ✅ | 10 | Sector.sweep | ⚠ | Two more parallel criteria, both reduced to @I.27. Transversal EF cuts AB@G, CD@H. (1) corresponding: ∠EGB=∠GHD given, ∠EGB=∠AGH (vertical, @I.15) ⟹ ∠AGH=∠GHD alternate ⟹ ∥. (2) co-interior: ∠BGH+∠GHD=2rt given, ∠AGH+∠BGH=2rt (@I.13) ⟹ subtract ∠BGH (C.N.3) ⟹ ∠AGH=∠GHD alternate ⟹ ∥. 4 markers: EGB/AGH/BGH @G (nest #103), GHD @H. No polygon collisions (no triangles). G/H intersection pts added to visible. Fixed noscript propI29→propI28.gif. **Slideshow-only: the 3 reasoning paragraphs broken out into per-statement sub-slides** (1 citation each) so each chip shows the single prop for that step — prose stays combined. (`ISlideJust` has no text field, so statements can't go IN the justification panel without a lib change.) Markers → #91 rework |
 | I.29 | Parallels ⇒ equal alternate / corresponding angles | T | ✅ | 11 | Sector.sweep | ⚠ | Converse of I.27/I.28; **first prop to use Post.5** (fails in hyperbolic geom). Same transversal figure as I.28 (∠EGB/∠AGH/∠BGH @G, ∠GHD @H; radii pinned 22/22/14/22). Part 1 (alternate ∠AGH=∠GHD): reductio — if ∠AGH>∠GHD, then ∠BGH+∠GHD<2rt (@I.13), so by **@I.Post.5** AB/CD would meet, contradicting parallel. Part 2: ∠AGH=∠EGB (@I.15) ⟹ ∠EGB=∠GHD (C.N.1). Part 3: add ∠BGH (C.N.2) ⟹ ∠BGH+∠GHD=2rt (@I.13). **canvas_1 = Poincaré disk** (hyperbolic guide, static): "line" AB = arc + point C + two asymptotic-parallel arcs; guide refs (AB/A/B/C) bind canvas_1. Markers → #91 rework |
 | I.30 | Transitivity of parallelism | T | ✅ | 7 | Point.appear, Line.straightEdgeConnect, Sector.sweep | ✓ | AB∥EF & CD∥EF ⟹ AB∥CD. Transversal GK cuts all three parallels (G on AB, H on EF, K on CD; G/K deferred sliders, H intersection). Two alternate-angle steps via @I.29: ∠AGK=∠GHF, then ∠GHF=∠GKD ⟹ ∠AGK=∠GKD (C.N.1), alternate ⟹ ∥. 3 markers, one per crossing (∠AGK@G, ∠GHF@H, ∠GKD@K — distinct vertices, no #103 nesting). Guide is discursive (Playfair's axiom, elegance) — no figure refs to bind. Markers → #91 rework |
-| I.31 | Draw a parallel through a point | C | ⬜ | | | ~ | Uses I.23 angle copy; marker incidental |
+| I.31 | Draw a parallel through a point | C | ✅ | 7 | Point.appear, Line.straightEdgeConnect, Sector.sweep | ✓ | **Q.E.F. construction** (`red_highlight`). Random D on BC, join AD, copy ∠ADC to ∠DAE at A (@I.23 — shown as the `similar` ray AE, not the full ten-circle walk), produce AF; EAF∥BC by @I.27 (alternate ∠EAD=∠ADC). Constructed parallel E–A–F drawn as AE+AF; **zero-color `EF;connect;E,F` is the unified hover target**, with aliases **DAE→EAD** (prose uses both spellings for the A-angle) and **EAF→EF**. 2 markers (∠EAD@A, ∠ADC@D). D deferred. Guide (uniqueness via Post.5; works in hyperbolic too) tokenized to canvas_0; "Construction steps" (I.23: 10→6 circles) is prose-only. Markers → #91 rework |
 | I.32 | Exterior angle = sum of remotes; angles sum 2R | T | ⬜ | | | ⚠? | |
 | I.33 | Equal+parallel ends joined ⇒ equal+parallel | T | ⬜ | | | — | |
 | I.34 | Parallelogram opposite sides/angles; diameter bisects | T | ⬜ | | | ⚠? | |

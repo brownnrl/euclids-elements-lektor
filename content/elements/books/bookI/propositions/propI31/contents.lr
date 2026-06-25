@@ -17,7 +17,7 @@ statement: To draw a straight line through a given point parallel to a given str
 ----
 proof:
 
-Let *A* be the given point, and *BC* the given straight line.
+Let {A} be the given point, and {BC} the given straight line.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="230" height="160" tabindex="0"></canvas>
@@ -37,28 +37,86 @@ Let *A* be the given point, and *BC* the given straight line.
             "AE;line;similar;A,D,D,A,C",
             "E;point;last;AE",
             "AF;line;extend;E,A,B,D",
-            "F;point;last;AF"
+            "F;point;last;AF",
+            // Zero-color hover target for the whole constructed parallel
+            // E–A–F (so {EF} / {EAF} light the full line through A; it is
+            // drawn visibly as AE + AF).
+            "EF;line;connect;E,F;0;0;0",
+            // The alternate angles AD makes (#91): the copied ∠EAD (=∠DAE) at
+            // A and the original ∠ADC at D. Distinct vertices, no #103 nesting.
+            "EAD;sector;angleMarker;A,E,D",
+            "ADC;sector;angleMarker;D,A,C"
         ],
+        aliases: { "DAE": "EAD", "EAF": "EF" },
+        deferDraggables: ["D"],
+        slides: [
+            { text: "Let {A} be the given point, and {BC} the given straight line.",
+              visible: ["BC"],
+              highlighted: ["A","BC"] },
+            { text: "It is required to draw a straight line through the point {A} parallel to the straight line {BC}.",
+              visible: ["BC"],
+              highlighted: ["A","BC"] },
+            { text: "Take a point {D} at random on {BC}. Join {AD}.",
+              visible: ["BC","D","AD"],
+              highlighted: ["D","AD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "D",  name: geomlib.A.Point.appear },
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Construct the angle {DAE} equal to the angle {ADC} on the straight line {DA} and at the point {A} on it.",
+              visible: ["BC","D","AD","AE","E","ADC","EAD"],
+              highlighted: ["EAD","ADC","AE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ADC", name: geomlib.A.Sector.sweep },
+                  { elem: "AE",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EAD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.23" }] },
+            { text: "Produce the straight line {AF} in a straight line with {EA}.",
+              visible: ["BC","D","AD","AE","E","ADC","EAD","AF","F"],
+              highlighted: ["AF"],
+              transition: { animations: [ { elem: "AF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Since the straight line {AD} falling on the two straight lines {BC} and {EF} makes the alternate angles {EAD} and {ADC} equal to one another, therefore {EAF} is parallel to {BC}.",
+              visible: ["BC","D","AD","AE","E","ADC","EAD","AF","F","EF"],
+              highlighted: ["AD","BC","EF","EAD","ADC"],
+              justifications: [{ ref: "I.27" }] },
+            { text: "Therefore the straight line {EAF} has been drawn through the given point {A} parallel to the given straight line {BC}.",
+              visible: ["BC","D","AD","AE","E","ADC","EAD","AF","F","EF"],
+              highlighted: ["EF","A","BC"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.23":     "/elements/books/bookI/propositions/propI23/",
+        "I.27":     "/elements/books/bookI/propositions/propI27/"
     });
 </script>
 </figure>
 
-It is required to draw a straight line through the point *A* parallel to the straight line *BC.*
+It is required to draw a straight line through the point {A} parallel to the straight line {BC}.
 
-Take a point *D* at random on *BC.* Join *AD.* Construct the angle *DAE* equal to the angle *ADC* on the straight line *DA* and at the point *A* on it. Produce the straight line *AF* in a straight line with *EA.* [!just I.Post.1; I.23; I.Post.2]
+Take a point {D} at random on {BC}. Join {AD}. Construct the angle {DAE} equal to the angle {ADC} on the straight line {DA} and at the point {A} on it. Produce the straight line {AF} in a straight line with {EA}. [!just I.Post.1; I.23; I.Post.2]
 
-Since the straight line *AD* falling on the two straight lines *BC* and *EF* makes the alternate angles *EAD* and *ADC* equal to one another, therefore *EAF* is parallel to *BC.* [!just I.27]
+Since the straight line {AD} falling on the two straight lines {BC} and {EF} makes the alternate angles {EAD} and {ADC} equal to one another, therefore {EAF} is parallel to {BC}. [!just I.27]
 
-Therefore the straight line *EAF* has been drawn through the given point *A* parallel to the given straight line *BC.*
+Therefore the straight line {EAF} has been drawn through the given point {A} parallel to the given straight line {BC}.
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
 ----
 guide:
 
-The parallel line *EF* constructed in this proposition is the only one passing through the point *A.* If there were another, then the interior angles on one side or the other of *AD* it makes with *BC* would be less than two right angles, and therefore by the parallel postulate @I.Post.5, it would meet *BC,* a contradiction.
+The parallel line {EF} constructed in this proposition is the only one passing through the point {A}. If there were another, then the interior angles on one side or the other of {AD} it makes with {BC} would be less than two right angles, and therefore by the parallel postulate @I.Post.5, it would meet {BC}, a contradiction.
 
-Incidentally, this construction also works in hyperbolic geometry, although different parallel lines through *A* are constructed for different points *D.*
+Incidentally, this construction also works in hyperbolic geometry, although different parallel lines through {A} are constructed for different points {D}.
 
 #### Construction steps
 
