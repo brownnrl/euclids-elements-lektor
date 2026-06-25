@@ -159,41 +159,17 @@ As Proclus and Heath point out, a very minor variant of the construction in @I.2
             // Side hover targets.
             "CD;line;connect;C,D;0;0;0",
             "CE;line;connect;C,E;0;0;0",
-            "DE;line;connect;D,E;0;0;0",
-            // ---- Transfer rig #1: place CD at A (I.2 + I.1). ALL transitory
-            // (zero-color): the whole rig is drawn on the "transfer" slide
-            // (equilateral via outline, circles via compass, all gold) and
-            // then cleared on the next slide, leaving only G + the circle on A.
-            // Absent from the static figure. t1M lays off CD beyond C; t1N
-            // copies that length onto the T->A side so AN = CD (node-verified).
-            "t1AC;line;connect;A,C;0;0;0",                      // join A-C (drawn first)
-            "t1Ka;circle;radius;A,A,C;0;0;0;0",                 // I.1 circle
-            "t1Kc;circle;radius;C,A,C;0;0;0;0",                 // I.1 circle
-            "t1tri;polygon;equilateralTriangle;A,C;0;0;0;0",    // equilateral on AC
-            "t1T;point;vertex;t1tri,3;0;0",                     // apex
-            "t1M;point;extend;t1T,C,C,D;0;0",                   // CM = CD beyond C
-            "t1TM;line;connect;t1T,t1M;0;0;0",                  // produced side T-C-M
-            "t1Kc2;circle;radius;C,C,D;0;0;0;0",                // circle(C,CD)
-            "t1N;point;cutoff;t1T,A,t1T,t1M;0;0",               // TN = TM -> AN = CD
-            "t1TN;line;connect;t1T,t1N;0;0;0",                  // produced side T-A-N
-            "t1KT;circle;radius;t1T,t1T,t1M;0;0;0;0",           // circle(T,TM)
-            // ---- Transfer rig #2: place ED at G (I.2 + I.1), same pattern.
-            "t2GE;line;connect;G,E;0;0;0",                      // join G-E (drawn first)
-            "t2Kg;circle;radius;G,G,E;0;0;0;0",                 // I.1 circle
-            "t2Ke;circle;radius;E,G,E;0;0;0;0",                 // I.1 circle
-            "t2tri;polygon;equilateralTriangle;G,E;0;0;0;0",    // equilateral on GE
-            "t2T;point;vertex;t2tri,3;0;0",                     // apex
-            "t2M;point;extend;t2T,E,E,D;0;0",                   // EM = ED beyond E
-            "t2TM;line;connect;t2T,t2M;0;0;0",                  // produced side T-E-M
-            "t2Ke2;circle;radius;E,E,D;0;0;0;0",                // circle(E,ED)
-            "t2N;point;cutoff;t2T,G,t2T,t2M;0;0",               // TN = TM -> GN = ED
-            "t2TN;line;connect;t2T,t2N;0;0;0",                  // produced side T-G-N
-            "t2KT;circle;radius;t2T,t2T,t2M;0;0;0;0"            // circle(T,TM)
+            "DE;line;connect;D,E;0;0;0"
+            // The two I.2/I.1 transfer rigs are gone — replaced by
+            // A.Circle.compassTransfer on Acirc / Gcirc (#127, geomlib
+            // 0.13.0). The macro owns the join + I.1 circles + equilateral +
+            // produced sides + lay-off circles as self-clearing ephemerals;
+            // args.keepCircles names the four construction circles per
+            // transfer (t1Ka/t1Kc/t1Kc2/t1KT, t2Kg/t2Ke/t2Ke2/t2KT) so they
+            // PERSIST (initiallyHidden) for the ten-circle count slide.
         ],
         aliases: {
-            "ED": "DE",
-            "AN": "t1N",
-            "GN": "t2N"
+            "ED": "DE"
         },
         slides: [
             { text: "Unless there is some special reason for selecting particular points {D} and {E} on the sides of the angle {C}, they might as well be taken equidistant from {C} as Apollonius suggested — then only two distances need to be transferred instead of three.",
@@ -203,37 +179,23 @@ As Proclus and Heath point out, a very minor variant of the construction in @I.2
               visible: ["CD1","CE1","CDE","AB","Ccirc","CD","CE"],
               highlighted: ["Ccirc","CE","CD"],
               transition: { animations: [ { elem: "Ccirc", name: geomlib.A.Circle.compass } ] } },
-            { text: "Next, to transfer the distance {CD} to {A}, two circles lay off the length {CD} from {A}, leaving {AN} equal to {CD}. The circle with center {A} and radius {AN} then meets {AB} at {G}.",
-              visible: ["CD1","CE1","CDE","AB","t1AC","t1Ka","t1Kc","t1tri","t1TM","t1Kc2","t1TN","t1KT","Acirc","G","CD"],
-              highlighted: ["t1AC","t1Ka","t1Kc","t1tri","t1TM","t1TN","t1Kc2","t1KT","Acirc","CD"],
+            { text: "Next, to transfer the distance {CD} to {A}, a compass-transfer lays off the length, leaving the circle with center {A} and radius {CD}, which meets {AB} at {G}.",
+              visible: ["CD1","CE1","CDE","AB","Acirc","G","CD"],
+              highlighted: ["Acirc","CD"],
               transition: { mode: "cascade", animations: [
-                  { elem: "t1AC",  name: geomlib.A.Line.straightEdgeConnect },
-                  { elem: "t1Ka",  name: geomlib.A.Circle.compass },
-                  { elem: "t1Kc",  name: geomlib.A.Circle.compass },
-                  { elem: "t1tri", name: geomlib.A.Polygon.outline },
-                  { elem: "t1TM",  name: geomlib.A.Line.straightEdgeConnect },
-                  { elem: "t1TN",  name: geomlib.A.Line.straightEdgeConnect },
-                  { elem: "t1Kc2", name: geomlib.A.Circle.compass },
-                  { elem: "t1KT",  name: geomlib.A.Circle.compass },
-                  { elem: "Acirc", name: geomlib.A.Circle.compass },
+                  { elem: "Acirc", name: geomlib.A.Circle.compassTransfer,
+                    args: { side: -1, keepCircles: ["t1Ka","t1Kc","t1Kc2","t1KT"] } },
                   { elem: "G",     name: geomlib.A.Point.appear } ] },
               justifications: [{ ref: "I.1" }, { ref: "I.2" }] },
-            { text: "With {G} fixed, the equilateral triangle and transfer circles are cleared away, leaving {G} and the circle on {A}.",
+            { text: "With {G} fixed, the transfer scaffolding has cleared, leaving {G} and the circle on {A}.",
               visible: ["CD1","CE1","CDE","AB","G","Acirc"],
               highlighted: ["G","Acirc"] },
-            { text: "In the same way, transfer the distance {ED} to {G}, then draw the circle with center {G} and radius {ED}.",
-              visible: ["CD1","CE1","CDE","AB","G","Acirc","t2GE","t2Kg","t2Ke","t2tri","t2TM","t2Ke2","t2TN","t2KT","Gcirc","DE"],
-              highlighted: ["t2GE","t2Kg","t2Ke","t2tri","t2TM","t2TN","t2Ke2","t2KT","Gcirc","DE"],
+            { text: "In the same way, transfer the distance {ED} to {G}, leaving the circle with center {G} and radius {ED}.",
+              visible: ["CD1","CE1","CDE","AB","G","Acirc","Gcirc","DE"],
+              highlighted: ["Gcirc","DE"],
               transition: { mode: "cascade", animations: [
-                  { elem: "t2GE",  name: geomlib.A.Line.straightEdgeConnect },
-                  { elem: "t2Kg",  name: geomlib.A.Circle.compass },
-                  { elem: "t2Ke",  name: geomlib.A.Circle.compass },
-                  { elem: "t2tri", name: geomlib.A.Polygon.outline },
-                  { elem: "t2TM",  name: geomlib.A.Line.straightEdgeConnect },
-                  { elem: "t2TN",  name: geomlib.A.Line.straightEdgeConnect },
-                  { elem: "t2Ke2", name: geomlib.A.Circle.compass },
-                  { elem: "t2KT",  name: geomlib.A.Circle.compass },
-                  { elem: "Gcirc", name: geomlib.A.Circle.compass } ] },
+                  { elem: "Gcirc", name: geomlib.A.Circle.compassTransfer,
+                    args: { side: -1, keepCircles: ["t2Kg","t2Ke","t2Ke2","t2KT"] } } ] },
               justifications: [{ ref: "I.1" }, { ref: "I.2" }] },
             { text: "Clearing that scaffolding too leaves the two circles — one on {A} with radius {CD}, one on {G} with radius {ED}.",
               visible: ["CD1","CE1","CDE","AB","G","Acirc","Gcirc"],
