@@ -141,6 +141,10 @@ The walk below carries out that specialized copy of the angle, and counts the si
             "sideDC;line;connect;D,C;0;0;black",
             // P on ray DC with DP = DA, found where K1 meets DC (hidden helper).
             "P;point;cutoff;D,C,D,A",
+            // Zero-color hover targets (drawn only when a caption phrase is
+            // hovered): the join DP and the chord AP, both intermediate lines.
+            "DP;line;connect;D,P;0;0;0",
+            "AP;line;connect;A,P;0;0;0",
             // --- FOUR circles transfer the chord PA to the centre D (I.1 + I.2).
             // I.1 equilateral triangle on DP: the two circles K1, K2 meet at apex
             // T. K1 (centre D, radius DA) also cuts DC at P — so no separate
@@ -167,49 +171,49 @@ The walk below carries out that specialized copy of the angle, and counts the si
             "AF;line;connect;A,F"
         ],
         slides: [
-            { text: "This is the construction of I.23 to copy an angle, applied to the angle at {D}. Because the side from {D} to {A} already lies along the line, that distance need not be transferred — four of the ten circles are eliminated, leaving six.",
+            { text: "This is the construction of I.23 to copy an angle, applied to the angle at {D}. Because {the side from D to A|sideDA} already lies along the line, that distance need not be transferred — four of the ten circles are eliminated, leaving six.",
               visible: ["sideDA","sideDC"],
               highlighted: ["sideDA","sideDC"],
               justifications: [{ ref: "I.23" }] },
-            { text: "Circle 1 — centre {D}, through {A}. It is the first circle of the equilateral triangle (Prop I.1) that begins the transfer, and it cuts the ray toward {C} at {P}, so {P} lies as far from {D} as {A} does.",
+            { text: "{Circle 1|K1} — centre {D}, through {A}. It is the first circle of the equilateral triangle (Prop I.1) that begins the transfer, and it cuts {the ray toward C|sideDC} at {P}, so {P} lies as far from {D} as {A} does.",
               visible: ["sideDA","sideDC","K1","P"],
               highlighted: ["K1","P"],
               transition: { mode: "cascade", animations: [
                   { elem: "K1", name: geomlib.A.Circle.compass },
                   { elem: "P",  name: geomlib.A.Point.appear } ] },
               justifications: [{ ref: "I.1" }] },
-            { text: "Circle 2 — centre {P}, through {D}. With circle 1 it completes the equilateral triangle on the join, the two circles meeting at the apex {T}.",
-              visible: ["sideDA","sideDC","K1","P","K2","T"],
+            { text: "{Circle 2|K2} — centre {P}, through {D}. With {circle 1|K1} it completes the equilateral triangle on {the join|DP}, the two circles meeting at the apex {T}.",
+              visible: ["sideDA","sideDC","K1","P","DP","K2","T"],
               highlighted: ["K2","T"],
               transition: { mode: "cascade", animations: [
                   { elem: "K2", name: geomlib.A.Circle.compass },
                   { elem: "T",  name: geomlib.A.Point.appear } ] } },
-            { text: "Circle 3 — centre {P}, through {A}. The chord from {A} to {P} is the third distance of the angle; this circle lays its length off from {P}, marking {G} on the produced side.",
-              visible: ["sideDA","sideDC","K1","P","K2","T","K3","G"],
+            { text: "{Circle 3|K3} — centre {P}, through {A}. {The chord from A to P|AP} is the third distance of the angle; {this circle|K3} lays its length off from {P}, marking {G} on the produced side.",
+              visible: ["sideDA","sideDC","K1","P","K2","T","K3","G","AP"],
               highlighted: ["K3","G"],
               transition: { mode: "cascade", animations: [
                   { elem: "K3", name: geomlib.A.Circle.compass },
                   { elem: "G",  name: geomlib.A.Point.appear } ] } },
-            { text: "Circle 4 — centre {T}, through {G}. It carries that length around to the produced side through {D}, so a length equal to the chord from {A} to {P} now reaches from {D}. These four circles are the transfer, by Propositions I.1 and I.2.",
-              visible: ["sideDA","sideDC","K1","P","K2","T","K3","G","K4"],
+            { text: "{Circle 4|K4} — centre {T}, through {G}. It carries that length around to the produced side through {D}, so a length equal to {the chord from A to P|AP} now reaches from {D}. These four circles are the transfer, by Propositions I.1 and I.2.",
+              visible: ["sideDA","sideDC","K1","P","K2","T","K3","G","K4","AP"],
               highlighted: ["K4"],
               transition: { animations: [ { elem: "K4", name: geomlib.A.Circle.compass } ] },
               justifications: [{ ref: "I.1" }, { ref: "I.2" }] },
-            { text: "Circle 5 — centre {A}, through {D}: the first result circle. The new side must equal the side already in place, so its far end will lie on this circle.",
+            { text: "{Circle 5|Acirc} — centre {A}, through {D}: the first result circle. The new side must equal {the side already in place|sideDA}, so its far end will lie on {this circle|Acirc}.",
               visible: ["sideDA","sideDC","K1","P","K2","T","K3","G","K4","Acirc"],
               highlighted: ["Acirc"],
               transition: { animations: [ { elem: "Acirc", name: geomlib.A.Circle.compass } ] } },
-            { text: "Circle 6 — centre {D}, with radius the transferred chord: the second result circle. The far end of the new side must be the chord's length from {D}, so it will lie on this circle too.",
-              visible: ["sideDA","sideDC","K1","P","K2","T","K3","G","K4","Acirc","Gcirc"],
+            { text: "{Circle 6|Gcirc} — centre {D}, with radius {the chord from A to P|AP}: the second result circle. The far end of the new side must be the chord's length from {D}, so it will lie on {this circle|Gcirc} too.",
+              visible: ["sideDA","sideDC","K1","P","K2","T","K3","G","K4","Acirc","Gcirc","AP"],
               highlighted: ["Gcirc"],
               transition: { animations: [ { elem: "Gcirc", name: geomlib.A.Circle.compass } ] } },
-            { text: "The two result circles meet at the point {F}, and the line {AF} is the other side of the required angle — equal to the angle at {D}.",
+            { text: "{Circle 5|Acirc} and {circle 6|Gcirc} meet at the point {F}, and {the new side|AF} is the other side of the required angle — equal to the angle at {D}.",
               visible: ["sideDA","sideDC","K1","P","K2","T","K3","G","K4","Acirc","Gcirc","F","AF"],
               highlighted: ["Acirc","Gcirc","F","AF"],
               transition: { mode: "cascade", animations: [
                   { elem: "F",  name: geomlib.A.Point.appear },
                   { elem: "AF", name: geomlib.A.Line.straightEdgeConnect } ] } },
-            { text: "In all there are six circles and one line that must be drawn. The intermediate lines may be suppressed, since they only serve to verify the construction.",
+            { text: "In all there are six circles and {one line|AF} that must be drawn. The intermediate lines may be suppressed, since they only serve to verify the construction.",
               visible: ["sideDA","sideDC","P","T","G","F","AF","K1","K2","K3","K4","Acirc","Gcirc"],
               highlighted: ["AF","K1","K2","K3","K4","Acirc","Gcirc"],
               transition: { mode: "cascade", animations: [
