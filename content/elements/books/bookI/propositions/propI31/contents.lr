@@ -125,7 +125,7 @@ The construction needed is that of @I.23 to construct an angle. That constructio
 The walk below carries out that specialized copy of the angle, and counts the six circles at the end.
 
 <figure class="diagram rdiagram">
-<canvas id="canvas_1" width="360" height="280" tabindex="0"></canvas>
+<canvas id="canvas_1" width="380" height="320" tabindex="0"></canvas>
 <noscript><img alt="I.31 six-circle construction" src="propI31.gif"/></noscript>
 <script type="text/javascript">
     geomlib.init({
@@ -133,71 +133,75 @@ The walk below carries out that specialized copy of the angle, and counts the si
         background: "0,0,100",
         title: "I.31 — six circles",
         elements: [
-            "D;point;free;110,200",
-            "A;point;free;190,70",
-            "C;point;free;260,200",
-            // The given angle ADC (vertex D), and the line AD it is copied onto.
+            "D;point;free;90,150",
+            "A;point;free;150,100",
+            "C;point;free;200,150",
+            // The given angle at D (rays only), copied onto the line AD at A.
             "sideDA;line;connect;D,A;0;0;black",
             "sideDC;line;connect;D,C;0;0;black",
-            "ADC;sector;angleMarker;D,A,C",
-            // Apollonius "equal-sides" circle (centre D, radius DA): meets DC at
-            // P so DP = DA — like I.23's Ccirc, it is the uncounted extra circle
-            // that lets only ONE further distance be transferred.
-            "Dcirc;circle;radius;D,A;0;0;black;0",
-            "P;point;cutoff;D,C,D,A",
-            "AP;line;connect;A,P;0;0;0",
-            // The six counted circles: Acirc (centre A through D — the side DA is
-            // already in place, so no transfer scaffolding) + the chord-transfer
-            // of AP to centre D (its 4 kept circles gKa/gKc/gKc2/gKT) + Gcirc.
+            // P on ray DC with DP = DA, found where K1 meets DC (hidden helper).
+            "P;point;cutoff;D,C,D,A;0;0",
+            // --- FOUR circles transfer the chord PA to the centre D (I.1 + I.2).
+            // I.1 equilateral triangle on DP: the two circles K1, K2 meet at apex
+            // T. K1 (centre D, radius DA) also cuts DC at P — so no separate
+            // equal-sides circle is drawn.
+            "K1;circle;radius;D,P;0;0;black;0",
+            "K2;circle;radius;P,D;0;0;black;0",
+            "TT;line;bichord;K1,K2;0;0",
+            "T;point;first;TT;0;0",
+            "TPx;point;extend;T,P,T,P;0;0",
+            "TDx;point;extend;T,D,T,D;0;0",
+            // I.2 lay-off: K3 (centre P, radius PA) marks G on the produced TP;
+            // K4 (centre T, radius TG) carries that length round to the produced
+            // TD, so the transferred length lands at D.
+            "G;point;cutoff;P,TPx,P,A;0;0",
+            "K3;circle;radius;P,A;0;0;black;0",
+            "K4;circle;radius;T,G;0;0;black;0",
+            // --- TWO result circles: centre A radius the side already in place,
+            // centre D radius the chord.
             "Acirc;circle;radius;A,D;0;0;black;0",
             "Gcirc;circle;radius;D,A,P;0;0;black;0",
-            "E'E;line;bichord;Acirc,Gcirc;0;0",
-            "E;point;first;E'E",
-            "AE;line;connect;A,E",
-            "DAE;sector;angleMarker;A,D,E"
+            // Apex F = Acirc ∩ Gcirc, and THE ONE LINE, AF.
+            "FF;line;bichord;Acirc,Gcirc;0;0",
+            "F;point;first;FF",
+            "AF;line;connect;A,F"
         ],
         slides: [
-            { text: "The construction is that of {ADC}, copied. We copy the given angle {ADC} at {D} onto the line {AD} at the point {A}.",
-              visible: ["sideDA","sideDC","ADC"],
-              highlighted: ["ADC"],
-              transition: { animations: [ { elem: "ADC", name: geomlib.A.Sector.sweep } ] } },
-            { text: "First make the two sides equal: with centre {D} and radius {DA}, draw a circle. It meets {DC} at {P}, so {DP} equals {DA}. (As Apollonius noted, this one circle lets only one further distance be transferred.)",
-              visible: ["sideDA","sideDC","ADC","Dcirc","P"],
-              highlighted: ["Dcirc","P"],
+            { text: "This is the construction of I.23 to copy an angle, applied to the angle at {D}. Because the side from {D} to {A} already lies along the line, that distance need not be transferred — four of the ten circles are eliminated, leaving six.",
+              visible: ["sideDA","sideDC"],
+              highlighted: ["sideDA","sideDC"],
+              justifications: [{ ref: "I.23" }] },
+            { text: "To transfer the chord to the centre {D}, four circles are required, as per Propositions I.1 and I.2.",
+              visible: ["sideDA","sideDC","K1","K2","K3","K4"],
+              highlighted: ["K1","K2","K3","K4"],
               transition: { mode: "cascade", animations: [
-                  { elem: "Dcirc", name: geomlib.A.Circle.compass },
-                  { elem: "P",     name: geomlib.A.Point.appear } ] } },
-            { text: "Along the line {AD} the side {DA} is already in place — laying it off from {A} lands back on {D}, so that distance is not transferred, saving four circles. Draw the circle with centre {A} through {D}.",
-              visible: ["sideDA","sideDC","ADC","P","Acirc"],
-              highlighted: ["Acirc"],
-              transition: { animations: [ { elem: "Acirc", name: geomlib.A.Circle.compass } ] } },
-            { text: "Transfer the chord {AP} to the centre {D}: one compass-transfer walk lays it off, leaving the circle with centre {D} and radius {AP}.",
-              visible: ["sideDA","sideDC","ADC","P","Acirc","AP","Gcirc"],
-              highlighted: ["Gcirc","AP"],
-              transition: { mode: "cascade", animations: [
-                  { elem: "Gcirc", name: geomlib.A.Circle.compassTransfer,
-                    args: { side: 1, keepCircles: ["gKa","gKc","gKc2","gKT"] } } ] },
+                  { elem: "K1", name: geomlib.A.Circle.compass },
+                  { elem: "K2", name: geomlib.A.Circle.compass },
+                  { elem: "K3", name: geomlib.A.Circle.compass },
+                  { elem: "K4", name: geomlib.A.Circle.compass } ] },
               justifications: [{ ref: "I.1" }, { ref: "I.2" }] },
-            { text: "The two circles meet at {E}.",
-              visible: ["sideDA","sideDC","ADC","P","Acirc","Gcirc","E"],
-              highlighted: ["Acirc","Gcirc","E"],
-              transition: { animations: [ { elem: "E", name: geomlib.A.Point.appear } ] } },
-            { text: "Join {AE}. The angle {DAE} equals the given angle {ADC} — and {AE} gives the direction of the parallel.",
-              visible: ["sideDA","sideDC","ADC","P","Acirc","Gcirc","E","AE","DAE"],
-              highlighted: ["DAE","ADC"],
+            { text: "Then two more circles are required: one with centre {A} and radius the side already in place, the other with centre {D} and radius equal to the chord.",
+              visible: ["sideDA","sideDC","K1","K2","K3","K4","Acirc","Gcirc"],
+              highlighted: ["Acirc","Gcirc"],
               transition: { mode: "cascade", animations: [
-                  { elem: "AE",  name: geomlib.A.Line.straightEdgeConnect },
-                  { elem: "DAE", name: geomlib.A.Sector.sweep } ] } },
-            { text: "In all there are six circles and one line: the circle on {A}, the four of the chord-transfer, and the circle on {D}.",
-              visible: ["sideDA","sideDC","E","AE","Acirc","gKa","gKc","gKc2","gKT","Gcirc"],
-              highlighted: ["AE","Acirc","gKa","gKc","gKc2","gKT","Gcirc"],
-              transition: { mode: "cascade", animations: [
-                  { elem: "AE",    name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "Acirc", name: geomlib.A.Circle.compass },
-                  { elem: "gKa",   name: geomlib.A.Circle.compass },
-                  { elem: "gKc",   name: geomlib.A.Circle.compass },
-                  { elem: "gKc2",  name: geomlib.A.Circle.compass },
-                  { elem: "gKT",   name: geomlib.A.Circle.compass },
+                  { elem: "Gcirc", name: geomlib.A.Circle.compass } ] } },
+            { text: "These last two circles meet at the point {F}, and the line {AF} is the other side of the required angle — equal to the angle at {D}.",
+              visible: ["sideDA","sideDC","K1","K2","K3","K4","Acirc","Gcirc","F","AF"],
+              highlighted: ["Acirc","Gcirc","F","AF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",  name: geomlib.A.Point.appear },
+                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "In all there are six circles and one line that must be drawn. The intermediate lines may be suppressed, since they only serve to verify the construction.",
+              visible: ["sideDA","sideDC","F","AF","K1","K2","K3","K4","Acirc","Gcirc"],
+              highlighted: ["AF","K1","K2","K3","K4","Acirc","Gcirc"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K1",    name: geomlib.A.Circle.compass },
+                  { elem: "K2",    name: geomlib.A.Circle.compass },
+                  { elem: "K3",    name: geomlib.A.Circle.compass },
+                  { elem: "K4",    name: geomlib.A.Circle.compass },
+                  { elem: "Acirc", name: geomlib.A.Circle.compass },
                   { elem: "Gcirc", name: geomlib.A.Circle.compass } ] } }
         ],
         resolveJustification: function(ref) {
@@ -206,8 +210,9 @@ The walk below carries out that specialized copy of the angle, and counts the si
     });
     window.eucrefs = (window.eucrefs || {});
     Object.assign(window.eucrefs, {
-        "I.1": "/elements/books/bookI/propositions/propI1/",
-        "I.2": "/elements/books/bookI/propositions/propI2/"
+        "I.1":  "/elements/books/bookI/propositions/propI1/",
+        "I.2":  "/elements/books/bookI/propositions/propI2/",
+        "I.23": "/elements/books/bookI/propositions/propI23/"
     });
 </script>
 </figure>
