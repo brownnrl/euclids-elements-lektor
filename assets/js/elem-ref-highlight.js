@@ -146,18 +146,58 @@
         listening.push(slate);
     }
 
-    function bindSpan(span) {
-        var target = resolveTarget(span);
-        if (!target) return;
+    // Resolve a span to a LIST of {slate, element} targets.
+    //   data-canvases="canvas_0,canvas_1"  →  multi-canvas (geomlib >= 0.13.0,
+    //     #130): bind to each, so a shared ref (e.g. I.26's two ASA/AAS
+    //     figures) lights the element in EVERY listed canvas at once.
+    //   otherwise → the single target from resolveTarget (data-canvas / DOM order).
+    function resolveTargets(span) {
+        var name = span.getAttribute("data-elem");
+        if (!name) return { name: name, targets: [], canvasIds: null };
+        var multi = span.getAttribute("data-canvases");
+        if (multi) {
+            var ids = multi.split(",").map(function (s) { return s.trim(); })
+                           .filter(function (s) { return !!s; });
+            var targets = [];
+            for (var i = 0; i < ids.length; i++) {
+                var s = findSlateByCanvasId(ids[i]);
+                if (!s) { console.warn("elem-ref: no canvas id=" + ids[i]
+                                       + " for {!" + name + "}"); continue; }
+                var el = s.lookupElement(name);
+                if (!el) { console.warn("elem-ref: canvas " + ids[i]
+                                        + " has no element '" + name + "'"); continue; }
+                targets.push({ slate: s, element: el });
+            }
+            return { name: name, targets: targets, canvasIds: ids };
+        }
+        var t = resolveTarget(span);
+        return { name: name, targets: t ? [t] : [], canvasIds: null };
+    }
 
-        var slate = target.slate;
-        var elem = target.element;
-        bound.push({ span: span, slate: slate, element: elem });
-        ensureHighlightListener(slate);
+    function bindSpan(span) {
+        var r = resolveTargets(span);
+        if (!r.targets.length) return;
+        var name = r.name;
+        var canvasIds = r.canvasIds;
+        var targets = r.targets;
+
+        for (var i = 0; i < targets.length; i++) {
+            bound.push({ span: span, slate: targets[i].slate, element: targets[i].element });
+            ensureHighlightListener(targets[i].slate);
+        }
 
         function setHighlight(on) {
-            elem.shouldHighlight = !!on;
-            slate.update();
+            // Multi-canvas: one alias-aware call lights every listed canvas
+            // and fires each one's geomlib:highlight event (#130).
+            if (canvasIds && window.geomlib
+                && typeof window.geomlib.highlightByName === "function") {
+                window.geomlib.highlightByName(name, !!on, { canvasids: canvasIds });
+                return;
+            }
+            for (var j = 0; j < targets.length; j++) {
+                targets[j].element.shouldHighlight = !!on;
+                targets[j].slate.update();
+            }
         }
 
         span.addEventListener("mouseenter", function () {
