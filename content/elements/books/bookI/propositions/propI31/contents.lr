@@ -171,7 +171,13 @@ The walk below carries out that specialized copy of the angle, and counts the si
             // Apex F = Acirc ∩ Gcirc, and THE ONE LINE, AF.
             "FF;line;bichord;Acirc,Gcirc;0;0",
             "F;point;first;FF",
-            "AF;line;connect;A,F"
+            "AF;line;connect;A,F",
+            // The OTHER intersection of the two result circles — the mirror of
+            // F across AD. It gives the same angle but on C's side, so AF2 is
+            // NOT parallel; shown (red) to demonstrate why the fixed choice of
+            // F matters when A is dragged across DC.
+            "F2;point;last;FF;red;red",
+            "AF2;line;connect;A,F2;0;0;red"
         ],
         slides: [
             { text: "This is the construction of I.23 to copy an angle, applied to the angle at {D}. Because the {side|sideDA} from {D} to {A} already lies along the line, that distance need not be transferred — four of the ten circles are eliminated, leaving six.",
@@ -216,6 +222,12 @@ The walk below carries out that specialized copy of the angle, and counts the si
               transition: { mode: "cascade", animations: [
                   { elem: "F",  name: geomlib.A.Point.appear },
                   { elem: "AF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "But {Circle|Acirc} 5 and {circle|Gcirc} 6 meet at two points. We take {F}, on the far side of {AD|sideDA} from {C}, so {AF} runs parallel to {DC|sideDC}. The other meeting point, {F2}, gives the same angle mirrored — {AF2} crosses {DC|sideDC} and is not parallel. Drag {A} across {DC|sideDC}: the two swap, which is why a fixed choice of {F} can stop being the parallel one.",
+              visible: ["sideDA","sideDC","Acirc","Gcirc","F","AF","F2","AF2"],
+              highlighted: ["F","AF","F2","AF2"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F2",  name: geomlib.A.Point.appear },
+                  { elem: "AF2", name: geomlib.A.Line.straightEdgeConnect } ] } },
             { text: "In all there are six circles and one {line|AF} that must be drawn. The intermediate lines may be suppressed, since they only serve to verify the construction.",
               visible: ["sideDA","sideDC","P","T","G","F","AF","K1","K2","K3","K4","Acirc","Gcirc"],
               highlighted: ["AF","K1","K2","K3","K4","Acirc","Gcirc"],
