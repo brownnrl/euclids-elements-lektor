@@ -177,8 +177,20 @@ The walk below carries out that specialized copy of the angle, and counts the si
             // NOT parallel; shown (red) to demonstrate why the fixed choice of
             // F matters when A is dragged across DC.
             "F2;point;last;FF;red;red",
-            "AF2;line;connect;A,F2;0;0;red"
+            "AF2;line;connect;A,F2;0;0;red",
+            // Angle markers for the illustrative slides only: the given angle
+            // at D, the copied FAD (alternate -> parallel) and the mirror F2AD
+            // (same side -> not parallel). Radii pinned to dodge #103 nesting.
+            "angADC;sector;angleMarker;D,A,C",
+            "angFAD;sector;angleMarker;A,F,D,22",
+            "angF2AD;sector;angleMarker;A,F2,D,22"
         ],
+        // Resting/static canvas = the slide-9 view (the angle, the two result
+        // circles, AF and the F/F2 comparison). The busy six-circle scaffolding
+        // is hidden at rest and only revealed by stepping through the slides;
+        // clearVisibility restores this baseline on exit. (Angle markers are
+        // already hidden at rest by #100.)
+        initiallyHidden: ["P","T","G","K1","K2","K3","K4"],
         slides: [
             { text: "This is the construction of I.23 to copy an angle, applied to the angle at {D}. Because the {side|sideDA} from {D} to {A} already lies along the line, that distance need not be transferred — four of the ten circles are eliminated, leaving six.",
               visible: ["sideDA","sideDC"],
@@ -222,12 +234,20 @@ The walk below carries out that specialized copy of the angle, and counts the si
               transition: { mode: "cascade", animations: [
                   { elem: "F",  name: geomlib.A.Point.appear },
                   { elem: "AF", name: geomlib.A.Line.straightEdgeConnect } ] } },
-            { text: "But {Circle|Acirc} 5 and {circle|Gcirc} 6 meet at two points. We take {F}, on the far side of {AD|sideDA} from {C}, so {AF} runs parallel to {DC|sideDC}. The other meeting point, {F2}, gives the same angle mirrored — {AF2} crosses {DC|sideDC} and is not parallel. Drag {A} across {DC|sideDC}: the two swap, which is why a fixed choice of {F} can stop being the parallel one.",
+            { text: "The choice of {F} matters. {Circle|Acirc} 5 and {circle|Gcirc} 6 meet at two points: we take {F}, on the far side of {AD|sideDA} from {C}, so {AF} runs parallel to {DC|sideDC}. The other meeting point, {F2}, gives the same angle mirrored, so {AF2} crosses {DC|sideDC} and is not parallel. Drag {A} across {DC|sideDC} and the two swap roles — the parallel side is always the intersection on the far side of {AD|sideDA} from {C}.",
               visible: ["sideDA","sideDC","Acirc","Gcirc","F","AF","F2","AF2"],
               highlighted: ["F","AF","F2","AF2"],
               transition: { mode: "cascade", animations: [
                   { elem: "F2",  name: geomlib.A.Point.appear },
                   { elem: "AF2", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Why {F} and not {F2}? Both copied angles {FAD|angFAD} and {F2AD|angF2AD} equal the given {ADC|angADC} — but only {FAD|angFAD}, on the far side of {AD|sideDA}, is the alternate angle, so only {AF} is parallel to {DC|sideDC} (I.27). {F2AD|angF2AD} sits on {C}'s side, so {AF2} is not.",
+              visible: ["sideDA","sideDC","F","AF","F2","AF2","angADC","angFAD","angF2AD"],
+              highlighted: ["angADC","angFAD","angF2AD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angADC",  name: geomlib.A.Sector.sweep },
+                  { elem: "angFAD",  name: geomlib.A.Sector.sweep },
+                  { elem: "angF2AD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.27" }] },
             { text: "In all there are six circles and one {line|AF} that must be drawn. The intermediate lines may be suppressed, since they only serve to verify the construction.",
               visible: ["sideDA","sideDC","P","T","G","F","AF","K1","K2","K3","K4","Acirc","Gcirc"],
               highlighted: ["AF","K1","K2","K3","K4","Acirc","Gcirc"],
@@ -248,7 +268,8 @@ The walk below carries out that specialized copy of the angle, and counts the si
     Object.assign(window.eucrefs, {
         "I.1":  "/elements/books/bookI/propositions/propI1/",
         "I.2":  "/elements/books/bookI/propositions/propI2/",
-        "I.23": "/elements/books/bookI/propositions/propI23/"
+        "I.23": "/elements/books/bookI/propositions/propI23/",
+        "I.27": "/elements/books/bookI/propositions/propI27/"
     });
 </script>
 </figure>
