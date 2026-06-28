@@ -102,6 +102,24 @@ Every element a guide ref names must exist on its target canvas; add an
 invisible highlight target there if the prose names something the diagram
 doesn't draw.
 
+### Don't add words to the guide or proof prose
+
+The proof and guide text is Dr. Joyce's edition, republished faithfully —
+treat it as read-only. **Don't insert explanatory sentences** (lead-ins
+like "The walk below carries out…", "step through to see…", summaries of
+what a figure shows). Adding prose is editorializing, even when it feels
+helpful.
+
+What *is* allowed on the prose: tokenizing words that are already there
+(wrapping existing letters in `{NAME}` refs), and the editorial-footnote
+convention for correcting a source typo (see `conventions.md`). Adding new
+words is not.
+
+All framing, narration, and "here's what to notice" belongs in the
+**slideshow captions** (`slides[].text`), which are ours to write — not in
+the guide. (Same spirit as "only build figures Joyce's page had": the
+republished page stays his; our layer is the interactive slideshow on top.)
+
 ### Invisible highlight targets (the Zeno pattern)
 
 Prose names segments, angles, and triangles that aren't standalone
