@@ -155,7 +155,7 @@ The construction needed is that of @I.23 to construct an angle. That constructio
             "TDx;point;extend;T,D,T,D;0;0",
             // Zero-color hover target for the produced side TP: apex T through
             // P, past G to TPx (drawn only when its caption phrase is hovered).
-            "TPprod;line;connect;T,TPx;0;0;0",
+            "TPprod;line;connect;T,TPx;0;0;gray",
             // I.2 lay-off: K3 (centre P, radius PA) marks G on the produced TP;
             // K4 (centre T, radius TG) carries that length round to the produced
             // TD, so the transferred length lands at D.
@@ -166,85 +166,99 @@ The construction needed is that of @I.23 to construct an angle. That constructio
             // centre D radius the chord.
             "Acirc;circle;radius;A,D;0;0;black;0",
             "Gcirc;circle;radius;D,A,P;0;0;black;0",
-            // Apex F = Acirc ∩ Gcirc, and THE ONE LINE, AF.
-            "FF;line;bichord;Acirc,Gcirc;0;0;0",
-            "F;point;first;FF",
-            "AF;line;connect;A,F",
+            // Slide 6: extend the ray T->D to K4 at L (TL = TG, so DL = PG),
+            // making the chord carried to D concrete. PG/DL are highlightable.
+            "TDprod;line;connect;T,TDx;0;0;gray",
+            "L;point;cutoff;T,TDx,T,G",
+            "DL;line;connect;D,L;0;0;0",
+            "PG;line;connect;P,G;0;0;0",
+            // Apex E = Acirc ∩ Gcirc, and THE ONE LINE, AE. (Named E/E2 to
+            // match the proof diagram's E; canvas_0 also uses E/F separately.)
+            "EE;line;bichord;Acirc,Gcirc;0;0;0",
+            "E;point;first;EE",
+            "AE;line;connect;A,E",
             // The OTHER intersection of the two result circles — the mirror of
-            // F across AD. It gives the same angle but on C's side, so AF2 is
+            // E across AD. It gives the same angle but on C's side, so AE2 is
             // NOT parallel; shown (red) to demonstrate why the fixed choice of
-            // F matters when A is dragged across DC.
-            "F2;point;last;FF;red;red",
-            "AF2;line;connect;A,F2;0;0;red",
+            // E matters when A is dragged across DC.
+            "E2;point;last;EE;red;red",
+            "AE2;line;connect;A,E2;0;0;red",
             // Angle markers for the illustrative slides only: the given angle
-            // at D, the copied FAD (alternate -> parallel) and the mirror F2AD
+            // at D, the copied DAE (alternate -> parallel) and the mirror DAE2
             // (same side -> not parallel). Radii pinned to dodge #103 nesting.
             "angADC;sector;angleMarker;D,A,C",
-            "angFAD;sector;angleMarker;A,F,D,22",
-            "angF2AD;sector;angleMarker;A,F2,D,22"
+            "angDAE;sector;angleMarker;A,E,D,22",
+            "angDAE2;sector;angleMarker;A,E2,D,22"
         ],
         // Resting/static canvas = the slide-9 view (the angle, the two result
         // circles, AF and the F/F2 comparison). The busy six-circle scaffolding
         // is hidden at rest and only revealed by stepping through the slides;
         // clearVisibility restores this baseline on exit. (Angle markers are
         // already hidden at rest by #100.)
-        initiallyHidden: ["P","T","G","K1","K2","K3","K4"],
+        initiallyHidden: ["P","T","G","K1","K2","K3","K4","TPprod","TDprod","L"],
         slides: [
-            { text: "We start with the two lengths {AD|sideDA} and {DC|sideDC}, meeting at {D}. We want to place a line through {A} parallel to {DC|sideDC}.",
-              visible: ["sideDA","sideDC"],
-              highlighted: ["sideDA","sideDC"] },
-            { text: "Mark a point {F} that will lie along that parallel line. We want to show that {FA|AF} is parallel to {DC|sideDC}. Because of the way this construction is produced, {A} and {F} must stay on the same side of {DC|sideDC} as they begin — this is discussed later, but you can break it by dragging {A} to the other side of {DC|sideDC} to see what happens.",
-              visible: ["sideDA","sideDC","AF","F"],
-              highlighted: ["AF","F"],
-              transition: { mode: "cascade", animations: [
-                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect },
-                  { elem: "F",  name: geomlib.A.Point.appear } ] } },
-            { text: "Setting that point aside, we begin its construction — copying the angle at {D} onto the line {AD|sideDA}, the construction of I.23.",
-              visible: ["sideDA","sideDC"],
-              highlighted: ["sideDA","sideDC"],
+            { text: "To draw a line through {A} parallel to {DC|sideDC}, we copy the angle {ADC|angADC} onto the line {AD|sideDA} at {A} as an alternate interior angle.",
+              visible: ["sideDA","sideDC","angADC"],
+              highlighted: ["angADC"],
+              transition: { animations: [ { elem: "angADC", name: geomlib.A.Sector.sweep } ] },
               justifications: [{ ref: "I.23" }] },
-            { text: "Because the {side|sideDA} from {D} to {A} already lies along the line, that distance need not be transferred — four of the ten circles are eliminated, leaving six. Transferring the {chord|AP} to {D} still takes four circles, drawn here together as a reminder; see Propositions I.1 and I.2 for how they work.",
-              visible: ["sideDA","sideDC","AP","K1","K2","K3","K4"],
-              highlighted: ["K1","K2","K3","K4"],
+            { text: "The full construction normally takes ten circles, but the side {DA|sideDA} already lies along {AD|sideDA}, so that distance need not be transferred — four circles are eliminated, leaving six.",
+              visible: ["sideDA","sideDC","angADC"],
+              highlighted: ["sideDA"] },
+            { text: "The {circle|K1} centered at {D} through a point {P} meets the ray {DC|sideDC} at {P}, so that {DP|DP} equals the side {DA|sideDA}.",
+              visible: ["sideDA","sideDC","K1","P","DP"],
+              highlighted: ["K1","P"],
               transition: { mode: "cascade", animations: [
                   { elem: "K1", name: geomlib.A.Circle.compass },
+                  { elem: "P",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.1" }] },
+            { text: "The {circle|K2} centered at {P} through {D} completes an equilateral triangle with {DP|DP} as one side; the two circles meet at an apex {T}.",
+              visible: ["sideDA","sideDC","K1","P","DP","K2","T"],
+              highlighted: ["K2","T"],
+              transition: { mode: "cascade", animations: [
                   { elem: "K2", name: geomlib.A.Circle.compass },
+                  { elem: "T",  name: geomlib.A.Point.appear } ] } },
+            { text: "We extend the {line|TPprod} from {T} through {P}. The {circle|K3} centered at {P} through {A} cuts a continuation of the line {TP|TPprod} at {G}. Since {A} and {G} both lie on the circle, {AP} equals {PG} — the chord {AP} now laid along the line {TG|TPprod}, specifically the line segment {PG}.",
+              visible: ["sideDA","sideDC","K1","P","DP","K2","T","K3","G","AP","TPprod"],
+              highlighted: ["K3","G","AP"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "TPprod", name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "K3", name: geomlib.A.Circle.compass },
-                  { elem: "K4", name: geomlib.A.Circle.compass } ] },
+                  { elem: "G",  name: geomlib.A.Point.appear } ] } },
+            { text: "The {circle|K4} centered at {T} through {G} swings that length round. If we extend the {line|TDprod} from {T} through {D}, and the circle meets it at {L}, we arrive at the segment {DL} equals {PG}. Together the four circles perform this transfer of {AP} to {DL}. The equilateral triangle (I.1) fixes the pivot {T}, and the two lay-off circles swing the chord {PG} length round to {D} (I.2).",
+              visible: ["sideDA","sideDC","K1","P","DP","K2","T","K3","G","AP","PG","TPprod","K4","TDprod","L","DL"],
+              highlighted: ["K4","L","DL","PG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "TDprod", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K4",     name: geomlib.A.Circle.compass },
+                  { elem: "L",      name: geomlib.A.Point.appear },
+                  { elem: "DL",     name: geomlib.A.Line.straightEdgeConnect } ] },
               justifications: [{ ref: "I.1" }, { ref: "I.2" }] },
-            { text: "Then two more circles are required. The first, {circle|Acirc}, has centre {A} and radius the {side|sideDA} already in place: the new side must equal it, so its far end lies on this circle.",
-              visible: ["sideDA","sideDC","K1","K2","K3","K4","Acirc"],
-              highlighted: ["Acirc"],
-              transition: { animations: [ { elem: "Acirc", name: geomlib.A.Circle.compass } ] } },
-            { text: "The second, {circle|Gcirc}, has centre {D} and radius the {chord|AP}: the far end of the new side is the chord's length from {D}, so it lies on this circle too.",
-              visible: ["sideDA","sideDC","K1","K2","K3","K4","Acirc","Gcirc","AP"],
-              highlighted: ["Gcirc"],
-              transition: { animations: [ { elem: "Gcirc", name: geomlib.A.Circle.compass } ] } },
-            { text: "The two result circles, {circle|Acirc} and {circle|Gcirc}, meet at the point {F}, and the new {side|AF} is the other side of the required angle — equal to the angle at {D}.",
-              visible: ["sideDA","sideDC","K1","K2","K3","K4","Acirc","Gcirc","F","AF"],
-              highlighted: ["Acirc","Gcirc","F","AF"],
+            { text: "Two more circles are required: the {circle|Acirc} centered at {A} with radius {AD|sideDA}, and the {circle|Gcirc} centered at {D} of radius {DL}, which is equal to {AP}. These two circles meet at a point {E}, and the line {AE} is parallel to {DC|sideDC}, as the angle {DAE|angDAE} equals the angle {ADP|angADC}.",
+              visible: ["sideDA","sideDC","K1","K2","K3","K4","P","T","G","AP","L","DL","Acirc","Gcirc","E","AE","angADC","angDAE"],
+              highlighted: ["Acirc","Gcirc","DL","E","AE"],
               transition: { mode: "cascade", animations: [
-                  { elem: "F",  name: geomlib.A.Point.appear },
-                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect } ] } },
-            { text: "The choice of {F} matters. The two result circles, {circle|Acirc} and {circle|Gcirc}, meet at two points: we take {F}, on the far side of {AD|sideDA} from {C}, so {AF} runs parallel to {DC|sideDC}. The other meeting point, {F2}, gives the same angle mirrored, so {AF2} crosses {DC|sideDC} and is not parallel. Drag {A} across {DC|sideDC} and the two swap roles — the parallel side is always the intersection on the far side of {AD|sideDA} from {C}.",
-              visible: ["sideDA","sideDC","Acirc","Gcirc","F","AF","F2","AF2"],
-              highlighted: ["F","AF","F2","AF2"],
+                  { elem: "Acirc",  name: geomlib.A.Circle.compass },
+                  { elem: "Gcirc",  name: geomlib.A.Circle.compass },
+                  { elem: "E",      name: geomlib.A.Point.appear },
+                  { elem: "AE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angADC", name: geomlib.A.Sector.sweep },
+                  { elem: "angDAE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.Post.1" }, { ref: "I.23" }, { ref: "I.Post.2" }, { ref: "I.27" }] },
+            { text: "The choice of {E} matters. The final two circles meet at two points; we take them to be {E} and {E2}. These form the angles {DAE|angDAE}, {DAE2|angDAE2}, and {ADC|angADC}. Only one of these angles forms an alternate interior angle with {ADC|angADC} even though all three angles equal one another, and it is the point satisfying that criterion whose line — {AE} or {AE2} — forms a parallel to {DC|sideDC} at {A}.",
+              visible: ["sideDA","sideDC","Acirc","Gcirc","E","AE","E2","AE2","angADC","angDAE","angDAE2"],
+              highlighted: ["E","AE","E2","AE2"],
               transition: { mode: "cascade", animations: [
-                  { elem: "F2",  name: geomlib.A.Point.appear },
-                  { elem: "AF2", name: geomlib.A.Line.straightEdgeConnect } ] } },
-            { text: "Why {F} and not {F2}? Both copied angles {FAD|angFAD} and {F2AD|angF2AD} equal the given {ADC|angADC} — but only {FAD|angFAD}, on the far side of {AD|sideDA}, is the alternate angle, so only {AF} is parallel to {DC|sideDC} (I.27). {F2AD|angF2AD} sits on {C}'s side, so {AF2} is not.",
-              visible: ["sideDA","sideDC","F","AF","F2","AF2","angADC","angFAD","angF2AD"],
-              highlighted: ["angADC","angFAD","angF2AD"],
-              transition: { mode: "cascade", animations: [
+                  { elem: "E2",      name: geomlib.A.Point.appear },
+                  { elem: "AE2",     name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "angADC",  name: geomlib.A.Sector.sweep },
-                  { elem: "angFAD",  name: geomlib.A.Sector.sweep },
-                  { elem: "angF2AD", name: geomlib.A.Sector.sweep } ] },
-              justifications: [{ ref: "I.27" }] },
-            { text: "In all there are six circles and one {line|AF} that must be drawn. {F2} and {AF2} are kept here only to mark the other choice of intersection — just the one line {AF} is actually drawn. The intermediate lines may be suppressed, since they only serve to verify the construction.",
-              visible: ["sideDA","sideDC","F","AF","F2","AF2","K1","K2","K3","K4","Acirc","Gcirc"],
-              highlighted: ["AF","K1","K2","K3","K4","Acirc","Gcirc"],
+                  { elem: "angDAE",  name: geomlib.A.Sector.sweep },
+                  { elem: "angDAE2", name: geomlib.A.Sector.sweep } ] } },
+            { text: "In all there are six circles and one line, either {AE} or {AE2}, that must be drawn. The intermediate lines may be suppressed since they only verify the construction. The two lines {AD|sideDA} and {DC|sideDC} are already drawn at the start of our construction.",
+              visible: ["sideDA","sideDC","E","AE","E2","AE2","K1","K2","K3","K4","Acirc","Gcirc"],
+              highlighted: ["AE","K1","K2","K3","K4","Acirc","Gcirc"],
               transition: { mode: "cascade", animations: [
-                  { elem: "AF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AE",    name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "K1",    name: geomlib.A.Circle.compass },
                   { elem: "K2",    name: geomlib.A.Circle.compass },
                   { elem: "K3",    name: geomlib.A.Circle.compass },
@@ -258,10 +272,12 @@ The construction needed is that of @I.23 to construct an angle. That constructio
     });
     window.eucrefs = (window.eucrefs || {});
     Object.assign(window.eucrefs, {
-        "I.1":  "/elements/books/bookI/propositions/propI1/",
-        "I.2":  "/elements/books/bookI/propositions/propI2/",
-        "I.23": "/elements/books/bookI/propositions/propI23/",
-        "I.27": "/elements/books/bookI/propositions/propI27/"
+        "I.1":     "/elements/books/bookI/propositions/propI1/",
+        "I.2":     "/elements/books/bookI/propositions/propI2/",
+        "I.23":    "/elements/books/bookI/propositions/propI23/",
+        "I.27":    "/elements/books/bookI/propositions/propI27/",
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/"
     });
 </script>
 </figure>
