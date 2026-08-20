@@ -15,12 +15,33 @@ statement: Equal triangles which are on the same base and on the same side are a
 ----
 proof:
 
-Let *ABC* and *DBC* be equal triangles which are on the same base *BC* and on the same side of it. Join *AD.* [!just I.Post.1]
+Let {ABC} and {DBC} be equal triangles which are on the same base {BC} and on the same side of it. Join {AD}. [!just I.Post.1]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="210" tabindex="0"></canvas>
 <noscript><img alt="I.39 diagram" src="propI39.gif"/></noscript>
 <script type="text/javascript">
+    // A reductio, so the hypothetical apparatus (E, AE, EC) is deferred to the
+    // slide that supposes it, and dropped again at the close — the walk ends on
+    // the clean true figure. Colour carries the argument: ABC and DBC are the
+    // equal pair, so they share cyan; EBC, the intruder the supposition forces
+    // in, is orange. E rides on BD, which puts triangle EBC strictly INSIDE
+    // triangle DBC — that containment is Euclid's "the greater equals the
+    // less", visible rather than merely asserted.
+    //
+    // Fills are gated pairwise so each comparison is read against one other
+    // region, never two: slide 4 shows ABC vs EBC (@I.37), slide 5 shows DBC vs
+    // EBC (the contradiction). The regions are fill-only and initiallyHidden —
+    // the original figure draws outlines and no fills, and the triangle sides
+    // are declared as black lines in their own right so the outlines stand
+    // whichever fills are gated off.
+    var CORE  = ["A","B","C","D","BC","AB","AC","BD","CD"];
+    var BASE  = CORE.concat(["ABC","BCD"]);
+    var JOIN  = BASE.concat(["AD"]);
+    var FRAME = CORE.concat(["AD","E","AE","CE","EB"]);
+    var HYP   = FRAME.concat(["ABC","BCD"]);
+    var CMP1  = FRAME.concat(["ABC","EBC"]);
+    var CMP2  = FRAME.concat(["BCD","EBC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -29,30 +50,94 @@ Let *ABC* and *DBC* be equal triangles which are on the same base *BC* and on th
             "B;point;free;40,170",
             "C;point;free;220,170",
             "A;point;free;80,40",
-            "ABC;polygon;triangle;A,B,C",
+            // Invisible carrier: the parallel to BC through A. D slides on it,
+            // so the figure at rest satisfies the proposition's conclusion —
+            // the reductio's E is what departs from it.
             "AD';line;parallel;A,B,C;0;0;0",
             "D;point;lineSlider;AD',210,40",
-            "BCD;polygon;triangle;B,C,D",
-            "AD;line;connect;A,D",
+            // The supposition's point: E slides along BD, so EBC nests inside DBC.
             "E;point;lineSlider;B,D,165,40",
+            // Base, the join AD, and the two triangles' remaining sides.
+            "BC;line;connect;B,C",
+            "AD;line;connect;A,D",
+            "AB;line;connect;A,B",
+            "AC;line;connect;A,C",
+            "BD;line;connect;B,D",
+            "CD;line;connect;C,D",
+            // The supposed parallel through A, and the join EC.
             "AE;line;connect;A,E",
-            "CE;line;connect;C,E"
+            "CE;line;connect;C,E",
+            // EB is a sub-segment of BD (E lies on it); hover target only.
+            "EB;line;connect;E,B;0;0;0",
+            // Regions. The equal pair shares cyan; the supposition's EBC is orange.
+            "ABC;polygon;triangle;A,B,C;0;0;0;cyan",
+            "BCD;polygon;triangle;B,C,D;0;0;0;cyan",
+            "EBC;polygon;triangle;E,B,C;0;0;0;orange"
         ],
+        aliases: { "DBC": "BCD", "EC": "CE", "BA": "AB", "CA": "AC", "DB": "BD",
+                   "DC": "CD", "EA": "AE", "BE": "EB", "DA": "AD", "CB": "BC" },
+        initiallyHidden: ["ABC","BCD","EBC"],
+        deferDraggables: ["E"],
+        slides: [
+            { text: "Let {ABC} and {DBC} be equal triangles which are on the same base {BC} and on the same side of it.",
+              visible: BASE,
+              highlighted: ["ABC","DBC","BC"] },
+            { text: "Join {AD}. I say that {AD} is parallel to {BC}.",
+              visible: JOIN,
+              highlighted: ["AD","BC"],
+              transition: { animations: [ { elem: "AD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "If not, draw {AE} through the point {A} parallel to the straight line {BC}, and join {EC}.",
+              visible: HYP,
+              highlighted: ["AE","EC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CE", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.31" }, { ref: "I.Post.1" }] },
+            { text: "Then the triangle {ABC} equals the triangle {EBC}, for it is on the same base {BC} with it and in the same parallels.",
+              visible: CMP1,
+              highlighted: ["ABC","EBC","BC"],
+              transition: { animations: [ { elem: "EBC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.37" }] },
+            { text: "But {ABC} equals {DBC}, therefore {DBC} also equals {EBC} — the greater equals the less, which is impossible.",
+              visible: CMP2,
+              highlighted: ["DBC","EBC"],
+              justifications: [{ ref: "C.N.1" }] },
+            { text: "Therefore {AE} is not parallel to {BC}.",
+              visible: HYP,
+              highlighted: ["AE","BC"] },
+            { text: "Similarly we can prove that neither is any other straight line except {AD}. Therefore {AD} is parallel to {BC}.",
+              visible: JOIN,
+              highlighted: ["AD","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "I.37":     "/elements/books/bookI/propositions/propI37/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/"
     });
 </script>
 </figure>
 
-I say that *AD* is parallel to *BC.*
+I say that {AD} is parallel to {BC}.
 
-If not, draw *AE* through the point *A* parallel to the straight line *BC,* and join *EC.* [!just I.31, I.Post.1]
+If not, draw {AE} through the point {A} parallel to the straight line {BC}, and join {EC}. [!just I.31, I.Post.1]
 
-Therefore the triangle *ABC* equals the triangle *EBC,* for it is on the same base *BC* with it and in the same parallels. [!just I.37]
+Therefore the triangle {ABC} equals the triangle {EBC}, for it is on the same base {BC} with it and in the same parallels. [!just I.37]
 
-But *ABC* equals *DBC,* therefore *DBC* also equals *EBC,* the greater equals the less, which is impossible. [!just C.N.1]
+But {ABC} equals {DBC}, therefore {DBC} also equals {EBC}, the greater equals the less, which is impossible. [!just C.N.1]
 
-Therefore *AE* is not parallel to *BC.*
+Therefore {AE} is not parallel to {BC}.
 
-Similarly we can prove that neither is any other straight line except *AD,* therefore *AD* is parallel to *BC.*
+Similarly we can prove that neither is any other straight line except {AD}, therefore {AD} is parallel to {BC}.
 
 Therefore *equal triangles which are on the same base and on the same side are also in the same parallels.*
 
@@ -61,7 +146,7 @@ Therefore *equal triangles which are on the same base and on the same side are a
 ----
 guide:
 
-This is a partial converse to proposition @I.37, only partial since the two triangles *ABC* and *DBC* have to be on the same side of the line *BC.* If they weren't, then of course *AD* would not be parallel to *BC* but instead cross it at the midpoint
+This is a partial converse to proposition @I.37, only partial since the two triangles {ABC} and {DBC} have to be on the same side of the line {BC}. If they weren't, then of course {AD} would not be parallel to {BC} but instead cross it at the midpoint
 
 #### Use of Proposition 39
 
