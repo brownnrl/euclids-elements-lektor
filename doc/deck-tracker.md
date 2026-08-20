@@ -38,9 +38,9 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 36 (I.1–I.36) | markers on 0.13.0 (see open Qs) |
+| Book I | 48 | 37 (I.1–I.37) | markers on 0.13.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
-| **Total** | **465** | **36** | — |
+| **Total** | **465** | **37** | — |
 
 ---
 
@@ -87,7 +87,7 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.34 | Parallelogram opposite sides/angles; diameter bisects | T | ✅ | 8 | Sector.sweep, Polygon.superpose | ⚠ | Same figure as I.33 (parallelogram, diagonal BC). Alternate ∠ABC=∠BCD (red) and ∠ACB=∠CBD (blue) via @I.29; △ABC≅△DCB by ASA/AAS (@I.26) ⟹ AB=CD, AC=BD, ∠BAC=∠CDB (green). **Whole angles ∠ABD=∠ACD** (each = red+blue, outer orange arc @30) ⟹ opposite angles equal (C.N.2). Bisect part: SAS △ABC≅△DCB (@I.4) — **`Polygon.superpose` ABC `onto: "DCB"`** (maps AB→DC). Collisions: triangle owns `ABC`/`DCB` → ∠ABC marker `CBA` (`{ABC\|CBA}`), ∠DCB angle `{DCB\|BCD}`; aliases DC→CD, CB→BC, BCA→ACB, DB→BD. Parallelogram `{ACDB\|CABD}` (polygon named CABD). **⚠ visual check: red/blue/green fills, the ABD/ACD outer arcs, and the superpose landing ABC on DCB.** Markers → #91 rework |
 | I.35 | Parallelograms, same base & parallels, equal | T | ✅ | 7 | Polygon.superpose, Polygon.outlineAndFill, Sector.sweep | ⚠ | **First area cut-and-paste.** AD=EF=BC (@I.34); AE=DF (C.N.); ∠EAB=∠FDC (magenta, @I.29) ⟹ △EAB≅△FDC (@I.4) — **`superpose` EAB `onto: "FDC"`**. Subtract common △DGE ⟹ trapezium ABGD=EGCF (C.N.3); add △GBC ⟹ ▱ABCD=▱EBCF (C.N.2). **Region polygons** (`polygon;quadrilateral` for the 4-gons): ABCD cyan / EBCF pink (parallelograms), EAB/FDC yellow, DGE orange, GBC green, ABGD/EGCF cyan (trapezia); revealed via `outlineAndFill`. G=CD∩BE. Triangles own EAB/FDC → angle markers angEAB/angFDC (`{EAB\|angEAB}`); aliases EA→AE, FD→DF, DC→CD, EB→BE, FC→CF. Guide's alternate-case canvas_1 static (untokenized — lacks the region polygons). **⚠ visual check: the overlapping filled regions could read muddy — verify the fills/opacity + the superpose landing.** Markers → #91 rework |
 | I.36 | Parallelograms on equal bases & parallels equal | T | ✅ | 7 | Line.straightEdgeConnect, Polygon.outlineAndFill | ✓ | **Generalizes I.35** via a **bridge parallelogram EBCH**. Two givens ▱ABCD (cyan) and ▱EFGH (pink) on equal bases BC=FG, same parallels AH (top) / BG (bottom) — they don't overlap, so both stay shown all 7 slides. Join BE, CH (@I.Post.1) ⟹ EBCH; BC=FG=EH (@I.34, C.N.1) + parallel ⟹ EBCH is a ▱ (@I.33, `outlineAndFill` orange). EBCH=ABCD (same base BC — @I.35); EFGH=EBCH (same base EH — @I.35) ⟹ ABCD=EFGH (C.N.1). Gated like I.35's markers: joins BE/CH (slide 2+) and bridge EBCH (slide 4+) appear at their step. Figure fully on-canvas (no off-screen helper — cf. euclid#138). aliases EB→BE, HC→CH, HE→EH, GF→FG, CB→BC. Markers → #91 rework (none here) |
-| I.37 | Triangles on same base & parallels equal | T | ⬜ | | | — | |
+| I.37 | Triangles on same base & parallels equal | T | ✅ | 7 | Line.straightEdgeExtend, Line.straightEdgeConnect, Polygon.outlineAndFill | ✓ | **Triangle analogue of I.35** — each triangle is half a parallelogram on the same base. Produce AD both ways to E/F (@I.Post.2), draw BE∥CA and CF∥BD (@I.31) ⟹ ▱EBCA and ▱DBCF, equal on base BC in parallels BC/EF (@I.35); each triangle is half its own ▱, bisected by the diameter AB / DC (@I.34); halves of equals are equal (C.N. — Joyce notes the missing common notion in the guide). **Fills gated to avoid mud** (cf. I.35's ⚠): triangles ABC cyan / BCD pink from slide 1, then **slide 3 drops the triangle fills** so the two ▱ (orange/green) read cleanly, and slides 4–5 bring each triangle back inside its ▱ — the "half of" beat. Hiding a triangle also removes its diagonal, so the diameters AB/DC only appear on the slide that names them. ▱ regions are fill-only + `initiallyHidden` (Joyce's figure draws no such regions); AC/BD declared as black lines in their own right so the ▱ boundaries survive slide 3. E/F land at (40,40)/(260,40) — fully on-canvas, no euclid#138 exposure. aliases DBC→BCD, BA→AB, CD→DC, CA→AC, DB→BD, EB→BE, FC→CF, DA→AD, FE→EF. Guide is discursive (argues I.37 is redundant given I.38) and names no letters — nothing to tokenize. No markers |
 | I.38 | Triangles on equal bases & parallels equal | T | ⬜ | | | — | |
 | I.39 | Equal triangles, same base/side ⇒ same parallels | T | ⬜ | | | — | |
 | I.40 | Equal triangles, equal bases/side ⇒ same parallels | T | ⬜ | | | — | |
@@ -122,7 +122,7 @@ already complete (see [journal/journal.md](journal/journal.md)).
 
 ## geomlib migration (markers + animations)
 
-Pinned at **0.11.0** (#107 maximize/presentation recenter + reset-on-exit;
+Pinned at **0.13.0** (#107 maximize/presentation recenter + reset-on-exit;
 #108 `geomlib:highlight` bidirectional event — see `elem-ref-highlight.js`).
 Angle markers (`E.Sector.angleMarker`) are hidden in the static figure by
 default and revealed during the walk / on hover (#100); markers migrated
