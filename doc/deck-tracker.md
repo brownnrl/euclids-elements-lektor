@@ -38,9 +38,9 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | 48 | 35 (I.1–I.35) | markers on 0.13.0 (see open Qs) |
+| Book I | 48 | 36 (I.1–I.36) | markers on 0.13.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
-| **Total** | **465** | **20** | — |
+| **Total** | **465** | **36** | — |
 
 ---
 
@@ -86,7 +86,7 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 | I.33 | Equal+parallel ends joined ⇒ equal+parallel | T | ✅ | 6 | Line.straightEdgeConnect, Sector.sweep | ✓ | AB=CD & AB∥CD, joined by AC, BD. Join diagonal BC ⟹ alternate ∠ABC=∠BCD (@I.29); SAS △ABC≅△DCB (@I.4) ⟹ AC=BD and ∠ACB=∠CBD ⟹ AC∥BD (@I.27). Figure = `parallelogram;C,A,B` (D=vertex 4). **Two colour-matched alternate pairs**: ∠ABC=∠BCD red, ∠ACB=∠CBD blue (each pair fills an interior angle at B/C, split by diagonal BC). Name collision: triangle owns `ABC` → ∠ABC marker = `CBA`, prose `{ABC\|CBA}`; aliases DC→CD, CB→BC. Side hover targets AB/CD/AC/BD + triangle targets ABC/DCB. **Guide tokenized** (the three pairs AB/CD, AC/BD, AD/BC — only AD & BC, the diagonals, intersect; `AD` added as a hover target). Markers → #91 rework |
 | I.34 | Parallelogram opposite sides/angles; diameter bisects | T | ✅ | 8 | Sector.sweep, Polygon.superpose | ⚠ | Same figure as I.33 (parallelogram, diagonal BC). Alternate ∠ABC=∠BCD (red) and ∠ACB=∠CBD (blue) via @I.29; △ABC≅△DCB by ASA/AAS (@I.26) ⟹ AB=CD, AC=BD, ∠BAC=∠CDB (green). **Whole angles ∠ABD=∠ACD** (each = red+blue, outer orange arc @30) ⟹ opposite angles equal (C.N.2). Bisect part: SAS △ABC≅△DCB (@I.4) — **`Polygon.superpose` ABC `onto: "DCB"`** (maps AB→DC). Collisions: triangle owns `ABC`/`DCB` → ∠ABC marker `CBA` (`{ABC\|CBA}`), ∠DCB angle `{DCB\|BCD}`; aliases DC→CD, CB→BC, BCA→ACB, DB→BD. Parallelogram `{ACDB\|CABD}` (polygon named CABD). **⚠ visual check: red/blue/green fills, the ABD/ACD outer arcs, and the superpose landing ABC on DCB.** Markers → #91 rework |
 | I.35 | Parallelograms, same base & parallels, equal | T | ✅ | 7 | Polygon.superpose, Polygon.outlineAndFill, Sector.sweep | ⚠ | **First area cut-and-paste.** AD=EF=BC (@I.34); AE=DF (C.N.); ∠EAB=∠FDC (magenta, @I.29) ⟹ △EAB≅△FDC (@I.4) — **`superpose` EAB `onto: "FDC"`**. Subtract common △DGE ⟹ trapezium ABGD=EGCF (C.N.3); add △GBC ⟹ ▱ABCD=▱EBCF (C.N.2). **Region polygons** (`polygon;quadrilateral` for the 4-gons): ABCD cyan / EBCF pink (parallelograms), EAB/FDC yellow, DGE orange, GBC green, ABGD/EGCF cyan (trapezia); revealed via `outlineAndFill`. G=CD∩BE. Triangles own EAB/FDC → angle markers angEAB/angFDC (`{EAB\|angEAB}`); aliases EA→AE, FD→DF, DC→CD, EB→BE, FC→CF. Guide's alternate-case canvas_1 static (untokenized — lacks the region polygons). **⚠ visual check: the overlapping filled regions could read muddy — verify the fills/opacity + the superpose landing.** Markers → #91 rework |
-| I.36 | Parallelograms on equal bases & parallels equal | T | ⬜ | | | — | |
+| I.36 | Parallelograms on equal bases & parallels equal | T | ✅ | 7 | Line.straightEdgeConnect, Polygon.outlineAndFill | ✓ | **Generalizes I.35** via a **bridge parallelogram EBCH**. Two givens ▱ABCD (cyan) and ▱EFGH (pink) on equal bases BC=FG, same parallels AH (top) / BG (bottom) — they don't overlap, so both stay shown all 7 slides. Join BE, CH (@I.Post.1) ⟹ EBCH; BC=FG=EH (@I.34, C.N.1) + parallel ⟹ EBCH is a ▱ (@I.33, `outlineAndFill` orange). EBCH=ABCD (same base BC — @I.35); EFGH=EBCH (same base EH — @I.35) ⟹ ABCD=EFGH (C.N.1). Gated like I.35's markers: joins BE/CH (slide 2+) and bridge EBCH (slide 4+) appear at their step. Figure fully on-canvas (no off-screen helper — cf. euclid#138). aliases EB→BE, HC→CH, HE→EH, GF→FG, CB→BC. Markers → #91 rework (none here) |
 | I.37 | Triangles on same base & parallels equal | T | ⬜ | | | — | |
 | I.38 | Triangles on equal bases & parallels equal | T | ⬜ | | | — | |
 | I.39 | Equal triangles, same base/side ⇒ same parallels | T | ⬜ | | | — | |
