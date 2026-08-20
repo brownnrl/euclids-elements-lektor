@@ -15,12 +15,31 @@ statement: If a parallelogram has the same base with a triangle and is in the sa
 ----
 proof:
 
-Let the parallelogram *ABCD* have the same base *BC* with the triangle *EBC,* and let it be in the same parallels *BC* and *AE.*
+Let the parallelogram {ABCD} have the same base {BC} with the triangle {EBC}, and let it be in the same parallels {BC} and {AE}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="200" tabindex="0"></canvas>
 <noscript><img alt="I.41 diagram" src="propI41.gif"/></noscript>
 <script type="text/javascript">
+    // "Double" is the whole point, so the figure shows it rather than asserting
+    // it: the diameter AC cuts ABCD into ABC and ACD, and ABC equals EBC by
+    // I.37 — so all THREE triangles are equal, and two of them tile the
+    // parallelogram. Colour says exactly that. ABC and EBC, the pair I.37 makes
+    // equal, share cyan; ACD — the other half, which the proof reaches through
+    // "the diameter bisects it" — is pink. The parallelogram is left as an
+    // unfilled outline throughout, so what fills it is always its own halves.
+    //
+    // Fills are gated pairwise as in I.39/I.40: slide 4 shows ABC vs EBC (the
+    // I.37 equality), slide 5 drops EBC so the ABC+ACD tiling reads clean (the
+    // I.34 bisection), and slide 6 brings all three back for the conclusion.
+    // ACD is ours — Joyce never names it — so it lives only in the figure and
+    // in our captions, never in his prose.
+    var CORE = ["A","B","C","D","E","ABCD","DE","BC","AE","BE","CE"];
+    var BASE = CORE.concat(["BCE"]);
+    var JOIN = BASE.concat(["AC"]);
+    var EQ   = CORE.concat(["AC","ABC","BCE"]);
+    var HALF = CORE.concat(["AC","ABC","ACD"]);
+    var ALL  = CORE.concat(["AC","ABC","ACD","BCE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -29,24 +48,81 @@ Let the parallelogram *ABCD* have the same base *BC* with the triangle *EBC,* an
             "B;point;free;60,170",
             "C;point;free;130,170",
             "A;point;free;40,40",
+            // The parallelogram stays an unfilled outline — its own halves are
+            // what ever fills it. D is its fourth vertex.
             "ABCD;polygon;parallelogram;A,B,C",
             "D;point;vertex;ABCD,4",
+            // E slides along AD produced, so the triangle shares base BC with
+            // the parallelogram and sits in the same parallels.
             "E;point;lineSlider;A,D,210,40",
-            "BCE;polygon;triangle;B,C,E;0;0;0,0,0;random",
             "DE;line;connect;D,E",
-            "AC;line;connect;A,C"
+            "AC;line;connect;A,C",
+            // The triangle's two free sides, drawn in their own right so its
+            // outline stands on slide 5 where its fill is gated off.
+            "BE;line;connect;B,E",
+            "CE;line;connect;C,E",
+            // The shared base and the top parallel AE (= AD produced through
+            // D to E): hover targets, already drawn by the figure.
+            "BC;line;connect;B,C;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            // Regions. ABC and EBC are the pair I.37 makes equal, so they share
+            // cyan; ACD, the other half of the parallelogram, is pink.
+            "BCE;polygon;triangle;B,C,E;0;0;0;cyan",
+            "ABC;polygon;triangle;A,B,C;0;0;0;cyan",
+            "ACD;polygon;triangle;A,C,D;0;0;0;pink"
         ],
+        aliases: { "EBC": "BCE", "BEC": "BCE", "CB": "BC", "EA": "AE",
+                   "EB": "BE", "EC": "CE", "CA": "AC", "ED": "DE" },
+        initiallyHidden: ["ABC","ACD"],
+        slides: [
+            { text: "Let the parallelogram {ABCD} have the same base {BC} with the triangle {EBC}, and let it be in the same parallels {BC} and {AE}.",
+              visible: BASE,
+              highlighted: ["ABCD","EBC","BC"] },
+            { text: "I say that the parallelogram {ABCD} is double the triangle {BEC}.",
+              visible: BASE,
+              highlighted: ["ABCD","BEC"] },
+            { text: "Join {AC}.",
+              visible: JOIN,
+              highlighted: ["AC"],
+              transition: { animations: [ { elem: "AC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then the triangle {ABC} equals the triangle {EBC}, for it is on the same base {BC} with it and in the same parallels {BC} and {AE}.",
+              visible: EQ,
+              highlighted: ["ABC","EBC","BC"],
+              transition: { animations: [ { elem: "ABC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.37" }] },
+            { text: "But the parallelogram {ABCD} is double the triangle {ABC}, for the diameter {AC} bisects it.",
+              visible: HALF,
+              highlighted: ["ABC","ACD","AC"],
+              transition: { animations: [ { elem: "ACD", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.34" }] },
+            { text: "So the parallelogram {ABCD} is also double the triangle {EBC}.",
+              visible: ALL,
+              highlighted: ["ABCD","EBC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.34":     "/elements/books/bookI/propositions/propI34/",
+        "I.37":     "/elements/books/bookI/propositions/propI37/"
     });
 </script>
 </figure>
 
-I say that the parallelogram *ABCD* is double the triangle *BEC.*
+I say that the parallelogram {ABCD} is double the triangle {BEC}.
 
-Join *AC.* [!just I.Post.1]
+Join {AC}. [!just I.Post.1]
 
-Then the triangle *ABC* equals the triangle *EBC,* for it is on the same base *BC* with it and in the same parallels *BC* and *AE.* [!just I.37]
+Then the triangle {ABC} equals the triangle {EBC}, for it is on the same base {BC} with it and in the same parallels {BC} and {AE}. [!just I.37]
 
-But the parallelogram *ABCD* is double the triangle *ABC,* for the diameter *AC* bisects it, so that the parallelogram *ABCD* is also double the triangle *EBC.* [!just I.34]
+But the parallelogram {ABCD} is double the triangle {ABC}, for the diameter {AC} bisects it, so that the parallelogram {ABCD} is also double the triangle {EBC}. [!just I.34]
 
 Therefore *if a parallelogram has the same base with a triangle and is in the same parallels, then the parallelogram is double the triangle.*
 
