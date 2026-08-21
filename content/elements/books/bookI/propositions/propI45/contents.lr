@@ -17,14 +17,49 @@ statement: To construct a parallelogram equal to a given rectilinear figure in a
 ----
 proof:
 
-Let *ABCD* be the given rectilinear figure and *E* the given rectilinear angle.
+Let {ABCD} be the given rectilinear figure and {E} the given rectilinear angle.
 
-It is required to construct a parallelogram equal to the rectilinear figure *ABCD* in the given angle *E.*
+It is required to construct a parallelogram equal to the rectilinear figure {ABCD} in the given angle {E}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="400" height="240" tabindex="0"></canvas>
 <noscript><img alt="I.45 diagram" src="propI45.gif"/></noscript>
 <script type="text/javascript">
+    // Closes the application-of-areas run: any rectilinear figure becomes a
+    // parallelogram in any angle. The diagonal DB cuts ABCD into two triangles;
+    // I.42 turns the first into a parallelogram, I.44 applies the second onto
+    // its side, and the long middle stretch proves the two line up into one
+    // parallelogram (KH straight with HM, FG straight with GL, both by I.14).
+    //
+    // COLOUR CARRIES THE WHOLE ARGUMENT, and it is a sum this time rather than
+    // a pair: ABCD splits into ABD (orange) + DBC (green); each becomes a
+    // parallelogram of the SAME colour — FH orange, GM green; and the two
+    // together are KFLM. So the given figure and the constructed parallelogram
+    // are both cyan, and both are visibly orange + green. Slide 13 is where
+    // that pays off: four regions on screen, matched in pairs by colour.
+    //
+    // Angle colours follow the same rule. Every angle the proof shows equal to
+    // E is magenta — E itself, HKF, GHM and (via the alternate-angle step) HGF.
+    // The two supplements added along the way, KHG and HGL, are equal to each
+    // other, so they are both yellow. Radii pinned to 22: KHG/GHM are adjacent
+    // at H and HGF/HGL adjacent at G, so #103 must not step them apart.
+    //
+    // euclid#138: helpers H'(350,190) and M'(390,190) are on-canvas, so the
+    // drift here is only -15px horizontally. Nothing to work around.
+    var GIV = ["A","B","C","D","ABCD","E","E1","E2","E3","E1E2","E2E3","angE","K","F"];
+    var SPL = ["A","B","C","D","BD","ABD","DBC","E","E1","E2","E3","E1E2","E2E3","angE","K","F"];
+    var B1  = ["A","B","C","D","BD","ABD","DBC","E","E1","E2","E3","E1E2","E2E3","angE",
+               "K","F","G","H","KF","FG","GH","HK","KFGH","angFKH"];
+    var B2  = B1.concat(["L","M","GL","LM","MH","KM","FL","HGLM","angGHM"]);
+    var A1  = B2.concat(["angKHG"]);
+    var A2  = A1.concat(["angHGF"]);
+    var A3  = A2.concat(["angHGL"]);
+    var PG  = ["A","B","C","D","BD","ABD","DBC","E","E1","E2","E3","E1E2","E2E3","angE",
+               "K","F","G","H","L","M","KF","FG","GH","HK","GL","LM","MH","KM","FL",
+               "angFKH","angGHM","angKHG","angHGF","angHGL","KFLM"];
+    var DONE= ["A","B","C","D","ABCD","E","E1","E2","E3","E1E2","E2E3","angE",
+               "K","F","G","H","L","M","KF","FG","GH","HK","GL","LM","MH","KM","FL",
+               "angFKH","KFLM"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -35,7 +70,11 @@ It is required to construct a parallelogram equal to the rectilinear figure *ABC
             "C;point;free;150,80",
             "D;point;free;100,40",
             "BD;line;connect;B,D",
-            "ABCD;polygon;quadrilateral;A,B,C,D;0;0;0,0,0;random",
+            // The given figure, and the two triangles the diagonal cuts it into.
+            "ABCD;polygon;quadrilateral;A,B,C,D;0;0;0,0,0;cyan",
+            "ABD;polygon;triangle;A,B,D;0;0;0;orange",
+            "DBC;polygon;triangle;D,B,C;0;0;0;green",
+            // The given angle E: two arms plus a label-only polygon.
             "E1;point;free;180,120;0",
             "E2;point;free;170,150;0",
             "E3;point;free;200,150;0",
@@ -44,42 +83,164 @@ It is required to construct a parallelogram equal to the rectilinear figure *ABC
             "E;polygon;triangle;E1,E2,E3;0,0,0;0;0;0",
             "K;point;free;230,190",
             "F;point;free;270,70",
+            // FH = the I.42 parallelogram on KF equal to triangle ABD, angle HKF = E.
             "H';point;similar;F,K,E1,E2,E3;0;0",
-            "ABD;polygon;triangle;A,B,D;0;0;0;0",
-            "DBC;polygon;triangle;D,B,C;0;0;0;0",
-            "KFGH;polygon;application;ABD,K,F,H';0;0;0,0,0;random",
+            "KFGH;polygon;application;ABD,K,F,H';0;0;0;orange",
             "H;point;vertex;KFGH,4",
             "G;point;vertex;KFGH,3",
+            // GM = the I.44 parallelogram applied to GH equal to triangle DBC,
+            // angle GHM = E.
             "M';point;similar;G,H,E1,E2,E3;0;0",
-            "HGLM;polygon;application;DBC,H,G,M';0;0;0,0,0;random",
+            "HGLM;polygon;application;DBC,H,G,M';0;0;0;green",
             "M;point;vertex;HGLM,4",
-            "L;point;vertex;HGLM,3"
+            "L;point;vertex;HGLM,3",
+            // The result: the two parallelograms joined. Equal to ABCD, so cyan.
+            "KFLM;polygon;quadrilateral;K,F,L,M;0;0;0;cyan",
+            // Every segment the proof names, drawn in its own right so the
+            // outlines stand whichever region fills are gated off.
+            "KF;line;connect;K,F",
+            "FG;line;connect;F,G",
+            "GH;line;connect;G,H",
+            "HK;line;connect;H,K",
+            "GL;line;connect;G,L",
+            "LM;line;connect;L,M",
+            "MH;line;connect;M,H",
+            // KM and FL are the joined lines the proof establishes as straight;
+            // already drawn by their halves, so hover targets only.
+            "KM;line;connect;K,M;0;0;0",
+            "FL;line;connect;F,L;0;0;0",
+            // Angles. Magenta = shown equal to E; yellow = the two supplements,
+            // which are equal to each other. Radii pinned so #103 leaves the
+            // adjacent pairs at H and at G alone.
+            "angE;sector;angleMarker;E2,E1,E3;0;0;magenta;magenta",
+            "angFKH;sector;angleMarker;K,F,H,22;0;0;magenta;magenta",
+            "angGHM;sector;angleMarker;H,G,M,22;0;0;magenta;magenta",
+            "angHGF;sector;angleMarker;G,H,F,22;0;0;magenta;magenta",
+            "angKHG;sector;angleMarker;H,K,G,22;0;0;yellow;yellow",
+            "angHGL;sector;angleMarker;G,H,L,22;0;0;yellow;yellow"
         ],
+        aliases: { "FH": "KFGH", "GM": "HGLM", "DB": "BD",
+                   "HKF": "angFKH", "FKH": "angFKH", "FKM": "angFKH",
+                   "GHM": "angGHM", "MHG": "angGHM",
+                   "KHG": "angKHG", "HGF": "angHGF", "HGL": "angHGL",
+                   "FK": "KF", "HG": "GH", "KH": "HK", "HM": "MH",
+                   "ML": "LM", "MK": "KM", "LF": "FL", "GF": "FG", "LG": "GL" },
+        initiallyHidden: ["ABD","DBC","KFLM"],
+        slides: [
+            { text: "Let {ABCD} be the given rectilinear figure and {E} the given rectilinear angle. It is required to construct a parallelogram equal to {ABCD} in the given angle {E}.",
+              visible: GIV,
+              highlighted: ["ABCD","E","angE"],
+              transition: { animations: [ { elem: "angE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Join {DB}. It cuts the figure into the triangles {ABD} and {DBC}.",
+              visible: SPL,
+              highlighted: ["BD","ABD","DBC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BD",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ABD", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DBC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Construct the parallelogram {FH} equal to the triangle {ABD} in the angle {HKF} which equals {E}.",
+              visible: B1,
+              highlighted: ["FH","ABD","angFKH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "KFGH",   name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "angFKH", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.42" }] },
+            { text: "Apply the parallelogram {GM} equal to the triangle {DBC} to the straight line {GH} in the angle {GHM} which equals {E}.",
+              visible: B2,
+              highlighted: ["GM","DBC","angGHM","GH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "HGLM",   name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "angGHM", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.44" }] },
+            { text: "Since the angle {E} equals each of the angles {HKF} and {GHM}, therefore the angle {HKF} also equals the angle {GHM}.",
+              visible: B2,
+              highlighted: ["angE","angFKH","angGHM"],
+              justifications: [{ ref: "C.N.1" }] },
+            { text: "Add the angle {KHG} to each. Therefore the sum of the angles {FKH} and {KHG} equals the sum of the angles {KHG} and {GHM}.",
+              visible: A1,
+              highlighted: ["angKHG","angFKH","angGHM"],
+              transition: { animations: [ { elem: "angKHG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "But the sum of the angles {FKH} and {KHG} equals two right angles, therefore the sum of {KHG} and {GHM} also equals two right angles.",
+              visible: A1,
+              highlighted: ["angFKH","angKHG","angGHM"],
+              justifications: [{ ref: "I.29" }, { ref: "C.N.1" }] },
+            { text: "So with the straight line {GH}, at the point {H}, the two straight lines {KH} and {HM} make adjacent angles equal to two right angles — therefore {KH} is in a straight line with {HM}.",
+              visible: A1,
+              highlighted: ["KH","HM","KM"],
+              justifications: [{ ref: "I.14" }] },
+            { text: "Since the straight line {HG} falls upon the parallels {KM} and {FG}, the alternate angles {MHG} and {HGF} equal one another.",
+              visible: A2,
+              highlighted: ["angGHM","angHGF","GH"],
+              transition: { animations: [ { elem: "angHGF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.29" }] },
+            { text: "Add the angle {HGL} to each. Then the sum of {MHG} and {HGL} equals the sum of {HGF} and {HGL}.",
+              visible: A3,
+              highlighted: ["angHGL","angGHM","angHGF"],
+              transition: { animations: [ { elem: "angHGL", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "But the sum of {MHG} and {HGL} equals two right angles, so the sum of {HGF} and {HGL} does too. Therefore {FG} is in a straight line with {GL}.",
+              visible: A3,
+              highlighted: ["angHGF","angHGL","FG","GL","FL"],
+              justifications: [{ ref: "I.29" }, { ref: "C.N.1" }, { ref: "I.14" }] },
+            { text: "Since {FK} is equal and parallel to {HG}, and {HG} to {ML}, therefore {KF} is equal and parallel to {ML}, and {KM} and {FL} join them at their ends. So {KFLM} is a parallelogram.",
+              visible: PG,
+              highlighted: ["KFLM","KM","FL"],
+              transition: { animations: [ { elem: "KFLM", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.34" }, { ref: "I.30" }, { ref: "C.N.1" }, { ref: "I.33" }] },
+            { text: "Since the triangle {ABD} equals the parallelogram {FH}, and {DBC} equals {GM}, therefore the whole figure {ABCD} equals the whole parallelogram {KFLM}.",
+              visible: A3,
+              highlighted: ["ABD","FH","DBC","GM"],
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "So the parallelogram {KFLM} has been constructed equal to the given rectilinear figure {ABCD}, in the angle {FKM} which equals the given angle {E}.",
+              visible: DONE,
+              highlighted: ["KFLM","ABCD","angFKH"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.14":     "/elements/books/bookI/propositions/propI14/",
+        "I.29":     "/elements/books/bookI/propositions/propI29/",
+        "I.30":     "/elements/books/bookI/propositions/propI30/",
+        "I.33":     "/elements/books/bookI/propositions/propI33/",
+        "I.34":     "/elements/books/bookI/propositions/propI34/",
+        "I.42":     "/elements/books/bookI/propositions/propI42/",
+        "I.44":     "/elements/books/bookI/propositions/propI44/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/"
     });
 </script>
 </figure>
 
-Join *DB.* Construct the parallelogram *FH* equal to the triangle *ABD* in the angle *HKF* which equals *E.* Apply the parallelogram *GM* equal to the triangle *DBC* to the straight line *GH* in the angle *GHM* which equals *E.* [!just I.Post.1; I.42; I.44]
+Join {DB}. Construct the parallelogram {FH} equal to the triangle {ABD} in the angle {HKF|angFKH} which equals {E}. Apply the parallelogram {GM} equal to the triangle {DBC} to the straight line {GH} in the angle {GHM|angGHM} which equals {E}. [!just I.Post.1; I.42; I.44]
 
-Since the angle *E* equals each of the angles *HKF* and *GHM,* therefore the angle *HKF* also equals the angle *GHM.* [!just C.N.1]
+Since the angle {E} equals each of the angles {HKF|angFKH} and {GHM|angGHM}, therefore the angle {HKF|angFKH} also equals the angle {GHM|angGHM}. [!just C.N.1]
 
-Add the angle *KHG* to each. Therefore the sum of the angles *FKH* and *KHG* equals the sum of the angles *KHG* and *GHM.* [!just C.N.2]
+Add the angle {KHG|angKHG} to each. Therefore the sum of the angles {FKH|angFKH} and {KHG|angKHG} equals the sum of the angles {KHG|angKHG} and {GHM|angGHM}. [!just C.N.2]
 
-But the sum of the angles *FKH* and *KHG* equals two right angles, therefore the sum of the angles *KHG* and *GHM* also equals two right angles. [!just I.29; C.N.1]
+But the sum of the angles {FKH|angFKH} and {KHG|angKHG} equals two right angles, therefore the sum of the angles {KHG|angKHG} and {GHM|angGHM} also equals two right angles. [!just I.29; C.N.1]
 
-Thus, with a straight line *GH,* and at the point *H* on it, two straight lines *KH* and *HM* not lying on the same side make the adjacent angles together equal to two right angles, therefore *KH* is in a straight line with *HM.* [!just I.14]
+Thus, with a straight line {GH}, and at the point {H} on it, two straight lines {KH} and {HM} not lying on the same side make the adjacent angles together equal to two right angles, therefore {KH} is in a straight line with {HM}. [!just I.14]
 
-Since the straight line *HG* falls upon the parallels *KM* and *FG,* therefore the alternate angles *MHG* and *HGF* equal one another. [!just I.29]
+Since the straight line {HG} falls upon the parallels {KM} and {FG}, therefore the alternate angles {MHG|angGHM} and {HGF|angHGF} equal one another. [!just I.29]
 
-Add the angle *HGL* to each. Then the sum of the angles *MHG* and *HGL* equals the sum of the angles *HGF* and *HGL.* [!just C.N.2]
+Add the angle {HGL|angHGL} to each. Then the sum of the angles {MHG|angGHM} and {HGL|angHGL} equals the sum of the angles {HGF|angHGF} and {HGL|angHGL}. [!just C.N.2]
 
-But the sum of the angles *MHG* and *HGL* equals two right angles, therefore the sum of the angles *HGF* and *HGL* also equals two right angles. Therefore *FG* is in a straight line with *GL.* [!just I.29, C.N.1; I.14]
+But the sum of the angles {MHG|angGHM} and {HGL|angHGL} equals two right angles, therefore the sum of the angles {HGF|angHGF} and {HGL|angHGL} also equals two right angles. Therefore {FG} is in a straight line with {GL}. [!just I.29, C.N.1; I.14]
 
-Since *FK* is equal and parallel to *HG,* and *HG* equal and parallel to *ML* also, therefore *KF* is also equal and parallel to *ML,* and the straight lines *KM* and *FL* join them at their ends. Therefore *KM* and *FL* are also equal and parallel. Therefore *KFLM* is a parallelogram. [!just I.34, I.30; C.N.1, I.33]
+Since {FK} is equal and parallel to {HG}, and {HG} equal and parallel to {ML} also, therefore {KF} is also equal and parallel to {ML}, and the straight lines {KM} and {FL} join them at their ends. Therefore {KM} and {FL} are also equal and parallel. Therefore {KFLM} is a parallelogram. [!just I.34, I.30; C.N.1, I.33]
 
-Since the triangle *ABD* equals the parallelogram *FH,* and *DBC* equals *GM,* therefore the whole rectilinear figure *ABCD* equals the whole parallelogram *KFLM.* [!just C.N.2]
+Since the triangle {ABD} equals the parallelogram {FH}, and {DBC} equals {GM}, therefore the whole rectilinear figure {ABCD} equals the whole parallelogram {KFLM}. [!just C.N.2]
 
-Therefore the parallelogram *KFLM* has been constructed equal to the given rectilinear figure *ABCD* in the angle *FKM* which equals the given angle *E.*
+Therefore the parallelogram {KFLM} has been constructed equal to the given rectilinear figure {ABCD} in the angle {FKM|angFKH} which equals the given angle {E}.
 
 <div class="qed">Q.E.F.</div>
 ----
