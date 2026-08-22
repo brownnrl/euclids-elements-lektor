@@ -46,8 +46,8 @@ It is required to construct a parallelogram equal to the rectilinear figure {ABC
     //
     // euclid#138: helpers H'(350,190) and M'(390,190) are on-canvas, so the
     // drift here is only -15px horizontally. Nothing to work around.
-    var GIV = ["A","B","C","D","ABCD","E","E1","E2","E3","E1E2","E2E3","angE","K","F"];
-    var SPL = ["A","B","C","D","BD","ABD","DBC","E","E1","E2","E3","E1E2","E2E3","angE","K","F"];
+    var GIV = ["A","B","C","D","ABCD","E","E1","E2","E3","E1E2","E2E3","angE"];
+    var SPL = ["A","B","C","D","BD","ABD","DBC","E","E1","E2","E3","E1E2","E2E3","angE"];
     var B1  = ["A","B","C","D","BD","ABD","DBC","E","E1","E2","E3","E1E2","E2E3","angE",
                "K","F","G","H","KF","FG","GH","HK","KFGH","angFKH"];
     var B2  = B1.concat(["L","M","GL","LM","MH","KM","FL","HGLM","angGHM"]);
@@ -125,6 +125,10 @@ It is required to construct a parallelogram equal to the rectilinear figure {ABC
                    "KHG": "angKHG", "HGF": "angHGF", "HGL": "angHGL",
                    "FK": "KF", "HG": "GH", "KH": "HK", "HM": "MH",
                    "ML": "LM", "MK": "KM", "LF": "FL", "GF": "FG", "LG": "GL" },
+        // K and F are free points, so without this they would be auto-unioned
+        // into every slide and stand on the canvas from slide 1 — before the
+        // proof introduces them with the I.42 construction on slide 3.
+        deferDraggables: ["K","F"],
         initiallyHidden: ["ABD","DBC","KFLM"],
         slides: [
             { text: "Let {ABCD} be the given rectilinear figure and {E} the given rectilinear angle. It is required to construct a parallelogram equal to {ABCD} in the given angle {E}.",

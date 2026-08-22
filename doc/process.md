@@ -137,6 +137,35 @@ a `{NAME}` hover lights them. Two hard rules:
   while its animation runs, fades with the post-animation emphasis
   taper, and is dropped from the next slide's visible set.
 
+### Points the proof introduces mid-walk (`deferDraggables`)
+
+Visibility has two defaults pulling in opposite directions, and both bite:
+
+- **Draggables are auto-unioned into every slide.** `free` and
+  `*Slider` points ignore the `visible` sets and stand on the canvas from
+  slide 1 — including points the proof does not introduce until later. A
+  reader on slide 1 sees lettered points the caption never mentions.
+  **Fix: list them in `deferDraggables`**, which drops them out of the
+  auto-union so they follow `visible` like any other element. (Caught on
+  I.44's `E` and I.45's `K`/`F`, which only arrive with the I.42
+  construction; also I.5's `F`, I.20's `P`, I.27's `G`, I.39's `E`,
+  I.40's `F`.)
+- **Derived points are NOT auto-unioned.** `vertex` / `last` /
+  `intersection` / `cutoff` / `midpoint` points follow the `visible`
+  sets, so a slide that omits one loses its dot *and its label*. **Fix:
+  list them explicitly in every slide they belong to** (C in I.4/I.8/I.26,
+  D in I.27, G/H in I.28).
+
+The rule of thumb: **a slide should show exactly what its caption has
+introduced.** Sub-points of a composite given are fine — the arms
+`D1`/`D2`/`D3` of a given angle `{D}` belong on slide 1 because `{D}`
+itself is a given — but a lettered point the prose has not reached yet
+does not.
+
+Note `deferDraggables` affects only the slideshow's auto-union; the
+resting figure still shows the point, so Joyce's static diagram is
+unchanged.
+
 ### Angle markers
 
 A small sector at the vertex marking the interior angle. Use the
@@ -225,6 +254,16 @@ text — that is how `Q.E.F.` / `Q.E.D.` goes on the closing slide.
    `canvas_1` correctly).
 7. Static figure + exit-presentation: matches Joyce's layout, free
    points drag, the whole construction tracks.
+8. **Slide 1 shows only the givens.** Scan the opening slide for any
+   lettered point the caption has not named — a draggable the proof
+   introduces later needs `deferDraggables` (see the rule above). Then
+   check the same slide-by-slide: nothing should appear before the
+   caption that introduces it.
+9. **Bounds sanity (euclid#138).** Presentation centring measures *all*
+   elements, ignoring visibility, so an invisible helper outside the
+   canvas skews it. Check that the bbox of every declared coordinate is
+   centred on the canvas centre; if it is not, an off-canvas helper is
+   the usual cause.
 
 ## Worked example — proposition I.5
 
