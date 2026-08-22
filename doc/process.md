@@ -137,6 +137,32 @@ a `{NAME}` hover lights them. Two hard rules:
   while its animation runs, fades with the post-animation emphasis
   taper, and is dropped from the next slide's visible set.
 
+### Slide sets take CANONICAL names only — aliases are inert there
+
+`aliases` resolve for prose `{NAME}` refs, but **not** inside a slide's
+`visible` or `highlighted` arrays. Both code paths test the element's own
+name — `SlateControls.ts` (`state.highlighted.has(e.name)`) and
+`SlateAnimator.ts` (`targetHighlighted.has(e.name)`) — so an alias in a
+slide set matches nothing and is **silently ignored**: no error, no
+warning, the element simply never lights.
+
+So write the **declared** name in `visible` / `highlighted` / `elem:`,
+and keep the alias for the prose:
+
+```js
+aliases: { "FC": "CF" },
+// caption may say {FC}; the slide set must say "CF"
+highlighted: ["AL","AD","CF"],
+```
+
+When the prose spells it one way and the element is declared another,
+the caption can still read Joyce's spelling via the display override —
+`{FC|CF}` — while the slide set uses `CF`.
+
+Caught on I.47, where slide 4 highlighted `"FC"` and the line stayed
+black while AL and AD lit gold. An audit then found **33 inert names
+across 17 deck-canvases**, including decks predating the area block.
+
 ### Points the proof introduces mid-walk (`deferDraggables`)
 
 Visibility has two defaults pulling in opposite directions, and both bite:
@@ -254,12 +280,15 @@ text — that is how `Q.E.F.` / `Q.E.D.` goes on the closing slide.
    `canvas_1` correctly).
 7. Static figure + exit-presentation: matches Joyce's layout, free
    points drag, the whole construction tracks.
-8. **Slide 1 shows only the givens.** Scan the opening slide for any
+8. **Slide sets use canonical names.** Grep the `visible` / `highlighted`
+   arrays for anything that appears as a key in `aliases` — it is inert
+   (see the rule above). Same for `elem:` animation targets.
+9. **Slide 1 shows only the givens.** Scan the opening slide for any
    lettered point the caption has not named — a draggable the proof
    introduces later needs `deferDraggables` (see the rule above). Then
    check the same slide-by-slide: nothing should appear before the
    caption that introduces it.
-9. **Bounds sanity (euclid#138).** Presentation centring measures *all*
+10. **Bounds sanity (euclid#138).** Presentation centring measures *all*
    elements, ignoring visibility, so an invisible helper outside the
    canvas skews it. Check that the bbox of every declared coordinate is
    centred on the canvas centre; if it is not, an off-canvas helper is
