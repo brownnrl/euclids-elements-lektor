@@ -15,14 +15,29 @@ statement: If in a triangle the square on one of the sides equals the sum of the
 ----
 proof:
 
-In the triangle *ABC* let the square on one side *BC* equal the sum of the squares on the sides *BA* and *AC*
+In the triangle {ABC} let the square on one side {BC} equal the sum of the squares on the sides {BA} and {AC}
 
-I say that the angle *BAC* is right.
+I say that the angle {BAC} is right.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="230" tabindex="0"></canvas>
 <noscript><img alt="I.48 diagram" src="propI48.gif"/></noscript>
 <script type="text/javascript">
+    // Converse of I.47, and it turns on a congruence rather than on areas:
+    // build DAC as a right-angled mirror of ABC across AC, show DC = BC by
+    // I.47 applied to DAC, then SSS (I.8) forces angle BAC = angle DAC, which
+    // is right by construction. So the two triangles are the equal pair and
+    // share cyan; they meet along AC without overlapping, so no gating is
+    // needed. The squares the proof reasons about are never drawn — Joyce's
+    // figure has none, and five of them would swamp a 260px canvas — so the
+    // area steps live in the captions and the figure carries the congruence.
+    //
+    // Note the right angle at A is enforced by the figure (C rides on the
+    // perpendicular to AB through A), exactly as I.39 enforced its parallel.
+    // The walk therefore proves what the diagram already guarantees.
+    var GIVEN = ["A","B","C","AB","AC","BC","ABC","angBAC"];
+    var BUILT = GIVEN.concat(["D","AD","CD","angDAC"]);
+    var TRI   = BUILT.concat(["DAC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -30,26 +45,91 @@ I say that the angle *BAC* is right.
         elements: [
             "A;point;free;130,190",
             "B;point;free;220,190",
+            // C rides the perpendicular to AB at A, so angle BAC is right in
+            // the figure however the triangle is dragged.
             "AC';line;perpendicular;A,B;0;0;0",
             "C;point;lineSlider;AC',100,40",
-            "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random",
+            "ABC;polygon;triangle;A,B,C;0;0;0,0,0;cyan",
+            // BA produced through A by its own length gives D, so DA = AB.
             "AD;line;extend;B,A,B,A",
             "D;point;last;AD",
-            "CD;line;connect;C,D"
+            "CD;line;connect;C,D",
+            // The mirror triangle, equal to ABC by I.8 — same cyan.
+            "DAC;polygon;triangle;D,A,C;0;0;0;cyan",
+            // Sides the proof names; the triangle and AD already draw them.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            // Both angles at A are right and adjacent along AC, so they do not
+            // overlap — same radius, and red as the equal right-angle pair.
+            "angBAC;sector;angleMarker;A,B,C,20;0;0;red;red",
+            "angDAC;sector;angleMarker;A,D,C,20;0;0;red;red"
         ],
+        aliases: { "BA": "AB", "CA": "AC", "CB": "BC", "DA": "AD", "DC": "CD",
+                   "BAC": "angBAC" },
+        initiallyHidden: ["DAC"],
+        slides: [
+            { text: "In the triangle {ABC} let the square on one side {BC} equal the sum of the squares on the sides {BA} and {AC}. I say that the angle {BAC} is right.",
+              visible: GIVEN,
+              highlighted: ["ABC","BC","AB","AC"],
+              transition: { animations: [ { elem: "angBAC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Draw {AD} from the point {A} at right angles to the straight line {AC}. Make {AD} equal to {BA}, and join {DC}.",
+              visible: BUILT,
+              highlighted: ["AD","CD","angDAC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD",     name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "CD",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angDAC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.11" }, { ref: "I.3" }, { ref: "I.Post.1" }] },
+            { text: "Since {DA} equals {AB}, therefore the square on {DA} also equals the square on {AB}.",
+              visible: BUILT,
+              highlighted: ["AD","AB"] },
+            { text: "Add the square on {AC} to each. Then the sum of the squares on {DA} and {AC} equals the sum of the squares on {BA} and {AC}.",
+              visible: BUILT,
+              highlighted: ["AD","AC","AB"],
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "But the square on {DC} equals the squares on {DA} and {AC}, for the angle {DAC|angDAC} is right; and the square on {BC} equals the squares on {BA} and {AC}, for that is the hypothesis. Therefore the square on {DC} equals the square on {BC}, so the side {DC} equals {BC}.",
+              visible: BUILT,
+              highlighted: ["CD","BC","angDAC"],
+              justifications: [{ ref: "I.47" }, { ref: "C.N.1" }] },
+            { text: "Since {DA} equals {AB}, and {AC} is common, the two sides {DA} and {AC} equal the two sides {BA} and {AC}, and the base {DC} equals the base {BC} — therefore the angle {DAC|angDAC} equals the angle {BAC}.",
+              visible: TRI,
+              highlighted: ["DAC","ABC"],
+              transition: { animations: [ { elem: "DAC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.8" }] },
+            { text: "But the angle {DAC|angDAC} is right, therefore the angle {BAC} is also right.",
+              visible: TRI,
+              highlighted: ["angDAC","angBAC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.8":      "/elements/books/bookI/propositions/propI8/",
+        "I.11":     "/elements/books/bookI/propositions/propI11/",
+        "I.47":     "/elements/books/bookI/propositions/propI47/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/"
     });
 </script>
 </figure>
 
-Draw *AD* from the point *A* at right angles to the straight line *AC.* Make *AD* equal to *BA,* and join *DC.* [!just I.11, I.3; I.Post.1]
+Draw {AD} from the point {A} at right angles to the straight line {AC}. Make {AD} equal to {BA}, and join {DC}. [!just I.11, I.3; I.Post.1]
 
-Since *DA* equals *AB,* therefore the square on *DA* also equals the square on *AB.*
+Since {DA} equals {AB}, therefore the square on {DA} also equals the square on {AB}.
 
-Add the square on *AC* to each. Then the sum of the squares on *DA* and *AC* equals the sum of the squares on *BA* and *AC.* [!just C.N.2]
+Add the square on {AC} to each. Then the sum of the squares on {DA} and {AC} equals the sum of the squares on {BA} and {AC}. [!just C.N.2]
 
-But the square on *DC* equals the sum of the squares on *DA* and *AC,* for the angle *DAC* is right, and the square on *BC* equals the sum of the squares on *BA* and *AC,* for this is the hypothesis, therefore the square on *DC* equals the square on *BC,* so that the side *DC* also equals *BC.* [!just I.47; C.N.1]
+But the square on {DC} equals the sum of the squares on {DA} and {AC}, for the angle {DAC|angDAC} is right, and the square on {BC} equals the sum of the squares on {BA} and {AC}, for this is the hypothesis, therefore the square on {DC} equals the square on {BC}, so that the side {DC} also equals {BC}. [!just I.47; C.N.1]
 
-Since *DA* equals *AB,* and *AC* is common, the two sides *DA* and *AC* equal the two sides *BA* and *AC,* and the base *DC* equals the base *BC,* therefore the angle *DAC* equals the angle *BAC.* But the angle *DAC* is right, therefore the angle *BAC* is also right. [!just I.8]
+Since {DA} equals {AB}, and {AC} is common, the two sides {DA} and {AC} equal the two sides {BA} and {AC}, and the base {DC} equals the base {BC}, therefore the angle {DAC|angDAC} equals the angle {BAC}. But the angle {DAC|angDAC} is right, therefore the angle {BAC} is also right. [!just I.8]
 
 Therefore *if in a triangle the square on one of the sides equals the sum of the squares on the remaining two sides of the triangle, then the angle contained by the remaining two sides of the triangle is right.*
 
