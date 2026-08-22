@@ -47,9 +47,10 @@ Describe the square {BDEC} on {BC}, and the squares {GB} and {HC} on {BA} and {A
     // those and overlap each other, so they go to outer rings at 30 and 38.
     // Red = right angle, yellow = the added angle, magenta = the equal pair.
     var GIVEN = ["A","B","C","AB","BC","AC","ABC","angBAC"];
-    var SQ    = GIVEN.concat(["D","E","F","G","H","K","L","J","A2","B2","C2",
-                              "AG","AH","BD","FB","GC","CE","AL","AD","CF"]);
-    var STR   = SQ.concat(["angBAG"]);
+    var SQ    = GIVEN.concat(["D","E","F","G","H","K","A2","B2","C2",
+                              "AG","AH","BD","FB","GC","CE"]);
+    var LIN   = SQ.concat(["L","J","AL","AD","CF"]);
+    var STR   = LIN.concat(["angBAG"]);
     var ANGB  = STR.concat(["angDBC","angFBA","angABC","angDBA","angFBC"]);
     var TRI   = ANGB.concat(["ABD","FBC"]);
     var EQ1   = TRI.concat(["BL","GBfill"]);
@@ -129,17 +130,22 @@ Describe the square {BDEC} on {BC}, and the squares {GB} and {HC} on {BA} and {A
             { text: "I say that the square on {BC} equals the sum of the squares on {BA} and {AC}.",
               visible: GIVEN,
               highlighted: ["BC","AB","AC"] },
-            { text: "Describe the square {BDEC} on {BC}, and the squares {GB} and {HC} on {BA} and {AC}. Draw {AL} through {A} parallel to either {BD} or {CE}, and join {AD} and {FC}.",
+            { text: "Describe the square {BDEC} on {BC}, and the squares {GB} and {HC} on {BA} and {AC}.",
               visible: SQ,
-              highlighted: ["BDEC","GB","HC","AL"],
+              highlighted: ["BDEC","GB","HC"],
               transition: { mode: "cascade", animations: [
                   { elem: "A2", name: geomlib.A.Polygon.outline },
                   { elem: "B2", name: geomlib.A.Polygon.outline },
-                  { elem: "C2", name: geomlib.A.Polygon.outline },
+                  { elem: "C2", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "I.46" }] },
+            { text: "Draw {AL} through {A} parallel to either {BD} or {CE}, and join {AD} and {FC}.",
+              visible: LIN,
+              highlighted: ["AL","AD","FC"],
+              transition: { mode: "cascade", animations: [
                   { elem: "AL", name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "CF", name: geomlib.A.Line.straightEdgeConnect } ] },
-              justifications: [{ ref: "I.46" }, { ref: "I.31" }, { ref: "I.Post.1" }] },
+              justifications: [{ ref: "I.31" }, { ref: "I.Post.1" }] },
             { text: "Since each of the angles {BAC} and {BAG} is right, the two straight lines {AC} and {AG} make adjacent angles equal to two right angles — therefore {CA} is in a straight line with {AG}.",
               visible: STR,
               highlighted: ["angBAC","angBAG","AC","AG"],
