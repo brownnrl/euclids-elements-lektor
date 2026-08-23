@@ -120,6 +120,33 @@ already complete (see [journal/journal.md](journal/journal.md)).
   `AC;line;connect;A,C;0;0;0` target and tokenized `{AC}` in the caption +
   prose.
 
+## Deferred — revisit after Book I is published
+
+Not scheduled. These are recorded so the dependency isn't lost, **not**
+decisions to build. Nelson's order is: fix the known content problems →
+publish the lektor site over the current HTML site → then Books II–XIII a
+book at a time. This list is what to look at once that publish is done.
+
+The June "revisit list" in the coordination log is superseded by this table —
+it predates several of these and every ticket it named has since shipped.
+
+| Deck / scope | Deferred work | Depends on |
+|---|---|---|
+| **I.31** `canvas_1` | Animate `A` across `DC` and back, so the same-side hypothesis is *demonstrated* rather than left to whether the reader drags. The `E2`/`AE2` red demo stays as the static statement of the same point. Filed as **lektor#13**. | **euclid#137** (open — point follows a path). Note **#122** alone is not enough: it moves a point *to* a target and leaves it; the value here is the there-and-back. |
+| **I.20** Heron guide | The "search → land on E" motion for the variable point `P`. | **euclid#122** — **shipped in 0.14.0**, so this is unblocked and merely unwired. |
+| **I.20** and any deck using the interim | Unwind the one-keyword caption workaround (`the {side\|sideDA} from D to A`) back to the natural `{the side from D to A\|sideDA}`. | **euclid#136** — **shipped in 0.14.0**; cosmetic, do at leisure. |
+| **Book II onward** | Adopt `ISlideJust.claim` so a chip can state its step (`∠EGB = ∠AGH — I.15`) rather than only cite it. | **euclid#146** — **shipped in 0.14.0**. I.28's per-statement sub-slide split becomes a pacing choice, not a workaround. |
+| **All marker decks** | Re-author angle markers once the dedicated construction lands. Scope is the ⚠ column in the Book I table. | **euclid#91** (open). |
+| **I.4** | Add `"C"` to every slide's `visible` set (see *Deck polish to-dos*). | none — deck-side, pre-existing. |
+
+**Why this section exists.** The I.31 → #137 link previously lived *only*
+inside the euclid ticket; the coordination-log entry that filed it is now
+thousands of lines deep, and this tracker's I.31 row never mentioned it. There
+is precedent for losing one: an authoring note of 2026-06-22 proposed an
+`ISlideJust` claim field "if we want it", was never filed, and stayed lost
+until the library session found it in those notes and filed euclid#146
+themselves. Anything deferred goes in this table.
+
 ## geomlib migration (markers + animations)
 
 Pinned at **0.13.0** (#107 maximize/presentation recenter + reset-on-exit;
