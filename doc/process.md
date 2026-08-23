@@ -280,19 +280,29 @@ text — that is how `Q.E.F.` / `Q.E.D.` goes on the closing slide.
    `canvas_1` correctly).
 7. Static figure + exit-presentation: matches Joyce's layout, free
    points drag, the whole construction tracks.
-8. **Slide sets use canonical names.** Grep the `visible` / `highlighted`
-   arrays for anything that appears as a key in `aliases` — it is inert
-   (see the rule above). Same for `elem:` animation targets.
-9. **Slide 1 shows only the givens.** Scan the opening slide for any
-   lettered point the caption has not named — a draggable the proof
-   introduces later needs `deferDraggables` (see the rule above). Then
-   check the same slide-by-slide: nothing should appear before the
-   caption that introduces it.
-10. **Bounds sanity (euclid#138).** Presentation centring measures *all*
-   elements, ignoring visibility, so an invisible helper outside the
-   canvas skews it. Check that the bbox of every declared coordinate is
-   centred on the canvas centre; if it is not, an off-canvas helper is
-   the usual cause.
+8. **Run the deck checker.** `node scripts/check-decks.js` (needs
+   `node-canvas` from the euclid checkout — `NODE_PATH=../euclid/node_modules`,
+   or set `EUCLIDS_GEOMLIB_REPO`). It evaluates **every** page's inline
+   geomlib script against the real bundle — 524 pages, 634 canvases — and
+   fails on any diagnostic: a figure that throws, a slide name that resolves
+   to nothing, an animation target that matches nothing. Exit 1 means fix it.
+   `scripts/deploy-preview.sh` runs it before building, so a bad deck cannot
+   reach a preview.
+
+   This **replaces** the manual greps that used to be steps 8–10 here (alias
+   names in slide sets, points shown before their caption introduces them,
+   bounds sanity). The checker catches those cases directly, and it
+   *evaluates* rather than greps — 14 Book I decks build `visible` sets from
+   shared `var`s via `.concat()`, which no static scan can follow. It is what
+   caught propIV3, whose figure had not rendered since conversion because two
+   element lines were transposed.
+
+   Known false positives are suppressed by name in `isKnownFalsePositive()`,
+   each with a comment and a ticket. Today that is I.23's `keepCircles` names
+   (euclid#159) — created by a macro animation at run time, so they do not
+   resolve at init even though the deck is correct. **Never silence a
+   diagnostic by deleting the name** until you have checked whether something
+   creates it later.
 
 ## Worked example — proposition I.5
 

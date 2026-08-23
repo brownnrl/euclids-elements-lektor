@@ -35,6 +35,27 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
 fi
 PREVIEW_BRANCH="lektor/${SOURCE_BRANCH}"
 
+echo "==> Checking deck consistency"
+# Evaluates every page's inline geomlib script against the real bundle and
+# fails on any diagnostic (unresolvable slide names, animation targets that
+# match nothing, figures that throw). This is what caught propIV3, whose
+# figure had not rendered since conversion. Needs node-canvas from the euclid
+# checkout; skipped with a warning if that is not available, so the deploy
+# still works on a machine without it.
+if NODE_PATH="${EUCLIDS_GEOMLIB_REPO:-$(cd "$(dirname "$0")/../../euclid" && pwd)}/node_modules" \
+       node "$(dirname "$0")/check-decks.js"; then
+    :
+else
+    status=$?
+    if [ "$status" -eq 1 ]; then
+        echo "!! deck check failed — fix the diagnostics above, or re-run with SKIP_DECK_CHECK=1" >&2
+        [ "${SKIP_DECK_CHECK:-}" = "1" ] || exit 1
+        echo "!! SKIP_DECK_CHECK=1 set — continuing anyway" >&2
+    else
+        echo "!! deck check could not run (exit $status) — continuing" >&2
+    fi
+fi
+
 echo "==> Building Lektor site"
 rm -rf build
 "$LEKTOR" build --output-path build

@@ -42,11 +42,14 @@ I say that {ABCD} equals the parallelogram {EBCF}.
             "D;point;parallelogram;A,B,C",
             "CD;line;connect;C,D",
             // E1 sets how far E' extends past D along the A→D ray (E' = D +
-            // dist(A,E1) along that direction). It MUST stay on-canvas: the
-            // presentation centres on figureBounds(), which ignores visibility,
-            // so a far-off E1/E' would push the whole figure off-screen. At
-            // (210,40) it puts E' at the right edge (~x=300); invisible + deferred.
-            "E1;point;free;210,40;0;0",
+            // dist(A,E1) along that direction), so it also sets how far E can
+            // slide. Joyce's value is 10000,0 — "direction at infinity".
+            // It was pulled on-canvas as a euclid#138 workaround (present-centring
+            // measured it and shoved the figure off-screen); #138 shipped in
+            // 0.14.0 and now measures only elements that PAINT, so the original
+            // value is safe again. The ;0;0 matters — it is what makes E1
+            // inkless, and therefore unmeasured.
+            "E1;point;free;10000,0;0;0",
             "E';point;extend;A,D,A,E1;0;0",
             "E;point;lineSegmentSlider;D,E',180,40",
             "BE;line;connect;B,E",

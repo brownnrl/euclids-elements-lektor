@@ -38,7 +38,7 @@ authored with markers against the current pattern becomes rework when
 
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
-| Book I | **48** | **48 (I.1–I.48 — COMPLETE)** | markers on 0.13.0 (see open Qs) |
+| Book I | **48** | **48 (I.1–I.48 — COMPLETE)** | markers on 0.14.0 (see open Qs) |
 | Books II–XIII | 417 | 0 | — |
 | **Total** | **465** | **48** | — |
 
@@ -134,6 +134,7 @@ it predates several of these and every ticket it named has since shipped.
 |---|---|---|
 | **I.31** `canvas_1` | Animate `A` across `DC` and back, so the same-side hypothesis is *demonstrated* rather than left to whether the reader drags. The `E2`/`AE2` red demo stays as the static statement of the same point. Filed as **lektor#13**. | **euclid#137** (open — point follows a path). Note **#122** alone is not enough: it moves a point *to* a target and leaves it; the value here is the there-and-back. |
 | **I.20** Heron guide | The "search → land on E" motion for the variable point `P`. | **euclid#122** — **shipped in 0.14.0**, so this is unblocked and merely unwired. |
+| **Done 2026-08-23** | Pin bumped to **0.14.0**; #138 workarounds reverted (I.42/I.44 anchors back to ±1000, I.35's `E1` back to Joyce's `10000,0`); propIV3 transposition fixed (lektor#12); `scripts/check-decks.js` added and gating `deploy-preview.sh`. | — |
 | **I.20** and any deck using the interim | Unwind the one-keyword caption workaround (`the {side\|sideDA} from D to A`) back to the natural `{the side from D to A\|sideDA}`. | **euclid#136** — **shipped in 0.14.0**; cosmetic, do at leisure. |
 | **Book II onward** | Adopt `ISlideJust.claim` so a chip can state its step (`∠EGB = ∠AGH — I.15`) rather than only cite it. | **euclid#146** — **shipped in 0.14.0**. I.28's per-statement sub-slide split becomes a pacing choice, not a workaround. |
 | **All marker decks** | Re-author angle markers once the dedicated construction lands. Scope is the ⚠ column in the Book I table. | **euclid#91** (open). |
@@ -149,7 +150,7 @@ themselves. Anything deferred goes in this table.
 
 ## geomlib migration (markers + animations)
 
-Pinned at **0.13.0** (#107 maximize/presentation recenter + reset-on-exit;
+Pinned at **0.14.0** (#107 maximize/presentation recenter + reset-on-exit;
 #108 `geomlib:highlight` bidirectional event — see `elem-ref-highlight.js`).
 Angle markers (`E.Sector.angleMarker`) are hidden in the static figure by
 default and revealed during the walk / on hover (#100); markers migrated
