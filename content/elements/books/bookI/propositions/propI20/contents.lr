@@ -232,12 +232,33 @@ This proposition on the triangle inequality, along with @I.15 on vertical angles
                   { elem: "PB", name: geomlib.A.Line.straightEdgeConnect } ] } },
             { text: "But that still leaves us the question of which point {P} to choose on the line {CD} to minimize the sum of the distances {AP} plus {PB}.",
               visible: ["CD","P","AP","PB"],
-              highlighted: ["AP","PB"] },
+              highlighted: ["AP","PB"],
+              // euclid#137. The question is "which P?", so let P actually hunt
+              // for it: AP and PB stretch and shrink as it goes, which is the
+              // quantity the slide is asking about. via C and D rather than
+              // `along: "CD"` — CD is the EXTENDED line (connect;C1,D1) whose
+              // endpoints sit at x=430 and x=-140 on a 280px canvas, so `along`
+              // would sweep P far off-screen; C and D lie on the same line and
+              // bound the visible segment. settle defaults to false, so it
+              // sweeps out and retraces, leaving P where it started.
+              transition: { animations: [
+                  { elem: "P", name: geomlib.A.Point.followPath,
+                    durationMs: 7000,
+                    args: { via: ["C","D"] } } ] } },
             { text: "The solution is that the shortest path will be the path {AEB} where angle of incidence, namely, angle {AEC}, equals the angle of reflection, namely, angle {BED}.",
               visible: ["CD","P","AP","PB","E","AE","EB","AEB","AEC","BED"],
               highlighted: ["AEB","AEC","BED"],
-              transition: { mode: "parallel", animations: [
+              // euclid#122. P is a lineSlider and E is a DERIVED point
+              // (intersection;AB',CD), so before #122 there was no way to land
+              // P on it — E's parameter is only known at runtime and hardcoding
+              // it breaks the moment a reader drags A/B/C/D. `to: "E"` resolves
+              // and projects at setup, so P glides onto the optimum and keeps
+              // tracking it. This is the answer to the hunt on the slide before:
+              // the P that minimises AP+PB IS E.
+              transition: { mode: "cascade", animations: [
                   { elem: "E",   name: geomlib.A.Point.appear },
+                  { elem: "P",   name: geomlib.A.Point.slide,
+                    durationMs: 2200, args: { to: "E" } },
                   { elem: "EB",  name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "AEC", name: geomlib.A.Sector.sweep },
                   { elem: "BED", name: geomlib.A.Sector.sweep } ] } },
