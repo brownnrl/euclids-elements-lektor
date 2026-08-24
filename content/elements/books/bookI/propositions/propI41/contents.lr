@@ -50,7 +50,10 @@ Let the parallelogram {ABCD} have the same base {BC} with the triangle {EBC}, an
             "A;point;free;40,40",
             // The parallelogram stays an unfilled outline — its own halves are
             // what ever fills it. D is its fourth vertex.
-            "ABCD;polygon;parallelogram;A,B,C",
+            // Explicit ;0 face — omitting faceColor gives a 2-D element a
+            // near-white OPAQUE face (lighten(bgcolor)), not transparency, which
+            // covers the coloured regions beneath it whenever it is highlighted.
+            "ABCD;polygon;parallelogram;A,B,C;0;0;black;0",
             "D;point;vertex;ABCD,4",
             // E slides along AD produced, so the triangle shares base BC with
             // the parallelogram and sits in the same parallels.

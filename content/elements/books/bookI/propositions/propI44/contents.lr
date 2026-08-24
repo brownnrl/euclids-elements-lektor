@@ -117,7 +117,10 @@ It is required to apply a parallelogram equal to the given triangle {C} to the g
             "AE;line;connect;A,E;0;0;0",
             // The big parallelogram — invisible highlight target; its sides are
             // already drawn above.
-            "HLKF;polygon;quadrilateral;H,L,K,F;0;0;0",
+            // Explicit ;0 face — omitting faceColor gives a 2-D element a
+            // near-white OPAQUE face (lighten(bgcolor)), not transparency, which
+            // covers the coloured regions beneath it whenever it is highlighted.
+            "HLKF;polygon;quadrilateral;H,L,K,F;0;0;0;0",
             // The four regions about the diameter HK. Orange and green echo
             // I.43's about-the-diameter pair; the complements are cyan.
             "BMKE;polygon;quadrilateral;B,M,K,E;0;0;0;green",

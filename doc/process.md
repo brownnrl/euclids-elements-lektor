@@ -137,6 +137,36 @@ a `{NAME}` hover lights them. Two hard rules:
   while its animation runs, fades with the post-animation emphasis
   taper, and is dropped from the next slide's visible set.
 
+### An omitted `faceColor` is NOT transparent
+
+For a 2-D element (any polygon), leaving the `faceColor` field off gives it
+**`lighten(bgcolor)` — a near-white OPAQUE face**, not transparency
+(`index.ts`, `defaultFaceColor`). Only an explicit `;0` (or `none`) makes a
+polygon a true outline.
+
+This matters because of the layering rule: **a highlighted element is promoted
+within its draw pass (#140)**. So a polygon you believed was an empty outline
+will, the moment it is highlighted or hovered, cover every coloured region
+underneath it.
+
+```
+"B2;polygon;square;B,A;0;0;black"      // near-white FACE — will hide fills
+"B2;polygon;square;B,A;0;0;black;0"    // a real outline
+```
+
+Caught on I.47: the orange `GBfill` appeared while its animation ran (an
+animating element is promoted too) and then vanished the instant it settled,
+because the highlighted square `B2` was promoted over it. The same latent bug
+was then found in **I.41, I.43 and I.44** — in each case a big containing
+polygon described in its own comment as "left unfilled so its own regions fill
+it", which was in fact painting a white face over exactly those regions
+whenever it was highlighted. On I.41 and I.47 that would have whited out the
+closing slides, the payoff of both decks.
+
+**Rule:** any polygon meant as an outline or an invisible highlight target
+needs an explicit `;0` face. Grep for `polygon` declarations with fewer than
+eight `;`-separated fields.
+
 ### Slide sets take CANONICAL names only — aliases are inert there
 
 `aliases` resolve for prose `{NAME}` refs, but **not** inside a slide's

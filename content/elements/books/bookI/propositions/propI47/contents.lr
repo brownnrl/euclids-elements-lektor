@@ -72,10 +72,16 @@ Describe the square {BDEC} on {BC}, and the squares {GB} and {HC} on {BA} and {A
             // regions — complementary to the orange it sits beside, and a
             // pastel in the spirit of Joyce's original "random" fill.
             "ABC;polygon;triangle;A,B,C;0;0;black;8CB4D9",
-            // The three squares, as Joyce has them: black outlines, no fill.
-            "A2;polygon;square;C,B;0;0;black",
-            "B2;polygon;square;B,A;0;0;black",
-            "C2;polygon;square;A,C;0;0;black",
+            // The three squares. NOTE the explicit ";0" face: omitting faceColor
+            // does NOT give a transparent polygon — index.ts defaults a 2-D
+            // element to lighten(bgcolor), i.e. a near-white OPAQUE face. Left
+            // implicit, each square covers the coloured region beneath it the
+            // moment it is highlighted (#140 promotes highlighted elements
+            // within the draw pass), which blanked GBfill after its animation
+            // and would have whited out the whole decomposition on slides 12-13.
+            "A2;polygon;square;C,B;0;0;black;0",
+            "B2;polygon;square;B,A;0;0;black;0",
+            "C2;polygon;square;A,C;0;0;black;0",
             "G;point;vertex;B2,3",
             "F;point;vertex;B2,4",
             "K;point;vertex;C2,3",

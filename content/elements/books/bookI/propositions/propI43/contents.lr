@@ -57,7 +57,10 @@ Let {ABCD} be a parallelogram, and {AC} its diameter, and about {AC} let {EH} an
             "A;point;free;80,40",
             "B;point;free;40,210",
             "C;point;free;210,210",
-            "ABCD;polygon;parallelogram;A,B,C",
+            // Explicit ;0 face — omitting faceColor gives a 2-D element a
+            // near-white OPAQUE face (lighten(bgcolor)), not transparency, which
+            // covers the coloured regions beneath it whenever it is highlighted.
+            "ABCD;polygon;parallelogram;A,B,C;0;0;black;0",
             "D;point;vertex;ABCD,4",
             "AC;line;connect;A,C",
             "K;point;lineSlider;AC,110,90",
@@ -76,8 +79,8 @@ Let {ABCD} be a parallelogram, and {AC} its diameter, and about {AC} let {EH} an
             // it — invisible highlight targets (the figure already draws them).
             "AK;line;connect;A,K;0;0;0",
             "KC;line;connect;K,C;0;0;0",
-            "EH;polygon;quadrilateral;A,E,K,H;0;0;0",
-            "FG;polygon;quadrilateral;K,G,C,F;0;0;0",
+            "EH;polygon;quadrilateral;A,E,K,H;0;0;0;0",
+            "FG;polygon;quadrilateral;K,G,C,F;0;0;0;0",
             // Regions, fill-only. The complements are the equal pair the
             // proposition is about, so they share cyan.
             "EBGK;polygon;quadrilateral;E,B,G,K;0;0;0;cyan",
