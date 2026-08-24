@@ -70,6 +70,36 @@ cd build && python3 -m http.server 8001 --bind 0.0.0.0
 # Visit http://localhost:8001/ or http://<your-LAN-ip>:8001/ on a phone
 ```
 
+## Publishing to the live site
+
+`www.euclids-elements.org` is served by **GitHub Pages** from the
+`brownnrl/euclids-elements.org` repo. Publish with:
+
+```sh
+./scripts/publish.sh --dry-run    # check + build, deploy nothing
+./scripts/publish.sh              # check, build, confirm, deploy
+```
+
+The wrapper exists so a publish cannot skip validation — it runs
+[`scripts/check-decks.js`](scripts/check-decks.js) over every page and refuses
+to deploy if any figure is broken, then verifies the build actually produced
+its key files before asking for confirmation.
+
+It calls Lektor's `ghpages` publisher via the `[servers.production]` target in
+`euclids-elements.lektorproject`, which pushes the build to `gh-pages` and
+writes **`CNAME`** from the target's `?cname=` parameter — Pages reads that to
+bind the custom domain, so it has to be in the published tree.
+
+`LICENSE` and `COPYRIGHT.md` reach the build through `assets/` (symlinks to
+this repo's copies). The publisher does `git add -f --all` on the build
+directory, so **anything not in the build is not published** — that is the
+mechanism to use for any file the live site must carry.
+
+> **Note on URLs.** The Lektor tree uses directory URLs
+> (`/elements/books/bookI/propositions/propI47/`) where the older hand-authored
+> site used flat files (`/elements/bookI/propI47.html`). The scheme change is
+> deliberate; deep links into the old scheme do not resolve.
+
 ## Deploying a preview to euclids-elements.org
 
 The site at `euclids-elements.org` already has Cloudflare Workers

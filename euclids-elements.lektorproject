@@ -4,3 +4,19 @@ url = https://www.euclids-elements.org/
 url_style = relative
 
 [packages]
+
+[servers.production]
+name = Production (GitHub Pages)
+enabled = yes
+# Live site. GitHub Pages serves brownnrl/euclids-elements.org at
+# www.euclids-elements.org; Lektor's ghpages publisher pushes the build to the
+# gh-pages branch and writes the CNAME from the query param below — Pages reads
+# CNAME to bind the custom domain, so it MUST be in the published tree.
+#
+# LICENSE and COPYRIGHT.md reach the build through assets/ (symlinks to this
+# repo's own copies): the publisher does `git add -f --all` on the build
+# directory, so anything not in the build is not published.
+#
+# Deploy with scripts/publish.sh, NOT `lektor deploy` directly — the wrapper
+# runs the deck checker first.
+target = ghpages+https://brownnrl/euclids-elements.org?cname=www.euclids-elements.org
