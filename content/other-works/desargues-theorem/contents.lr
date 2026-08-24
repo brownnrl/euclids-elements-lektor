@@ -129,6 +129,13 @@ The version of Desargue's theorem in Round Geometry specializes to one in hyperb
         background: "0,0,100",
         title: "Desargues Theorem in Hyperbolic Geometry",
         pivot: "diskcenter",
+        // Centre the maximized view on the disk, not on the figure bounds
+        // (euclid#164). Hyperbolic geodesics are genuinely large circles, so
+        // even with #162 skipping runaway elements the derived centre lands at
+        // (289,86) while the disk centre is (200,160) — no arrangement of the
+        // free points closes that gap. Naming the element is the actual fix, and
+        // it lets Dr. Joyce's original coordinates stand.
+        centerOn: "diskcenter",
         elements: [
             "diskcenter;point;fixed;200,160;0;orange",
             "diskradius;point;free;355,150;0;orange",
@@ -142,18 +149,7 @@ The version of Desargue's theorem in Round Geometry specializes to one in hyperb
             "AB;circle;circumcircle;A,B,A*;0;0;red;0",
             "BC;circle;circumcircle;B,C,B*;0;0;red;0",
             "CA;circle;circumcircle;C,A,C*;0;0;red;0",
-            // P is the centre of perspectivity, and free — the reader can drag
-            // it anywhere. Its DEFAULT was (100,130), where P sits within ~1° of
-            // the line through B and B* (= invert;B,disk). A circumcircle through
-            // near-collinear points is unbounded, so BP came out with radius
-            // ~11300 on this 500x320 canvas and figureBounds ran to ~22600x23100.
-            // Maximizing then centred on that and pushed the whole figure off
-            // screen — a blank canvas. Moved to a well-conditioned spot (still
-            // inside the disk, >=55px from every vertex): worst circumradius
-            // drops 11300 -> 504 and the bounds to ~1770x1300.
-            // INTERIM ONLY — the real fix is euclid#162 (centring should not
-            // follow an outlier element, however legitimately it paints).
-            "P;point;free;155,245",
+            "P;point;free;100,130",
             "P*;point;invert;P,disk;0;0",
             "AP;circle;circumcircle;A,A*,P;0;0;black;0",
             "BP;circle;circumcircle;B,B*,P;0;0;black;0",
@@ -193,6 +189,10 @@ The version of Desargue's theorem in Round Geometry specializes to one in hyperb
         background: "0,0,100",
         title: "Desargues Theorem in Elliptic Geometry",
         pivot: "diskcenter",
+        // Same reasoning as canvas_2 (euclid#164): this is the elliptic twin,
+        // built the same way from a disk plus inversions, so its bounds run well
+        // past the canvas too. Centre on the disk rather than on the bounds.
+        centerOn: "diskcenter",
         elements: [
             "diskcenter;point;fixed;200,160;0;orange",
             "diskradius;point;free;350,150;0;orange",

@@ -96,26 +96,19 @@ let totalDecks = 0, totalCanvases = 0, pagesWithIssues = 0, totalIssues = 0;
 let totalSuppressed = 0;
 
 // ---------------------------------------------------------------------------
-// Known false positives.
+// Known false positives: none.
 //
-// #154 resolves every slide name when the figure is BUILT. Names that a macro
-// animation creates at RUN time therefore look unresolvable at init even
-// though they resolve perfectly once the animation has played.
-//
-// I.23 canvas_1: A.Circle.compassTransfer's `keepCircles` registers its four
-// construction circles via slate.addElement() inside step1.setup — i.e. when
-// slides 3 and 5 run. Slide 9 (the ten-circle count) then addresses them by
-// name and works. Deleting these names to silence the warning would break
-// that count. Both diagnostic codes are affected: "unknown-slide-name" (the
-// visible/highlighted sets) and "unknown-element" (the animation targets).
-// Tracked as euclid#159.
+// I.23's keepCircles names were suppressed here while euclid#159 was open —
+// #154 validated at figure-build time, so names a macro animation creates at
+// RUN time looked unresolvable. Fixed library-side in 0.15.0: an animation now
+// declares the names it will create, and compassTransfer declares its
+// keepCircles. The suppression is gone; a real typo in that deck is still
+// caught.
 // ---------------------------------------------------------------------------
-const KEEPCIRCLE_NAMES = new Set(["t1Ka","t1Kc","t1Kc2","t1KT","t2Kg","t2Ke","t2Ke2","t2KT"]);
 function isKnownFalsePositive(dir, entry) {
-    if (!dir.endsWith("propI23")) return false;
-    if (entry.code !== "unknown-slide-name" && entry.code !== "unknown-element") return false;
-    return [...KEEPCIRCLE_NAMES].some((n) => entry.message.includes(`'${n}'`));
+    return false;
 }
+
 const rows = [];
 
 for (const lr of files) {
