@@ -120,6 +120,36 @@ already complete (see [journal/journal.md](journal/journal.md)).
   `AC;line;connect;A,C;0;0;0` target and tokenized `{AC}` in the caption +
   prose.
 
+## Awaiting a visual pass
+
+Built and verified structurally (the deck checker passes), but nobody has
+watched the walk. Cleared as they are looked at; the per-row Notes carry the
+specifics.
+
+| Deck | What to look for |
+|---|---|
+| **I.32** | Do the red/blue/green markers at C visibly **tile the straight line BCD**? That tiling is the angle-sum payoff. Plus the orange exterior arc at r=30. Also still uses a `random` fill. |
+| **I.34** | Red/blue/green fills, the ABD/ACD outer arcs at r=30, and the `superpose` landing ABC on DCB. Also still uses a `random` fill. |
+| **I.35** | The one deck with **ungated fills** — six regions visible at once; legible or muddy? Plus the `superpose` landing EAB on FDC. |
+| **I.43** | Never seen. Both halves should decompose *identically* into orange+green+cyan. |
+| **I.44** | Never seen. Six markers — a vertical pair at B pinned equal, an arm-sharing pair at H at 30/18. |
+| **I.45** | Never seen. Slide 13 is the payoff: four regions matched in pairs by colour. |
+| **I.47** | Never seen, and the densest marker cluster in Book I — **five at vertex B**, two outer rings (30, 38) over three inner (20). Most-viewed page in the work. |
+| **I.48** | Never seen. Two right-angle markers at A, adjacent along AC. |
+
+**Cleared so far:** I.7, I.10, I.11, I.42, I.46.
+
+### `random` fills — 37 across Book I
+
+`random` resolves to a **fresh pastel on every page load**, so those figures
+change colour each visit and can land near-invisible (caught on I.46, where
+the guide square rendered almost white). Faithful to Joyce's spec, but it is
+non-deterministic and undercuts the colour idiom that carries meaning from
+I.32 on. Pin them deck by deck as each gets its visual pass rather than in a
+sweep — the right colour depends on what the figure means in its proof.
+Affected: I.2, I.4, I.5, I.6, I.8, I.9, I.19, I.23, I.24, I.25, I.26, I.29,
+I.32, I.34.
+
 ## Deferred — revisit after Book I is published
 
 Not scheduled. These are recorded so the dependency isn't lost, **not**
