@@ -175,8 +175,8 @@ it predates several of these and every ticket it named has since shipped.
 | Deck / scope | Deferred work | Depends on |
 |---|---|---|
 | **Done 2026-08-23** | Pin bumped to **0.14.0**; #138 workarounds reverted (I.42/I.44 anchors back to ±1000, I.35's `E1` back to Joyce's `10000,0`); propIV3 transposition fixed (lektor#12); `scripts/check-decks.js` added and gating `deploy-preview.sh`. | — |
-| **I.20** and any deck using the interim | Unwind the one-keyword caption workaround (`the {side\|sideDA} from D to A`) back to the natural `{the side from D to A\|sideDA}`. | **euclid#136** — **shipped in 0.14.0**; cosmetic, do at leisure. |
-| **Book II onward** | Adopt `ISlideJust.claim` so a chip can state its step (`∠EGB = ∠AGH — I.15`) rather than only cite it. | **euclid#146** — **shipped in 0.14.0**. I.28's per-statement sub-slide split becomes a pacing choice, not a workaround. |
+| — | **Nothing to unwind for #136.** The cited interim (`the {side\|sideDA} from D to A`) does not exist in the content, and there are **0** multi-word display refs. The 8 lowercase-noun refs are all in I.31 (`{circle\|K1}` etc.) and are the *right* choice there: the descriptive phrase contains other refs (`{D}`, `{P}`), so unwinding would swallow two working hover targets to gain one. Capability is there when a case needs it. | **euclid#136** — shipped, no debt. |
+| **Book II onward** | ✅ **Adopted** — `ISlideJust.claim` is now the documented convention in [process.md](process.md) § Justifications. A chip states its step (`∠EGB = ∠AGH — I.15`) rather than only citing it, so a slide no longer has to be split just to pair a statement with its citation. Book I decks are untouched: layout only stacks on slides that actually carry a claim. | **euclid#146** — shipped in 0.14.0. |
 | **All marker decks** | Re-author angle markers once the dedicated construction lands. Scope is the ⚠ column in the Book I table. | **euclid#91** (open). |
 | **I.4** | Add `"C"` to every slide's `visible` set (see *Deck polish to-dos*). | none — deck-side, pre-existing. |
 

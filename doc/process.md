@@ -276,6 +276,34 @@ Each page defines `window.eucrefs` (symbolic ref → URL) and passes
 window.eucrefs[ref]) || null; }`. An unmapped ref renders as plain
 text — that is how `Q.E.F.` / `Q.E.D.` goes on the closing slide.
 
+**`claim` — use it from Book II on** (geomlib 0.14.0+, euclid#146). A
+justification may state *what* the step asserts, not just which proposition
+licenses it. It renders ahead of the citation as `claim — ref`:
+
+```js
+justifications: [
+    { claim: "angle EGB = angle AGH",       ref: "I.15" },
+    { claim: "angle AGH + angle BGH = 2rt", ref: "I.13" },
+    { claim: "subtract angle BGH",          ref: "C.N.3" },
+]
+```
+
+Two things follow from having it:
+
+- **Stop splitting a slide just to keep each statement beside its citation.**
+  That is why I.28's three reasoning steps became per-statement sub-slides —
+  a chip could name the proposition but not the claim, so the only way to pair
+  them was one step per slide. A split is now a *pacing* choice: take it when
+  the steps genuinely deserve separate beats, not to work around the chip.
+- **Layout follows the data.** If any justification on a slide carries a claim,
+  that slide's entries stack one per line; with no claims anywhere the panel
+  stays the inline `·`-joined row. So adopting it on one slide does not disturb
+  the rest of a deck, and Book I decks are untouched.
+
+`claim` is **plain text — no `{NAME}` tokens**, so it cannot light elements.
+Keep it short and let the caption carry the prose; the chip is a summary, not a
+second narration.
+
 ### Animation choices
 
 - Lines: `A.Line.straightEdgeConnect` (joins) /
