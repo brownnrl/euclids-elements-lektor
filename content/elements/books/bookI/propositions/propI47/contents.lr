@@ -53,7 +53,15 @@ Describe the square {BDEC} on {BC}, and the squares {GB} and {HC} on {BA} and {A
     var STR   = LIN.concat(["angBAG"]);
     var ANGB  = STR.concat(["angDBC","angFBA","angABC","angDBA","angFBC"]);
     var TRI   = ANGB.concat(["ABD","FBC"]);
-    var EQ1   = TRI.concat(["BL","GBfill"]);
+    // From slide 9 the proof leaves the angles behind and is purely about
+    // areas, so the seven markers come OFF — they have done their work by the
+    // time triangle ABD is shown equal to FBC, and five of them are stacked at
+    // B where they crowd the figure. GEOM is TRI's geometry with no markers.
+    var GEOM  = ["A","B","C","AB","BC","AC","ABC",
+                 "D","E","F","G","H","K","A2","B2","C2",
+                 "AG","AH","BD","FB","GC","CE",
+                 "L","J","AL","AD","CF","ABD","FBC"];
+    var EQ1   = GEOM.concat(["BL","GBfill"]);
     var EQ2   = EQ1.concat(["CL","HCfill","AE","BK"]);
     geomlib.init({
         canvasid: "canvas_0",
