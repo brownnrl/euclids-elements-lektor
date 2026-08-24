@@ -120,22 +120,22 @@ already complete (see [journal/journal.md](journal/journal.md)).
   `AC;line;connect;A,C;0;0;0` target and tokenized `{AC}` in the caption +
   prose.
 
-## Awaiting a visual pass
+## Visual pass — COMPLETE
 
-Built and verified structurally (the deck checker passes), but nobody has
-watched the walk. Cleared as they are looked at; the per-row Notes carry the
-specifics.
+**All 48 Book I decks have been watched and confirmed** (Nelson, 2026-08-23).
+Nothing outstanding. The pass found and fixed four real defects, none of which
+the deck checker could see — all four are about what the figure *looks like*
+rather than whether it resolves:
 
-| Deck | What to look for |
-|---|---|
-| **I.34** | Red/blue/green fills, the ABD/ACD outer arcs at r=30, and the `superpose` landing ABC on DCB. Also still uses a `random` fill. |
-| **I.35** | The one deck with **ungated fills** — six regions visible at once; legible or muddy? Plus the `superpose` landing EAB on FDC. |
-| **I.43** | Never seen. Both halves should decompose *identically* into orange+green+cyan. |
-| **I.44** | Never seen. Six markers — a vertical pair at B pinned equal, an arm-sharing pair at H at 30/18. |
-| **I.45** | Never seen. Slide 13 is the payoff: four regions matched in pairs by colour. |
-| **I.48** | Never seen. Two right-angle markers at A, adjacent along AC. |
+| Deck | Found | Fix |
+|---|---|---|
+| **I.46** | Guide square's `random` fill rendered almost white | Pinned to cyan, matching the same square on the page's other canvas |
+| **I.47** | Orange fill vanished the moment its animation settled | An omitted `faceColor` is a near-white **opaque** face, and a highlighted element is promoted in its draw pass — gave the squares explicit `;0` faces |
+| **I.41, I.43, I.44** | Same latent bug, found by audit | Explicit `;0` on every containing polygon. On I.41 and I.47 it would have whited out the closing slide, each deck's payoff |
+| **I.47** | Seven markers crowding the area argument | Markers now run slides 1–8 and come off at slide 9, where the proof leaves angles for areas |
 
-**Cleared so far:** I.7, I.10, I.11, I.32, I.42, I.46, I.47.
+Also cleared en route: `other-works/desargues-theorem` `canvas_2` blanked on
+maximize — a near-degenerate circumcircle of radius ~11300 (euclid#162, #164).
 
 ### `random` fills — 37 across Book I
 
