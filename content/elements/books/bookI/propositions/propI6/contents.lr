@@ -15,10 +15,10 @@ statement: If in a triangle two angles equal one another, then the sides opposit
 ----
 proof:
 
-Let *ABC* be a triangle having the angle *ABC* equal to the angle *ACB.*
+Let {ABC} be a triangle having the angle {ABC|angB} equal to the angle {ACB|angC}.
 
 <figure class="diagram">
-<canvas id="canvas_0" width="200" height="210" tabindex="0"></canvas>
+<canvas id="canvas_0" width="320" height="300" tabindex="0"></canvas>
 <noscript><img alt="I.6 diagram" src="propI6.gif"/></noscript>
 <script type="text/javascript">
 geomlib.init({
@@ -26,26 +26,156 @@ geomlib.init({
     background: "35,19,100",
     title: "I.6",
     elements: [
-        "A;point;free;100,40",
-        "B;point;free;40,180",
-        "C;point;free;160,180",
-        "ABC;polygon;triangle;A,B,C",
-        "D;point;lineSlider;A,B,85,75",
-        "CD;line;connect;C,D"
+        "B;point;free;50,250",
+        "C;point;free;240,250",
+        // Apex A is constrained to the perpendicular bisector of BC, so
+        // AB = AC and the base angles ABC = ACB stay equal however the
+        // figure is dragged — the hypothesis of I.6 is invariant. (Same
+        // pattern as I.5's apex.) M / MM' are zero-color helpers.
+        "M;point;midpoint;B,C;0;0",
+        "MM';line;perpendicular;M,B;0;0;0",
+        "A;point;lineSlider;MM',145,50",
+        "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random",
+        // D is the hypothetical cut-off (the proof asserts BD = AC). Its
+        // init places it ~75% of the way from B toward A (t≈0.25), where
+        // Euclid's original static figure draws it, so the resting diagram
+        // matches the original. In presentation D is deferred
+        // (deferDraggables): hidden on slides 1–3, then on slide 4 it
+        // slides from this rest position to the midpoint of AB (the "cut
+        // off DB" gesture). BD is drawn shorter than AC — the
+        // asserted-but-undrawable equality the reductio exposes. A plain
+        // (infinite) line slider on AB, so the slide-3 ghost can vary it
+        // past A (t<0) for the BD > AB case.
+        "D;point;lineSlider;A,B,121,100",
+        "DC;line;connect;D,C",
+        // BD (visible) — shown in the slide-3 case ghosts (with DC) to
+        // outline the would-be sub-triangle DBC in each case. It runs
+        // along AB, so it's near-invisible in the main figure.
+        "BD;line;connect;B,D",
+        // Invisible highlight targets (zero-color; render gold only
+        // under highlight or hover) for the segments and the nested
+        // part-triangle the prose names.
+        "AB;line;connect;A,B;0;0;0",
+        "AC;line;connect;A,C;0;0;0",
+        "BC;line;connect;B,C;0;0;0",
+        "DB;line;connect;D,B;0;0;0",
+        "DBC;polygon;triangle;D,B,C;0;0;0;0",
+        // Angle markers (geomlib 0.8.0 E.Sector.angleMarker): vertex
+        // first, then the two arm points — interior is automatic (no
+        // sign-check, no midpoint-chain radius helpers). Fixed radius,
+        // translucent palette fill, colored edge. angB doubles as the
+        // angle DBC (D lies on ray BA, same rays).
+        "angB;sector;angleMarker;B,A,C",
+        "angC;sector;angleMarker;C,A,B"
     ],
+    // D is introduced mid-proof ("Cut off DB …"), so it opts out of the
+    // slideshow's every-slide draggable auto-union (geomlib >= 0.7.1)
+    // and appears with its slide-4 animation; draggable from then on.
+    deferDraggables: ["D"],
+    slides: [
+        { text: "Let {ABC} be a triangle having the angle {ABC|angB} equal to the angle {ACB|angC}.",
+          visible: ["ABC","angB","angC"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "angB", name: geomlib.A.Sector.sweep },
+                  { elem: "angC", name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "I say that the side {AB} also equals the side {AC}.",
+          visible: ["ABC"],
+          highlighted: ["AB","AC"] },
+        { text: "If {AB} does not equal {AC}, then one of them is greater.",
+          visible: ["ABC"],
+          highlighted: ["AB","AC"],
+          transition: {
+              animations: [
+                  // The two cases of "one of them is greater", as
+                  // displaced case-variants (geomlib 0.10.0 cloneAside
+                  // autoPlace + variants): the figure centres and both
+                  // copies are placed atomically in the freed space.
+                  // Varying D stands for the two cases — D between A and B
+                  // (AB > AC) and D past A (t < 0, AB < AC). Copies clear
+                  // on advance; desktop / presentation only.
+                  { elem: "ABC", name: geomlib.A.Group.cloneAside,
+                    args: { include: ["ABC","D","DC","BD"], autoPlace: true,
+                            variants: [ { vary: { elem: "D", to: 0.45 } },
+                                        { vary: { elem: "D", to: -0.4 } } ] } }
+              ]
+          },
+          justifications: [{ ref: "C.N." }] },
+        { text: "Let {AB} be greater. Cut off {DB} from {AB} the greater equal to {AC} the less, and join {DC}.",
+          visible: ["ABC","D","DB","AC","DC"],
+          highlighted: ["DB","AC"],
+          transition: {
+              animations: [
+                  // Case-variants clear; D slides from its rest position
+                  // (~75% toward A, Euclid's static placement) to the
+                  // midpoint of AB — the "cut off DB" gesture (the main
+                  // slider never moved during slide 3, since variants
+                  // restore it) — then DC is joined.
+                  { elem: "D",  name: geomlib.A.Point.slide, args: { to: 0.5 } },
+                  { elem: "DC", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          },
+          justifications: [{ ref: "I.3" }, { ref: "I.Post.1" }] },
+        { text: "Since {DB} equals {AC}, and {BC} is common, the two sides {DB} and {BC} equal the two sides {AC} and {CB|BC}, and the angle {DBC|angB} equals the angle {ACB|angC}.",
+          visible: ["ABC","D","DB","AC","DC","BC","angB","angC"],
+          highlighted: ["DB","AC","BC"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "angB", name: geomlib.A.Sector.sweep },
+                  { elem: "angC", name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "Therefore the base {DC} equals the base {AB}, and the triangle {DBC} equals the triangle {ACB|ABC}.",
+          visible: ["ABC","D","DB","AC","DC","BC","DBC"],
+          highlighted: ["DC","AB","DBC"],
+          transition: {
+              animations: [
+                  { elem: "DBC", name: geomlib.A.Polygon.outline }
+              ]
+          },
+          justifications: [{ ref: "I.4" }] },
+        { text: "The less equals the greater, which is absurd.",
+          visible: ["ABC","D","DB","AC","DC","BC","DBC"],
+          highlighted: ["DBC","ABC"],
+          justifications: [{ ref: "C.N.5" }] },
+        { text: "Therefore {AB} is not unequal to {AC}; it therefore equals it.",
+          visible: ["ABC"],
+          highlighted: ["AB","AC"] },
+        { text: "Therefore if in a triangle two angles equal one another, then the sides opposite the equal angles also equal one another.",
+          visible: ["ABC","angB","angC"],
+          highlighted: ["ABC","AB","AC"],
+          justifications: [{ ref: "Q.E.D." }] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
+});
+
+// Per-page citation lookup for the slideshow's resolveJustification
+// callback — same hand-authored pattern as propI.1 – propI.5.
+window.eucrefs = (window.eucrefs || {});
+Object.assign(window.eucrefs, {
+    "I.Post.1": "/elements/books/bookI/postulates/post1/",
+    "I.3":      "/elements/books/bookI/propositions/propI3/",
+    "I.4":      "/elements/books/bookI/propositions/propI4/",
+    "C.N.5":    "/elements/books/bookI/commonnotions/cn5/"
 });
 </script>
 </figure>
 
-I say that the side *AB* also equals the side *AC.*
+I say that the side {AB} also equals the side {AC}.
 
 [!just C.N.]
 
-If *AB* does not equal *AC,* then one of them is greater.
+If {AB} does not equal {AC}, then one of them is greater.
 
-Let *AB* be greater. Cut off *DB* from *AB* the greater equal to *AC* the less, and join *DC.* [!just I.3, I.Post.1]
+Let {AB} be greater. Cut off {DB} from {AB} the greater equal to {AC} the less, and join {DC}. [!just I.3, I.Post.1]
 
-Since *DB* equals *AC,* and *BC* is common, therefore the two sides *DB* and *BC* equal the two sides *AC* and *CB* respectively, and the angle *DBC* equals the angle *ACB.* Therefore the base *DC* equals the base *AB,* and the triangle *DBC* equals the triangle *ACB,* the less equals the greater, which is absurd. Therefore *AB* is not unequal to *AC,* it therefore equals it. [!just I.4; C.N.5]
+Since {DB} equals {AC}, and {BC} is common, therefore the two sides {DB} and {BC} equal the two sides {AC} and {CB|BC} respectively, and the angle {DBC|angB} equals the angle {ACB|angC}. Therefore the base {DC} equals the base {AB}, and the triangle {DBC} equals the triangle {ACB|ABC}, the less equals the greater, which is absurd. Therefore {AB} is not unequal to {AC}, it therefore equals it. [!just I.4; C.N.5]
 
 Therefore *if in a triangle two angles equal one another, then the sides opposite the equal angles also equal one another.*
 

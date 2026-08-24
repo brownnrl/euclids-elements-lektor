@@ -15,9 +15,9 @@ statement: A straight line falling on parallel straight lines makes the alternat
 ----
 proof:
 
-Let the straight line *EF* fall on the parallel straight lines *AB* and *CD.*
+Let the straight line {EF} fall on the parallel straight lines {AB} and {CD}.
 
-I say that it makes the alternate angles *AGH* and *GHD* equal, the exterior angle *EGB* equal to the interior and opposite angle *GHD,* and the sum of the interior angles on the same side, namely *BGH* and *GHD,* equal to two right angles.
+I say that it makes the alternate angles {AGH} and {GHD} equal, the exterior angle {EGB} equal to the interior and opposite angle {GHD}, and the sum of the interior angles on the same side, namely {BGH} and {GHD}, equal to two right angles.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="220" height="210" tabindex="0"></canvas>
@@ -39,29 +39,97 @@ I say that it makes the alternate angles *AGH* and *GHD* equal, the exterior ang
             "F;point;free;120,170",
             "EF;line;connect;E,F",
             "G;point;intersection;A,B,E,F",
-            "H;point;intersection;C,D,E,F"
+            "H;point;intersection;C,D,E,F",
+            // Angle markers (#91). At G: ∠EGB (exterior), ∠AGH (alternate),
+            // ∠BGH (co-interior); at H: ∠GHD. Explicit px radii pin the size
+            // (#103 nesting otherwise bloats a same-vertex marker); ∠EGB/∠AGH
+            // are vertical so share 22px, ∠BGH shares an arm with both → 14px.
+            "EGB;sector;angleMarker;G,E,B,22",
+            "AGH;sector;angleMarker;G,A,H,22",
+            "BGH;sector;angleMarker;G,B,H,14",
+            "GHD;sector;angleMarker;H,G,D,22"
         ],
+        slides: [
+            { text: "Let the straight line {EF} fall on the parallel straight lines {AB} and {CD}.",
+              visible: ["AB","CD","D","EF","G","H"],
+              highlighted: ["EF","AB","CD"] },
+            { text: "I say that it makes the alternate angles {AGH} and {GHD} equal, the exterior angle {EGB} equal to the interior and opposite angle {GHD}, and the sum of the interior angles on the same side, namely {BGH} and {GHD}, equal to two right angles.",
+              visible: ["AB","CD","D","EF","G","H","AGH","GHD","EGB","BGH"],
+              highlighted: ["AGH","GHD","EGB","BGH"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "AGH", name: geomlib.A.Sector.sweep },
+                  { elem: "GHD", name: geomlib.A.Sector.sweep },
+                  { elem: "EGB", name: geomlib.A.Sector.sweep },
+                  { elem: "BGH", name: geomlib.A.Sector.sweep } ] } },
+            { text: "If the angle {AGH} does not equal the angle {GHD}, then one of them is greater. Let the angle {AGH} be greater.",
+              visible: ["AB","CD","D","EF","G","H","AGH","GHD","EGB","BGH"],
+              highlighted: ["AGH","GHD"] },
+            { text: "Add the angle {BGH} to each. Therefore the sum of the angles {AGH} and {BGH} is greater than the sum of the angles {BGH} and {GHD}.",
+              visible: ["AB","CD","D","EF","G","H","AGH","GHD","EGB","BGH"],
+              highlighted: ["AGH","BGH","GHD"] },
+            { text: "But the sum of the angles {AGH} and {BGH} equals two right angles. Therefore the sum of the angles {BGH} and {GHD} is less than two right angles.",
+              visible: ["AB","CD","D","EF","G","H","AGH","GHD","EGB","BGH"],
+              highlighted: ["AGH","BGH","GHD"],
+              justifications: [{ ref: "I.13" }] },
+            { text: "But straight lines produced indefinitely from angles less than two right angles meet. Therefore {AB} and {CD}, if produced indefinitely, will meet. But they do not meet, because they are by hypothesis parallel.",
+              visible: ["AB","CD","D","EF","G","H","AGH","GHD","EGB","BGH"],
+              highlighted: ["AB","CD","BGH","GHD"],
+              justifications: [{ ref: "I.Post.5" }] },
+            { text: "Therefore the angle {AGH} is not unequal to the angle {GHD}, and therefore equals it.",
+              visible: ["AB","CD","D","EF","G","H","AGH","GHD","EGB","BGH"],
+              highlighted: ["AGH","GHD"] },
+            { text: "Again, the angle {AGH} equals the angle {EGB}. Therefore the angle {EGB} also equals the angle {GHD}.",
+              visible: ["AB","CD","D","EF","G","H","AGH","GHD","EGB","BGH"],
+              highlighted: ["AGH","EGB","GHD"],
+              transition: { animations: [ { elem: "EGB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.15" }, { ref: "C.N.1" }] },
+            { text: "Add the angle {BGH} to each. Therefore the sum of the angles {EGB} and {BGH} equals the sum of the angles {BGH} and {GHD}.",
+              visible: ["AB","CD","D","EF","G","H","AGH","GHD","EGB","BGH"],
+              highlighted: ["EGB","BGH","GHD"],
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "But the sum of the angles {EGB} and {BGH} equals two right angles. Therefore the sum of the angles {BGH} and {GHD} also equals two right angles.",
+              visible: ["AB","CD","D","EF","G","H","AGH","GHD","EGB","BGH"],
+              highlighted: ["EGB","BGH","GHD"],
+              justifications: [{ ref: "I.13" }, { ref: "C.N.1" }] },
+            { text: "Therefore a straight line falling on parallel straight lines makes the alternate angles equal to one another, the exterior angle equal to the interior and opposite angle, and the sum of the interior angles on the same side equal to two right angles.",
+              visible: ["AB","CD","D","EF","G","H","AGH","GHD","EGB","BGH"],
+              highlighted: ["AGH","GHD","EGB","BGH"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.5": "/elements/books/bookI/postulates/post5/",
+        "I.13":     "/elements/books/bookI/propositions/propI13/",
+        "I.15":     "/elements/books/bookI/propositions/propI15/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/"
     });
 </script>
 </figure>
 
-If the angle *AGH* does not equal the angle *GHD,* then one of them is greater. Let the angle *AGH* be greater.
+If the angle {AGH} does not equal the angle {GHD}, then one of them is greater. Let the angle {AGH} be greater.
 
-Add the angle *BGH* to each. Therefore the sum of the angles *AGH* and *BGH* is greater than the sum of the angles *BGH* and *GHD.*
+Add the angle {BGH} to each. Therefore the sum of the angles {AGH} and {BGH} is greater than the sum of the angles {BGH} and {GHD}.
 
-But sum of the angles *AGH* and *BGH* equals two right angles. Therefore the sum of the angles *BGH* and *GHD* is less than two right angles. [!just I.13]
+But sum of the angles {AGH} and {BGH} equals two right angles. Therefore the sum of the angles {BGH} and {GHD} is less than two right angles. [!just I.13]
 
 [!just I.Post.5]
 
-But straight lines produced indefinitely from angles less than two right angles meet. Therefore *AB* and *CD,* if produced indefinitely, will meet. But they do not meet, because they are by hypothesis parallel.
+But straight lines produced indefinitely from angles less than two right angles meet. Therefore {AB} and {CD}, if produced indefinitely, will meet. But they do not meet, because they are by hypothesis parallel.
 
-Therefore the angle *AGH* is not unequal to the angle *GHD,* and therefore equals it.
+Therefore the angle {AGH} is not unequal to the angle {GHD}, and therefore equals it.
 
-Again, the angle *AGH* equals the angle *EGB.* Therefore the angle *EGB* also equals the angle *GHD.* [!just I.15, C.N.1]
+Again, the angle {AGH} equals the angle {EGB}. Therefore the angle {EGB} also equals the angle {GHD}. [!just I.15, C.N.1]
 
-Add the angle *BGH* to each. Therefore the sum of the angles *EGB* and *BGH* equals the sum of the angles *BGH* and *GHD.* [!just C.N.2]
+Add the angle {BGH} to each. Therefore the sum of the angles {EGB} and {BGH} equals the sum of the angles {BGH} and {GHD}. [!just C.N.2]
 
-But the sum of the angles *EGB* and *BGH* equals two right angles. Therefore the sum of the angles *BGH* and *GHD* also equals two right angles. [!just I.13; C.N.1]
+But the sum of the angles {EGB} and {BGH} equals two right angles. Therefore the sum of the angles {BGH} and {GHD} also equals two right angles. [!just I.13; C.N.1]
 
 Therefore *a straight line falling on parallel straight lines makes the alternate angles equal to one another, the exterior angle equal to the interior and opposite angle, and the sum of the interior angles on the same side equal to two right angles.*
 
@@ -120,9 +188,9 @@ It is not possible to illustrate hyperbolic geometry with correct distances on a
 
 Once this model is accepted, it is easy to see why there are infinitely many "lines" parallel to a given "line" through a given "point." That is just that there are infinitely many circles orthogonal to the fixed circle which don't intersect the given circle orthogonal to the fixed circle but do pass through the given point.
 
-In the diagram, *AB* is a "line" in the hyperbolic plane, that is, a circle orthogonal to the circumference of the shaded disk which represents the hyperbolic plane. A "point" *C* lies in that plane. Two "lines" are shown passing through *C,* one gets close to the line *AB* in the direction of *A,* the other gets close in the direction of *B.* But these two "lines" don't intersect *AB* since the arcs representing them only intersect on the circumference of the disk, and points on the circumference don't represent "points" in the hyperbolic plane.
+In the diagram, {AB} is a "line" in the hyperbolic plane, that is, a circle orthogonal to the circumference of the shaded disk which represents the hyperbolic plane. A "point" {C} lies in that plane. Two "lines" are shown passing through {C}, one gets close to the line {AB} in the direction of {A}, the other gets close in the direction of {B}. But these two "lines" don't intersect {AB} since the arcs representing them only intersect on the circumference of the disk, and points on the circumference don't represent "points" in the hyperbolic plane.
 
-These two parallel "lines" are called the *asymptotic* parallels of *AB* since they approach *AB* at one end or the other. There are infinitely many parallels between them. (In much of the literature on hyperbolic geometry, the word "parallels" is used for what are called "asymptotic parallels" here, while "nonintersecting lines" is used for what are called "parallels" here.)
+These two parallel "lines" are called the *asymptotic* parallels of {AB} since they approach {AB} at one end or the other. There are infinitely many parallels between them. (In much of the literature on hyperbolic geometry, the word "parallels" is used for what are called "asymptotic parallels" here, while "nonintersecting lines" is used for what are called "parallels" here.)
 
 #### Use of Proposition 29
 

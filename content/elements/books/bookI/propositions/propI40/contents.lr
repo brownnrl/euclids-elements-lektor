@@ -15,12 +15,33 @@ statement: Equal triangles which are on equal bases and on the same side are als
 ----
 proof:
 
-Let *ABC* and *CDE* be equal triangles on equal bases *BC* and *CE* and on the same side.
+Let {ABC} and {CDE} be equal triangles on equal bases {BC} and {CE} and on the same side.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="210" tabindex="0"></canvas>
 <noscript><img alt="I.40 diagram" src="propI40.gif"/></noscript>
 <script type="text/javascript">
+    // The equal-bases twin of I.39, and built to read as its twin: same reductio
+    // rhythm, same colour logic, citing I.38 where I.39 cites I.37. ABC and DCE
+    // are the equal pair, so they share cyan; FCE, the region the supposition
+    // forces in, is orange. F rides on CD, so triangle FCE nests strictly INSIDE
+    // triangle DCE and Euclid's "the greater equals the less" is something you
+    // can see rather than merely read.
+    //
+    // B, C, E are collinear (E = extend of BC by its own length), so one BE line
+    // draws the whole bottom parallel and the equal bases BC / CE ride on it as
+    // hover targets. Fills are gated pairwise -- slide 4 shows ABC vs FCE, slide
+    // 5 shows DCE vs FCE -- and the hypothetical (F, AF, FE) is deferred to the
+    // slide that supposes it and dropped again at the close, so the walk ends on
+    // the clean true figure. Unlike I.39, this original DOES fill its triangles,
+    // so ABC / DCE stay filled at rest; only the new FCE is initiallyHidden.
+    var CORE  = ["A","B","C","D","E","BE","BC","CE","AB","AC","CD","DE"];
+    var BASE  = CORE.concat(["ABC","DCE"]);
+    var JOIN  = BASE.concat(["AD"]);
+    var FRAME = CORE.concat(["AD","F","AF","EF","FC"]);
+    var HYP   = FRAME.concat(["ABC","DCE"]);
+    var CMP1  = FRAME.concat(["ABC","FCE"]);
+    var CMP2  = FRAME.concat(["DCE","FCE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -29,31 +50,100 @@ Let *ABC* and *CDE* be equal triangles on equal bases *BC* and *CE* and on the s
             "B;point;free;30,170",
             "C;point;free;130,170",
             "A;point;free;60,40",
-            "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random",
+            // Invisible carrier: the parallel to BC through A. D slides on it, so
+            // the resting figure already satisfies the conclusion; the reductio's
+            // F is what departs from it.
             "AD';line;parallel;A,B,C;0;0;0",
             "D;point;lineSlider;AD',190,40",
+            // E extends BC by its own length, so CE equals BC and B, C, E are
+            // collinear -- the equal bases lie along one line.
             "E;point;extend;B,C,B,C",
-            "DCE;polygon;triangle;D,C,E;0;0;0,0,0;random",
-            "AD;line;connect;A,D",
+            // The supposition's point: F slides along CD, so FCE nests in DCE.
             "F;point;lineSlider;C,D,135,60",
+            // The bottom parallel through B, C, E; the join AD; the triangles' sides.
+            "BE;line;connect;B,E",
+            "AD;line;connect;A,D",
+            "AB;line;connect;A,B",
+            "AC;line;connect;A,C",
+            "CD;line;connect;C,D",
+            "DE;line;connect;D,E",
+            // The supposed parallel through A, and the join FE.
             "AF;line;connect;A,F",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // Equal bases and FC (a sub-segment of CD): hover targets only.
+            "BC;line;connect;B,C;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "FC;line;connect;F,C;0;0;0",
+            // Regions. The equal pair shares cyan; the supposition's FCE is orange.
+            "ABC;polygon;triangle;A,B,C;0;0;0,0,0;cyan",
+            "DCE;polygon;triangle;D,C,E;0;0;0,0,0;cyan",
+            "FCE;polygon;triangle;F,C,E;0;0;0;orange"
         ],
+        aliases: { "CDE": "DCE", "FE": "EF", "BA": "AB", "CA": "AC", "DC": "CD",
+                   "ED": "DE", "CF": "FC", "FA": "AF", "DA": "AD", "EB": "BE",
+                   "CB": "BC", "EC": "CE" },
+        initiallyHidden: ["FCE"],
+        deferDraggables: ["F"],
+        slides: [
+            { text: "Let {ABC} and {CDE} be equal triangles on equal bases {BC} and {CE} and on the same side. I say that they are also in the same parallels.",
+              visible: BASE,
+              highlighted: ["ABC","DCE","BC","CE"] },
+            { text: "Join {AD}. I say that {AD} is parallel to {BE}.",
+              visible: JOIN,
+              highlighted: ["AD","BE"],
+              transition: { animations: [ { elem: "AD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "If not, draw {AF} through {A} parallel to {BE}, and join {FE}.",
+              visible: HYP,
+              highlighted: ["AF","EF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.31" }, { ref: "I.Post.1" }] },
+            { text: "Then the triangle {ABC} equals the triangle {FCE}, for they are on equal bases {BC} and {CE} and in the same parallels {BE} and {AF}.",
+              visible: CMP1,
+              highlighted: ["ABC","FCE","BC","CE"],
+              transition: { animations: [ { elem: "FCE", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.38" }] },
+            { text: "But the triangle {ABC} equals the triangle {DCE}, therefore {DCE} also equals {FCE} — the greater equals the less, which is impossible.",
+              visible: CMP2,
+              highlighted: ["DCE","FCE"],
+              justifications: [{ ref: "C.N.1" }] },
+            { text: "Therefore {AF} is not parallel to {BE}.",
+              visible: HYP,
+              highlighted: ["AF","BE"] },
+            { text: "Similarly we can prove that neither is any other straight line except {AD}. Therefore {AD} is parallel to {BE}.",
+              visible: JOIN,
+              highlighted: ["AD","BE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "I.38":     "/elements/books/bookI/propositions/propI38/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/"
     });
 </script>
 </figure>
 
 I say that they are also in the same parallels.
 
-Join *AD.* I say that *AD* is parallel to *BE.* [!just I.Post.1]
+Join {AD}. I say that {AD} is parallel to {BE}. [!just I.Post.1]
 
-If not, draw *AF* through *A* parallel to *BE,* and join *FE.* [!just I.31, I.Post.1]
+If not, draw {AF} through {A} parallel to {BE}, and join {FE}. [!just I.31, I.Post.1]
 
-Therefore the triangle *ABC* equals the triangle *FCE,* for they are on equal bases *BC* and *CE* and in the same parallels *BE* and *AF.* [!just I.38]
+Therefore the triangle {ABC} equals the triangle {FCE}, for they are on equal bases {BC} and {CE} and in the same parallels {BE} and {AF}. [!just I.38]
 
-But the triangle *ABC* equals the triangle *DCE,* therefore the triangle *DCE* also equals the triangle *FCE,* the greater equals the less, which is impossible. Therefore *AF* is not parallel to *BE.* [!just C.N.1]
+But the triangle {ABC} equals the triangle {DCE}, therefore the triangle {DCE} also equals the triangle {FCE}, the greater equals the less, which is impossible. Therefore {AF} is not parallel to {BE}. [!just C.N.1]
 
-Similarly we can prove that neither is any other straight line except *AD,* therefore *AD* is parallel to *BE.*
+Similarly we can prove that neither is any other straight line except {AD}, therefore {AD} is parallel to {BE}.
 
 Therefore *equal triangles which are on equal bases and on the same side are also in the same parallels.*
 
@@ -61,7 +151,7 @@ Therefore *equal triangles which are on equal bases and on the same side are als
 ----
 guide:
 
-The statement and the setting out of this proposition are not up to Euclid's standards. This is supposed to be a converse to @I.38. The statement should state the the bases are along the same line, but it doesn't. There is no justification for assuming that the point *C* is a common vertex of the two triangles. Fortunately, the proof works just as well if *C* is split into two points.
+The statement and the setting out of this proposition are not up to Euclid's standards. This is supposed to be a converse to @I.38. The statement should state the the bases are along the same line, but it doesn't. There is no justification for assuming that the point {C} is a common vertex of the two triangles. Fortunately, the proof works just as well if {C} is split into two points.
 
 For some of the propositions and many of the lemmas and corollaries in the *Elements,* there is evidence that Euclid did not write them, but they were added later. The process of incorporating new material in textbooks was almost automatic when the books were copied by hand instead of printed. Scholars wrote comments (called "scholia", singular "scholium") in the margins of the texts, and copyists (some of whom were later scholars) would include those comments as part of the text in their new copies.
 

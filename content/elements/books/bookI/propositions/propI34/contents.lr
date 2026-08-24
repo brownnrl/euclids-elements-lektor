@@ -15,9 +15,9 @@ statement: In parallelogrammic areas the opposite sides and angles equal one ano
 ----
 proof:
 
-Let *ACDB* be a parallelogrammic area, and *BC* its diameter.
+Let {ACDB|CABD} be a parallelogrammic area, and {BC} its diameter.
 
-I say that the opposite sides and angles of the parallelogram *ACDB* equal one another, and the diameter *BC* bisects it.
+I say that the opposite sides and angles of the parallelogram {ACDB|CABD} equal one another, and the diameter {BC} bisects it.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="200" tabindex="0"></canvas>
@@ -33,29 +33,109 @@ I say that the opposite sides and angles of the parallelogram *ACDB* equal one a
             "C;point;free;50,175",
             "CABD;polygon;parallelogram;C,A,B;0;0;0,0,0;random",
             "D;point;vertex;CABD,4",
-            "BC;line;connect;B,C"
+            "BC;line;connect;B,C",
+            // Side hover targets (the parallelogram draws its edges).
+            "AB;line;connect;A,B;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            // Triangle hover targets for the I.26 / I.4 congruence.
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "DCB;polygon;triangle;D,C,B;0;0;0;0",
+            // Angle markers (#91), colour-matched: alternate pairs ∠ABC=∠BCD
+            // (red) and ∠ACB=∠CBD (blue); opposite angles ∠BAC=∠CDB (green).
+            // The whole angles ∠ABD and ∠ACD (each = red+blue) are outer arcs
+            // (orange). Radii pinned (#103): parts @22, whole @30. Triangle owns
+            // `ABC`/`DCB`, so ∠ABC marker = `CBA`, ∠DCB angle = `{DCB|BCD}`.
+            "CBA;sector;angleMarker;B,C,A,22;0;0;red;red",
+            "BCD;sector;angleMarker;C,B,D,22;0;0;red;red",
+            "ACB;sector;angleMarker;C,A,B,22;0;0;blue;blue",
+            "CBD;sector;angleMarker;B,C,D,22;0;0;blue;blue",
+            "BAC;sector;angleMarker;A,B,C,22;0;0;green;green",
+            "CDB;sector;angleMarker;D,C,B,22;0;0;green;green",
+            "ABD;sector;angleMarker;B,A,D,30;0;0;orange;0",
+            "ACD;sector;angleMarker;C,A,D,30;0;0;orange;0"
         ],
+        aliases: { "DC": "CD", "CB": "BC", "BCA": "ACB", "DB": "BD" },
+        slides: [
+            { text: "Let {ACDB|CABD} be a parallelogram, and {BC} its diameter. I say that the opposite sides and angles are equal, and that {BC} bisects it.",
+              visible: ["CABD","BC"],
+              highlighted: ["CABD","BC"] },
+            { text: "Since {AB} is parallel to {CD} and {BC} falls upon them, the alternate angles {ABC|CBA} and {BCD} equal one another.",
+              visible: ["CABD","BC","AB","CD","CBA","BCD"],
+              highlighted: ["CBA","BCD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "CBA", name: geomlib.A.Sector.sweep },
+                  { elem: "BCD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.29" }] },
+            { text: "Again, since {AC} is parallel to {BD} and {BC} falls upon them, the alternate angles {ACB} and {CBD} equal one another.",
+              visible: ["CABD","BC","AC","BD","CBA","BCD","ACB","CBD"],
+              highlighted: ["ACB","CBD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ACB", name: geomlib.A.Sector.sweep },
+                  { elem: "CBD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.29" }] },
+            { text: "So triangles {ABC} and {DCB} have two angles equal — {ABC|CBA} to {DCB|BCD} and {BCA|ACB} to {CBD} — and the common side {BC}. Therefore {AB} equals {CD}, {AC} equals {BD}, and the angle {BAC} equals the angle {CDB}.",
+              visible: ["CABD","BC","ABC","DCB","AB","CD","AC","BD","CBA","BCD","ACB","CBD","BAC","CDB"],
+              highlighted: ["AB","CD","AC","BD","BAC","CDB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BAC", name: geomlib.A.Sector.sweep },
+                  { elem: "CDB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.26" }] },
+            { text: "Since {ABC|CBA} equals {BCD} and {CBD} equals {ACB}, the whole angle {ABD} equals the whole angle {ACD}.",
+              visible: ["CABD","BC","CBA","BCD","ACB","CBD","ABD","ACD"],
+              highlighted: ["ABD","ACD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ABD", name: geomlib.A.Sector.sweep },
+                  { elem: "ACD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "And {BAC} was proved equal to {CDB}. So in a parallelogram the opposite sides and the opposite angles are equal.",
+              visible: ["CABD","BC","AB","CD","AC","BD","BAC","CDB","ABD","ACD"],
+              highlighted: ["BAC","CDB","ABD","ACD"] },
+            { text: "Next, the diameter bisects it. Since {AB} equals {CD}, {BC} is common, and {ABC|CBA} equals {BCD}, the triangle {ABC} equals the triangle {DCB}. So the diameter {BC} bisects the parallelogram {ACDB|CABD}.",
+              visible: ["CABD","BC","ABC","DCB","AB","CD","CBA","BCD"],
+              highlighted: ["ABC","DCB","BC"],
+              transition: { animations: [
+                  { elem: "ABC", name: geomlib.A.Polygon.superpose, args: { onto: "DCB" } } ] },
+              justifications: [{ ref: "I.4" }] },
+            { text: "So in a parallelogram the opposite sides and angles equal one another, and the diameter bisects it.",
+              visible: ["CABD","BC","AB","CD","AC","BD","BAC","CDB","ABD","ACD"],
+              highlighted: ["AB","CD","AC","BD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.4":   "/elements/books/bookI/propositions/propI4/",
+        "I.26":  "/elements/books/bookI/propositions/propI26/",
+        "I.29":  "/elements/books/bookI/propositions/propI29/",
+        "C.N.2": "/elements/books/bookI/commonnotions/cn2/"
     });
 </script>
 </figure>
 
-Since *AB* is parallel to *CD,* and the straight line *BC* falls upon them, therefore the alternate angles *ABC* and *BCD* equal one another. [!just I.29]
+Since {AB} is parallel to {CD}, and the straight line {BC} falls upon them, therefore the alternate angles {ABC|CBA} and {BCD} equal one another. [!just I.29]
 
-Again, since *AC* is parallel to *BD,* and *BC* falls upon them, therefore the alternate angles *ACB* and *CBD* equal one another. [!just I.29]
+Again, since {AC} is parallel to {BD}, and {BC} falls upon them, therefore the alternate angles {ACB} and {CBD} equal one another. [!just I.29]
 
-Therefore *ABC* and *DCB* are two triangles having the two angles *ABC* and *BCA* equal to the two angles *DCB* and *CBD* respectively, and one side equal to one side, namely that adjoining the equal angles and common to both of them, *BC.* Therefore they also have the remaining sides equal to the remaining sides respectively, and the remaining angle to the remaining angle. Therefore the side *AB* equals *CD,* and *AC* equals *BD,* and further the angle *BAC* equals the angle *CDB.* [!just I.26]
+Therefore {ABC} and {DCB} are two triangles having the two angles {ABC|CBA} and {BCA} equal to the two angles {DCB|BCD} and {CBD} respectively, and one side equal to one side, namely that adjoining the equal angles and common to both of them, {BC}. Therefore they also have the remaining sides equal to the remaining sides respectively, and the remaining angle to the remaining angle. Therefore the side {AB} equals {CD}, and {AC} equals {BD}, and further the angle {BAC} equals the angle {CDB}. [!just I.26]
 
-Since the angle *ABC* equals the angle *BCD,* and the angle *CBD* equals the angle *ACB,* therefore the whole angle *ABD* equals the whole angle *ACD.* [!just C.N.2]
+Since the angle {ABC|CBA} equals the angle {BCD}, and the angle {CBD} equals the angle {ACB}, therefore the whole angle {ABD} equals the whole angle {ACD}. [!just C.N.2]
 
-And the angle *BAC* was also proved equal to the angle *CDB.*
+And the angle {BAC} was also proved equal to the angle {CDB}.
 
 Therefore in parallelogrammic areas the opposite sides and angles equal one another.
 
 I say, next, that the diameter also bisects the areas.
 
-Since *AB* equals *CD,* and *BC* is common, the two sides *AB* and *BC* equal the two sides *DC* and *CB* respectively, and the angle *ABC* equals the angle *BCD.* Therefore the base *AC* also equals *DB,* and the triangle *ABC* equals the triangle *DCB.* [!just I.4]
+Since {AB} equals {CD}, and {BC} is common, the two sides {AB} and {BC} equal the two sides {DC} and {CB} respectively, and the angle {ABC|CBA} equals the angle {BCD}. Therefore the base {AC} also equals {DB}, and the triangle {ABC} equals the triangle {DCB}. [!just I.4]
 
-Therefore the diameter *BC* bisects the parallelogram *ACDB.*
+Therefore the diameter {BC} bisects the parallelogram {ACDB|CABD}.
 
 Therefore *in parallelogrammic areas the opposite sides and angles equal one another, and the diameter bisects the areas.*
 

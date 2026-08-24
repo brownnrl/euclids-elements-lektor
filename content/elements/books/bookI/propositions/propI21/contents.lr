@@ -15,9 +15,9 @@ statement: If from the ends of one of the sides of a triangle two straight lines
 ----
 proof:
 
-From the ends *B* and *C* of one of the sides *BC* of the triangle *ABC,* let the two straight lines *BD* and *DC* be constructed meeting within the triangle.
+From the ends {B} and {C} of one of the sides {BC} of the triangle {ABC}, let the two straight lines {BD} and {DC} be constructed meeting within the triangle.
 
-I say that the sum of *BD* and *DC* is less than the sum of the remaining two sides of the triangle *BA* and *AC,* but *BD* and *DC* contain an angle *BDC* greater than the angle *BAC.*
+I say that the sum of {BD} and {DC} is less than the sum of the remaining two sides of the triangle {BA} and {AC}, but {BD} and {DC} contain an angle {BDC} greater than the angle {BAC}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="220" height="220" tabindex="0"></canvas>
@@ -37,33 +37,133 @@ I say that the sum of *BD* and *DC* is less than the sum of the remaining two si
             "CD;line;connect;C,D",
             "E;point;intersection;B,D,A,C",
             "DE;line;connect;D,E",
-            "BCD;polygon;triangle;B,C,D;0;0;0;random"
+            "BCD;polygon;triangle;B,C,D;0;0;0;random",
+            // Sub-triangles used in the argument (zero-color highlight
+            // targets): ABE (I.20 gives AB+AE > BE) and CDE (I.20 gives
+            // CE+ED > CD; also the I.16 exterior-angle step).
+            "ABE;polygon;triangle;A,B,E;0;0;0;0",
+            "CDE;polygon;triangle;C,D,E;0;0;0;0",
+            // Zero-color hover / segment targets. BE is BD produced to E;
+            // AE + EC = AC split at E; AB, BC are the outer sides.
+            "BE;line;connect;B,E;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            // Angle markers. The outer apex BAC at A; the contained angle
+            // BDC at D; and the single angle at E that is both the interior
+            // ∠CED of △CDE and the exterior ∠CEB of △ABE (B, D, E collinear,
+            // so they coincide) — named ECB, reached as {CED|ECB}/{CEB|ECB}.
+            "BAC;sector;angleMarker;A,B,C",
+            "BDC;sector;angleMarker;D,B,C",
+            "ECB;sector;angleMarker;E,C,B"
         ],
+        deferDraggables: ["D"],
+        aliases: {
+            "BA":  "AB",
+            "DC":  "CD",
+            "CE":  "EC",
+            "ED":  "DE",
+            "DB":  "BD",
+            "EB":  "BE",
+            "CED": "CDE"
+        },
+        slides: [
+            { text: "From the ends {B} and {C} of one of the sides {BC} of the triangle {ABC}, let the two straight lines {BD} and {DC} be constructed meeting within the triangle.",
+              visible: ["ABC","BCD","D","BD","CD"],
+              highlighted: ["BC","BD","CD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "D",  name: geomlib.A.Point.appear },
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that the sum of {BD} and {DC} is less than the sum of the remaining two sides of the triangle {BA} and {AC}, but {BD} and {DC} contain an angle {BDC} greater than the angle {BAC}.",
+              visible: ["ABC","BCD","D","BD","CD","BDC","BAC"],
+              highlighted: ["BD","CD","AB","AC","BDC","BAC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BDC", name: geomlib.A.Sector.sweep },
+                  { elem: "BAC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Draw {BD} through to {E}.",
+              visible: ["ABC","BCD","D","BD","CD","E","DE","BE"],
+              highlighted: ["BE"],
+              transition: { animations: [
+                  { elem: "E",  name: geomlib.A.Point.appear },
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Since in any triangle the sum of two sides is greater than the remaining one, therefore, in the triangle {ABE}, the sum of the two sides {AB} and {AE} is greater than {BE}.",
+              visible: ["ABC","BCD","D","BD","CD","E","DE","BE","ABE","AB","AE"],
+              highlighted: ["ABE","AB","AE","BE"],
+              transition: { animations: [ { elem: "ABE", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "I.20" }] },
+            { text: "Add {EC} to each. Then the sum of {BA} and {AC} is greater than the sum of {BE} and {EC}.",
+              visible: ["ABC","BCD","D","BD","CD","E","DE","BE","ABE","AB","AE","EC","AC"],
+              highlighted: ["AB","AC","BE","EC"],
+              justifications: [{ ref: "I.20" }, { ref: "C.N." }] },
+            { text: "Again, since, in the triangle {CED}, the sum of the two sides {CE} and {ED} is greater than {CD}, add {DB} to each, therefore the sum of {CE} and {EB} is greater than the sum of {CD} and {DB}.",
+              visible: ["ABC","BCD","D","BD","CD","E","DE","BE","ABE","AB","AE","EC","AC","CDE"],
+              highlighted: ["CDE","EC","DE","CD","BD","BE"],
+              transition: { animations: [ { elem: "CDE", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "I.20" }, { ref: "C.N." }] },
+            { text: "But the sum of {BA} and {AC} was proved greater than the sum of {BE} and {EC}, therefore the sum of {BA} and {AC} is much greater than the sum of {BD} and {DC}.",
+              visible: ["ABC","BCD","D","BD","CD","E","DE","BE","ABE","AB","AE","EC","AC","CDE"],
+              highlighted: ["AB","AC","BD","CD"],
+              justifications: [{ ref: "C.N." }] },
+            { text: "Again, since in any triangle the exterior angle is greater than the interior and opposite angle, therefore, in the triangle {CDE}, the exterior angle {BDC} is greater than the angle {CED|ECB}.",
+              visible: ["ABC","BCD","D","BD","CD","E","DE","BE","ABE","AB","AE","EC","AC","CDE","BDC","BAC","ECB"],
+              highlighted: ["BDC","ECB","CDE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BDC", name: geomlib.A.Sector.sweep },
+                  { elem: "ECB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.16" }] },
+            { text: "For the same reason, moreover, in the triangle {ABE} the exterior angle {CEB|ECB} is greater than the angle {BAC}. But the angle {BDC} was proved greater than the angle {CEB|ECB}, therefore the angle {BDC} is much greater than the angle {BAC}.",
+              visible: ["ABC","BCD","D","BD","CD","E","DE","BE","ABE","AB","AE","EC","AC","CDE","BDC","BAC","ECB"],
+              highlighted: ["ABE","ECB","BAC","BDC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ECB", name: geomlib.A.Sector.sweep },
+                  { elem: "BAC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.16" }, { ref: "C.N." }] },
+            { text: "Therefore if from the ends of one of the sides of a triangle two straight lines are constructed meeting within the triangle, then the sum of the straight lines so constructed is less than the sum of the remaining two sides of the triangle, but the constructed straight lines contain a greater angle than the angle contained by the remaining two sides.",
+              visible: ["ABC","BCD","D","BD","CD","E","DE","BE","ABE","AB","AE","EC","AC","CDE","BDC","BAC","ECB"],
+              highlighted: ["BD","CD","AB","AC","BDC","BAC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.16":     "/elements/books/bookI/propositions/propI16/",
+        "I.20":     "/elements/books/bookI/propositions/propI20/",
+        "C.N.":     "/elements/books/bookI/commonnotions/"
     });
 </script>
 </figure>
 
-Draw *BD* through to *E.* [!just I.Post.2]
+Draw {BD} through to {E}. [!just I.Post.2]
 
-Since in any triangle the sum of two sides is greater than the remaining one, therefore, in the triangle *ABE,* the sum of the two sides *AB* and *AE* is greater than *BE.* [!just I.20]
+Since in any triangle the sum of two sides is greater than the remaining one, therefore, in the triangle {ABE}, the sum of the two sides {AB} and {AE} is greater than {BE}. [!just I.20]
 
 [!just C.N.]
 
-Add *EC* to each. Then the sum of *BA* and *AC* is greater than the sum of *BE* and *EC.*
+Add {EC} to each. Then the sum of {BA} and {AC} is greater than the sum of {BE} and {EC}.
 
 [!just I.20; C.N.]
 
-Again, since, in the triangle *CED,* the sum of the two sides *CE* and *ED* is greater than *CD,* add *DB* to each, therefore the sum of *CE* and *EB* is greater than the sum of *CD* and *DB.*
+Again, since, in the triangle {CED}, the sum of the two sides {CE} and {ED} is greater than {CD}, add {DB} to each, therefore the sum of {CE} and {EB} is greater than the sum of {CD} and {DB}.
 
 [!just C.N.]
 
-But the sum of *BA* and *AC* was proved greater than the sum of *BE* and *EC,* therefore the sum of *BA* and *AC* is much greater than the sum of *BD* and *DC.*
+But the sum of {BA} and {AC} was proved greater than the sum of {BE} and {EC}, therefore the sum of {BA} and {AC} is much greater than the sum of {BD} and {DC}.
 
-Again, since in any triangle the exterior angle is greater than the interior and opposite angle, therefore, in the triangle *CDE,* the exterior angle *BDC* is greater than the angle *CED.* [!just I.16]
+Again, since in any triangle the exterior angle is greater than the interior and opposite angle, therefore, in the triangle {CDE}, the exterior angle {BDC} is greater than the angle {CED|ECB}. [!just I.16]
 
 [!just I.16; C.N.]
 
-For the same reason, moreover, in the triangle *ABE* the exterior angle *CEB* is greater than the angle *BAC.* But the angle *BDC* was proved greater than the angle *CEB,* therefore the angle *BDC* is much greater than the angle *BAC.*
+For the same reason, moreover, in the triangle {ABE} the exterior angle {CEB|ECB} is greater than the angle {BAC}. But the angle {BDC} was proved greater than the angle {CEB|ECB}, therefore the angle {BDC} is much greater than the angle {BAC}.
 
 Therefore *if from the ends of one of the sides of a triangle two straight lines are constructed meeting within the triangle, then the sum of the straight lines so constructed is less than the sum of the remaining two sides of the triangle, but the constructed straight lines contain a greater angle than the angle contained by the remaining two sides.*
 

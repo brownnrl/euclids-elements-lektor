@@ -17,7 +17,7 @@ statement: To construct a triangle out of three straight lines which equal three
 ----
 proof:
 
-Let the three given straight lines be *A, B,* and *C,* and let the sum of any two of these be greater than the remaining one, namely, *A* plus *B* greater than *C, A* plus *C* greater than *B,* and *B* plus *C* greater than *B.* [!just I.20]
+Let the three given straight lines be {A}, {B}, and {C}, and let the sum of any two of these be greater than the remaining one, namely, {A} plus {B} greater than {C}, {A} plus {C} greater than {B}, and {B} plus {C} greater than {A}.<sup class="fn-ref" id="fnref-1"><a href="#fn-1">1</a></sup> [!just I.20]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="360" height="310" tabindex="0"></canvas>
@@ -59,33 +59,120 @@ Let the three given straight lines be *A, B,* and *C,* and let the sum of any tw
             "KL;line;bichord;DKL,KLH;0;0;0",
             "K;point;last;KL",
             "L;point;first;KL",
-            "FGK;polygon;triangle;F,G,K;0;0;black;random"
+            "FGK;polygon;triangle;F,G,K;0;0;black;random",
+            // The two joined sides, drawn black; they coincide with the
+            // FGK polygon's edges, so the join animation leaves no artifact.
+            "KF;line;connect;K,F;black",
+            "KG;line;connect;K,G;black"
         ],
+        deferDraggables: ["D", "E"],
+        aliases: {
+            "KFG": "FGK",
+            "FK":  "KF",
+            "GK":  "KG",
+            "FD":  "DF",
+            "LKH": "KLH"
+        },
+        slides: [
+            { text: "Let the three given straight lines be {A}, {B}, and {C}, and let the sum of any two of these be greater than the remaining one, namely, {A} plus {B} greater than {C}, {A} plus {C} greater than {B}, and {B} plus {C} greater than {A}¹.",
+              visible: ["A","B","C"],
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "I.20" }] },
+            { text: "It is required to construct a triangle out of straight lines equal to {A}, {B}, and {C}.",
+              visible: ["A","B","C"],
+              highlighted: ["A","B","C"] },
+            { text: "Set out a straight line {DE}, terminated at {D} but of infinite length in the direction of {E}.",
+              visible: ["A","B","C","D","E","DE"],
+              highlighted: ["DE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "D",  name: geomlib.A.Point.appear },
+                  { elem: "E",  name: geomlib.A.Point.appear },
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Make {DF} equal to {A}, {FG} equal to {B}, and {GH} equal to {C}.",
+              visible: ["A","B","C","D","E","DE","F","DF","G","FG","H","GH"],
+              highlighted: ["DF","FG","GH","A","B","C"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F", name: geomlib.A.Point.appear },
+                  { elem: "G", name: geomlib.A.Point.appear },
+                  { elem: "H", name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.2" }, { ref: "I.3" }] },
+            { text: "Describe the circle {DKL} with center {F} and radius {FD}.",
+              visible: ["A","B","C","D","E","DE","F","DF","G","FG","H","GH","DKL"],
+              highlighted: ["DKL","DF"],
+              transition: { animations: [ { elem: "DKL", name: geomlib.A.Circle.compass } ] },
+              justifications: [{ ref: "I.Post.3" }] },
+            { text: "Again, describe the circle {KLH} with center {G} and radius {GH}.",
+              visible: ["A","B","C","D","E","DE","F","DF","G","FG","H","GH","DKL","KLH"],
+              highlighted: ["KLH","GH"],
+              transition: { animations: [ { elem: "KLH", name: geomlib.A.Circle.compass } ] } },
+            { text: "Join {KF} and {KG}.",
+              visible: ["A","B","C","D","E","DE","F","DF","G","FG","H","GH","DKL","KLH","K","KF","KG"],
+              highlighted: ["KF","KG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "K",  name: geomlib.A.Point.appear },
+                  { elem: "KF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "I say that the triangle {KFG} has been constructed out of three straight lines equal to {A}, {B}, and {C}.",
+              visible: ["A","B","C","D","E","DE","F","DF","G","FG","H","GH","DKL","KLH","K","KF","KG","FGK"],
+              highlighted: ["FGK"],
+              transition: { animations: [ { elem: "FGK", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Since the point {F} is the center of the circle {DKL}, therefore {FD} equals {FK}. But {FD} equals {A}, therefore {KF} also equals {A}.",
+              visible: ["A","B","C","D","E","DE","F","DF","G","FG","H","GH","DKL","KLH","K","KF","KG","FGK"],
+              highlighted: ["DKL","DF","KF","A"],
+              justifications: [{ ref: "I.Def.16" }, { ref: "C.N.1" }] },
+            { text: "Again, since the point {G} is the center of the circle {LKH}, therefore {GH} equals {GK}. But {GH} equals {C}, therefore {KG} also equals {C}.",
+              visible: ["A","B","C","D","E","DE","F","DF","G","FG","H","GH","DKL","KLH","K","KF","KG","FGK"],
+              highlighted: ["KLH","GH","KG","C"],
+              justifications: [{ ref: "I.Def.16" }, { ref: "C.N.1" }] },
+            { text: "And {FG} also equals {B}, therefore the three straight lines {KF}, {FG}, and {GK} equal the three straight lines {A}, {B}, and {C}.",
+              visible: ["A","B","C","D","E","DE","F","DF","G","FG","H","GH","DKL","KLH","K","KF","KG","FGK"],
+              highlighted: ["KF","FG","KG","A","B","C"] },
+            { text: "Therefore out of the three straight lines {KF}, {FG}, and {GK}, which equal the three given straight lines {A}, {B}, and {C}, the triangle {KFG} has been constructed.",
+              visible: ["A","B","C","D","E","DE","F","DF","G","FG","H","GH","DKL","KLH","K","KF","KG","FGK"],
+              highlighted: ["FGK","KF","FG","KG","A","B","C"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.Post.3": "/elements/books/bookI/postulates/post3/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.20":     "/elements/books/bookI/propositions/propI20/",
+        "I.Def.16": "/elements/books/bookI/definitions/defI16/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/"
     });
 </script>
 </figure>
 
-It is required to construct a triangle out of straight lines equal to *A, B,* and *C.*
+It is required to construct a triangle out of straight lines equal to {A}, {B}, and {C}.
 
-Set out a straight line *DE,* terminated at *D* but of infinite length in the direction of *E.* Make *DF* equal to A, FG equal to *B,* and *GH* equal to *C.* [!just I.Post.2; I.3]
+Set out a straight line {DE}, terminated at {D} but of infinite length in the direction of {E}. Make {DF} equal to {A}, {FG} equal to {B}, and {GH} equal to {C}. [!just I.Post.2; I.3]
 
-Describe the circle *DKL* with center *F* and radius *FD.* Again, describe the circle *KLH* with center *G* and radius *GH.* Join *KF* and *KG.* [!just I.Post.3; I.Post.1]
+Describe the circle {DKL} with center {F} and radius {FD}. Again, describe the circle {KLH} with center {G} and radius {GH}. Join {KF} and {KG}. [!just I.Post.3; I.Post.1]
 
-I say that the triangle *KFG* has been constructed out of three straight lines equal to *A, B,* and *C.*
+I say that the triangle {KFG} has been constructed out of three straight lines equal to {A}, {B}, and {C}.
 
-Since the point *F* is the center of the circle *DKL,* therefore *FD* equals *FK.* But *FD* equals *A,* therefore *KF* also equals *A.* [!just I.Def.16; C.N.1]
+Since the point {F} is the center of the circle {DKL}, therefore {FD} equals {FK}. But {FD} equals {A}, therefore {KF} also equals {A}. [!just I.Def.16; C.N.1]
 
-Again, since the point *G* is the center of the circle *LKH,* therefore *GH* equals *GK.* But *GH* equals *C,* therefore *KG* also equals *C.* [!just I.Def.16; C.N.1]
+Again, since the point {G} is the center of the circle {LKH}, therefore {GH} equals {GK}. But {GH} equals {C}, therefore {KG} also equals {C}. [!just I.Def.16; C.N.1]
 
-And *FG* also equals *B,* therefore the three straight lines *KF, FG,* and GK equal the three straight lines *A, B,* and C.
+And {FG} also equals {B}, therefore the three straight lines {KF}, {FG}, and {GK} equal the three straight lines {A}, {B}, and {C}.
 
-Therefore out of the three straight lines *KF, FG,* and *GK,* which equal the three given straight lines *A, B,* and C, the triangle *KFG* has been constructed.
+Therefore out of the three straight lines {KF}, {FG}, and {GK}, which equal the three given straight lines {A}, {B}, and {C}, the triangle {KFG} has been constructed.
 
 <div class="qed">Q.E.F.</div>
 ----
 guide:
 
-(Be sure to change the lengths of *B*, *C*, and *D* in the diagram to see what effect that has. You can drag their ends to change their lengths.)
+(Be sure to change the lengths of {A}, {B}, and {C}<sup class="fn-ref" id="fnref-2"><a href="#fn-2">2</a></sup> in the diagram to see what effect that has. You can drag their ends to change their lengths.)
 
 The qualifier in the statement of the proposition, "thus it is necessary that the sum of any two of the straight lines should be greater than the remaining one," refers to the triangle inequality, Proposition @I.20. This condition is, indeed, necessary. It is also sufficient, but Euclid failed to show that sufficiency. Perhaps Euclid (or some later commentator) meant this clause to be a postulate. A full statement of such a postulate might read "If the sum of the radii of two circles is greater than the line joining their centers, and if the sum of each radius and the line joining the centers is greater than the other radius, then the two circles intersect."
 
@@ -94,3 +181,11 @@ This construction is actually a generalization of the very first proposition @I.
 #### Use of Proposition 22
 
 The construction in this proposition is used for the construction in proposition @I.23. It is also used in @XI.22
+
+<hr class="footnotes-sep">
+<section class="footnotes" id="footnotes">
+<ol>
+<li id="fn-1">Typo correction from &ldquo;<em>C</em> greater than <em>B</em>&rdquo; to &ldquo;<em>C</em> greater than <em>A</em>.&rdquo; &mdash;NB, 2026-06-17 <a href="#fnref-1" class="fn-back" aria-label="Back to text">&#8617;</a></li>
+<li id="fn-2">Typo correction from &ldquo;<em>B</em>, <em>C</em>, and <em>D</em>&rdquo; to &ldquo;<em>A</em>, <em>B</em>, and <em>C</em>.&rdquo; &mdash;NB, 2026-06-17 <a href="#fnref-2" class="fn-back" aria-label="Back to text">&#8617;</a></li>
+</ol>
+</section>

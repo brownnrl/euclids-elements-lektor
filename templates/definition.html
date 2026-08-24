@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% import "_macros_refs.html" as refs %}
 {% block content %}
 {# Definitions render a theorem box (from `title` + `statement`) and
    an optional Guide section. If `group` is set, this page is part of
@@ -26,6 +27,7 @@
       <h2 id="guide-{{ d.order }}">Guide</h2>
       {{ d.guide }}
     {% endif %}
+    {{ refs.ref_table(d) }}
     {% if not loop.last %}<br>{% endif %}
   {% endfor %}
   {% if group_page and group_page.guide %}
@@ -41,5 +43,6 @@
     <h2 id="guide">Guide</h2>
     {{ this.guide }}
   {% endif %}
+  {{ refs.ref_table(this) }}
 {% endif %}
 {% endblock %}

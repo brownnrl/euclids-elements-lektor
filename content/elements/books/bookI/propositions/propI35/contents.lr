@@ -15,14 +15,20 @@ statement: Parallelograms which are on the same base and in the same parallels e
 ----
 proof:
 
-Let *ABCD* and *EBCF* be parallelograms on the same base *BC* and in the same parallels *AF* and *BC.*
+Let {ABCD} and {EBCF} be parallelograms on the same base {BC} and in the same parallels {AF} and {BC}.
 
-I say that *ABCD* equals the parallelogram *EBCF.*
+I say that {ABCD} equals the parallelogram {EBCF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="210" tabindex="0"></canvas>
 <noscript><img alt="I.35 diagram" src="propI35.gif"/></noscript>
 <script type="text/javascript">
+    // The whole figure stays on screen for every slide; only the angle
+    // indicators (angEAB / angFDC) are gated to the slide that references
+    // them. Per-slide `highlighted` guides the eye instead of hiding parts.
+    var FULL = ["A","B","C","D","E","F","G",
+                "BC","AB","CD","BE","CF","DE","AF","AD","EF","AE","DF",
+                "ABCD","EBCF","EAB","FDC","DGE","GBC","ABGD","EGCF"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -35,7 +41,15 @@ I say that *ABCD* equals the parallelogram *EBCF.*
             "AB;line;connect;A,B",
             "D;point;parallelogram;A,B,C",
             "CD;line;connect;C,D",
-            "E1;point;free;10000,0",
+            // E1 sets how far E' extends past D along the A→D ray (E' = D +
+            // dist(A,E1) along that direction), so it also sets how far E can
+            // slide. Joyce's value is 10000,0 — "direction at infinity".
+            // It was pulled on-canvas as a euclid#138 workaround (present-centring
+            // measured it and shoved the figure off-screen); #138 shipped in
+            // 0.14.0 and now measures only elements that PAINT, so the original
+            // value is safe again. The ;0;0 matters — it is what makes E1
+            // inkless, and therefore unmeasured.
+            "E1;point;free;10000,0;0;0",
             "E';point;extend;A,D,A,E1;0;0",
             "E;point;lineSegmentSlider;D,E',180,40",
             "BE;line;connect;B,E",
@@ -43,21 +57,96 @@ I say that *ABCD* equals the parallelogram *EBCF.*
             "CF;line;connect;C,F",
             "DE;line;connect;D,E",
             "AF;line;connect;A,F",
-            "G;point;intersection;CD,BE"
+            "G;point;intersection;CD,BE",
+            // Top-parallel sub-segment hover targets (AF is the whole parallel).
+            "AD;line;connect;A,D;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "DF;line;connect;D,F;0;0;0",
+            // The two parallelograms as fillable regions (cyan / pink).
+            "ABCD;polygon;quadrilateral;A,B,C,D;0;0;0;cyan",
+            "EBCF;polygon;quadrilateral;E,B,C,F;0;0;0;pink",
+            // Cut-and-paste regions: the congruent triangles (yellow), the
+            // subtracted overlap DGE (orange), the added GBC (green), and the
+            // two remaining trapezia (cyan). Fill only — the boundary segments
+            // are already drawn.
+            "EAB;polygon;triangle;E,A,B;0;0;0;yellow",
+            "FDC;polygon;triangle;F,D,C;0;0;0;yellow",
+            "DGE;polygon;triangle;D,G,E;0;0;0;orange",
+            "GBC;polygon;triangle;G,B,C;0;0;0;green",
+            "ABGD;polygon;quadrilateral;A,B,G,D;0;0;0;cyan",
+            "EGCF;polygon;quadrilateral;E,G,C,F;0;0;0;cyan",
+            // Corresponding angles ∠EAB = ∠FDC (magenta). Triangles own EAB/FDC,
+            // so the angle markers are angEAB / angFDC.
+            "angEAB;sector;angleMarker;A,E,B,22;0;0;magenta;magenta",
+            "angFDC;sector;angleMarker;D,F,C,22;0;0;magenta;magenta"
         ],
+        aliases: { "EA": "AE", "FD": "DF", "DC": "CD", "EB": "BE", "FC": "CF" },
+        deferDraggables: ["E1"],
+        slides: [
+            { text: "Let {ABCD} and {EBCF} be parallelograms on the same base {BC} and in the same parallels {AF} and {BC}. I say that {ABCD} equals {EBCF}.",
+              visible: FULL,
+              highlighted: ["ABCD","EBCF"] },
+            { text: "Since {ABCD} is a parallelogram, {AD} equals {BC}. For the same reason {EF} equals {BC}, so {AD} also equals {EF}.",
+              visible: FULL,
+              highlighted: ["AD","EF","BC"],
+              justifications: [{ ref: "I.34" }] },
+            { text: "And {DE} is common, therefore the whole {AE} equals the whole {DF}.",
+              visible: FULL,
+              highlighted: ["AE","DF","DE"],
+              justifications: [{ ref: "C.N.1" }, { ref: "C.N.2" }] },
+            { text: "But {AB} also equals {DC}, and the angle {EAB|angEAB} equals the angle {FDC|angFDC}. So the two sides {EA} and {AB} equal {FD} and {DC}, and the triangle {EAB} equals the triangle {FDC}.",
+              visible: FULL.concat(["angEAB","angFDC"]),
+              highlighted: ["EAB","FDC","angEAB","angFDC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angEAB", name: geomlib.A.Sector.sweep },
+                  { elem: "angFDC", name: geomlib.A.Sector.sweep },
+                  { elem: "EAB",    name: geomlib.A.Polygon.superpose, args: { onto: "FDC" } } ] },
+              justifications: [{ ref: "I.34" }, { ref: "I.29" }, { ref: "I.4" }] },
+            { text: "Subtract the triangle {DGE} from each. Then the trapezium {ABGD} which remains equals the trapezium {EGCF} which remains.",
+              visible: FULL,
+              highlighted: ["ABGD","EGCF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ABGD", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "EGCF", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "C.N.3" }] },
+            { text: "Add the triangle {GBC} to each. Then the whole parallelogram {ABCD} equals the whole parallelogram {EBCF}.",
+              visible: FULL,
+              highlighted: ["ABCD","EBCF"],
+              transition: { animations: [ { elem: "GBC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "So parallelograms which are on the same base and in the same parallels equal one another.",
+              visible: FULL,
+              highlighted: ["ABCD","EBCF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.4":   "/elements/books/bookI/propositions/propI4/",
+        "I.29":  "/elements/books/bookI/propositions/propI29/",
+        "I.34":  "/elements/books/bookI/propositions/propI34/",
+        "C.N.1": "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2": "/elements/books/bookI/commonnotions/cn2/",
+        "C.N.3": "/elements/books/bookI/commonnotions/cn3/"
     });
 </script>
 </figure>
 
-Since *ABCD* is a parallelogram, therefore *AD* equals *BC.* [!just I.34]
+Since {ABCD} is a parallelogram, therefore {AD} equals {BC}. [!just I.34]
 
-For the same reason *EF* equals *BC,* so that *AD* also equals *EF.* And *DE* is common, therefore the whole *AE* equals the whole *DF.* [!just C.N.1; C.N.2]
+For the same reason {EF} equals {BC}, so that {AD} also equals {EF}. And {DE} is common, therefore the whole {AE} equals the whole {DF}. [!just C.N.1; C.N.2]
 
-But *AB* also equals *DC.* Therefore the two sides *EA* and *AB* equal the two sides *FD* and *DC* respectively, and the angle *FDC* equals the angle *EAB,* the exterior equals the interior. Therefore the base *EB* equals the base *FC,* and the triangle *EAB* equals the triangle *FDC.* [!just I.34; I.29; I.4]
+But {AB} also equals {DC}. Therefore the two sides {EA} and {AB} equal the two sides {FD} and {DC} respectively, and the angle {FDC|angFDC} equals the angle {EAB|angEAB}, the exterior equals the interior. Therefore the base {EB} equals the base {FC}, and the triangle {EAB} equals the triangle {FDC}. [!just I.34; I.29; I.4]
 
-Subtract *DGE* from each. Then the trapezium *ABGD* which remains equals the trapezium *EGCF* which remains. [!just C.N.3]
+Subtract {DGE} from each. Then the trapezium {ABGD} which remains equals the trapezium {EGCF} which remains. [!just C.N.3]
 
-Add the triangle *GBC* to each. Then the whole parallelogram *ABCD* equals the whole parallelogram *EBCF.* [!just C.N.2]
+Add the triangle {GBC} to each. Then the whole parallelogram {ABCD} equals the whole parallelogram {EBCF}. [!just C.N.2]
 
 Therefore *parallelograms which are on the same base and in the same parallels equal one another.*
 

@@ -17,7 +17,7 @@ statement: To place a straight line equal to a given straight line with one end 
 ----
 proof:
 
-Let *A* be the given point, and *BC* the given straight line.
+Let {A} be the given point, and {BC} the given straight line.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="340" height="320" tabindex="0"></canvas>
@@ -33,8 +33,25 @@ geomlib.init({
         "B;point;free;190,160",
         "C;point;free;180,90",
         "BC;line;connect;B,C",
-        "DAB;polygon;equilateralTriangle;A,B;0;0;0;0",
-        "D;point;vertex;DAB,3;black;green",
+        // Joined on slide 3 of the walk-through ("Join the straight
+        // line AB"). The original figure leaves AB implicit in the
+        // triangle's edge; the slideshow needs it addressable.
+        "AB;line;connect;A,B",
+        // Transitionary circles for the verbose I.1 construction on
+        // slide 3 — centre A radius AB and centre B radius BA, the
+        // two compass sweeps whose intersection locates D. Zero
+        // colors keep them out of the static figure entirely
+        // (geomlib >= 0.6.1): they render in the gold emphasis
+        // stroke only while their compass animation runs, stay up
+        // through D's appearance, then fade out with the
+        // post-animation emphasis taper.
+        "ABcirc;circle;radius;A,B;0;0;0;0",
+        "BAcirc;circle;radius;B,A;0;0;0;0",
+        // Invisible helper triangle that derives D (vertex 3). The
+        // prose name "DAB" belongs to the visible polygon at the end
+        // of the list, so this helper carries the -h suffix.
+        "DABh;polygon;equilateralTriangle;A,B;0;0;0;0",
+        "D;point;vertex;DABh,3;black;green",
         "AL;line;extend;D,A,B,C",
         "L;point;last;AL",
         "LE;line;extend;A,L,A,B",
@@ -43,49 +60,171 @@ geomlib.init({
         "G;point;last;BG",
         "GF;line;extend;B,G,A,B",
         "F;point;last;GF;black;0",
-        "CGH;circle;radius;BC;0;0;0;0",
+        // Invisible z-order helper from the original applet ordering;
+        // the visible CGH (brighter face) draws later, on top of GKL.
+        // Renamed from "CGH" so the prose name resolves to the
+        // visible circle below.
+        "CGHh;circle;radius;BC;0;0;0;0",
         "BH;line;extend;G,B,G,B;0;0;0",
         "H;point;last;BH;black;0",
         "GKL;circle;radius;D,G;0;0;black;darker",
-        "CGH*;circle;radius;BC;0;0;black;brighter",
+        "CGH;circle;radius;BC;0;0;black;brighter",
         "DK;line;extend;G,D,G,D;0;0;0",
         "K;point;last;DK;black;0",
-        "DAB*;polygon;equilateralTriangle;A,B;0;0;black;random"
+        "DAB;polygon;equilateralTriangle;A,B;0;0;black;random",
+        // Invisible highlight-target lines (the Zeno pattern from
+        // propI.1): zero-color edges draw nothing normally but render
+        // in the gold highlight stroke when a slide or a {NAME} span
+        // calls them out. They name the proof's conceptual segments
+        // that aren't standalone drawn elements — the triangle sides
+        // DA / DB, the full radius runs DL (D→A→L) and DG (D→B→G),
+        // and the produced lines AE (A→L→E) and BF (B→G→F).
+        "DA;line;connect;D,A;0;0;0",
+        "DB;line;connect;D,B;0;0;0",
+        "DL;line;connect;D,L;0;0;0",
+        "DG;line;connect;D,G;0;0;0",
+        "AE;line;connect;A,E;0;0;0",
+        "BF;line;connect;B,F;0;0;0"
     ],
+    // Slideshow walk-through (geomlib >= 0.5.0) with slide-transition
+    // animations (>= 0.6.0). Slides that introduce a construction
+    // animate it in compass-and-straightedge style; the proof-step
+    // slides (7-11) only relight highlights. Slide 3 plays the full
+    // I.1 equilateral-triangle construction — both compass sweeps and
+    // the intersection point D — then the transitionary circles
+    // disappear on the next slide, their work done.
+    slides: [
+        { text: "Let {A} be the given point, and {BC} the given straight line.",
+          visible: ["BC"],
+          transition: {
+              animations: [
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          } },
+        { text: "It is required to place a straight line equal to the given straight line {BC} with one end at the point {A}.",
+          visible: ["BC","AL"],
+          transition: {
+              animations: [
+                  { elem: "AL", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          } },
+        { text: "Join the straight line {AB} from the point {A} to the point {B}, and construct the equilateral triangle {DAB} on it. [the construction of I.1 is shown in full]",
+          visible: ["BC","AB","ABcirc","BAcirc","D","DAB"],
+          transition: {
+              // The verbose I.1 dance: straightedge AB, compass sweep
+              // about A, compass sweep about B, D lands at the
+              // intersection, the triangle traces and fills.
+              animations: [
+                  { elem: "AB",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ABcirc", name: geomlib.A.Circle.compass },
+                  { elem: "BAcirc", name: geomlib.A.Circle.compass },
+                  { elem: "D",      name: geomlib.A.Point.appear },
+                  { elem: "DAB",    name: geomlib.A.Polygon.outlineAndFill }
+              ]
+          },
+          justifications: [{ ref: "I.Post.1" }, { ref: "I.1" }] },
+        { text: "Produce the straight lines {AE} and {BF} in a straight line with {DA} and {DB}.",
+          // The zero-color highlight-target lines named in the caption
+          // must be IN the visible set for hover emphasis to render —
+          // drawEdge bails on visible=false before checking emphasis.
+          visible: ["BC","AB","D","DAB","AL","L","LE","E","BG","G","GF","F","AE","BF","DA","DB"],
+          transition: {
+              // Each produced line runs as one continuous gesture:
+              // A out to L and on to E, then B out to G and on to F.
+              animations: [
+                  { elem: "AL", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "LE", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "BG", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "GF", name: geomlib.A.Line.straightEdgeExtend }
+              ]
+          },
+          justifications: [{ ref: "I.Post.2" }] },
+        { text: "Describe the circle {CGH} with center {B} and radius {BC}.",
+          visible: ["BC","AB","D","DAB","AL","L","LE","E","BG","G","GF","F","CGH","H"],
+          transition: {
+              animations: [
+                  { elem: "CGH", name: geomlib.A.Circle.compass }
+              ]
+          },
+          justifications: [{ ref: "I.Post.3" }] },
+        { text: "And again, describe the circle {GKL} with center {D} and radius {DG}.",
+          // DG included so the caption's {DG} hover can render (see
+          // slide 4's note on zero-color highlight targets).
+          visible: ["BC","AB","D","DAB","AL","L","LE","E","BG","G","GF","F","CGH","H","GKL","K","DG"],
+          transition: {
+              animations: [
+                  { elem: "GKL", name: geomlib.A.Circle.compass }
+              ]
+          },
+          justifications: [{ ref: "I.Post.3" }] },
+        { text: "Since the point {B} is the center of the circle {CGH}, therefore {BC} equals {BG}.",
+          highlighted: ["B","CGH","BC","BG"],
+          justifications: [{ ref: "I.Def.15" }] },
+        { text: "Again, since the point {D} is the center of the circle {GKL}, therefore {DL} equals {DG}.",
+          highlighted: ["D","GKL","DL","DG"],
+          justifications: [{ ref: "I.Def.15" }] },
+        { text: "And in these {DA} equals {DB}, therefore the remainder {AL} equals the remainder {BG}.",
+          highlighted: ["DA","DB","AL","BG"],
+          justifications: [{ ref: "C.N.3" }] },
+        { text: "But {BC} was also proved equal to {BG}, therefore each of the straight lines {AL} and {BC} equals {BG}.",
+          highlighted: ["BC","BG","AL"] },
+        { text: "And things which equal the same thing also equal one another, therefore {AL} also equals {BC}.",
+          highlighted: ["AL","BC"],
+          justifications: [{ ref: "C.N.1" }] },
+        { text: "Therefore the straight line {AL} equal to the given straight line {BC} has been placed with one end at the given point {A}.",
+          highlighted: ["AL","BC","A"],
+          justifications: [{ ref: "Q.E.F." }] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
+});
+
+// Per-page citation lookup for the slideshow's resolveJustification
+// callback — same hand-authored pattern as propI.1.
+window.eucrefs = (window.eucrefs || {});
+Object.assign(window.eucrefs, {
+    "I.Post.1": "/elements/books/bookI/postulates/post1/",
+    "I.Post.2": "/elements/books/bookI/postulates/post2/",
+    "I.Post.3": "/elements/books/bookI/postulates/post3/",
+    "I.1":      "/elements/books/bookI/propositions/propI1/",
+    "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+    "C.N.3":    "/elements/books/bookI/commonnotions/cn3/",
+    "C.N.1":    "/elements/books/bookI/commonnotions/cn1/"
 });
 </script>
 </figure>
 
-It is required to place a straight line equal to the given straight line *BC* with one end at the point *A.*
+It is required to place a straight line equal to the given straight line {BC} with one end at the point {A}.
 
-Join the straight line *AB* from the point *A* to the point *B,* and construct the equilateral triangle *DAB* on it. [!just I.Post.1, I.1]
+Join the straight line {AB} from the point {A} to the point {B}, and construct the equilateral triangle {DAB} on it. [!just I.Post.1, I.1]
 
 [!just I.Post.2; I.Post.3]
 
-Produce the straight lines *AE* and *BF* in a straight line with *DA* and *DB.* Describe the circle *CGH* with center *B* and radius *BC,* and again, describe the circle *GKL* with center *D* and radius *DG.*
+Produce the straight lines {AE} and {BF} in a straight line with {DA} and {DB}. Describe the circle {CGH} with center {B} and radius {BC}, and again, describe the circle {GKL} with center {D} and radius {DG}.
 
-Since the point *B* is the center of the circle *CGH,* therefore *BC* equals *BG.* Again, since the point *D* is the center of the circle *GKL,* therefore *DL* equals *DG.* [!just I.Def.15]
+Since the point {B} is the center of the circle {CGH}, therefore {BC} equals {BG}. Again, since the point {D} is the center of the circle {GKL}, therefore {DL} equals {DG}. [!just I.Def.15]
 
-And in these *DA* equals *DB,* therefore the remainder *AL* equals the remainder *BG.* [!just C.N.3]
+And in these {DA} equals {DB}, therefore the remainder {AL} equals the remainder {BG}. [!just C.N.3]
 
-But *BC* was also proved equal to *BG,* therefore each of the straight lines *AL* and *BC* equals *BG.* And things which equal the same thing also equal one another, therefore *AL* also equals *BC.* [!just C.N.1]
+But {BC} was also proved equal to {BG}, therefore each of the straight lines {AL} and {BC} equals {BG}. And things which equal the same thing also equal one another, therefore {AL} also equals {BC}. [!just C.N.1]
 
-Therefore the straight line *AL* equal to the given straight line *BC* has been placed with one end at the given point *A.*
+Therefore the straight line {AL} equal to the given straight line {BC} has been placed with one end at the given point {A}.
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
 ----
 guide:
 
-This is a very clever construction to solve what seems to be a simple problem. One would like simply to slide the line *BC* along so that one end coincides with the point *A.* But there is no motion in the geometry of Euclid. There is something like motion used in proposition @I.4, but nothing is actually moved there. The only basic constructions that Euclid allows are those described in Postulates 1, 2, and 3. Euclid then builds new constructions (such as the one in this proposition) out of previously described constructions. So at this point, the only constructions available are those of the three postulates and the construction in proposition @I.1, and Euclid uses all four here.
+This is a very clever construction to solve what seems to be a simple problem. One would like simply to slide the line {BC} along so that one end coincides with the point {A}. But there is no motion in the geometry of Euclid. There is something like motion used in proposition @I.4, but nothing is actually moved there. The only basic constructions that Euclid allows are those described in Postulates 1, 2, and 3. Euclid then builds new constructions (such as the one in this proposition) out of previously described constructions. So at this point, the only constructions available are those of the three postulates and the construction in proposition @I.1, and Euclid uses all four here.
 
-Another, different, expectation is that one might use a compass to transfer the distance *BC* over to the point *A.* It is clear from Euclid's use of postulate 3 that the point to be used for the center and a point that will be on the circumference must be constructed before applying the postulate; postulate 3 is not used to transfer distance. Sometimes postulate 3 is likened to a collapsing compass, that is, when the compass is lifted off the drawing surface, it collapses.
+Another, different, expectation is that one might use a compass to transfer the distance {BC} over to the point {A}. It is clear from Euclid's use of postulate 3 that the point to be used for the center and a point that will be on the circumference must be constructed before applying the postulate; postulate 3 is not used to transfer distance. Sometimes postulate 3 is likened to a collapsing compass, that is, when the compass is lifted off the drawing surface, it collapses.
 
 It could well be that in some earlier Greek geometric theory abstracted compasses that could transfer distances. If that speculation is correct, then this proposition would be a late addition to the theory. The construction of the proposition allows a weaker postulate (namely postulate 3) to be assumed.
 
 #### Construction steps
 
-When using a compass and a straightedge to perform this construction there are more circles drawn than shown in the diagram that accompanies the proposition. These are the two circles needed to construct the equilateral triangle *ABD.* One side, *AB,* of that triangle isn't necessary for the construction.
+When using a compass and a straightedge to perform this construction there are more circles drawn than shown in the diagram that accompanies the proposition. These are the two circles needed to construct the equilateral triangle {ABD}. One side, <span class="elem-ref" data-elem="AB" data-canvas="canvas_1">AB</span>, of that triangle isn't necessary for the construction.
 
 Altogether, four circles and two lines are required for this construction.
 
@@ -116,7 +255,15 @@ geomlib.init({
         "L;point;extend;D,A,B,C",
         "AL;line;connect;A,L;0;0;blue",
         "LE;line;extend;A,L,A,B",
-        "GF;line;extend;B,G,A,B"
+        "GF;line;extend;B,G,A,B",
+        // Invisible highlight targets for the guide prose: {ABD} and
+        // {AB} draw nothing normally but render in the gold highlight
+        // stroke on hover/tap (the Zeno pattern from propI.1). The
+        // side AB is deliberately not drawn in this figure — the
+        // prose point is that it isn't needed — so the ref outlines
+        // it only on demand.
+        "AB;line;connect;A,B;0;0;0",
+        "ABD;polygon;triangle;A,B,D;0;0;0;0"
     ],
 });
 </script>

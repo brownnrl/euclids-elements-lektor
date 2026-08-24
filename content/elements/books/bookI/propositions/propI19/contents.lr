@@ -15,7 +15,7 @@ statement: In any triangle the side opposite the greater angle is greater.
 ----
 proof:
 
-Let *ABC* be a triangle having the angle *ABC* greater than the angle *BCA.*
+Let {ABC} be a triangle having the angle {ABC|CBA} greater than the angle {BCA}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="170" height="220" tabindex="0"></canvas>
@@ -29,21 +29,75 @@ Let *ABC* be a triangle having the angle *ABC* greater than the angle *BCA.*
             "A;point;free;130,40",
             "B;point;free;40,80",
             "C;point;free;70,180",
-            "ABC;polygon;triangle;A,B,C;0;0;black;random"
+            "ABC;polygon;triangle;A,B,C;0;0;black;random",
+            // Zero-color hover targets for the two sides compared.
+            "AC;line;connect;A,C;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            // Angle markers. Angle at B named CBA (the triangle owns
+            // "ABC"; "angle ABC" via {ABC|CBA}); ∠BCA at C, alias ACB→BCA.
+            "CBA;sector;angleMarker;B,C,A",
+            "BCA;sector;angleMarker;C,B,A"
         ],
+        aliases: {
+            "ACB": "BCA"
+        },
+        slides: [
+            { text: "Let {ABC} be a triangle having the angle {ABC|CBA} greater than the angle {BCA}.",
+              visible: ["ABC","CBA","BCA"],
+              highlighted: ["CBA","BCA"],
+              transition: {
+                  mode: "parallel",
+                  animations: [
+                      { elem: "CBA", name: geomlib.A.Sector.sweep },
+                      { elem: "BCA", name: geomlib.A.Sector.sweep }
+                  ]
+              } },
+            { text: "I say that the side {AC} is greater than the side {AB}.",
+              visible: ["ABC","CBA","BCA"],
+              highlighted: ["AC","AB"] },
+            { text: "If not, either {AC} equals {AB} or it is less than it.",
+              visible: ["ABC","CBA","BCA"],
+              highlighted: ["AC","AB"] },
+            { text: "Now {AC} does not equal {AB}, for then the angle {ABC|CBA} would equal the angle {ACB}, but it does not. Therefore {AC} does not equal {AB}.",
+              visible: ["ABC","CBA","BCA"],
+              highlighted: ["AC","AB","CBA","BCA"],
+              justifications: [{ ref: "I.5" }] },
+            { text: "Neither is {AC} less than {AB}, for then the angle {ABC|CBA} would be less than the angle {ACB}, but it is not. Therefore {AC} is not less than {AB}.",
+              visible: ["ABC","CBA","BCA"],
+              highlighted: ["AC","AB","CBA","BCA"],
+              justifications: [{ ref: "I.18" }] },
+            { text: "And it was proved that it is not equal either. Therefore {AC} is greater than {AB}.",
+              visible: ["ABC","CBA","BCA"],
+              highlighted: ["AC","AB"] },
+            { text: "Therefore in any triangle the side opposite the greater angle is greater.",
+              visible: ["ABC","CBA","BCA"],
+              highlighted: ["AC","AB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // callback — same hand-authored pattern as the earlier props.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.5":  "/elements/books/bookI/propositions/propI5/",
+        "I.18": "/elements/books/bookI/propositions/propI18/"
     });
 </script>
 </figure>
 
-I say that the side *AC* is greater than the side *AB.*
+I say that the side {AC} is greater than the side {AB}.
 
-If not, either *AC* equals *AB* or it is less than it.
+If not, either {AC} equals {AB} or it is less than it.
 
-Now *AC* does not equal *AB,* for then the angle *ABC* would equal the angle *ACB,* but it does not. Therefore *AC* does not equal *AB.* [!just I.5]
+Now {AC} does not equal {AB}, for then the angle {ABC|CBA} would equal the angle {ACB}, but it does not. Therefore {AC} does not equal {AB}. [!just I.5]
 
-Neither is *AC* less than *AB,* for then the angle *ABC* would be less than the angle *ACB,* but it is not. Therefore *AC* is not less than *AB.* [!just I.18]
+Neither is {AC} less than {AB}, for then the angle {ABC|CBA} would be less than the angle {ACB}, but it is not. Therefore {AC} is not less than {AB}. [!just I.18]
 
-And it was proved that it is not equal either. Therefore *AC* is greater than *AB.*
+And it was proved that it is not equal either. Therefore {AC} is greater than {AB}.
 
 Therefore *in any triangle the side opposite the greater angle is greater.*
 
@@ -81,9 +135,9 @@ Although some of the geometric underpinnings of trigonometry appear in the *Elem
 
 Without going into details, the law of sines contains more precise information about the relation between angles and sides of a triangle than this and the last proposition did. The law of sines states that
 
-<center><img alt="sin A divided by BC equals sin B divided by AC equals sin C divided by AB" src="propI19b.gif"></center>
+<div class="math display">\dfrac{\sin A}{BC} = \dfrac{\sin B}{AC} = \dfrac{\sin C}{AB}</div>
 
-where *a* denotes the side opposite angle *A*, *b* denotes the side opposite angle *B*, and *c* denotes the side opposite angle *C*. In other words, the sine of an angle in a triangle is proportional to the opposite side.
+where {a} denotes the side opposite angle {A}, {b} denotes the side opposite angle {B}, and {c} denotes the side opposite angle {C}. In other words, the sine of an angle in a triangle is proportional to the opposite side.
 
 By means of the law of sines the size of a angle can be related directly to the length of the opposite side.
 

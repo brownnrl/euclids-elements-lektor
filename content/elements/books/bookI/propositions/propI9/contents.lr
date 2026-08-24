@@ -17,7 +17,7 @@ statement: To bisect a given rectilinear angle.
 ----
 proof:
 
-Let the angle *BAC* be the given rectilinear angle.
+Let the angle {BAC} be the given rectilinear angle.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="260" tabindex="0"></canvas>
@@ -32,29 +32,154 @@ geomlib.init({
         "A;point;free;150,40",
         "B;point;free;50,150",
         "C;point;free;250,150",
-        "D;point;lineSlider;A,B,75,90",
-        "E;point;cutoff;A,C,A,D",
         "AB;line;connect;A,B",
         "AC;line;connect;A,C",
+        "D;point;lineSlider;A,B,75,90",
+        "E;point;cutoff;A,C,A,D",
+        "DE;line;connect;D,E",
         "EDF;polygon;equilateralTriangle;E,D;0;0;black;random",
         "F;point;vertex;EDF,3;black;green",
-        "AF;line;connect;A,F"
+        "AF;line;connect;A,F",
+        // Invisible highlight targets (zero-color; gold under highlight
+        // or hover) for the segments the prose names.
+        "AD;line;connect;A,D;0;0;0",
+        "AE;line;connect;A,E;0;0;0",
+        "DF;line;connect;D,F;0;0;0",
+        "EF;line;connect;E,F;0;0;0",
+        // Transitory construction circles (zero-color; gold while
+        // sweeping). Joyce's three compass circles, drawn in full here
+        // to tie the proposition figure to the Guide's construction-
+        // steps canvas: AEcirc (centre A through D) fixes E since
+        // AE = AD; DEcirc and EDcirc (centres D and E, common radius DE)
+        // intersect to give F.
+        "AEcirc;circle;radius;A,D;0;0;0;0",
+        "DEcirc;circle;radius;D,E;0;0;0;0",
+        "EDcirc;circle;radius;E,D;0;0;0;0",
+        // Angle markers (geomlib 0.8.0 angleMarker) — all at vertex A:
+        // the whole angle BAC and the two halves DAF, EAF. They overlap
+        // at the default radius until 0.8.1's auto radius-stepping nests
+        // them (deck-tracker.md). angDAF = angle BAF (D on ray AB),
+        // angEAF = angle CAF (E on ray AC).
+        "angBAC;sector;angleMarker;A,B,C",
+        "angDAF;sector;angleMarker;A,D,F",
+        "angEAF;sector;angleMarker;A,E,F"
     ],
+    // D is the arbitrary point introduced mid-proof, so it opts out of
+    // the every-slide draggable auto-union and appears on its slide.
+    deferDraggables: ["D"],
+    aliases: {
+        "BAC": "angBAC",
+        "DAF": "angDAF",
+        "EAF": "angEAF",
+        "DEF": "EDF",
+        "EA":  "AE"
+    },
+    slides: [
+        { text: "Let the angle {BAC} be the given rectilinear angle.",
+          visible: ["AB","AC","angBAC"],
+          transition: {
+              animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "It is required to bisect it.",
+          visible: ["AB","AC","angBAC"],
+          highlighted: ["angBAC"] },
+        { text: "Take an arbitrary point {D} on {AB}.",
+          visible: ["AB","AC","D"],
+          transition: {
+              animations: [
+                  { elem: "D", name: geomlib.A.Point.appear }
+              ]
+          } },
+        { text: "Cut off {AE} from {AC} equal to {AD},",
+          visible: ["AB","AC","D","AD","AE","E","AEcirc"],
+          highlighted: ["AD","AE"],
+          transition: {
+              animations: [
+                  { elem: "AEcirc", name: geomlib.A.Circle.compass },
+                  { elem: "E",      name: geomlib.A.Point.appear }
+              ]
+          },
+          justifications: [{ ref: "I.3" }] },
+        { text: "and join {DE}.",
+          visible: ["AB","AC","D","E","DE"],
+          transition: {
+              animations: [
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          },
+          justifications: [{ ref: "I.Post.1" }] },
+        { text: "Construct the equilateral triangle {DEF} on {DE},",
+          visible: ["AB","AC","D","E","DE","DEcirc","EDcirc","EDF","F"],
+          transition: {
+              animations: [
+                  { elem: "DEcirc", name: geomlib.A.Circle.compass },
+                  { elem: "EDcirc", name: geomlib.A.Circle.compass },
+                  { elem: "F",      name: geomlib.A.Point.appear },
+                  { elem: "EDF",    name: geomlib.A.Polygon.outline }
+              ]
+          },
+          justifications: [{ ref: "I.1" }] },
+        { text: "and join {AF}.",
+          visible: ["AB","AC","D","E","DE","EDF","F","AF"],
+          transition: {
+              animations: [
+                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          },
+          justifications: [{ ref: "I.Post.1" }] },
+        { text: "I say that the angle {BAC} is bisected by the straight line {AF}.",
+          visible: ["AB","AC","D","E","DE","EDF","F","AF","angBAC"],
+          highlighted: ["AF","angBAC"] },
+        { text: "Since {AD} equals {AE}, and {AF} is common, the two sides {AD} and {AF} equal the two sides {EA} and {AF}.",
+          visible: ["AB","AC","D","E","DE","EDF","F","AF","AD","AE"],
+          highlighted: ["AD","AE","AF"] },
+        { text: "And the base {DF} equals the base {EF}, therefore the angle {DAF} equals the angle {EAF}.",
+          visible: ["AB","AC","D","E","DE","EDF","F","AF","DF","EF","angDAF","angEAF"],
+          highlighted: ["DF","EF"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "angDAF", name: geomlib.A.Sector.sweep },
+                  { elem: "angEAF", name: geomlib.A.Sector.sweep }
+              ]
+          },
+          justifications: [{ ref: "I.Def.20" }, { ref: "I.8" }] },
+        { text: "Therefore the given rectilinear angle {BAC} is bisected by the straight line {AF}.",
+          visible: ["AB","AC","D","E","DE","EDF","F","AF","angBAC","angDAF","angEAF"],
+          highlighted: ["AF","angBAC","angDAF","angEAF"],
+          justifications: [{ ref: "Q.E.F." }] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
+});
+
+// Per-page citation lookup for the slideshow's resolveJustification
+// callback — same hand-authored pattern as propI.1 – propI.6.
+window.eucrefs = (window.eucrefs || {});
+Object.assign(window.eucrefs, {
+    "I.1":       "/elements/books/bookI/propositions/propI1/",
+    "I.3":       "/elements/books/bookI/propositions/propI3/",
+    "I.8":       "/elements/books/bookI/propositions/propI8/",
+    "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+    "I.Def.20":  "/elements/books/bookI/definitions/defI20/"
 });
 </script>
 </figure>
 
 It is required to bisect it.
 
-Take an arbitrary point *D* on *AB.* Cut off *AE* from *AC* equal to *AD,* and join *DE.* Construct the equilateral triangle *DEF* on *DE,* and join *AF.* [!just I.3; I.Post.1, I.1]
+Take an arbitrary point {D} on {AB}. Cut off {AE} from {AC} equal to {AD}, and join {DE}. Construct the equilateral triangle {DEF} on {DE}, and join {AF}. [!just I.3; I.Post.1, I.1]
 
-I say that the angle *BAC* is bisected by the straight line *AF.*
+I say that the angle {BAC} is bisected by the straight line {AF}.
 
-Since *AD* equals *AE,* and *AF* is common, therefore the two sides *AD* and *AF* equal the two sides *EA* and *AF* respectively.
+Since {AD} equals {AE}, and {AF} is common, therefore the two sides {AD} and {AF} equal the two sides {EA} and {AF} respectively.
 
-And the base *DF* equals the base *EF,* therefore the angle *DAF* equals the angle *EAF.* [!just I.Def.20, I.8]
+And the base {DF} equals the base {EF}, therefore the angle {DAF} equals the angle {EAF}. [!just I.Def.20, I.8]
 
-Therefore the given rectilinear angle *BAC* is bisected by the straight line *AF.*
+Therefore the given rectilinear angle {BAC} is bisected by the straight line {AF}.
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
@@ -85,15 +210,24 @@ geomlib.init({
         "EDcirc;circle;radius;E,D",
         "FF';line;bichord;DEcirc,EDcirc;0;0;0",
         "F;point;first;FF';black;green",
-        "AF;line;connect;A,F;0;0;blue"
+        "AF;line;connect;A,F;0;0;blue",
+        // Invisible highlight targets for the Guide prose's {NAME} hover
+        // refs — segments named in the text but not drawn here (the
+        // triangle's sides aren't needed for the construction). Render
+        // gold only on hover. They make {AD}/{AE}/{DE} resolve to this
+        // canvas (elem-ref-highlight.js binds a ref to the latest
+        // preceding canvas that has the named element).
+        "AD;line;connect;A,D;0;0;0",
+        "AE;line;connect;A,E;0;0;0",
+        "DE;line;connect;D,E;0;0;0"
     ],
 });
 </script>
 </figure>
 
-When using a compass and a straightedge to perform this construction, three circles and the final bisecting line need to be drawn. One circle with center *A* and radius *AD* is needed to determine the point *E.* The other two circles with centers at *D* and *E* and common radius *DE* intersect to give the point *F.* The sides of the equilateral triangle aren't needed for the construction.
+When using a compass and a straightedge to perform this construction, three circles and the final bisecting line need to be drawn. One circle with center {A} and radius {AD} is needed to determine the point {E}. The other two circles with centers at {D} and {E} and common radius {DE} intersect to give the point {F}. The sides of the equilateral triangle aren't needed for the construction.
 
-There is an alternate construction where the circles centered at *D* and *E* have a different radius, namely, *AD,* which equals *AE.* A different proof is required to show that this alternate construction works.
+There is an alternate construction where the circles centered at {D} and {E} have a different radius, namely, {AD}, which equals {AE}. A different proof is required to show that this alternate construction works.
 
 #### On angle trisection
 

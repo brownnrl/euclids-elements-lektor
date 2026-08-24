@@ -101,15 +101,77 @@ Token grammar: Roman numeral book (`I` through `XIII`), then optional `Def.` or 
 
 `Q.E.F.` for constructions (also flagged `red_highlight: yes`); `Q.E.D.` otherwise. The trailing `<br clear="all">` is preserved when present in source and helps clear residual floats inside the theorem box.
 
-### Centered formulas
+### Editorial footnotes (source corrections)
 
-The source uses `<center>...</center>` for displayed equations:
+When Dr. Joyce's source text contains an error (verified against the
+`djoyce/` mirror as original, not a conversion artifact), **correct it inline**
+and record the emendation in a numbered footnote at the end of the page,
+flagged with a superscript marker. Never change the text silently — the
+footnote is the audit trail. Note wording is a dated, initialed changelog
+entry: `Typo correction from "<old>" to "<new>." —<initials>, <YYYY-MM-DD>`.
+First used on I.22 (`propI22/contents.lr`).
 
-```markdown
-<center>If <i>x</i> < <i>y</i> and <i>y</i> = <i>z,</i> then <i>x</i> < <i>z.</i></center>
+Marker at the corrected text (in the `proof` or `guide` field, right after the
+word/punctuation):
+
+```html
+<sup class="fn-ref" id="fnref-1"><a href="#fn-1">1</a></sup>
 ```
 
-Italics inside the `<center>` need to be HTML (`<i>`), not markdown asterisks. Same rule as figures: raw HTML blocks bypass markdown.
+Footnotes section, appended at the **end of the `guide:` field** (it renders
+after the guide prose and before the `referenced_by` table — i.e. the end of
+the page; anchors resolve across the proof/guide fields since they share one
+HTML document):
+
+```html
+<hr class="footnotes-sep">
+<section class="footnotes" id="footnotes">
+<ol>
+<li id="fn-1">Typo correction from &ldquo;…&rdquo; to &ldquo;… .&rdquo; &mdash;NB, 2026-06-17 <a href="#fnref-1" class="fn-back" aria-label="Back to text">&#8617;</a></li>
+</ol>
+</section>
+```
+
+Numbering is per page (`fnref-1`/`fn-1`, `fnref-2`/`fn-2`, …). CSS lives in
+`assets/css/style.css` (`sup.fn-ref`, `hr.footnotes-sep`, `section.footnotes`,
+`li:target` flash). **Slideshow caveat:** a slide caption is plain text drawn
+on canvas and can't carry a DOM anchor — in a caption use a bare superscript
+character (e.g. `¹`) with no link; the prose body carries the linked marker.
+
+### Math (KaTeX)
+
+Math is **pre-rendered at build time** by the `lektor-katex` plugin
+(`packages/lektor-katex/lektor_katex.py`), which shells out to Node + KaTeX
+via `scripts/render-katex.js` and substitutes the rendered HTML into the page.
+KaTeX's CSS + fonts are vendored under `assets/css/katex/` (matched to KaTeX
+**0.17.0**); there is **no client-side KaTeX JS** — nothing renders in the
+browser, so there are no `$…$`-style delimiters to scan for.
+
+Two authoring forms — both raw HTML, so Mistune passes the TeX through
+verbatim (the plugin's regexes are anchored, so each must sit on its own and
+match the class string exactly):
+
+```markdown
+<div class="math display">…TeX…</div>      ← displayed (centred block)
+<span class="math">…TeX…</span>            ← inline
+```
+
+Write the body as ordinary LaTeX; wrap any prose words in `\text{…}` so they
+stay upright and keep their spaces:
+
+```markdown
+<div class="math display">\text{If } x < y \text{ and } y = z \text{, then } x < z\text{.}</div>
+```
+
+A render failure emits a visible red `<span class="katex-error">` rather than
+breaking the build, so a typo is easy to spot on the page.
+
+**Editorial rule.** Re-typesetting Joyce's `<i>x</i> < <i>y</i>`-style HTML
+math (or `<center>`-wrapped formulas) into KaTeX is purely a *typesetting*
+change: never reword, drop, or add meaning. The prose ("If … and … then …")
+and the relations must read identically — only the rendering gets cleaner.
+Legacy `<center>`+`<i>` formulas still in the content get migrated to this
+form as you touch a page.
 
 ### Axiom blocks
 
@@ -143,7 +205,9 @@ Lektor's asset pipeline ships attachments alongside `index.html` in the build ou
 
 ### `<center>` for displayed prose vs. `text-align: center` for everything else
 
-Inline math: `<center>` (HTML — markdown can't express centering).
+Displayed math: use the KaTeX `<div class="math display">` block (see [Math (KaTeX)](#math-katex)) — **not** `<center>`.
+
+Displayed non-math prose or a centred image (e.g. the `propI19b.gif` law-of-sines panel above): `<center>` (HTML — markdown can't express centering).
 
 Page-level centering (h1/h2 titles, statement boxes): CSS only — never write `<center>` for these, the templates handle it.
 

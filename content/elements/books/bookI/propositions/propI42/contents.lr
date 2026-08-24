@@ -17,63 +17,188 @@ statement: To construct a parallelogram equal to a given triangle in a given rec
 ----
 proof:
 
-Let *ABC* be the given triangle, and *D* the given rectilinear angle.
+Let {ABC} be the given triangle, and {D} the given rectilinear angle.
 
-It is required to construct in *D* a parallelogram equal to the triangle *ABC* in the rectilinear angle.
+It is required to construct in {D} a parallelogram equal to the triangle {ABC} in the rectilinear angle.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="320" height="210" tabindex="0"></canvas>
 <noscript><img alt="I.42 diagram" src="propI42.gif"/></noscript>
 <script type="text/javascript">
+    // First application-of-areas construction. The chain is
+    // ABC = 2*AEC = FECG, so the goal itself is stated in colour: the given
+    // triangle ABC and the constructed parallelogram FECG are the equal pair
+    // and share cyan, while the two half-triangles ABE and AEC — equal to each
+    // other, and tiling ABC — are orange. The two equal angles, the given D and
+    // the copied CEF, are magenta (the I.35 pairing). They sit at different
+    // vertices, so no #103 nesting.
+    //
+    // Each slide shows what its caption is about: the given triangle through
+    // the construction (1-4), the finished parallelogram alone (5), the two
+    // halves (6), the doubling that links them (7), and finally both equal
+    // figures together (8-9).
+    //
+    // euclid#138 WORKAROUND: B0/B3 are invisible anchors defining the line B
+    // and C slide along. They were at x=-1000 / +1000; presentation centring
+    // measures figureBounds() ignoring visibility, so that span would centre
+    // the walk near x=0 and translate the whole figure off-canvas — a blank
+    // slideshow, the I.35 failure again. Pulled to -40 / 360: same horizontal
+    // line, same B and C, ample drag room, sane bounds.
+    var FRAME  = ["A","B","C","AB","AC","BC","D","D1","D2","D3","D1D2","D2D3","angD"];
+    var GIVEN  = FRAME.concat(["ABC"]);
+    var BISECT = GIVEN.concat(["E","AE","BE","EC"]);
+    var COPY   = BISECT.concat(["F","EF","angCEF"]);
+    var PARA   = COPY.concat(["G","AG","CG","FG"]);
+    var BUILT  = FRAME.concat(["E","AE","BE","EC","F","EF","angCEF","G","AG","CG","FG"]);
+    var PGRAM  = BUILT.concat(["FECG"]);
+    var HALVES = BUILT.concat(["ABE","AEC"]);
+    var DOUBLE = BUILT.concat(["FECG","AEC"]);
+    var CLOSE  = BUILT.concat(["FECG","ABC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
         title: "I.42",
         elements: [
+            // Invisible anchors for the base line — see the #138 note above.
             "B0;point;free;-1000,180;0;0",
             "B3;point;free;1000,180;0;0",
             "B;point;lineSlider;B0,B3,90,0",
             "C;point;lineSlider;B0,B3,210,0",
             "A;point;free;120,30",
-            "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random",
+            // The given triangle's sides, drawn in their own right so its
+            // outline stands on the slides where its fill is gated off.
+            "AB;line;connect;A,B",
+            "AC;line;connect;A,C",
+            "BC;line;connect;B,C",
+            // The given rectilinear angle D: two arms and a label-only polygon
+            // (transparent edges, black name) that places the letter D.
             "D1;point;free;45,25;0",
             "D2;point;free;30,75;0",
             "D3;point;free;80,75;0",
             "D1D2;line;connect;D1,D2",
             "D2D3;line;connect;D2,D3",
             "D;polygon;triangle;D1,D2,D3;0,0,0;0;0;0",
+            // Bisect BC at E and join AE.
             "E;point;midpoint;B,C",
             "AE;line;connect;A,E",
+            // Copy the angle D onto EC at E: F' aims the ray, G' aims the
+            // parallel through A, and F is where they meet.
             "F';point;similar;C,E,D3,D2,D1;0;0",
             "G';point;parallelogram;C,B,A;0;0",
             "F;point;intersection;A,G',E,F'",
             "EF;line;connect;E,F",
+            // Complete the parallelogram: AG through A parallel to EC, CG
+            // through C parallel to EF.
             "G;point;parallelogram;C,E,F",
-            "CG;line;connect;C,G",
             "AG;line;connect;A,G",
-            "FG;line;connect;F,G"
+            "CG;line;connect;C,G",
+            "FG;line;connect;F,G",
+            // The equal halves of BC: hover targets, already drawn by BC.
+            "BE;line;connect;B,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            // Regions. ABC and FECG are the equal pair the construction aims
+            // at, so they share cyan; the halves ABE and AEC are orange.
+            "ABC;polygon;triangle;A,B,C;0;0;0;cyan",
+            "FECG;polygon;quadrilateral;F,E,C,G;0;0;0;cyan",
+            "ABE;polygon;triangle;A,B,E;0;0;0;orange",
+            "AEC;polygon;triangle;A,E,C;0;0;0;orange",
+            // The given angle and its copy — equal, so colour-matched magenta.
+            "angD;sector;angleMarker;D2,D1,D3;0;0;magenta;magenta",
+            "angCEF;sector;angleMarker;E,C,F;0;0;magenta;magenta"
         ],
+        aliases: { "CE": "EC", "EB": "BE", "BA": "AB", "CA": "AC", "CB": "BC",
+                   "EA": "AE", "FE": "EF", "GA": "AG", "GC": "CG", "GF": "FG",
+                   "AEB": "ABE", "ACE": "AEC", "CEF": "angCEF" },
+        initiallyHidden: ["FECG","ABE","AEC"],
+        slides: [
+            { text: "Let {ABC} be the given triangle, and {D} the given rectilinear angle. It is required to construct in {D} a parallelogram equal to {ABC}.",
+              visible: GIVEN,
+              highlighted: ["ABC","D","angD"],
+              transition: { animations: [ { elem: "angD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Bisect {BC} at {E}, and join {AE}.",
+              visible: BISECT,
+              highlighted: ["E","AE","BE","EC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E",  name: geomlib.A.Point.appear },
+                  { elem: "AE", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.10" }, { ref: "I.Post.1" }] },
+            { text: "Construct the angle {CEF|angCEF} on the straight line {EC} at the point {E} on it equal to the angle {D}.",
+              visible: COPY,
+              highlighted: ["angCEF","angD","EF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EF",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angCEF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.23" }] },
+            { text: "Draw {AG} through {A} parallel to {EC}, and draw {CG} through {C} parallel to {EF}.",
+              visible: PARA,
+              highlighted: ["AG","CG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.31" }] },
+            { text: "Then {FECG} is a parallelogram.",
+              visible: PGRAM,
+              highlighted: ["FECG"],
+              transition: { animations: [ { elem: "FECG", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Since {BE} equals {EC}, the triangle {ABE} equals the triangle {AEC}, for they are on equal bases {BE} and {EC} and in the same parallels {BC} and {AG}. Therefore {ABC} is double {AEC}.",
+              visible: HALVES,
+              highlighted: ["ABE","AEC","BE","EC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ABE", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "AEC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.38" }] },
+            { text: "But the parallelogram {FECG} is also double the triangle {AEC}, for it has the same base with it and is in the same parallels with it. Therefore {FECG} equals {ABC}.",
+              visible: DOUBLE,
+              highlighted: ["FECG","AEC"],
+              transition: { animations: [ { elem: "FECG", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.41" }, { ref: "C.N.1" }] },
+            { text: "And it has the angle {CEF|angCEF} equal to the given angle {D}.",
+              visible: CLOSE,
+              highlighted: ["angCEF","angD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angCEF", name: geomlib.A.Sector.sweep },
+                  { elem: "angD",   name: geomlib.A.Sector.sweep } ] } },
+            { text: "So the parallelogram {FECG} has been constructed equal to the given triangle {ABC}, in the angle {CEF|angCEF} which equals {D}.",
+              visible: CLOSE,
+              highlighted: ["FECG","ABC"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.10":     "/elements/books/bookI/propositions/propI10/",
+        "I.23":     "/elements/books/bookI/propositions/propI23/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "I.38":     "/elements/books/bookI/propositions/propI38/",
+        "I.41":     "/elements/books/bookI/propositions/propI41/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/"
     });
 </script>
 </figure>
 
-Bisect *BC* at *E,* and join *AE.* Construct the angle *CEF* on the straight line *EC* at the point *E* on it equal to the angle *D.* Draw *AG* through *A* parallel to *EC,* and draw *CG* through *C* parallel to *EF.* [!just I.10; I.Post.1; I.23, I.31]
+Bisect {BC} at {E}, and join {AE}. Construct the angle {CEF|angCEF} on the straight line {EC} at the point {E} on it equal to the angle {D}. Draw {AG} through {A} parallel to {EC}, and draw {CG} through {C} parallel to {EF}. [!just I.10; I.Post.1; I.23, I.31]
 
-Then *FECG* is a parallelogram.
+Then {FECG} is a parallelogram.
 
-Since *BE* equals *EC,* therefore the triangle *ABE* also equals the triangle *AEC,* for they are on equal bases *BE* and *EC* and in the same parallels *BC* and *AG.* Therefore the triangle *ABC* is double the triangle *AEC.* [!just I.38]
+Since {BE} equals {EC}, therefore the triangle {ABE} also equals the triangle {AEC}, for they are on equal bases {BE} and {EC} and in the same parallels {BC} and {AG}. Therefore the triangle {ABC} is double the triangle {AEC}. [!just I.38]
 
-But the parallelogram *FECG* is also double the triangle *AEC,* for it has the same base with it and is in the same parallels with it, therefore the parallelogram *FECG* equals the triangle *ABC.* [!just I.41; C.N.1]
+But the parallelogram {FECG} is also double the triangle {AEC}, for it has the same base with it and is in the same parallels with it, therefore the parallelogram {FECG} equals the triangle {ABC}. [!just I.41; C.N.1]
 
-And it has the angle *CEF* equal to the given angle *D.*
+And it has the angle {CEF|angCEF} equal to the given angle {D}.
 
-Therefore the parallelogram *FECG* has been constructed equal to the given triangle *ABC,* in the angle *CEF* which equals *D.*
+Therefore the parallelogram {FECG} has been constructed equal to the given triangle {ABC}, in the angle {CEF|angCEF} which equals {D}.
 
 <div class="qed">Q.E.F.</div>
 ----
 guide:
 
-The idea of the construction is as follows. First make a triangle half the size of the given triangle. Next skew the half-size triangle to make one of its angles the desired angle without changing its area. Complete the resulting half-size triangle to a parallelogram. that's the desired parallelogram equal to the original triangle in the desired angle.
+The idea of the construction is as follows. First make a triangle half the size of the given triangle. Next skew the half-size triangle to make one of its angles the desired angle without changing its area. Complete the resulting half-size triangle to a parallelogram. That's the desired parallelogram equal to the original triangle in the desired angle.
 
 #### Application of areas
 

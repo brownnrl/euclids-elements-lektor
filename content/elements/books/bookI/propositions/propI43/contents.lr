@@ -15,12 +15,40 @@ statement: In any parallelogram the complements of the parallelograms about the 
 ----
 proof:
 
-Let *ABCD* be a parallelogram, and *AC* its diameter, and about *AC* let *EH* and *FG* be parallelograms, and *BK* and *KD* the so-called complements.
+Let {ABCD} be a parallelogram, and {AC} its diameter, and about {AC} let {EH} and {FG} be parallelograms, and {BK} and {KD} the so-called complements.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="240" tabindex="0"></canvas>
 <noscript><img alt="I.43 diagram" src="propI43.gif"/></noscript>
 <script type="text/javascript">
+    // A subtraction argument, and the colours do the subtracting. The diameter
+    // AC halves ABCD; each half then splits into three pieces, and the two
+    // halves decompose IDENTICALLY: orange + green + cyan. AEK/AHK are the
+    // orange pair, KFC/KGC the green pair, and the two complements BK and KD
+    // are cyan. Once you see each half is one orange, one green and one cyan
+    // piece, and the orange and green pairs are equal, the cyan pair must be
+    // too — which is the proposition.
+    //
+    // Fills are gated so the decomposition happens a step at a time: the two
+    // halves whole (3), the orange pair (4), the green pair (5), both pairs
+    // together (6), and finally the complements filling the gaps (7-8).
+    //
+    // FIGURE FIXES vs the original applet params:
+    //  * Joyce's helper G' (= K + B - A) lands at (75, 256) — 16px BELOW this
+    //    240px canvas. figureBounds() ignores visibility (euclid#138), so it
+    //    would drag the presentation centre ~28px up. Dropped entirely: H, G
+    //    and F are now parallelogram fourth-vertices off E, which is exact for
+    //    any A/B/C/K and adds no helper. Only E' remains, and it sits on-canvas.
+    //  * F's params carried a stray "0'" in the vertexColor field (present in
+    //    the original applet too, where E/G/H all use "0"); F is now built as a
+    //    parallelogram vertex, so the malformed token is gone.
+    var FRAME = ["A","B","C","D","E","F","G","H","K",
+                 "ABCD","AC","EF","GH","AK","KC","EH","FG"];
+    var NAMED = FRAME.concat(["EBGK","HDFK"]);
+    var WHOLE = FRAME.concat(["ABC","ACD"]);
+    var P1    = FRAME.concat(["AEK","AHK"]);
+    var P2    = FRAME.concat(["AEK","AHK","KFC","KGC"]);
+    var ALL   = FRAME.concat(["AEK","AHK","KFC","KGC","EBGK","HDFK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -29,32 +57,114 @@ Let *ABCD* be a parallelogram, and *AC* its diameter, and about *AC* let *EH* an
             "A;point;free;80,40",
             "B;point;free;40,210",
             "C;point;free;210,210",
-            "ABCD;polygon;parallelogram;A,B,C",
+            // Explicit ;0 face — omitting faceColor gives a 2-D element a
+            // near-white OPAQUE face (lighten(bgcolor)), not transparency, which
+            // covers the coloured regions beneath it whenever it is highlighted.
+            "ABCD;polygon;parallelogram;A,B,C;0;0;black;0",
             "D;point;vertex;ABCD,4",
             "AC;line;connect;A,C",
             "K;point;lineSlider;AC,110,90",
+            // E' aims the line through K parallel to AD; E is where it meets AB.
             "E';point;parallelogram;K,A,D;0;0",
             "E;point;intersection;A,B,K,E';0,0,0;0",
-            "F;point;intersection;C,D,K,E;0,0,0;0'",
-            "G';point;parallelogram;K,A,B;0;0",
-            "G;point;intersection;B,C,K,G';0,0,0;0",
-            "H;point;intersection;A,D,K,G';0,0,0;0",
-            "HDFK;polygon;quadrilateral;H,D,F,K;0;0;0,0,0;random",
-            "EBGK;polygon;quadrilateral;E,B,G,K;0;0;0,0,0;random"
+            // The other three inner points are parallelogram fourth-vertices off
+            // E — exact for any configuration, and no off-canvas helper.
+            "H;point;parallelogram;A,E,K;0,0,0;0",
+            "G;point;parallelogram;B,E,K;0,0,0;0",
+            "F;point;parallelogram;C,G,K;0,0,0;0",
+            // The cross through K: EF parallel to AD, GH parallel to AB.
+            "EF;line;connect;E,F",
+            "GH;line;connect;G,H",
+            // The two parts of the diameter, and the two parallelograms about
+            // it — invisible highlight targets (the figure already draws them).
+            "AK;line;connect;A,K;0;0;0",
+            "KC;line;connect;K,C;0;0;0",
+            "EH;polygon;quadrilateral;A,E,K,H;0;0;0;0",
+            "FG;polygon;quadrilateral;K,G,C,F;0;0;0;0",
+            // Regions, fill-only. The complements are the equal pair the
+            // proposition is about, so they share cyan.
+            "EBGK;polygon;quadrilateral;E,B,G,K;0;0;0;cyan",
+            "HDFK;polygon;quadrilateral;H,D,F,K;0;0;0;cyan",
+            // The two halves of ABCD, equal by I.34.
+            "ABC;polygon;triangle;A,B,C;0;0;0;pink",
+            "ACD;polygon;triangle;A,C,D;0;0;0;pink",
+            // The two subtracted pairs — equal within each pair, so matched.
+            "AEK;polygon;triangle;A,E,K;0;0;0;orange",
+            "AHK;polygon;triangle;A,H,K;0;0;0;orange",
+            "KFC;polygon;triangle;K,F,C;0;0;0;green",
+            "KGC;polygon;triangle;K,G,C;0;0;0;green"
         ],
+        aliases: { "BK": "EBGK", "KD": "HDFK", "ADC": "ACD", "CA": "AC",
+                   "KA": "AK", "CK": "KC", "FE": "EF", "HG": "GH" },
+        initiallyHidden: ["ABC","ACD","AEK","AHK","KFC","KGC"],
+        slides: [
+            { text: "Let {ABCD} be a parallelogram, and {AC} its diameter, and about {AC} let {EH} and {FG} be parallelograms, and {BK} and {KD} the so-called complements.",
+              visible: NAMED,
+              highlighted: ["ABCD","EH","FG","EBGK","HDFK"] },
+            { text: "I say that the complement {BK} equals the complement {KD}.",
+              visible: NAMED,
+              highlighted: ["EBGK","HDFK"] },
+            { text: "Since {ABCD} is a parallelogram and {AC} its diameter, the triangle {ABC} equals the triangle {ACD}.",
+              visible: WHOLE,
+              highlighted: ["ABC","ACD","AC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ABC", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "ACD", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.34" }] },
+            { text: "Again, since {EH} is a parallelogram and {AK} is its diameter, the triangle {AEK} equals the triangle {AHK}.",
+              visible: P1,
+              highlighted: ["AEK","AHK","AK"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AEK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "AHK", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.34" }] },
+            { text: "For the same reason the triangle {KFC} also equals the triangle {KGC}.",
+              visible: P2,
+              highlighted: ["KFC","KGC","KC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "KFC", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "KGC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.34" }] },
+            { text: "So the triangle {AEK} together with {KGC} equals the triangle {AHK} together with {KFC}.",
+              visible: P2,
+              highlighted: ["AEK","KGC","AHK","KFC"],
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "And the whole triangle {ABC} equals the whole {ADC}, therefore the remaining complement {BK} equals the remaining complement {KD}.",
+              visible: ALL,
+              highlighted: ["EBGK","HDFK"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EBGK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "HDFK", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "C.N.3" }] },
+            { text: "So in any parallelogram the complements of the parallelograms about the diameter equal one another.",
+              visible: ALL,
+              highlighted: ["EBGK","HDFK"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.34":  "/elements/books/bookI/propositions/propI34/",
+        "C.N.2": "/elements/books/bookI/commonnotions/cn2/",
+        "C.N.3": "/elements/books/bookI/commonnotions/cn3/"
     });
 </script>
 </figure>
 
-I say that the complement *BK* equals the complement *KD.*
+I say that the complement {BK} equals the complement {KD}.
 
-Since *ABCD* is a parallelogram, and *AC* its diameter, therefore the triangle *ABC* equals the triangle *ACD.* [!just I.34]
+Since {ABCD} is a parallelogram, and {AC} its diameter, therefore the triangle {ABC} equals the triangle {ACD}. [!just I.34]
 
-Again, since *EH* is a parallelogram, and *AK* is its diameter, therefore the triangle *AEK* equals the triangle *AHK.* For the same reason the triangle *KFC* also equals *KGC.* [!just I.34]
+Again, since {EH} is a parallelogram, and {AK} is its diameter, therefore the triangle {AEK} equals the triangle {AHK}. For the same reason the triangle {KFC} also equals {KGC}. [!just I.34]
 
-Now, since the triangle *AEK* equals the triangle *AHK,* and *KFC* equals *KGC,* therefore the triangle *AEK* together with *KGC* equals the triangle *AHK* together with *KFC.* [!just C.N.2]
+Now, since the triangle {AEK} equals the triangle {AHK}, and {KFC} equals {KGC}, therefore the triangle {AEK} together with {KGC} equals the triangle {AHK} together with {KFC}. [!just C.N.2]
 
-And the whole triangle *ABC* also equals the whole *ADC,* therefore the remaining complement *BK* equals the remaining complement *KD.* [!just C.N.3]
+And the whole triangle {ABC} also equals the whole {ADC}, therefore the remaining complement {BK} equals the remaining complement {KD}. [!just C.N.3]
 
 Therefore *in any parallelogram the complements of the parallelograms about the diameter equal one another.*
 
@@ -63,7 +173,7 @@ Therefore *in any parallelogram the complements of the parallelograms about the 
 ----
 guide:
 
-The meaning of the statement has to be found in its use. The term "the parallelograms about the diameter" refers to the two parallelograms having the same angles as the original parallelogram and with diameters *AK* and *KC* which are two parts of a diameter *AC* of the original parallelogram. The complements are the two parallelograms left over after removing those two parallelograms from the original parallelogram.
+The meaning of the statement has to be found in its use. The term "the parallelograms about the diameter" refers to the two parallelograms having the same angles as the original parallelogram and with diameters {AK} and {KC} which are two parts of a diameter {AC} of the original parallelogram. The complements are the two parallelograms left over after removing those two parallelograms from the original parallelogram.
 
 #### Use of Proposition 43
 

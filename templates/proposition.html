@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% import "_macros_refs.html" as refs %}
 {% block content %}
 {# A proposition's page is one or more theorem boxes, driven entirely
    by the `sections` flow field. Each section renders its own beige
@@ -35,4 +36,8 @@
   <h2 id="guide">Guide</h2>
   {{ s.guide }}
 {% endfor %}
+
+{# Which OTHER pages list this one in a [!just …] (reverse citation
+   index, lektor-eucrefs `referenced_by`). #}
+{{ refs.ref_table(this) }}
 {% endblock %}

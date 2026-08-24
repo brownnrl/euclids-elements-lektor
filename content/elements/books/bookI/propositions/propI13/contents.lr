@@ -15,9 +15,9 @@ statement: If a straight line stands on a straight line, then it makes either tw
 ----
 proof:
 
-Let any straight line *AB* standing on the straight line *CD* make the angles *CBA* and *ABD.*
+Let any straight line {AB} standing on the straight line {CD} make the angles {CBA} and {ABD}.
 
-I say that either the angles *CBA* and *ABD* are two right angles or their sum equals two right angles.
+I say that either the angles {CBA} and {ABD} are two right angles or their sum equals two right angles.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="220" tabindex="0"></canvas>
@@ -28,28 +28,115 @@ geomlib.init({
     background: "35,19,100",
     title: "I.13",
     elements: [
+        // The base line CD (B slides on it) and the line AB standing on
+        // it at B, making the angles ∠CBA and ∠ABD.
         "D;point;free;40,180",
         "C;point;free;230,180",
         "CD;line;connect;C,D",
         "A;point;free;175,50",
         "B;point;lineSlider;CD,125,180",
         "AB;line;connect;A,B",
+        // BE erected perpendicular to CD at B (the auxiliary, I.11) —
+        // drawn only in the unequal case.
         "BE;line;perpendicular;B,C",
-        "E;point;last;BE"
+        "E;point;last;BE",
+        // The angles at B (0.8.0 angleMarker; hidden in the static figure,
+        // swept on their slide; #103 nests this same-vertex set). Named to
+        // match the prose tokens; the permuted spellings (ABC, DBA, EBA,
+        // DBE) map on via aliases.
+        "CBA;sector;angleMarker;B,C,A",
+        "ABD;sector;angleMarker;B,A,D",
+        "CBE;sector;angleMarker;B,C,E",
+        "EBD;sector;angleMarker;B,E,D",
+        "ABE;sector;angleMarker;B,A,E"
     ],
+    aliases: {
+        "BA":  "AB",
+        "ABC": "CBA",
+        "DBA": "ABD",
+        "EBA": "ABE",
+        "DBE": "EBD"
+    },
+    slides: [
+        { text: "Let any straight line {AB} standing on the straight line {CD} make the angles {CBA} and {ABD}.",
+          visible: ["CD","AB","CBA","ABD"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "CBA", name: geomlib.A.Sector.sweep },
+                  { elem: "ABD", name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "I say that either the angles {CBA} and {ABD} are two right angles or their sum equals two right angles.",
+          visible: ["CD","AB","CBA","ABD"],
+          highlighted: ["CBA","ABD"] },
+        { text: "Now, if the angle {CBA} equals the angle {ABD}, then they are two right angles.",
+          visible: ["CD","AB","CBA","ABD"],
+          highlighted: ["CBA","ABD"],
+          justifications: [{ ref: "I.Def.10" }] },
+        { text: "But, if not, draw {BE} from the point {B} at right angles to {CD}. Therefore the angles {CBE} and {EBD} are two right angles.",
+          visible: ["CD","AB","BE","E","CBE","EBD"],
+          highlighted: ["CBE","EBD"],
+          transition: {
+              animations: [
+                  { elem: "BE",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E",   name: geomlib.A.Point.appear },
+                  { elem: "CBE", name: geomlib.A.Sector.sweep },
+                  { elem: "EBD", name: geomlib.A.Sector.sweep }
+              ]
+          },
+          justifications: [{ ref: "I.11" }] },
+        { text: "Since the angle {CBE} equals the sum of the two angles {CBA} and {ABE}, add the angle {EBD} to each, therefore the sum of the angles {CBE} and {EBD} equals the sum of the three angles {CBA}, {ABE}, and {EBD}.",
+          visible: ["CD","AB","BE","E","CBE","EBD","CBA","ABE"],
+          highlighted: ["CBA","ABE","EBD"],
+          transition: {
+              animations: [
+                  { elem: "ABE", name: geomlib.A.Sector.sweep }
+              ]
+          },
+          justifications: [{ ref: "C.N.2" }] },
+        { text: "Again, since the angle {DBA} equals the sum of the two angles {DBE} and {EBA}, add the angle {ABC} to each, therefore the sum of the angles {DBA} and {ABC} equals the sum of the three angles {DBE}, {EBA}, and {ABC}.",
+          visible: ["CD","AB","BE","E","ABD","EBD","ABE","CBA"],
+          highlighted: ["EBD","ABE","CBA"],
+          justifications: [{ ref: "C.N.2" }] },
+        { text: "But the sum of the angles {CBE} and {EBD} was also proved equal to the sum of the same three angles, and things which equal the same thing also equal one another, therefore the sum of the angles {CBE} and {EBD} also equals the sum of the angles {DBA} and {ABC}.",
+          visible: ["CD","AB","BE","E","CBE","EBD","ABD","CBA"],
+          highlighted: ["CBE","EBD","ABD","CBA"],
+          justifications: [{ ref: "C.N.1" }] },
+        { text: "But the angles {CBE} and {EBD} are two right angles, therefore the sum of the angles {DBA} and {ABC} also equals two right angles.",
+          visible: ["CD","AB","BE","E","CBE","EBD","ABD","CBA"],
+          highlighted: ["ABD","CBA"] },
+        { text: "Therefore if a straight line stands on a straight line, then it makes either two right angles or angles whose sum equals two right angles.",
+          visible: ["CD","AB","CBA","ABD"],
+          highlighted: ["CBA","ABD"],
+          justifications: [{ ref: "Q.E.D." }] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
+});
+
+// Per-page citation lookup for the slideshow's resolveJustification
+// callback — same hand-authored pattern as the earlier props.
+window.eucrefs = (window.eucrefs || {});
+Object.assign(window.eucrefs, {
+    "I.11":     "/elements/books/bookI/propositions/propI11/",
+    "I.Def.10": "/elements/books/bookI/definitions/defI10/",
+    "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+    "C.N.2":    "/elements/books/bookI/commonnotions/cn2/"
 });
 </script>
 </figure>
 
-Now, if the angle *CBA* equals the angle *ABD,* then they are two right angles. [!just I.Def.10]
+Now, if the angle {CBA} equals the angle {ABD}, then they are two right angles. [!just I.Def.10]
 
-But, if not, draw *BE* from the point *B* at right angles to *CD.* Therefore the angles *CBE* and *EBD* are two right angles. [!just I.11]
+But, if not, draw {BE} from the point {B} at right angles to {CD}. Therefore the angles {CBE} and {EBD} are two right angles. [!just I.11]
 
-Since the angle *CBE* equals the sum of the two angles *CBA* and *ABE,* add the angle *EBD* to each, therefore the sum of the angles *CBE* and *EBD* equals the sum of the three angles *CBA, ABE,* and *EBD.* [!just C.N.2]
+Since the angle {CBE} equals the sum of the two angles {CBA} and {ABE}, add the angle {EBD} to each, therefore the sum of the angles {CBE} and {EBD} equals the sum of the three angles {CBA}, {ABE}, and {EBD}. [!just C.N.2]
 
-Again, since the angle *DBA* equals the sum of the two angles *DBE* and *EBA,* add the angle *ABC* to each, therefore the sum of the angles *DBA* and *ABC* equals the sum of the three angles *DBE, EBA,* and *ABC.* [!just C.N.2]
+Again, since the angle {DBA} equals the sum of the two angles {DBE} and {EBA}, add the angle {ABC} to each, therefore the sum of the angles {DBA} and {ABC} equals the sum of the three angles {DBE}, {EBA}, and {ABC}. [!just C.N.2]
 
-But the sum of the angles *CBE* and *EBD* was also proved equal to the sum of the same three angles, and things which equal the same thing also equal one another, therefore the sum of the angles *CBE* and *EBD* also equals the sum of the angles *DBA* and *ABC.* But the angles *CBE* and *EBD* are two right angles, therefore the sum of the angles *DBA* and *ABC* also equals two right angles. [!just C.N.1]
+But the sum of the angles {CBE} and {EBD} was also proved equal to the sum of the same three angles, and things which equal the same thing also equal one another, therefore the sum of the angles {CBE} and {EBD} also equals the sum of the angles {DBA} and {ABC}. But the angles {CBE} and {EBD} are two right angles, therefore the sum of the angles {DBA} and {ABC} also equals two right angles. [!just C.N.1]
 
 Therefore *if a straight line stands on a straight line, then it makes either two right angles or angles whose sum equals two right angles.*
 
@@ -57,9 +144,9 @@ Therefore *if a straight line stands on a straight line, then it makes either tw
 ----
 guide:
 
-With this proposition, we begin to see what the arithmetic of magnitudes means to Euclid, in particular, how to add angles. Euclid says that the angle *CBE* equals the sum of the two angles *CBA* and *ABE.* So, one way a sum of angles occurs is when the two angles have a common vertex (*B* in this case) and a common side (*BA* in this case), and the angles lie on opposite sides of their common side. Thus, addition of angles can be performed by joining adjacent angles.
+With this proposition, we begin to see what the arithmetic of magnitudes means to Euclid, in particular, how to add angles. Euclid says that the angle {CBE} equals the sum of the two angles {CBA} and {ABE}. So, one way a sum of angles occurs is when the two angles have a common vertex ({B} in this case) and a common side ({BA} in this case), and the angles lie on opposite sides of their common side. Thus, addition of angles can be performed by joining adjacent angles.
 
-But that's not the only addition that occurs here. Euclid also says that the sum of the angles *CBE* and *EBD* equals the sum of the three angles *CBA, ABE,* and *EBD.* That sum being mentioned is a straight angle, which is not to be considered as an angle according to Euclid. It is a formal sum equal to two right angles. In other propositions formal sums of four right angles occur. These and larger formal sums are not angles themselves, merely sums of angles. Only if an angle sum is less than two right angles can it be identified with a single angle.
+But that's not the only addition that occurs here. Euclid also says that the sum of the angles {CBE} and {EBD} equals the sum of the three angles {CBA}, {ABE}, and {EBD}. That sum being mentioned is a straight angle, which is not to be considered as an angle according to Euclid. It is a formal sum equal to two right angles. In other propositions formal sums of four right angles occur. These and larger formal sums are not angles themselves, merely sums of angles. Only if an angle sum is less than two right angles can it be identified with a single angle.
 
 #### Use of Proposition 13
 

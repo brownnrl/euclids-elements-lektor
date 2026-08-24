@@ -15,7 +15,7 @@ statement: In any triangle the sum of any two angles is less than two right angl
 ----
 proof:
 
-Let *ABC* be a triangle.
+Let {ABC} be a triangle.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="210" tabindex="0"></canvas>
@@ -30,24 +30,97 @@ Let *ABC* be a triangle.
             "B;point;free;30,180",
             "C;point;free;140,180",
             "ABC;polygon;triangle;A,B,C;0;0;black;random",
+            // BC produced to D (the exterior angle at C). CD is the
+            // produced part; the triangle polygon draws BC itself.
             "D;point;lineSlider;B,C,220,180",
-            "BD;line;connect;B,D"
+            "CD;line;connect;C,D",
+            // Zero-color hover target for the side BC.
+            "BC;line;connect;B,C;0;0;0",
+            // Angle markers. The angle at B is named CBA (the triangle
+            // owns "ABC"); "the angle ABC" in prose uses {ABC|CBA}. At C,
+            // ACB (interior) and ACD (exterior) are adjacent — #103 nests.
+            "ACD;sector;angleMarker;C,A,D",
+            "ACB;sector;angleMarker;C,A,B",
+            "CBA;sector;angleMarker;B,C,A",
+            "BAC;sector;angleMarker;A,B,C"
         ],
+        // D (BC produced) is constructed mid-proof.
+        deferDraggables: ["D"],
+        aliases: {
+            "BCA": "ACB",
+            "CAB": "BAC"
+        },
+        slides: [
+            { text: "Let {ABC} be a triangle.",
+              visible: ["ABC"] },
+            { text: "I say that the sum of any two angles of the triangle {ABC} is less than two right angles.",
+              visible: ["ABC","CBA","ACB","BAC"],
+              highlighted: ["CBA","ACB","BAC"],
+              transition: {
+                  mode: "parallel",
+                  animations: [
+                      { elem: "CBA", name: geomlib.A.Sector.sweep },
+                      { elem: "ACB", name: geomlib.A.Sector.sweep },
+                      { elem: "BAC", name: geomlib.A.Sector.sweep }
+                  ]
+              } },
+            { text: "Produce {BC} to {D}.",
+              visible: ["ABC","CBA","ACB","BAC","D","CD"],
+              transition: {
+                  animations: [
+                      { elem: "D",  name: geomlib.A.Point.appear },
+                      { elem: "CD", name: geomlib.A.Line.straightEdgeConnect }
+                  ]
+              },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Since the angle {ACD} is an exterior angle of the triangle {ABC}, therefore it is greater than the interior and opposite angle {ABC|CBA}. Add the angle {ACB} to each. Then the sum of the angles {ACD} and {ACB} is greater than the sum of the angles {ABC|CBA} and {BCA}.",
+              visible: ["ABC","CBA","ACB","BAC","D","CD","ACD"],
+              highlighted: ["ACD","CBA","ACB"],
+              transition: {
+                  animations: [
+                      { elem: "ACD", name: geomlib.A.Sector.sweep }
+                  ]
+              },
+              justifications: [{ ref: "I.16" }, { ref: "C.N." }] },
+            { text: "But the sum of the angles {ACD} and {ACB} is equal to two right angles. Therefore the sum of the angles {ABC|CBA} and {BCA} is less than two right angles.",
+              visible: ["ABC","CBA","ACB","BAC","D","CD","ACD"],
+              highlighted: ["ACD","ACB","CBA"],
+              justifications: [{ ref: "I.13" }] },
+            { text: "Similarly we can prove that the sum of the angles {BAC} and {ACB} is also less than two right angles, and so the sum of the angles {CAB} and {ABC|CBA} as well.",
+              visible: ["ABC","CBA","ACB","BAC","D","CD"],
+              highlighted: ["BAC","ACB","CBA"] },
+            { text: "Therefore in any triangle the sum of any two angles is less than two right angles.",
+              visible: ["ABC","CBA","ACB","BAC"],
+              highlighted: ["CBA","ACB","BAC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // callback — same hand-authored pattern as the earlier props.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.13":     "/elements/books/bookI/propositions/propI13/",
+        "I.16":     "/elements/books/bookI/propositions/propI16/"
     });
 </script>
 </figure>
 
-I say that the sum of any two angles of the triangle *ABC* is less than two right angles.
+I say that the sum of any two angles of the triangle {ABC} is less than two right angles.
 
-Produce *BC* to *D.* [!just I.Post.2]
+Produce {BC} to {D}. [!just I.Post.2]
 
 [!just I.16; C.N.]
 
-Since the angle *ACD* is an exterior angle of the triangle *ABC,* therefore it is greater than the interior and opposite angle *ABC.* Add the angle *ACB* to each. Then the sum of the angles *ACD* and *ACB* is greater than the sum of the angles *ABC* and *BCA.*
+Since the angle {ACD} is an exterior angle of the triangle {ABC}, therefore it is greater than the interior and opposite angle {ABC|CBA}. Add the angle {ACB} to each. Then the sum of the angles {ACD} and {ACB} is greater than the sum of the angles {ABC|CBA} and {BCA}.
 
-But the sum of the angles *ACD* and *ACB* is equal to two right angles. Therefore the sum of the angles *ABC* and *BCA* is less than two right angles. [!just I.13]
+But the sum of the angles {ACD} and {ACB} is equal to two right angles. Therefore the sum of the angles {ABC|CBA} and {BCA} is less than two right angles. [!just I.13]
 
-Similarly we can prove that the sum of the angles *BAC* and *ACB* is also less than two right angles, and so the sum of the angles *CAB* and *ABC* as well.
+Similarly we can prove that the sum of the angles {BAC} and {ACB} is also less than two right angles, and so the sum of the angles {CAB} and {ABC|CBA} as well.
 
 Therefore *in any triangle the sum of any two angles is less than two right angles.*
 
@@ -57,11 +130,11 @@ guide:
 
 The statements
 
-> ... the angle *ACD* ... is greater than the interior and opposite angle *ABC.* Add the angle *ACB* to each. Then the sum of the angles *ACD* and *ACB* is greater than the sum of the angles *ABC* and *BCA.*
+> ... the angle {ACD} ... is greater than the interior and opposite angle {ABC|CBA}. Add the angle {ACB} to each. Then the sum of the angles {ACD} and {ACB} is greater than the sum of the angles {ABC|CBA} and {BCA}.
 
 use the property of magnitudes
 
-> If *x* > *y,* then *x* + *z* > *y* + *z.*
+<div class="math display">\text{If } x > y \text{, then } x + z > y + z\text{.}</div>
 
 This property is not listed among the [Common Notions](../../commonnotions/cn1/).
 

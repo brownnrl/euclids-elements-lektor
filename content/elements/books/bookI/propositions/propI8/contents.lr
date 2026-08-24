@@ -15,9 +15,9 @@ statement: If two triangles have the two sides equal to two sides respectively, 
 ----
 proof:
 
-Let *ABC* and *DEF* be two triangles having the two sides *AB* and *AC* equal to the two sides *DE* and *DF* respectively, namely *AB* equal to *DE* and *AC* equal to *DF,* and let them have the base *BC* equal to the base *EF.*
+Let {ABC} and {DEF} be two triangles having the two sides {AB} and {AC} equal to the two sides {DE} and {DF} respectively, namely {AB} equal to {DE} and {AC} equal to {DF}, and let them have the base {BC} equal to the base {EF}.
 
-I say that the angle *BAC* also equals the angle *EDF.*
+I say that the angle {BAC} also equals the angle {EDF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="350" height="240" tabindex="0"></canvas>
@@ -28,10 +28,15 @@ geomlib.init({
     background: "35,19,100",
     title: "I.8",
     elements: [
+        // Target triangle DEF (free).
         "D;point;free;220,50",
         "E;point;free;200,200",
         "F;point;free;320,150",
         "DEF;polygon;triangle;D,E,F;0;0;black;random",
+        // Triangle ABC, built CONGRUENT to DEF and drag-safe: BA = ED,
+        // AC = DF, BC = EF. CircBA = circle(centre B, radius |ED|) and A
+        // rides it (so BA = ED); CircAC, CircBC give AC = DF and BC = EF;
+        // C is the far intersection of their common chord.
         "B;point;free;50,200",
         "CircBA;circle;radius;B,E,D;0;0;0;0",
         "A;point;circleSlider;CircBA,70,50",
@@ -40,21 +45,130 @@ geomlib.init({
         "C'C;line;bichord;CircAC,CircBC;0;0;0",
         "C;point;last;C'C",
         "ABC;polygon;triangle;A,B,C;0;0;black;random",
+        // The I.7 "fall beside" hypothetical apex (revealed mid-proof): if
+        // BA, AC did NOT coincide with ED, DF they would land here as EG,
+        // GF — giving base EF two apexes (D and G) with equal corresponding
+        // sides, which I.7 forbids.
         "G;point;free;280,65",
         "EG;line;connect;E,G",
-        "FG;line;connect;F,G"
+        "FG;line;connect;F,G",
+        // Zero-color hover targets for the prose's side references (the
+        // triangle polygons give no per-edge hover).
+        "AB;line;connect;A,B;0;0;0",
+        "AC;line;connect;A,C;0;0;0",
+        "BC;line;connect;B,C;0;0;0",
+        "DE;line;connect;D,E;0;0;0",
+        "DF;line;connect;D,F;0;0;0",
+        "EF;line;connect;E,F;0;0;0",
+        // Apex angle markers (the conclusion ∠BAC = ∠EDF). Hidden in the
+        // static figure (#100), swept in on their slide; named to match the
+        // prose tokens (no triangle BAC/EDF to collide with).
+        "BAC;sector;angleMarker;A,B,C",
+        "EDF;sector;angleMarker;D,E,F"
     ],
+    // The hypothetical apex G is introduced mid-proof; everything else is a
+    // given shown from slide 1. C is a derived point (point;last) so, like
+    // I.4's C, it is not auto-unioned — list "C" in every slide's visible
+    // set so its vertex label persists.
+    deferDraggables: ["G"],
+    aliases: {
+        "BA": "AB",
+        "ED": "DE",
+        "GF": "FG"
+    },
+    slides: [
+        { text: "Let {ABC} and {DEF} be two triangles having the two sides {AB} and {AC} equal to the two sides {DE} and {DF} respectively,",
+          visible: ["ABC","DEF","C"],
+          highlighted: ["AB","AC","DE","DF"] },
+        { text: "namely {AB} equal to {DE} and {AC} equal to {DF}, and let them have the base {BC} equal to the base {EF}.",
+          visible: ["ABC","DEF","C"],
+          highlighted: ["AB","DE","AC","DF","BC","EF"] },
+        { text: "I say that the angle {BAC} also equals the angle {EDF}.",
+          visible: ["ABC","DEF","C","BAC","EDF"],
+          highlighted: ["BAC","EDF"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "BAC", name: geomlib.A.Sector.sweep },
+                  { elem: "EDF", name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "If the triangle {ABC} is applied to the triangle {DEF}, and if the point {B} is placed on the point {E} and the straight line {BC} on {EF},",
+          visible: ["ABC","DEF","C","BAC","EDF"],
+          highlighted: ["B","E","BC","EF"],
+          transition: {
+              animations: [
+                  { elem: "ABC", name: geomlib.A.Polygon.superpose,
+                    args: { onto: "DEF" } }
+              ]
+          } },
+        { text: "then the point {C} also coincides with {F}, because {BC} equals {EF}.",
+          visible: ["ABC","DEF","C","BAC","EDF"],
+          highlighted: ["C","F","BC","EF"] },
+        { text: "Then, {BC} coinciding with {EF}, therefore {BA} and {AC} also coincide with {ED} and {DF},",
+          visible: ["ABC","DEF","C","BAC","EDF"],
+          highlighted: ["AB","DE","AC","DF"] },
+        { text: "for, if the base {BC} coincides with the base {EF}, and the sides {BA} and {AC} do not coincide with {ED} and {DF} but fall beside them as {EG} and {GF},",
+          visible: ["ABC","DEF","C","BAC","EDF","G","EG","FG"],
+          highlighted: ["EG","FG"],
+          transition: {
+              animations: [
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "EG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          } },
+        { text: "then given two straight lines constructed on a straight line and meeting in a point, there will have been constructed on the same straight line and on the same side of it, two other straight lines meeting in another point and equal to the former two respectively, namely each to that which has the same end with it.",
+          visible: ["ABC","DEF","C","BAC","EDF","G","EG","FG"],
+          highlighted: ["DE","EG","DF","FG"] },
+        { text: "But they cannot be so constructed.",
+          // The forbidden two-apex configuration is eliminated: G and its
+          // sides drop out of the visible set.
+          visible: ["ABC","DEF","C","BAC","EDF"],
+          justifications: [{ ref: "I.7" }] },
+        { text: "Therefore it is not possible that, if the base {BC} is applied to the base {EF}, the sides {BA} and {AC} do not coincide with {ED} and {DF}.",
+          visible: ["ABC","DEF","C","BAC","EDF"],
+          highlighted: ["AB","AC","DE","DF"] },
+        { text: "Therefore they coincide, so that the angle {BAC} coincides with the angle {EDF}, and equals it.",
+          visible: ["ABC","DEF","C","BAC","EDF"],
+          highlighted: ["BAC","EDF"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "ABC", name: geomlib.A.Polygon.superpose,
+                    args: { onto: "DEF" } },
+                  { elem: "BAC", name: geomlib.A.Sector.sweep },
+                  { elem: "EDF", name: geomlib.A.Sector.sweep }
+              ]
+          },
+          justifications: [{ ref: "C.N.4" }] },
+        { text: "Therefore if two triangles have the two sides equal to two sides respectively, and also have the base equal to the base, then they also have the angles equal which are contained by the equal straight lines.",
+          visible: ["ABC","DEF","C","BAC","EDF"],
+          highlighted: ["BAC","EDF"],
+          justifications: [{ ref: "Q.E.D." }] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
+});
+
+// Per-page citation lookup for the slideshow's resolveJustification
+// callback — same hand-authored pattern as the earlier props.
+window.eucrefs = (window.eucrefs || {});
+Object.assign(window.eucrefs, {
+    "I.7":   "/elements/books/bookI/propositions/propI7/",
+    "C.N.4": "/elements/books/bookI/commonnotions/cn4/"
 });
 </script>
 </figure>
 
-If the triangle *ABC* is applied to the triangle *DEF,* and if the point *B* is placed on the point *E* and the straight line *BC* on *EF,* then the point *C* also coincides with *F,* because *BC* equals *EF.*
+If the triangle {ABC} is applied to the triangle {DEF}, and if the point {B} is placed on the point {E} and the straight line {BC} on {EF}, then the point {C} also coincides with {F}, because {BC} equals {EF}.
 
-Then, *BC* coinciding with *EF,* therefore *BA* and *AC* also coincide with *ED* and *DF,* for, if the base *BC* coincides with the base *EF,* and the sides *BA* and *AC* do not coincide with *ED* and *DF* but fall beside them as *EG* and *GF,* then given two straight lines constructed on a straight line and meeting in a point, there will have been constructed on the same straight line and on the same side of it, two other straight lines meeting in another point and equal to the former two respectively, namely each to that which has the same end with it.
+Then, {BC} coinciding with {EF}, therefore {BA} and {AC} also coincide with {ED} and {DF}, for, if the base {BC} coincides with the base {EF}, and the sides {BA} and {AC} do not coincide with {ED} and {DF} but fall beside them as {EG} and {GF}, then given two straight lines constructed on a straight line and meeting in a point, there will have been constructed on the same straight line and on the same side of it, two other straight lines meeting in another point and equal to the former two respectively, namely each to that which has the same end with it.
 
 But they cannot be so constructed. [!just I.7]
 
-Therefore it is not possible that, if the base *BC* is applied to the base *EF,* the sides *BA* and *AC* do not coincide with *ED* and *DF.* Therefore they coincide, so that the angle *BAC* coincides with the angle *EDF,* and equals it. [!just C.N.4]
+Therefore it is not possible that, if the base {BC} is applied to the base {EF}, the sides {BA} and {AC} do not coincide with {ED} and {DF}. Therefore they coincide, so that the angle {BAC} coincides with the angle {EDF}, and equals it. [!just C.N.4]
 
 Therefore *if two triangles have the two sides equal to two sides respectively, and also have the base equal to the base, then they also have the angles equal which are contained by the equal straight lines.*
 

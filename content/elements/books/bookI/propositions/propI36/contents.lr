@@ -15,12 +15,24 @@ statement: Parallelograms which are on equal bases and in the same parallels equ
 ----
 proof:
 
-Let *ABCD* and *EFGH* be parallelograms which are on the equal bases *BC* and *FG* and in the same parallels *AH* and *BG.*
+Let {ABCD} and {EFGH} be parallelograms which are on the equal bases {BC} and {FG} and in the same parallels {AH} and {BG}.
+
+I say that the parallelogram {ABCD} equals {EFGH}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="370" height="210" tabindex="0"></canvas>
 <noscript><img alt="I.36 diagram" src="propI36.gif"/></noscript>
 <script type="text/javascript">
+    // The two given parallelograms (ABCD cyan, EFGH pink) and the parallels
+    // stay on screen for every slide — they don't overlap. Only the
+    // construction additions are gated to the step that introduces them: the
+    // joins BE / CH (slide 2 onward) and the bridge parallelogram EBCH
+    // (slide 4 onward). Per-slide `highlighted` guides the eye.
+    var FULL = ["A","B","C","D","E","F","G","H",
+                "AH","BG","AB","CD","EF","GH","BC","FG","EH",
+                "ABCD","EFGH"];
+    var JOIN = FULL.concat(["BE","CH"]);
+    var BRIDGE = JOIN.concat(["EBCH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -29,35 +41,93 @@ Let *ABCD* and *EFGH* be parallelograms which are on the equal bases *BC* and *F
             "B;point;free;70,170",
             "C;point;free;160,170",
             "A;point;free;40,40",
-            "ABCD;polygon;parallelogram;A,B,C;0;0;0,0,0;random",
-            "D;point;vertex;ABCD,4",
+            "D;point;parallelogram;A,B,C",
             "E;point;lineSlider;A,D,240,40",
-            "BE;line;connect;B,E",
             "H;point;parallelogram;E,B,C",
-            "CH;line;connect;C,H",
-            "DE;line;connect;D,E",
-            "AH;line;connect;A,H",
             "F;point;lineSlider;B,C,220,170",
-            "HEFG;polygon;parallelogram;H,E,F;0;0;0,0,0;random",
-            "G;point;vertex;HEFG,4",
+            "G;point;parallelogram;H,E,F",
+            // The two parallels (top AH through A,D,E,H; bottom BG through
+            // B,C,F,G) and the four slanted sides of the given parallelograms.
+            "AH;line;connect;A,H",
             "BG;line;connect;B,G",
-            "CF;line;connect;C,F"
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "EF;line;connect;E,F",
+            "GH;line;connect;G,H",
+            // The joins that build the bridge parallelogram EBCH (gated).
+            "BE;line;connect;B,E",
+            "CH;line;connect;C,H",
+            // Sub-segment hover targets on the parallels / shared edges (the
+            // fills + parallels already draw these; these only light on ref).
+            "BC;line;connect;B,C;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "EH;line;connect;E,H;0;0;0",
+            // The two given parallelograms as fillable regions (cyan / pink),
+            // and the bridge EBCH (orange) that equals each of them by I.35.
+            "ABCD;polygon;quadrilateral;A,B,C,D;0;0;0;cyan",
+            "EFGH;polygon;quadrilateral;E,F,G,H;0;0;0;pink",
+            "EBCH;polygon;quadrilateral;E,B,C,H;0;0;0;orange"
         ],
+        aliases: { "EB": "BE", "HC": "CH", "HE": "EH", "GF": "FG", "CB": "BC" },
+        slides: [
+            { text: "Let {ABCD} and {EFGH} be parallelograms on the equal bases {BC} and {FG} and in the same parallels {AH} and {BG}. I say that {ABCD} equals {EFGH}.",
+              visible: FULL,
+              highlighted: ["ABCD","EFGH","BC","FG"] },
+            { text: "Join {BE} and {CH}.",
+              visible: JOIN,
+              highlighted: ["BE","CH"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CH", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Since {BC} equals {FG} and {FG} equals {EH}, therefore {BC} equals {EH}.",
+              visible: JOIN,
+              highlighted: ["BC","FG","EH"],
+              justifications: [{ ref: "I.34" }, { ref: "C.N.1" }] },
+            { text: "But {BC} and {EH} are also parallel, and {EB} and {HC} join them. So {EBCH} is a parallelogram.",
+              visible: BRIDGE,
+              highlighted: ["EBCH"],
+              transition: { animations: [ { elem: "EBCH", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.33" }] },
+            { text: "And {EBCH} equals {ABCD}, for it has the same base {BC} and lies in the same parallels {AH} and {BG}.",
+              visible: BRIDGE,
+              highlighted: ["EBCH","ABCD","BC"],
+              justifications: [{ ref: "I.35" }] },
+            { text: "For the same reason {EFGH} equals {EBCH}, for they have the same base {EH} and lie in the same parallels.",
+              visible: BRIDGE,
+              highlighted: ["EFGH","EBCH","EH"],
+              justifications: [{ ref: "I.35" }] },
+            { text: "So {ABCD} equals {EBCH} equals {EFGH}. Parallelograms on equal bases and in the same parallels equal one another.",
+              visible: FULL,
+              highlighted: ["ABCD","EFGH"],
+              justifications: [{ ref: "C.N.1" }, { ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.33":     "/elements/books/bookI/propositions/propI33/",
+        "I.34":     "/elements/books/bookI/propositions/propI34/",
+        "I.35":     "/elements/books/bookI/propositions/propI35/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/"
     });
 </script>
 </figure>
 
-I say that the parallelogram *ABCD* equals *EFGH.*
+Join {BE} and {CH}. [!just I.Post.1]
 
-Join *BE* and *CH.* [!just I.Post.1]
+Since {BC} equals {FG} and {FG} equals {EH}, therefore {BC} equals {EH}. [!just I.34; C.N.1]
 
-Since *BC* equals *FG* and *FG* equals *EH,* therefore *BC* equals *EH.* [!just I.34, C.N.1]
+But they are also parallel, and {EB} and {HC} join them. But straight lines joining equal and parallel straight lines in the same directions are equal and parallel, therefore {EBCH} is a parallelogram. [!just I.33]
 
-But they are also parallel, and *EB* and *HC* join them. But straight lines joining equal and parallel straight lines in the same directions are equal and parallel, therefore *EBCH* is a parallelogram. [!just I.33]
+And it equals {ABCD}, for it has the same base {BC} with it and is in the same parallels {BC} and {AH} with it. [!just I.35]
 
-And it equals *ABCD,* for it has the same base *BC* with it and is in the same parallels *BC* and *AH* with it. [!just I.35]
-
-For the same reason also *EFGH* equals the same *EBCH,* so that the parallelogram *ABCD* also equals *EFGH.* [!just C.N.1]
+For the same reason also {EFGH} equals the same {EBCH}, so that the parallelogram {ABCD} also equals {EFGH}. [!just C.N.1]
 
 Therefore *parallelograms which are on equal bases and in the same parallels equal one another.*
 

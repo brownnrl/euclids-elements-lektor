@@ -137,9 +137,15 @@ Some `<book>.html` source files describe multiple definitions (Book I's defI11.h
 
 When source has `<ul>...prose...</ul>` with no `<li>` children, it's an indented-quote — render as markdown blockquote (`> …`), not as `- bullet`. Book I had two cases: propI7 and propI17.
 
-### `<center>` displayed formulas
+### Displayed / inline math → KaTeX
 
-Preserve `<center>…</center>` in markdown source with HTML italics inside. Mistune passes raw HTML through but does NOT process markdown inside it, so `*x*` will render as literal asterisks.
+Re-typeset Joyce's math with KaTeX rather than `<center>` + `<i>`: a displayed
+formula becomes `<div class="math display">…TeX…</div>`, inline math becomes
+`<span class="math">…TeX…</span>`, both pre-rendered at build by the
+`lektor-katex` plugin (see [conventions.md → Math (KaTeX)](../conventions.md#math-katex)).
+This is an **editorial** change only — keep the exact prose and meaning, just
+typeset the symbols (wrap prose words in `\text{…}`). Mistune passes the raw
+HTML through verbatim, so the TeX (and any bare `<`) survives untouched.
 
 ### Source typos to expect
 

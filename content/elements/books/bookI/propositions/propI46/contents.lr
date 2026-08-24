@@ -17,14 +17,26 @@ statement: To describe a square on a given straight line.
 ----
 proof:
 
-Let *AB* be the given straight line.
+Let {AB} be the given straight line.
 
-It is required to describe a square on the straight line *AB.*
+It is required to describe a square on the straight line {AB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="220" height="230" tabindex="0"></canvas>
 <noscript><img alt="I.46 diagram" src="propI46.gif"/></noscript>
 <script type="text/javascript">
+    // The square is proved in two halves — equilateral, then right-angled —
+    // so the walk does the same. Slides 3-5 establish the four equal sides
+    // (Joyce's one sentence split per-statement so each PAIR gets its own
+    // highlight, which spares needing colour for the pairing); slides 7-9
+    // establish the four right angles, one marker per corner, all red because
+    // all four are equal. C is a slider the proof only introduces on slide 2,
+    // so it is deferred out of the every-slide auto-union.
+    var GIVEN  = ["A","B","AB"];
+    var BUILT  = ["A","B","AB","C","D","E","AC","CD","AD","DE","BE","angBAD"];
+    var FILLED = BUILT.concat(["ABED"]);
+    var ANG1   = FILLED.concat(["angADE"]);
+    var ANG2   = ANG1.concat(["angABE","angBED"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -32,33 +44,116 @@ It is required to describe a square on the straight line *AB.*
         elements: [
             "A;point;free;50,190",
             "B;point;free;170,190",
-            "ABED;polygon;square;A,B;0;0;0,0,0;random",
+            "AB;line;connect;A,B",
+            // The square, fill-only — its four sides are drawn in their own
+            // right below so the outline stands when the fill is gated off.
+            "ABED;polygon;square;A,B;0;0;0;cyan",
             "E;point;vertex;ABED,3",
             "D;point;vertex;ABED,4",
             "C;point;lineSlider;A,D,30,30",
-            "CD;line;connect;C,D"
+            "CD;line;connect;C,D",
+            "AD;line;connect;A,D",
+            "DE;line;connect;D,E",
+            "BE;line;connect;B,E",
+            // AC is the perpendicular: AD plus CD already draw it, so this is
+            // a hover target only.
+            "AC;line;connect;A,C;0;0;0",
+            // One right angle per corner. All four are equal, so all red.
+            "angBAD;sector;angleMarker;A,B,D;0;0;red;red",
+            "angADE;sector;angleMarker;D,A,E;0;0;red;red",
+            "angABE;sector;angleMarker;B,A,E;0;0;red;red",
+            "angBED;sector;angleMarker;E,B,D;0;0;red;red"
         ],
+        aliases: { "ADEB": "ABED", "BA": "AB", "EB": "BE", "ED": "DE",
+                   "DA": "AD", "CA": "AC", "DC": "CD",
+                   "BAD": "angBAD", "ADE": "angADE", "ABE": "angABE", "BED": "angBED" },
+        deferDraggables: ["C"],
+        slides: [
+            { text: "Let {AB} be the given straight line. It is required to describe a square on {AB}.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "Draw {AC} at right angles to {AB} from the point {A} on it. Make {AD} equal to {AB}. Draw {DE} through {D} parallel to {AB}, and {BE} through {B} parallel to {AD}.",
+              visible: BUILT,
+              highlighted: ["AC","AD","DE","BE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AC",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AD",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angBAD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.11" }, { ref: "I.3" }, { ref: "I.31" }] },
+            { text: "Then {ADEB} is a parallelogram. Therefore {AB} equals {DE}.",
+              visible: FILLED,
+              highlighted: ["AB","DE"],
+              transition: { animations: [ { elem: "ABED", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.34" }] },
+            { text: "And {AD} equals {BE}.",
+              visible: FILLED,
+              highlighted: ["AD","BE"],
+              justifications: [{ ref: "I.34" }] },
+            { text: "But {AB} equals {AD}, therefore the four straight lines {BA}, {AD}, {DE}, and {EB} equal one another. Therefore the parallelogram {ADEB} is equilateral.",
+              visible: FILLED,
+              highlighted: ["AB","AD","DE","BE"] },
+            { text: "I say next that it is also right-angled.",
+              visible: FILLED,
+              highlighted: ["ABED"] },
+            { text: "Since the straight line {AD} falls upon the parallels {AB} and {DE}, the sum of the angles {BAD} and {ADE} equals two right angles.",
+              visible: ANG1,
+              highlighted: ["angBAD","angADE","AD"],
+              transition: { animations: [ { elem: "angADE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.29" }] },
+            { text: "But the angle {BAD} is right, therefore the angle {ADE} is also right.",
+              visible: ANG1,
+              highlighted: ["angBAD","angADE"],
+              justifications: [{ ref: "I.Post.4" }] },
+            { text: "And in parallelogrammic areas the opposite sides and angles equal one another, therefore each of the opposite angles {ABE} and {BED} is also right. Therefore {ADEB} is right-angled.",
+              visible: ANG2,
+              highlighted: ["angABE","angBED"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angABE", name: geomlib.A.Sector.sweep },
+                  { elem: "angBED", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.34" }] },
+            { text: "And it was also proved equilateral. Therefore it is a square, and it is described on the straight line {AB}.",
+              visible: ANG2,
+              highlighted: ["ABED","AB"],
+              justifications: [{ ref: "I.Def.22" }, { ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup, shared across both canvases on this page.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "I.11":      "/elements/books/bookI/propositions/propI11/",
+        "I.29":      "/elements/books/bookI/propositions/propI29/",
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "I.34":      "/elements/books/bookI/propositions/propI34/",
+        "I.Post.4":  "/elements/books/bookI/postulates/post4/",
+        "I.Def.22":  "/elements/books/bookI/definitions/defI22/"
     });
 </script>
 </figure>
 
-Draw *AC* at right angles to the straight line *AB* from the point *A* on it. Make *AD* equal to *AB.* Draw *DE* through the point *D* parallel to *AB,* and draw *BE* through the point *B* parallel to *AD.* [!just I.11; I.3, I.31]
+Draw {AC} at right angles to the straight line {AB} from the point {A} on it. Make {AD} equal to {AB}. Draw {DE} through the point {D} parallel to {AB}, and draw {BE} through the point {B} parallel to {AD}. [!just I.11; I.3, I.31]
 
-Then *ADEB* is a parallelogram. Therefore *AB* equals *DE,* and *AD* equals *BE.* [!just I.34]
+Then {ADEB} is a parallelogram. Therefore {AB} equals {DE}, and {AD} equals {BE}. [!just I.34]
 
-But *AB* equals *AD,* therefore the four straight lines *BA, AD, DE,* and *EB* equal one another. Therefore the parallelogram *ADEB* is equilateral.
+But {AB} equals {AD}, therefore the four straight lines {BA}, {AD}, {DE}, and {EB} equal one another. Therefore the parallelogram {ADEB} is equilateral.
 
 I say next that it is also right-angled.
 
-Since the straight line *AD* falls upon the parallels *AB* and *DE,* therefore the sum of the angles *BAD* and *ADE* equals two right angles. [!just I.29]
+Since the straight line {AD} falls upon the parallels {AB} and {DE}, therefore the sum of the angles {BAD|angBAD} and {ADE|angADE} equals two right angles. [!just I.29]
 
-But the angle *BAD* is right, therefore the angle *ADE* is also right. [!just I.Post.4]
+But the angle {BAD|angBAD} is right, therefore the angle {ADE|angADE} is also right. [!just I.Post.4]
 
-And in parallelogrammic areas the opposite sides and angles equal one another, therefore each of the opposite angles *ABE* and *BED* is also right. Therefore *ADEB* is right-angled. [!just I.34]
+And in parallelogrammic areas the opposite sides and angles equal one another, therefore each of the opposite angles {ABE|angABE} and {BED|angBED} is also right. Therefore {ADEB} is right-angled. [!just I.34]
 
 And it was also proved equilateral.
 
-Therefore it is a square, and it is described on the straight line *AB.* [!just I.Def.22]
+Therefore it is a square, and it is described on the straight line {AB}. [!just I.Def.22]
 
 <div class="qed">Q.E.F.</div>
 ----
@@ -72,6 +167,24 @@ We now have the second regular polygon, the first being the equilateral triangle
 <canvas id="canvas_1" width="280" height="270" tabindex="0"></canvas>
 <noscript><img alt="I.46 diagram" src="propI46a.gif"/></noscript>
 <script type="text/javascript">
+    // Guide construction walk (guide-proof exception in process.md, as on I.20,
+    // I.23 and I.31): the guide prose below IS a step-by-step narration, so the
+    // captions are Dr. Joyce's own sentences, in his order.
+    //
+    // Everything appears on the step that introduces it — ABcirc arrives on
+    // slide 2, where it is the circle that places F at distance AB from A on
+    // the far side, and it is then reused on slide 4 to cut off AD. That reuse
+    // is exactly Joyce's "fortunately, the needed circle has already been
+    // drawn".
+    //
+    // The refs {BA}, {AG} and {GA} bind to the three CIRCLES, not to segments —
+    // his sentence names them as "three circles with radii BA, AG, and GA".
+    var G1 = ["A","B","AB"];
+    var G2 = G1.concat(["ABcirc","Fline","AF","F"]);
+    var G3 = G2.concat(["BFcirc","FBcirc","CC'","C","AC"]);
+    var G4 = G3.concat(["D","AD"]);
+    var G6 = G4.concat(["G","Bline","BAcirc","AGcirc","GAcirc","HH'","H","E","BE"]);
+    var G7 = G6.concat(["ABED"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "0,0,100",
@@ -80,15 +193,20 @@ We now have the second regular polygon, the first being the equilateral triangle
             "A;point;free;100,160",
             "B;point;free;160,160",
             "AB;line;connect;A,B",
+            // Circle centred A through B — places F on the far side, and is
+            // reused later to cut off AD.
             "ABcirc;circle;radius;A,B",
             "F;point;extend;B,A,B,A",
             "AF;line;connect;A,F",
             "Fline;line;extend;A,F,B,A",
+            // Two circles centred B and F give the perpendicular at A.
             "BFcirc;circle;radius;B,F",
             "FBcirc;circle;radius;F,B",
             "CC';line;bichord;BFcirc,FBcirc",
             "C;point;first;CC'",
             "D;point;cutoff;A,C,A,B",
+            // Three more circles give the perpendicular at B, which is parallel
+            // to AD and so serves as EB.
             "BAcirc;circle;radius;B,A",
             "G;point;extend;A,B,A,B",
             "Bline;line;extend;A,B,F,B",
@@ -97,15 +215,74 @@ We now have the second regular polygon, the first being the equilateral triangle
             "HH';line;bichord;GAcirc,AGcirc",
             "H;point;first;HH'",
             "E;point;cutoff;B,H,B,A",
-            "ABED;polygon;quadrilateral;A,B,E,D;0;0;black;random"
+            // The square the walk builds. Joyce's spec fills it "random", which picks
+            // a fresh pastel every page load and can land almost white against
+            // this white canvas. Pinned to the same cyan the proposition figure
+            // uses for the same square, so both canvases agree and it is always
+            // visible.
+            "ABED;polygon;quadrilateral;A,B,E,D;0;0;black;cyan",
+            // Hover targets for the segments the guide names.
+            "AC;line;connect;A,C;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "BE;line;connect;B,E;0;0;0"
         ],
+        aliases: { "EB": "BE", "DA": "AD", "CA": "AC", "BA": "BAcirc",
+                   "AG": "AGcirc", "GA": "GAcirc", "FA": "AF" },
+        slides: [
+            { text: "There are quite a few steps needed to construct a square on {AB}.",
+              visible: G1,
+              highlighted: ["AB"] },
+            { text: "In order to construct the perpendicular {AC}, first {AB} has to be extended in the direction of {A} and a point {F} on the far side the same distance from {A} as {B} is,",
+              visible: G2,
+              highlighted: ["F","ABcirc"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ABcirc", name: geomlib.A.Circle.compass },
+                  { elem: "Fline",  name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "F",      name: geomlib.A.Point.appear } ] } },
+            { text: "then two more circles centered at {B} and {F} to get a perpendicular line,",
+              visible: G3,
+              highlighted: ["BFcirc","FBcirc","AC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BFcirc", name: geomlib.A.Circle.compass },
+                  { elem: "FBcirc", name: geomlib.A.Circle.compass },
+                  { elem: "C",      name: geomlib.A.Point.appear } ] } },
+            { text: "and then it needs to be cut off at length {C}, but fortunately, the needed circle has already been drawn.",
+              visible: G4,
+              highlighted: ["ABcirc","AD","D"],
+              transition: { animations: [ { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "Next, {EB} is to be drawn through {B} parallel to {AD}.",
+              visible: G4,
+              highlighted: ["AD","B"] },
+            { text: "In general that construction given in I.31 takes six circles, but in this case if {EB} is drawn perpendicular to {AB}, then it will be parallel to {AD}, too, and that construction only takes three circles with radii {BA}, {AG}, and {GA}.",
+              visible: G6,
+              highlighted: ["BAcirc","AGcirc","GAcirc","BE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BAcirc", name: geomlib.A.Circle.compass },
+                  { elem: "AGcirc", name: geomlib.A.Circle.compass },
+                  { elem: "GAcirc", name: geomlib.A.Circle.compass },
+                  { elem: "E",      name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.31" }] },
+            { text: "This abbreviation of Euclid's construction requires six circles and four lines.",
+              visible: G7,
+              highlighted: ["ABED"],
+              transition: { animations: [ { elem: "ABED", name: geomlib.A.Polygon.outlineAndFill } ] } }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Merge into the page-wide citation lookup (shared with canvas_0).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.31": "/elements/books/bookI/propositions/propI31/"
     });
 </script>
 </figure>
 
-There are quite a few steps needed to construct a square on *AB.* In order to construct the perpendicular *AC,* first *AB* has to be extended in the direction of *A* and a point *F* on the far side the same distance from *A* as *B* is, then two more circles centered at *B* and *F* to get a perpendicular line, and then it needs to be cut off at length *C,* but fortunately, the needed circle has already been drawn.
+There are quite a few steps needed to construct a square on {AB}. In order to construct the perpendicular {AC}, first {AB} has to be extended in the direction of {A} and a point {F} on the far side the same distance from {A} as {B} is, then two more circles centered at {B} and {F} to get a perpendicular line, and then it needs to be cut off at length {C}, but fortunately, the needed circle has already been drawn.
 
-Next, *EB* is to be drawn through *B* parallel to *AD.* In general that construction given in @I.31 takes six circles, but in this case if *EB* is drawn perpendicular to *AB,* then it will be parallel to *AD,* too, and that construction only takes three circles with radii *BA, AG,* and *GA.*
+Next, {EB} is to be drawn through {B} parallel to {AD}. In general that construction given in @I.31 takes six circles, but in this case if {EB} is drawn perpendicular to {AB}, then it will be parallel to {AD}, too, and that construction only takes three circles with radii {BA}, {AG}, and {GA}.
 
 This abbreviation of Euclid's construction requires six circles and four lines. There are alternate constructions that are a bit shorter.
 

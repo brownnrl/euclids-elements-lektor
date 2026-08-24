@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% import "_macros_refs.html" as refs %}
 {% block content %}
 {# When `group` is set, render a single combined theorem box that
    lists every bundle member's statement as a numbered paragraph
@@ -18,6 +19,9 @@
     <h2 id="guide">Guide</h2>
     {{ group_page.guide }}
   {% endif %}
+  {# One reverse-citation table per common notion (the combined box
+     above shows all of them together). #}
+  {% for m in members %}{{ refs.ref_table(m, "Referenced by — " ~ m.short_label) }}{% endfor %}
 {% else %}
   <div class="theorem">
   <h1>{{ this.title }}</h1>
@@ -28,5 +32,6 @@
     <h2 id="guide">Guide</h2>
     {{ this.guide }}
   {% endif %}
+  {{ refs.ref_table(this) }}
 {% endif %}
 {% endblock %}

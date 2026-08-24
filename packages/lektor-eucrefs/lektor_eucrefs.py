@@ -79,11 +79,17 @@ _TOKEN_BARE = (
 INLINE_RE = re.compile(rf"@({_TOKEN_BARE})")
 BLOCK_RE = re.compile(r"\[!just\s+(.+?)\]")
 
-# Element-reference inline shortcode: {NAME}.
+# Element-reference inline shortcode: {NAME} or {DISPLAY|element}.
 #   NAME — Joyce/Euclid label: letter-led, may carry digits, primes,
 #          hyphens (e.g. A, AB, BCD, A', ABC'). Underscores are
 #          deliberately excluded — mistune's inline lexer stops at `_`
 #          (emphasis prefix), which would split the token.
+#   The optional `|element` part (display override) renders DISPLAY
+#   but binds the highlight to `element` — for prose names that
+#   collide with another element's name, e.g. "the angle {ABC|angBint}"
+#   where the bare token would resolve to the triangle ABC. The
+#   element part may carry digits (angBint) but follows the same
+#   no-underscore constraint.
 #
 # The leading `!` was tried first (`{!AB}`) but mistune also stops at
 # `!`. Bare `{NAME}` arrives intact at the text() walker, no lexer
@@ -97,7 +103,7 @@ BLOCK_RE = re.compile(r"\[!just\s+(.+?)\]")
 # be targeted from prose, drop to raw inline HTML:
 #   <span class="elem-ref" data-elem="AB" data-canvas="canvas_2">AB</span>
 ELEM_REF_RE = re.compile(
-    r"\{(?P<name>[A-Za-z][A-Za-z0-9'\-]*)\}"
+    r"\{(?P<name>[A-Za-z][A-Za-z0-9'\-]*)(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?\}"
 )
 
 # Standalone block directives that REPLACE the paragraph they sit in.
@@ -112,7 +118,8 @@ BLOCK_REPLACE_RE = re.compile(
 # named groups disambiguate which kind of token matched.
 _INLINE_ANY_RE = re.compile(
     rf"@(?P<cite>{_TOKEN_BARE})"
-    rf"|\{{(?P<elem>[A-Za-z][A-Za-z0-9'\-]*)\}}"
+    rf"|\{{(?P<elem>[A-Za-z][A-Za-z0-9'\-]*)"
+    rf"(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?\}}"
 )
 
 
@@ -198,10 +205,12 @@ def _render_entry(entry: str) -> str:
     return " ".join(parts)
 
 
-def _render_elem_ref(name: str) -> str:
-    """Render a `{NAME}` inline shortcode as a span the browser-side JS
-    binds hover/touch handlers to."""
-    return f'<span class="elem-ref" data-elem="{name}">{name}</span>'
+def _render_elem_ref(name: str, target: str | None = None) -> str:
+    """Render a `{NAME}` / `{DISPLAY|element}` inline shortcode as a
+    span the browser-side JS binds hover/touch handlers to. With a
+    display override, the span shows NAME but binds to `target`."""
+    elem = target or name
+    return f'<span class="elem-ref" data-elem="{elem}">{name}</span>'
 
 
 def _render_block_replace(kind: str, arg: str | None) -> str:
@@ -232,6 +241,186 @@ def _render_just(content: str) -> str:
     return '<div class="just">' + "<br>".join(groups) + "</div>"
 
 
+# ----------------------------------------------------------------------
+# Forward-reference table (phase 1).
+#
+# For a proposition page, collect the UNIQUE set of citations its proof
+# makes via `[!just …]` directives, grouped by book. Exposed to templates
+# as the Jinja global `forward_refs(*proof_sources)` — each argument is a
+# proof field's raw markdown `.source` (the template passes one per
+# section). Reuses BLOCK_RE, _ENTRY_RE and resolve() above; no global
+# index needed since forward refs are per-page.
+# ----------------------------------------------------------------------
+
+_ROMAN_ORDER = {r: i for i, r in enumerate(
+    ["I", "II", "III", "IV", "V", "VI", "VII", "VIII",
+     "IX", "X", "XI", "XII", "XIII"], start=1)}
+
+
+def _num(s):
+    try:
+        return int(s)
+    except (ValueError, TypeError):
+        return 0
+
+
+def _token_group(token):
+    """(group label, group sort key) for a citation token."""
+    if token.startswith("C.N."):
+        return ("Common Notions", 99)
+    head = token.split(".", 1)[0]
+    if head in _ROMAN_ORDER:
+        return (f"Book {head}", _ROMAN_ORDER[head])
+    return ("Other", 100)
+
+
+def _item_sort(token):
+    """Sort within a book: postulates, then definitions, then
+    propositions, then common notions; by number within each."""
+    parts = token.split(".")
+    if token.startswith("C.N."):
+        return (3, _num(parts[-1]))
+    if len(parts) >= 2 and parts[1] == "Post":
+        return (0, _num(parts[2]) if len(parts) > 2 else 0)
+    if len(parts) >= 2 and parts[1] == "Def":
+        return (1, _num(parts[-1]))
+    return (2, _num(parts[1]) if len(parts) > 1 else 0)
+
+
+def _entry_token(entry):
+    """The citation token from one `[!just]` entry, dropping any
+    parenthetical annotation; None for pure-annotation entries."""
+    entry = entry.strip()
+    m = _ENTRY_RE.match(entry)
+    if m and m.group(1):
+        return m.group(1)
+    if entry and "(" not in entry:
+        return entry
+    return None
+
+
+def forward_refs(*proof_sources):
+    """Unique `[!just]` citations across the given proof markdown
+    sources, grouped + sorted by book. Returns a list of
+    {"label": str, "refs": [{"token": str, "url": str}, …]} for the
+    template (key is `refs`, not `items`, to avoid Jinja's dict.items)."""
+    if len(proof_sources) == 1 and isinstance(proof_sources[0], (list, tuple)):
+        proof_sources = proof_sources[0]
+    seen = set()
+    ordered = []
+    for src in proof_sources:
+        if not src:
+            continue
+        for m in BLOCK_RE.finditer(str(src)):
+            for line in m.group(1).split(";"):
+                for entry in line.split(","):
+                    tok = _entry_token(entry)
+                    if tok and tok not in seen:
+                        seen.add(tok)
+                        ordered.append(tok)
+    groups = {}
+    for tok in ordered:
+        label, gsort = _token_group(tok)
+        groups.setdefault((gsort, label), []).append(
+            {"token": tok, "url": resolve(tok)})
+    out = []
+    for key in sorted(groups):
+        refs = sorted(groups[key], key=lambda d: _item_sort(d["token"]))
+        out.append({"label": key[1], "refs": refs})
+    return out
+
+
+# ----------------------------------------------------------------------
+# Reverse-reference ("Referenced by") index.
+#
+# The inverse of forward_refs: for a given page, which OTHER pages list it
+# in a `[!just …]`. Needs one pass over the whole corpus, so it's built
+# once (memoised) by walking `content/elements/**/contents.lr`, pulling
+# each file's `[!just]` tokens, and recording the citing page under every
+# target it resolves to. `referenced_by(record)` then looks up the
+# record's own URL. (Built once per process — restart `lektor server`
+# after editing citations for the index to refresh.)
+# ----------------------------------------------------------------------
+
+_SHORT_LABEL_RE = re.compile(r"^short_label:\s*(.+?)\s*$", re.MULTILINE)
+_reverse_index = None
+
+
+def _content_root():
+    here = os.path.abspath(__file__)
+    root = os.path.dirname(os.path.dirname(os.path.dirname(here)))
+    return os.path.join(root, "content")
+
+
+def _norm_url(u):
+    if u and not u.endswith("/"):
+        u += "/"
+    return u
+
+
+def _url_from_contents_path(fpath, content_root):
+    rel = os.path.relpath(os.path.dirname(fpath), content_root)
+    return "/" + rel.replace(os.sep, "/") + "/"
+
+
+def _build_reverse_index():
+    root = _content_root()
+    rev = {}
+    elements = os.path.join(root, "elements")
+    for dirpath, _dirnames, filenames in os.walk(elements):
+        if "contents.lr" not in filenames:
+            continue
+        fpath = os.path.join(dirpath, "contents.lr")
+        try:
+            with open(fpath, encoding="utf-8") as f:
+                text = f.read()
+        except OSError:
+            continue
+        tokens = set()
+        for jm in BLOCK_RE.finditer(text):
+            for line in jm.group(1).split(";"):
+                for entry in line.split(","):
+                    tok = _entry_token(entry)
+                    if tok:
+                        tokens.add(tok)
+        if not tokens:
+            continue
+        lm = _SHORT_LABEL_RE.search(text)
+        url = _norm_url(_url_from_contents_path(fpath, root))
+        citer = {"label": lm.group(1).strip() if lm else url, "url": url}
+        for tok in tokens:
+            target = resolve(tok).split("#")[0]   # fold #cor onto the prop
+            if not target.startswith("/"):
+                continue                          # skip #unresolved-…
+            rev.setdefault(_norm_url(target), []).append(citer)
+    return rev
+
+
+def referenced_by(record):
+    """Pages whose `[!just]` lists `record`, grouped + sorted by book.
+    Returns the same {"label", "refs":[{"label","url"}]} shape as
+    forward_refs (here `refs[*].label` is the citing page's short label)."""
+    global _reverse_index
+    if _reverse_index is None:
+        _reverse_index = _build_reverse_index()
+    url = _norm_url(getattr(record, "url_path", None) or "")
+    citers = _reverse_index.get(url, [])
+    seen, uniq = set(), []
+    for c in citers:
+        if c["url"] not in seen:
+            seen.add(c["url"])
+            uniq.append(c)
+    groups = {}
+    for c in uniq:
+        label, gsort = _token_group(c["label"])
+        groups.setdefault((gsort, label), []).append(c)
+    out = []
+    for key in sorted(groups):
+        refs = sorted(groups[key], key=lambda c: _item_sort(c["label"]))
+        out.append({"label": key[1], "refs": refs})
+    return out
+
+
 class EucrefsRendererMixin:
     """Mixed into Lektor's Mistune Renderer via on_markdown_config."""
 
@@ -252,7 +441,7 @@ class EucrefsRendererMixin:
             if m.group("cite"):
                 parts.append(_link(m.group("cite")))
             else:
-                parts.append(_render_elem_ref(m.group("elem")))
+                parts.append(_render_elem_ref(m.group("elem"), m.group("target")))
             last = m.end()
         if last == 0:
             return super().text(text)
@@ -301,3 +490,7 @@ class EucrefsPlugin(Plugin):
         # repo's dist/bundle.js). Templates read this as a global.
         val = os.environ.get("EUCLIDS_GEOMLIB_LOCAL", "").strip().lower()
         self.env.jinja_env.globals["geomlib_local"] = val in ("1", "true", "yes", "on")
+        # Reference tables: forward_refs = what this page cites;
+        # referenced_by = which pages cite this one (see above).
+        self.env.jinja_env.globals["forward_refs"] = forward_refs
+        self.env.jinja_env.globals["referenced_by"] = referenced_by

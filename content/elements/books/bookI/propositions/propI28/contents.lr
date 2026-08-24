@@ -15,11 +15,11 @@ statement: If a straight line falling on two straight lines makes the exterior a
 ----
 proof:
 
-Let the straight line *EF* falling on the two straight lines *AB* and *CD* make the exterior angle *EGB* equal to the interior and opposite angle *GHD,* or the sum of the interior angles on the same side, namely *BGH* and *GHD,* equal to two right angles.
+Let the straight line {EF} falling on the two straight lines {AB} and {CD} make the exterior angle {EGB} equal to the interior and opposite angle {GHD}, or the sum of the interior angles on the same side, namely {BGH} and {GHD}, equal to two right angles.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="230" height="200" tabindex="0"></canvas>
-<noscript><img alt="I.28 diagram" src="propI29.gif"/></noscript>
+<noscript><img alt="I.28 diagram" src="propI28.gif"/></noscript>
 <script type="text/javascript">
     geomlib.init({
         canvasid: "canvas_0",
@@ -37,19 +37,87 @@ Let the straight line *EF* falling on the two straight lines *AB* and *CD* make 
             "F;point;free;130,170",
             "EF;line;connect;E,F",
             "G;point;intersection;A,B,E,F",
-            "H;point;intersection;C,D,E,F"
+            "H;point;intersection;C,D,E,F",
+            // Angle markers (#91). At G the transversal crosses AB: ∠EGB
+            // (exterior), ∠AGH (alternate, vertical to ∠EGB), ∠BGH
+            // (co-interior). At H it crosses CD: ∠GHD. Explicit px radii
+            // pin the size — the #103 auto-nesting otherwise pushes a
+            // same-vertex marker out to ~31–40px. ∠EGB/∠AGH are vertical
+            // (opposite quadrants) so share 22px; ∠BGH shares an arm with
+            // both, so a smaller 14px keeps it distinct.
+            "EGB;sector;angleMarker;G,E,B,22",
+            "AGH;sector;angleMarker;G,A,H,22",
+            "BGH;sector;angleMarker;G,B,H,14",
+            "GHD;sector;angleMarker;H,G,D,22"
         ],
+        slides: [
+            { text: "Let the straight line {EF} falling on the two straight lines {AB} and {CD} make the exterior angle {EGB} equal to the interior and opposite angle {GHD}, or the sum of the interior angles on the same side, namely {BGH} and {GHD}, equal to two right angles.",
+              visible: ["AB","CD","EF","G","H","EGB","GHD","BGH"],
+              highlighted: ["EF","AB","CD","EGB","GHD","BGH"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "EGB", name: geomlib.A.Sector.sweep },
+                  { elem: "GHD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that {AB} is parallel to {CD}.",
+              visible: ["AB","CD","EF","G","H","EGB","GHD","BGH"],
+              highlighted: ["AB","CD"] },
+            { text: "Since the angle {EGB} equals the angle {GHD}, and the angle {EGB} equals the angle {AGH}, therefore the angle {AGH} equals the angle {GHD}.",
+              visible: ["AB","CD","EF","G","H","EGB","GHD","BGH","AGH"],
+              highlighted: ["EGB","GHD","AGH"],
+              transition: { animations: [ { elem: "AGH", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.15" }, { ref: "C.N.1" }] },
+            { text: "And they are alternate, therefore {AB} is parallel to {CD}.",
+              visible: ["AB","CD","EF","G","H","EGB","GHD","BGH","AGH"],
+              highlighted: ["AGH","GHD","AB","CD"],
+              justifications: [{ ref: "I.27" }] },
+            { text: "Next, since the sum of the angles {BGH} and {GHD} equals two right angles,",
+              visible: ["AB","CD","EF","G","H","EGB","GHD","BGH","AGH"],
+              highlighted: ["BGH","GHD"] },
+            { text: "and the sum of the angles {AGH} and {BGH} also equals two right angles,",
+              visible: ["AB","CD","EF","G","H","EGB","GHD","BGH","AGH"],
+              highlighted: ["AGH","BGH"],
+              justifications: [{ ref: "I.13" }, { ref: "I.Post.4" }] },
+            { text: "therefore the sum of the angles {AGH} and {BGH} equals the sum of the angles {BGH} and {GHD}.",
+              visible: ["AB","CD","EF","G","H","EGB","GHD","BGH","AGH"],
+              highlighted: ["AGH","BGH","GHD"],
+              justifications: [{ ref: "C.N.1" }] },
+            { text: "Subtract the angle {BGH} from each. Therefore the remaining angle {AGH} equals the remaining angle {GHD}.",
+              visible: ["AB","CD","EF","G","H","EGB","GHD","BGH","AGH"],
+              highlighted: ["BGH","AGH","GHD"],
+              justifications: [{ ref: "C.N.3" }] },
+            { text: "And they are alternate, therefore {AB} is parallel to {CD}.",
+              visible: ["AB","CD","EF","G","H","EGB","GHD","BGH","AGH"],
+              highlighted: ["AGH","GHD","AB","CD"],
+              justifications: [{ ref: "I.27" }] },
+            { text: "Therefore if a straight line falling on two straight lines makes the exterior angle equal to the interior and opposite angle on the same side, or the sum of the interior angles on the same side equal to two right angles, then the straight lines are parallel to one another.",
+              visible: ["AB","CD","EF","G","H","EGB","GHD","BGH","AGH"],
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.4": "/elements/books/bookI/postulates/post4/",
+        "I.13":     "/elements/books/bookI/propositions/propI13/",
+        "I.15":     "/elements/books/bookI/propositions/propI15/",
+        "I.27":     "/elements/books/bookI/propositions/propI27/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.3":    "/elements/books/bookI/commonnotions/cn3/"
     });
 </script>
 </figure>
 
-I say that *AB* is parallel to *CD.*
+I say that {AB} is parallel to {CD}.
 
-Since the angle *EGB* equals the angle *GHD,* and the angle *EGB* equals the angle *AGH,* therefore the angle *AGH* equals the angle *GHD.* And they are alternate, therefore *AB* is parallel to *CD.* [!just I.15; C.N.1; I.27]
+Since the angle {EGB} equals the angle {GHD}, and the angle {EGB} equals the angle {AGH}, therefore the angle {AGH} equals the angle {GHD}. And they are alternate, therefore {AB} is parallel to {CD}. [!just I.15; C.N.1; I.27]
 
-Next, since the sum of the angles *BGH* and *GHD* equals two right angles, and the sum of the angles *AGH* and *BGH* also equals two right angles, therefore the sum of the angles *AGH* and *BGH* equals the sum of the angles *BGH* and *GHD.* [!just I.13; C.N.1; I.Post.4]
+Next, since the sum of the angles {BGH} and {GHD} equals two right angles, and the sum of the angles {AGH} and {BGH} also equals two right angles, therefore the sum of the angles {AGH} and {BGH} equals the sum of the angles {BGH} and {GHD}. [!just I.13; C.N.1; I.Post.4]
 
-Subtract the angle *BGH* from each. Therefore the remaining angle *AGH* equals the remaining angle *GHD.* And they are alternate, therefore *AB* is parallel to *CD.* [!just C.N.3; I.27]
+Subtract the angle {BGH} from each. Therefore the remaining angle {AGH} equals the remaining angle {GHD}. And they are alternate, therefore {AB} is parallel to {CD}. [!just C.N.3; I.27]
 
 Therefore *if a straight line falling on two straight lines makes the exterior angle equal to the interior and opposite angle on the same side, or the sum of the interior angles on the same side equal to two right angles, then the straight lines are parallel to one another.*
 

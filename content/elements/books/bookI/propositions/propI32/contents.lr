@@ -15,9 +15,9 @@ statement: In any triangle, if one of the sides is produced, then the exterior a
 ----
 proof:
 
-Let *ABC* be a triangle, and let one side of it *BC* be produced to *D.*
+Let {ABC} be a triangle, and let one side of it {BC} be produced to {D}.
 
-I say that the exterior angle *ACD* equals the sum of the two interior and opposite angles *CAB* and *ABC,* and the sum of the three interior angles of the triangle *ABC, BCA,* and *CAB* equals two right angles.
+I say that the exterior angle {ACD} equals the sum of the two interior and opposite angles {CAB} and {ABC|CBA}, and the sum of the three interior angles of the triangle {ABC|CBA}, {BCA}, and {CAB} equals two right angles.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="240" height="200" tabindex="0"></canvas>
@@ -36,23 +36,113 @@ I say that the exterior angle *ACD* equals the sum of the two interior and oppos
             "CD;line;connect;C,D",
             "E';point;parallelogram;A,B,C;0;0",
             "E;point;lineSlider;C,E',170,40",
-            "CE;line;connect;C,E"
+            "CE;line;connect;C,E",
+            // Side hover targets (the triangle polygon draws them; these only
+            // light up when a prose/caption ref names the side).
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            // Angle markers (#91), colour-matched: the interior angles A (red)
+            // and B (blue) reappear at C as ∠ACE and ∠ECD, so the three angles
+            // at C — ∠BCA (green) + ∠ACE (red) + ∠ECD (blue) — tile the straight
+            // line BCD = ∠A+∠B+∠C. Radii pinned (#103): the three tiling angles
+            // at 22px, the exterior ∠ACD as an outer arc at 30px.
+            "CAB;sector;angleMarker;A,C,B,22;0;0;red;red",
+            "CBA;sector;angleMarker;B,C,A,22;0;0;blue;blue",
+            "BCA;sector;angleMarker;C,B,A,22;0;0;green;green",
+            "ACE;sector;angleMarker;C,A,E,22;0;0;red;red",
+            "ECD;sector;angleMarker;C,E,D,22;0;0;blue;blue",
+            "ACD;sector;angleMarker;C,A,D,30;0;0;orange;0"
         ],
+        aliases: { "BAC": "CAB", "ACB": "BCA" },
+        deferDraggables: ["E"],
+        slides: [
+            { text: "Let {ABC} be a triangle, and let one side {BC|BC} be produced to {D}.",
+              visible: ["ABC","BC","CD","D"],
+              highlighted: ["ABC","BC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",  name: geomlib.A.Point.appear } ] } },
+            { text: "I say that the exterior angle {ACD} equals the sum of the two interior and opposite angles {CAB} and {ABC|CBA}, and that the three interior angles {ABC|CBA}, {BCA}, and {CAB} together equal two right angles.",
+              visible: ["ABC","BC","CD","D","CAB","CBA","BCA","ACD"],
+              highlighted: ["ACD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "CAB", name: geomlib.A.Sector.sweep },
+                  { elem: "CBA", name: geomlib.A.Sector.sweep },
+                  { elem: "BCA", name: geomlib.A.Sector.sweep },
+                  { elem: "ACD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Draw {CE} through the point {C} parallel to the straight line {AB|AB}.",
+              visible: ["ABC","BC","CD","D","AB","CE","E"],
+              highlighted: ["CE","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E",  name: geomlib.A.Point.appear },
+                  { elem: "CE", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.31" }] },
+            { text: "Since {AB|AB} is parallel to {CE} and {AC|AC} falls upon them, the alternate angles {BAC|CAB} and {ACE} are equal.",
+              visible: ["ABC","BC","CD","D","AB","AC","CE","E","CAB","ACE"],
+              highlighted: ["CAB","ACE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "CAB", name: geomlib.A.Sector.sweep },
+                  { elem: "ACE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.29" }] },
+            { text: "Again, since {AB|AB} is parallel to {CE} and {BD|BD} falls upon them, the exterior angle {ECD} equals the interior and opposite angle {ABC|CBA}.",
+              visible: ["ABC","BC","CD","D","AB","BD","CE","E","CAB","ACE","CBA","ECD"],
+              highlighted: ["CBA","ECD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "CBA", name: geomlib.A.Sector.sweep },
+                  { elem: "ECD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.29" }] },
+            { text: "But {ACE} was proved equal to {BAC|CAB}. So the whole exterior angle {ACD} equals the sum of the two interior and opposite angles {BAC|CAB} and {ABC|CBA}.",
+              visible: ["ABC","BC","CD","D","CE","E","CAB","ACE","CBA","ECD","ACD"],
+              highlighted: ["ACD","ACE","ECD"],
+              transition: { animations: [ { elem: "ACD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Add the angle {ACB|BCA} to each. Then {ACD} and {ACB|BCA} together equal the three interior angles {ABC|CBA}, {BCA}, and {CAB}.",
+              visible: ["ABC","BC","CD","D","CE","E","CAB","ACE","CBA","ECD","ACD","BCA"],
+              highlighted: ["BCA","ACD"],
+              transition: { animations: [ { elem: "BCA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "But {ACD} and {ACB|BCA} together equal two right angles — they fill the straight line {BD|BD}. Therefore the three interior angles {ABC|CBA}, {BCA}, and {CAB} equal two right angles.",
+              visible: ["ABC","BC","BD","CD","D","CE","E","BCA","ACE","ECD","CAB","CBA"],
+              highlighted: ["BCA","ACE","ECD","BD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BCA", name: geomlib.A.Sector.sweep },
+                  { elem: "ACE", name: geomlib.A.Sector.sweep },
+                  { elem: "ECD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.13" }, { ref: "C.N.1" }] },
+            { text: "So in any triangle, if one side is produced, the exterior angle equals the sum of the two interior and opposite angles, and the three interior angles equal two right angles.",
+              visible: ["ABC","BC","BD","CD","D","CE","E","BCA","ACE","ECD","CAB","CBA"],
+              highlighted: ["BCA","ACE","ECD","CAB","CBA"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.13":  "/elements/books/bookI/propositions/propI13/",
+        "I.29":  "/elements/books/bookI/propositions/propI29/",
+        "I.31":  "/elements/books/bookI/propositions/propI31/",
+        "C.N.1": "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2": "/elements/books/bookI/commonnotions/cn2/"
     });
 </script>
 </figure>
 
-Draw *CE* through the point *C* parallel to the straight line *AB.* [!just I.31]
+Draw {CE} through the point {C} parallel to the straight line {AB}. [!just I.31]
 
-Since *AB* is parallel to *CE,* and *AC* falls upon them, therefore the alternate angles *BAC* and *ACE* equal one another. [!just I.29]
+Since {AB} is parallel to {CE}, and {AC} falls upon them, therefore the alternate angles {BAC} and {ACE} equal one another. [!just I.29]
 
-Again, since *AB* is parallel to *CE,* and the straight line *BD* falls upon them, therefore the exterior angle *ECD* equals the interior and opposite angle *ABC.* [!just I.29]
+Again, since {AB} is parallel to {CE}, and the straight line {BD} falls upon them, therefore the exterior angle {ECD} equals the interior and opposite angle {ABC|CBA}. [!just I.29]
 
-But the angle *ACE* was also proved equal to the angle *BAC.* Therefore the whole angle *ACD* equals the sum of the two interior and opposite angles *BAC* and *ABC.*
+But the angle {ACE} was also proved equal to the angle {BAC}. Therefore the whole angle {ACD} equals the sum of the two interior and opposite angles {BAC} and {ABC|CBA}.
 
-Add the angle *ACB* to each. Then the sum of the angles *ACD* and *ACB* equals the sum of the three angles *ABC, BCA,* and *CAB.* [!just C.N.2]
+Add the angle {ACB} to each. Then the sum of the angles {ACD} and {ACB} equals the sum of the three angles {ABC|CBA}, {BCA}, and {CAB}. [!just C.N.2]
 
-But the sum of the angles *ACD* and *ACB* equals two right angles. Therefore the sum of the angles *ABC, BCA,* and *CAB* also equals two right angles. [!just I.13; C.N.1]
+But the sum of the angles {ACD} and {ACB} equals two right angles. Therefore the sum of the angles {ABC|CBA}, {BCA}, and {CAB} also equals two right angles. [!just I.13; C.N.1]
 
 Therefore *in any triangle, if one of the sides is produced, then the exterior angle equals the sum of the two interior and opposite angles, and the sum of the three interior angles of the triangle equals two right angles.*
 

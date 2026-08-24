@@ -15,12 +15,32 @@ statement: Triangles which are on the same base and in the same parallels equal 
 ----
 proof:
 
-Let *ABC* and *DBC* be triangles on the same base *BC* and in the same parallels *AD* and *BC.*
+Let {ABC} and {DBC} be triangles on the same base {BC} and in the same parallels {AD} and {BC}.
+
+I say that the triangle {ABC} equals the triangle {DBC}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="310" height="210" tabindex="0"></canvas>
 <noscript><img alt="I.37 diagram" src="propI37.gif"/></noscript>
 <script type="text/javascript">
+    // The proof builds outward from the two triangles: produce AD both ways to
+    // E and F, close the two parallelograms, then read each triangle off as
+    // half of its own parallelogram. So the walk gates by step — the produced
+    // line + drawn parallels arrive on slide 2, the parallelograms on slide 3.
+    // Slide 3 drops the TRIANGLE fills so the two parallelograms read cleanly
+    // (their fills would otherwise sit on top of the triangles they contain);
+    // slides 4-5 bring each triangle back inside its parallelogram, which is
+    // exactly the "half of" beat. Hiding a triangle also takes its diagonal
+    // (AB / DC) with it — wanted, since the diameters aren't drawn until the
+    // slide that names them.
+    var BASE = ["A","B","C","D",
+                "BC","AD","AC","BD","AB","DC",
+                "ABC","BCD"];
+    var PROD = BASE.concat(["E","F","EF","BE","CF"]);
+    var PARA = ["A","B","C","D","E","F",
+                "BC","AD","EF","BE","CF","AC","BD",
+                "EBCA","DBCF"];
+    var HALF = PROD.concat(["EBCA","DBCF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -29,33 +49,104 @@ Let *ABC* and *DBC* be triangles on the same base *BC* and in the same parallels
             "B;point;free;80,170",
             "C;point;free;170,170",
             "A;point;free;130,40",
-            "ABC;polygon;triangle;A,B,C;0;0;0,0,0;random",
+            // Invisible carrier: the parallel to BC through A, on which D slides.
             "AD';line;parallel;A,B,C;0;0;0",
             "D;point;lineSlider;AD',170,40",
-            "BCD;polygon;triangle;B,C,D;0;0;0,0,0;random",
-            "AD;line;connect;A,D",
+            // E and F are the fourth vertices of the two parallelograms, and
+            // both land on the line AD produced (E-A = B-C, F-D = C-B), which
+            // is what makes EF the produced parallel. Both sit on-canvas.
             "E;point;parallelogram;B,C,A",
-            "EA;line;connect;E,A",
-            "EB;line;connect;E,B",
             "F;point;parallelogram;C,B,D",
-            "FD;line;connect;F,D",
-            "FC;line;connect;F,C"
+            // The base, the original parallel AD, and AD produced to E and F.
+            "BC;line;connect;B,C",
+            "AD;line;connect;A,D",
+            "EF;line;connect;E,F",
+            // The two parallels drawn in the construction: BE ∥ CA, CF ∥ BD.
+            "BE;line;connect;B,E",
+            "CF;line;connect;C,F",
+            // Parallelogram edges that are also triangle sides — drawn in their
+            // own right so they survive slide 3, where the triangles are hidden.
+            "AC;line;connect;A,C",
+            "BD;line;connect;B,D",
+            // The two diameters, as hover targets only; the triangles draw them.
+            "AB;line;connect;A,B;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            // Regions. The triangles keep Joyce's black edges and take the
+            // colour pair (cyan / pink); the two parallelograms are fill-only
+            // (their boundaries are the lines above) and start hidden, since
+            // the original figure draws no such regions.
+            "ABC;polygon;triangle;A,B,C;0;0;0,0,0;cyan",
+            "BCD;polygon;triangle;B,C,D;0;0;0,0,0;pink",
+            "EBCA;polygon;quadrilateral;E,B,C,A;0;0;0;orange",
+            "DBCF;polygon;quadrilateral;D,B,C,F;0;0;0;green"
         ],
+        aliases: { "DBC": "BCD", "BA": "AB", "CD": "DC", "CA": "AC", "DB": "BD",
+                   "EB": "BE", "FC": "CF", "DA": "AD", "FE": "EF" },
+        initiallyHidden: ["EBCA","DBCF"],
+        slides: [
+            { text: "Let {ABC} and {DBC} be triangles on the same base {BC} and in the same parallels {AD} and {BC}. I say that {ABC} equals {DBC}.",
+              visible: BASE,
+              highlighted: ["ABC","BCD","BC"] },
+            { text: "Produce {AD} in both directions to {E} and {F}. Draw {BE} through {B} parallel to {CA}, and draw {CF} through {C} parallel to {BD}.",
+              visible: PROD,
+              highlighted: ["EF","BE","CF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.2" }, { ref: "I.31" }] },
+            { text: "Then each of the figures {EBCA} and {DBCF} is a parallelogram, and they are equal, for they are on the same base {BC} and in the same parallels {BC} and {EF}.",
+              visible: PARA,
+              highlighted: ["EBCA","DBCF","BC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EBCA", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DBCF", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.35" }] },
+            { text: "Moreover the triangle {ABC} is half of the parallelogram {EBCA}, for the diameter {AB} bisects it.",
+              visible: HALF,
+              highlighted: ["ABC","EBCA","AB"],
+              transition: { animations: [ { elem: "ABC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.34" }] },
+            { text: "And the triangle {DBC} is half of the parallelogram {DBCF}, for the diameter {DC} bisects it.",
+              visible: HALF,
+              highlighted: ["BCD","DBCF","DC"],
+              transition: { animations: [ { elem: "BCD", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.34" }] },
+            { text: "The halves of equal magnitudes equal one another, therefore the triangle {ABC} equals the triangle {DBC}.",
+              visible: HALF,
+              highlighted: ["ABC","BCD"],
+              justifications: [{ ref: "C.N." }] },
+            { text: "So triangles which are on the same base and in the same parallels equal one another.",
+              visible: HALF,
+              highlighted: ["ABC","BCD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "I.34":     "/elements/books/bookI/propositions/propI34/",
+        "I.35":     "/elements/books/bookI/propositions/propI35/",
+        "C.N.":     "/elements/books/bookI/commonnotions/"
     });
 </script>
 </figure>
 
-I say that the triangle *ABC* equals the triangle *DBC.*
+Produce {AD} in both directions to {E} and {F}. Draw {BE} through {B} parallel to {CA}, and draw {CF} through {C} parallel to {BD}. [!just I.Post.2; I.31]
 
-Produce *AD* in both directions to *E* and *F.* Draw *BE* through *B* parallel to *CA,* and draw *CF* through *C* parallel to *BD.* [!just I.Post.2; I.31]
+Then each of the figures {EBCA} and {DBCF} is a parallelogram, and they are equal, for they are on the same base {BC} and in the same parallels {BC} and {EF}. [!just I.35]
 
-Then each of the figures *EBCA* and *DBCF* is a parallelogram, and they are equal, for they are on the same base *BC* and in the same parallels *BC* and *EF.* [!just I.35]
-
-Moreover the triangle *ABC* is half of the parallelogram *EBCA,* for the diameter *AB* bisects it. And the triangle *DBC* is half of the parallelogram *DBCF,* for the diameter *DC* bisects it. [!just I.34]
+Moreover the triangle {ABC} is half of the parallelogram {EBCA}, for the diameter {AB} bisects it. And the triangle {DBC} is half of the parallelogram {DBCF}, for the diameter {DC} bisects it. [!just I.34]
 
 [!just C.N.]
 
-Therefore the triangle *ABC* equals the triangle *DBC.*
+Therefore the triangle {ABC} equals the triangle {DBC}.
 
 Therefore *triangles which are on the same base and in the same parallels equal one another.*
 

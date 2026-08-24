@@ -129,6 +129,13 @@ The version of Desargue's theorem in Round Geometry specializes to one in hyperb
         background: "0,0,100",
         title: "Desargues Theorem in Hyperbolic Geometry",
         pivot: "diskcenter",
+        // Centre the maximized view on the disk, not on the figure bounds
+        // (euclid#164). Hyperbolic geodesics are genuinely large circles, so
+        // even with #162 skipping runaway elements the derived centre lands at
+        // (289,86) while the disk centre is (200,160) — no arrangement of the
+        // free points closes that gap. Naming the element is the actual fix, and
+        // it lets Dr. Joyce's original coordinates stand.
+        centerOn: "diskcenter",
         elements: [
             "diskcenter;point;fixed;200,160;0;orange",
             "diskradius;point;free;355,150;0;orange",
@@ -182,6 +189,10 @@ The version of Desargue's theorem in Round Geometry specializes to one in hyperb
         background: "0,0,100",
         title: "Desargues Theorem in Elliptic Geometry",
         pivot: "diskcenter",
+        // Same reasoning as canvas_2 (euclid#164): this is the elliptic twin,
+        // built the same way from a disk plus inversions, so its bounds run well
+        // past the canvas too. Centre on the disk rather than on the bounds.
+        centerOn: "diskcenter",
         elements: [
             "diskcenter;point;fixed;200,160;0;orange",
             "diskradius;point;free;350,150;0;orange",

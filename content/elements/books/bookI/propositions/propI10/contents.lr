@@ -17,7 +17,7 @@ statement: To bisect a given finite straight line.
 ----
 proof:
 
-Let *AB* be the given finite straight line.
+Let {AB} be the given finite straight line.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="240" height="200" tabindex="0"></canvas>
@@ -31,24 +31,121 @@ geomlib.init({
     elements: [
         "A;point;free;40,170",
         "B;point;free;200,170",
+        "AB;line;connect;A,B",
         "ABC;polygon;equilateralTriangle;A,B;0;0;black;random",
         "C;point;vertex;ABC,3",
         "D;point;midpoint;A,B;black;green",
-        "CD;line;connect;C,D"
+        "CD;line;connect;C,D",
+        // Transitory construction — real-colored, but listed in
+        // initiallyHidden below (geomlib 0.9.0) so they stay out of the
+        // static figure and appear only on the build/bisect slides: the
+        // two equilateral-triangle circles, the lower intersection E,
+        // and the second triangle's sides (the I.9 double-triangle
+        // bisection). The Guide canvas runs the same construction but
+        // keeps its circles; here they vanish, returning to △ABC + CD.
+        "Acirc;circle;radius;A,B;0;0;black;300,30,100",
+        "Bcirc;circle;radius;B,A;0;0;black;300,30,100",
+        "ABbi;line;bichord;Acirc,Bcirc;0;0;0",
+        "E;point;first;ABbi;black;green",
+        "AE;line;connect;A,E;0;0;black",
+        "EB;line;connect;E,B;0;0;black",
+        // Bisector drawn C → E on the bisect slide (through D to the
+        // lower apex); transitory (initiallyHidden) — it settles to the
+        // persistent CD on the next slide, Joyce's figure.
+        "CE;line;connect;C,E;0;0;black",
+        // Zero-color highlight targets for the prose's {NAME} refs.
+        "CA;line;connect;C,A;0;0;0",
+        "CB;line;connect;C,B;0;0;0",
+        "AD;line;connect;A,D;0;0;0",
+        "BD;line;connect;B,D;0;0;0",
+        // Angle markers at C (0.8.0 angleMarker): the whole angle ACB
+        // and the two halves ACD/BCD. 3 markers at C overlap at the
+        // default radius until 0.8.1 auto-nesting (deck-tracker.md).
+        "angACB;sector;angleMarker;C,A,B",
+        "angACD;sector;angleMarker;C,A,D",
+        "angBCD;sector;angleMarker;C,B,D"
     ],
+    // Real-colored construction scaffolding kept out of the static
+    // figure (0.9.0). Angle markers auto-hide; these need listing.
+    initiallyHidden: ["Acirc","Bcirc","E","AE","EB","CE"],
+    aliases: {
+        "ACB": "angACB",
+        "ACD": "angACD",
+        "BCD": "angBCD"
+    },
+    slides: [
+        { text: "Let {AB} be the given finite straight line.",
+          visible: ["AB"] },
+        { text: "It is required to bisect the finite straight line {AB}.",
+          visible: ["AB"],
+          highlighted: ["AB"] },
+        { text: "Construct the equilateral triangle {ABC} on it,",
+          visible: ["AB","Acirc","Bcirc","C","ABC"],
+          transition: {
+              animations: [
+                  { elem: "Acirc", name: geomlib.A.Circle.compass },
+                  { elem: "Bcirc", name: geomlib.A.Circle.compass },
+                  { elem: "C",     name: geomlib.A.Point.appear },
+                  { elem: "ABC",   name: geomlib.A.Polygon.outlineAndFill }
+              ]
+          },
+          justifications: [{ ref: "I.1" }] },
+        { text: "and bisect the angle {ACB} by the straight line {CD}.",
+          visible: ["AB","Acirc","Bcirc","C","ABC","angACB","E","AE","EB","CE","D","angACD","angBCD"],
+          transition: {
+              animations: [
+                  { elem: "angACB", name: geomlib.A.Sector.sweep },
+                  { elem: "E",      name: geomlib.A.Point.appear },
+                  { elem: "AE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EB",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",      name: geomlib.A.Point.appear },
+                  { elem: "angACD", name: geomlib.A.Sector.sweep },
+                  { elem: "angBCD", name: geomlib.A.Sector.sweep }
+              ]
+          },
+          justifications: [{ ref: "I.9" }] },
+        { text: "I say that the straight line {AB} is bisected at the point {D}.",
+          visible: ["AB","ABC","C","CD","D"],
+          highlighted: ["AB","D"] },
+        { text: "Since {CA} equals {CB}, and {CD} is common, therefore the two sides {CA} and {CD} equal the two sides {CB} and {CD} respectively, and the angle {ACD} equals the angle {BCD},",
+          visible: ["AB","ABC","C","CD","D","CA","CB","angACD","angBCD"],
+          highlighted: ["CA","CB","CD","angACD","angBCD"] },
+        { text: "therefore the base {AD} equals the base {BD}.",
+          visible: ["AB","ABC","C","CD","D","CA","CB","AD","BD"],
+          highlighted: ["AD","BD"],
+          justifications: [{ ref: "I.Def.20" }, { ref: "I.4" }] },
+        { text: "Therefore the given straight line {AB} is bisected at {D}.",
+          visible: ["AB","ABC","C","CD","D","AD","BD"],
+          highlighted: ["AD","BD","D"],
+          justifications: [{ ref: "Q.E.F." }] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
+});
+
+// Per-page citation lookup shared by both figures' resolveJustification
+// (window.eucrefs is global; canvas_1's callback reads it too).
+window.eucrefs = (window.eucrefs || {});
+Object.assign(window.eucrefs, {
+    "I.1":       "/elements/books/bookI/propositions/propI1/",
+    "I.4":       "/elements/books/bookI/propositions/propI4/",
+    "I.9":       "/elements/books/bookI/propositions/propI9/",
+    "I.Def.20":  "/elements/books/bookI/definitions/defI20/"
 });
 </script>
 </figure>
 
-It is required to bisect the finite straight line *AB.*
+It is required to bisect the finite straight line {AB}.
 
-Construct the equilateral triangle *ABC* on it, and bisect the angle *ACB* by the straight line *CD.* [!just I.1, I.9]
+Construct the equilateral triangle {ABC} on it, and bisect the angle {ACB} by the straight line {CD}. [!just I.1, I.9]
 
-I say that the straight line *AB* is bisected at the point *D.*
+I say that the straight line {AB} is bisected at the point {D}.
 
-Since *CA* equals *CB,* and *CD* is common, therefore the two sides *CA* and *CD* equal the two sides *CB* and *CD* respectively, and the angle *ACD* equals the angle *BCD,* therefore the base *AD* equals the base *BD.* [!just I.Def.20; I.4]
+Since {CA} equals {CB}, and {CD} is common, therefore the two sides {CA} and {CD} equal the two sides {CB} and {CD} respectively, and the angle {ACD} equals the angle {BCD}, therefore the base {AD} equals the base {BD}. [!just I.Def.20; I.4]
 
-Therefore the given straight line *AB* is bisected at *D.*
+Therefore the given straight line {AB} is bisected at {D}.
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
@@ -73,20 +170,115 @@ geomlib.init({
         "AB;line;connect;A,B",
         "Acirc;circle;radius;A,B;0;0;black;300,30,100",
         "Bcirc;circle;radius;B,A;0;0;black;300,30,100",
-        "CE;line;bichord;Acirc,Bcirc",
-        "E;point;first;CE",
-        "C;point;last;CE",
-        "D;point;intersection;A,B,C,E"
+        "CEbi;line;bichord;Acirc,Bcirc;0;0;0",
+        "E;point;first;CEbi",
+        "C;point;last;CEbi",
+        "D;point;intersection;A,B,C,E",
+        // Visible bisector drawn C → E (top-down) — a connect line so the
+        // straightEdge stroke runs from C to E; the bichord above is kept
+        // only as a hidden helper to derive the C and E intersections.
+        "CE;line;connect;C,E",
+        // Illustrative triangle sides + the two halves (zero-color;
+        // Joyce: these "aren't necessary ... only used to show the
+        // construction is correct"). Shown gold on their slides,
+        // invisible in the static figure (Joyce's two circles + CE).
+        "AC;line;connect;A,C;0;0;0",
+        "CB;line;connect;C,B;0;0;0",
+        "AE;line;connect;A,E;0;0;0",
+        "EB;line;connect;E,B;0;0;0",
+        // Zero-color triangle outlines for the prose's {ACB}/{AEB} hover
+        // refs (the two equilateral triangles). Gold on hover/highlight;
+        // suffixed names so the {ACB} angle alias isn't shadowed — refs
+        // use the {DISPLAY|element} override.
+        "ACBtri;polygon;triangle;A,C,B;0;0;0;0",
+        "AEBtri;polygon;triangle;A,E,B;0;0;0;0",
+        "AD;line;connect;A,D;0;0;0",
+        "BD;line;connect;B,D;0;0;0",
+        // The angle being bisected (shows in the static figure — Q2).
+        "angACB;sector;angleMarker;C,A,B"
     ],
+    aliases: {
+        "BA":  "AB",
+        "BC":  "CB",
+        "ACB": "angACB"
+    },
+    slides: [
+        { text: "This method for bisecting lines takes less actual work than it appears to. It is really no more than the double-equilateral-triangle.",
+          visible: ["AB"] },
+        { text: "First, the equilateral triangle ABC needs to be constructed. According to I.1 two circles need to be drawn: one with center {A} and radius {AB}, the other with center {B} and radius {BA}.",
+          visible: ["AB","Acirc","Bcirc"],
+          transition: {
+              animations: [
+                  { elem: "Acirc", name: geomlib.A.Circle.compass },
+                  { elem: "Bcirc", name: geomlib.A.Circle.compass }
+              ]
+          },
+          justifications: [{ ref: "I.1" }] },
+        { text: "One of the points of intersection of the two circles is {C}.",
+          visible: ["AB","Acirc","Bcirc","C"],
+          highlighted: ["AC","CB"],
+          transition: {
+              animations: [
+                  { elem: "C",  name: geomlib.A.Point.appear },
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CB", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          } },
+        { text: "Then to bisect angle {ACB}, according to I.9, an arbitrary point is chosen on one side of the angle, and it might as well be the point {A} on the side {AC}, and a point equally far from {C} on the side {BC}, which is, of course, {B}.",
+          visible: ["AB","Acirc","Bcirc","C"],
+          highlighted: ["AC","CB","angACB"],
+          transition: {
+              animations: [
+                  { elem: "angACB", name: geomlib.A.Sector.sweep }
+              ]
+          },
+          justifications: [{ ref: "I.9" }] },
+        { text: "Then an equilateral triangle is constructed on the line {AB}. There are two such equilateral triangles, the one already constructed {ACB|ACBtri}, and another one, call it {AEB|AEBtri}.",
+          visible: ["AB","Acirc","Bcirc","C","E"],
+          highlighted: ["ACBtri","AEBtri"],
+          transition: {
+              animations: [
+                  { elem: "E",  name: geomlib.A.Point.appear },
+                  { elem: "AE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EB", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          } },
+        { text: "The point {E} is the other intersection of the two circles already drawn.",
+          visible: ["AB","Acirc","Bcirc","C","E"],
+          highlighted: ["E"] },
+        { text: "Then, by I.9, the line {CE} bisects the angle {ACB},",
+          visible: ["AB","Acirc","Bcirc","C","E","CE"],
+          highlighted: ["CE","angACB","AC","CB"],
+          transition: {
+              animations: [
+                  { elem: "CE", name: geomlib.A.Line.straightEdgeConnect }
+              ]
+          },
+          justifications: [{ ref: "I.9" }] },
+        { text: "and according to this proposition, the point {D} bisects the line {AB}.",
+          visible: ["AB","Acirc","Bcirc","C","E","CE","D"],
+          highlighted: ["D","AD","BD"],
+          transition: {
+              animations: [
+                  { elem: "D", name: geomlib.A.Point.appear }
+              ]
+          } },
+        { text: "Actually, only two circles and the straight line {CE} need to be drawn. The straight lines {AC}, {CB}, {AE}, and {EB}, aren't necessary for the construction; they are only used to show that the construction is correct.",
+          visible: ["AB","Acirc","Bcirc","C","E","CE","D"],
+          highlighted: ["AC","CB","AE","EB"] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
 });
 </script>
 </figure>
 
 This method for bisecting lines takes less actual work than it appears to. It is really no more than the double-equilateral-triangle.
 
-First, the equilateral triangle *ABC* needs to be constructed. According to @I.1 two circles need to be drawn: one with center *A* and radius *AB,* the other with center *B* and radius *BA.* One of the points of intersection of the two circles is *C.* Then to bisect angle *ACB,* according to @I.9, an arbitrary point is chosen on one side of the angle, and it might as well be the point *A* on the side *AC,* and a point equally far from *C* on the side *BC,* which is, of course, *B.* Then an equilateral triangle is constructed on the line *AB.* There are two such equilateral triangles, the one already constructed *ACB,* and another one, call it *AEB.* The point *E* is the other intersection of the two circles already drawn. Then, by I.9, the line *CE* bisects the angle *ACB,* and according to this proposition, the point *D* bisects the line *AB.*
+First, the equilateral triangle *ABC* needs to be constructed. According to @I.1 two circles need to be drawn: one with center {A} and radius {AB}, the other with center {B} and radius {BA}. One of the points of intersection of the two circles is {C}. Then to bisect angle {ACB}, according to @I.9, an arbitrary point is chosen on one side of the angle, and it might as well be the point {A} on the side {AC}, and a point equally far from {C} on the side {BC}, which is, of course, {B}. Then an equilateral triangle is constructed on the line {AB}. There are two such equilateral triangles, the one already constructed *ACB*, and another one, call it *AEB*. The point {E} is the other intersection of the two circles already drawn. Then, by I.9, the line {CE} bisects the angle {ACB}, and according to this proposition, the point {D} bisects the line {AB}.
 
-Actually, only two circles and the straight line *CE* need to be drawn. The straight lines *AC, CB, AE,* and *EB,* aren't necessary for the construction; they are only used to show that the construction is correct.
+Actually, only two circles and the straight line {CE} need to be drawn. The straight lines {AC}, {CB}, {AE}, and {EB}, aren't necessary for the construction; they are only used to show that the construction is correct.
 
 #### Use of Proposition 10
 

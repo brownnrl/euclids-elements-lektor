@@ -15,9 +15,9 @@ statement: If two triangles have two sides equal to two sides respectively, and 
 ----
 proof:
 
-Let *ABC* and *DEF* be two triangles having the two sides *AB* and *AC* equal to the two sides *DE* and *DF* respectively, namely *AB* equal to *DE* and *AC* equal to *DF,* and the angle *BAC* equal to the angle *EDF.*
+Let {ABC} and {DEF} be two triangles having the two sides {AB} and {AC} equal to the two sides {DE} and {DF} respectively, namely {AB} equal to {DE} and {AC} equal to {DF}, and the angle {BAC} equal to the angle {EDF}.
 
-I say that the base *BC* also equals the base *EF,* the triangle *ABC* equals the triangle *DEF,* and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides, that is, the angle *ABC* equals the angle *DEF,* and the angle *ACB* equals the angle *DFE.*
+I say that the base {BC} also equals the base {EF}, the triangle {ABC} equals the triangle {DEF}, and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides, that is, the angle {ABC|angB} equals the angle {DEF|angE}, and the angle {ACB} equals the angle {DFE}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="360" height="250" tabindex="0"></canvas>
@@ -44,21 +44,149 @@ geomlib.init({
         "b;point;extend;D,a,E,a;0;0",
         "c;point;midpoint;a,b;0;0",
         "d;point;midpoint;a,c;0;0",
-        "arc;sector;arc;E,d,F;0;0;black;0"
+        "arc;sector;arc;E,d,F;0;0;black;0",
+        // Named side lines (drawn over the triangle edges, like
+        // propI.1's AB) so the slideshow can show / highlight sides
+        // individually.
+        "AB;line;connect;A,B",
+        "AC;line;connect;A,C",
+        "BC;line;connect;B,C",
+        "DE;line;connect;D,E",
+        "DF;line;connect;D,F",
+        "EF;line;connect;E,F",
+        // Angle markers (geomlib 0.8.0 E.Sector.angleMarker): vertex
+        // first, then the two arm vertices — interior is automatic, no
+        // midpoint-chain radius helpers, no sign-check. Fixed radius,
+        // translucent palette fill + colored edge cycled per marker.
+        "angA;sector;angleMarker;A,B,C",
+        "angB;sector;angleMarker;B,A,C",
+        "angC;sector;angleMarker;C,A,B",
+        "angD;sector;angleMarker;D,E,F",
+        "angE;sector;angleMarker;E,D,F",
+        "angF;sector;angleMarker;F,D,E"
     ],
+    // Joyce's prose names the angles by their three letters; the
+    // unambiguous ones alias to the zero-color angle markers. The
+    // angles AT B and AT E share the triangle names "ABC"/"DEF", so
+    // prose and captions bind them with the {DISPLAY|element}
+    // override instead (geomlib >= 0.7.1): {ABC|angB}, {DEF|angE}.
+    aliases: {
+        "BAC": "angA",
+        "EDF": "angD",
+        "ACB": "angC",
+        "DFE": "angF"
+    },
+    slides: [
+        { text: "Let {ABC} and {DEF} be two triangles",
+          visible: ["ABC","DEF","C"] },
+        { text: "having the two sides {AB} and {AC}",
+          visible: ["AB","AC","C"] },
+        { text: "equal to the two sides {DE} and {DF} respectively,",
+          visible: ["AB","AC","DE","DF","C"] },
+        { text: "namely {AB} equal to {DE},",
+          visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF","C"],
+          highlighted: ["AB","DE"] },
+        { text: "and {AC} equal to {DF},",
+          highlighted: ["AC","DF"] },
+        { text: "and the angle {BAC} equal to the angle {EDF}.",
+          visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF","angA","angD","C"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "angA", name: geomlib.A.Sector.sweep },
+                  { elem: "angD", name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "I say that the base {BC} also equals the base {EF},",
+          highlighted: ["BC","EF"] },
+        { text: "the triangle {ABC} equals the triangle {DEF}, and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides,",
+          highlighted: ["ABC","DEF","AB","AC","BC","DE","DF","EF"] },
+        { text: "that is, the angle {ABC|angB} equals the angle {DEF|angE},",
+          visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF","angA","angD","angB","angE","C"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "angB", name: geomlib.A.Sector.sweep },
+                  { elem: "angE", name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "and the angle {ACB} equals the angle {DFE}.",
+          visible: ["ABC","DEF","AB","AC","BC","DE","DF","EF","angA","angD","angB","angE","angC","angF","C"],
+          transition: {
+              mode: "parallel",
+              animations: [
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "angF", name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "If the triangle {ABC} is superposed on the triangle {DEF},",
+          transition: {
+              animations: [
+                  { elem: "ABC", name: geomlib.A.Polygon.superpose,
+                    args: { onto: "DEF" } }
+              ]
+          } },
+        { text: "and if the point {A} is placed on the point {D} and the straight line {AB} on {DE}, then the point {B} also coincides with {E}, because {AB} equals {DE}.",
+          highlighted: ["A","D","AB","DE","B","E"] },
+        { text: "Again, {AB} coinciding with {DE}, the straight line {AC} also coincides with {DF}, because the angle {BAC} equals the angle {EDF}.",
+          highlighted: ["AB","DE","AC","DF","angA","angD"] },
+        { text: "Hence the point {C} also coincides with the point {F}, because {AC} again equals {DF}.",
+          highlighted: ["C","F","AC","DF"] },
+        { text: "But {B} also coincides with {E}, hence the base {BC} coincides with the base {EF} and equals it.",
+          highlighted: ["B","E","BC","EF"],
+          justifications: [{ ref: "C.N.4" }] },
+        { text: "Thus the whole triangle {ABC} coincides with the whole triangle {DEF} and equals it.",
+          transition: {
+              animations: [
+                  { elem: "ABC", name: geomlib.A.Polygon.superpose,
+                    args: { onto: "DEF" } }
+              ]
+          },
+          justifications: [{ ref: "C.N.4" }] },
+        { text: "And the remaining angles also coincide with the remaining angles and equal them, the angle {ABC|angB} equals the angle {DEF|angE}, and the angle {ACB} equals the angle {DFE}.",
+          transition: {
+              animations: [
+                  { elem: "angB", name: geomlib.A.Sector.sweep },
+                  { elem: "angE", name: geomlib.A.Sector.sweep },
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "angF", name: geomlib.A.Sector.sweep }
+              ]
+          } },
+        { text: "Therefore if two triangles have two sides equal to two sides respectively, and have the angles contained by the equal straight lines equal,",
+          highlighted: ["AB","AC","DE","DF","angA","angD"] },
+        { text: "then they also have the base equal to the base,",
+          highlighted: ["BC","EF"] },
+        { text: "the triangle equals the triangle,",
+          highlighted: ["ABC","DEF","AB","AC","BC","DE","DF","EF"] },
+        { text: "and the remaining angles equal the remaining angles respectively,",
+          highlighted: ["angB","angE","angC","angF"] },
+        { text: "namely those opposite the equal sides.",
+          highlighted: ["angB","angE","angC","angF","AC","DF","AB","DE"],
+          justifications: [{ ref: "Q.E.D." }] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
+});
+
+// Per-page citation lookup for the slideshow's resolveJustification
+// callback — same hand-authored pattern as propI.1 – propI.3.
+window.eucrefs = (window.eucrefs || {});
+Object.assign(window.eucrefs, {
+    "C.N.4": "/elements/books/bookI/commonnotions/cn4/"
 });
 </script>
 </figure>
 
-If the triangle *ABC* is superposed on the triangle *DEF,* and if the point *A* is placed on the point *D* and the straight line *AB* on *DE,* then the point *B* also coincides with *E,* because *AB* equals *DE.*
+If the triangle {ABC} is superposed on the triangle {DEF}, and if the point {A} is placed on the point {D} and the straight line {AB} on {DE}, then the point {B} also coincides with {E}, because {AB} equals {DE}.
 
-Again, *AB* coinciding with *DE,* the straight line *AC* also coincides with *DF,* because the angle *BAC* equals the angle *EDF.* Hence the point *C* also coincides with the point *F,* because *AC* again equals *DF.*
+Again, {AB} coinciding with {DE}, the straight line {AC} also coincides with {DF}, because the angle {BAC} equals the angle {EDF}. Hence the point {C} also coincides with the point {F}, because {AC} again equals {DF}.
 
-But *B* also coincides with *E,* hence the base *BC* coincides with the base *EF* and equals it. [!just C.N.4]
+But {B} also coincides with {E}, hence the base {BC} coincides with the base {EF} and equals it. [!just C.N.4]
 
-Thus the whole triangle *ABC* coincides with the whole triangle *DEF* and equals it. [!just C.N.4]
+Thus the whole triangle {ABC} coincides with the whole triangle {DEF} and equals it. [!just C.N.4]
 
-And the remaining angles also coincide with the remaining angles and equal them, the angle *ABC* equals the angle *DEF,* and the angle *ACB* equals the angle *DFE.*
+And the remaining angles also coincide with the remaining angles and equal them, the angle {ABC|angB} equals the angle {DEF|angE}, and the angle {ACB} equals the angle {DFE}.
 
 Therefore *if two triangles have two sides equal to two sides respectively, and have the angles contained by the equal straight lines equal, then they also have the base equal to the base, the triangle equals the triangle, and the remaining angles  equal the remaining angles respectively, namely those opposite the equal sides.*
 

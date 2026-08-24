@@ -54,11 +54,32 @@ span.elem-ref {
   font-style: italic;
   cursor: pointer;
   border-bottom: 1px dotted transparent;
-  transition: border-bottom-color 120ms ease-out;
+  transition: border-bottom-color 120ms ease-out, color 120ms ease-out,
+              background-color 120ms ease-out;
 }
 span.elem-ref:hover,
 span.elem-ref.active {
   border-bottom-color: currentColor;
+}
+/* `.lit` is set by the browser-side JS in response to geomlib's
+   `geomlib:highlight` event (geomlib >= 0.11.0, #108): every prose
+   reference to an element currently highlighted on the canvas — whether
+   by hovering any one of its refs, pinning it, or a slide's `highlighted`
+   set — gets the same golden emphasis as the figure.
+
+   A gold highlighter wash + dark amber text reads on the tan page where
+   plain gold text did not. The bold look is faked with `text-shadow`
+   instead of `font-weight` so lighting a ref never reflows the prose
+   (hovering one ref lights every other ref to the same element at once).
+   The padding is balanced by an equal negative margin so the wash never
+   shifts surrounding text. */
+span.elem-ref.lit {
+  color: #4a3a00;
+  background-color: rgba(255, 196, 0, 0.55);
+  border-radius: 2px;
+  padding: 0 2px;
+  margin: 0 -2px;
+  text-shadow: 0.02em 0 0 currentColor, -0.02em 0 0 currentColor;
 }
 
 div.theorem h1 {
@@ -450,4 +471,65 @@ figure.diagram canvas {
    styling on the <a> itself. */
 .red-highlight {
     color: #bb0033;
+}
+
+/* Reference table (lektor-eucrefs `referenced_by` / `forward_refs`):
+   citation cross-references grouped by book, under a "Referenced by"
+   <h4> at the bottom of the page. The h4 picks up the page's Felipa-blue
+   heading style (like "Use of Proposition N"); the cells inherit the
+   serif body text so the table reads as part of the page. */
+table.ref-table {
+    margin: 0.2em 0 0.6em;
+    border-collapse: collapse;
+}
+table.ref-table th {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.1em 1.2em 0.1em 0;
+    white-space: nowrap;
+    font-weight: normal;
+}
+table.ref-table td {
+    padding: 0.1em 0;
+}
+
+/* Editorial footnotes — corrections to the source text. A superscript
+   marker (sup.fn-ref) links down to a numbered note in section.footnotes
+   at the end of the page; each note links back up (a.fn-back). Kept small
+   and dimmed so it reads as an aside, with the page's link blue. */
+sup.fn-ref {
+    line-height: 0;
+}
+sup.fn-ref a {
+    color: #0020C2;
+    text-decoration: none;
+    padding: 0 0.05em;
+}
+sup.fn-ref a:hover {
+    text-decoration: underline;
+}
+hr.footnotes-sep {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 2em 0 0.6em;
+}
+section.footnotes {
+    font-size: 85%;
+    color: #444;
+}
+section.footnotes ol {
+    margin: 0;
+    padding-left: 1.4em;
+}
+section.footnotes li {
+    margin: 0.2em 0;
+}
+section.footnotes a.fn-back {
+    color: #0020C2;
+    text-decoration: none;
+    margin-left: 0.3em;
+}
+/* Make the note jumped to from its marker briefly stand out. */
+section.footnotes li:target {
+    background: rgba(255, 196, 0, 0.18);
 }

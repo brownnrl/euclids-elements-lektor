@@ -15,9 +15,9 @@ statement: If with any straight line, and at a point on it, two straight lines n
 ----
 proof:
 
-With any straight line *AB,* and at the point *B* on it, let the two straight lines *BC* and *BD* not lying on the same side make the sum of the adjacent angles *ABC* and *ABD* equal to two right angles.
+With any straight line {AB}, and at the point {B} on it, let the two straight lines {BC} and {BD} not lying on the same side make the sum of the adjacent angles {ABC} and {ABD} equal to two right angles.
 
-I say that *BD* is in a straight line with *CB.*
+I say that {BD} is in a straight line with {CB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="220" height="210" tabindex="0"></canvas>
@@ -28,27 +28,115 @@ I say that *BD* is in a straight line with *CB.*
         background: "35,19,100",
         title: "I.14",
         elements: [
+            // The standing line AB at B.
             "A;point;free;60,60",
             "B;point;free;70,180",
             "AB;line;connect;A,B",
+            // C and D on opposite sides of B, collinear through B (D slides
+            // on line BC), so CBD is a genuine straight line and the
+            // hypothesis ∠ABC + ∠ABD = two right angles really holds.
             "C;point;free;40,180",
             "D;point;lineSlider;B,C,170,180",
             "CD;line;connect;C,D",
-            "Acirc;circle;radius;A,B;0;0;0;0",
-            "E;point;circleSlider;Acirc,160,150",
-            "BE;line;connect;B,E"
+            // BE: the hypothetical ray "in a straight line with CB" of the
+            // reductio. Drawn distinct from BD (E up-right, inside ∠ABD) —
+            // the impossible diagram; revealed mid-proof.
+            "E;point;free;160,130",
+            "BE;line;connect;B,E",
+            // Zero-color hover targets for the two halves of the line.
+            "BC;line;connect;B,C;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            // The angles at B (0.8.0 angleMarker; hidden in static, swept
+            // on their slide). ∠ABE nests inside ∠ABD (#103) — the visible
+            // "the less equals the greater" of the contradiction.
+            "ABC;sector;angleMarker;B,A,C",
+            "ABD;sector;angleMarker;B,A,D",
+            "ABE;sector;angleMarker;B,A,E"
         ],
+        // E (the hypothetical ray's endpoint) is introduced mid-proof.
+        deferDraggables: ["E"],
+        aliases: {
+            "CB":  "BC",
+            "CBA": "ABC",
+            "CBD": "CD"
+        },
+        slides: [
+            { text: "With any straight line {AB}, and at the point {B} on it, let the two straight lines {BC} and {BD} not lying on the same side make the sum of the adjacent angles {ABC} and {ABD} equal to two right angles.",
+              visible: ["AB","CD","ABC","ABD"],
+              transition: {
+                  mode: "parallel",
+                  animations: [
+                      { elem: "ABC", name: geomlib.A.Sector.sweep },
+                      { elem: "ABD", name: geomlib.A.Sector.sweep }
+                  ]
+              } },
+            { text: "I say that {BD} is in a straight line with {CB}.",
+              visible: ["AB","CD","ABC","ABD"],
+              highlighted: ["BD","BC"] },
+            { text: "If {BD} is not in a straight line with {BC}, then produce {BE} in a straight line with {CB}.",
+              visible: ["AB","CD","ABC","ABD","E","BE"],
+              highlighted: ["BE"],
+              transition: {
+                  animations: [
+                      { elem: "E",  name: geomlib.A.Point.appear },
+                      { elem: "BE", name: geomlib.A.Line.straightEdgeConnect }
+                  ]
+              },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Since the straight line {AB} stands on the straight line CBE, therefore the sum of the angles {ABC} and {ABE} equals two right angles.",
+              visible: ["AB","CD","ABC","ABD","E","BE","ABE"],
+              highlighted: ["ABC","ABE"],
+              transition: {
+                  animations: [
+                      { elem: "ABE", name: geomlib.A.Sector.sweep }
+                  ]
+              },
+              justifications: [{ ref: "I.13" }] },
+            { text: "But the sum of the angles {ABC} and {ABD} also equals two right angles, therefore the sum of the angles {CBA} and {ABE} equals the sum of the angles {CBA} and {ABD}.",
+              visible: ["AB","CD","ABC","ABD","E","BE","ABE"],
+              highlighted: ["ABC","ABD","ABE"],
+              justifications: [{ ref: "I.Post.4" }, { ref: "C.N.1" }] },
+            { text: "Subtract the angle {CBA} from each. Then the remaining angle {ABE} equals the remaining angle {ABD}, the less equals the greater, which is impossible.",
+              visible: ["AB","CD","ABC","ABD","E","BE","ABE"],
+              highlighted: ["ABE","ABD"],
+              justifications: [{ ref: "C.N.3" }] },
+            { text: "Therefore {BE} is not in a straight line with {CB}.",
+              // The hypothetical ray is eliminated: BE, E, ∠ABE drop out.
+              visible: ["AB","CD","ABC","ABD"],
+              highlighted: ["BC"] },
+            { text: "Similarly we can prove that neither is any other straight line except {BD}. Therefore {CB} is in a straight line with {BD}.",
+              visible: ["AB","CD","ABC","ABD"],
+              highlighted: ["BC","BD"] },
+            { text: "Therefore if with any straight line, and at a point on it, two straight lines not lying on the same side make the sum of the adjacent angles equal to two right angles, then the two straight lines are in a straight line with one another.",
+              visible: ["AB","CD","ABC","ABD"],
+              highlighted: ["BC","BD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // callback — same hand-authored pattern as the earlier props.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.Post.4": "/elements/books/bookI/postulates/post4/",
+        "I.13":     "/elements/books/bookI/propositions/propI13/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.3":    "/elements/books/bookI/commonnotions/cn3/"
     });
 </script>
 </figure>
 
-If *BD* is not in a straight line with *BC,* then produce *BE* in a straight line with *CB.* [!just I.Post.2]
+If {BD} is not in a straight line with {BC}, then produce {BE} in a straight line with {CB}. [!just I.Post.2]
 
-Since the straight line *AB* stands on the straight line *CBE,* therefore the sum of the angles *ABC* and *ABE* equals two right angles. But the sum of the angles *ABC* and *ABD* also equals two right angles, therefore the sum of the angles *CBA* and *ABE* equals the sum of the angles *CBA* and *ABD.* [!just I.13; I.Post.4; C.N.1]
+Since the straight line {AB} stands on the straight line *CBE,* therefore the sum of the angles {ABC} and {ABE} equals two right angles. But the sum of the angles {ABC} and {ABD} also equals two right angles, therefore the sum of the angles {CBA} and {ABE} equals the sum of the angles {CBA} and {ABD}. [!just I.13; I.Post.4; C.N.1]
 
-Subtract the angle *CBA* from each. Then the remaining angle *ABE* equals the remaining angle *ABD,* the less equals the greater, which is impossible. Therefore *BE* is not in a straight line with *CB.* [!just C.N.3]
+Subtract the angle {CBA} from each. Then the remaining angle {ABE} equals the remaining angle {ABD}, the less equals the greater, which is impossible. Therefore {BE} is not in a straight line with {CB}. [!just C.N.3]
 
-Similarly we can prove that neither is any other straight line except *BD.* Therefore *CB* is in a straight line with *BD.*
+Similarly we can prove that neither is any other straight line except {BD}. Therefore {CB} is in a straight line with {BD}.
 
 Therefore *if with any straight line, and at a point on it, two straight lines not lying on the same side make the sum of the adjacent angles equal to two right angles, then the two straight lines are in a straight line with one another.*
 
@@ -58,9 +146,9 @@ guide:
 
 This is a converse of the last proposition.
 
-This is a proposition in plane geometry. If *A, B, C,* and *D* do not lie in a plane, then *CBD* cannot be a straight line. An ambient plane is necessary to talk about the sides of the line *AB*
+This is a proposition in plane geometry. If {A}, {B}, {C}, and {D} do not lie in a plane, then {CBD} cannot be a straight line. An ambient plane is necessary to talk about the sides of the line {AB}
 
-The qualifying sentence, "Similarly we can prove that neither is any other straight line except *BD,*" is meant to take care of the cases when *E* does not lie inside the angle *ABD.*
+The qualifying sentence, "Similarly we can prove that neither is any other straight line except {BD}," is meant to take care of the cases when {E} does not lie inside the angle {ABD}.
 
 This is the first use of @I.Post.4 that all right angles are equal.
 

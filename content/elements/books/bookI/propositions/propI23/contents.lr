@@ -17,7 +17,7 @@ statement: To construct a rectilinear angle equal to a given rectilinear angle o
 ----
 proof:
 
-Let the angle *DCE* be the given rectilinear angle, *AB* the given straight line, and *A* the point on it.
+Let the angle {DCE} be the given rectilinear angle, {AB} the given straight line, and {A} the point on it.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="340" height="220" tabindex="0"></canvas>
@@ -40,30 +40,88 @@ Let the angle *DCE* be the given rectilinear angle, *AB* the given straight line
             "DE;line;connect;D,E",
             "G;point;cutoff;A,B,C,E",
             "AGF;polygon;similar;A,G,C,E,D;0;0;0,0,0;random",
-            "F;point;vertex;AGF,3"
+            "F;point;vertex;AGF,3",
+            // Zero-color hover/segment targets for the angle sides and the
+            // copied triangle's sides (the polygons give no per-edge hover).
+            "CD;line;connect;C,D;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            // Angle markers: the given angle DCE at C, and the copy FAG at A.
+            // Named vertex-in-the-middle so they don't collide with the
+            // CDE / AGF triangle polygons.
+            "DCE;sector;angleMarker;C,D,E",
+            "FAG;sector;angleMarker;A,F,G"
         ],
+        aliases: {
+            "AFG": "AGF",
+            "DC":  "CD",
+            "FA":  "AF"
+        },
+        slides: [
+            { text: "Let the angle {DCE} be the given rectilinear angle, {AB} the given straight line, and {A} the point on it.",
+              visible: ["CDE","DCE","AB"],
+              highlighted: ["DCE","AB","A"],
+              transition: { animations: [ { elem: "DCE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "It is required to construct a rectilinear angle equal to the given rectilinear angle {DCE} on the given straight line {AB} and at the point {A} on it.",
+              visible: ["CDE","DCE","AB"],
+              highlighted: ["DCE","AB","A"] },
+            { text: "Take the points {D} and {E} at random on the straight lines {CD} and {CE} respectively, and join {DE}.",
+              visible: ["CDE","DCE","AB","DE"],
+              highlighted: ["D","E","CD","CE","DE"],
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Out of three straight lines which equal the three straight lines {CD}, {DE}, and {CE} construct the triangle {AFG} in such a way that {CD} equals {AF}, {CE} equals {AG}, and {DE} equals {FG}.",
+              visible: ["CDE","DCE","AB","DE","G","F","AGF","AF","AG","FG"],
+              highlighted: ["AGF","CD","AF","CE","AG","DE","FG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G",   name: geomlib.A.Point.appear },
+                  { elem: "F",   name: geomlib.A.Point.appear },
+                  { elem: "AGF", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "I.22" }] },
+            { text: "Since the two sides {DC} and {CE} equal the two sides {FA} and {AG} respectively, and the base {DE} equals the base {FG}, therefore the angle {DCE} equals the angle {FAG}.",
+              visible: ["CDE","DCE","AB","DE","G","F","AGF","AF","AG","FG","FAG"],
+              highlighted: ["CD","CE","AF","AG","DE","FG","DCE","FAG"],
+              transition: { animations: [ { elem: "FAG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.8" }] },
+            { text: "Therefore on the given straight line {AB}, and at the point {A} on it, the rectilinear angle {FAG} has been constructed equal to the given rectilinear angle {DCE}.",
+              visible: ["CDE","DCE","AB","DE","G","F","AGF","AF","AG","FG","FAG"],
+              highlighted: ["AB","FAG","DCE"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.8":      "/elements/books/bookI/propositions/propI8/",
+        "I.22":     "/elements/books/bookI/propositions/propI22/"
     });
 </script>
 </figure>
 
-It is required to construct a rectilinear angle equal to the given rectilinear angle *DCE* on the given straight line *AB* and at the point *A* on it.
+It is required to construct a rectilinear angle equal to the given rectilinear angle {DCE} on the given straight line {AB} and at the point {A} on it.
 
-Take the points *D* and *E* at random on the straight lines *CD* and *CE* respectively, and join *DE.* Out of three straight lines which equal the three straight lines *CD, DE,* and *CE* construct the triangle *AFG* in such a way that *CD* equals *AF, CE* equals *AG,* and *DE* equals *FG.* [!just I.Post.1; I.22]
+Take the points {D} and {E} at random on the straight lines {CD} and {CE} respectively, and join {DE}. Out of three straight lines which equal the three straight lines {CD}, {DE}, and {CE} construct the triangle {AFG} in such a way that {CD} equals {AF}, {CE} equals {AG}, and {DE} equals {FG}. [!just I.Post.1; I.22]
 
-Since the two sides *DC* and *CE* equal the two sides *FA* and *AG* respectively, and the base *DE* equals the base *FG,* therefore the angle *DCE* equals the angle *FAG.* [!just I.8]
+Since the two sides {DC} and {CE} equal the two sides {FA} and {AG} respectively, and the base {DE} equals the base {FG}, therefore the angle {DCE} equals the angle {FAG}. [!just I.8]
 
-Therefore on the given straight line *AB,* and at the point *A* on it, the rectilinear angle *FAG* has been constructed equal to the given rectilinear angle *DCE.*
+Therefore on the given straight line {AB}, and at the point {A} on it, the rectilinear angle {FAG} has been constructed equal to the given rectilinear angle {DCE}.
 
 <div class="qed">Q.E.F.</div>
 ----
 guide:
 
-As Proclus and Heath point out, a very minor variant of the construction in @I.22 is needed to make the triangle *AFG.* The problem is that in I.22 the triangle is placed not at the end of line, but somewhere beyond that, and in I.23, the triangle needs to be placed right at the end *A* of the line.
+As Proclus and Heath point out, a very minor variant of the construction in @I.22 is needed to make the triangle {AFG}. The problem is that in I.22 the triangle is placed not at the end of line, but somewhere beyond that, and in I.23, the triangle needs to be placed right at the end {A} of the line.
 
 #### Construction steps
 
 <figure class="diagram rdiagram">
-<canvas id="canvas_1" width="330" height="230" tabindex="0"></canvas>
+<canvas id="canvas_1" width="360" height="300" tabindex="0"></canvas>
 <noscript><img alt="I.23 construction steps" src="propI23a.gif"/></noscript>
 <script type="text/javascript">
     geomlib.init({
@@ -83,26 +141,126 @@ As Proclus and Heath point out, a very minor variant of the construction in @I.2
             "A;point;free;50,180",
             "B;point;free;210,180",
             "AB;line;connect;A,B",
-            "Acirc;circle;radius;A,C,D;0;0;black;0",
             "G;point;cutoff;A,B,C,D",
+            // The two result circles (centre A radius CD, centre G radius ED)
+            // are part of Joyce's static figure — keep them drawn (black).
+            // They still animate on their slide; the slideshow visible-set
+            // governs when they show during the walk.
+            "Acirc;circle;radius;A,C,D;0;0;black;0",
             "Gcirc;circle;radius;G,D,E;0;0;black;0",
             "F'F;line;bichord;Acirc,Gcirc;0;0",
             "F;point;last;F'F",
             "AF;line;connect;A,F",
-            "AGF;sector;sector;A,G,F;0;0;0"
+            "AGF;sector;sector;A,G,F;0;0;0",
+            // Angle-marker indicators (in addition to the filled sectors) for
+            // the closing slide: the given angle at C and the copied one at A.
+            "DCE;sector;angleMarker;C,D,E",
+            "FAG;sector;angleMarker;A,G,F",
+            // Side hover targets.
+            "CD;line;connect;C,D;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "DE;line;connect;D,E;0;0;0"
+            // The two I.2/I.1 transfer rigs are gone — replaced by
+            // A.Circle.compassTransfer on Acirc / Gcirc (#127, geomlib
+            // 0.13.0). The macro owns the join + I.1 circles + equilateral +
+            // produced sides + lay-off circles as self-clearing ephemerals;
+            // args.keepCircles names the four construction circles per
+            // transfer (t1Ka/t1Kc/t1Kc2/t1KT, t2Kg/t2Ke/t2Ke2/t2KT) so they
+            // PERSIST (initiallyHidden) for the ten-circle count slide.
         ],
+        aliases: {
+            "ED": "DE"
+        },
+        slides: [
+            { text: "Unless there is some special reason for selecting particular points {D} and {E} on the sides of the angle {C}, they might as well be taken equidistant from {C} as Apollonius suggested — then only two distances need to be transferred instead of three.",
+              visible: ["CD1","CE1","CDE","AB"],
+              highlighted: ["D","E","C"] },
+            { text: "In order to make {CE} equal to {CD}, one circle is required.",
+              visible: ["CD1","CE1","CDE","AB","Ccirc","CD","CE"],
+              highlighted: ["Ccirc","CE","CD"],
+              transition: { animations: [ { elem: "Ccirc", name: geomlib.A.Circle.compass } ] } },
+            { text: "Next, to transfer the distance {CD} to {A}, a compass-transfer lays off the length, leaving the circle with center {A} and radius {CD}, which meets {AB} at {G}.",
+              visible: ["CD1","CE1","CDE","AB","Acirc","G","CD"],
+              highlighted: ["Acirc","CD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "Acirc", name: geomlib.A.Circle.compassTransfer,
+                    args: { side: -1, keepCircles: ["t1Ka","t1Kc","t1Kc2","t1KT"] } },
+                  { elem: "G",     name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.1" }, { ref: "I.2" }] },
+            { text: "With {G} fixed, the transfer scaffolding has cleared, leaving {G} and the circle on {A}.",
+              visible: ["CD1","CE1","CDE","AB","G","Acirc"],
+              highlighted: ["G","Acirc"] },
+            { text: "In the same way, transfer the distance {ED} to {G}, leaving the circle with center {G} and radius {ED}.",
+              visible: ["CD1","CE1","CDE","AB","G","Acirc","Gcirc","DE"],
+              highlighted: ["Gcirc","DE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "Gcirc", name: geomlib.A.Circle.compassTransfer,
+                    args: { side: -1, keepCircles: ["t2Kg","t2Ke","t2Ke2","t2KT"] } } ] },
+              justifications: [{ ref: "I.1" }, { ref: "I.2" }] },
+            { text: "Clearing that scaffolding too leaves the two circles — one on {A} with radius {CD}, one on {G} with radius {ED}.",
+              visible: ["CD1","CE1","CDE","AB","G","Acirc","Gcirc"],
+              highlighted: ["Acirc","Gcirc"] },
+            { text: "These two circles meet at the point {F}.",
+              visible: ["CD1","CE1","CDE","AB","G","Acirc","Gcirc","F","CD","DE"],
+              highlighted: ["Acirc","Gcirc","F"],
+              transition: { animations: [ { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "The line {AF} is the other side of the required angle.",
+              visible: ["CD1","CE1","CDE","AB","G","Acirc","Gcirc","F","AF","AGF"],
+              highlighted: ["AF","AGF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AF",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AGF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "In all there are ten circles and one line that must be drawn;",
+              visible: ["CD1","CE1","CDE","AB","G","F","AF","AGF","t1Ka","t1Kc","t1Kc2","t1KT","Acirc","t2Kg","t2Ke","t2Ke2","t2KT","Gcirc"],
+              highlighted: ["AF","t1Ka","t1Kc","t1Kc2","t1KT","Acirc","t2Kg","t2Ke","t2Ke2","t2KT","Gcirc"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "t1Ka",  name: geomlib.A.Circle.compass },
+                  { elem: "t1Kc",  name: geomlib.A.Circle.compass },
+                  { elem: "t1Kc2", name: geomlib.A.Circle.compass },
+                  { elem: "t1KT",  name: geomlib.A.Circle.compass },
+                  { elem: "Acirc", name: geomlib.A.Circle.compass },
+                  { elem: "t2Kg",  name: geomlib.A.Circle.compass },
+                  { elem: "t2Ke",  name: geomlib.A.Circle.compass },
+                  { elem: "t2Ke2", name: geomlib.A.Circle.compass },
+                  { elem: "t2KT",  name: geomlib.A.Circle.compass },
+                  { elem: "Gcirc", name: geomlib.A.Circle.compass } ] } },
+            { text: "The lines in the intermediate stages may be suppressed as usual, since they are only needed to verify the construction is correct. The constructed angle {FAG} equals the given angle {DCE}.",
+              visible: ["CD1","CE1","CDE","AB","G","Acirc","Gcirc","F","AF","AGF","DCE","FAG"],
+              highlighted: ["DCE","FAG"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "DCE", name: geomlib.A.Sector.sweep },
+                  { elem: "FAG", name: geomlib.A.Sector.sweep } ] } }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Guide-construction citations (merged into the shared page lookup).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.1": "/elements/books/bookI/propositions/propI1/",
+        "I.2": "/elements/books/bookI/propositions/propI2/"
     });
 </script>
 </figure>
 
-This construction that moves an angle requires a number of steps involving a straightedge and compass. Unless there is some special reason for selecting particular points *D* and *E* on the sides of the angle *C,* they might as well be taken equidistant from *C* as Apollonius suggested. Then only two distances need to be transferred instead of three.
+This construction that moves an angle requires a number of steps involving a straightedge and compass. Unless there is some special reason for selecting particular points {D} and {E} on the sides of the angle {C}, they might as well be taken equidistant from {C} as Apollonius suggested. Then only two distances need to be transferred instead of three.
 
-In order to make *CE* equal to *CD,* one circle is required. Next, in order to transfer the distance *CD* to *A,* four circles (not shown) are required as per Propositions @I.2 and @I.1, and four more circles (also not shown) to transfer *ED* to *G.* Finally, two more circles are required, one with center *A* and radius *CD* (which has been transferred), the other with center *G* and radius *ED.* These last two circles meet at the point *F,* and the line *AF* is the other side of the required angle.
+In order to make {CE} equal to {CD}, one circle is required. Next, in order to transfer the distance {CD} to {A}, four circles (not drawn in the static diagram, but shown transitorily in the slideshow above) are required as per Propositions @I.2 and @I.1, and four more circles (likewise) to transfer {ED} to {G}. Finally, two more circles are required, one with center {A} and radius {CD} (which has been transferred), the other with center {G} and radius {ED}. These last two circles meet at the point {F}, and the line {AF} is the other side of the required angle.
 
 In all there are ten circles and one line that must be drawn. The lines in the intermediate stages may be suppressed as usual since they're only needed to verify the construction is correct.
 
 #### Use of Proposition 23
 
-The construction in this proposition is used in the next one and a couple others in Book I. It is also used frequently in the later books. It is also used frequently in BookS III and VI and occasionally in Books IV and XI.
+The construction in this proposition is used in the next one and a couple others in Book I. It is also used frequently in the later books. It is also used frequently in Books III and VI<sup class="fn-ref" id="fnref-1"><a href="#fn-1">1</a></sup> and occasionally in Books IV and XI.
 
 Although it may appear that the triangles are to be in the same plane, that is not necessary. Indeed, the construction in this proposition is used to construct an angle in a different plane in proposition @XI.31.
+
+<hr class="footnotes-sep">
+<section class="footnotes" id="footnotes">
+<ol>
+<li id="fn-1">Typo correction from &ldquo;BookS III and VI&rdquo; to &ldquo;Books III and VI.&rdquo; &mdash;NB, 2026-06-17 <a href="#fnref-1" class="fn-back" aria-label="Back to text">&#8617;</a></li>
+</ol>
+</section>

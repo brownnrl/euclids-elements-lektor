@@ -17,10 +17,10 @@ statement: To cut off from the greater of two given unequal straight lines a str
 ----
 proof:
 
-Let *AB* and *C* be the two given unequal straight lines, and let *AB* be the greater of them.
+Let {AB} and {C} be the two given unequal straight lines, and let {AB} be the greater of them.
 
 <figure class="diagram">
-<canvas id="canvas_0" width="350" height="270" tabindex="0"></canvas>
+<canvas id="canvas_0" width="350" height="320" tabindex="0"></canvas>
 <noscript><img alt="I.3 diagram" src="propI3.gif"/></noscript>
 <script type="text/javascript">
 geomlib.init({
@@ -28,33 +28,134 @@ geomlib.init({
     background: "35,19,100",
     title: "I.3",
     elements: [
-        "C0;point;free;-1000,50;0,0",
-        "C3;point;free;1000,50;0,0",
-        "C1;point;lineSlider;C0,C3,250,50;0",
-        "C2;point;lineSlider;C0,C3,320,50;0",
+        "C0;point;free;-1000,70;0,0",
+        "C3;point;free;1000,70;0,0",
+        "C1;point;lineSlider;C0,C3,250,70;0",
+        "C2;point;lineSlider;C0,C3,320,70;0",
         "C;line;connect;C1,C2;0,0,0",
-        "A;point;free;140,150",
-        "B;point;free;290,150",
+        "A;point;free;140,200",
+        "B;point;free;290,200",
         "AB;line;connect;A,B",
         "E;point;cutoff;AB,C",
+        // The I.2 construction chain that places AD = C at the point
+        // A — D is derived from it rather than slid around the circle
+        // (the slideshow's slide 3 plays this construction in full).
+        // Zero-color elements are transitory: invisible in the static
+        // figure, rendered in the gold emphasis stroke only while
+        // their slide-3 animation runs.
+        "ACjoin;line;connect;A,C1;0;0;0",
+        "ACcirc;circle;radius;A,C1;0;0;0;0",
+        "CAcirc;circle;radius;C1,A;0;0;0;0",
+        "DxLine;line;bichord;ACcirc,CAcirc;0;0;0",
+        "Dx;point;last;DxLine;0;0",
+        "DxA;line;connect;Dx,A;0;0;0",
+        "DxC;line;connect;Dx,C1;0;0;0",
+        "Aprod;line;extend;Dx,A,Dx,A;0;0;0",
+        "Cprod;line;extend;Dx,C1,C1,C2;0;0;0",
+        "Gx;point;extend;Dx,C1,C1,C2;0;0",
+        "CGcirc;circle;radius;C;0;0;0;0",
+        "DGcirc;circle;radius;Dx,Gx;0;0;0;0",
+        // Permanent yield of the construction: AD = C placed at A.
+        "AD;line;extend;Dx,A,C1,C2",
+        "D;point;last;AD;black",
         "DEF;circle;radius;A,E",
-        "D;point;circleSlider;DEF,100,120",
-        "AD;line;connect;A,D",
-        "F;point;extend;D,A,D,A;0,0,0;0"
+        "F;point;extend;D,A,D,A;0,0,0;0",
+        // Zero-color highlight target: the cut-off segment A→E along
+        // AB that the proof's conclusion names.
+        "AE;line;connect;A,E;0;0;0"
     ],
+    // The guide's solid-geometry note calls the circle AEF (all three
+    // points lie on DEF).
+    aliases: {
+        "AEF": "DEF"
+    },
+    slides: [
+        { text: "Let {AB} and {C} be the two given unequal straight lines, and let {AB} be the greater of them.",
+          visible: ["AB","C"],
+          highlighted: ["A","B","AB","C"] },
+        { text: "It is required to cut off from {AB} the greater a straight line equal to {C} the less.",
+          // Preview the cut-off as a bare gold segment: AE is the
+          // zero-color target line, and the point E (dot + label)
+          // stays hidden until the circle DEF actually produces it.
+          visible: ["AB","C"],
+          highlighted: ["AE"] },
+        { text: "Place {AD} at the point {A} equal to the straight line {C}. [the construction of I.2, itself using I.1, is shown in full]",
+          visible: ["AB","C","ACjoin","ACcirc","CAcirc","Dx","DxA","DxC","Aprod","Cprod","Gx","CGcirc","DGcirc","AD","D"],
+          transition: {
+              // The full I.2 dance: join A to an end of C, find the
+              // equilateral-triangle apex via the two I.1 circles,
+              // trace the sides, produce them, span C with the
+              // compass, transfer it with the big circle, and land AD.
+              animations: [
+                  { elem: "ACjoin", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ACcirc", name: geomlib.A.Circle.compass },
+                  { elem: "CAcirc", name: geomlib.A.Circle.compass },
+                  { elem: "Dx",     name: geomlib.A.Point.appear },
+                  { elem: "DxA",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DxC",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "Aprod",  name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "Cprod",  name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "CGcirc", name: geomlib.A.Circle.compass },
+                  { elem: "Gx",     name: geomlib.A.Point.appear },
+                  { elem: "DGcirc", name: geomlib.A.Circle.compass },
+                  { elem: "AD",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",      name: geomlib.A.Point.appear }
+              ]
+          },
+          justifications: [{ ref: "I.2" }] },
+        { text: "and describe the circle {DEF} with center {A} and radius {AD}.",
+          visible: ["AB","C","E","AD","D","DEF","F"],
+          transition: {
+              animations: [
+                  { elem: "DEF", name: geomlib.A.Circle.compass }
+              ]
+          },
+          justifications: [{ ref: "I.Post.3" }] },
+        { text: "Now, since the point {A} is the center of the circle {DEF}, therefore {AE} equals {AD}.",
+          visible: ["AB","C","E","AD","D","DEF","F","AE"],
+          highlighted: ["A","DEF","AE","AD"],
+          justifications: [{ ref: "I.Def.15" }] },
+        { text: "But {C} also equals {AD},",
+          highlighted: ["C","AD"] },
+        { text: "therefore each of the straight lines {AE} and {C} equals {AD},",
+          highlighted: ["AE","C","AD"] },
+        { text: "so that {AE} also equals {C}.",
+          highlighted: ["AE","C"],
+          justifications: [{ ref: "C.N.1" }] },
+        { text: "Therefore, given the two straight lines {AB} and {C},",
+          highlighted: ["AB","C"] },
+        { text: "{AE} has been cut off from {AB} the greater equal to {C} the less.",
+          highlighted: ["AE","E","C"],
+          // Unmapped ref — resolveJustification returns null, so it
+          // renders as plain text in the justification slot.
+          justifications: [{ ref: "Q.E.F." }] }
+    ],
+    resolveJustification: function(ref) {
+        return (window.eucrefs && window.eucrefs[ref]) || null;
+    }
+});
+
+// Per-page citation lookup for the slideshow's resolveJustification
+// callback — same hand-authored pattern as propI.1 / propI.2.
+window.eucrefs = (window.eucrefs || {});
+Object.assign(window.eucrefs, {
+    "I.2":      "/elements/books/bookI/propositions/propI2/",
+    "I.Post.3": "/elements/books/bookI/postulates/post3/",
+    "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+    "C.N.1":    "/elements/books/bookI/commonnotions/cn1/"
 });
 </script>
 </figure>
 
-It is required to cut off from *AB* the greater a straight line equal to *C* the less.
+It is required to cut off from {AB} the greater a straight line equal to {C} the less.
 
-Place *AD* at the point *A* equal to the straight line *C,* and describe the circle *DEF* with center *A* and radius *AD.* [!just I.2; I.Post.3]
+Place {AD} at the point {A} equal to the straight line {C}, and describe the circle {DEF} with center {A} and radius {AD}. [!just I.2; I.Post.3]
 
-Now, since the point *A* is the center of the circle *DEF,* therefore *AE* equals *AD.* [!just I.Def.15]
+Now, since the point {A} is the center of the circle {DEF}, therefore {AE} equals {AD}. [!just I.Def.15]
 
-But *C* also equals *AD,* therefore each of the straight lines *AE* and *C* equals *AD,* so that *AE* also equals *C.* [!just C.N.1]
+But {C} also equals {AD}, therefore each of the straight lines {AE} and {C} equals {AD}, so that {AE} also equals {C}. [!just C.N.1]
 
-Therefore, given the two straight lines *AB* and *C, AE* has been cut off from *AB* the greater equal to *C* the less.
+Therefore, given the two straight lines {AB} and {C}, {AE} has been cut off from {AB} the greater equal to {C} the less.
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
@@ -69,7 +170,7 @@ According to Proclus (410–485 C.E.) in his *Commentary on Book I,* Hippocrates
 
 This construction takes one more step beyond that of @I.2, and that is the final circle, the circle shown in the diagram accompanying this proposition. Altogether, therefore, five circles and two lines are required for this construction.
 
-Frequently, though, one end of the line *C* is already placed at *A,* and then the construction of I.2 isn't required. In that case, only one circle needs to be drawn.
+Frequently, though, one end of the line {C} is already placed at {A}, and then the construction of I.2 isn't required. In that case, only one circle needs to be drawn.
 
 #### Use of Proposition 3
 
@@ -77,4 +178,4 @@ This proposition begins the geometric arithmetic of lines. Explicitly, it allows
 
 The construction is use more often in the *Elements* than any other starting with proposition @I.5. It is used in all the books on geometry, that is in Books I through IV, VI, and XI through XIII.
 
-Naturally a construction of this sort is needed in the solid geometry of Books XI through XIII. Surprisingly, the construction given here also works in solid geometry, even the lines *AB* and *C* don't lie in the same plane. Since the point *A* and the line *C* lie in one plane, the construction of @I.2 produces a line *AD* equal to *C* in that plane. Now *AD* and *AB* also lie in one plane, but not the same one, and the circle *AEF* can be drawn there.
+Naturally a construction of this sort is needed in the solid geometry of Books XI through XIII. Surprisingly, the construction given here also works in solid geometry, even the lines {AB} and {C} don't lie in the same plane. Since the point {A} and the line {C} lie in one plane, the construction of @I.2 produces a line {AD} equal to {C} in that plane. Now {AD} and {AB} also lie in one plane, but not the same one, and the circle {AEF} can be drawn there.

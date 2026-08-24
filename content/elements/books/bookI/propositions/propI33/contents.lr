@@ -15,9 +15,9 @@ statement: Straight lines which join the ends of equal and parallel straight lin
 ----
 proof:
 
-Let *AB* and *CD* be equal and parallel, and let the straight lines *AC* and *BD* join them at their ends in the same directions.
+Let {AB} and {CD} be equal and parallel, and let the straight lines {AC} and {BD} join them at their ends in the same directions.
 
-I say that *AC* and *BD* are also equal and parallel.
+I say that {AC} and {BD} are also equal and parallel.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="160" tabindex="0"></canvas>
@@ -33,19 +33,84 @@ I say that *AC* and *BD* are also equal and parallel.
             "C;point;free;80,120",
             "CABD;polygon;parallelogram;C,A,B;0;0;0,0,0;0",
             "D;point;vertex;CABD,4",
-            "BC;line;connect;B,C"
+            "BC;line;connect;B,C",
+            // Side hover targets (the parallelogram draws the edges; these only
+            // light when a prose/caption ref names the segment).
+            "AB;line;connect;A,B;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            // The other diagonal AD (not drawn) — hover target for the guide's
+            // "which of the three pairs intersects" discussion (AD & BC cross).
+            "AD;line;connect;A,D;0;0;0",
+            // Triangle hover targets for the I.4 congruence (ABC upper, DCB
+            // lower — the two halves split by diagonal BC).
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "DCB;polygon;triangle;D,C,B;0;0;0;0",
+            // Angle markers (#91), colour-matched alternate pairs: ∠ABC=∠BCD
+            // (red, from AB∥CD) and ∠ACB=∠CBD (blue, proved ⟹ AC∥BD). Radii
+            // pinned (#103) at 22. Triangle owns `ABC`, so ∠ABC marker = `CBA`.
+            "CBA;sector;angleMarker;B,C,A,22;0;0;red;red",
+            "BCD;sector;angleMarker;C,B,D,22;0;0;red;red",
+            "ACB;sector;angleMarker;C,A,B,22;0;0;blue;blue",
+            "CBD;sector;angleMarker;B,C,D,22;0;0;blue;blue"
         ],
+        aliases: { "DC": "CD", "CB": "BC" },
+        slides: [
+            { text: "Let {AB} and {CD} be equal and parallel, and let {AC} and {BD} join them at their ends in the same directions. I say that {AC} and {BD} are also equal and parallel.",
+              visible: ["CABD","AB","CD","AC","BD"],
+              highlighted: ["AB","CD"] },
+            { text: "Join {BC}.",
+              visible: ["CABD","AB","CD","AC","BD","BC"],
+              highlighted: ["BC"],
+              transition: { animations: [ { elem: "BC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Since {AB} is parallel to {CD}, and {BC} falls upon them, the alternate angles {ABC|CBA} and {BCD} equal one another.",
+              visible: ["CABD","AB","CD","BC","CBA","BCD"],
+              highlighted: ["CBA","BCD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "CBA", name: geomlib.A.Sector.sweep },
+                  { elem: "BCD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.29" }] },
+            { text: "Since {AB} equals {CD}, {BC} is common, and {ABC|CBA} equals {BCD}, the triangle {ABC} equals the triangle {DCB}. So the base {AC} equals the base {BD}, and the angle {ACB} equals the angle {CBD}.",
+              visible: ["CABD","AB","CD","BC","ABC","DCB","AC","BD","CBA","BCD","ACB","CBD"],
+              highlighted: ["AC","BD","ACB","CBD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ACB", name: geomlib.A.Sector.sweep },
+                  { elem: "CBD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.4" }] },
+            { text: "Since {BC} falling on {AC} and {BD} makes the alternate angles {ACB} and {CBD} equal, {AC} is parallel to {BD}.",
+              visible: ["CABD","BC","AC","BD","ACB","CBD"],
+              highlighted: ["AC","BD","ACB","CBD"],
+              justifications: [{ ref: "I.27" }] },
+            { text: "And {AC} was also proved equal to {BD}. So straight lines joining the ends of equal, parallel segments in the same directions are themselves equal and parallel.",
+              visible: ["CABD","AB","CD","AC","BD"],
+              highlighted: ["AC","BD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.27":     "/elements/books/bookI/propositions/propI27/",
+        "I.29":     "/elements/books/bookI/propositions/propI29/"
     });
 </script>
 </figure>
 
-Join *BC.* [!just I.Post.1]
+Join {BC}. [!just I.Post.1]
 
-Since *AB* is parallel to *CD,* and *BC* falls upon them, therefore the alternate angles *ABC* and *BCD* equal one another. [!just I.29]
+Since {AB} is parallel to {CD}, and {BC} falls upon them, therefore the alternate angles {ABC|CBA} and {BCD} equal one another. [!just I.29]
 
-Since *AB* equals *CD,* and *BC* is common, the two sides *AB* and *BC* equal the two sides *DC* and *CB,* and the angle *ABC* equals the angle *BCD,* therefore the base *AC* equals the base *BD,* the triangle *ABC* equals the triangle *DCB,* and the remaining angles equals the remaining angles respectively, namely those opposite the equal sides. Therefore the angle *ACB* equals the angle *CBD.* [!just I.4]
+Since {AB} equals {CD}, and {BC} is common, the two sides {AB} and {BC} equal the two sides {DC} and {CB}, and the angle {ABC|CBA} equals the angle {BCD}, therefore the base {AC} equals the base {BD}, the triangle {ABC} equals the triangle {DCB}, and the remaining angles equals the remaining angles respectively, namely those opposite the equal sides. Therefore the angle {ACB} equals the angle {CBD}. [!just I.4]
 
-Since the straight line *BC* falling on the two straight lines *AC* and *BD* makes the alternate angles equal to one another, therefore *AC* is parallel to *BD.* [!just I.27]
+Since the straight line {BC} falling on the two straight lines {AC} and {BD} makes the alternate angles equal to one another, therefore {AC} is parallel to {BD}. [!just I.27]
 
 And it was also proved equal to it.
 
@@ -55,9 +120,9 @@ Therefore *straight lines which join the ends of equal and parallel straight lin
 ----
 guide:
 
-The qualifier "in the same directions" in the statement of this proposition is necessary since without it the lines *AD* and *BC* could join the endpoints of the parallel lines, and *AD* and *BC* are not parallel but intersect. But these words of Euclid words are informal, and it would take some work to determine geometrically which end of *AD* corresponds to which end of a parallel line *BC.*
+The qualifier "in the same directions" in the statement of this proposition is necessary since without it the lines {AD} and {BC} could join the endpoints of the parallel lines, and {AD} and {BC} are not parallel but intersect. But these words of Euclid words are informal, and it would take some work to determine geometrically which end of {AD} corresponds to which end of a parallel line {BC}.
 
-In general, given four points *A, B, C,* and *D,* exactly one of the three pairs of lines, *AB* and *CD, AC* and *BD,* and *AD* and *BC,* intersects. (If extended to infinite lines, all three pairs of lines might intersect, but as line segments only one pair does.) This statement belongs to the fundamental part of plane geometry that includes betweenness and sides of lines that wasn't developed until the late nineteenth century.
+In general, given four points {A}, {B}, {C}, and {D}, exactly one of the three pairs of lines, {AB} and {CD}, {AC} and {BD}, and {AD} and {BC}, intersects. (If extended to infinite lines, all three pairs of lines might intersect, but as line segments only one pair does.) This statement belongs to the fundamental part of plane geometry that includes betweenness and sides of lines that wasn't developed until the late nineteenth century.
 
 #### Use of Proposition 33
 

@@ -15,16 +15,54 @@ statement: In right-angled triangles the square on the side opposite the right a
 ----
 proof:
 
-Let *ABC* be a right-angled triangle having the angle *BAC* right.
+Let {ABC} be a right-angled triangle having the angle {BAC} right.
 
-I say that the square on *BC* equals the sum of the squares on *BA* and *AC.*
+I say that the square on {BC} equals the sum of the squares on {BA} and {AC}.
 
-Describe the square *BDEC* on *BC,* and the squares *GB* and *HC* on *BA* and *AC.* Draw *AL* through *A* parallel to either *BD* or *CE,* and join *AD* and *FC.* [!just I.46; I.31, I.Post.1]
+Describe the square {BDEC} on {BC}, and the squares {GB} and {HC} on {BA} and {AC}. Draw {AL} through {A} parallel to either {BD} or {CE}, and join {AD} and {FC}. [!just I.46; I.31, I.Post.1]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="320" height="380" tabindex="0"></canvas>
 <noscript><img src="propI47.gif"/></noscript>
 <script type="text/javascript">
+    // Pythagoras. The theorem is a SUM, so the colours decompose it the way
+    // I.45 did: AL splits the big square BDEC into the rectangles BL and CL;
+    // BL equals the square GB (orange) and CL equals the square HC (green), so
+    // the big square visibly IS orange + green and those match the two smaller
+    // squares. BDEC itself is left UNFILLED — its own two rectangles fill it,
+    // the same trick as I.41's parallelogram. The congruent triangles ABD and
+    // FBC, the hinge of the whole proof, share yellow.
+    //
+    // Joyce's own figure keeps the three squares as unfilled outlines, so the
+    // colour lives in SEPARATE fill-only regions (GBfill / HCfill / BL / CL /
+    // ABD / FBC), all initiallyHidden. The resting figure is therefore exactly
+    // his; the colour arrives during the walk.
+    //
+    // A is a circleSlider on the circle with diameter BC, so angle BAC stays
+    // right however the figure is dragged (Thales) — Joyce's touch, kept.
+    //
+    // Five of the seven markers sit at B (the I.13 situation). They tile
+    // without overlapping — DBC (-90..0), ABC (0..52), FBA (52..142) — so all
+    // three pin at r=20; the two WHOLE angles DBA and FBC each span two of
+    // those and overlap each other, so they go to outer rings at 30 and 38.
+    // Red = right angle, yellow = the added angle, magenta = the equal pair.
+    var GIVEN = ["A","B","C","AB","BC","AC","ABC","angBAC"];
+    var SQ    = GIVEN.concat(["D","E","F","G","H","K","A2","B2","C2",
+                              "AG","AH","BD","FB","GC","CE"]);
+    var LIN   = SQ.concat(["L","J","AL","AD","CF"]);
+    var STR   = LIN.concat(["angBAG"]);
+    var ANGB  = STR.concat(["angDBC","angFBA","angABC","angDBA","angFBC"]);
+    var TRI   = ANGB.concat(["ABD","FBC"]);
+    // From slide 9 the proof leaves the angles behind and is purely about
+    // areas, so the seven markers come OFF — they have done their work by the
+    // time triangle ABD is shown equal to FBC, and five of them are stacked at
+    // B where they crowd the figure. GEOM is TRI's geometry with no markers.
+    var GEOM  = ["A","B","C","AB","BC","AC","ABC",
+                 "D","E","F","G","H","K","A2","B2","C2",
+                 "AG","AH","BD","FB","GC","CE",
+                 "L","J","AL","AD","CF","ABD","FBC"];
+    var EQ1   = GEOM.concat(["BL","GBfill"]);
+    var EQ2   = EQ1.concat(["CL","HCfill","AE","BK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -33,13 +71,25 @@ Describe the square *BDEC* on *BC,* and the squares *GB* and *HC* on *BA* and *A
         elements: [
             "B;point;free;100,200",
             "C;point;free;230,200",
-            "O;point;midpoint;B,C;none;none",
-            "OABC;circle;radius;O,B;none;none;none;none",
+            // The circle on diameter BC keeps angle BAC right as A is dragged.
+            "O;point;midpoint;B,C;0;0",
+            "OABC;circle;radius;O,B;0;0;0;0",
             "A;point;circleSlider;OABC,140,100",
-            "ABC;polygon;triangle;A,B,C;none;none;black;random",
-            "A2;polygon;square;C,B;none;none;black",
-            "B2;polygon;square;B,A;none;none;black",
-            "C2;polygon;square;A,C;none;none;black",
+            // The given triangle is not one of the areas being compared, so it
+            // takes a cool blue against the warm orange/green/yellow of the
+            // regions — complementary to the orange it sits beside, and a
+            // pastel in the spirit of Joyce's original "random" fill.
+            "ABC;polygon;triangle;A,B,C;0;0;black;8CB4D9",
+            // The three squares. NOTE the explicit ";0" face: omitting faceColor
+            // does NOT give a transparent polygon — index.ts defaults a 2-D
+            // element to lighten(bgcolor), i.e. a near-white OPAQUE face. Left
+            // implicit, each square covers the coloured region beneath it the
+            // moment it is highlighted (#140 promotes highlighted elements
+            // within the draw pass), which blanked GBfill after its animation
+            // and would have whited out the whole decomposition on slides 12-13.
+            "A2;polygon;square;C,B;0;0;black;0",
+            "B2;polygon;square;B,A;0;0;black;0",
+            "C2;polygon;square;A,C;0;0;black;0",
             "G;point;vertex;B2,3",
             "F;point;vertex;B2,4",
             "K;point;vertex;C2,3",
@@ -52,29 +102,161 @@ Describe the square *BDEC* on *BC,* and the squares *GB* and *HC* on *BA* and *A
             "AD;line;connect;A,D",
             "CF;line;connect;C,F",
             "BK;line;connect;B,K",
-            "AE;line;connect;A,E"
+            "AE;line;connect;A,E",
+            // Segments the proof names; the squares and triangle already draw
+            // them, so these are hover targets. GC is the parallel through C
+            // that Joyce names but does not draw.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "AH;line;connect;A,H;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "GC;line;connect;G,C;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            // Fill-only regions carrying the argument. BL = GB (orange),
+            // CL = HC (green), and the congruent pair ABD = FBC (yellow).
+            "GBfill;polygon;quadrilateral;B,A,G,F;0;0;0;orange",
+            "HCfill;polygon;quadrilateral;A,C,K,H;0;0;0;green",
+            "BL;polygon;quadrilateral;B,D,L,J;0;0;0;orange",
+            "CL;polygon;quadrilateral;J,L,E,C;0;0;0;green",
+            "ABD;polygon;triangle;A,B,D;0;0;0;yellow",
+            "FBC;polygon;triangle;F,B,C;0;0;0;yellow",
+            // Angles. The triangles own ABD and FBC, so the markers are angDBA
+            // and angFBC, reached from the prose with a display override.
+            "angBAC;sector;angleMarker;A,B,C,20;0;0;red;red",
+            "angBAG;sector;angleMarker;A,B,G,20;0;0;red;red",
+            "angDBC;sector;angleMarker;B,D,C,20;0;0;red;red",
+            "angFBA;sector;angleMarker;B,F,A,20;0;0;red;red",
+            "angABC;sector;angleMarker;B,A,C,20;0;0;yellow;yellow",
+            "angDBA;sector;angleMarker;B,D,A,30;0;0;magenta;magenta",
+            "angFBC;sector;angleMarker;B,F,C,38;0;0;magenta;magenta"
         ],
+        aliases: { "BDEC": "A2", "GB": "B2", "HC": "C2",
+                   "BA": "AB", "CA": "AC", "CB": "BC", "DB": "BD", "BF": "FB",
+                   "GA": "AG", "HA": "AH", "FC": "CF", "CG": "GC", "EC": "CE",
+                   "DA": "AD", "EA": "AE", "KB": "BK", "LA": "AL",
+                   "BAC": "angBAC", "BAG": "angBAG", "DBC": "angDBC",
+                   "FBA": "angFBA", "DBA": "angDBA" },
+        initiallyHidden: ["GBfill","HCfill","BL","CL","ABD","FBC"],
+        slides: [
+            { text: "Let {ABC} be a right-angled triangle having the angle {BAC} right.",
+              visible: GIVEN,
+              highlighted: ["ABC","angBAC"],
+              transition: { animations: [ { elem: "angBAC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that the square on {BC} equals the sum of the squares on {BA} and {AC}.",
+              visible: GIVEN,
+              highlighted: ["BC","AB","AC"] },
+            { text: "Describe the square {BDEC} on {BC}, and the squares {GB} and {HC} on {BA} and {AC}.",
+              visible: SQ,
+              highlighted: ["A2","B2","C2"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "A2", name: geomlib.A.Polygon.outline },
+                  { elem: "B2", name: geomlib.A.Polygon.outline },
+                  { elem: "C2", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "I.46" }] },
+            { text: "Draw {AL} through {A} parallel to either {BD} or {CE}, and join {AD} and {FC}.",
+              visible: LIN,
+              highlighted: ["AL","AD","CF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.31" }, { ref: "I.Post.1" }] },
+            { text: "Since each of the angles {BAC} and {BAG} is right, the two straight lines {AC} and {AG} make adjacent angles equal to two right angles — therefore {CA} is in a straight line with {AG}.",
+              visible: STR,
+              highlighted: ["angBAC","angBAG","AC","AG"],
+              transition: { animations: [ { elem: "angBAG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.Def.22" }, { ref: "I.14" }] },
+            { text: "For the same reason {BA} is also in a straight line with {AH}.",
+              visible: STR,
+              highlighted: ["AB","AH"],
+              justifications: [{ ref: "I.14" }] },
+            { text: "Since the angle {DBC} equals the angle {FBA}, for each is right, add the angle {ABC|angABC} to each — therefore the whole angle {DBA} equals the whole angle {FBC|angFBC}.",
+              visible: ANGB,
+              highlighted: ["angDBC","angFBA","angABC","angDBA","angFBC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angDBC", name: geomlib.A.Sector.sweep },
+                  { elem: "angFBA", name: geomlib.A.Sector.sweep },
+                  { elem: "angABC", name: geomlib.A.Sector.sweep },
+                  { elem: "angDBA", name: geomlib.A.Sector.sweep },
+                  { elem: "angFBC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.Def.22" }, { ref: "I.Post.4" }, { ref: "C.N.2" }] },
+            { text: "Since {DB} equals {BC} and {FB} equals {BA}, the two sides {AB} and {BD} equal {FB} and {BC}, and the angle {ABD|angDBA} equals the angle {FBC|angFBC} — therefore the base {AD} equals the base {FC}, and the triangle {ABD} equals the triangle {FBC}.",
+              visible: TRI,
+              highlighted: ["ABD","FBC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ABD", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "FBC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.Def.22" }, { ref: "I.4" }] },
+            { text: "Now the parallelogram {BL} is double the triangle {ABD}, for they have the same base {BD} and are in the same parallels {BD} and {AL}. And the square {GB} is double the triangle {FBC}, for they have the same base {FB} and are in the same parallels {FB} and {GC}.",
+              visible: EQ1,
+              highlighted: ["BL","ABD","B2","FBC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BL",     name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "GBfill", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.41" }] },
+            { text: "Therefore the parallelogram {BL} also equals the square {GB}.",
+              visible: EQ1,
+              highlighted: ["BL","B2"],
+              justifications: [{ ref: "I.41" }] },
+            { text: "Similarly, if {AE} and {BK} are joined, the parallelogram {CL} can also be proved equal to the square {HC}. Therefore the whole square {BDEC} equals the sum of the two squares {GB} and {HC}.",
+              visible: EQ2,
+              highlighted: ["CL","C2"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BK",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CL",     name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "HCfill", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.41" }] },
+            { text: "And the square {BDEC} is described on {BC}, and the squares {GB} and {HC} on {BA} and {AC}.",
+              visible: EQ2,
+              highlighted: ["A2","B2","C2"],
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "Therefore the square on {BC} equals the sum of the squares on {BA} and {AC}.",
+              visible: EQ2,
+              highlighted: ["A2","B2","C2"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup, shared across both canvases on this page.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.4": "/elements/books/bookI/postulates/post4/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.14":     "/elements/books/bookI/propositions/propI14/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "I.41":     "/elements/books/bookI/propositions/propI41/",
+        "I.46":     "/elements/books/bookI/propositions/propI46/",
+        "I.Def.22": "/elements/books/bookI/definitions/defI22/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/"
     });
 </script>
 </figure>
 
-Since each of the angles *BAC* and *BAG* is right, it follows that with a straight line *BA,* and at the point *A* on it, the two straight lines *AC* and *AG* not lying on the same side make the adjacent angles equal to two right angles, therefore *CA* is in a straight line with *AG.* [!just I.Def.22; I.14]
+Since each of the angles {BAC} and {BAG} is right, it follows that with a straight line {BA}, and at the point {A} on it, the two straight lines {AC} and {AG} not lying on the same side make the adjacent angles equal to two right angles, therefore {CA} is in a straight line with {AG}. [!just I.Def.22; I.14]
 
-For the same reason *BA* is also in a straight line with *AH.*
+For the same reason {BA} is also in a straight line with {AH}.
 
-Since the angle *DBC* equals the angle *FBA,* for each is right, add the angle *ABC* to each, therefore the whole angle *DBA* equals the whole angle *FBC.* [!just I.Def.22; I.Post.4; C.N.2]
+Since the angle {DBC} equals the angle {FBA}, for each is right, add the angle {ABC|angABC} to each, therefore the whole angle {DBA} equals the whole angle {FBC|angFBC}. [!just I.Def.22; I.Post.4; C.N.2]
 
-Since *DB* equals *BC,* and *FB* equals *BA,* the two sides *AB* and *BD* equal the two sides *FB* and *BC* respectively, and the angle *ABD* equals the angle *FBC,* therefore the base *AD* equals the base *FC,* and the triangle *ABD* equals the triangle *FBC.* [!just I.Def.22; I.4]
+Since {DB} equals {BC}, and {FB} equals {BA}, the two sides {AB} and {BD} equal the two sides {FB} and {BC} respectively, and the angle {ABD|angDBA} equals the angle {FBC|angFBC}, therefore the base {AD} equals the base {FC}, and the triangle {ABD} equals the triangle {FBC}. [!just I.Def.22; I.4]
 
-Now the parallelogram *BL* is double the triangle *ABD,* for they have the same base *BD* and are in the same parallels *BD* and *AL.* And the square *GB* is double the triangle *FBC,* for they again have the same base *FB* and are in the same parallels *FB* and *GC.*
+Now the parallelogram {BL} is double the triangle {ABD}, for they have the same base {BD} and are in the same parallels {BD} and {AL}. And the square {GB} is double the triangle {FBC}, for they again have the same base {FB} and are in the same parallels {FB} and {GC}.
 
-Therefore the parallelogram *BL* also equals the square *GB.* [!just I.41]
+Therefore the parallelogram {BL} also equals the square {GB}. [!just I.41]
 
-Similarly, if *AE* and *BK* are joined, the parallelogram *CL* can also be proved equal to the square *HC.* Therefore the whole square *BDEC* equals the sum of the two squares *GB* and *HC.*
+Similarly, if {AE} and {BK} are joined, the parallelogram {CL} can also be proved equal to the square {HC}. Therefore the whole square {BDEC} equals the sum of the two squares {GB} and {HC}.
 
-And the square *BDEC* is described on *BC,* and the squares *GB* and *HC* on *BA* and *AC.* [!just C.N.2]
+And the square {BDEC} is described on {BC}, and the squares {GB} and {HC} on {BA} and {AC}. [!just C.N.2]
 
-Therefore the square on *BC* equals the sum of the squares on *BA* and *AC.*
+Therefore the square on {BC} equals the sum of the squares on {BA} and {AC}.
 
 Therefore *in right-angled triangles the square on the side opposite the right angle equals the sum of the squares on the sides containing the right angle..*
 
@@ -113,6 +295,22 @@ The *Zhou bi* has recently been translated into English with an excellent commen
 <canvas id="canvas_1" width="280" height="200" tabindex="0"></canvas>
 <noscript><img alt="lemma for X.33 diagram" src="propI47b.gif"/></noscript>
 <script type="text/javascript">
+    // Guide-proof exception (as on I.20, I.23, I.31, I.46): the guide below
+    // narrates the X.33 lemma proof step by step, so the captions are Dr.
+    // Joyce's own sentences. This is the "why Euclid did it the hard way"
+    // counterpoint — the same result via proportion and similarity, which
+    // needs Books V and VI and so could not stand in Book I.
+    //
+    // ABM and ACM take orange and green, echoing canvas_0's BL and CL: the
+    // guide says in so many words that the rectangle CB by BM "is the
+    // parallelogram BL in the proof of I.47", so the two figures line up.
+    //
+    // The circle is renamed BCcirc — Joyce's figure called it ABC, which
+    // collides with the triangle ABC his guide prose names. It is invisible
+    // either way; the rename just frees the name for the triangle.
+    var L1 = ["A","B","C","BC","ABC"];
+    var L2 = L1.concat(["M","AM","BM","CM","AB","AC"]);
+    var L3 = L2.concat(["ABM","ACM"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "0,0,100",
@@ -121,12 +319,61 @@ The *Zhou bi* has recently been translated into English with an excellent commen
             "B;point;free;30,170",
             "C;point;free;250,170",
             "BCmid;point;midpoint;B,C;0;0",
-            "ABC;circle;radius;BCmid,B;0;0;0;0",
-            "A;point;circleSlider;ABC,120,40",
+            "BCcirc;circle;radius;BCmid,B;0;0;0;0",
+            "A;point;circleSlider;BCcirc,120,40",
             "M;point;foot;A,B,C",
-            "ABM;polygon;triangle;A,B,M;0;0;black;random",
-            "ACM;polygon;triangle;A,C,M;0;0;black;random"
+            "ABC;polygon;triangle;A,B,C;0;0;black;0",
+            "AM;line;connect;A,M",
+            // The two sub-triangles, matched to canvas_0's BL and CL.
+            "ABM;polygon;triangle;A,B,M;0;0;0;orange",
+            "ACM;polygon;triangle;A,C,M;0;0;0;green",
+            // Segments the guide names — the triangles already draw them.
+            "BC;line;connect;B,C;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BM;line;connect;B,M;0;0;0",
+            "CM;line;connect;C,M;0;0;0"
         ],
+        aliases: { "AMC": "ACM", "CB": "BC", "BA": "AB", "CA": "AC",
+                   "MB": "BM", "MC": "CM", "MA": "AM" },
+        initiallyHidden: ["ABM","ACM"],
+        slides: [
+            { text: "Let {ABC} be a right-angled triangle with a right angle at {A}. Draw {AM} perpendicular to {BC}.",
+              visible: L2,
+              highlighted: ["ABC","AM"],
+              transition: { animations: [ { elem: "AM", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "According to VI.8, the triangles {ABM} and {AMC} are similar both to the whole {ABC} and to one another.",
+              visible: L3,
+              highlighted: ["ABM","ACM","ABC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ABM", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "ACM", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "VI.8" }, { ref: "VI.4" }] },
+            { text: "Since triangle {ABC} is similar to triangle {ABM}, therefore, by the definition of similarity, {CB} is to {BA} as {BA} is to {BM}.",
+              visible: L3,
+              highlighted: ["ABC","ABM","BC","AB","BM"],
+              justifications: [{ ref: "VI.Def.1" }] },
+            { text: "Next VI.17 converts this proportion to a statement about areas: the rectangle {CB} by {BM} — which is the parallelogram BL in the proof of I.47 — equals the square on {AB}. For the same reason the rectangle {BC} by {CM} (the parallelogram CL) equals the square on {AC}.",
+              visible: L3,
+              highlighted: ["BM","CM","AB","AC"],
+              justifications: [{ ref: "VI.17" }] },
+            { text: "Therefore the sum of the two rectangles {CB} by {BM} and {BC} by {CM}, which is the square on {BC}, equals the sum of the squares on {AC} and {AB}.",
+              visible: L3,
+              highlighted: ["ABM","ACM","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Merge into the page-wide citation lookup (shared with canvas_0).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VI.4":     "/elements/books/bookVI/propositions/propVI4/",
+        "VI.8":     "/elements/books/bookVI/propositions/propVI8/",
+        "VI.17":    "/elements/books/bookVI/propositions/propVI17/",
+        "VI.Def.1": "/elements/books/bookVI/definitions/defVI1/"
     });
 </script>
 </figure>
@@ -135,13 +382,13 @@ According to Proclus, the specific proof of this proposition given in the *Eleme
 
 Euclid presents a proof based on proportion and similarity in the [lemma](/elements/books/bookX/propositions/propX33/#lemma) for proposition X.33. Compare it, summarized here, to the proof in I.47.
 
-Let *ABC* be a right-angled triangle with a right angle at *A.* Draw *AM* perpendicular to *BC.*
+Let {ABC} be a right-angled triangle with a right angle at {A}. Draw {AM} perpendicular to {BC}.
 
-According to @VI.8, the triangles *ABM* and *AMC* are similar both to the whole *ABC* and to one another. (VI.8 concludes the triangles are similar after showing they have the same angles, see @VI.4.)
+According to @VI.8, the triangles {ABM} and {AMC} are similar both to the whole {ABC} and to one another. (VI.8 concludes the triangles are similar after showing they have the same angles, see @VI.4.)
 
-Since triangle *ABC* is similar to triangle *ABD,* therefore, by the definition of similarity @VI.Def.1, *CB* is to *BA* as *BA* is to *BM.*
+Since triangle {ABC} is similar to triangle {ABM},<sup class="fn-ref" id="fnref-1"><a href="#fn-1">1</a></sup> therefore, by the definition of similarity @VI.Def.1, {CB} is to {BA} as {BA} is to {BM}.
 
-Next @VI.17 converts this proportion to a statement about areas, namely, the rectangle *CB* by *BM* (which is the parallelogram *BL* in the proof of I.47) equals the square on *AB.* For the same reason the rectangle *BC* by *CM* (which is the parallelogram *CL* in the proof of I.47) also equals the square on *AC.* Therefore the sum of the two rectangles *CB* by *BM* and *BC* by *CM,* which is the square on *BC,* equals the sum of the squares on *AC* and *BC.* Q.E.D.
+Next @VI.17 converts this proportion to a statement about areas, namely, the rectangle {CB} by {BM} (which is the parallelogram *BL* in the proof of I.47) equals the square on {AB}. For the same reason the rectangle {BC} by {CM} (which is the parallelogram *CL* in the proof of I.47) also equals the square on {AC}. Therefore the sum of the two rectangles {CB} by {BM} and {BC} by {CM}, which is the square on {BC}, equals the sum of the squares on {AC} and {AB}.<sup class="fn-ref" id="fnref-2"><a href="#fn-2">2</a></sup> Q.E.D.
 
 (Actually, the final sentence is not part of the lemma, probably because Euclid moved that statement to the first Book as I.47.)
 
@@ -156,3 +403,11 @@ Proposition @VI.31 generalizes the figures that can be placed on the sides of th
 #### Use of this proposition
 
 This proposition is used in the next one, which its converse, in propositions @II.9 through II.14 in Book II, and several propositions in the rest of the books on geometry.
+
+<hr class="footnotes-sep">
+<section class="footnotes" id="footnotes">
+<ol>
+<li id="fn-1">Typo correction from &ldquo;triangle <em>ABD</em>&rdquo; to &ldquo;triangle <em>ABM</em>.&rdquo; The figure has no point <em>D</em>; the proportion <em>CB</em>&nbsp;:&nbsp;<em>BA</em> = <em>BA</em>&nbsp;:&nbsp;<em>BM</em> follows from the similarity of <em>ABC</em> and <em>ABM</em>. &mdash;NB, 2026-08-22 <a href="#fnref-1" class="fn-back" aria-label="Back to text">&#8617;</a></li>
+<li id="fn-2">Typo correction from &ldquo;the squares on <em>AC</em> and <em>BC</em>&rdquo; to &ldquo;the squares on <em>AC</em> and <em>AB</em>.&rdquo; <em>BC</em> is the hypotenuse; the sum is of the squares on the two legs, as it is earlier stated. &mdash;NB, 2026-08-22 <a href="#fnref-2" class="fn-back" aria-label="Back to text">&#8617;</a></li>
+</ol>
+</section>
