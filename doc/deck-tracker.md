@@ -137,16 +137,30 @@ rather than whether it resolves:
 Also cleared en route: `other-works/desargues-theorem` `canvas_2` blanked on
 maximize — a near-degenerate circumcircle of radius ~11300 (euclid#162, #164).
 
-### `random` fills — 37 across Book I
+### `random` fills — keep them
 
-`random` resolves to a **fresh pastel on every page load**, so those figures
-change colour each visit and can land near-invisible (caught on I.46, where
-the guide square rendered almost white). Faithful to Joyce's spec, but it is
-non-deterministic and undercuts the colour idiom that carries meaning from
-I.32 on. Pin them deck by deck as each gets its visual pass rather than in a
-sweep — the right colour depends on what the figure means in its proof.
-Affected: I.2, I.4, I.5, I.6, I.8, I.9, I.19, I.23, I.24, I.25, I.26, I.29,
-I.32, I.34.
+25 polygons across Book I use Joyce's `random` fill, which resolves to a fresh
+pastel per page load. **This is his design and it should stay.** An earlier
+note here recommended pinning all of them; that was wrong, and the data says so:
+
+| | count | reads? |
+|---|---|---|
+| on the **cream** canvas (`35,19,100`) | 23 | yes — pastels have plenty to sit against |
+| on a **white** canvas (`0,0,100`) | 2 | can go pale: I.1 `canvas_1`, I.19 `canvas_1` |
+
+**I.46 was a contrast problem, not a randomness problem.** Its guide square sat
+on a *white* canvas and the pastel had nothing to read against; it was also the
+subject of the walk, so it had to be visible. Pinned to cyan for that reason.
+
+The other thing randomness was blamed for — fills fighting the colour idiom —
+was actually the `faceColor` layering bug (see the rule in `process.md`), fixed
+independently. I.32 is the check case: a random triangle beside red/blue/green
+markers, visually confirmed as reading well.
+
+**So: pin only when a fill has to carry meaning or has to be seen** — a region
+the argument depends on, or a pale pastel on a white canvas that is the subject
+of its own slide. Otherwise leave the variety; it is part of how the original
+figures feel.
 
 ## Deferred — revisit after Book I is published
 
