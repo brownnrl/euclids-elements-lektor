@@ -263,13 +263,14 @@ The construction needed is that of @I.23 to construct an angle. That constructio
             // move with it. sweep 360 with settle:true ends exactly where it
             // began, so the figure is left as authored. durationMs on the entry
             // outranks any animationConfig and scopes the slow pace to this one
-            // animation.
+            // animation. 16 s is deliberate: the caption takes ~15 s to read, so
+            // the turn should still be going when the reader looks up.
             { text: "Now watch {A} make a full turn about {D}. Every circle follows it, and twice on the way round {A} crosses {DC|sideDC} — each time {AE}, the line the construction fixed on, stops being parallel. That is the hypothesis hiding in the construction: {A} has to stay on one side of {DC|sideDC}.",
               visible: ["sideDA","sideDC","Acirc","Gcirc","E","AE","E2","AE2","angADC","angDAE","angDAE2"],
               highlighted: ["A","AE","sideDC"],
               transition: { animations: [
                   { elem: "A", name: geomlib.A.Point.followPath,
-                    durationMs: 9000,
+                    durationMs: 16000,
                     args: { arc: { center: "D", sweep: 360 }, settle: true } } ] } },
             { text: "In all there are six circles and one line, either {AE} or {AE2}, that must be drawn. The intermediate lines may be suppressed since they only verify the construction. The two lines {AD|sideDA} and {DC|sideDC} are already drawn at the start of our construction.",
               visible: ["sideDA","sideDC","E","AE","E2","AE2","K1","K2","K3","K4","Acirc","Gcirc"],
