@@ -128,7 +128,7 @@ specifics.
 
 | Deck | What to look for |
 |---|---|
-| **I.32** | Do the red/blue/green markers at C visibly **tile the straight line BCD**? That tiling is the angle-sum payoff. Plus the orange exterior arc at r=30. Also still uses a `random` fill. |
+| **I.32** | **The deck where colour first carries meaning — this is the origin of the idiom used through I.48, so if it does not read here the whole approach's first instance fails.** The proof draws CE∥AB, then copies ∠A and ∠B to vertex C by alternate and corresponding angles (@I.29). So **four markers sit at C**: ∠BCA green (r22), ∠ACE red (r22), ∠ECD blue (r22), and ∠ACD orange on an outer arc (r30). **Look for four things.** (1) The three r22 wedges — green, red, blue — should **exactly fill the straight line B-C-D**, edge to edge, no gap and no overlap: that half-plane at C *is* two right angles, so seeing ∠C + ∠A + ∠B fill it is the angle-sum theorem. (2) The **red at C should match the red at A**, and the **blue at C the blue at B** — they are the same angles copied over, which is the only reason the tiling proves anything. (3) The **orange r30 arc should span exactly the red+blue pair** and stop at the green: exterior ∠ACD = ∠A + ∠B, the first half of the proposition. (4) The triangle still has a **`random`** fill, which may wash out or fight the three marker colours — pin it if so. |
 | **I.34** | Red/blue/green fills, the ABD/ACD outer arcs at r=30, and the `superpose` landing ABC on DCB. Also still uses a `random` fill. |
 | **I.35** | The one deck with **ungated fills** — six regions visible at once; legible or muddy? Plus the `superpose` landing EAB on FDC. |
 | **I.43** | Never seen. Both halves should decompose *identically* into orange+green+cyan. |
