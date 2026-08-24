@@ -47,7 +47,7 @@ Let {A} be the given point, and {BC} the given straight line.
             "EAD;sector;angleMarker;A,E,D",
             "ADC;sector;angleMarker;D,A,C"
         ],
-        aliases: { "DAE": "EAD", "EAF": "EF" },
+        aliases: { "DAE": "EAD", "EAF": "EF", "DA": "AD", "EA": "AE" },
         deferDraggables: ["D"],
         slides: [
             { text: "Let {A} be the given point, and {BC} the given straight line.",
@@ -254,6 +254,23 @@ The construction needed is that of @I.23 to construct an angle. That constructio
                   { elem: "angADC",  name: geomlib.A.Sector.sweep },
                   { elem: "angDAE",  name: geomlib.A.Sector.sweep },
                   { elem: "angDAE2", name: geomlib.A.Sector.sweep } ] } },
+            // lektor#13 / euclid#137. The slide above STATES the hypothesis;
+            // this one performs it. A is a free point, so followPath can walk
+            // it — a FULL turn about D, slowly, so the construction can be
+            // watched reacting rather than flicked past. Twice on the way round
+            // A crosses DC and the "parallel" comes apart, then reforms.
+            // slate.update() runs every frame, so all six circles, E, E2 and AE
+            // move with it. sweep 360 with settle:true ends exactly where it
+            // began, so the figure is left as authored. durationMs on the entry
+            // outranks any animationConfig and scopes the slow pace to this one
+            // animation.
+            { text: "Now watch {A} make a full turn about {D}. Every circle follows it, and twice on the way round {A} crosses {DC|sideDC} — each time {AE}, the line the construction fixed on, stops being parallel. That is the hypothesis hiding in the construction: {A} has to stay on one side of {DC|sideDC}.",
+              visible: ["sideDA","sideDC","Acirc","Gcirc","E","AE","E2","AE2","angADC","angDAE","angDAE2"],
+              highlighted: ["A","AE","sideDC"],
+              transition: { animations: [
+                  { elem: "A", name: geomlib.A.Point.followPath,
+                    durationMs: 9000,
+                    args: { arc: { center: "D", sweep: 360 }, settle: true } } ] } },
             { text: "In all there are six circles and one line, either {AE} or {AE2}, that must be drawn. The intermediate lines may be suppressed since they only verify the construction. The two lines {AD|sideDA} and {DC|sideDC} are already drawn at the start of our construction.",
               visible: ["sideDA","sideDC","E","AE","E2","AE2","K1","K2","K3","K4","Acirc","Gcirc"],
               highlighted: ["AE","K1","K2","K3","K4","Acirc","Gcirc"],
