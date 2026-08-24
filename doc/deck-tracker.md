@@ -133,10 +133,9 @@ specifics.
 | **I.43** | Never seen. Both halves should decompose *identically* into orange+green+cyan. |
 | **I.44** | Never seen. Six markers — a vertical pair at B pinned equal, an arm-sharing pair at H at 30/18. |
 | **I.45** | Never seen. Slide 13 is the payoff: four regions matched in pairs by colour. |
-| **I.47** | Never seen, and the densest marker cluster in Book I — **five at vertex B**, two outer rings (30, 38) over three inner (20). Most-viewed page in the work. |
 | **I.48** | Never seen. Two right-angle markers at A, adjacent along AC. |
 
-**Cleared so far:** I.7, I.10, I.11, I.32, I.42, I.46.
+**Cleared so far:** I.7, I.10, I.11, I.32, I.42, I.46, I.47.
 
 ### `random` fills — 37 across Book I
 
