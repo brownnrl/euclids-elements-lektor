@@ -110,21 +110,33 @@ page, **order the prose so each reference's nearest preceding canvas is the one
 it means** — a guide reference placed after `canvas_1` binds to `canvas_1`, one
 between the canvases binds to `canvas_0`.
 
-#### Escaping to raw HTML
+#### Naming the canvas explicitly — `{AB:1}`
 
-Two cases the inline form cannot express, because Mistune splits `canvas_2` at
-the underscore:
+Add a canvas **index** to pin which figure a reference lights, for the cases
+where the fallback above is not what the prose means:
 
-```html
-<!-- target one specific canvas -->
-<span class="elem-ref" data-elem="AB" data-canvas="canvas_1">AB</span>
-
-<!-- light the same element on SEVERAL canvases at once (geomlib 0.13+, #130) -->
-<span class="elem-ref" data-elem="ABC" data-canvases="canvas_0,canvas_1">ABC</span>
+```markdown
+{AB:1}                   → data-canvas="canvas_1"
+{ABC:0,1}                → data-canvases="canvas_0,canvas_1"   (light both)
+{ABC|angABC:1}           → display override AND selector
 ```
 
-The multi-canvas form is how I.26's two case figures light together — 38 shared
-references on that page use it.
+The multi form is the cross-canvas highlight (geomlib 0.13+): one reference
+lights the same element on several figures at once — how I.26's two case
+figures light together.
+
+> **It is an index, not the id.** `{AB:canvas_1}` does **not** work: Mistune
+> splits inline text at `_`, so that token reaches the renderer as two pieces
+> (`{AB:canvas` + `_1}`) and never matches. The rejoined output still *looks*
+> intact on the page, which makes this easy to misdiagnose — if a selector is
+> rendering literally, check for an underscore first.
+
+The equivalent raw HTML still works, and is what older pages use:
+
+```html
+<span class="elem-ref" data-elem="AB" data-canvas="canvas_1">AB</span>
+<span class="elem-ref" data-elem="ABC" data-canvases="canvas_0,canvas_1">ABC</span>
+```
 
 #### Caveat: slide sets are not prose
 

@@ -96,14 +96,26 @@ BLOCK_RE = re.compile(r"\[!just\s+(.+?)\]")
 # patch required. The constrained NAME pattern (letter-led identifier
 # with no underscores) keeps free-form `{...}` prose from matching.
 #
-# The explicit canvas selector (`{AB:canvas_2}`) is not supported
-# inline: mistune splits `canvas_2` at the underscore. The browser-side
-# JS falls back to the nearest in-section canvas, which covers the
-# expected cases. For the rare edge case where a specific canvas must
-# be targeted from prose, drop to raw inline HTML:
-#   <span class="elem-ref" data-elem="AB" data-canvas="canvas_2">AB</span>
+# An optional trailing `:N` selector names the canvas the ref should
+# light, for multi-canvas pages where the browser's fallback (nearest
+# preceding canvas) is not what the prose means. N is the canvas INDEX:
+#   {AB:1}            -> data-canvas="canvas_1"
+#   {ABC:0,1}         -> data-canvases="canvas_0,canvas_1"
+#   {ABC|angABC:1}    -> override AND selector
+# Both attributes are already understood by elem-ref-highlight.js; the
+# multi form drives the cross-canvas highlight (geomlib >= 0.13, #130).
+#
+# The selector is an INDEX, not the id, precisely because mistune splits
+# inline text at `_`: a literal `{AB:canvas_1}` reaches the text()
+# walker as two chunks, 'Sel {AB:canvas' + '_1} and ...', so the token
+# can never match. (The rejoined output still *looks* intact, which
+# makes this easy to misdiagnose.) Keeping digits-only sidesteps the
+# lexer entirely — no lexer patch, same as bare `{NAME}`.
+
 ELEM_REF_RE = re.compile(
-    r"\{(?P<name>[A-Za-z][A-Za-z0-9'\-]*)(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?\}"
+    r"\{(?P<name>[A-Za-z][A-Za-z0-9'\-]*)"
+    r"(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?"
+    r"(?::(?P<canvas>\d+(?:,\d+)*))?\}"
 )
 
 # Standalone block directives that REPLACE the paragraph they sit in.
@@ -119,7 +131,8 @@ BLOCK_REPLACE_RE = re.compile(
 _INLINE_ANY_RE = re.compile(
     rf"@(?P<cite>{_TOKEN_BARE})"
     rf"|\{{(?P<elem>[A-Za-z][A-Za-z0-9'\-]*)"
-    rf"(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?\}}"
+    rf"(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?"
+    rf"(?::(?P<canvas>\d+(?:,\d+)*))?\}}"
 )
 
 
@@ -205,12 +218,27 @@ def _render_entry(entry: str) -> str:
     return " ".join(parts)
 
 
-def _render_elem_ref(name: str, target: str | None = None) -> str:
-    """Render a `{NAME}` / `{DISPLAY|element}` inline shortcode as a
-    span the browser-side JS binds hover/touch handlers to. With a
-    display override, the span shows NAME but binds to `target`."""
+def _render_elem_ref(
+    name: str, target: str | None = None, canvas: str | None = None
+) -> str:
+    """Render a `{NAME}` / `{DISPLAY|element}` / `{NAME:canvas_N}` inline
+    shortcode as a span the browser-side JS binds hover/touch handlers to.
+
+    With a display override the span shows NAME but binds to `target`.
+    With a canvas selector it also pins which canvas to light. The selector
+    is a canvas INDEX (or comma list of them) — `1` becomes `canvas_1` —
+    because mistune splits inline text at `_`, so the id cannot be written
+    literally. One index emits `data-canvas`, several emit `data-canvases`
+    (the cross-canvas form, geomlib >= 0.13). Without a selector the browser
+    falls back to the nearest preceding canvas.
+    """
     elem = target or name
-    return f'<span class="elem-ref" data-elem="{elem}">{name}</span>'
+    attrs = f'class="elem-ref" data-elem="{elem}"'
+    if canvas:
+        ids = [f"canvas_{i.strip()}" for i in canvas.split(",")]
+        attr = "data-canvases" if len(ids) > 1 else "data-canvas"
+        attrs += f' {attr}="{",".join(ids)}"'
+    return f"<span {attrs}>{name}</span>"
 
 
 def _render_block_replace(kind: str, arg: str | None) -> str:
@@ -441,7 +469,9 @@ class EucrefsRendererMixin:
             if m.group("cite"):
                 parts.append(_link(m.group("cite")))
             else:
-                parts.append(_render_elem_ref(m.group("elem"), m.group("target")))
+                parts.append(_render_elem_ref(
+                    m.group("elem"), m.group("target"), m.group("canvas")
+                ))
             last = m.end()
         if last == 0:
             return super().text(text)
