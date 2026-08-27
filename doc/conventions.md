@@ -46,14 +46,100 @@ The first canvas on a page (`canvas_0`) almost always lives in the proof. Second
 
 On mobile (`max-width: 480px`) figures stop floating and stack centered. The `canvas` itself has `max-width: 100%; height: auto;` so it shrinks on narrow viewports — geomlib 0.2.0+ remaps Pointer Events through CSS scaling, so hit-testing is preserved.
 
+### Element references (`{AB}`) — the interactive layer
+
+Wrapping an element's letters in braces turns them into a live reference: hover
+or tap it and the matching element lights up on the figure, and (geomlib 0.11+)
+every *other* reference to the same element lights up with it.
+
+```markdown
+Describe the circle {BCD} with center {A} and radius {AB}. [!just I.Post.3, I.Post.1]
+```
+
+`lektor-eucrefs` renders that as:
+
+```html
+<span class="elem-ref" data-elem="BCD">BCD</span>
+```
+
+and `assets/js/elem-ref-highlight.js` binds the hover/touch handlers.
+
+**`*AB*` vs `{AB}`.** Joyce's source italicises element letters, and that is
+what the converted prose starts as. Italics are inert — no highlight, no
+binding. Converting `*AB*` → `{AB}` is the normal way to bring a page into the
+interactive layer, and it is explicitly allowed on proof and guide prose:
+tokenizing words that are **already there** is fine, adding words is not (see
+[process.md](process.md#dont-add-words-to-the-guide-or-proof-prose)). Leave
+`*AB*` where the element does not exist on the page's figure.
+
+#### Display override — `{DISPLAY|element}`
+
+When the prose spells an element differently from how the figure declares it,
+show one and bind to the other:
+
+```markdown
+the angle {ABC|CBA}          # reads "ABC", lights the element declared CBA
+the angle {CEF|angCEF}       # reads "CEF", lights the angle marker
+```
+
+This is what makes name collisions liveable: a triangle usually owns the plain
+name (`ABC`), so its angle marker is declared `angABC` and the prose reaches it
+with `{ABC|angABC}`. Same for a reversed spelling — `{DBC|BCD}` — although a
+reversal is usually better handled once, as an `aliases` entry on the figure,
+than repeated at every mention.
+
+> **Both halves are constrained identifiers** — letter-led, then letters,
+> digits, `'` or `-`. **No spaces and no underscores in either half.** So a
+> multi-word display (`{the side from D to A|sideDA}`) does **not** work in
+> prose; it is a geomlib *caption* feature, not a lektor one. Phrase around it:
+> `the {side|sideDA} from D to A`.
+
+#### Which canvas does a reference bind to?
+
+The browser resolves each span in this order:
+
+1. An explicit `data-canvas` / `data-canvases` attribute, if present.
+2. The nearest enclosing `div.theorem` section.
+3. **The nearest canvas *preceding* the span** — latest-preceding first, since a
+   reference is normally talking about the figure just above it.
+4. Failing that, a canvas *following* it — for prose that names an element
+   before its figure appears.
+
+On a single-canvas page this is automatic: tokenize freely. On a multi-canvas
+page, **order the prose so each reference's nearest preceding canvas is the one
+it means** — a guide reference placed after `canvas_1` binds to `canvas_1`, one
+between the canvases binds to `canvas_0`.
+
+#### Escaping to raw HTML
+
+Two cases the inline form cannot express, because Mistune splits `canvas_2` at
+the underscore:
+
+```html
+<!-- target one specific canvas -->
+<span class="elem-ref" data-elem="AB" data-canvas="canvas_1">AB</span>
+
+<!-- light the same element on SEVERAL canvases at once (geomlib 0.13+, #130) -->
+<span class="elem-ref" data-elem="ABC" data-canvases="canvas_0,canvas_1">ABC</span>
+```
+
+The multi-canvas form is how I.26's two case figures light together — 38 shared
+references on that page use it.
+
+#### Caveat: slide sets are not prose
+
+`aliases` resolve for these prose references, but **not** inside a slide's
+`visible` / `highlighted` arrays, where only the declared name matches. See
+[process.md](process.md#slide-sets-take-canonical-names-only--aliases-are-inert-there).
+
 ### Marginal justifications (`[!just …]`)
 
 The little right-floated reference column next to each proof step. Use the `[!just …]` directive — the `lektor-eucrefs` plugin (see [Euclid citation shortcodes](#euclid-citation-shortcodes) below) resolves the bare tokens to `<a href>` links and emits the wrapping `<div class="just">`.
 
 ```markdown
-Describe the circle *BCD* with center *A* and radius *AB.* [!just I.Post.3, I.Post.1]
+Describe the circle {BCD} with center {A} and radius {AB}. [!just I.Post.3, I.Post.1]
 
-Now, since the point *A* is the center of the circle *CDB,* therefore *AC* equals *AB.* [!just I.Def.15]
+Now, since the point {A} is the center of the circle {CDB}, therefore {AC} equals {AB}. [!just I.Def.15]
 ```
 
 Inside the directive:
