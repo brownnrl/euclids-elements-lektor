@@ -28,9 +28,8 @@ construction-methods tables) lives under `/geomlib/`. Mobile layouts
 collapse the master TOC and Subject Index across breakpoints and
 stack the footer-nav row on phones.
 
-Per-conversion notes, editorial mismatch reviews, and the per-book
-agent-fan-out playbook live under
-[`doc/journal/`](doc/journal/).
+Authoring reference lives under [`doc/`](doc/) — see
+[`doc/README.md`](doc/README.md) for the map.
 
 ## Setup
 
@@ -159,7 +158,7 @@ The script assumes the `euclids-elements.org` checkout sits at
 └── doc/
     ├── conventions.md              Canvas backgrounds, figure floats, eucref grammar
     ├── content-model.md            Bundle pattern, frontmatter shapes
-    └── journal/                    Per-milestone notes + per-book agent playbook
+    └── deck-tracker.md             Per-proposition deck status and notes
 ```
 
 ## Roadmap
