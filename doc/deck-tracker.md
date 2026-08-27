@@ -3,8 +3,7 @@
 Per-proposition status of the **slideshow deck** layer — the
 `slides[]` / `transition` / `{NAME}` authoring that turns a converted
 proposition page into a step-through proof. This is distinct from the
-prose conversion (all 465 props are converted; that history lives in
-[journal/journal.md](journal/journal.md)). A deck is built per the
+prose conversion — all 465 propositions are converted. A deck is built per the
 [process.md](process.md) workflow.
 
 Update the summary and the relevant row at the end of each deck.
@@ -106,7 +105,7 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 
 No decks yet. Add a per-book section here as the work reaches each
 book, mirroring the Book I table. Prose conversion for all of these is
-already complete (see [journal/journal.md](journal/journal.md)).
+already complete.
 
 ## Deck polish to-dos (from the visual walk)
 

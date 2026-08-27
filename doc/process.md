@@ -3,8 +3,7 @@
 How a proposition page gets its slideshow: the planning table, the
 authoring rules accumulated over propI.1–I.5, and the verification
 checklist. Point a fresh session here before starting a new
-proposition. (The older [journal/process.md](journal/process.md) is
-the Phase-3 HTML-conversion process — different work.)
+proposition.
 
 Illustration and education are the primary goals. The slides should
 glean intent from Joyce's writing and convey the construction — kept

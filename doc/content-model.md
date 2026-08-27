@@ -18,6 +18,10 @@ The conceptual model and the places it diverges from vanilla Lektor.
 /elements/books/bookI/commonnotions/cn1/        leaf — model: commonnotion
 /elements/books/bookI/commonnotions/cn1_5/      hidden group — model: commonnotion_group
 /elements/books/bookI/propositions/propI1/      leaf — model: proposition
+/other-works/<slug>/                            Joyce's republished tutorials and
+                                                geomlib's own site — model: other_work
+/geomlib/                                       geomlib landing + Using + Joyce's 1996
+                                                applet archive + construction tables
 ```
 
 Three depth levels under each book: **section** (definitions/postulates/commonnotions/propositions) → **leaf** (e.g. propI7) → optional inline anchors (#guide, #cor).
