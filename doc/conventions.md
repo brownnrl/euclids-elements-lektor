@@ -125,11 +125,16 @@ The multi form is the cross-canvas highlight (geomlib 0.13+): one reference
 lights the same element on several figures at once — how I.26's two case
 figures light together.
 
-> **It is an index, not the id.** `{AB:canvas_1}` does **not** work: Mistune
-> splits inline text at `_`, so that token reaches the renderer as two pieces
-> (`{AB:canvas` + `_1}`) and never matches. The rejoined output still *looks*
-> intact on the page, which makes this easy to misdiagnose — if a selector is
-> rendering literally, check for an underscore first.
+> **It is an index, not the id.** `{AB:canvas_1}` does **not** work. Mistune's
+> `text` rule stops at `\ < ! [ _ * \` ~` but **not** at `{`, so it swallows
+> `…{AB:canvas` and breaks at the underscore; the renderer receives two pieces
+> and never matches. The rejoined output still *looks* intact on the page,
+> which makes this easy to misdiagnose — if a selector renders literally, check
+> for an underscore first.
+>
+> The literal form *is* achievable with a custom inline lexer, prototyped and
+> recorded in [lektor#19](https://github.com/brownnrl/euclids-elements-lektor/issues/19);
+> it is out of scope here because it changes how every inline token is parsed.
 
 The equivalent raw HTML still works, and is what older pages use:
 
