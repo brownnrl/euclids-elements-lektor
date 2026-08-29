@@ -110,38 +110,38 @@ page, **order the prose so each reference's nearest preceding canvas is the one
 it means** — a guide reference placed after `canvas_1` binds to `canvas_1`, one
 between the canvases binds to `canvas_0`.
 
-#### Naming the canvas explicitly — `{AB:1}`
+#### Naming the canvas explicitly — `{AB:canvas_1}`
 
-Add a canvas **index** to pin which figure a reference lights, for the cases
-where the fallback above is not what the prose means:
+Add a canvas id to pin which figure a reference lights, for the cases where the
+fallback above is not what the prose means:
 
 ```markdown
-{AB:1}                   → data-canvas="canvas_1"
-{ABC:0,1}                → data-canvases="canvas_0,canvas_1"   (light both)
-{ABC|angABC:1}           → display override AND selector
+{AB:canvas_1}                → data-canvas="canvas_1"
+{ABC:canvas_0,canvas_1}      → data-canvases="canvas_0,canvas_1"   (light both)
+{ABC|angABC:canvas_1}        → display override AND selector
 ```
 
+The id is written out in full, matching the figure's own `canvasid:` and the
+raw-HTML form below — nothing to translate.
+
 The multi form is the cross-canvas highlight (geomlib 0.13+): one reference
-lights the same element on several figures at once — how I.26's two case
-figures light together.
+lights the same element on several figures at once, which is how I.26's two
+case figures light together.
 
-> **It is an index, not the id.** `{AB:canvas_1}` does **not** work. Mistune's
-> `text` rule stops at `\ < ! [ _ * \` ~` but **not** at `{`, so it swallows
-> `…{AB:canvas` and breaks at the underscore; the renderer receives two pieces
-> and never matches. The rejoined output still *looks* intact on the page,
-> which makes this easy to misdiagnose — if a selector renders literally, check
-> for an underscore first.
->
-> The literal form *is* achievable with a custom inline lexer, prototyped and
-> recorded in [lektor#19](https://github.com/brownnrl/euclids-elements-lektor/issues/19);
-> it is out of scope here because it changes how every inline token is parsed.
-
-The equivalent raw HTML still works, and is what older pages use:
+The equivalent raw HTML still works, and is what the older pages use:
 
 ```html
 <span class="elem-ref" data-elem="AB" data-canvas="canvas_1">AB</span>
 <span class="elem-ref" data-elem="ABC" data-canvases="canvas_0,canvas_1">ABC</span>
 ```
+
+> **Why this needs a custom lexer.** Mistune's stock `text` rule stops at
+> `\ < ! [ _ * \` ~` but **not** at `{`, so it swallows `…{AB:canvas` and
+> breaks at the underscore — the token is destroyed before any rule sees it,
+> while the rejoined output still *looks* intact on the page. `lektor-eucrefs`
+> therefore registers its own inline rule (`elem_ref`, ahead of emphasis) and
+> adds `{` to the `text` stop set. Anything that is not a well-formed
+> reference — `{}`, `{1abc}`, ordinary prose braces — falls through untouched.
 
 #### Caveat: slide sets are not prose
 
