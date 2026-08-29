@@ -6,6 +6,8 @@ for typ in ("POINT","LINE","CIRCLE","POLYGON","SECTOR","PLANE","SPHERE","POLYHED
     for name, entry in getattr(S, typ).items():
         els = entry[0]
         w, h = entry[2] if len(entry) > 2 else (260, 200)
-        out.append({"id": "c_%s_%s" % (typ.lower(), name), "w": w, "h": h, "elements": els})
+        opts = entry[3] if len(entry) > 3 else {}
+        out.append({"id": "c_%s_%s" % (typ.lower(), name), "w": w, "h": h,
+                    "elements": els, "opts": opts})
 json.dump(out, open(sys.argv[1], "w"), indent=1)
 print("%d specs" % len(out))

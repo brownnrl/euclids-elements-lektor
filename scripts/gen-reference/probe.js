@@ -41,12 +41,12 @@ const specs = JSON.parse(fs.readFileSync(process.argv[2], "utf-8"));
 const PNGDIR = process.argv[3] || null;
 if (PNGDIR) fs.mkdirSync(PNGDIR, { recursive: true });
 let bad = 0;
-for (const { id, w, h, elements } of specs) {
+for (const { id, w, h, elements, opts } of specs) {
     const s = sandboxFor(w, h);
     const canvasOf = (id) => s.document.getElementById(id);
     const problems = [];
     try {
-        s.geomlib.init({ canvasid: id, background: "0,0,100", elements });
+        s.geomlib.init(Object.assign({ canvasid: id, background: "0,0,100", elements }, opts || {}));
     } catch (e) { problems.push("THREW: " + String(e).slice(0, 200)); }
     let diags = { slates: [] };
     try { diags = s.geomlib.diagnostics(); } catch (_) {}

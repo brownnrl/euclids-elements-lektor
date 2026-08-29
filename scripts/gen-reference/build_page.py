@@ -4,7 +4,7 @@ Signatures and descriptions are parsed out of the library's own
 doc/constructions-reference.md rather than restated here, so the page cannot
 drift from the source silently. The figures themselves live in specs.py.
 """
-import sys, re, os, html
+import sys, re, os, html, json
 sys.path.insert(0, os.path.dirname(__file__))
 import specs
 
@@ -79,8 +79,14 @@ GROUPS = [
 ]
 
 
-def canvas(cid, elements, w, h):
+def canvas(cid, elements, w, h, opts=None):
     els = ",\n            ".join('"%s"' % e for e in elements)
+    # Extra init options, e.g. showAngles for the angle-marker figures:
+    # markers default to hidden because Euclid's own diagrams draw no angle
+    # arcs, which is right for a proposition and wrong for a card whose
+    # subject IS the marker.
+    extra = "".join('        %s: %s,\n' % (k, json.dumps(v))
+                    for k, v in sorted((opts or {}).items()))
     return (
         '<figure class="diagram block">\n'
         '<canvas id="%s" width="%d" height="%d" tabindex="0"></canvas>\n'
@@ -91,9 +97,10 @@ def canvas(cid, elements, w, h):
         "        elements: [\n"
         "            %s\n"
         "        ],\n"
+        "%s"
         "    });\n"
         "</script>\n"
-        "</figure>" % (cid, w, h, cid, els)
+        "</figure>" % (cid, w, h, cid, els, extra)
     )
 
 
@@ -164,6 +171,7 @@ for typ, label, table in GROUPS:
     for name, entry in table.items():
         elements, note = entry[0], entry[1]
         w, h = entry[2] if len(entry) > 2 else (260, 200)
+        opts = entry[3] if len(entry) > 3 else None
         sig, desc = REFTBL.get((typ, name), ("", ""))
         n += 1
         # The declaration to show is this construction's own element — the
@@ -174,7 +182,7 @@ for typ, label, table in GROUPS:
             if len(f) > 2 and f[1] == typ and f[2] == name:
                 decl = e
         cards.append(card(typ, name, sig, desc,
-                          decl, canvas("c_%s_%s" % (typ, name), elements, w, h), note))
+                          decl, canvas("c_%s_%s" % (typ, name), elements, w, h, opts), note))
     body.append('\n<div class="ctor-grid">\n' + "\n".join(cards) + "\n</div>\n")
 
 body.append("""

@@ -36,9 +36,17 @@ CIRCLE = {
 }
 
 SECTOR = {
- "sector":      (['V;point;free;60,150','A;point;free;200,150','B;point;free;150,50','VA;line;connect;V,A','VB;line;connect;V,B','s;sector;sector;V,A,B;0;0;magenta;magenta'], "The wedge at V between the arms VA and VB."),
- "angleMarker": (['V;point;free;60,150','A;point;free;200,150','B;point;free;150,50','VA;line;connect;V,A','VB;line;connect;V,B','m;sector;angleMarker;V,A,B;0;0;magenta;magenta'], "The interior angle marker at V. Radius defaults to 22px, clamped to 0.45 of the shorter arm."),
- "arc":         (['O;point;free;120,120','A;point;free;200,120','B;point;free;120,45','a;sector;arc;O,A,B;0;0;red;0'], "The arc through A, M and B, with M lying on the arc."),
+ "sector":      (['V;point;free;60,150','A;point;free;200,150',
+                  'varc;circle;radius;V,A;0;0;0;0',
+                  'B;point;circleSlider;varc,150,55',
+                  'VA;line;connect;V,A','VB;line;connect;V,B',
+                  's;sector;sector;V,A,B;0;0;magenta;magenta'],
+                 "The wedge at V between the arms VA and VB. Both arms must be radii of the same "
+                 "circle, so B is placed on the circle through A rather than left free."),
+ "angleMarker": (['V;point;free;60,150','A;point;free;200,150','B;point;free;150,50','VA;line;connect;V,A','VB;line;connect;V,B','m;sector;angleMarker;V,A,B;0;0;magenta;magenta'], "The interior angle marker at V. Radius defaults to 22px, clamped to 0.45 of the shorter arm. Markers stay hidden in a static figure unless init sets showAngles, since Euclid's own diagrams draw no angle arcs.", (260, 200), {"showAngles": True}),
+ "arc":         (['A;point;free;120,120','M;point;free;200,120','B;point;free;120,45',
+                  'a;sector;arc;A,M,B;0;0;red;0'],
+                 "Three points ON the arc, not a centre and two ends. M lies between A and B."),
 }
 
 POLYGON = {
@@ -90,12 +98,12 @@ POINT.update({
                   'AB;line;connect;A,B','AC;line;connect;A,C','BC;line;connect;B,C',
                   'D;point;angleBisector;B,A,C','AD;line;connect;A,D;0;0;red',
                   'm;sector;angleMarker;A,B,C;0;0;magenta;magenta'],
-                 "Where the bisector of angle BAC meets BC. Argument order is B, A, C — the vertex is second. A plane may be supplied."),
+                 "Where the bisector of angle BAC meets BC. Argument order is B, A, C — the vertex is second. A plane may be supplied.", (260, 200), {"showAngles": True}),
  "angleDivider":(['A;point;free;130,35','B;point;free;35,165','C;point;free;225,165',
                   'AB;line;connect;A,B','AC;line;connect;A,C','BC;line;connect;B,C',
                   'D;point;angleDivider;B,A,C,3','AD;line;connect;A,D;0;0;red',
                   'm;sector;angleMarker;A,B,C;0;0;magenta;magenta'],
-                 "As angleBisector, for a 1/n division; n is the trailing integer. Shown here at a third."),
+                 "As angleBisector, for a 1/n division; n is the trailing integer. Shown here at a third.", (260, 200), {"showAngles": True}),
  "harmonic":    (['C;point;free;30,110','D;point;free;180,110','CD;line;connect;C,D',
                   'B;point;lineSlider;C,D,150,110',"H;point;harmonic;B,C,D"],
                  "The harmonic conjugate of B with respect to C and D. Takes three points."),
@@ -106,12 +114,12 @@ LINE.update({
                   'BA;line;connect;B,A','BC;line;connect;B,C',
                   'bis;line;angleBisector;A,B,C;0;0;red',
                   'm;sector;angleMarker;B,A,C;0;0;magenta;magenta'],
-                 "The bisector of angle ABC as a line. The vertex is the second argument."),
+                 "The bisector of angle ABC as a line. The vertex is the second argument.", (260, 200), {"showAngles": True}),
  "angleDivider":(['A;point;free;130,35','B;point;free;35,165','C;point;free;225,165',
                   'BA;line;connect;B,A','BC;line;connect;B,C',
                   'div;line;angleDivider;A,B,C,3;0;0;red',
                   'm;sector;angleMarker;B,A,C;0;0;magenta;magenta'],
-                 "The 1/n division of an angle, as a line."),
+                 "The 1/n division of an angle, as a line.", (260, 200), {"showAngles": True}),
  "foot":        (BASE3D + ['A;point;free;150,45','f;line;foot;A,base;0;0;red'],
                  "The perpendicular from a point to a plane. Euclid XI.11.", (280, 230)),
  "similar":     (['A;point;free;35,165','B;point;free;120,165','D;point;free;165,90','E;point;free;225,90','F;point;free;200,40',
@@ -177,7 +185,7 @@ SECTOR.update({
  "angleMarkerReflex":(['V;point;free;60,150','A;point;free;200,150','B;point;free;150,50',
                   'VA;line;connect;V,A','VB;line;connect;V,B',
                   'm;sector;angleMarkerReflex;V,A,B;0;0;magenta;magenta'],
-                 "As angleMarker, on the major (reflex) arc."),
+                 "As angleMarker, on the major (reflex) arc.", (260, 200), {"showAngles": True}),
 })
 
 PLANE = {
