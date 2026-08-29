@@ -1,0 +1,916 @@
+_model: other_work
+---
+title: Constructions
+---
+order: 4
+---
+body:
+
+Every construction the library implements, each with a figure you can drag.
+The signature and description of each are taken from the library's own
+reference table, so this page and the source cannot drift apart silently.
+
+An element is declared as a single string:
+
+```
+name;type;construction;arguments;nameColor;vertexColor;edgeColor;faceColor
+```
+
+The four colour fields are optional, and `0` means transparent. `{A}` in the
+prose lights the matching element in the figure beside it — see
+[Using geomlib diagrams](/geomlib/using/).
+
+> **A note on the signatures.** When a line's name appears in an argument list
+> it expands to its two endpoints, so `params: ["AB"]` arrives as two points,
+> not one. The signatures below are written post-expansion, which is why some
+> read as more points than you would write.
+
+## Point constructions
+
+### `point;free`
+**Signature** — ``int x, int y``  
+Freely draggable point.
+
+<figure class="diagram">
+<canvas id="c_point_free" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_free",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,60",
+            "B;point;free;180,110"
+        ],
+    });
+</script>
+</figure>
+
+Draggable anywhere. Red by default.
+
+```
+B;point;free;180,110
+```
+
+### `point;fixed`
+**Signature** — ``int x, int y [, int z]``  
+Non-draggable fixed point (2D and 3D variants).
+
+<figure class="diagram">
+<canvas id="c_point_fixed" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_fixed",
+        background: "0,0,100",
+        elements: [
+            "O;point;fixed;120,80",
+            "A;point;free;60,130"
+        ],
+    });
+</script>
+</figure>
+
+Not draggable; the anchor other things hang off.
+
+```
+O;point;fixed;120,80
+```
+
+### `point;first`
+**Signature** — ``Point A, Point B``  
+Returns point A (first endpoint of a line).
+
+<figure class="diagram">
+<canvas id="c_point_first" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_first",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,120",
+            "B;point;free;190,60",
+            "AB;line;connect;A,B",
+            "F;point;first;AB"
+        ],
+    });
+</script>
+</figure>
+
+The first endpoint of a line, as a point in its own right.
+
+```
+F;point;first;AB
+```
+
+### `point;last`
+**Signature** — ``Point A, Point B``  
+Returns point B (last endpoint of a line).
+
+<figure class="diagram">
+<canvas id="c_point_last" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_last",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,120",
+            "B;point;free;190,60",
+            "AB;line;connect;A,B",
+            "L;point;last;AB"
+        ],
+    });
+</script>
+</figure>
+
+The other endpoint.
+
+```
+L;point;last;AB
+```
+
+### `point;midpoint`
+**Signature** — ``Point A, Point B``  
+Midpoint of segment AB.
+
+<figure class="diagram">
+<canvas id="c_point_midpoint" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_midpoint",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,120",
+            "B;point;free;190,60",
+            "AB;line;connect;A,B",
+            "M;point;midpoint;A,B"
+        ],
+    });
+</script>
+</figure>
+
+Bisects the segment — drag either end.
+
+```
+M;point;midpoint;A,B
+```
+
+### `point;intersection`
+**Signature** — ``Point A, B, C, D [, Plane]``  
+Intersection of lines AB and CD.
+
+<figure class="diagram">
+<canvas id="c_point_intersection" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_intersection",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;40,40",
+            "B;point;free;200,130",
+            "C;point;free;40,130",
+            "D;point;free;200,40",
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "X;point;intersection;A,B,C,D"
+        ],
+    });
+</script>
+</figure>
+
+Where two lines cross.
+
+```
+X;point;intersection;A,B,C,D
+```
+
+### `point;foot`
+**Signature** — ``Point A, Point B, Point C``  
+Foot of perpendicular from A to line BC.
+
+<figure class="diagram">
+<canvas id="c_point_foot" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_foot",
+        background: "0,0,100",
+        elements: [
+            "B;point;free;40,140",
+            "C;point;free;210,140",
+            "A;point;free;110,40",
+            "BC;line;connect;B,C",
+            "M;point;foot;A,B,C",
+            "AM;line;connect;A,M;0;0;red"
+        ],
+    });
+</script>
+</figure>
+
+Foot of the perpendicular from a point to a line.
+
+```
+M;point;foot;A,B,C
+```
+
+### `point;extend`
+**Signature** — ``Point A, B, C, D``  
+Point E on line AB so BE = CD.
+
+<figure class="diagram">
+<canvas id="c_point_extend" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_extend",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,110",
+            "B;point;free;130,110",
+            "C;point;free;50,160",
+            "D;point;free;110,160",
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "E;point;extend;A,B,C,D",
+            "BE;line;connect;B,E;0;0;red"
+        ],
+    });
+</script>
+</figure>
+
+Lays off |CD| beyond B — Euclid I.3.
+
+```
+E;point;extend;A,B,C,D
+```
+
+### `point;cutoff`
+**Signature** — ``Point A, B, C, D``  
+Point E on line AB so AE = CD.
+
+<figure class="diagram">
+<canvas id="c_point_cutoff" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_cutoff",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,110",
+            "B;point;free;200,110",
+            "C;point;free;50,160",
+            "D;point;free;110,160",
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "E;point;cutoff;A,B,C,D",
+            "AE;line;connect;A,E;0;0;red"
+        ],
+    });
+</script>
+</figure>
+
+Cuts |CD| off from A along AB.
+
+```
+E;point;cutoff;A,B,C,D
+```
+
+### `point;center`
+**Signature** — ``Circle A``  
+Center of circle A.
+
+<figure class="diagram">
+<canvas id="c_point_center" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_center",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;120,90",
+            "P;point;free;190,90",
+            "circ;circle;radius;O,P",
+            "Z;point;center;circ"
+        ],
+    });
+</script>
+</figure>
+
+Recovers a circle's centre as a point.
+
+```
+Z;point;center;circ
+```
+
+### `point;circumcenter`
+**Signature** — ``Point A, B, C [, Plane]``  
+Circumcenter of triangle ABC (2D and 3D variants).
+
+<figure class="diagram">
+<canvas id="c_point_circumcenter" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_circumcenter",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;70,40",
+            "B;point;free;40,140",
+            "C;point;free;200,120",
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "O;point;circumcenter;A,B,C"
+        ],
+    });
+</script>
+</figure>
+
+Equidistant from all three vertices.
+
+```
+O;point;circumcenter;A,B,C
+```
+
+### `point;lineSlider`
+**Signature** — ``Point A, B, int x, int y [, int z]``  
+Point draggable along line AB (2D, 3D, segment variants).
+
+<figure class="diagram">
+<canvas id="c_point_lineSlider" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_lineSlider",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;40,130",
+            "B;point;free;210,60",
+            "AB;line;connect;A,B",
+            "P;point;lineSlider;A,B,120,95"
+        ],
+    });
+</script>
+</figure>
+
+Draggable, but only along the line. Orange.
+
+```
+P;point;lineSlider;A,B,120,95
+```
+
+### `point;circleSlider`
+**Signature** — ``Circle A, int x, int y [, int z]``  
+Point draggable along circle A.
+
+<figure class="diagram">
+<canvas id="c_point_circleSlider" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_circleSlider",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;120,95",
+            "R;point;free;190,95",
+            "circ;circle;radius;O,R",
+            "P;point;circleSlider;circ,60,60"
+        ],
+    });
+</script>
+</figure>
+
+Draggable around the circle.
+
+```
+P;point;circleSlider;circ,60,60
+```
+
+### `point;perpendicular`
+**Signature** — `Various (5 signature variants)`  
+Point D s.t. AD ⊥ AB and \.
+
+<figure class="diagram">
+<canvas id="c_point_perpendicular" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_perpendicular",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,140",
+            "B;point;free;200,140",
+            "AB;line;connect;A,B",
+            "D;point;perpendicular;A,B",
+            "AD;line;connect;A,D;0;0;red"
+        ],
+    });
+</script>
+</figure>
+
+A point square to AB at A.
+
+```
+D;point;perpendicular;A,B
+```
+
+### `point;parallelogram`
+**Signature** — ``Point A, Point B, Point C``  
+4th vertex D of parallelogram ABCD (D = A+C−B).
+
+<figure class="diagram">
+<canvas id="c_point_parallelogram" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_parallelogram",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,50",
+            "B;point;free;40,140",
+            "C;point;free;180,150",
+            "D;point;parallelogram;A,B,C",
+            "ABCD;polygon;quadrilateral;A,B,C,D;0;0;0;cyan"
+        ],
+    });
+</script>
+</figure>
+
+The fourth vertex: D = A + C − B.
+
+```
+D;point;parallelogram;A,B,C
+```
+
+### `point;vertex`
+**Signature** — ``Polygon P, int i``  
+i-th vertex of polygon P.
+
+<figure class="diagram">
+<canvas id="c_point_vertex" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_vertex",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,60",
+            "B;point;free;170,120",
+            "sq;polygon;square;A,B;0;0;black;cyan",
+            "V;point;vertex;sq,3"
+        ],
+    });
+</script>
+</figure>
+
+Pulls the i-th vertex out of a polygon.
+
+```
+V;point;vertex;sq,3
+```
+
+## Line constructions
+
+### `line;connect`
+**Signature** — ``Point A, Point B``  
+Line through A and B.
+
+<figure class="diagram">
+<canvas id="c_line_connect" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_connect",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,120",
+            "B;point;free;190,60",
+            "AB;line;connect;A,B"
+        ],
+    });
+</script>
+</figure>
+
+The straightedge between two points.
+
+```
+AB;line;connect;A,B
+```
+
+### `line;extend`
+**Signature** — ``Point A, B, C, D``  
+Line extending AB by length CD.
+
+<figure class="diagram">
+<canvas id="c_line_extend" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_extend",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,120",
+            "B;point;free;140,90",
+            "C;point;free;60,160",
+            "D;point;free;120,160",
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "AE;line;extend;A,B,C,D;0;0;red"
+        ],
+    });
+</script>
+</figure>
+
+AB produced by a further |CD|.
+
+```
+AE;line;extend;A,B,C,D;0;0;red
+```
+
+### `line;parallel`
+**Signature** — ``Point A, Point B, Point C``  
+Line through A parallel and equal to line BC.
+
+<figure class="diagram">
+<canvas id="c_line_parallel" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_parallel",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,140",
+            "B;point;free;200,140",
+            "P;point;free;110,60",
+            "AB;line;connect;A,B",
+            "par;line;parallel;P,A,B;0;0;red"
+        ],
+    });
+</script>
+</figure>
+
+Through P, parallel to AB.
+
+```
+par;line;parallel;P,A,B;0;0;red
+```
+
+### `line;perpendicular`
+**Signature** — `Various (5 signature variants)`  
+Line perpendicular to another.
+
+<figure class="diagram">
+<canvas id="c_line_perpendicular" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_perpendicular",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,130",
+            "B;point;free;200,130",
+            "AB;line;connect;A,B",
+            "perp;line;perpendicular;A,B;0;0;red"
+        ],
+    });
+</script>
+</figure>
+
+Square to AB at A.
+
+```
+perp;line;perpendicular;A,B;0;0;red
+```
+
+### `line;bichord`
+**Signature** — ``Circle A, Circle B``  
+Line connecting two circle intersections.
+
+<figure class="diagram">
+<canvas id="c_line_bichord" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_bichord",
+        background: "0,0,100",
+        elements: [
+            "O1;point;free;90,95",
+            "R1;point;free;150,95",
+            "O2;point;free;160,95",
+            "R2;point;free;225,95",
+            "c1;circle;radius;O1,R1;0;0;0;0",
+            "c2;circle;radius;O2,R2;0;0;0;0",
+            "ch;line;bichord;c1,c2;0;0;red"
+        ],
+    });
+</script>
+</figure>
+
+The common chord of two circles.
+
+```
+ch;line;bichord;c1,c2;0;0;red
+```
+
+### `line;chord`
+**Signature** — ``Point B, Point C, Circle A``  
+Chord of circle A cut by line BC.
+
+<figure class="diagram">
+<canvas id="c_line_chord" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_chord",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;120,95",
+            "R;point;free;195,95",
+            "circ;circle;radius;O,R",
+            "A;point;free;70,60",
+            "B;point;free;170,150",
+            "ch;line;chord;A,B,circ;0;0;red"
+        ],
+    });
+</script>
+</figure>
+
+The chord line AB cuts from a circle.
+
+```
+ch;line;chord;A,B,circ;0;0;red
+```
+
+## Circle constructions
+
+### `circle;radius`
+**Signature** — ``Point center, Point edge [, Point C]``  
+Circle with center and radius; 2-point (radius=\.
+
+<figure class="diagram">
+<canvas id="c_circle_radius" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_circle_radius",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;120,95",
+            "P;point;free;195,95",
+            "circ;circle;radius;O,P"
+        ],
+    });
+</script>
+</figure>
+
+Centre and a point on it — Euclid's compass.
+
+```
+circ;circle;radius;O,P
+```
+
+### `circle;circumcircle`
+**Signature** — ``Point A, B, C [, Plane]``  
+Circle through three points (2D and 3D).
+
+<figure class="diagram">
+<canvas id="c_circle_circumcircle" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_circle_circumcircle",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;70,40",
+            "B;point;free;40,140",
+            "C;point;free;200,130",
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "circ;circle;circumcircle;A,B,C;0;0;red;0"
+        ],
+    });
+</script>
+</figure>
+
+Through all three vertices.
+
+```
+circ;circle;circumcircle;A,B,C;0;0;red;0
+```
+
+## Polygon constructions
+
+### `polygon;triangle`
+**Signature** — ``Point A, B, C``  
+Triangle with vertices A, B, C.
+
+<figure class="diagram">
+<canvas id="c_polygon_triangle" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_triangle",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;110,40",
+            "B;point;free;40,150",
+            "C;point;free;190,150",
+            "t;polygon;triangle;A,B,C;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+
+Three vertices.
+
+```
+t;polygon;triangle;A,B,C;0;0;black;cyan
+```
+
+### `polygon;quadrilateral`
+**Signature** — ``Point A, B, C, D``  
+Quadrilateral ABCD.
+
+<figure class="diagram">
+<canvas id="c_polygon_quadrilateral" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_quadrilateral",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,40",
+            "B;point;free;40,150",
+            "C;point;free;190,150",
+            "D;point;free;200,50",
+            "q;polygon;quadrilateral;A,B,C,D;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+
+Four, in order.
+
+```
+q;polygon;quadrilateral;A,B,C,D;0;0;black;cyan
+```
+
+### `polygon;parallelogram`
+**Signature** — ``Point A, B, C``  
+Parallelogram ABCD where D = A+(C−B).
+
+<figure class="diagram">
+<canvas id="c_polygon_parallelogram" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_parallelogram",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,50",
+            "B;point;free;40,150",
+            "C;point;free;180,150",
+            "p;polygon;parallelogram;A,B,C;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+
+Three vertices; the fourth follows.
+
+```
+p;polygon;parallelogram;A,B,C;0;0;black;cyan
+```
+
+### `polygon;square`
+**Signature** — ``Point A, B``  
+Square on side AB.
+
+<figure class="diagram">
+<canvas id="c_polygon_square" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_square",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;70,60",
+            "B;point;free;170,90",
+            "s;polygon;square;A,B;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+
+Built on one side — Euclid I.46.
+
+```
+s;polygon;square;A,B;0;0;black;cyan
+```
+
+### `polygon;equilateralTriangle`
+**Signature** — ``Point A, B [, Plane]``  
+Equilateral triangle on side AB (2D + 3D).
+
+<figure class="diagram">
+<canvas id="c_polygon_equilateralTriangle" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_equilateralTriangle",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;70,140",
+            "B;point;free;180,140",
+            "t;polygon;equilateralTriangle;A,B;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+
+Euclid I.1. Vertex order picks the apex side.
+
+```
+t;polygon;equilateralTriangle;A,B;0;0;black;cyan
+```
+
+### `polygon;regularPolygon`
+**Signature** — ``Point A, B [, Plane], int n``  
+Regular n-gon on edge AB (2D + 3D).
+
+<figure class="diagram">
+<canvas id="c_polygon_regularPolygon" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_regularPolygon",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;120,95",
+            "A;point;free;190,95",
+            "p;polygon;regularPolygon;O,A,7;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+
+N-gon about a centre — here seven sides.
+
+```
+p;polygon;regularPolygon;O,A,7;0;0;black;cyan
+```
+
+## Sector constructions
+
+### `sector;sector`
+**Signature** — ``Point A, B, C [, Plane]``  
+Circular sector from center through A and B (2 variants).
+
+<figure class="diagram">
+<canvas id="c_sector_sector" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_sector_sector",
+        background: "0,0,100",
+        elements: [
+            "V;point;free;60,150",
+            "A;point;free;200,150",
+            "B;point;free;150,50",
+            "VA;line;connect;V,A",
+            "VB;line;connect;V,B",
+            "s;sector;sector;V,A,B;0;0;magenta;magenta"
+        ],
+    });
+</script>
+</figure>
+
+A wedge between two arms.
+
+```
+s;sector;sector;V,A,B;0;0;magenta;magenta
+```
+
+### `sector;angleMarker`
+**Signature** — ``Point V, P1, P2 [, int radiusPx]``  
+Interior angle marker at V — element-chosen radius (default 22px, clamped to 0.45× shorter arm), auto-interior, translucent palette fill.
+
+<figure class="diagram">
+<canvas id="c_sector_angleMarker" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_sector_angleMarker",
+        background: "0,0,100",
+        elements: [
+            "V;point;free;60,150",
+            "A;point;free;200,150",
+            "B;point;free;150,50",
+            "VA;line;connect;V,A",
+            "VB;line;connect;V,B",
+            "m;sector;angleMarker;V,A,B;0;0;magenta;magenta"
+        ],
+    });
+</script>
+</figure>
+
+The small arc marking an angle. Auto-orients to the interior.
+
+```
+m;sector;angleMarker;V,A,B;0;0;magenta;magenta
+```
+
+### `sector;arc`
+**Signature** — ``Point A, M, B [, Plane]``  
+Arc of circle passing through A, M, B (M is on the arc, 2D + 3D).
+
+<figure class="diagram">
+<canvas id="c_sector_arc" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_sector_arc",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;120,120",
+            "A;point;free;200,120",
+            "B;point;free;120,45",
+            "a;sector;arc;O,A,B;0;0;red;0"
+        ],
+    });
+</script>
+</figure>
+
+Arc of a circle between two points.
+
+```
+a;sector;arc;O,A,B;0;0;red;0
+```
