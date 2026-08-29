@@ -28,7 +28,13 @@ as simple as the proof allows.
 6. Only if the **Not yet implemented** column has entries: geomlib
    issue → feature branch → PR → test the deck against the dev bundle
    (`EUCLIDS_GEOMLIB_LOCAL=1`) → release → bump the
-   `geomlib_default` pin in `templates/layout.html`.
+   `geomlib_default` pin in `templates/layout.html`. That one line feeds
+   every page's `<script src>` and the `<meta name="geomlib-version">`
+   the constructions page's Source overlay hands to CodePen, so it is
+   the only pin to change. Hardcoded versions in *prose* (the CDN
+   snippet on `/geomlib/`) can't be templated — Lektor doesn't run Jinja
+   in content bodies — so `scripts/check-versions.js` fails the publish
+   if one drifts from the layout, or names a CDN other than jsDelivr.
 
 ## The planning table
 
