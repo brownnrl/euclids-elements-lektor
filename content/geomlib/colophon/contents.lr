@@ -1,0 +1,100 @@
+_model: other_work
+---
+title: How this site is built
+---
+order: 3
+---
+body:
+
+This edition is a static site. Every page is generated ahead of time from plain
+text files, so there is no database and nothing to query when you open a
+proposition — the browser receives finished HTML, and the only code that runs is
+the diagram library.
+
+### Where the pages came from
+
+Dr. Joyce wrote his edition between 1996 and 2020 as hand-authored HTML, one
+file per proposition, definition, or essay, with a Java applet supplying the
+figures. Those files are the source this edition was converted from: **551
+legacy pages**, each read, split into its parts, and rewritten as structured
+text.
+
+The conversion was not a reformat. Joyce's HTML mixes the statement of a
+proposition, its proof, and his commentary in one flow, distinguished only by
+typography. Here they are separate fields, which is what allows a proof to be
+walked one step at a time while the commentary stays put. His `<applet>` blocks
+became [`geomlib`](/geomlib/) canvases, and his cross-references — written as
+links to files like `propI47.html` — became citation tokens that resolve to
+whatever the URL happens to be.
+
+### What the pages are made of
+
+The site is built with [Lektor](https://www.getlektor.com/), a static generator
+that lets a project define its own content types. Thirteen are defined here, and
+the counts show the shape of the work:
+
+| Content type | Pages |
+|---|---|
+| Proposition | 465 |
+| Definition | 131 |
+| Definition bundle | 32 |
+| Section index | 24 |
+| Other works | 17 |
+| Book introduction | 13 |
+| Prematter essay | 6 |
+| Postulate | 5 |
+| Common notion | 5 |
+
+A **proposition** is not one blob of text. It carries its statement, its proof,
+its marginal justifications, its figures, and Joyce's guide commentary as
+separate fields, and the page template assembles them. That separation is what
+makes the interactive layer possible.
+
+The **definition bundle** is a case where Joyce's own structure had to be
+modelled rather than flattened. He often wrote several definitions in a single
+file — `defV1.html` holds both V.Def.1 and V.Def.2 — with one shared commentary
+covering the group. Each definition here gets its own page, while a hidden
+bundle page holds the shared guide, so a citation to V.Def.2 lands somewhere
+sensible without duplicating Joyce's commentary across pages.
+
+Some pages to look at: a [proposition](/elements/books/bookI/propositions/propI47/)
+with a proof walk-through, a [definition](/elements/books/bookI/definitions/defI15_18/)
+from a bundle, a [book introduction](/elements/books/bookI/), and one of
+[Joyce's other works](/other-works/compass-geometry/).
+
+### The three extensions written for it
+
+Lektor was extended with three small plugins, each answering a problem this
+particular text raised.
+
+**Citations and element references.** Joyce's prose is dense with
+cross-references, and hand-writing links for them would not survive a change of
+URL scheme. Instead the source says `@I.47` and the plugin resolves it. The same
+plugin builds the reverse index — the "this proposition is used in…" list at the
+foot of a page is not written by hand anywhere; it is collected from every
+citation pointing at that page. It also handles the `{AB}` references that light
+up the figures, described on the [Using](/geomlib/using/) page.
+
+**Mathematics.** The few places needing set mathematics are rendered at build
+time rather than in the browser, so no math library is shipped to readers.
+
+**Roman-numeral URLs.** The smallest plugin, and the most particular. Book X's
+definitions restart their numbering in three subsections, so their addresses end
+in fragments like `defX.III.6`. Python treats a trailing `.6` as a file
+extension it does not recognise, and the development server offered the pages as
+downloads instead of displaying them. Forty lines to teach it that these are
+pages. It is the kind of thing that only appears when a text's own numbering
+outlives the assumptions of the tools carrying it.
+
+### Checking the figures
+
+The diagrams are the part most likely to break quietly: a figure can be
+misspecified and simply not appear, leaving a page that looks finished. So every
+figure on the site is exercised before anything is published — each page's
+diagram code is run against the real library, and a page that throws, or that
+names an element which does not exist, stops the deploy. **634 diagrams** across
+**524 pages** are checked this way.
+
+That check earned its place immediately: it found a Book IV figure whose element
+declarations had been transposed during conversion, so the page had been quietly
+falling back to a static image since it was written.
