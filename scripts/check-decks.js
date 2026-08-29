@@ -111,8 +111,14 @@ let refPages = 0, refFigures = 0;
 // construction that doesn't exist, is a real failure and still blocks a
 // publish — but their deck diagnostics are not treated as issues.
 // ---------------------------------------------------------------------------
-function isReferencePage(dir) {
-    return dir === "geomlib" || dir.startsWith("geomlib/") || dir.startsWith("geomlib" + path.sep);
+// A page under /geomlib/ that declares no slides is a reference figure.
+// One that DOES declare slides is a deck like any other — the slide-transition
+// page is exactly that — and gets the full validation, since a slide naming an
+// element that doesn't exist is just as broken there as in a proof.
+function isReferencePage(dir, text) {
+    const underGeomlib = dir === "geomlib" ||
+        dir.startsWith("geomlib/") || dir.startsWith("geomlib" + path.sep);
+    return underGeomlib && !/\bslides\s*:/.test(text);
 }
 
 // ---------------------------------------------------------------------------
@@ -152,7 +158,7 @@ for (const lr of files) {
 
     const issues = [];
     let suppressed = 0;
-    const reference = isReferencePage(dir);
+    const reference = isReferencePage(dir, text);
     if (reference) {
         refPages++;
         refFigures += (sandbox.geomlib.slates || []).length;

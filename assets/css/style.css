@@ -553,10 +553,18 @@ section.footnotes li:target {
     /* min(...) so the track can still shrink below 300px on a narrow phone
        rather than overflowing the viewport and forcing a horizontal scroll. */
     grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
-    gap: 1.2em;
-    margin: 1em 0 2.2em;
+    /* Row gap deliberately larger than the column gap: cards are separated
+       left-to-right by their own borders plus whitespace, but stacked rows
+       read as one continuous column of boxes without extra air between them. */
+    gap: 2.2em 1.25em;
+    margin: 1em 0 2.4em;
     clear: both;
-    align-items: start;
+}
+/* Wider tracks for cards holding a stepped deck rather than a static figure:
+   the caption needs a readable line length under the canvas, and the
+   slideshow controls need room. */
+.ctor-grid.wide {
+    grid-template-columns: repeat(auto-fill, minmax(min(400px, 100%), 1fr));
 }
 .ctor-card {
     border: 1px solid #d9d0c1;

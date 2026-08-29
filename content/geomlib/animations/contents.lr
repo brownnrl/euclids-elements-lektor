@@ -1,0 +1,567 @@
+_model: other_work
+---
+title: Slide transitions
+---
+order: 5
+---
+body:
+
+Animations run on the transition between one slide and the next. Each is named
+`A.{Type}.{name}` and attached to an element in the slide it arrives on.
+
+Every figure below is a two-slide deck. Step it with the controls under the
+canvas, or with the arrow keys once the canvas has focus, and press **r** to
+run it again.
+
+```javascript
+slides: [
+    { text: "Two points.", visible: ["A", "B"] },
+    { text: "Join AB.",    visible: ["A", "B", "AB"],
+      transition: { animations: [ { elem: "AB", name: geomlib.A.Line.straightEdgeConnect } ] } },
+]
+```
+
+An element a later slide introduces must be listed in `initiallyHidden`, or it
+is on screen before the slide that draws it. `mode` on the transition sequences
+several animations: `"parallel"` runs them together, `"cascade"` one after the
+next.
+
+<nav class="ctor-index">
+<div class="ctor-index-group"><b>Animations</b> — <a href="#point-appear"><code>A.Point.appear</code></a>, <a href="#point-slide"><code>A.Point.slide</code></a>, <a href="#point-followpath"><code>A.Point.followPath</code></a>, <a href="#line-straightedgeconnect"><code>A.Line.straightEdgeConnect</code></a>, <a href="#line-straightedgeextend"><code>A.Line.straightEdgeExtend</code></a>, <a href="#circle-compass"><code>A.Circle.compass</code></a>, <a href="#circle-compasstransfer"><code>A.Circle.compassTransfer</code></a>, <a href="#polygon-outline"><code>A.Polygon.outline</code></a>, <a href="#polygon-outlineandfill"><code>A.Polygon.outlineAndFill</code></a>, <a href="#polygon-superpose"><code>A.Polygon.superpose</code></a>, <a href="#polygon-equilateralbuild"><code>A.Polygon.equilateralBuild</code></a>, <a href="#sector-sweep"><code>A.Sector.sweep</code></a>, <a href="#group-cloneaside"><code>A.Group.cloneAside</code></a>, <a href="#instant"><code>A.instant</code></a></div>
+</nav>
+
+<div class="ctor-grid wide">
+<section class="ctor-card" id="point-appear">
+<h3>A.Point.appear</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>point</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>—</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>350 ms</code></p>
+<p class="ctor-desc">Marker radius scales from zero to its final size.</p>
+<pre><code>transition: { animations: [ { elem: "X", name: geomlib.A.Point.appear } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Point_appear" width="300" height="220" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Point_appear",
+        background: "35,19,100",
+        title: "A.Point.appear",
+        elements: [
+            "A;point;free;45,45",
+            "B;point;free;255,175",
+            "C;point;free;45,175",
+            "D;point;free;255,45",
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "X;point;intersection;A,B,C,D"
+        ],
+        initiallyHidden: ["X"],
+        slides: [
+                { text: "Two lines are drawn.",
+                  visible: ["A", "B", "C", "D", "AB", "CD"] },
+                { text: "The point X at which they cut.",
+                  visible: ["A", "B", "C", "D", "AB", "CD", "X"],
+                  highlighted: ["X"],
+                  transition: { animations: [
+                      { elem: "X", name: geomlib.A.Point.appear } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The plainest reveal. Used for a point the proof introduces at a crossing.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-slide">
+<h3>A.Point.slide</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>lineSlider</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>{ to: number } or { to: "E" }</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>650 ms</code></p>
+<p class="ctor-desc">Glides a slider point along its line, its dependents following each frame.</p>
+<pre><code>transition: { animations: [ { elem: "P", name: geomlib.A.Point.slide, args: { to: 0.85 } } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Point_slide" width="320" height="210" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Point_slide",
+        background: "35,19,100",
+        title: "A.Point.slide",
+        elements: [
+            "A;point;free;45,155",
+            "B;point;free;265,75",
+            "AB;line;connect;A,B",
+            "P;point;lineSlider;A,B,90,130",
+            "C;point;free;150,45",
+            "PC;line;connect;P,C;0;0;red"
+        ],
+        slides: [
+                { text: "P slides along AB. Everything hanging off P follows.",
+                  visible: ["A", "B", "AB", "P", "C", "PC"],
+                  highlighted: ["P"] },
+                { text: "Glide P to t = 0.85.",
+                  visible: ["A", "B", "AB", "P", "C", "PC"],
+                  highlighted: ["P"],
+                  transition: { animations: [
+                      { elem: "P", name: geomlib.A.Point.slide, args: { to: 0.85 } } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The scripted counterpart of a reader dragging the slider. A numeric target is the parameter t along AB; naming an element instead projects that element onto the line, so the point can land on a derived point and keep tracking it.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-followpath">
+<h3>A.Point.followPath</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>point</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>{ via: [...] }, { along: "AB" }, { arc: {...} }, { settle }</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>1200 ms</code></p>
+<p class="ctor-desc">Moves a point along a path so the figure visibly reacts as it travels.</p>
+<pre><code>transition: { animations: [ { elem: "P", name: geomlib.A.Point.followPath, args: { along: "AB" } } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Point_followPath" width="320" height="220" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Point_followPath",
+        background: "35,19,100",
+        title: "A.Point.followPath",
+        elements: [
+            "A;point;free;55,175",
+            "B;point;free;265,175",
+            "AB;line;connect;A,B",
+            "P;point;free;95,60",
+            "PA;line;connect;P,A",
+            "PB;line;connect;P,B"
+        ],
+        slides: [
+                { text: "The apex P over the base AB.",
+                  visible: ["A", "B", "AB", "P", "PA", "PB"],
+                  highlighted: ["P"] },
+                { text: "Walk P along AB and back again.",
+                  visible: ["A", "B", "AB", "P", "PA", "PB"],
+                  highlighted: ["P"],
+                  transition: { animations: [
+                      { elem: "P", name: geomlib.A.Point.followPath, args: { along: "AB" } } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Where Point.slide sets a slider to a value, this one is watched. The path starts at the point's current position. With settle false it retraces its steps and finishes exactly where it began, so a deck can show a construction breaking and then restore it.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-straightedgeconnect">
+<h3>A.Line.straightEdgeConnect</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>line</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>—</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>0.25 px/ms</code></p>
+<p class="ctor-desc">A pencil stroke from A toward B.</p>
+<pre><code>transition: { animations: [ { elem: "AB", name: geomlib.A.Line.straightEdgeConnect } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Line_straightEdgeConnect" width="300" height="210" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Line_straightEdgeConnect",
+        background: "35,19,100",
+        title: "A.Line.straightEdgeConnect",
+        elements: [
+            "A;point;free;50,165",
+            "B;point;free;255,60",
+            "AB;line;connect;A,B"
+        ],
+        initiallyHidden: ["AB"],
+        slides: [
+                { text: "Two points.",
+                  visible: ["A", "B"] },
+                { text: "Join AB.",
+                  visible: ["A", "B", "AB"],
+                  highlighted: ["AB"],
+                  transition: { animations: [
+                      { elem: "AB", name: geomlib.A.Line.straightEdgeConnect } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The canonical straightedge between two points that already exist. Short lines are held to a minimum duration so they stay perceptible.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-straightedgeextend">
+<h3>A.Line.straightEdgeExtend</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>line</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>—</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>0.25 px/ms</code></p>
+<p class="ctor-desc">The same trace, for a line produced beyond an existing endpoint.</p>
+<pre><code>transition: { animations: [ { elem: "AE", name: geomlib.A.Line.straightEdgeExtend } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Line_straightEdgeExtend" width="300" height="220" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Line_straightEdgeExtend",
+        background: "35,19,100",
+        title: "A.Line.straightEdgeExtend",
+        elements: [
+            "A;point;free;45,140",
+            "B;point;free;135,105",
+            "C;point;free;45,185",
+            "D;point;free;110,185",
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "AE;line;extend;A,B,C,D;0;0;red"
+        ],
+        initiallyHidden: ["AE"],
+        slides: [
+                { text: "AB, and a length CD to add to it.",
+                  visible: ["A", "B", "C", "D", "AB", "CD"],
+                  highlighted: ["CD"] },
+                { text: "Produce AB by a further CD.",
+                  visible: ["A", "B", "C", "D", "AB", "CD", "AE"],
+                  highlighted: ["AE"],
+                  transition: { animations: [
+                      { elem: "AE", name: geomlib.A.Line.straightEdgeExtend } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">For Line.extend constructions, where one endpoint sits on an existing line and the other is the projected new end.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="circle-compass">
+<h3>A.Circle.compass</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>circle</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>{ startAngle?: number }</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>0.003 rad/ms</code></p>
+<p class="ctor-desc">Two steps: the edge sweeps a full turn, then the face fades in over it.</p>
+<pre><code>transition: { animations: [ { elem: "circ", name: geomlib.A.Circle.compass } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Circle_compass" width="300" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Circle_compass",
+        background: "35,19,100",
+        title: "A.Circle.compass",
+        elements: [
+            "O;point;free;150,115",
+            "P;point;free;235,115",
+            "circ;circle;radius;O,P;0;0;black;cyan"
+        ],
+        initiallyHidden: ["circ"],
+        slides: [
+                { text: "Centre O, radius OP.",
+                  visible: ["O", "P"] },
+                { text: "Strike the circle.",
+                  visible: ["O", "P", "circ"],
+                  highlighted: ["circ"],
+                  transition: { animations: [
+                      { elem: "circ", name: geomlib.A.Circle.compass } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The sweep begins where a real compass would, at the radius-defining point. A circle with no faceColor skips the second step entirely rather than waiting through it.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="circle-compasstransfer">
+<h3>A.Circle.compassTransfer</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>circle</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>{ side?: 1 | -1, keepCircles?: string[] }</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>0.0055 rad/ms</code></p>
+<p class="ctor-desc">Euclid I.2 — copying a length to a point — as a single entry.</p>
+<pre><code>transition: { animations: [ { elem: "cop", name: geomlib.A.Circle.compassTransfer } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Circle_compassTransfer" width="330" height="240" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Circle_compassTransfer",
+        background: "35,19,100",
+        title: "A.Circle.compassTransfer",
+        elements: [
+            "P;point;free;80,160",
+            "C;point;free;185,65",
+            "D;point;free;265,105",
+            "CD;line;connect;C,D",
+            "cop;circle;radius;P,C,D;0;0;black;0"
+        ],
+        initiallyHidden: ["cop"],
+        slides: [
+                { text: "The length CD, to be copied to the point P.",
+                  visible: ["P", "C", "D", "CD"],
+                  highlighted: ["CD"] },
+                { text: "Lay it off at P.",
+                  visible: ["P", "C", "D", "CD", "cop"],
+                  highlighted: ["cop"],
+                  transition: { animations: [
+                      { elem: "cop", name: geomlib.A.Circle.compassTransfer } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Declared as circle;radius;P,C,D: centre P, radius the length |CD| being copied. The macro walks the rigorous I.2 construction as transient gold scaffolding, then reveals the circle and clears it. keepCircles names the construction circles that should survive as real, addressable elements for a later slide.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-outline">
+<h3>A.Polygon.outline</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>polygon</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>—</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>0.25 px/ms, min 180 ms</code></p>
+<p class="ctor-desc">Traces each edge in vertex order.</p>
+<pre><code>transition: { animations: [ { elem: "t", name: geomlib.A.Polygon.outline } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Polygon_outline" width="300" height="220" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Polygon_outline",
+        background: "35,19,100",
+        title: "A.Polygon.outline",
+        elements: [
+            "A;point;free;150,45",
+            "B;point;free;55,175",
+            "C;point;free;245,175",
+            "t;polygon;triangle;A,B,C;0;0;black;0"
+        ],
+        initiallyHidden: ["t"],
+        slides: [
+                { text: "Three vertices.",
+                  visible: ["A", "B", "C"] },
+                { text: "Trace the edges.",
+                  visible: ["A", "B", "C", "t"],
+                  highlighted: ["t"],
+                  transition: { animations: [
+                      { elem: "t", name: geomlib.A.Polygon.outline } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">One 0 to 1 step is partitioned across the edges, so each is drawn in sequence at its own proportion of the whole.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-outlineandfill">
+<h3>A.Polygon.outlineAndFill</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>polygon</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>—</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>outline 0.25 px/ms, fill cap 500 ms</code></p>
+<p class="ctor-desc">The outline trace, then a face fade-in over it.</p>
+<pre><code>transition: { animations: [ { elem: "t", name: geomlib.A.Polygon.outlineAndFill } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Polygon_outlineAndFill" width="300" height="220" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Polygon_outlineAndFill",
+        background: "35,19,100",
+        title: "A.Polygon.outlineAndFill",
+        elements: [
+            "A;point;free;150,45",
+            "B;point;free;55,175",
+            "C;point;free;245,175",
+            "t;polygon;triangle;A,B,C;0;0;black;cyan"
+        ],
+        initiallyHidden: ["t"],
+        slides: [
+                { text: "Three vertices.",
+                  visible: ["A", "B", "C"] },
+                { text: "Outline, then fill.",
+                  visible: ["A", "B", "C", "t"],
+                  highlighted: ["t"],
+                  transition: { animations: [
+                      { elem: "t", name: geomlib.A.Polygon.outlineAndFill } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The fill is deliberately quicker than the outline: the eye has taken the shape in from the trace already, so the colour should land promptly. A face-less polygon skips it.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-superpose">
+<h3>A.Polygon.superpose</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>polygon</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>{ onto: string }</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>translate 0.25 px/ms, hold 800 ms</code></p>
+<p class="ctor-desc">Euclid's superposition, as in I.4.</p>
+<pre><code>transition: { animations: [ { elem: "t1", name: geomlib.A.Polygon.superpose, args: { onto: "t2" } } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Polygon_superpose" width="320" height="220" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Polygon_superpose",
+        background: "35,19,100",
+        title: "A.Polygon.superpose",
+        elements: [
+            "A;point;free;40,60",
+            "B;point;free;40,165",
+            "C;point;free;115,110",
+            "D;point;free;190,60",
+            "E;point;free;190,165",
+            "F;point;free;265,110",
+            "t1;polygon;triangle;A,B,C;0;0;black;cyan",
+            "t2;polygon;triangle;D,E,F;0;0;black;pink"
+        ],
+        slides: [
+                { text: "Two triangles, claimed equal.",
+                  visible: ["A", "B", "C", "D", "E", "F", "t1", "t2"],
+                  highlighted: ["t1", "t2"] },
+                { text: "Apply the one to the other.",
+                  visible: ["A", "B", "C", "D", "E", "F", "t1", "t2"],
+                  highlighted: ["t1"],
+                  transition: { animations: [
+                      { elem: "t1", name: geomlib.A.Polygon.superpose, args: { onto: "t2" } } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">A gold ghost copy lifts off, translates so its first vertex meets the target's, rotates to lay one side onto the other, holds a beat coinciding, then retraces its way home. The real polygon never moves. The target must have the same vertex count.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-equilateralbuild">
+<h3>A.Polygon.equilateralBuild</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>polygon</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>—</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>0.0045 rad/ms, fill cap 500 ms</code></p>
+<p class="ctor-desc">Euclid I.1 as a single entry.</p>
+<pre><code>transition: { animations: [ { elem: "t", name: geomlib.A.Polygon.equilateralBuild } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Polygon_equilateralBuild" width="300" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Polygon_equilateralBuild",
+        background: "35,19,100",
+        title: "A.Polygon.equilateralBuild",
+        elements: [
+            "A;point;free;115,150",
+            "B;point;free;185,150",
+            "t;polygon;equilateralTriangle;A,B;0;0;black;cyan"
+        ],
+        initiallyHidden: ["t"],
+        slides: [
+                { text: "A given finite straight line.",
+                  visible: ["A", "B"] },
+                { text: "Build the equilateral triangle on it.",
+                  visible: ["A", "B", "t"],
+                  highlighted: ["t"],
+                  transition: { animations: [
+                      { elem: "t", name: geomlib.A.Polygon.equilateralBuild } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Two gold compass circles sweep out, the triangle outlines and fills, and the circles clear as it lands. The apex follows whichever side the declared triangle chose, so A,B and B,A give mirror results.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="sector-sweep">
+<h3>A.Sector.sweep</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>sector</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>—</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>0.003 rad/ms, min 250 ms</code></p>
+<p class="ctor-desc">The arc grows from one arm toward the other.</p>
+<pre><code>transition: { animations: [ { elem: "m", name: geomlib.A.Sector.sweep } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Sector_sweep" width="320" height="220" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Sector_sweep",
+        background: "35,19,100",
+        title: "A.Sector.sweep",
+        elements: [
+            "V;point;free;55,175",
+            "A;point;free;265,175",
+            "B;point;free;190,55",
+            "VA;line;connect;V,A",
+            "VB;line;connect;V,B",
+            "m;sector;angleMarker;V,A,B;0;0;magenta;magenta"
+        ],
+        initiallyHidden: ["m"],
+        slides: [
+                { text: "The angle at V.",
+                  visible: ["V", "A", "B", "VA", "VB"] },
+                { text: "Mark it.",
+                  visible: ["V", "A", "B", "VA", "VB", "m"],
+                  highlighted: ["m"],
+                  transition: { animations: [
+                      { elem: "m", name: geomlib.A.Sector.sweep } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The angle-marker reveal. A sector with a face sweeps and then fills; one without skips the fill. A sector with no colours at all renders in the gold emphasis stroke while animating, which is the invisible angle-marker pattern.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="group-cloneaside">
+<h3>A.Group.cloneAside</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>any</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>{ include?, vary?, dx?, dy?, autoPlace?, variants? }</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>0.4 px/ms, min 200 ms</code></p>
+<p class="ctor-desc">Clones part of the figure into displaced copies that slide aside and stay for the slide.</p>
+<pre><code>transition: { animations: [ { elem: "t", name: geomlib.A.Group.cloneAside, args: { include: "all", dx: 130, dy: 0 } } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_Group_cloneAside" width="330" height="220" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_Group_cloneAside",
+        background: "35,19,100",
+        title: "A.Group.cloneAside",
+        elements: [
+            "A;point;free;50,155",
+            "B;point;free;125,155",
+            "C;point;free;90,80",
+            "t;polygon;triangle;A,B,C;0;0;black;cyan"
+        ],
+        slides: [
+                { text: "One triangle.",
+                  visible: ["A", "B", "C", "t"],
+                  highlighted: ["t"] },
+                { text: "Set a copy beside it.",
+                  visible: ["A", "B", "C", "t"],
+                  highlighted: ["t"],
+                  transition: { animations: [
+                      { elem: "t", name: geomlib.A.Group.cloneAside, args: { include: "all", dx: 130, dy: 0 } } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The real figure never moves. vary can set a slider before the snapshot is taken, so a copy shows a different case — which is how a trichotomy argument gets all three cases on screen at once. autoPlace centres the figure first and lays the copies in the freed space.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="instant">
+<h3>A.instant</h3>
+<p class="ctor-sig"><b>Applies to</b> — <code>any</code></p>
+<p class="ctor-sig"><b>Arguments</b> — <code>—</code></p>
+<p class="ctor-sig"><b>Default rate</b> — <code>0 ms</code></p>
+<p class="ctor-desc">A no-op finalise: the element arrives with no motion.</p>
+<pre><code>transition: { animations: [ { elem: "CD", name: geomlib.A.instant } ] }</code></pre>
+<figure class="diagram block">
+<canvas id="a_instant" width="330" height="220" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "a_instant",
+        background: "35,19,100",
+        title: "A.instant",
+        elements: [
+            "A;point;free;45,60",
+            "B;point;free;145,175",
+            "C;point;free;185,60",
+            "D;point;free;285,175",
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D"
+        ],
+        initiallyHidden: ["AB", "CD"],
+        slides: [
+                { text: "Two pairs of points.",
+                  visible: ["A", "B", "C", "D"] },
+                { text: "AB is drawn; CD is not.",
+                  visible: ["A", "B", "C", "D", "AB", "CD"],
+                  highlighted: ["AB", "CD"],
+                  transition: { animations: [
+                      { elem: "AB", name: geomlib.A.Line.straightEdgeConnect },
+                      { elem: "CD", name: geomlib.A.instant } ] } }
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Used on a slide entry to suppress an animation that would otherwise be inherited, and fired automatically when a name lookup fails, with one console warning per name. Below, AB is drawn and CD simply appears.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+</div>
+
+## Library documentation
+
+- [**animations-reference.md**](https://github.com/brownnrl/euclid/blob/main/doc/animations-reference.md)
+  — the full table, including the reserved names not yet implemented, and the
+  `animationConfig` tuning fields.
+- [**creating-animations.md**](https://github.com/brownnrl/euclid/blob/main/doc/creating-animations.md)
+  — adding a transition of your own.
+- [**Constructions**](/geomlib/constructions/) — the elements these animations
+  are attached to.

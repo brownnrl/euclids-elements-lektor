@@ -7,8 +7,6 @@ order: 4
 body:
 
 Every construction the library implements, each with a figure you can drag.
-The signature and description of each are taken from the library's own
-reference table, so this page and the source cannot drift apart silently.
 
 An element is declared as a single string:
 
@@ -16,14 +14,14 @@ An element is declared as a single string:
 name;type;construction;arguments;nameColor;vertexColor;edgeColor;faceColor
 ```
 
-The four colour fields are optional, and `0` means transparent. Every figure's
-**Source** button opens the complete runnable file behind it, ready to copy or
-to open in CodePen.
+The four colour fields are optional; `0` means transparent. Each figure's
+**Source** button gives the complete runnable file behind it, to copy or to open
+in CodePen.
 
-> **A note on the signatures.** When a line's name appears in an argument list
-> it expands to its two endpoints, so `params: ["AB"]` arrives as two points,
-> not one. The signatures below are written post-expansion, which is why some
-> read as more points than you would write.
+> **Signatures are written post-expansion.** A line's name in an argument list
+> expands to its two endpoints, so `params: ["AB"]` arrives as two points rather
+> than one. That is why some signatures below read as taking more points than
+> you would write.
 
 <nav class="ctor-index">
 <div class="ctor-index-group"><b>Point</b> — <a href="#point-free"><code>free</code></a>, <a href="#point-fixed"><code>fixed</code></a>, <a href="#point-first"><code>first</code></a>, <a href="#point-last"><code>last</code></a>, <a href="#point-midpoint"><code>midpoint</code></a>, <a href="#point-intersection"><code>intersection</code></a>, <a href="#point-foot"><code>foot</code></a>, <a href="#point-extend"><code>extend</code></a>, <a href="#point-cutoff"><code>cutoff</code></a>, <a href="#point-center"><code>center</code></a>, <a href="#point-circumcenter"><code>circumcenter</code></a>, <a href="#point-lineSlider"><code>lineSlider</code></a>, <a href="#point-circleSlider"><code>circleSlider</code></a>, <a href="#point-perpendicular"><code>perpendicular</code></a>, <a href="#point-parallelogram"><code>parallelogram</code></a>, <a href="#point-vertex"><code>vertex</code></a>, <a href="#point-similar"><code>similar</code></a>, <a href="#point-proportion"><code>proportion</code></a>, <a href="#point-invert"><code>invert</code></a>, <a href="#point-meanProportional"><code>meanProportional</code></a>, <a href="#point-planeSlider"><code>planeSlider</code></a>, <a href="#point-sphereSlider"><code>sphereSlider</code></a>, <a href="#point-angleBisector"><code>angleBisector</code></a>, <a href="#point-angleDivider"><code>angleDivider</code></a>, <a href="#point-harmonic"><code>harmonic</code></a></div>
@@ -57,7 +55,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Draggable anywhere. Red by default.</p>
+<p class="ctor-note">Two integer pixel coordinates. Draggable anywhere; drawn red.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-fixed">
@@ -78,7 +76,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Not draggable; the anchor other things hang off.</p>
+<p class="ctor-note">Two or three integer coordinates. Not draggable. Used for anchors and for off-screen construction aids.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-first">
@@ -101,7 +99,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The first endpoint of a line, as a point in its own right.</p>
+<p class="ctor-note">The first endpoint of a line, as an addressable point.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-last">
@@ -124,7 +122,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The other endpoint.</p>
+<p class="ctor-note">The second endpoint.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-midpoint">
@@ -147,7 +145,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Bisects the segment — drag either end.</p>
+<p class="ctor-note">Bisects the segment.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-intersection">
@@ -173,7 +171,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Where two lines cross.</p>
+<p class="ctor-note">The crossing of lines AB and CD. Line names expand to their endpoints, so this arrives as four points.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-foot">
@@ -198,7 +196,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Foot of the perpendicular from a point to a line.</p>
+<p class="ctor-note">Foot of the perpendicular from A to line BC.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-extend">
@@ -225,7 +223,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Lays off |CD| beyond B — Euclid I.3.</p>
+<p class="ctor-note">Lays |CD| off beyond B along AB. Euclid I.3.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-cutoff">
@@ -252,7 +250,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Cuts |CD| off from A along AB.</p>
+<p class="ctor-note">Cuts |CD| off from A along AB. Euclid I.3.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-center">
@@ -275,7 +273,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Recovers a circle's centre as a point.</p>
+<p class="ctor-note">The centre of a circle, as an addressable point.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-circumcenter">
@@ -299,7 +297,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Equidistant from all three vertices.</p>
+<p class="ctor-note">Equidistant from three points. A plane may be supplied for the 3D form.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-lineSlider">
@@ -322,7 +320,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Draggable, but only along the line. Orange.</p>
+<p class="ctor-note">Draggable along the line only; drawn orange. The trailing integers are the initial coordinates.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-circleSlider">
@@ -345,7 +343,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Draggable around the circle.</p>
+<p class="ctor-note">Draggable around the circle only.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-perpendicular">
@@ -369,7 +367,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">A point square to AB at A.</p>
+<p class="ctor-note">A point D with AD perpendicular to AB. Five signature variants determine |AD|.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-parallelogram">
@@ -393,7 +391,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The fourth vertex: D = A + C − B.</p>
+<p class="ctor-note">The fourth vertex, D = A + C − B.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-vertex">
@@ -416,7 +414,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Pulls the i-th vertex out of a polygon.</p>
+<p class="ctor-note">The i-th vertex of a polygon, 1-based.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-similar">
@@ -447,7 +445,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">H completes a triangle on AB similar to DEF. Drag the small triangle and the large one follows its shape.</p>
+<p class="ctor-note">The point H for which triangle ABH is similar to DEF.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-proportion">
@@ -480,7 +478,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The fourth proportional: W sits on V so that S:T = U:V0W. Euclid VI.12 by construction.</p>
+<p class="ctor-note">Eight points. W lies on V0V1 with |S|:|T| = |U|:|V0W| — the fourth proportional, Euclid VI.12.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-invert">
@@ -505,7 +503,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Inversion in a circle: OA · OA′ equals the radius squared. Drag A inward and A′ flies out.</p>
+<p class="ctor-note">The image of A inverted in the circle: OA · OA' equals the radius squared.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-meanProportional">
@@ -535,7 +533,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The geometric mean of the first two lengths, laid off along the third.</p>
+<p class="ctor-note">Six points. The geometric mean of the first two lengths, laid off along the third.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-planeSlider">
@@ -559,7 +557,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Draggable, but confined to the plane it was given.</p>
+<p class="ctor-note">Draggable, confined to the given plane. Three integer coordinates.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-sphereSlider">
@@ -583,7 +581,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Draggable, but confined to the sphere's surface.</p>
+<p class="ctor-note">Draggable, confined to the sphere's surface.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-angleBisector">
@@ -611,7 +609,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Where the bisector of the angle at A meets the opposite side. Euclid VI.3.</p>
+<p class="ctor-note">Where the bisector of angle BAC meets BC. Argument order is B, A, C — the vertex is second. A plane may be supplied.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-angleDivider">
@@ -639,7 +637,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The same, for a 1/n division — here a third of the angle. Euclid never trisects; the library will.</p>
+<p class="ctor-note">As angleBisector, for a 1/n division; n is the trailing integer. Shown here at a third.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="point-harmonic">
@@ -663,7 +661,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The harmonic conjugate of B with respect to C and D — the fourth point of a harmonic range. Takes three points, though the reference table lists four.</p>
+<p class="ctor-note">The harmonic conjugate of B with respect to C and D. Takes three points.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 </div>
@@ -690,7 +688,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The straightedge between two points.</p>
+<p class="ctor-note">The segment between two points.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="line-extend">
@@ -740,7 +738,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Through P, parallel to AB.</p>
+<p class="ctor-note">Through A, parallel and equal to line BC.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="line-perpendicular">
@@ -763,7 +761,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Square to AB at A.</p>
+<p class="ctor-note">Perpendicular to AB at A.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="line-bichord">
@@ -789,7 +787,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The common chord of two circles.</p>
+<p class="ctor-note">The common chord of two circles. Takes the circle elements themselves, not their centres.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="line-chord">
@@ -814,7 +812,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The chord line AB cuts from a circle.</p>
+<p class="ctor-note">The chord that line BC cuts from a circle.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="line-angleBisector">
@@ -840,7 +838,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The bisector itself, as a line rather than the point it lands on.</p>
+<p class="ctor-note">The bisector of angle ABC as a line. The vertex is the second argument.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="line-angleDivider">
@@ -866,7 +864,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Line form of the 1/n division.</p>
+<p class="ctor-note">The 1/n division of an angle, as a line.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="line-foot">
@@ -891,7 +889,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The perpendicular dropped from a point to a plane. Euclid XI.11.</p>
+<p class="ctor-note">The perpendicular from a point to a plane. Euclid XI.11.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="line-similar">
@@ -920,7 +918,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The similar triangle's third side, as a line.</p>
+<p class="ctor-note">Side AH of the triangle on AB similar to DEF.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="line-proportion">
@@ -952,7 +950,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Line form: the fourth proportional drawn as a segment, not a point.</p>
+<p class="ctor-note">The fourth proportional as a segment.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="line-meanProportional">
@@ -981,7 +979,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Line form of the geometric mean.</p>
+<p class="ctor-note">The geometric mean as a segment.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="line-path">
@@ -1005,7 +1003,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">An open polyline drawn and highlighted as ONE element, so a prose reference to the whole route lights every segment at once.</p>
+<p class="ctor-note">An open polyline through two or more points, drawn and highlighted as a single element. Does not close back to the first point.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 </div>
@@ -1032,7 +1030,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Centre and a point on it — Euclid's compass.</p>
+<p class="ctor-note">Centre and a point on the circumference. A third point sets the radius instead.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="circle-circumcircle">
@@ -1056,7 +1054,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Through all three vertices.</p>
+<p class="ctor-note">Through three points. A plane may be supplied for the 3D form.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="circle-invert">
@@ -1082,7 +1080,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">One circle inverted in another. The image of a circle is again a circle — unless it passes through the centre.</p>
+<p class="ctor-note">One circle inverted in another. The image is a circle unless the original passes through the centre of inversion.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 </div>
@@ -1134,7 +1132,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Four, in order.</p>
+<p class="ctor-note">Four vertices in order.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polygon-parallelogram">
@@ -1157,7 +1155,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Three vertices; the fourth follows.</p>
+<p class="ctor-note">Three vertices; the fourth is derived.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polygon-square">
@@ -1179,7 +1177,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Built on one side — Euclid I.46.</p>
+<p class="ctor-note">Built on the side AB. Vertex order picks which side it stands on. Euclid I.46.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polygon-equilateralTriangle">
@@ -1201,7 +1199,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Euclid I.1. Vertex order picks the apex side.</p>
+<p class="ctor-note">Built on the side AB. Vertex order picks the apex side. Euclid I.1.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polygon-regularPolygon">
@@ -1223,7 +1221,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Regular n-gon built ON THE EDGE AB — not centre-and-radius. Here seven sides.</p>
+<p class="ctor-note">Built on the edge AB, not from a centre and radius. n is the trailing integer.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polygon-similar">
@@ -1249,7 +1247,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The similar triangle as a filled region. Drag the pink one to reshape the cyan one.</p>
+<p class="ctor-note">The triangle on AB similar to DEF, as a fillable region.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polygon-application">
@@ -1276,7 +1274,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Euclid I.44: a parallelogram on side AB, at angle CAB, whose area equals the pink figure's. Drag B: as the side lengthens the parallelogram flattens, because the area is fixed.</p>
+<p class="ctor-note">A parallelogram on AB, at angle CAB, equal in area to the given polygon. Euclid I.44. Lengthening AB flattens the result, the area being fixed.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polygon-starPolygon">
@@ -1298,7 +1296,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The star polygon {n/k} — here {7/3}. k is the density: how many vertices each edge steps over.</p>
+<p class="ctor-note">The star polygon {n/k} on edge AB. k is the density — how many vertices each edge steps over.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polygon-pentagon">
@@ -1323,7 +1321,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Five free vertices, in order — no regularity assumed.</p>
+<p class="ctor-note">Five vertices in order. No regularity assumed.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polygon-hexagon">
@@ -1349,7 +1347,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Six free vertices.</p>
+<p class="ctor-note">Six vertices in order.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polygon-octagon">
@@ -1377,7 +1375,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Eight free vertices.</p>
+<p class="ctor-note">Eight vertices in order.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polygon-curvedTriangle">
@@ -1412,7 +1410,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">A triangle whose three sides are circular arcs. Each side rides a carrier circle, clipped to the corners.</p>
+<p class="ctor-note">Three vertices and three side carriers. Each side is its carrier's arc clipped to the two vertices; a line carrier gives a straight side. Carriers reach the construction unexpanded.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 </div>
@@ -1442,7 +1440,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">A wedge between two arms.</p>
+<p class="ctor-note">The wedge at V between the arms VA and VB.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="sector-angleMarker">
@@ -1467,7 +1465,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The small arc marking an angle. Auto-orients to the interior.</p>
+<p class="ctor-note">The interior angle marker at V. Radius defaults to 22px, clamped to 0.45 of the shorter arm.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="sector-arc">
@@ -1490,7 +1488,7 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">Arc of a circle between two points.</p>
+<p class="ctor-note">The arc through A, M and B, with M lying on the arc.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="sector-angleMarkerReflex">
@@ -1515,14 +1513,14 @@ to open in CodePen.
     });
 </script>
 </figure>
-<p class="ctor-note">The major arc instead of the minor one — the reflex angle, for the rare case that needs it.</p>
+<p class="ctor-note">As angleMarker, on the major (reflex) arc.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 </div>
 
 ## Plane constructions
 
-The solid-geometry figures below share a scaffold: a base plane pinned by three fixed points, with the rest sliding on it. Depth is drawn by shading rather than by projection, so drag the points to read the shape.
+Depth is conveyed by shading rather than perspective projection. Drag the points to read a solid's shape.
 
 <div class="ctor-grid">
 <section class="ctor-card" id="plane-3points">
@@ -1545,7 +1543,7 @@ The solid-geometry figures below share a scaffold: a base plane pinned by three 
     });
 </script>
 </figure>
-<p class="ctor-note">A plane pinned by three points. Everything else on this page that needs a plane starts here.</p>
+<p class="ctor-note">A plane through three points.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="plane-perpendicular">
@@ -1572,7 +1570,7 @@ The solid-geometry figures below share a scaffold: a base plane pinned by three 
     });
 </script>
 </figure>
-<p class="ctor-note">The plane through O square to the line OX — shown nearly edge-on, which is what a plane perpendicular to a line lying in the base plane looks like. Drag X.</p>
+<p class="ctor-note">The plane through O perpendicular to line OX. A plane square to a line that lies in the base plane appears edge-on.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="plane-parallel">
@@ -1597,7 +1595,7 @@ The solid-geometry figures below share a scaffold: a base plane pinned by three 
     });
 </script>
 </figure>
-<p class="ctor-note">A second plane through a point, parallel to the first. Euclid XI.31.</p>
+<p class="ctor-note">A plane through a point, parallel to a given plane. Euclid XI.31.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="plane-ambient">
@@ -1622,7 +1620,7 @@ The solid-geometry figures below share a scaffold: a base plane pinned by three 
     });
 </script>
 </figure>
-<p class="ctor-note">Recovers the plane a point already lives on, rather than constructing a new one.</p>
+<p class="ctor-note">The plane a point or circle already lies in. Returns that plane rather than constructing one.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 </div>
@@ -1650,7 +1648,7 @@ The solid-geometry figures below share a scaffold: a base plane pinned by three 
     });
 </script>
 </figure>
-<p class="ctor-note">Centre and one surface point — the compass, one dimension up. Euclid XI.14.</p>
+<p class="ctor-note">Centre and one point on the surface.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 </div>
@@ -1682,7 +1680,7 @@ The solid-geometry figures below share a scaffold: a base plane pinned by three 
     });
 </script>
 </figure>
-<p class="ctor-note">Four points: a triangular base and an apex. Euclid XIII.13.</p>
+<p class="ctor-note">Four points: a triangular base and an apex.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polyhedron-parallelepiped">
@@ -1709,7 +1707,7 @@ The solid-geometry figures below share a scaffold: a base plane pinned by three 
     });
 </script>
 </figure>
-<p class="ctor-note">Four points: three fix the base parallelogram, the fourth gives the direction it is swept along. Euclid XI.28.</p>
+<p class="ctor-note">Four points: three fix the base parallelogram, the fourth gives the sweep direction.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polyhedron-prism">
@@ -1738,7 +1736,7 @@ The solid-geometry figures below share a scaffold: a base plane pinned by three 
     });
 </script>
 </figure>
-<p class="ctor-note">A polygon base swept along a direction vector — any polygon, not just a triangle. Euclid XI.28.</p>
+<p class="ctor-note">A polygon base and two points giving the sweep direction. Any polygon, not only a triangle.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 <section class="ctor-card" id="polyhedron-pyramid">
@@ -1767,7 +1765,30 @@ The solid-geometry figures below share a scaffold: a base plane pinned by three 
     });
 </script>
 </figure>
-<p class="ctor-note">Any polygon base plus an apex. Euclid XII.3.</p>
+<p class="ctor-note">A polygon base and an apex.</p>
 <div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
 </section>
 </div>
+
+## Library documentation
+
+Fuller documentation lives with the source, in the
+[geomlib repository](https://github.com/brownnrl/euclid):
+
+- [**api.md**](https://github.com/brownnrl/euclid/blob/main/doc/api.md) — every
+  `init()` field, every `E.{Type}.{name}` construction and `A.{Type}.{name}`
+  animation, every accepted colour value.
+- [**constructions-reference.md**](https://github.com/brownnrl/euclid/blob/main/doc/constructions-reference.md)
+  — the table the signatures on this page are taken from, with each
+  construction's Java ancestor and how often it is used across Books I-III.
+- [**architecture.md**](https://github.com/brownnrl/euclid/blob/main/doc/architecture.md)
+  — the implementation model: the slate, construction dispatch, the drag
+  pipeline, the slideshow surface, the animation orchestrator.
+- [**creating-constructions.md**](https://github.com/brownnrl/euclid/blob/main/doc/creating-constructions.md)
+  — adding a construction type that isn't here yet.
+- [**animations-reference.md**](https://github.com/brownnrl/euclid/blob/main/doc/animations-reference.md)
+  and [**creating-animations.md**](https://github.com/brownnrl/euclid/blob/main/doc/creating-animations.md)
+  — the slide transitions, and how to add one.
+- [**quickstart.md**](https://github.com/brownnrl/euclid/blob/main/doc/quickstart.md)
+  — Proposition I.1 built line by line. There is an interactive version of it
+  [on this site](/geomlib/quickstart/).
