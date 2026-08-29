@@ -48,6 +48,10 @@ On mobile (`max-width: 480px`) figures stop floating and stack centered. The `ca
 
 ### Element references (`{AB}`) — the interactive layer
 
+> Reader-facing counterpart: **/geomlib/using/** demonstrates what these
+> do, with two live figures sharing labels so the canvas selector is
+> visible in action. Worth opening when changing anything here.
+
 Wrapping an element's letters in braces turns them into a live reference: hover
 or tap it and the matching element lights up on the figure, and (geomlib 0.11+)
 every *other* reference to the same element lights up with it.
