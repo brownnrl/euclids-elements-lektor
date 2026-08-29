@@ -94,6 +94,26 @@ const files = findPages(path.join(LEKTOR, "content"), []).sort();
 
 let totalDecks = 0, totalCanvases = 0, pagesWithIssues = 0, totalIssues = 0;
 let totalSuppressed = 0;
+let refPages = 0, refFigures = 0;
+
+// ---------------------------------------------------------------------------
+// Reference pages vs decks.
+//
+// This checker exists to guard the PROOF decks: a slide naming an element
+// that doesn't exist is a broken walk-through, and that's what the #154
+// diagnostics detect. The /geomlib/ pages are a different kind of page —
+// a live reference for the library, one small figure per construction, no
+// slides. There, deck-shaped diagnostics are noise: a figure deliberately
+// carrying invisible helper points or a construction demonstrated in
+// isolation is the POINT of the page, not a defect.
+//
+// So reference pages are still built — a figure that throws, or a
+// construction that doesn't exist, is a real failure and still blocks a
+// publish — but their deck diagnostics are not treated as issues.
+// ---------------------------------------------------------------------------
+function isReferencePage(dir) {
+    return dir === "geomlib" || dir.startsWith("geomlib/") || dir.startsWith("geomlib" + path.sep);
+}
 
 // ---------------------------------------------------------------------------
 // Known false positives: none.
@@ -132,10 +152,16 @@ for (const lr of files) {
 
     const issues = [];
     let suppressed = 0;
-    for (const s of diags.slates || []) {
-        for (const e of s.entries) {
-            if (isKnownFalsePositive(dir, e)) { suppressed++; continue; }
-            issues.push(`${s.canvasid || "?"} [${e.severity}] ${e.code}: ${e.message}`);
+    const reference = isReferencePage(dir);
+    if (reference) {
+        refPages++;
+        refFigures += (sandbox.geomlib.slates || []).length;
+    } else {
+        for (const s of diags.slates || []) {
+            for (const e of s.entries) {
+                if (isKnownFalsePositive(dir, e)) { suppressed++; continue; }
+                issues.push(`${s.canvasid || "?"} [${e.severity}] ${e.code}: ${e.message}`);
+            }
         }
     }
     totalSuppressed += suppressed;
@@ -150,6 +176,7 @@ for (const lr of files) {
 
 console.log(`pages scanned      : ${totalDecks}`);
 console.log(`canvases built     : ${totalCanvases}`);
+console.log(`reference pages    : ${refPages} (${refFigures} figures — built, deck diagnostics not applied)`);
 console.log(`decks with issues  : ${pagesWithIssues}`);
 console.log(`total issues       : ${totalIssues}`);
 console.log("");
