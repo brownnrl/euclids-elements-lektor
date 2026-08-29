@@ -51,7 +51,7 @@
                '<title>' + p.title + '</title>\n' +
                '<script src="' + p.bundle + '"><\/script>\n' +
                '</head>\n<body>\n' + p.html + '\n<script>\n' +
-               p.js.replace(/^/gm, "") + '\n<\/script>\n</body>\n</html>\n';
+               p.js + '\n<\/script>\n</body>\n</html>\n';
     }
 
     var dialog = null, current = null;
@@ -79,7 +79,7 @@
             var act = b.getAttribute("data-act");
             if (act === "close") { dialog.close(); return; }
             if (act === "copy") {
-                var text = dialog.querySelector("code").textContent;
+                var text = dialog.querySelector(".ctor-source-code code").textContent;
                 var done = function () { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy"; }, 1400); };
                 if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () {});
                 else {
@@ -134,7 +134,7 @@
         current = p;
         var d = ensureDialog();
         d.querySelector(".ctor-source-title").textContent = p.title;
-        d.querySelector("code").textContent = fullPage(p);
+        d.querySelector(".ctor-source-code code").textContent = fullPage(p);
         if (d.showModal) d.showModal(); else d.setAttribute("open", "");
     });
 })();
