@@ -534,6 +534,34 @@ section.footnotes li:target {
     background: rgba(255, 196, 0, 0.18);
 }
 
+
+/* --- Code samples -------------------------------------------------------
+   Set INTO the page rather than floating on it: a tinted ground a shade off
+   the parchment, a hairline border, and an inset shadow along the top edge so
+   the block reads as a recess. Deliberately block-level only — inline `code`
+   is left alone, since giving every backticked word in five hundred pages of
+   guide commentary its own background would be a much louder change than
+   this one. */
+pre {
+    background: #f5f1e8;
+    border: 1px solid #e2dacb;
+    border-radius: 4px;
+    padding: 0.75em 0.95em;
+    margin: 1.1em 0;
+    /* Long element strings are single unbreakable tokens; scroll the block
+       rather than letting it widen the page. */
+    overflow-x: auto;
+    box-shadow: inset 0 1px 3px rgba(90, 70, 40, 0.11);
+    font-size: 91%;
+    line-height: 1.45;
+}
+pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+}
+
 /* --- Reference-page figure grid ------------------------------------------
    A DIFFERENT layout problem from the proposition pages. There, one figure
    sits inside a long proof, so `figure.diagram`'s left float is right: the
@@ -594,13 +622,9 @@ section.footnotes li:target {
     color: #444;
 }
 .ctor-card pre {
+    /* Same recess as a page code sample, tightened for the card. */
     margin: 0.55em 0 0.2em;
-    /* Element strings are single unbreakable tokens; scroll the one card
-       rather than widening the whole grid track to fit the longest. */
-    overflow-x: auto;
-    background: #f4f0e8;
-    border-radius: 3px;
-    padding: 0.35em 0.5em;
+    padding: 0.4em 0.6em;
     font-size: 88%;
 }
 .ctor-card figure.diagram.block {
@@ -688,15 +712,9 @@ dialog.ctor-source-dialog .ctor-source-lead {
     color: #4a4a4a;
 }
 dialog.ctor-source-dialog pre.ctor-source-code {
-    background: #f4f0e8;
-    border: 1px solid #e2dbcf;
-    border-radius: 3px;
-    padding: 0.6em 0.8em;
-    /* Long element strings shouldn't widen the dialog past the viewport. */
-    overflow-x: auto;
+    /* Inherits the shared recess; only the height cap is dialog-specific. */
     max-height: 52vh;
     font-size: 86%;
-    line-height: 1.4;
     margin: 0;
 }
 dialog.ctor-source-dialog .ctor-source-actions {

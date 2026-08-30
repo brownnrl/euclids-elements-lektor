@@ -186,29 +186,16 @@ for typ, label, table in GROUPS:
     body.append('\n<div class="ctor-grid">\n' + "\n".join(cards) + "\n</div>\n")
 
 body.append("""
-## Library documentation
+The library's own documentation — the API reference, the implementation model,
+and the guides to adding a construction or an animation — is listed at the foot
+of the [geomlib](/geomlib/) page.
 
-Fuller documentation lives with the source, in the
-[geomlib repository](https://github.com/brownnrl/euclid):
-
-- [**api.md**](https://github.com/brownnrl/euclid/blob/main/doc/api.md) — every
-  `init()` field, every `E.{Type}.{name}` construction and `A.{Type}.{name}`
-  animation, every accepted colour value.
-- [**constructions-reference.md**](https://github.com/brownnrl/euclid/blob/main/doc/constructions-reference.md)
-  — the table the signatures on this page are taken from, with each
-  construction's Java ancestor and how often it is used across Books I-III.
-- [**architecture.md**](https://github.com/brownnrl/euclid/blob/main/doc/architecture.md)
-  — the implementation model: the slate, construction dispatch, the drag
-  pipeline, the slideshow surface, the animation orchestrator.
-- [**creating-constructions.md**](https://github.com/brownnrl/euclid/blob/main/doc/creating-constructions.md)
-  — adding a construction type that isn't here yet.
-- [**animations-reference.md**](https://github.com/brownnrl/euclid/blob/main/doc/animations-reference.md)
-  and [**creating-animations.md**](https://github.com/brownnrl/euclid/blob/main/doc/creating-animations.md)
-  — the slide transitions, and how to add one.
-- [**quickstart.md**](https://github.com/brownnrl/euclid/blob/main/doc/quickstart.md)
-  — Proposition I.1 built line by line. There is an interactive version of it
-  [on this site](/geomlib/quickstart/).
+- [**Quickstart**](/geomlib/quickstart/) — a first figure, built one
+  construction at a time.
+- [**Slide transitions**](/geomlib/animations/) — animating the step from one
+  slide to the next.
 """)
+
 
 page = """_model: other_work
 ---
