@@ -42,6 +42,10 @@ echo "==> Checking deck consistency"
 # figure had not rendered since conversion. Needs node-canvas from the euclid
 # checkout; skipped with a warning if that is not available, so the deploy
 # still works on a machine without it.
+if ! python3 "$(dirname "$0")/check-subjindex.py"; then
+    echo "!! subject-index cross-references are broken (see above) — continuing for the preview" >&2
+fi
+
 # Hardcoded geomlib versions in prose must match the layout's pin. A preview
 # only warns — a stale snippet is worth knowing about but shouldn't block
 # looking at a branch.
