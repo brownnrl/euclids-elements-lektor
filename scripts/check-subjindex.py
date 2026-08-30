@@ -42,6 +42,18 @@ KNOWN_DISCREPANCIES = {
     # populated below, after the first audit
 }
 
+# Cross-references whose target does not answer them, where the fault is in
+# Joyce's index rather than in this edition's handling of it. Recorded rather
+# than rewritten: correcting them means editing his text, which is a different
+# act from fixing a conversion artifact.
+KNOWN_UNMET = {
+    # "acute angle. See angle, acute." lands on the angle entry, whose
+    # sub-entry for Euclid I.Def.12 — the definition of an ACUTE angle — is
+    # labelled "obtuse angle". The entry below it, "obtuse angle I.Def.11",
+    # is the correct one, so the first is a slip for "acute angle".
+    ("acute angle", "acute"),
+}
+
 
 def url_of(path):
     rel = os.path.relpath(os.path.dirname(path), CONTENT)
@@ -169,33 +181,60 @@ def main():
         problems.append(("label-mismatch", where,
                          '%s reads "%s", target is %s' % (href, label, want)))
 
+    # An entry keyed by anchor, so a "See X, y" can be checked for whether the
+    # target actually offers a "y".
+    by_anchor = {e["anchor"]: e for l in idx["letters"] for e in l["entries"]
+                 if e.get("anchor")}
+
+    def check_promise(rec, where, kind):
+        """"See angle, acute" promises a sub-entry about `acute` under `angle`.
+        Nothing else notices when the target does not have one — the link
+        resolves, it just lands somewhere that does not answer the reference."""
+        ref = rec.get(kind)
+        if not ref or not ref.get("tail"):
+            return
+        tail = ref["tail"].lower().strip(" .,")
+        for r in ref["refs"]:
+            if not r["href"].startswith("#"):
+                continue
+            target = by_anchor.get(r["href"][1:])
+            if target is None:
+                continue
+            hay = [target.get("term", "")] + [sub.get("term", "")
+                                              for sub in target.get("subentries", [])]
+            if (rec.get("term", ""), ref["tail"]) in KNOWN_UNMET:
+                continue
+            if not any(tail in (h or "").lower() for h in hay):
+                problems.append(("unmet-reference", where,
+                                 '%s names "%s" but %s has no such entry'
+                                 % (kind.replace("_", " "), ref["tail"], r["href"])))
+
+    def walk(rec, where):
+        for c in rec.get("cites", []):
+            check_cite(c, where)
+        for kind in ("see", "see_also"):
+            if rec.get(kind):
+                for c in rec[kind]["refs"]:
+                    check_cite(c, "%s (%s)" % (where, kind.replace("_", " ")))
+                check_promise(rec, where, kind)
+        if rec.get("href"):
+            check_cite({"href": rec["href"], "label": rec["term"]}, where)
+        # The index nests three deep, so this recurses rather than looking one
+        # level down: 26 references live in the third level.
+        for sub in rec.get("subentries", []):
+            walk(sub, "%s / %s" % (where, sub.get("term", "")))
+
     for letter in idx["letters"]:
         for e in letter["entries"]:
-            where = "%s / %s" % (letter["id"], e.get("term", ""))
-            for c in e.get("cites", []):
-                check_cite(c, where)
-            for kind in ("see", "see_also"):
-                if e.get(kind):
-                    for c in e[kind]["refs"]:
-                        check_cite(c, "%s (%s)" % (where, kind.replace("_", " ")))
-            if e.get("href"):
-                check_cite({"href": e["href"], "label": e["term"]}, where)
-            for sub in e.get("subentries", []):
-                sw = "%s / %s" % (where, sub.get("term", ""))
-                for c in sub.get("cites", []):
-                    check_cite(c, sw)
-                for kind in ("see", "see_also"):
-                    if sub.get(kind):
-                        for c in sub[kind]["refs"]:
-                            check_cite(c, "%s (%s)" % (sw, kind.replace("_", " ")))
+            walk(e, "%s / %s" % (letter["id"], e.get("term", "")))
 
     entries = sum(len(l["entries"]) for l in idx["letters"])
     print("subject index      : %s" % os.path.relpath(DATABAG, ROOT))
     print("letters / entries  : %d / %d" % (len(idx["letters"]), entries))
     print("anchors            : %d" % len(anchors))
     print("references checked : %d" % checked)
-    print("known discrepancies: %d (Joyce's own — see KNOWN_DISCREPANCIES)"
-          % len(KNOWN_DISCREPANCIES))
+    print("known discrepancies: %d label, %d unmet reference (Joyce's own)"
+          % (len(KNOWN_DISCREPANCIES), len(KNOWN_UNMET)))
     print("problems           : %d" % len(problems))
     for kind, where, why in problems:
         print("    [%s] %s — %s" % (kind, where, why))
