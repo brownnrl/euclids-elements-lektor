@@ -48,6 +48,11 @@
     <span class="idx-term">{{ record(e) }}</span>
     {%- for s in e.subentries %}
     <span class="idx-sub">{{ record(s) }}</span>
+    {#- The index nests three deep: "area of a triangle" > "proportional to
+        base". A third level indents once more. -#}
+    {%- for t in s.subentries %}
+    <span class="idx-sub idx-sub2">{{ record(t) }}</span>
+    {%- endfor %}
     {%- endfor %}
   </div>
 {% endfor %}

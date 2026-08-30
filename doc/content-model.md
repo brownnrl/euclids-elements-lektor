@@ -123,6 +123,22 @@ Each entry is a record rather than a line of markup:
   uses this (Euclid).
 - `subentries` — the same record shape, one level down.
 
+### One correction to the source
+
+The index is reproduced as Joyce wrote it, with one exception, recorded here
+because it changes his text rather than repairing a conversion artifact.
+
+Under `angle`, the sub-entry citing Euclid I.Def.12 — *"An acute angle is an
+angle less than a right angle"* — was labelled **obtuse angle**, with the
+correct `obtuse angle I.Def.11` directly beneath it. It now reads **acute
+angle**. The citation and its link are unchanged; only the label moved.
+
+Four things agree that this was a slip: I.Def.12 defines the acute angle,
+I.Def.11 the obtuse; the correctly-labelled obtuse line already exists; the
+entry sits first in an alphabetically ordered list, where *acute* belongs and
+*obtuse* does not; and Joyce's own index carries "acute angle. See angle,
+acute.", which had nothing to resolve to.
+
 `scripts/check-subjindex.py` resolves every reference at build time — anchors
 against entries, citations against real pages, fragments against the target's
 section anchors, and each printed label against the target's own `short_label`.
