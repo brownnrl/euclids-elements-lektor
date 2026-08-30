@@ -132,7 +132,9 @@ def main():
     def check_cite(c, where):
         nonlocal checked
         checked += 1
-        href, label = c["href"], c["label"]
+        href = c["href"]
+        # labels may carry inline emphasis; compare the text
+        label = " ".join(re.sub(r"<[^>]+>", "", c["label"]).split())
         if href.startswith("#"):
             if href[1:] not in anchors:
                 problems.append(("dead-anchor", where, "%s matches no entry" % href))
@@ -169,15 +171,23 @@ def main():
 
     for letter in idx["letters"]:
         for e in letter["entries"]:
-            where = "%s / %s" % (letter["id"], e["text"])
+            where = "%s / %s" % (letter["id"], e.get("term", ""))
             for c in e.get("cites", []):
                 check_cite(c, where)
-            if e.get("see_also"):
-                for c in e["see_also"]["cites"]:
-                    check_cite(c, where + " (see also)")
+            for kind in ("see", "see_also"):
+                if e.get(kind):
+                    for c in e[kind]["refs"]:
+                        check_cite(c, "%s (%s)" % (where, kind.replace("_", " ")))
+            if e.get("href"):
+                check_cite({"href": e["href"], "label": e["term"]}, where)
             for sub in e.get("subentries", []):
-                for c in sub["cites"]:
-                    check_cite(c, "%s / %s" % (where, sub["text"]))
+                sw = "%s / %s" % (where, sub.get("term", ""))
+                for c in sub.get("cites", []):
+                    check_cite(c, sw)
+                for kind in ("see", "see_also"):
+                    if sub.get(kind):
+                        for c in sub[kind]["refs"]:
+                            check_cite(c, "%s (%s)" % (sw, kind.replace("_", " ")))
 
     entries = sum(len(l["entries"]) for l in idx["letters"])
     print("subject index      : %s" % os.path.relpath(DATABAG, ROOT))

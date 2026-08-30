@@ -19,16 +19,35 @@
 {% if l.entries %}
 <div class="threecolumn">
 {% for e in l.entries %}
-  {#- Each fragment renders verbatim: the source puts citations at the end of
-      most entries but mid-sentence in a few ("See <a>angle</a>, acute"), so
-      re-assembling them from the citation list would reorder those. -#}
+  {#- Citations are comma-separated; a See list reads as prose and takes an
+      "and" before its last target ("tetrahedron, cube, ... and dodecahedron"). -#}
+  {%- macro citelist(refs) -%}
+    {%- for r in refs -%}
+      <a href="{{ r.href }}">{{ r.label|safe }}</a>{% if not loop.last %}, {% endif %}
+    {%- endfor -%}
+  {%- endmacro -%}
+  {%- macro reflist(refs) -%}
+    {%- for r in refs -%}
+      <a href="{{ r.href }}">{{ r.label|safe }}</a>
+      {%- if not loop.last %}{{ ", " if loop.revindex0 > 1 else ", and " }}{% endif -%}
+    {%- endfor -%}
+  {%- endmacro -%}
+  {%- macro record(rec) -%}
+    {%- if rec.href -%}<a href="{{ rec.href }}">{{ rec.term|safe }}</a>
+    {%- else -%}{{ rec.term|safe }}{%- endif -%}
+    {%- if rec.tail %} {{ rec.tail|safe }}{% endif -%}
+    {%- if rec.cites %} {{ citelist(rec.cites) }}{% endif -%}
+    {%- if rec.see %}{% if rec.term %}.{% endif %} See {{ reflist(rec.see.refs) }}
+      {%- if rec.see.tail %}, {{ rec.see.tail|safe }}{% endif %}.
+    {%- endif -%}
+    {%- if rec.see_also %}{% if rec.term %}.{% endif %} See also {{ reflist(rec.see_also.refs) }}
+      {%- if rec.see_also.tail %}, {{ rec.see_also.tail|safe }}{% endif %}.
+    {%- endif -%}
+  {%- endmacro -%}
   <div class="idx-entry"{% if e.anchor %} id="{{ e.anchor }}"{% endif %}>
-    <span class="idx-term">{{ e.html|safe }}</span>
-    {%- if e.see_also %}
-    <span class="idx-see">{{ e.see_also.html|safe }}</span>
-    {%- endif %}
+    <span class="idx-term">{{ record(e) }}</span>
     {%- for s in e.subentries %}
-    <span class="idx-sub">{{ s.html|safe }}</span>
+    <span class="idx-sub">{{ record(s) }}</span>
     {%- endfor %}
   </div>
 {% endfor %}

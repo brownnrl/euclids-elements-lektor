@@ -27,24 +27,93 @@ OUT = os.path.join(ROOT, "databags/subject_index.json")
 LINK = re.compile(r'<a href="([^"]+)"\s*>(.*?)</a>', re.S)
 
 
-def render(fragment):
-    """Split a fragment into what to SHOW and what to CHECK.
+SEE_ALSO = re.compile(r"^(?P<head>.*?)\bSee\s+also\b\s*(?P<rest>.*)$", re.S | re.I)
+SEE = re.compile(r"^(?P<head>.*?)\bSee\b\s*(?P<rest>.*)$", re.S | re.I)
+ONE_LINK = re.compile(r'^<a href="(?P<href>[^"]+)"\s*>(?P<label>.*?)</a>(?P<tail>.*)$', re.S)
 
-    The two are not the same. Most entries end with their citations
-    ("boundary &nbsp; <a>I.Def.13</a>"), but some carry a link mid-sentence
-    ("acute angle. See <a>angle</a>, acute."). Extracting links out of the
-    prose and re-appending them would reorder that into "acute angle. See ,
-    acute. angle". So the display fragment keeps its links exactly where the
-    source put them, and the citation list is pulled out alongside it purely
-    for validation.
+
+def clean(fragment):
+    """Normalise a source fragment: drop the sub-entry indent and the &nbsp;
+    spacers, which were doing the job the stylesheet now does."""
+    f = fragment.strip()
+    f = re.sub(r"(?:<br>)+$", "", f).strip()
+    f = re.sub(r"^(?:&nbsp;\s*)+", "", f)
+    f = f.replace("&nbsp;", " ")
+    return " ".join(f.split())
+
+
+def plain(fragment):
+    """Strip the anchors, keep the inline emphasis. The index italicises book
+    titles and Latin phrases (<i>Elements</i>, <i>ex aequali</i>), so removing
+    every tag would flatten those away."""
+    f = re.sub(r"</?a\b[^>]*>", "", fragment)
+    return " ".join(f.replace("&nbsp;", " ").split())
+
+
+def cross_ref(rest):
+    """A `See` / `See also` names one or more targets, sometimes with prose
+    qualifying them ("See angle, acute" / "See tetrahedron, cube, ... and
+    dodecahedron")."""
+    rest = rest.strip()
+    links = LINK.findall(rest)
+    if not links:
+        return None
+    refs = [{"href": h, "label": plain(t)} for h, t in links]
+    tail = plain(rest[rest.rindex("</a>") + 4:]).strip(" .,")
+    ref = {"refs": refs}
+    if tail:
+        ref["tail"] = tail
+    return ref
+
+
+def decompose(fragment):
+    """A fragment -> a record, or an error string if it cannot be modelled.
+
+    Every fragment must decompose; the caller fails the run on anything left
+    over, so the conversion cannot quietly flatten something it did not
+    understand.
     """
-    html = fragment.strip()
-    html = re.sub(r"^(&nbsp;\s*)+", "", html).strip()      # sub-entry indent
-    html = " ".join(html.split())
-    cites = [{"label": " ".join(re.sub(r"<[^>]+>", "", t).split()), "href": h}
-             for h, t in LINK.findall(html)]
-    text = " ".join(re.sub(r"<[^>]+>", "", html).replace("&nbsp;", " ").split())
-    return html, text, cites
+    f = clean(fragment)
+    if not f:
+        return None, None
+
+    # A "See" may follow a citation on the same entry:
+    #     multilateral figure  <a>I.Def.19</a>.  See <a>polygon</a>.
+    # so the head is decomposed in its own right rather than flattened.
+    for pattern, key in ((SEE_ALSO, "see_also"), (SEE, "see")):
+        m = pattern.match(f)
+        if not m or "<a " not in m.group("rest"):
+            continue
+        ref = cross_ref(m.group("rest"))
+        if not ref:
+            continue
+        head = m.group("head").strip().rstrip(".,").strip()
+        rec = {}
+        if head:
+            sub, err = decompose(head)
+            if err:
+                return None, err
+            if sub:
+                rec.update(sub)
+        rec[key] = ref
+        return rec, None
+
+    links = LINK.findall(f)
+    if not links:
+        return {"term": plain(f)}, None
+
+    # A term that is itself a link, with prose after it (the Euclid entry).
+    m = ONE_LINK.match(f)
+    if m and m.group("tail").strip():
+        return {"term": plain(m.group("label")), "href": m.group("href"),
+                "tail": plain(m.group("tail"))}, None
+
+    # The ordinary shape: a term followed by its citations.
+    head = f[:f.index("<a ")]
+    if "<a " in LINK.sub("", f):
+        return None, f
+    return {"term": plain(head).rstrip(" ,"),
+            "cites": [{"label": plain(t), "href": h} for h, t in links]}, None
 
 
 def logical_lines(block):
@@ -105,28 +174,26 @@ def parse(src):
                         entry = {"_pending_anchor": anchor}
                         continue
                 is_sub = line.startswith("&nbsp;")
-                html, text, cites = render(line)
-                if not text and not cites:
+                rec, err = decompose(line)
+                if err is not None:
+                    unparsed.append(err)
                     continue
-                prose = text
-                # Five of the six see-also lines are indented like sub-entries
-                # in the source. They are cross-references, not sub-entries,
-                # so classify on what they say rather than where they sit.
-                m_see = re.match(r"See also\b[\s.,]*(.*)$", prose, re.I)
-                if m_see and entry:
-                    entry["see_also"] = {"html": html, "text": text, "cites": cites}
-                elif is_sub and entry:
-                    entry.setdefault("subentries", []).append(
-                        {"html": html, "text": text, "cites": cites})
+                if rec is None:
+                    continue
+                if is_sub and entry is not None and "term" in entry:
+                    if "see_also" in rec and not rec.get("term"):
+                        entry["see_also"] = rec["see_also"]
+                    else:
+                        entry.setdefault("subentries", []).append(rec)
+                elif "see_also" in rec and not rec.get("term") and entry is not None:
+                    entry["see_also"] = rec["see_also"]
                 else:
                     pending = (entry or {}).get("_pending_anchor")
-                    entry = {"html": html, "text": text}
                     if anchor or pending:
-                        entry["anchor"] = anchor or pending
-                    if cites:
-                        entry["cites"] = cites
+                        rec["anchor"] = anchor or pending
                     if not in_columns:
-                        entry["columns"] = False
+                        rec["columns"] = False
+                    entry = rec
                     current["entries"].append(entry)
             # anything left dangling
         for e in current["entries"]:
@@ -140,15 +207,21 @@ def main():
     letters, unparsed = parse(src)
     entries = sum(len(l["entries"]) for l in letters)
     subs = sum(len(e.get("subentries", [])) for l in letters for e in l["entries"])
-    cites = sum(len(e.get("cites", [])) for l in letters for e in l["entries"]) + \
-            sum(len(s["cites"]) for l in letters for e in l["entries"]
-                for s in e.get("subentries", [])) + \
-            sum(len(e["see_also"]["cites"]) for l in letters for e in l["entries"]
-                if e.get("see_also"))
+    def refs(rec):
+        n = len(rec.get("cites", []))
+        n += len(rec["see"]["refs"]) if rec.get("see") else 0
+        n += len(rec["see_also"]["refs"]) if rec.get("see_also") else 0
+        n += 1 if rec.get("href") else 0
+        return n
+    cites = sum(refs(e) + sum(refs(s) for s in e.get("subentries", []))
+                for l in letters for e in l["entries"])
     anchors = sum(1 for l in letters for e in l["entries"] if e.get("anchor"))
     see = sum(1 for l in letters for e in l["entries"] if e.get("see_also"))
-    print("letters %d | entries %d | sub-entries %d | citations %d | anchors %d | see-also %d"
-          % (len(letters), entries, subs, cites, anchors, see))
+    xref = sum(1 for l in letters for e in l["entries"]
+               if e.get("see")) + sum(1 for l in letters for e in l["entries"]
+               for s in e.get("subentries", []) if s.get("see"))
+    print("letters %d | entries %d | sub-entries %d | references %d | anchors %d | "
+          "see %d | see-also %d" % (len(letters), entries, subs, cites, anchors, xref, see))
     if unparsed:
         print("UNPARSED (%d):" % len(unparsed))
         for u in unparsed[:20]:
