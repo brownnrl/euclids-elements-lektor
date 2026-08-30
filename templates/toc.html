@@ -48,7 +48,13 @@
   {% for c in prematter_groups %}
     <dl>
       <dt><b><a href="{{ c|url }}">{{ c.title }}</a></b></dt>
-      {% for p in c.children.filter(F._model == "prematter") %}
+      {#- The subject index has its own model (it renders from a databag), so
+          selecting on "prematter" alone drops it out of the master TOC — where
+          Joyce's own toc.html lists it, last in the prematter block. Two
+          queries rather than one OR: `|` is Jinja's filter pipe. -#}
+      {% set pre = (c.children.filter(F._model == "prematter")|list)
+                 + (c.children.filter(F._model == "subject_index")|list) %}
+      {% for p in pre %}
         <dd><a href="{{ p|url }}">{{ p.title }}</a></dd>
       {% endfor %}
     </dl>

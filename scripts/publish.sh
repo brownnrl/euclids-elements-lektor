@@ -41,6 +41,14 @@ if ! node scripts/check-versions.js; then
     exit 1
 fi
 
+echo "==> Checking subject-index cross-references"
+# ~800 hand-written citation links and ~85 internal see-refs, none of them
+# checked by the build. A wrong target resolves silently to the wrong page.
+if ! python3 scripts/check-subjindex.py; then
+    echo "!! subject-index check FAILED — refusing to publish." >&2
+    exit 1
+fi
+
 echo "==> Building"
 rm -rf build
 "$LEKTOR" build --output-path build

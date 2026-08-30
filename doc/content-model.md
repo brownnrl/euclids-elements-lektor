@@ -100,6 +100,34 @@ The hidden group page still gets a URL (its own template renders a minimal landi
 
 Lektor's Mistune does NOT process markdown inside raw HTML blocks. Anywhere a markdown body contains a `<figure>`, `<div class="just">`, `<blockquote class="axiom">`, etc., put plain HTML inside (use `<i>` for italics, `<a href>` for links). Failing to do this leaves `*x*` and `[X](Y)` rendering as literal text.
 
+## The subject index
+
+The subject index is the one page whose content is not in its `contents.lr`. It
+is `databags/subject_index.json` — 27 letters, 270 entries, 565 sub-entries, 864
+references — rendered by `templates/subject_index.html` through the
+`subject_index` model. The `.lr` file carries only the model and the title.
+
+Each entry is a record rather than a line of markup:
+
+```json
+{"term": "algorithm, Euclidean",
+ "see": {"refs": [{"href": "#euclideanalgorithm", "label": "Euclidean algorithm"}]}}
+```
+
+- `term` — the heading text. May carry inline emphasis (`<i>Elements</i>`), never anchors.
+- `anchor` — makes the entry a target for other entries' `see` / `see_also`.
+- `cites` — the citations, in order. `href` plus the `label` as printed.
+- `see` / `see_also` — `{refs: [...], tail?}`. `refs` is a list: one See may
+  name several targets. `tail` is prose qualifying them ("See angle, **acute**").
+- `href` + `tail` — a term that is itself a link, with prose after it. One entry
+  uses this (Euclid).
+- `subentries` — the same record shape, one level down.
+
+`scripts/check-subjindex.py` resolves every reference at build time — anchors
+against entries, citations against real pages, fragments against the target's
+section anchors, and each printed label against the target's own `short_label`.
+It gates `publish.sh`.
+
 ## Things that are vanilla Lektor
 
 - Build via `lektor build --output-path build/`
@@ -116,4 +144,5 @@ Lektor's Mistune does NOT process markdown inside raw HTML blocks. Anywhere a ma
 - **Bundle pattern** (`group:` field + hidden `*_group` model) is custom — Lektor has no built-in notion of grouped records.
 - **The JS footer (`assets/js/footer-nav.js`)** carries its own `proptable` / `booktable` for cross-section navigation. This duplicates information available in the content tree, but keeps the nav fast and client-side. See [conventions.md](conventions.md#footer-nav) for the maintenance burden.
 - **The master `layout.html`** detects `this._model` to choose between three header shapes (imagemap + book title; imagemap only; stacked `Euclid's Elements / Book I`). It also walks `this.parent.parent` to find the book name for leaf pages.
+- **`subject_index` is a model of its own**, so the prematter listings in `toc.html` and `prematter_index.html` concatenate a second query for it. A filter on `F._model == "prematter"` alone drops the page out of every listing and leaves it unreachable.
 - **Section index template filters out group models** via `{% if k._model == this.child_model %}`. Without that filter, bundle group pages would appear as ghost entries in the section listing.

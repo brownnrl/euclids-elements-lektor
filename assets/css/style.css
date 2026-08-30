@@ -545,6 +545,38 @@ section.footnotes li:target {
 
 
 
+
+/* --- Subject index ------------------------------------------------------
+   Rendered from databags/subject_index.json, so each entry is a real element
+   rather than a run of <br>-separated text. That is what lets the column
+   layout keep an entry whole: `break-inside: avoid` was already declared for
+   `div.threecolumn > dl`, but the index had no <dl>, so a term could be split
+   from its sub-entries across a column boundary. */
+.threecolumn .idx-entry {
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 0.6em;
+}
+.idx-term {
+    font-weight: 600;
+}
+.idx-see,
+.idx-sub {
+    display: block;
+    padding-left: 1.8em;
+    /* A long sub-entry wraps under itself rather than back to the margin. */
+    text-indent: -0.9em;
+}
+.idx-see {
+    font-style: italic;
+}
+h4.idx-nav a {
+    /* The A-Z jump bar: keep the letters from crowding on a narrow screen. */
+    display: inline-block;
+    padding: 0 0.35em;
+}
+
 /* --- File enumerations --------------------------------------------------
    Models, flow blocks, templates: a name and a sentence about it, repeated.
    As a run of bold-led paragraphs that reads as an undifferentiated wall,

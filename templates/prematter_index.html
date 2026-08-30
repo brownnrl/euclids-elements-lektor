@@ -6,8 +6,11 @@
 {% if this.body %}{{ this.body }}{% endif %}
 
 {# Auto-listed prematter children — the ported prose pages. #}
-{% set pages = this.children.filter(F._model == "prematter") %}
-{% if pages.count() %}
+{# The subject index carries its own model; `|` is Jinja's filter pipe, so
+   the two queries are concatenated rather than OR-ed. #}
+{% set pages = (this.children.filter(F._model == "prematter")|list)
+             + (this.children.filter(F._model == "subject_index")|list) %}
+{% if pages %}
   <hr size="4">
   <ul>
     {% for p in pages %}
