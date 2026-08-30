@@ -44,15 +44,11 @@ KNOWN_DISCREPANCIES = {
 
 # Cross-references whose target does not answer them, where the fault is in
 # Joyce's index rather than in this edition's handling of it. Recorded rather
-# than rewritten: correcting them means editing his text, which is a different
-# act from fixing a conversion artifact.
-KNOWN_UNMET = {
-    # "acute angle. See angle, acute." lands on the angle entry, whose
-    # sub-entry for Euclid I.Def.12 — the definition of an ACUTE angle — is
-    # labelled "obtuse angle". The entry below it, "obtuse angle I.Def.11",
-    # is the correct one, so the first is a slip for "acute angle".
-    ("acute angle", "acute"),
-}
+# than rewritten: correcting one means editing his text, which is a different
+# act from fixing a conversion artifact. Empty — the single case found, the
+# angle entry labelling Euclid's definition of an ACUTE angle "obtuse angle",
+# was corrected instead. See doc/content-model.md.
+KNOWN_UNMET = set()
 
 
 def url_of(path):
