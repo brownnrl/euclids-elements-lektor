@@ -42,6 +42,13 @@ echo "==> Checking deck consistency"
 # figure had not rendered since conversion. Needs node-canvas from the euclid
 # checkout; skipped with a warning if that is not available, so the deploy
 # still works on a machine without it.
+# Hardcoded geomlib versions in prose must match the layout's pin. A preview
+# only warns — a stale snippet is worth knowing about but shouldn't block
+# looking at a branch.
+if ! node "$(dirname "$0")/check-versions.js"; then
+    echo "!! geomlib version pins are inconsistent (see above) — continuing for the preview" >&2
+fi
+
 if NODE_PATH="${EUCLIDS_GEOMLIB_REPO:-$(cd "$(dirname "$0")/../../euclid" && pwd)}/node_modules" \
        node "$(dirname "$0")/check-decks.js"; then
     :

@@ -1,0 +1,236 @@
+_model: other_work
+---
+title: Quickstart
+---
+order: 2
+---
+body:
+
+Proposition I.1 — *to construct an equilateral triangle on a given finite
+straight line* — built one construction at a time. Every figure below is live:
+drag its red points and the construction re-derives.
+
+## The skeleton
+
+A page needs three things: a `<canvas>`, the bundle, and one `geomlib.init()`
+call.
+
+```html
+<canvas id="propI1" width="340" height="240" tabindex="0"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/@brownnrl/geomlib@0.15.0/dist/bundle.js"></script>
+<script>
+geomlib.init({
+    canvasid: "propI1",
+    background: "35,19,100",
+    elements: [ /* the construction list goes here */ ],
+});
+</script>
+```
+
+`background` is `hue,saturation,brightness`, each 0–100. The `tabindex` makes
+the canvas focusable, which is what enables the keyboard controls listed at the
+foot of this page.
+
+## Two free points
+
+Every diagram starts with **free points** — the ones a reader can drag. The
+original Geometry Applet drew these as red dots, and geomlib keeps that.
+
+```javascript
+const E = geomlib.E;
+elements: [
+    { name: "A", construction: E.Point.free, params: [125, 130] },
+    { name: "B", construction: E.Point.free, params: [215, 130] },
+]
+```
+
+`params` are initial pixel coordinates. The `name` is how later constructions
+refer back to this element.
+
+<figure class="diagram block">
+<canvas id="qs1" width="340" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "qs1",
+        background: "35,19,100",
+        elements: [
+            { name: "A", construction: geomlib.E.Point.free, params: [125, 110] },
+            { name: "B", construction: geomlib.E.Point.free, params: [215, 110] }
+        ],
+    });
+</script>
+</figure>
+
+## Join them
+
+The first move of the proposition is the segment AB.
+
+```javascript
+{ name: "AB", construction: E.Line.connect, params: ["A", "B"] },
+```
+
+<figure class="diagram block">
+<canvas id="qs2" width="340" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "qs2",
+        background: "35,19,100",
+        elements: [
+            { name: "A", construction: geomlib.E.Point.free, params: [125, 110] },
+            { name: "B", construction: geomlib.E.Point.free, params: [215, 110] },
+            { name: "AB", construction: geomlib.E.Line.connect, params: ["A", "B"] }
+        ],
+    });
+</script>
+</figure>
+
+## The two circles
+
+*The circle BCD with centre A and radius AB*, and *the circle ACE with centre B
+and radius BA*. `E.Circle.radius` takes the centre first and a point on the
+circumference second.
+
+```javascript
+{ name: "Ac", construction: E.Circle.radius, params: ["A", "B"] },
+{ name: "Bc", construction: E.Circle.radius, params: ["B", "A"] },
+```
+
+Drag either point: `Ac` moves with its centre A, and its radius — which is
+|B − A| — recomputes at the same time.
+
+<figure class="diagram block">
+<canvas id="qs3" width="340" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "qs3",
+        background: "35,19,100",
+        elements: [
+            { name: "A", construction: geomlib.E.Point.free, params: [130, 140] },
+            { name: "B", construction: geomlib.E.Point.free, params: [210, 140] },
+            { name: "AB", construction: geomlib.E.Line.connect, params: ["A", "B"] },
+            { name: "Ac", construction: geomlib.E.Circle.radius, params: ["A", "B"] },
+            { name: "Bc", construction: geomlib.E.Circle.radius, params: ["B", "A"] }
+        ],
+    });
+</script>
+</figure>
+
+## Where the circles meet
+
+The circles cross twice. The line through both crossings is the **bichord**.
+It takes the two *circle* elements, not their centres.
+
+```javascript
+{ name: "CD", construction: E.Line.bichord, params: ["Bc", "Ac"] },
+```
+
+The apex of the triangle is one end of that line. `E.Point.first` returns the
+first endpoint of an existing line; `E.Point.last` returns the other.
+
+```javascript
+{ name: "C", construction: E.Point.first, params: ["CD"] },
+```
+
+<figure class="diagram block">
+<canvas id="qs4" width="340" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "qs4",
+        background: "35,19,100",
+        elements: [
+            { name: "A", construction: geomlib.E.Point.free, params: [130, 140] },
+            { name: "B", construction: geomlib.E.Point.free, params: [210, 140] },
+            { name: "AB", construction: geomlib.E.Line.connect, params: ["A", "B"] },
+            { name: "Ac", construction: geomlib.E.Circle.radius, params: ["A", "B"] },
+            { name: "Bc", construction: geomlib.E.Circle.radius, params: ["B", "A"] },
+            { name: "CD", construction: geomlib.E.Line.bichord, params: ["Bc", "Ac"] },
+            { name: "C", construction: geomlib.E.Point.first, params: ["CD"] }
+        ],
+    });
+</script>
+</figure>
+
+## The triangle
+
+```javascript
+{ name: "ABC", construction: E.Polygon.triangle, params: ["A", "B", "C"] },
+```
+
+Two options are worth adding at this point. `title` names the figure when it is
+popped out into its own window. `pivot` sets the centre of rotation: dragging a
+*non*-draggable part — the line, one of the circles — rotates and scales the
+whole figure about that point instead of moving it, which is how the original
+applet behaved.
+
+<figure class="diagram block">
+<canvas id="qs5" width="340" height="240" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "qs5",
+        background: "35,19,100",
+        title: "Proposition I.1",
+        pivot: "C",
+        elements: [
+            { name: "A", construction: geomlib.E.Point.free, params: [130, 150] },
+            { name: "B", construction: geomlib.E.Point.free, params: [210, 150] },
+            { name: "AB", construction: geomlib.E.Line.connect, params: ["A", "B"] },
+            { name: "Ac", construction: geomlib.E.Circle.radius, params: ["A", "B"] },
+            { name: "Bc", construction: geomlib.E.Circle.radius, params: ["B", "A"] },
+            { name: "CD", construction: geomlib.E.Line.bichord, params: ["Bc", "Ac"] },
+            { name: "C", construction: geomlib.E.Point.first, params: ["CD"] },
+            { name: "ABC", construction: geomlib.E.Polygon.triangle, params: ["A", "B", "C"] }
+        ],
+    });
+</script>
+</figure>
+
+The figure above is the finished proposition. Drag **A** or **B** and the
+triangle follows, staying equilateral; drag the line or a circle and the whole
+construction turns about **C**.
+
+## What a reader can do with it
+
+| Action | Result |
+|---|---|
+| Drag a red point | The construction follows. |
+| Drag a derived part | The figure rotates and scales about the pivot. |
+| **r** or **space** | Reset to the initial configuration. |
+| **m** | Maximize the canvas to fill the viewport. |
+| **Esc** | Leave the maximized view. In a slideshow the first press leaves the walk, the next leaves the maximized view. |
+
+The reset and maximize controls are also icon buttons at the top right of the
+canvas, hidden until the pointer is over the figure or it has keyboard focus.
+
+## The string form
+
+geomlib also accepts the original Java `<param>` strings, which is what makes
+porting an existing applet page mechanical. The two forms are interchangeable
+and may be mixed in one `elements` array.
+
+```javascript
+elements: [
+    "A;point;free;130,150",
+    "B;point;free;210,150",
+    "AB;line;connect;A,B",
+    "Ac;circle;radius;A,B",
+    "Bc;circle;radius;B,A",
+    "CD;line;bichord;Bc,Ac",
+    "C;point;first;CD",
+    "ABC;polygon;triangle;A,B,C",
+]
+```
+
+The full string grammar is
+`name;type;construction;arguments;nameColor;vertexColor;edgeColor;faceColor`.
+Every page on this site is written in that form; the
+[Constructions reference](/geomlib/constructions/) gives it for each of the
+sixty-seven constructions, alongside a live figure.
+
+## Next
+
+- [**Constructions**](/geomlib/constructions/) — the full vocabulary, each with
+  a figure and its element string.
+- [**Slide transitions**](/geomlib/animations/) — turning a static figure into a
+  proof that can be stepped through.
+- [**Using geomlib diagrams**](/geomlib/using/) — the reader-facing
+  interactions in full.

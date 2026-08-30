@@ -472,6 +472,15 @@ figure.diagram canvas {
 .red-highlight {
     color: #bb0033;
 }
+/* Joyce closed his <font color> before a proposition's corollary / lemma /
+   remark entry, so those sit black in the contents under a red proposition —
+   see bookXIII, where props 13-18 are coloured but their corollaries are not.
+   The colour on the <dd> would otherwise inherit into every child <p>. A
+   section that IS coloured in the original carries its own red_highlight and
+   is excluded here. */
+dl dd.red-highlight > p:not(.red-highlight) {
+    color: initial;
+}
 
 /* Reference table (lektor-eucrefs `referenced_by` / `forward_refs`):
    citation cross-references grouped by book, under a "Referenced by"
@@ -532,4 +541,263 @@ section.footnotes a.fn-back {
 /* Make the note jumped to from its marker briefly stand out. */
 section.footnotes li:target {
     background: rgba(255, 196, 0, 0.18);
+}
+
+
+
+/* --- File enumerations --------------------------------------------------
+   Models, flow blocks, templates: a name and a sentence about it, repeated.
+   As a run of bold-led paragraphs that reads as an undifferentiated wall,
+   so set it as a two-column reference table — name on the left, description
+   on the right, hairline between rows — collapsing to a stacked list on a
+   narrow screen. */
+dl.filelist {
+    display: grid;
+    grid-template-columns: minmax(10.5em, max-content) 1fr;
+    gap: 0;
+    margin: 1.1em 0 1.7em;
+    border-top: 1px solid #e6dfd2;
+}
+dl.filelist dt,
+dl.filelist dd {
+    border-bottom: 1px solid #e6dfd2;
+    padding: 0.6em 0;
+    margin: 0;
+}
+dl.filelist dt {
+    font-family: monospace;
+    font-size: 92%;
+    padding-right: 1.2em;
+    /* Names wrap rather than forcing the column wider than the prose. */
+    word-break: break-word;
+}
+dl.filelist dt a {
+    color: #0020C2;
+    text-decoration: none;
+    border-bottom: 1px dotted #9aa6e0;
+}
+dl.filelist dt a:hover,
+dl.filelist dt a:focus-visible {
+    border-bottom-style: solid;
+}
+dl.filelist dd {
+    padding-left: 1.2em;
+    line-height: 1.45;
+}
+@media (max-width: 640px) {
+    dl.filelist {
+        grid-template-columns: 1fr;
+    }
+    dl.filelist dt {
+        border-bottom: 0;
+        padding-bottom: 0.1em;
+    }
+    dl.filelist dd {
+        padding-left: 0;
+        padding-top: 0.15em;
+    }
+}
+
+/* --- Code samples -------------------------------------------------------
+   Set INTO the page rather than floating on it: a tinted ground a shade off
+   the parchment, a hairline border, and an inset shadow along the top edge so
+   the block reads as a recess. Deliberately block-level only — inline `code`
+   is left alone, since giving every backticked word in five hundred pages of
+   guide commentary its own background would be a much louder change than
+   this one. */
+pre {
+    background: #f5f1e8;
+    border: 1px solid #e2dacb;
+    border-radius: 4px;
+    padding: 0.75em 0.95em;
+    margin: 1.1em 0;
+    /* Long element strings are single unbreakable tokens; scroll the block
+       rather than letting it widen the page. */
+    overflow-x: auto;
+    box-shadow: inset 0 1px 3px rgba(90, 70, 40, 0.11);
+    font-size: 91%;
+    line-height: 1.45;
+}
+pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+}
+
+/* --- Reference-page figure grid ------------------------------------------
+   A DIFFERENT layout problem from the proposition pages. There, one figure
+   sits inside a long proof, so `figure.diagram`'s left float is right: the
+   prose wraps around it. A reference page inverts that ratio — dozens of
+   small figures, two lines of prose each. Floating them cascades into a
+   diagonal staircase (each entry's prose is too short to clear the previous
+   float), and `.block` fixes the staircase but leaves one narrow figure per
+   screenful with the rest of a wide viewport empty.
+
+   So: lay the entries out as a grid of self-contained cards instead. Each
+   card carries its own heading, signature, element string and figure, which
+   is also what makes it independently linkable from the index at the top.
+   Scoped to `.ctor-grid` — the shared `figure.diagram` rules are untouched,
+   and nothing outside a reference page sees any of this. */
+.ctor-grid {
+    display: grid;
+    /* min(...) so the track can still shrink below 300px on a narrow phone
+       rather than overflowing the viewport and forcing a horizontal scroll. */
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    /* Row gap deliberately larger than the column gap: cards are separated
+       left-to-right by their own borders plus whitespace, but stacked rows
+       read as one continuous column of boxes without extra air between them. */
+    gap: 2.2em 1.25em;
+    margin: 1em 0 2.4em;
+    clear: both;
+}
+/* Wider tracks for cards holding a stepped deck rather than a static figure:
+   the caption needs a readable line length under the canvas, and the
+   slideshow controls need room. */
+.ctor-grid.wide {
+    grid-template-columns: repeat(auto-fill, minmax(min(400px, 100%), 1fr));
+}
+.ctor-card {
+    border: 1px solid #d9d0c1;
+    border-radius: 4px;
+    background: #fffdf9;
+    padding: 0.55em 0.9em 0.9em;
+    /* Column so the trailing note can be pushed to the bottom, keeping the
+       cards' figures roughly on a line across a row. */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.ctor-card h3 {
+    margin: 0 0 0.4em;
+    font-size: 108%;
+    /* The construction names are code, not display type — the Felipa face
+       used for headings elsewhere renders `point;free` badly. */
+    font-family: monospace;
+    word-break: break-word;
+}
+.ctor-card p {
+    margin: 0.25em 0;
+    font-size: 93%;
+    line-height: 1.35;
+}
+.ctor-card .ctor-sig {
+    color: #444;
+}
+.ctor-card pre {
+    /* Same recess as a page code sample, tightened for the card. */
+    margin: 0.55em 0 0.2em;
+    padding: 0.4em 0.6em;
+    font-size: 88%;
+}
+.ctor-card figure.diagram.block {
+    margin: 0.5em auto 0.6em;
+}
+.ctor-card .ctor-note {
+    /* Pushed to the card's foot so a taller neighbour doesn't leave this
+       one's closing line floating mid-card. */
+    margin-top: auto;
+    padding-top: 0.4em;
+    color: #3c3c3c;
+}
+
+/* Index of the cards, grouped by element type, sitting above the grid. */
+nav.ctor-index {
+    border: 1px solid #d9d0c1;
+    background: #fbf7f0;
+    border-radius: 4px;
+    padding: 0.7em 1em;
+    margin: 1.2em 0;
+    font-size: 93%;
+}
+nav.ctor-index .ctor-index-group {
+    margin: 0.35em 0;
+    line-height: 1.7;
+}
+nav.ctor-index .ctor-index-group b {
+    font-variant: small-caps;
+    letter-spacing: 0.03em;
+}
+nav.ctor-index code {
+    font-size: 95%;
+}
+
+/* Anchor targets: the index links land mid-grid, so flag which card the
+   reader was sent to instead of making them hunt the row. */
+.ctor-card:target {
+    border-color: #0020C2;
+    box-shadow: 0 0 0 2px rgba(0, 32, 194, 0.18);
+}
+
+/* Card footer control row, and the source overlay it opens. */
+.ctor-card .ctor-actions {
+    margin-top: 0.5em;
+    padding-top: 0.4em;
+    border-top: 1px solid #ece5da;
+    text-align: right;
+}
+button.ctor-src {
+    font: inherit;
+    font-size: 85%;
+    color: #0020C2;
+    background: transparent;
+    border: 1px solid #c9bfae;
+    border-radius: 3px;
+    padding: 0.15em 0.6em;
+    cursor: pointer;
+}
+button.ctor-src:hover, button.ctor-src:focus-visible {
+    background: #eef1ff;
+    border-color: #0020C2;
+}
+
+dialog.ctor-source-dialog {
+    width: min(78ch, 92vw);
+    max-height: 86vh;
+    border: 1px solid #b9ae9a;
+    border-radius: 6px;
+    padding: 1em 1.2em 1.1em;
+    background: #fffdf9;
+    color: inherit;
+    /* Scroll the dialog, not the page behind it. */
+    overflow: auto;
+}
+dialog.ctor-source-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+}
+dialog.ctor-source-dialog .ctor-source-title {
+    font-family: monospace;
+    margin: 0 0 0.3em;
+}
+dialog.ctor-source-dialog .ctor-source-lead {
+    margin: 0 0 0.7em;
+    font-size: 92%;
+    color: #4a4a4a;
+}
+dialog.ctor-source-dialog pre.ctor-source-code {
+    /* Inherits the shared recess; only the height cap is dialog-specific. */
+    max-height: 52vh;
+    font-size: 86%;
+    margin: 0;
+}
+dialog.ctor-source-dialog .ctor-source-actions {
+    margin-top: 0.8em;
+    display: flex;
+    gap: 0.5em;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+dialog.ctor-source-dialog .ctor-source-actions button {
+    font: inherit;
+    font-size: 90%;
+    padding: 0.3em 0.9em;
+    border: 1px solid #c9bfae;
+    border-radius: 3px;
+    background: #fff;
+    cursor: pointer;
+}
+dialog.ctor-source-dialog .ctor-source-actions button:hover,
+dialog.ctor-source-dialog .ctor-source-actions button:focus-visible {
+    background: #eef1ff;
+    border-color: #0020C2;
 }

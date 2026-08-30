@@ -52,6 +52,7 @@ later, register a second resolver under a different prefix scheme
 import os
 import re
 
+import mistune
 from lektor.pluginsystem import Plugin
 
 
@@ -96,14 +97,26 @@ BLOCK_RE = re.compile(r"\[!just\s+(.+?)\]")
 # patch required. The constrained NAME pattern (letter-led identifier
 # with no underscores) keeps free-form `{...}` prose from matching.
 #
-# The explicit canvas selector (`{AB:canvas_2}`) is not supported
-# inline: mistune splits `canvas_2` at the underscore. The browser-side
-# JS falls back to the nearest in-section canvas, which covers the
-# expected cases. For the rare edge case where a specific canvas must
-# be targeted from prose, drop to raw inline HTML:
-#   <span class="elem-ref" data-elem="AB" data-canvas="canvas_2">AB</span>
+# An optional trailing `:canvas_N` selector names the canvas the ref
+# should light, for multi-canvas pages where the browser's fallback
+# (nearest preceding canvas) is not what the prose means:
+#   {AB:canvas_1}            -> data-canvas="canvas_1"
+#   {ABC:canvas_0,canvas_1}  -> data-canvases="canvas_0,canvas_1"
+#   {ABC|angABC:canvas_1}    -> override AND selector
+# Both attributes are already understood by elem-ref-highlight.js; the
+# multi form drives the cross-canvas highlight (geomlib >= 0.13, #130).
+#
+# Making the LITERAL id work needs the inline lexer below (#19). Mistune's
+# stock `text` rule stops at `\ < ! [ _ * ` ~` but NOT at `{`, so it
+# swallows "...{AB:canvas" and breaks at the underscore — the renderer's
+# text() walker then receives two fragments and can never match. The
+# rejoined output still LOOKS intact on the page, which makes this easy to
+# misdiagnose as a bad regex.
+
 ELEM_REF_RE = re.compile(
-    r"\{(?P<name>[A-Za-z][A-Za-z0-9'\-]*)(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?\}"
+    r"\{(?P<name>[A-Za-z][A-Za-z0-9'\-]*)"
+    r"(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?"
+    r"(?::(?P<canvas>canvas_\d+(?:,canvas_\d+)*))?\}"
 )
 
 # Standalone block directives that REPLACE the paragraph they sit in.
@@ -119,7 +132,8 @@ BLOCK_REPLACE_RE = re.compile(
 _INLINE_ANY_RE = re.compile(
     rf"@(?P<cite>{_TOKEN_BARE})"
     rf"|\{{(?P<elem>[A-Za-z][A-Za-z0-9'\-]*)"
-    rf"(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?\}}"
+    rf"(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?"
+    rf"(?::(?P<canvas>canvas_\d+(?:,canvas_\d+)*))?\}}"
 )
 
 
@@ -205,12 +219,24 @@ def _render_entry(entry: str) -> str:
     return " ".join(parts)
 
 
-def _render_elem_ref(name: str, target: str | None = None) -> str:
-    """Render a `{NAME}` / `{DISPLAY|element}` inline shortcode as a
-    span the browser-side JS binds hover/touch handlers to. With a
-    display override, the span shows NAME but binds to `target`."""
+def _render_elem_ref(
+    name: str, target: str | None = None, canvas: str | None = None
+) -> str:
+    """Render a `{NAME}` / `{DISPLAY|element}` / `{NAME:canvas_N}` inline
+    shortcode as a span the browser-side JS binds hover/touch handlers to.
+
+    With a display override the span shows NAME but binds to `target`.
+    With a canvas selector it also pins which canvas to light: one id emits
+    `data-canvas`, a comma list emits `data-canvases` (the cross-canvas
+    form, geomlib >= 0.13). Without a selector the browser falls back to the
+    nearest preceding canvas.
+    """
     elem = target or name
-    return f'<span class="elem-ref" data-elem="{elem}">{name}</span>'
+    attrs = f'class="elem-ref" data-elem="{elem}"'
+    if canvas:
+        attr = "data-canvases" if "," in canvas else "data-canvas"
+        attrs += f' {attr}="{canvas}"'
+    return f"<span {attrs}>{name}</span>"
 
 
 def _render_block_replace(kind: str, arg: str | None) -> str:
@@ -421,6 +447,47 @@ def referenced_by(record):
     return out
 
 
+class EucrefsInlineGrammar(mistune.InlineGrammar):
+    """Adds `{NAME}` as a first-class inline token (#19).
+
+    Two changes from stock mistune:
+
+    `elem_ref` matches a whole element reference — name, optional
+    `|target` display override, optional `:canvas_N[,canvas_N]` selector.
+
+    `text` gains `{` in its stop set. Without that the stock rule swallows
+    everything up to the next `\ < ! [ _ * ` ~`, so a reference carrying a
+    canvas id (`{AB:canvas_1}`) is torn at the underscore before any rule
+    sees it. Stopping at the brace lets `elem_ref` claim the token whole,
+    ahead of emphasis.
+    """
+
+    elem_ref = re.compile(
+        r"^\{(?P<name>[A-Za-z][A-Za-z0-9'\-]*)"
+        r"(?:\|(?P<target>[A-Za-z][A-Za-z0-9'\-]*))?"
+        r"(?::(?P<canvas>canvas_\d+(?:,canvas_\d+)*))?\}"
+    )
+    text = re.compile(r"^[\s\S]+?(?=[\\<!\[_*`~{]|https?://| {2,}\n|$)")
+
+
+class EucrefsInlineLexer(mistune.InlineLexer):
+    """Mistune inline lexer with `elem_ref` ahead of every other rule.
+
+    Ordering matters: emphasis must not get a chance to interpret the
+    underscore inside a canvas id. Anything that is not a well-formed
+    reference — `{}`, `{1abc}`, ordinary prose braces — falls through to
+    the normal rules untouched.
+    """
+
+    grammar_class = EucrefsInlineGrammar
+    default_rules = ["elem_ref"] + mistune.InlineLexer.default_rules
+
+    def output_elem_ref(self, m):
+        return _render_elem_ref(
+            m.group("name"), m.group("target"), m.group("canvas")
+        )
+
+
 class EucrefsRendererMixin:
     """Mixed into Lektor's Mistune Renderer via on_markdown_config."""
 
@@ -441,7 +508,9 @@ class EucrefsRendererMixin:
             if m.group("cite"):
                 parts.append(_link(m.group("cite")))
             else:
-                parts.append(_render_elem_ref(m.group("elem"), m.group("target")))
+                parts.append(_render_elem_ref(
+                    m.group("elem"), m.group("target"), m.group("canvas")
+                ))
             last = m.end()
         if last == 0:
             return super().text(text)
@@ -482,6 +551,12 @@ class EucrefsPlugin(Plugin):
 
     def on_markdown_config(self, config, **extra):
         config.renderer_mixins.append(EucrefsRendererMixin)
+        # Lektor passes config.options straight to mistune.Markdown(), whose
+        # signature is (renderer, inline, block, **kwargs) — so this is all
+        # the wiring the custom inline lexer needs. The renderer mixin still
+        # handles @CITE tokens (and `{NAME}` too, as a fallback if this ever
+        # fails to install).
+        config.options["inline"] = EucrefsInlineLexer
 
     def on_setup_env(self, **extra):
         # Local-dev toggle: when EUCLIDS_GEOMLIB_LOCAL is truthy, the

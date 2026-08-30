@@ -1,0 +1,1787 @@
+_model: other_work
+---
+title: Constructions
+---
+order: 4
+---
+body:
+
+Every construction the library implements, each with a figure you can drag.
+
+An element is declared as a single string:
+
+```
+name;type;construction;arguments;nameColor;vertexColor;edgeColor;faceColor
+```
+
+The four colour fields are optional; `0` means transparent. Each figure's
+**Source** button gives the complete runnable file behind it, to copy or to open
+in CodePen.
+
+> **Signatures are written post-expansion.** A line's name in an argument list
+> expands to its two endpoints, so `params: ["AB"]` arrives as two points rather
+> than one. That is why some signatures below read as taking more points than
+> you would write.
+
+<nav class="ctor-index">
+<div class="ctor-index-group"><b>Point</b> — <a href="#point-free"><code>free</code></a>, <a href="#point-fixed"><code>fixed</code></a>, <a href="#point-first"><code>first</code></a>, <a href="#point-last"><code>last</code></a>, <a href="#point-midpoint"><code>midpoint</code></a>, <a href="#point-intersection"><code>intersection</code></a>, <a href="#point-foot"><code>foot</code></a>, <a href="#point-extend"><code>extend</code></a>, <a href="#point-cutoff"><code>cutoff</code></a>, <a href="#point-center"><code>center</code></a>, <a href="#point-circumcenter"><code>circumcenter</code></a>, <a href="#point-lineSlider"><code>lineSlider</code></a>, <a href="#point-circleSlider"><code>circleSlider</code></a>, <a href="#point-perpendicular"><code>perpendicular</code></a>, <a href="#point-parallelogram"><code>parallelogram</code></a>, <a href="#point-vertex"><code>vertex</code></a>, <a href="#point-similar"><code>similar</code></a>, <a href="#point-proportion"><code>proportion</code></a>, <a href="#point-invert"><code>invert</code></a>, <a href="#point-meanProportional"><code>meanProportional</code></a>, <a href="#point-planeSlider"><code>planeSlider</code></a>, <a href="#point-sphereSlider"><code>sphereSlider</code></a>, <a href="#point-angleBisector"><code>angleBisector</code></a>, <a href="#point-angleDivider"><code>angleDivider</code></a>, <a href="#point-harmonic"><code>harmonic</code></a></div>
+<div class="ctor-index-group"><b>Line</b> — <a href="#line-connect"><code>connect</code></a>, <a href="#line-extend"><code>extend</code></a>, <a href="#line-parallel"><code>parallel</code></a>, <a href="#line-perpendicular"><code>perpendicular</code></a>, <a href="#line-bichord"><code>bichord</code></a>, <a href="#line-chord"><code>chord</code></a>, <a href="#line-angleBisector"><code>angleBisector</code></a>, <a href="#line-angleDivider"><code>angleDivider</code></a>, <a href="#line-foot"><code>foot</code></a>, <a href="#line-similar"><code>similar</code></a>, <a href="#line-proportion"><code>proportion</code></a>, <a href="#line-meanProportional"><code>meanProportional</code></a>, <a href="#line-path"><code>path</code></a></div>
+<div class="ctor-index-group"><b>Circle</b> — <a href="#circle-radius"><code>radius</code></a>, <a href="#circle-circumcircle"><code>circumcircle</code></a>, <a href="#circle-invert"><code>invert</code></a></div>
+<div class="ctor-index-group"><b>Polygon</b> — <a href="#polygon-triangle"><code>triangle</code></a>, <a href="#polygon-quadrilateral"><code>quadrilateral</code></a>, <a href="#polygon-parallelogram"><code>parallelogram</code></a>, <a href="#polygon-square"><code>square</code></a>, <a href="#polygon-equilateralTriangle"><code>equilateralTriangle</code></a>, <a href="#polygon-regularPolygon"><code>regularPolygon</code></a>, <a href="#polygon-similar"><code>similar</code></a>, <a href="#polygon-application"><code>application</code></a>, <a href="#polygon-starPolygon"><code>starPolygon</code></a>, <a href="#polygon-pentagon"><code>pentagon</code></a>, <a href="#polygon-hexagon"><code>hexagon</code></a>, <a href="#polygon-octagon"><code>octagon</code></a>, <a href="#polygon-curvedTriangle"><code>curvedTriangle</code></a></div>
+<div class="ctor-index-group"><b>Sector</b> — <a href="#sector-sector"><code>sector</code></a>, <a href="#sector-angleMarker"><code>angleMarker</code></a>, <a href="#sector-arc"><code>arc</code></a>, <a href="#sector-angleMarkerReflex"><code>angleMarkerReflex</code></a></div>
+<div class="ctor-index-group"><b>Plane</b> — <a href="#plane-3points"><code>3points</code></a>, <a href="#plane-perpendicular"><code>perpendicular</code></a>, <a href="#plane-parallel"><code>parallel</code></a>, <a href="#plane-ambient"><code>ambient</code></a></div>
+<div class="ctor-index-group"><b>Sphere</b> — <a href="#sphere-radius"><code>radius</code></a></div>
+<div class="ctor-index-group"><b>Polyhedron</b> — <a href="#polyhedron-tetrahedron"><code>tetrahedron</code></a>, <a href="#polyhedron-parallelepiped"><code>parallelepiped</code></a>, <a href="#polyhedron-prism"><code>prism</code></a>, <a href="#polyhedron-pyramid"><code>pyramid</code></a></div>
+</nav>
+
+## Point constructions
+
+<div class="ctor-grid">
+<section class="ctor-card" id="point-free">
+<h3>point;free</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>int x, int y</code></p>
+<p class="ctor-desc">Freely draggable point.</p>
+<pre><code>B;point;free;180,110</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_free" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_free",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,60",
+            "B;point;free;180,110"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Two integer pixel coordinates. Draggable anywhere; drawn red.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-fixed">
+<h3>point;fixed</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>int x, int y [, int z]</code></p>
+<p class="ctor-desc">Non-draggable fixed point (2D and 3D variants).</p>
+<pre><code>O;point;fixed;120,80</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_fixed" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_fixed",
+        background: "0,0,100",
+        elements: [
+            "O;point;fixed;120,80",
+            "A;point;free;60,130"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Two or three integer coordinates. Not draggable. Used for anchors and for off-screen construction aids.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-first">
+<h3>point;first</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, Point B</code></p>
+<p class="ctor-desc">Returns point A (first endpoint of a line).</p>
+<pre><code>F;point;first;AB</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_first" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_first",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,120",
+            "B;point;free;190,60",
+            "AB;line;connect;A,B",
+            "F;point;first;AB"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The first endpoint of a line, as an addressable point.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-last">
+<h3>point;last</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, Point B</code></p>
+<p class="ctor-desc">Returns point B (last endpoint of a line).</p>
+<pre><code>L;point;last;AB</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_last" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_last",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,120",
+            "B;point;free;190,60",
+            "AB;line;connect;A,B",
+            "L;point;last;AB"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The second endpoint.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-midpoint">
+<h3>point;midpoint</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, Point B</code></p>
+<p class="ctor-desc">Midpoint of segment AB.</p>
+<pre><code>M;point;midpoint;A,B</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_midpoint" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_midpoint",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,120",
+            "B;point;free;190,60",
+            "AB;line;connect;A,B",
+            "M;point;midpoint;A,B"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Bisects the segment.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-intersection">
+<h3>point;intersection</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C, D [, Plane]</code></p>
+<p class="ctor-desc">Intersection of lines AB and CD.</p>
+<pre><code>X;point;intersection;A,B,C,D</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_intersection" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_intersection",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;40,40",
+            "B;point;free;200,130",
+            "C;point;free;40,130",
+            "D;point;free;200,40",
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "X;point;intersection;A,B,C,D"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The crossing of lines AB and CD. Line names expand to their endpoints, so this arrives as four points.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-foot">
+<h3>point;foot</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, Point B, Point C</code></p>
+<p class="ctor-desc">Foot of perpendicular from A to line BC.</p>
+<pre><code>M;point;foot;A,B,C</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_foot" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_foot",
+        background: "0,0,100",
+        elements: [
+            "B;point;free;40,140",
+            "C;point;free;210,140",
+            "A;point;free;110,40",
+            "BC;line;connect;B,C",
+            "M;point;foot;A,B,C",
+            "AM;line;connect;A,M;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Foot of the perpendicular from A to line BC.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-extend">
+<h3>point;extend</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C, D</code></p>
+<p class="ctor-desc">Point E on line AB so BE = CD.</p>
+<pre><code>E;point;extend;A,B,C,D</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_extend" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_extend",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,110",
+            "B;point;free;130,110",
+            "C;point;free;50,160",
+            "D;point;free;110,160",
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "E;point;extend;A,B,C,D",
+            "BE;line;connect;B,E;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Lays |CD| off beyond B along AB. Euclid I.3.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-cutoff">
+<h3>point;cutoff</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C, D</code></p>
+<p class="ctor-desc">Point E on line AB so AE = CD.</p>
+<pre><code>E;point;cutoff;A,B,C,D</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_cutoff" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_cutoff",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,110",
+            "B;point;free;200,110",
+            "C;point;free;50,160",
+            "D;point;free;110,160",
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "E;point;cutoff;A,B,C,D",
+            "AE;line;connect;A,E;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Cuts |CD| off from A along AB. Euclid I.3.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-center">
+<h3>point;center</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Circle A</code></p>
+<p class="ctor-desc">Center of circle A.</p>
+<pre><code>Z;point;center;circ</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_center" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_center",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;120,90",
+            "P;point;free;190,90",
+            "circ;circle;radius;O,P",
+            "Z;point;center;circ"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The centre of a circle, as an addressable point.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-circumcenter">
+<h3>point;circumcenter</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C [, Plane]</code></p>
+<p class="ctor-desc">Circumcenter of triangle ABC (2D and 3D variants).</p>
+<pre><code>O;point;circumcenter;A,B,C</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_circumcenter" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_circumcenter",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;70,40",
+            "B;point;free;40,140",
+            "C;point;free;200,120",
+            "ABC;polygon;triangle;A,B,C;0;0;black;0",
+            "O;point;circumcenter;A,B,C"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Equidistant from three points. A plane may be supplied for the 3D form.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-lineSlider">
+<h3>point;lineSlider</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, int x, int y [, int z]</code></p>
+<p class="ctor-desc">Point draggable along line AB (2D, 3D, segment variants).</p>
+<pre><code>P;point;lineSlider;A,B,120,95</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_lineSlider" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_lineSlider",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;40,130",
+            "B;point;free;210,60",
+            "AB;line;connect;A,B",
+            "P;point;lineSlider;A,B,120,95"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Draggable along the line only; drawn orange. The trailing integers are the initial coordinates.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-circleSlider">
+<h3>point;circleSlider</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Circle A, int x, int y [, int z]</code></p>
+<p class="ctor-desc">Point draggable along circle A.</p>
+<pre><code>P;point;circleSlider;circ,60,60</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_circleSlider" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_circleSlider",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;120,95",
+            "R;point;free;190,95",
+            "circ;circle;radius;O,R",
+            "P;point;circleSlider;circ,60,60"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Draggable around the circle only.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-perpendicular">
+<h3>point;perpendicular</h3>
+<p class="ctor-sig"><b>Signature</b> — Various (5 signature variants)</p>
+<p class="ctor-desc">Point D s.t.</p>
+<pre><code>D;point;perpendicular;A,B</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_perpendicular" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_perpendicular",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,165",
+            "B;point;free;160,165",
+            "AB;line;connect;A,B",
+            "D;point;perpendicular;A,B",
+            "AD;line;connect;A,D;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">A point D with AD perpendicular to AB. Five signature variants determine |AD|.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-parallelogram">
+<h3>point;parallelogram</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, Point B, Point C</code></p>
+<p class="ctor-desc">4th vertex D of parallelogram ABCD (D = A+C−B).</p>
+<pre><code>D;point;parallelogram;A,B,C</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_parallelogram" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_parallelogram",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,50",
+            "B;point;free;40,140",
+            "C;point;free;180,150",
+            "D;point;parallelogram;A,B,C",
+            "ABCD;polygon;quadrilateral;A,B,C,D;0;0;0;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The fourth vertex, D = A + C − B.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-vertex">
+<h3>point;vertex</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Polygon P, int i</code></p>
+<p class="ctor-desc">i-th vertex of polygon P.</p>
+<pre><code>V;point;vertex;sq,3</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_vertex" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_vertex",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;70,135",
+            "B;point;free;155,155",
+            "sq;polygon;square;A,B;0;0;black;cyan",
+            "V;point;vertex;sq,3"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The i-th vertex of a polygon, 1-based.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-similar">
+<h3>point;similar</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, D, E, F [, Plane]</code></p>
+<p class="ctor-desc">Point H so △ABH ~ △DEF (2D + 3D).</p>
+<pre><code>H;point;similar;A,B,D,E,F</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_similar" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_similar",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;35,165",
+            "B;point;free;120,165",
+            "D;point;free;165,90",
+            "E;point;free;225,90",
+            "F;point;free;200,40",
+            "AB;line;connect;A,B",
+            "DE;line;connect;D,E",
+            "DF;line;connect;D,F",
+            "EF;line;connect;E,F",
+            "H;point;similar;A,B,D,E,F",
+            "AH;line;connect;A,H;0;0;red",
+            "BH;line;connect;B,H;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The point H for which triangle ABH is similar to DEF.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-proportion">
+<h3>point;proportion</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point S0,S1,T0,T1,U0,U1,V0,V1</code></p>
+<p class="ctor-desc">Point V' on V0V1 s.t. \.</p>
+<pre><code>W;point;proportion;S0,S1,T0,T1,U0,U1,V0,V1</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_proportion" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_proportion",
+        background: "0,0,100",
+        elements: [
+            "S0;point;free;40,35",
+            "S1;point;free;140,35",
+            "T0;point;free;40,70",
+            "T1;point;free;90,70",
+            "U0;point;free;40,105",
+            "U1;point;free;160,105",
+            "V0;point;free;40,160",
+            "V1;point;free;230,160",
+            "S;line;connect;S0,S1",
+            "T;line;connect;T0,T1",
+            "U;line;connect;U0,U1",
+            "V;line;connect;V0,V1",
+            "W;point;proportion;S0,S1,T0,T1,U0,U1,V0,V1",
+            "VW;line;connect;V0,W;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Eight points. W lies on V0V1 with |S|:|T| = |U|:|V0W| — the fourth proportional, Euclid VI.12.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-invert">
+<h3>point;invert</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, Circle B</code></p>
+<p class="ctor-desc">Inversion of A in circle B.</p>
+<pre><code>A';point;invert;A,circ</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_invert" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_invert",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;100,100",
+            "R;point;free;170,100",
+            "circ;circle;radius;O,R",
+            "A;point;free;140,100",
+            "A';point;invert;A,circ",
+            "OA;line;connect;O,A;0;0;lightGray"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The image of A inverted in the circle: OA · OA' equals the radius squared.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-meanProportional">
+<h3>point;meanProportional</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C, D, E, F</code></p>
+<p class="ctor-desc">Point G on EF s.t.</p>
+<pre><code>G;point;meanProportional;S0,S1,T0,T1,U0,U1</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_meanProportional" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_meanProportional",
+        background: "0,0,100",
+        elements: [
+            "S0;point;free;40,40",
+            "S1;point;free;140,40",
+            "T0;point;free;40,80",
+            "T1;point;free;76,80",
+            "U0;point;free;40,150",
+            "U1;point;free;230,150",
+            "S;line;connect;S0,S1",
+            "T;line;connect;T0,T1",
+            "U;line;connect;U0,U1",
+            "G;point;meanProportional;S0,S1,T0,T1,U0,U1",
+            "UG;line;connect;U0,G;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Six points. The geometric mean of the first two lengths, laid off along the third.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-planeSlider">
+<h3>point;planeSlider</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Plane A, int x, int y, int z</code></p>
+<p class="ctor-desc">Point draggable on plane A.</p>
+<pre><code>A;point;planeSlider;base,120,120,40</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_planeSlider" width="280" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_planeSlider",
+        background: "0,0,100",
+        elements: [
+            "P1;point;fixed;32,195,60;0;0",
+            "P2;point;fixed;205,195,60;0;0",
+            "P3;point;fixed;60,85,0;0;0",
+            "base;plane;3points;P1,P2,P3;0;0;lightGray;brighter",
+            "A;point;planeSlider;base,120,120,40"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Draggable, confined to the given plane. Three integer coordinates.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-sphereSlider">
+<h3>point;sphereSlider</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Sphere A, int x, int y, int z</code></p>
+<p class="ctor-desc">Point draggable on sphere A.</p>
+<pre><code>X;point;sphereSlider;sph,190,70,60</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_sphereSlider" width="280" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_sphereSlider",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;135,115",
+            "R;point;free;205,115;0;0",
+            "a;point;free;40,40;0;0",
+            "sph;sphere;radius;O,R;0;0;black;0",
+            "X;point;sphereSlider;sph,190,70,60"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Draggable, confined to the sphere's surface.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-angleBisector">
+<h3>point;angleBisector</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C [, Plane]</code></p>
+<p class="ctor-desc">Intersection of angle bisector of ∠BAC with BC.</p>
+<pre><code>D;point;angleBisector;B,A,C</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_angleBisector" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_angleBisector",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;130,35",
+            "B;point;free;35,165",
+            "C;point;free;225,165",
+            "AB;line;connect;A,B",
+            "AC;line;connect;A,C",
+            "BC;line;connect;B,C",
+            "D;point;angleBisector;B,A,C",
+            "AD;line;connect;A,D;0;0;red",
+            "m;sector;angleMarker;A,B,C;0;0;magenta;magenta"
+        ],
+        showAngles: true,
+    });
+</script>
+</figure>
+<p class="ctor-note">Where the bisector of angle BAC meets BC. Argument order is B, A, C — the vertex is second. A plane may be supplied.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-angleDivider">
+<h3>point;angleDivider</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C [, Plane], int n</code></p>
+<p class="ctor-desc">1/n division of angle.</p>
+<pre><code>D;point;angleDivider;B,A,C,3</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_angleDivider" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_angleDivider",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;130,35",
+            "B;point;free;35,165",
+            "C;point;free;225,165",
+            "AB;line;connect;A,B",
+            "AC;line;connect;A,C",
+            "BC;line;connect;B,C",
+            "D;point;angleDivider;B,A,C,3",
+            "AD;line;connect;A,D;0;0;red",
+            "m;sector;angleMarker;A,B,C;0;0;magenta;magenta"
+        ],
+        showAngles: true,
+    });
+</script>
+</figure>
+<p class="ctor-note">As angleBisector, for a 1/n division; n is the trailing integer. Shown here at a third.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="point-harmonic">
+<h3>point;harmonic</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C, D</code></p>
+<p class="ctor-desc">Harmonic conjugate.</p>
+<pre><code>H;point;harmonic;B,C,D</code></pre>
+<figure class="diagram block">
+<canvas id="c_point_harmonic" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_point_harmonic",
+        background: "0,0,100",
+        elements: [
+            "C;point;free;30,110",
+            "D;point;free;180,110",
+            "CD;line;connect;C,D",
+            "B;point;lineSlider;C,D,150,110",
+            "H;point;harmonic;B,C,D"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The harmonic conjugate of B with respect to C and D. Takes three points.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+</div>
+
+## Line constructions
+
+<div class="ctor-grid">
+<section class="ctor-card" id="line-connect">
+<h3>line;connect</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, Point B</code></p>
+<p class="ctor-desc">Line through A and B.</p>
+<pre><code>AB;line;connect;A,B</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_connect" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_connect",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,120",
+            "B;point;free;190,60",
+            "AB;line;connect;A,B"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The segment between two points.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-extend">
+<h3>line;extend</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C, D</code></p>
+<p class="ctor-desc">Line extending AB by length CD.</p>
+<pre><code>AE;line;extend;A,B,C,D;0;0;red</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_extend" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_extend",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,120",
+            "B;point;free;140,90",
+            "C;point;free;60,160",
+            "D;point;free;120,160",
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "AE;line;extend;A,B,C,D;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">AB produced by a further |CD|.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-parallel">
+<h3>line;parallel</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, Point B, Point C</code></p>
+<p class="ctor-desc">Line through A parallel and equal to line BC.</p>
+<pre><code>par;line;parallel;P,A,B;0;0;red</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_parallel" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_parallel",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,140",
+            "B;point;free;200,140",
+            "P;point;free;110,60",
+            "AB;line;connect;A,B",
+            "par;line;parallel;P,A,B;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Through A, parallel and equal to line BC.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-perpendicular">
+<h3>line;perpendicular</h3>
+<p class="ctor-sig"><b>Signature</b> — Various (5 signature variants)</p>
+<p class="ctor-desc">Line perpendicular to another.</p>
+<pre><code>perp;line;perpendicular;A,B;0;0;red</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_perpendicular" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_perpendicular",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;50,165",
+            "B;point;free;150,165",
+            "AB;line;connect;A,B",
+            "perp;line;perpendicular;A,B;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Perpendicular to AB at A.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-bichord">
+<h3>line;bichord</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Circle A, Circle B</code></p>
+<p class="ctor-desc">Line connecting two circle intersections.</p>
+<pre><code>ch;line;bichord;c1,c2;0;0;red</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_bichord" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_bichord",
+        background: "0,0,100",
+        elements: [
+            "O1;point;free;80,120",
+            "R1;point;free;140,120",
+            "O2;point;free;175,70",
+            "R2;point;free;235,70",
+            "c1;circle;radius;O1,R1;0;0;black;0",
+            "c2;circle;radius;O2,R2;0;0;black;0",
+            "ch;line;bichord;c1,c2;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The common chord of two circles. Takes the circle elements themselves, not their centres.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-chord">
+<h3>line;chord</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point B, Point C, Circle A</code></p>
+<p class="ctor-desc">Chord of circle A cut by line BC.</p>
+<pre><code>ch;line;chord;A,B,circ;0;0;red</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_chord" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_chord",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;120,95",
+            "R;point;free;195,95",
+            "circ;circle;radius;O,R",
+            "A;point;free;70,60",
+            "B;point;free;170,150",
+            "ch;line;chord;A,B,circ;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The chord that line BC cuts from a circle.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-angleBisector">
+<h3>line;angleBisector</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C [, Plane]</code></p>
+<p class="ctor-desc">Bisector of angle ∠ABC.</p>
+<pre><code>bis;line;angleBisector;A,B,C;0;0;red</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_angleBisector" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_angleBisector",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;130,35",
+            "B;point;free;35,165",
+            "C;point;free;225,165",
+            "BA;line;connect;B,A",
+            "BC;line;connect;B,C",
+            "bis;line;angleBisector;A,B,C;0;0;red",
+            "m;sector;angleMarker;B,A,C;0;0;magenta;magenta"
+        ],
+        showAngles: true,
+    });
+</script>
+</figure>
+<p class="ctor-note">The bisector of angle ABC as a line. The vertex is the second argument.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-angleDivider">
+<h3>line;angleDivider</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C [, Plane], int n</code></p>
+<p class="ctor-desc">1/n division of ∠ABC as a line.</p>
+<pre><code>div;line;angleDivider;A,B,C,3;0;0;red</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_angleDivider" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_angleDivider",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;130,35",
+            "B;point;free;35,165",
+            "C;point;free;225,165",
+            "BA;line;connect;B,A",
+            "BC;line;connect;B,C",
+            "div;line;angleDivider;A,B,C,3;0;0;red",
+            "m;sector;angleMarker;B,A,C;0;0;magenta;magenta"
+        ],
+        showAngles: true,
+    });
+</script>
+</figure>
+<p class="ctor-note">The 1/n division of an angle, as a line.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-foot">
+<h3>line;foot</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, Plane B</code></p>
+<p class="ctor-desc">Perpendicular from A to plane B.</p>
+<pre><code>f;line;foot;A,base;0;0;red</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_foot" width="280" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_foot",
+        background: "0,0,100",
+        elements: [
+            "P1;point;fixed;32,195,60;0;0",
+            "P2;point;fixed;205,195,60;0;0",
+            "P3;point;fixed;60,85,0;0;0",
+            "base;plane;3points;P1,P2,P3;0;0;lightGray;brighter",
+            "A;point;free;150,45",
+            "f;line;foot;A,base;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The perpendicular from a point to a plane. Euclid XI.11.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-similar">
+<h3>line;similar</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, D, E, F [, Plane]</code></p>
+<p class="ctor-desc">Line AH where △ABH ∼ △DEF (2D + 3D).</p>
+<pre><code>AH;line;similar;A,B,D,E,F;0;0;red</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_similar" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_similar",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;35,165",
+            "B;point;free;120,165",
+            "D;point;free;165,90",
+            "E;point;free;225,90",
+            "F;point;free;200,40",
+            "AB;line;connect;A,B",
+            "DE;line;connect;D,E",
+            "DF;line;connect;D,F",
+            "EF;line;connect;E,F",
+            "AH;line;similar;A,B,D,E,F;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Side AH of the triangle on AB similar to DEF.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-proportion">
+<h3>line;proportion</h3>
+<p class="ctor-sig"><b>Signature</b> — As point variant</p>
+<p class="ctor-desc">Line form of proportion.</p>
+<pre><code>W;line;proportion;S0,S1,T0,T1,U0,U1,V0,V1;0;0;red</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_proportion" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_proportion",
+        background: "0,0,100",
+        elements: [
+            "S0;point;free;40,35",
+            "S1;point;free;140,35",
+            "T0;point;free;40,70",
+            "T1;point;free;90,70",
+            "U0;point;free;40,105",
+            "U1;point;free;160,105",
+            "V0;point;free;40,160",
+            "V1;point;free;230,160",
+            "S;line;connect;S0,S1",
+            "T;line;connect;T0,T1",
+            "U;line;connect;U0,U1",
+            "V;line;connect;V0,V1",
+            "W;line;proportion;S0,S1,T0,T1,U0,U1,V0,V1;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The fourth proportional as a segment.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-meanProportional">
+<h3>line;meanProportional</h3>
+<p class="ctor-sig"><b>Signature</b> — As point variant</p>
+<p class="ctor-desc">Line form.</p>
+<pre><code>G;line;meanProportional;S0,S1,T0,T1,U0,U1;0;0;red</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_meanProportional" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_meanProportional",
+        background: "0,0,100",
+        elements: [
+            "S0;point;free;40,40",
+            "S1;point;free;140,40",
+            "T0;point;free;40,80",
+            "T1;point;free;76,80",
+            "U0;point;free;40,150",
+            "U1;point;free;230,150",
+            "S;line;connect;S0,S1",
+            "T;line;connect;T0,T1",
+            "U;line;connect;U0,U1",
+            "G;line;meanProportional;S0,S1,T0,T1,U0,U1;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The geometric mean as a segment.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="line-path">
+<h3>line;path</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, … (≥2)</code></p>
+<p class="ctor-desc">An <b>open</b> path (polyline) — an ordered run of connected segments A→B→… that does <b>not</b> close back to the first point.</p>
+<pre><code>p;line;path;A,B,C,D;0;0;red</code></pre>
+<figure class="diagram block">
+<canvas id="c_line_path" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_line_path",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;25,160",
+            "B;point;free;80,55",
+            "C;point;free;150,150",
+            "D;point;free;225,50",
+            "p;line;path;A,B,C,D;0;0;red"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">An open polyline through two or more points, drawn and highlighted as a single element. Does not close back to the first point.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+</div>
+
+## Circle constructions
+
+<div class="ctor-grid">
+<section class="ctor-card" id="circle-radius">
+<h3>circle;radius</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point center, Point edge [, Point C]</code></p>
+<p class="ctor-desc">Circle with center and radius; 2-point (radius=\.</p>
+<pre><code>circ;circle;radius;O,P</code></pre>
+<figure class="diagram block">
+<canvas id="c_circle_radius" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_circle_radius",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;120,95",
+            "P;point;free;195,95",
+            "circ;circle;radius;O,P"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Centre and a point on the circumference. A third point sets the radius instead.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="circle-circumcircle">
+<h3>circle;circumcircle</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C [, Plane]</code></p>
+<p class="ctor-desc">Circle through three points (2D and 3D).</p>
+<pre><code>circ;circle;circumcircle;A,B,C;0;0;red;0</code></pre>
+<figure class="diagram block">
+<canvas id="c_circle_circumcircle" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_circle_circumcircle",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;70,40",
+            "B;point;free;40,140",
+            "C;point;free;200,130",
+            "ABC;polygon;triangle;A,B,C;0;0;black;0",
+            "circ;circle;circumcircle;A,B,C;0;0;red;0"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Through three points. A plane may be supplied for the 3D form.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="circle-invert">
+<h3>circle;invert</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Circle A, Circle B</code></p>
+<p class="ctor-desc">Inversion of circle A in circle B.</p>
+<pre><code>c3;circle;invert;c2,c1;0;0;red;0</code></pre>
+<figure class="diagram block">
+<canvas id="c_circle_invert" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_circle_invert",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;75,110",
+            "R;point;free;140,110",
+            "c1;circle;radius;O,R;0;0;black;0",
+            "P;point;free;185,55",
+            "Q;point;free;225,55",
+            "c2;circle;radius;P,Q;0;0;black;0",
+            "c3;circle;invert;c2,c1;0;0;red;0"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">One circle inverted in another. The image is a circle unless the original passes through the centre of inversion.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+</div>
+
+## Polygon constructions
+
+<div class="ctor-grid">
+<section class="ctor-card" id="polygon-triangle">
+<h3>polygon;triangle</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C</code></p>
+<p class="ctor-desc">Triangle with vertices A, B, C.</p>
+<pre><code>t;polygon;triangle;A,B,C;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_triangle" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_triangle",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;110,40",
+            "B;point;free;40,150",
+            "C;point;free;190,150",
+            "t;polygon;triangle;A,B,C;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Three vertices.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-quadrilateral">
+<h3>polygon;quadrilateral</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C, D</code></p>
+<p class="ctor-desc">Quadrilateral ABCD.</p>
+<pre><code>q;polygon;quadrilateral;A,B,C,D;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_quadrilateral" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_quadrilateral",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,40",
+            "B;point;free;40,150",
+            "C;point;free;190,150",
+            "D;point;free;200,50",
+            "q;polygon;quadrilateral;A,B,C,D;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Four vertices in order.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-parallelogram">
+<h3>polygon;parallelogram</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C</code></p>
+<p class="ctor-desc">Parallelogram ABCD where D = A+(C−B).</p>
+<pre><code>p;polygon;parallelogram;A,B,C;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_parallelogram" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_parallelogram",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;60,50",
+            "B;point;free;40,150",
+            "C;point;free;180,150",
+            "p;polygon;parallelogram;A,B,C;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Three vertices; the fourth is derived.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-square">
+<h3>polygon;square</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B</code></p>
+<p class="ctor-desc">Square on side AB.</p>
+<pre><code>s;polygon;square;A,B;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_square" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_square",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;70,135",
+            "B;point;free;155,155",
+            "s;polygon;square;A,B;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Built on the side AB. Vertex order picks which side it stands on. Euclid I.46.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-equilateralTriangle">
+<h3>polygon;equilateralTriangle</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B [, Plane]</code></p>
+<p class="ctor-desc">Equilateral triangle on side AB (2D + 3D).</p>
+<pre><code>t;polygon;equilateralTriangle;A,B;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_equilateralTriangle" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_equilateralTriangle",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;70,140",
+            "B;point;free;180,140",
+            "t;polygon;equilateralTriangle;A,B;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Built on the side AB. Vertex order picks the apex side. Euclid I.1.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-regularPolygon">
+<h3>polygon;regularPolygon</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B [, Plane], int n</code></p>
+<p class="ctor-desc">Regular n-gon on edge AB (2D + 3D).</p>
+<pre><code>p;polygon;regularPolygon;A,B,7;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_regularPolygon" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_regularPolygon",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;105,180",
+            "B;point;free;155,180",
+            "p;polygon;regularPolygon;A,B,7;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Built on the edge AB, not from a centre and radius. n is the trailing integer.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-similar">
+<h3>polygon;similar</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, D, E, F [, Plane]</code></p>
+<p class="ctor-desc">Triangle ABH where △ABH ∼ △DEF (2D + 3D).</p>
+<pre><code>t;polygon;similar;A,B,D,E,F;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_similar" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_similar",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;30,165",
+            "B;point;free;115,165",
+            "D;point;free;165,95",
+            "E;point;free;225,95",
+            "F;point;free;200,45",
+            "DEF;polygon;triangle;D,E,F;0;0;black;pink",
+            "t;polygon;similar;A,B,D,E,F;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The triangle on AB similar to DEF, as a fillable region.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-application">
+<h3>polygon;application</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Polygon P, Point A, B, C</code></p>
+<p class="ctor-desc">Parallelogram with side AB, angle CAB, area = P.area().</p>
+<pre><code>p;polygon;application;src,A,B,C;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_application" width="300" height="250" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_application",
+        background: "0,0,100",
+        elements: [
+            "A0;point;free;45,72",
+            "B0;point;free;165,72",
+            "C0;point;free;105,28",
+            "src;polygon;triangle;A0,B0,C0;0;0;black;pink",
+            "A;point;free;60,225",
+            "B;point;free;125,225",
+            "C;point;free;90,175",
+            "p;polygon;application;src,A,B,C;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">A parallelogram on AB, at angle CAB, equal in area to the given polygon. Euclid I.44. Lengthening AB flattens the result, the area being fixed.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-starPolygon">
+<h3>polygon;starPolygon</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, int n, int k</code></p>
+<p class="ctor-desc">Star polygon {n/k} with density param.</p>
+<pre><code>s;polygon;starPolygon;A,B,7,3;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_starPolygon" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_starPolygon",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;110,110",
+            "B;point;free;185,110",
+            "s;polygon;starPolygon;A,B,7,3;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The star polygon {n/k} on edge AB. k is the density — how many vertices each edge steps over.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-pentagon">
+<h3>polygon;pentagon</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C, D, E</code></p>
+<p class="ctor-desc">Pentagon (5 free vertices).</p>
+<pre><code>p;polygon;pentagon;A,B,C,D,E;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_pentagon" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_pentagon",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;125,25",
+            "B;point;free;35,90",
+            "C;point;free;70,175",
+            "D;point;free;185,175",
+            "E;point;free;215,90",
+            "p;polygon;pentagon;A,B,C,D,E;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Five vertices in order. No regularity assumed.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-hexagon">
+<h3>polygon;hexagon</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C, D, E, F</code></p>
+<p class="ctor-desc">Hexagon (6 free vertices).</p>
+<pre><code>h;polygon;hexagon;A,B,C,D,E,F;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_hexagon" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_hexagon",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;95,25",
+            "B;point;free;30,105",
+            "C;point;free;80,180",
+            "D;point;free;175,180",
+            "E;point;free;230,105",
+            "F;point;free;180,25",
+            "h;polygon;hexagon;A,B,C,D,E,F;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Six vertices in order.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-octagon">
+<h3>polygon;octagon</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C, D, E, F, G, H</code></p>
+<p class="ctor-desc">Octagon (8 free vertices).</p>
+<pre><code>o;polygon;octagon;A,B,C,D,E,F,G,H;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_octagon" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_octagon",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;100,20",
+            "B;point;free;45,50",
+            "C;point;free;25,110",
+            "D;point;free;60,170",
+            "E;point;free;140,180",
+            "F;point;free;210,150",
+            "G;point;free;235,90",
+            "H;point;free;185,30",
+            "o;polygon;octagon;A,B,C,D,E,F,G,H;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Eight vertices in order.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polygon-curvedTriangle">
+<h3>polygon;curvedTriangle</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C, Carrier ab, bc, ca</code></p>
+<p class="ctor-desc">A triangle whose three sides are circular arcs — an elliptic or hyperbolic triangle (both have circular-arc sides).</p>
+<pre><code>t;polygon;curvedTriangle;A,B,C,cb,ca,cc;0;0;black;cyan</code></pre>
+<figure class="diagram block">
+<canvas id="c_polygon_curvedTriangle" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polygon_curvedTriangle",
+        background: "0,0,100",
+        elements: [
+            "Oa;point;fixed;130,-5;0;0",
+            "Ra;point;fixed;275,-5;0;0",
+            "ca;circle;radius;Oa,Ra;0;0;0;0",
+            "Ob;point;fixed;225,160;0;0",
+            "Rb;point;fixed;370,160;0;0",
+            "cb;circle;radius;Ob,Rb;0;0;0;0",
+            "Oc;point;fixed;35,160;0;0",
+            "Rc;point;fixed;180,160;0;0",
+            "cc;circle;radius;Oc,Rc;0;0;0;0",
+            "ch1;line;bichord;cb,cc;0;0;0",
+            "ch2;line;bichord;ca,cb;0;0;0",
+            "ch3;line;bichord;ca,cc;0;0;0",
+            "A;point;first;ch1",
+            "B;point;first;ch2",
+            "C;point;last;ch3",
+            "t;polygon;curvedTriangle;A,B,C,cb,ca,cc;0;0;black;cyan"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Three vertices and three side carriers. Each side is its carrier's arc clipped to the two vertices; a line carrier gives a straight side. Carriers reach the construction unexpanded.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+</div>
+
+## Sector constructions
+
+<div class="ctor-grid">
+<section class="ctor-card" id="sector-sector">
+<h3>sector;sector</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C [, Plane]</code></p>
+<p class="ctor-desc">Circular sector from center through A and B (2 variants).</p>
+<pre><code>s;sector;sector;V,A,B;0;0;magenta;magenta</code></pre>
+<figure class="diagram block">
+<canvas id="c_sector_sector" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_sector_sector",
+        background: "0,0,100",
+        elements: [
+            "V;point;free;60,150",
+            "A;point;free;200,150",
+            "varc;circle;radius;V,A;0;0;0;0",
+            "B;point;circleSlider;varc,150,55",
+            "VA;line;connect;V,A",
+            "VB;line;connect;V,B",
+            "s;sector;sector;V,A,B;0;0;magenta;magenta"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The wedge at V between the arms VA and VB. Both arms must be radii of the same circle, so B is placed on the circle through A rather than left free.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="sector-angleMarker">
+<h3>sector;angleMarker</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point V, P1, P2 [, int radiusPx]</code></p>
+<p class="ctor-desc">Interior angle marker at V — element-chosen radius (default 22px, clamped to 0.45× shorter arm), auto-interior, translucent palette fill.</p>
+<pre><code>m;sector;angleMarker;V,A,B;0;0;magenta;magenta</code></pre>
+<figure class="diagram block">
+<canvas id="c_sector_angleMarker" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_sector_angleMarker",
+        background: "0,0,100",
+        elements: [
+            "V;point;free;60,150",
+            "A;point;free;200,150",
+            "B;point;free;150,50",
+            "VA;line;connect;V,A",
+            "VB;line;connect;V,B",
+            "m;sector;angleMarker;V,A,B;0;0;magenta;magenta"
+        ],
+        showAngles: true,
+    });
+</script>
+</figure>
+<p class="ctor-note">The interior angle marker at V. Radius defaults to 22px, clamped to 0.45 of the shorter arm. Markers stay hidden in a static figure unless init sets showAngles, since Euclid's own diagrams draw no angle arcs.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="sector-arc">
+<h3>sector;arc</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, M, B [, Plane]</code></p>
+<p class="ctor-desc">Arc of circle passing through A, M, B (M is on the arc, 2D + 3D).</p>
+<pre><code>a;sector;arc;A,M,B;0;0;red;0</code></pre>
+<figure class="diagram block">
+<canvas id="c_sector_arc" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_sector_arc",
+        background: "0,0,100",
+        elements: [
+            "A;point;free;120,120",
+            "M;point;free;200,120",
+            "B;point;free;120,45",
+            "a;sector;arc;A,M,B;0;0;red;0"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Three points ON the arc, not a centre and two ends. M lies between A and B.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="sector-angleMarkerReflex">
+<h3>sector;angleMarkerReflex</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point V, P1, P2 [, int radiusPx]</code></p>
+<p class="ctor-desc">As <code>angleMarker</code> but the major (reflex, &gt;180°) arc; for rare teaching cases.</p>
+<pre><code>m;sector;angleMarkerReflex;V,A,B;0;0;magenta;magenta</code></pre>
+<figure class="diagram block">
+<canvas id="c_sector_angleMarkerReflex" width="260" height="200" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_sector_angleMarkerReflex",
+        background: "0,0,100",
+        elements: [
+            "V;point;free;60,150",
+            "A;point;free;200,150",
+            "B;point;free;150,50",
+            "VA;line;connect;V,A",
+            "VB;line;connect;V,B",
+            "m;sector;angleMarkerReflex;V,A,B;0;0;magenta;magenta"
+        ],
+        showAngles: true,
+    });
+</script>
+</figure>
+<p class="ctor-note">As angleMarker, on the major (reflex) arc.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+</div>
+
+## Plane constructions
+
+Depth is conveyed by shading rather than perspective projection. Drag the points to read a solid's shape.
+
+<div class="ctor-grid">
+<section class="ctor-card" id="plane-3points">
+<h3>plane;3points</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C</code></p>
+<p class="ctor-desc">Plane through three points.</p>
+<pre><code>base;plane;3points;P1,P2,P3;0;0;lightGray;brighter</code></pre>
+<figure class="diagram block">
+<canvas id="c_plane_3points" width="280" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_plane_3points",
+        background: "0,0,100",
+        elements: [
+            "P1;point;fixed;32,195,60;0;0",
+            "P2;point;fixed;205,195,60;0;0",
+            "P3;point;fixed;60,85,0;0;0",
+            "base;plane;3points;P1,P2,P3;0;0;lightGray;brighter"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">A plane through three points.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="plane-perpendicular">
+<h3>plane;perpendicular</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A, B, C, D, E</code></p>
+<p class="ctor-desc">Plane perpendicular to another.</p>
+<pre><code>perp;plane;perpendicular;O,X;0;0;black;brighter</code></pre>
+<figure class="diagram block">
+<canvas id="c_plane_perpendicular" width="280" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_plane_perpendicular",
+        background: "0,0,100",
+        elements: [
+            "P1;point;fixed;32,195,60;0;0",
+            "P2;point;fixed;205,195,60;0;0",
+            "P3;point;fixed;60,85,0;0;0",
+            "base;plane;3points;P1,P2,P3;0;0;lightGray;brighter",
+            "O;point;planeSlider;base,120,120,40",
+            "X;point;free;185,55",
+            "OX;line;connect;O,X;0;0;lightGray",
+            "perp;plane;perpendicular;O,X;0;0;black;brighter"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The plane through O perpendicular to line OX. A plane square to a line that lies in the base plane appears edge-on.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="plane-parallel">
+<h3>plane;parallel</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Plane A, Point B</code></p>
+<p class="ctor-desc">Plane through B parallel to plane A.</p>
+<pre><code>above;plane;parallel;base,Q;0;0;black;brighter</code></pre>
+<figure class="diagram block">
+<canvas id="c_plane_parallel" width="280" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_plane_parallel",
+        background: "0,0,100",
+        elements: [
+            "P1;point;fixed;50,185,60;0;0",
+            "P2;point;fixed;175,185,60;0;0",
+            "P3;point;fixed;80,115,0;0;0",
+            "base;plane;3points;P1,P2,P3;0;0;lightGray;brighter",
+            "Q;point;free;108,92",
+            "above;plane;parallel;base,Q;0;0;black;brighter"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">A plane through a point, parallel to a given plane. Euclid XI.31.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="plane-ambient">
+<h3>plane;ambient</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point A</code> or <code>Circle A</code></p>
+<p class="ctor-desc">The ambient plane of a point or circle.</p>
+<pre><code>amb;plane;ambient;A;0;0;red;0</code></pre>
+<figure class="diagram block">
+<canvas id="c_plane_ambient" width="280" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_plane_ambient",
+        background: "0,0,100",
+        elements: [
+            "P1;point;fixed;32,195,60;0;0",
+            "P2;point;fixed;205,195,60;0;0",
+            "P3;point;fixed;60,85,0;0;0",
+            "base;plane;3points;P1,P2,P3;0;0;lightGray;brighter",
+            "A;point;planeSlider;base,120,120,40",
+            "amb;plane;ambient;A;0;0;red;0"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">The plane a point or circle already lies in. Returns that plane rather than constructing one.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+</div>
+
+## Sphere constructions
+
+<div class="ctor-grid">
+<section class="ctor-card" id="sphere-radius">
+<h3>sphere;radius</h3>
+<p class="ctor-sig"><b>Signature</b> — <code>Point center, Point edge</code></p>
+<p class="ctor-desc">Sphere with given center and surface point.</p>
+<pre><code>sph;sphere;radius;O,P;0;0;black;brighter</code></pre>
+<figure class="diagram block">
+<canvas id="c_sphere_radius" width="280" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_sphere_radius",
+        background: "0,0,100",
+        elements: [
+            "O;point;free;130,115",
+            "P;point;free;210,115",
+            "sph;sphere;radius;O,P;0;0;black;brighter",
+            "OP;line;connect;O,P;0;0;lightGray"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Centre and one point on the surface.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+</div>
+
+## Polyhedron constructions
+
+<div class="ctor-grid">
+<section class="ctor-card" id="polyhedron-tetrahedron">
+<h3>polyhedron;tetrahedron</h3>
+<p class="ctor-desc">Tetrahedron from 4 points (triangle base + Pyramid).</p>
+<pre><code>tet;polyhedron;tetrahedron;A,B,C,D;0;0;black;random</code></pre>
+<figure class="diagram block">
+<canvas id="c_polyhedron_tetrahedron" width="280" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polyhedron_tetrahedron",
+        background: "0,0,100",
+        elements: [
+            "P1;point;fixed;32,195,60;0;0",
+            "P2;point;fixed;205,195,60;0;0",
+            "P3;point;fixed;60,85,0;0;0",
+            "base;plane;3points;P1,P2,P3;0;0;lightGray;brighter",
+            "A;point;planeSlider;base,60,150,50",
+            "B;point;planeSlider;base,200,150,50",
+            "C;point;planeSlider;base,130,90,10",
+            "D;point;free;140,40",
+            "tet;polyhedron;tetrahedron;A,B,C,D;0;0;black;random"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Four points: a triangular base and an apex.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polyhedron-parallelepiped">
+<h3>polyhedron;parallelepiped</h3>
+<p class="ctor-desc">Parallelepiped from 4 points (Layoff + Prism).</p>
+<pre><code>par;polyhedron;parallelepiped;A,B,C,D;0;0;black;random</code></pre>
+<figure class="diagram block">
+<canvas id="c_polyhedron_parallelepiped" width="280" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polyhedron_parallelepiped",
+        background: "0,0,100",
+        elements: [
+            "P1;point;fixed;32,195,60;0;0",
+            "P2;point;fixed;205,195,60;0;0",
+            "P3;point;fixed;60,85,0;0;0",
+            "base;plane;3points;P1,P2,P3;0;0;lightGray;brighter",
+            "A;point;planeSlider;base,70,150,45",
+            "B;point;planeSlider;base,180,155,55",
+            "C;point;planeSlider;base,120,95,15",
+            "D;point;free;105,72",
+            "par;polyhedron;parallelepiped;A,B,C,D;0;0;black;random"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">Four points: three fix the base parallelogram, the fourth gives the sweep direction.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polyhedron-prism">
+<h3>polyhedron;prism</h3>
+<p class="ctor-desc">Prism with polygon base + direction vector.</p>
+<pre><code>pri;polyhedron;prism;tri,S,T;0;0;black;random</code></pre>
+<figure class="diagram block">
+<canvas id="c_polyhedron_prism" width="280" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polyhedron_prism",
+        background: "0,0,100",
+        elements: [
+            "P1;point;fixed;32,195,60;0;0",
+            "P2;point;fixed;205,195,60;0;0",
+            "P3;point;fixed;60,85,0;0;0",
+            "base;plane;3points;P1,P2,P3;0;0;lightGray;brighter",
+            "A;point;planeSlider;base,60,155,50",
+            "B;point;planeSlider;base,175,160,55",
+            "C;point;planeSlider;base,115,100,15",
+            "tri;polygon;triangle;A,B,C;0;0;black;0",
+            "S;point;planeSlider;base,110,130,30;0;0",
+            "T;point;free;130,45;0;0",
+            "pri;polyhedron;prism;tri,S,T;0;0;black;random"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">A polygon base and two points giving the sweep direction. Any polygon, not only a triangle.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+<section class="ctor-card" id="polyhedron-pyramid">
+<h3>polyhedron;pyramid</h3>
+<p class="ctor-desc">Pyramid with polygon base + apex point.</p>
+<pre><code>pyr;polyhedron;pyramid;quad,V;0;0;black;random</code></pre>
+<figure class="diagram block">
+<canvas id="c_polyhedron_pyramid" width="280" height="230" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "c_polyhedron_pyramid",
+        background: "0,0,100",
+        elements: [
+            "P1;point;fixed;32,195,60;0;0",
+            "P2;point;fixed;205,195,60;0;0",
+            "P3;point;fixed;60,85,0;0;0",
+            "base;plane;3points;P1,P2,P3;0;0;lightGray;brighter",
+            "A;point;planeSlider;base,55,155,50",
+            "B;point;planeSlider;base,190,160,55",
+            "C;point;planeSlider;base,150,105,20",
+            "D;point;planeSlider;base,50,100,10",
+            "quad;polygon;quadrilateral;A,B,C,D;0;0;black;0",
+            "V;point;free;125,35",
+            "pyr;polyhedron;pyramid;quad,V;0;0;black;random"
+        ],
+    });
+</script>
+</figure>
+<p class="ctor-note">A polygon base and an apex.</p>
+<div class="ctor-actions"><button type="button" class="ctor-src" aria-haspopup="dialog">Source</button></div>
+</section>
+</div>
+
+The library's own documentation — the API reference, the implementation model,
+and the guides to adding a construction or an animation — is listed at the foot
+of the [geomlib](/geomlib/) page.
+
+- [**Quickstart**](/geomlib/quickstart/) — a first figure, built one
+  construction at a time.
+- [**Slide transitions**](/geomlib/animations/) — animating the step from one
+  slide to the next.

@@ -1,0 +1,240 @@
+_model: other_work
+---
+title: How this site is built
+---
+order: 6
+---
+body:
+
+The site is a static one, built with [Lektor](https://www.getlektor.com/). What
+follows is what a page is made of and why, for anyone who wants to borrow the
+arrangement.
+
+### A page
+
+[**The example page**](/geomlib/example/) is a working demonstration of the
+arrangement: it uses the real proposition model and the real template, and its
+own text describes what each part of it is.
+
+Read it alongside a page of the text proper —
+[Proposition I.1](/elements/books/bookI/propositions/propI1/) is the same shape
+with Euclid in it. Both show a statement in a boxed heading, a proof beneath it,
+citations in the margin beside the steps they support, a figure that can be
+dragged and also stepped through the proof a line at a time, and commentary
+below the whole thing. The example adds a lemma box before the proposition and a
+note box after, so all three section kinds are visible at once.
+
+None of that is one piece of prose. The statement is quoted by other pages. The
+proof is walked. The citations point at the postulates they lean on and are
+collected back into a *used in* list on those pages. The commentary stays put
+while the proof moves. So the page is stored as those parts, separately, and the
+template puts them back together:
+
+<pre><code>_model: proposition
+&#45;&#45;&#45;
+title: Proposition 1
+&#45;&#45;&#45;
+order: 1
+&#45;&#45;&#45;
+short_label: I.1
+&#45;&#45;&#45;
+sections:
+
+#### prop_section ####
+kind: proposition
+----
+statement: To construct an equilateral triangle on a given finite straight line.
+----
+proof:
+
+Let {AB} be the given finite straight line.
+
+&lt;figure class="diagram"&gt; … the geomlib element list and slides … &lt;/figure&gt;
+
+Describe the circle BCD with centre A and radius AB. [!just I.Post.3]
+…
+----
+guide:
+
+This proposition is the first…
+</code></pre>
+
+`_model` picks both the field set and the template. Fields are separated by a
+line of three dashes, and a flow block opens with `#### name ####` and separates
+its own fields with four. `short_label` is the form other pages cite. `order`
+sorts the page among its siblings, which is also what drives the previous and
+next links, so no page needs to know its neighbours.
+
+Three things inside the proof are extensions rather than plain markdown.
+`{AB}` marks an element reference, bound to the figure beside it, so hovering
+the letters lights the matching part of the diagram — described in full further
+down. `[!just I.Post.3]` is a
+justification, rendered in the margin and linked to what it names. And the
+figure's element list feeds both the static diagram and the stepped proof, so
+there is one description of the geometry rather than two that can disagree.
+
+### Models
+
+A model is the set of fields a kind of page has. There is one per kind of thing
+the text contains, rather than a single generic page, because they differ in
+what they carry and in how they are cited.
+
+<dl class="filelist">
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/models/proposition.ini">proposition</a></dt><dd>A title, a citation label, and a list of sections. The list is what lets a page carry a lemma before the proposition or a corollary after it without a special case. It can also pin its own library version, for testing a figure against an unreleased build.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/models/definition.ini">definition</a></dt><dd>A statement and a guide, plus the group it belongs to and the book subsection it sits in.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/models/postulate.ini">postulate</a></dt><dd>A statement and a guide.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/models/commonnotion.ini">commonnotion</a></dt><dd>The same shape as a postulate.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/models/definition_group.ini">definition_group</a></dt><dd>A guide and nothing else. Joyce often wrote several definitions in one file under one shared commentary; the group is a hidden page holding that commentary, so each definition still gets its own address without the commentary being copied.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/models/commonnotion_group.ini">commonnotion_group</a></dt><dd>The same, for common notions.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/models/book.ini">book</a></dt><dd>The book's introduction and its contents, the latter as a list of subsections interleaving definitions and propositions the way the original did.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/models/section_index.ini">section_index</a></dt><dd>The listing for one kind of child — a book's definitions, or its propositions. It names its child model as a field, so one model and one template serve every such listing in the work.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/models/other_work.ini">other_work</a></dt><dd>A free-form page with a single body: Joyce's essays, and these library pages.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/models/prematter.ini">prematter</a></dt><dd>Front matter belonging to no book, with <code>prematter_index</code> for its listing.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/models/toc.ini">toc</a></dt><dd>The root listing.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/models/page.ini">page</a></dt><dd>A plain title and body, for anything needing no structure at all.</dd>
+</dl>
+
+### Flow blocks
+
+A flow block is a section a page can hold any number of, in order.
+
+<dl class="filelist">
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/flowblocks/prop_section.ini">prop_section</a></dt><dd>One boxed unit of a proposition page — a lemma, the proposition itself, a corollary, a note. Its <code>kind</code> field says which, and the book's contents listing reads the same field to decide what appears as the book's entry for that proposition.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/flowblocks/book_subsection.ini">book_subsection</a></dt><dd>One batch of a book's contents, so definitions and propositions can interleave rather than being forced into two blocks.</dd>
+</dl>
+
+### Templates
+
+<dl class="filelist">
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/templates/layout.html">layout.html</a></dt><dd>The shell every page extends: the head, the diagram library, the header and breadcrumb, and the footer navigation between siblings.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/templates/leaf.html">leaf.html</a></dt><dd>The shared body for anything living under a book — definitions, postulates, common notions, propositions — which is why those pages agree on their furniture without repeating it.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/templates/proposition.html">proposition.html</a></dt><dd>Assembles the sections flow into its boxes, then the guide below them, then the reverse-citation table. <code>definition.html</code>, <code>postulate.html</code> and <code>commonnotion.html</code> do the same for their own fields.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/templates/toc.html">toc.html</a></dt><dd>The root listing, with <code>book.html</code> and <code>section_index.html</code> for the levels beneath it — all drawing on the shared macros in <code>_toc_macros.html</code>, so an entry looks the same wherever it appears.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/templates/_macros_refs.html">_macros_refs.html</a></dt><dd>The <em>referenced by</em> table, which is written nowhere and collected from every citation pointing at the page.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/templates/_imagemap.html">_imagemap.html</a></dt><dd>The pentagonal book map from the original site.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/templates/other_work.html">other_work.html</a></dt><dd>A thin wrapper around a body field, as are <code>page.html</code> and the prematter templates.</dd>
+</dl>
+
+### Content
+
+Every page is a directory holding a `contents.lr` file, and the directory path
+is the URL — so `content/elements/books/bookI/propositions/propI1/` is served at
+`/elements/books/bookI/propositions/propI1/`. Anything sitting beside that file
+is an attachment of the page and is copied through, which is where the original
+diagram images live as fallbacks for readers without scripting.
+
+The tree therefore mirrors the work: books, and under each of them its
+definitions, postulates, common notions and propositions, with the front matter
+and the essays alongside. Nothing computes a page's place from its content;
+position in the tree and the `order` field are enough for the navigation, the
+listings and the breadcrumbs.
+
+### Extensions
+
+Three small plugins, each answering one mismatch between the text and the
+tooling.
+
+<dl class="filelist">
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/packages/lektor-eucrefs">lektor-eucrefs</a></dt><dd>Resolves citations and element references. The prose is dense with cross-references, and hand-written links would not survive a change of URL scheme, so the source names <code>@I.47</code> and the plugin resolves it — and builds the reverse index from the same data. It also renders the <code>{AB}</code> element references.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/packages/lektor-katex">lektor-katex</a></dt><dd>Renders mathematics at build time, so readers are not sent a maths library for the few pages that need one.</dd>
+<dt><a href="https://github.com/brownnrl/euclids-elements-lektor/blob/main/packages/lektor-roman-slug-mimetypes">lektor-roman-slug-mimetypes</a></dt><dd>Forty lines, and the most particular. Book X restarts its definition numbering in three subsections, so those addresses end in fragments like <code>defX.III.6</code>; Python reads the trailing <code>.6</code> as an unrecognised file extension, and the development server offered the pages as downloads instead of displaying them.</dd>
+</dl>
+
+That last one is the honest shape of most of this work — a text's own numbering
+outliving the assumptions of the tools carrying it.
+
+### Element references in the prose
+
+The lettered references in the prose are linked to the figure. Move the cursor
+over one — or tap it on a touch screen — and the element it names lights up in
+the diagram. Every *other* mention of the same element on the page lights up
+with it, so you can see at a glance where else a line or angle is being talked
+about.
+
+Some pages carry more than one figure, and a reference can be tied to a
+particular one — or to several at once, which is useful when two figures show
+the same construction in different cases. The two triangles below share the
+labels {A}, {B} and {C} deliberately, so you can see the difference:
+
+<figure class="diagram">
+<canvas id="canvas_1" width="240" height="190" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_1",
+        background: "0,0,100",
+        title: "First figure",
+        elements: [
+            "A;point;free;120,35",
+            "B;point;free;35,150",
+            "C;point;free;205,150",
+            "AB;line;connect;A,B",
+            "BC;line;connect;B,C",
+            "AC;line;connect;A,C",
+            "ABC;polygon;triangle;A,B,C;0;0;0;cyan"
+        ],
+    });
+</script>
+</figure>
+
+<figure class="diagram">
+<canvas id="canvas_2" width="240" height="190" tabindex="0"></canvas>
+<script type="text/javascript">
+    geomlib.init({
+        canvasid: "canvas_2",
+        background: "0,0,100",
+        title: "Second figure",
+        elements: [
+            "A;point;free;55,35",
+            "B;point;free;35,150",
+            "C;point;free;205,115",
+            "AB;line;connect;A,B",
+            "BC;line;connect;B,C",
+            "AC;line;connect;A,C",
+            "ABC;polygon;triangle;A,B,C;0;0;0;orange",
+            "angABC;sector;angleMarker;B,A,C,24;0;0;magenta;magenta"
+        ],
+    });
+</script>
+</figure>
+
+- Hovering {ABC:canvas_1} lights the triangle in the **first** figure only.
+- Hovering {ABC:canvas_2} lights the **second**.
+- Hovering {ABC:canvas_1,canvas_2} lights **both at once** — the two figures
+  respond together.
+- A reference can also point at something other than what it reads as:
+  hovering {ABC|angABC:canvas_2} says "ABC" but lights the **angle** at *B* in
+  the second figure rather than the triangle.
+- The individual sides work the same way — {AB:canvas_1}, {BC:canvas_1},
+  {AC:canvas_1}.
+
+Highlighting runs both ways: when a step of a proof walk-through lights an
+element, the matching words in the prose light up too.
+
+The reference is written `{ABC}` in the source. The plugin turns it into a
+span bound to a figure, and the binding is what the trailing selector chooses:
+no selector binds to the figure in context, `{ABC:canvas_1}` names one figure,
+a comma-separated list names several, and `{DISPLAY|element}` shows one name
+while lighting another.
+
+### Checking what the build cannot
+
+A static build validates its own model, not yours. A page whose diagram is
+misspecified still builds; the figure simply does not appear, and the page looks
+finished.
+
+So every figure is exercised before anything is published: [check-decks.js](https://github.com/brownnrl/euclids-elements-lektor/blob/main/scripts/check-decks.js) runs each page's diagram
+code against the real library in a sandbox, and a page that throws, or that
+names an element which does not exist, stops the deploy. It paid for itself at
+once, finding a Book IV figure whose element declarations had been transposed
+during conversion and which had been quietly falling back to a static image ever
+since. [check-versions.js](https://github.com/brownnrl/euclids-elements-lektor/blob/main/scripts/check-versions.js) keeps the library
+version consistent, since a version written into prose cannot be templated
+and will rot unnoticed.
+
+### Reusing it
+
+The site is open source at
+[github.com/brownnrl/euclids-elements-lektor](https://github.com/brownnrl/euclids-elements-lektor).
+The models, flow blocks, templates and plugins are the parts worth lifting; the
+content is Joyce's. See [geomlib](/geomlib/) for the diagram library, and the
+[Quickstart](/geomlib/quickstart/) for putting a figure on a page of your own.

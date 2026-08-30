@@ -33,6 +33,14 @@ if ! NODE_PATH="${EUCLID}/node_modules" node scripts/check-decks.js; then
     exit 1
 fi
 
+echo "==> Checking geomlib version consistency"
+# A hand-written CDN snippet in prose can't be templated, so it rots
+# silently. Nothing breaks the build; it just misleads anyone who copies it.
+if ! node scripts/check-versions.js; then
+    echo "!! version check FAILED — refusing to publish. Fix the pins above." >&2
+    exit 1
+fi
+
 echo "==> Building"
 rm -rf build
 "$LEKTOR" build --output-path build

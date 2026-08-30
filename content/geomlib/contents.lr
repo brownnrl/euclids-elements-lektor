@@ -14,6 +14,24 @@ depends on it follows. The original Java applet illustrated Euclid's
 *Elements*; this port does the same job in a modern browser, no JVM
 required.
 
+- [**Quickstart**](/geomlib/quickstart/) — build Euclid's Proposition I.1 from
+  an empty canvas, one construction at a time, with the figure live at every
+  step.
+- [**Using geomlib diagrams**](/geomlib/using/) — how to work the figures:
+  dragging points, the sliders and pivots, and the reset key.
+- [**Constructions**](/geomlib/constructions/) — every construction the
+  library implements, each with a figure you can drag and the element string
+  that produced it.
+- [**Slide transitions**](/geomlib/animations/) — the animations that step a
+  figure from one slide to the next, each with a deck you can walk through.
+- [**Example page**](/geomlib/example/) — a page built the way every page of
+  the text is, whose own content describes each part of it.
+- [**How this site is built**](/geomlib/colophon/) — how a page is modelled so
+  its proof can be stepped through, the extensions written to carry Euclid's own
+  numbering, and the lettered references that tie the prose to the figures.
+- [**Geometry Applet (archival)**](/geomlib/historical/) — Dr. Joyce's
+  original 1996 documentation for the Java applet this library ports.
+
 <figure class="diagram block">
 <canvas id="canvas_0" width="400" height="360" tabindex="0"></canvas>
 <noscript><img alt="The icosahedron" src="propXIII16a.gif"/></noscript>
@@ -98,29 +116,12 @@ automatically. See [Using geomlib diagrams](/geomlib/using/) for the
 full set of interactions (free points vs sliders vs pivots, reset and
 pop-out shortcuts).
 
-### What it does
-
-The library exposes eight element classes — *point*, *line*, *circle*,
-*polygon*, *sector*, *plane*, *sphere*, *polyhedron* — and ~70
-construction methods. All 465 propositions across Books I–XIII of the
-*Elements* are renderable.
-
-Two reference points for what's available:
-
-- [**Quickstart**](https://github.com/brownnrl/euclid/blob/main/doc/quickstart.md)
-  walks through building Proposition I.1 from scratch — a `<canvas>`,
-  a script tag, and a `geomlib.init({...})` with the ordered
-  constructions.
-- [**Constructions reference**](https://github.com/brownnrl/euclid/blob/main/doc/constructions-reference.md)
-  lists every construction available on each element type, with the
-  expected parameters and return shape.
-
 ### Use it on your own page
 
 Drop the bundle in via CDN (no build step):
 
 ```html
-<script src="https://unpkg.com/@brownnrl/geomlib@0.3.0/dist/bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@brownnrl/geomlib@0.15.0/dist/bundle.js"></script>
 ```
 
 Or install from npm:
@@ -149,6 +150,11 @@ Brown.
 Joyce's original 1996 *Geometry Applet* documentation page is
 preserved [here](/geomlib/historical/) for historical reference.
 
+For how this edition itself is put together — where the pages were converted
+from, how a proposition is modelled so its proof can be stepped through, and the
+extensions written to carry Euclid's own numbering — see
+[How this site is built](/geomlib/colophon/).
+
 ### Source + reports
 
 [![tests](https://github.com/brownnrl/euclid/actions/workflows/test.yml/badge.svg)](https://github.com/brownnrl/euclid/actions/workflows/test.yml)
@@ -159,3 +165,28 @@ preserved [here](/geomlib/historical/) for historical reference.
 - **npm package**: [`@brownnrl/geomlib`](https://www.npmjs.com/package/@brownnrl/geomlib)
 - **Code coverage**: [coverage report](https://brownnrl.github.io/geomlib-reports/coverage/)
 - **Visual regression**: [snapshot report](https://brownnrl.github.io/geomlib-reports/snapshots/report.html)
+
+### Library documentation
+
+Fuller documentation lives with the source, in the
+[geomlib repository](https://github.com/brownnrl/euclid):
+
+- [**quickstart.md**](https://github.com/brownnrl/euclid/blob/main/doc/quickstart.md)
+  — Proposition I.1 built line by line. There is an interactive version of it
+  [on this site](/geomlib/quickstart/).
+- [**api.md**](https://github.com/brownnrl/euclid/blob/main/doc/api.md) — every
+  `init()` field, every `E.{Type}.{name}` construction and `A.{Type}.{name}`
+  animation, every accepted colour value.
+- [**constructions-reference.md**](https://github.com/brownnrl/euclid/blob/main/doc/constructions-reference.md)
+  — the table behind the [Constructions](/geomlib/constructions/) page, with
+  each construction's Java ancestor and how often it is used across Books I-III.
+- [**animations-reference.md**](https://github.com/brownnrl/euclid/blob/main/doc/animations-reference.md)
+  — the table behind the [Slide transitions](/geomlib/animations/) page,
+  including the reserved names not yet implemented and the `animationConfig`
+  tuning fields.
+- [**architecture.md**](https://github.com/brownnrl/euclid/blob/main/doc/architecture.md)
+  — the implementation model: the slate, construction dispatch, the drag
+  pipeline, the slideshow surface, the animation orchestrator.
+- [**creating-constructions.md**](https://github.com/brownnrl/euclid/blob/main/doc/creating-constructions.md)
+  and [**creating-animations.md**](https://github.com/brownnrl/euclid/blob/main/doc/creating-animations.md)
+  — adding a construction type, or a slide transition, that isn't there yet.
