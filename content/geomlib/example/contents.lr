@@ -1,0 +1,142 @@
+_model: proposition
+---
+title: Example page
+---
+order: 7
+---
+short_label: Example
+---
+sections:
+
+#### prop_section ####
+kind: lemma
+----
+label: A lemma box
+----
+proof:
+
+This page is a working example of the structure the rest of the site is written
+in. It uses the real proposition model and the real template; nothing here is
+mocked up in HTML.
+
+A page's body is a list of sections, and each section renders as its own box.
+Sections of kind `lemma` come first, before the proposition, because that is the
+order Euclid's text puts them in.
+
+#### prop_section ####
+kind: proposition
+----
+statement: A statement field holds the claim, set apart at the head of its box and quoted by other pages.
+----
+proof:
+
+The proof field is ordinary markdown with three additions.
+
+The first is an element reference. Writing {A} or {AB} in the prose binds it to
+the figure alongside — hover the letters here and the matching part of the
+diagram lights up, and hovering the diagram works in reverse.
+
+<figure class="diagram">
+<canvas id="canvas_0" width="330" height="250" tabindex="0"></canvas>
+<script type="text/javascript">
+    // The construction of I.1, used here only because it is the smallest
+    // figure that has something worth stepping through.
+    var START = ["A","B","AB"];
+    var CIRC = START.concat(["BCD","ACE"]);
+    var APEX = CIRC.concat(["C","AC","BC"]);
+    var DONE = APEX.concat(["ABC"]);
+    geomlib.init({
+        canvasid: "canvas_0",
+        background: "35,19,100",
+        title: "Example figure",
+        pivot: "C",
+        elements: [
+            "A;point;free;110,160",
+            "B;point;free;210,160",
+            "AB;line;connect;A,B",
+            "BCD;circle;radius;A,B",
+            "ACE;circle;radius;B,A",
+            "CD;line;bichord;BCD,ACE;0;0;0",
+            "C;point;first;CD",
+            "AC;line;connect;A,C",
+            "BC;line;connect;B,C",
+            "ABC;polygon;triangle;A,B,C;0;0;black;cyan"
+        ],
+        initiallyHidden: ["BCD","ACE","CD","C","AC","BC","ABC"],
+        slides: [
+            { text: "A slide names which elements are visible and which are highlighted. Here, only the given line {AB}.",
+              visible: START,
+              highlighted: ["AB"] },
+            { text: "Describe the two circles. A transition animates the step rather than cutting to it.",
+              visible: CIRC,
+              highlighted: ["BCD","ACE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BCD", name: geomlib.A.Circle.compass },
+                  { elem: "ACE", name: geomlib.A.Circle.compass } ] },
+              justifications: [{ ref: "I.Post.3" }] },
+            { text: "Join {AC} and {BC}, where the circles cut at {C}.",
+              visible: APEX,
+              highlighted: ["AC","BC","C"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "The triangle {ABC} is equilateral. A justification on a slide links out the same way a marginal one does.",
+              visible: DONE,
+              highlighted: ["ABC"],
+              transition: { animations: [ { elem: "ABC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.Def.15" }, { ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "I.Post.3":  "/elements/books/bookI/postulates/post3/",
+        "I.Def.15":  "/elements/books/bookI/definitions/defI15_18/"
+    });
+</script>
+</figure>
+
+The second addition is a justification. A step that leans on something earlier
+names it, and it renders in the margin beside the step rather than interrupting
+it. [!just I.Post.3]
+
+The same figure also carries a slide walk. The element list above is the only
+description of the geometry; the slides say which parts of it are on screen at
+each step, so the static diagram and the stepped proof cannot disagree. Press
+the present control under the figure to walk it. [!just I.Post.1]
+
+The third addition is the citation token used in commentary rather than proof —
+`@I.47` resolves to whichever URL that proposition currently has, so the prose
+survives a change of scheme.
+
+<div class="qed">Q.E.D.</div>
+----
+guide:
+
+The guide field is commentary on the page as a whole. It renders once, below
+every box, under its own heading — so a page reads as its boxes in order and
+then its commentary, wherever the proposition section happens to sit among them.
+
+This is where a citation like @I.1 belongs: prose that discusses the text rather
+than proves something in it.
+
+#### prop_section ####
+kind: note
+----
+label: A note box
+----
+guide:
+
+A section of kind `note` or `remark` carries its commentary inside its own box,
+because the box *is* the remark. These come after the proposition, matching the
+layout of the books that have them.
+
+Below this you would normally see a *referenced by* table, listing the pages
+whose justifications point here. It is empty on this page: the reverse index is
+built by walking the text itself, so an example living outside it neither
+appears in that index nor inserts itself into anyone else's.

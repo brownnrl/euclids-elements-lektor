@@ -535,6 +535,60 @@ section.footnotes li:target {
 }
 
 
+
+/* --- File enumerations --------------------------------------------------
+   Models, flow blocks, templates: a name and a sentence about it, repeated.
+   As a run of bold-led paragraphs that reads as an undifferentiated wall,
+   so set it as a two-column reference table — name on the left, description
+   on the right, hairline between rows — collapsing to a stacked list on a
+   narrow screen. */
+dl.filelist {
+    display: grid;
+    grid-template-columns: minmax(10.5em, max-content) 1fr;
+    gap: 0;
+    margin: 1.1em 0 1.7em;
+    border-top: 1px solid #e6dfd2;
+}
+dl.filelist dt,
+dl.filelist dd {
+    border-bottom: 1px solid #e6dfd2;
+    padding: 0.6em 0;
+    margin: 0;
+}
+dl.filelist dt {
+    font-family: monospace;
+    font-size: 92%;
+    padding-right: 1.2em;
+    /* Names wrap rather than forcing the column wider than the prose. */
+    word-break: break-word;
+}
+dl.filelist dt a {
+    color: #0020C2;
+    text-decoration: none;
+    border-bottom: 1px dotted #9aa6e0;
+}
+dl.filelist dt a:hover,
+dl.filelist dt a:focus-visible {
+    border-bottom-style: solid;
+}
+dl.filelist dd {
+    padding-left: 1.2em;
+    line-height: 1.45;
+}
+@media (max-width: 640px) {
+    dl.filelist {
+        grid-template-columns: 1fr;
+    }
+    dl.filelist dt {
+        border-bottom: 0;
+        padding-bottom: 0.1em;
+    }
+    dl.filelist dd {
+        padding-left: 0;
+        padding-top: 0.15em;
+    }
+}
+
 /* --- Code samples -------------------------------------------------------
    Set INTO the page rather than floating on it: a tinted ground a shade off
    the parchment, a hairline border, and an inset shadow along the top edge so
