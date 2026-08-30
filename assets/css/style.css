@@ -472,6 +472,15 @@ figure.diagram canvas {
 .red-highlight {
     color: #bb0033;
 }
+/* Joyce closed his <font color> before a proposition's corollary / lemma /
+   remark entry, so those sit black in the contents under a red proposition —
+   see bookXIII, where props 13-18 are coloured but their corollaries are not.
+   The colour on the <dd> would otherwise inherit into every child <p>. A
+   section that IS coloured in the original carries its own red_highlight and
+   is excluded here. */
+dl dd.red-highlight > p:not(.red-highlight) {
+    color: initial;
+}
 
 /* Reference table (lektor-eucrefs `referenced_by` / `forward_refs`):
    citation cross-references grouped by book, under a "Referenced by"

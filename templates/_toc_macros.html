@@ -14,7 +14,9 @@
                        "lemma": "lemma", "note": "note", "remark": "remark"} %}
 {% macro sec_anchor(s) %}{{ s.anchor if s.anchor else _kind_anchor.get(s.kind, s.kind) }}{% endmacro %}
 
-{% macro sec_inline(item, s) %}<b><a href="{{ item|url }}#{{ sec_anchor(s) }}">{{ sec_label(item, s) }}.</a></b>{% if s.statement %} {{ s.statement }}{% endif %}{% endmacro %}
+{# `toc_summary` wins over `statement`: a section whose index wording differs
+   from its page wording carries both, and the listing wants the former. #}
+{% macro sec_inline(item, s) %}<b><a href="{{ item|url }}#{{ sec_anchor(s) }}">{{ sec_label(item, s) }}.</a></b>{% if s.toc_summary %} {{ s.toc_summary }}{% elif s.statement %} {{ s.statement }}{% endif %}{% endmacro %}
 
 {# Single TOC row: <dt> with the title link, then <dd> with the
    first section's content + trailing <p>s for any extra sections.
