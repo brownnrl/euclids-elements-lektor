@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+{# Entries come from databags/subject_index.json, converted once from Joyce's
+   hand-written HTML by scripts/subjindex_to_json.py. Terms and labels may
+   carry inline markup (<i>) and entities, so they render raw. #}
+{% set idx = bag('subject_index') %}
+
+<h1>{{ this.title }}</h1>
+{% if this.body %}{{ this.body }}{% endif %}
+
+<center><h4 class="idx-nav">
+{%- for l in idx.letters %}
+<a href="#{{ l.id }}">{{ l.title }}</a>
+{%- endfor %}
+</h4></center>
+
+{% for l in idx.letters %}
+<h4 id="{{ l.id }}">{{ l.title }}</h4>
+{% if l.entries %}
+<div class="threecolumn">
+{% for e in l.entries %}
+  {#- Each fragment renders verbatim: the source puts citations at the end of
+      most entries but mid-sentence in a few ("See <a>angle</a>, acute"), so
+      re-assembling them from the citation list would reorder those. -#}
+  <div class="idx-entry"{% if e.anchor %} id="{{ e.anchor }}"{% endif %}>
+    <span class="idx-term">{{ e.html|safe }}</span>
+    {%- if e.see_also %}
+    <span class="idx-see">{{ e.see_also.html|safe }}</span>
+    {%- endif %}
+    {%- for s in e.subentries %}
+    <span class="idx-sub">{{ s.html|safe }}</span>
+    {%- endfor %}
+  </div>
+{% endfor %}
+</div>
+{% endif %}
+{% endfor %}
+{% endblock %}

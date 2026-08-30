@@ -27,13 +27,14 @@ conversion split those bundles into a page per definition and left the index
 pointing at the old bundle heads. Eleven of them addressed group pages that
 are `_hidden` and therefore never built, so they were live 404s.
 """
+import json
 import os
 import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT = os.path.join(ROOT, "content")
-SUBJINDEX = os.path.join(CONTENT, "elements/prematter/subjindex/contents.lr")
+DATABAG = os.path.join(ROOT, "databags/subject_index.json")
 
 # (href, link text) pairs where Joyce's own page has the same mismatch.
 # Verified against the mirror of aleph0.clarku.edu/~djoyce/elements/subjindex.html.
@@ -118,61 +119,71 @@ def anchors_of(url):
 
 
 def main():
-    src = open(SUBJINDEX, encoding="utf-8").read()
+    idx = json.load(open(DATABAG, encoding="utf-8"))
     labels = page_labels()
 
-    anchors = set(re.findall(r'id="([^"]+)"', src))
+    anchors = {e["anchor"] for l in idx["letters"] for e in l["entries"]
+               if e.get("anchor")}
+    anchors |= {l["id"] for l in idx["letters"]}
     problems = []
-
-    # 1. internal See-references
-    for target in re.findall(r'href="#([^"]+)"', src):
-        if target not in anchors:
-            problems.append(("dead-anchor", "#%s" % target, "no id=\"%s\" on the page" % target))
-
-    # 2 + 3. citation links
-    seen_ok = 0
+    checked = 0
     section_anchors = {}
-    for href, text in re.findall(r'href="(/elements/[^"]*)"\s*>(.*?)</a>', src, re.S):
-        text = " ".join(re.sub(r"<[^>]+>", "", text).split())
+
+    def check_cite(c, where):
+        nonlocal checked
+        checked += 1
+        href, label = c["href"], c["label"]
+        if href.startswith("#"):
+            if href[1:] not in anchors:
+                problems.append(("dead-anchor", where, "%s matches no entry" % href))
+            return
         path, _, fragment = href.partition("#")
         key = path if path.endswith("/") else path + "/"
         if key not in labels:
-            problems.append(("missing-page", href, "no such page"))
-            continue
+            problems.append(("missing-page", where, "%s — no such page" % href))
+            return
         # Lektor drops the trailing slash on a slug containing a dot (Book X's
         # defX.I.1 and friends) and emits the page as a FILE of that name, so
         # the directory form is a 404 in production. Verified against the live
         # site: no-slash 200, trailing-slash 404.
         if path.endswith("/") and "." in key.rstrip("/").rsplit("/", 1)[-1]:
-            problems.append(("trailing-slash", href,
-                             "dotted slug — drop the trailing slash or it 404s"))
-            continue
-        # A citation may address a section of a page (a lemma, a corollary).
-        # Check the anchor exists rather than trusting it.
+            problems.append(("trailing-slash", where,
+                             "%s — dotted slug, drop the trailing slash" % href))
+            return
         if fragment:
-            if path not in section_anchors:
-                section_anchors[path] = anchors_of(key)
-            if fragment not in section_anchors[path]:
-                problems.append(("dead-section", href,
-                                 "page has no section anchored #%s" % fragment))
-                continue
+            if key not in section_anchors:
+                section_anchors[key] = anchors_of(key)
+            if fragment not in section_anchors[key]:
+                problems.append(("dead-section", where,
+                                 "%s — page has no section anchored #%s" % (href, fragment)))
+                return
         want = labels[key]
         if want is None:
-            seen_ok += 1
-            continue
-        # With a fragment the text names the section, not just the page:
-        # "X.29.Lemma1" against a page labelled X.29.
-        if fragment and want and text.startswith(want):
-            seen_ok += 1
-            continue
-        if label_agrees(text, want) or KNOWN_DISCREPANCIES.get(href) == text:
-            seen_ok += 1
-        else:
-            problems.append(("label-mismatch", href, 'reads "%s", target is %s' % (text, want)))
+            return
+        if fragment and label.startswith(want):
+            return
+        if label_agrees(label, want) or KNOWN_DISCREPANCIES.get(href) == label:
+            return
+        problems.append(("label-mismatch", where,
+                         '%s reads "%s", target is %s' % (href, label, want)))
 
-    print("subject index      : %s" % os.path.relpath(SUBJINDEX, ROOT))
+    for letter in idx["letters"]:
+        for e in letter["entries"]:
+            where = "%s / %s" % (letter["id"], e["text"])
+            for c in e.get("cites", []):
+                check_cite(c, where)
+            if e.get("see_also"):
+                for c in e["see_also"]["cites"]:
+                    check_cite(c, where + " (see also)")
+            for sub in e.get("subentries", []):
+                for c in sub["cites"]:
+                    check_cite(c, "%s / %s" % (where, sub["text"]))
+
+    entries = sum(len(l["entries"]) for l in idx["letters"])
+    print("subject index      : %s" % os.path.relpath(DATABAG, ROOT))
+    print("letters / entries  : %d / %d" % (len(idx["letters"]), entries))
     print("anchors            : %d" % len(anchors))
-    print("links checked      : %d" % (seen_ok + len(problems)))
+    print("references checked : %d" % checked)
     print("known discrepancies: %d (Joyce's own — see KNOWN_DISCREPANCIES)"
           % len(KNOWN_DISCREPANCIES))
     print("problems           : %d" % len(problems))
