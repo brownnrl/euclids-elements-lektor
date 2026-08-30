@@ -6,62 +6,23 @@ order: 6
 ---
 body:
 
-This edition is a static site built with [Lektor](https://www.getlektor.com/).
-Every page is generated ahead of time from plain text files, so nothing is
-queried when a proposition is opened — the browser receives finished HTML, and
-the only code that runs is the diagram library.
+The site is a static one, built with [Lektor](https://www.getlektor.com/). What
+follows is what a page is made of and why, for anyone who wants to borrow the
+arrangement.
 
-This page describes how it is put together, and why it is put together that way,
-for anyone who wants to build something similar: a structured text whose parts
-are addressed individually and whose figures are live.
+### A page
 
-### The problem the structure solves
+Take [Proposition I.1](/elements/books/bookI/propositions/propI1/). A reader
+sees the statement in a boxed heading, the proof beneath it, small citations in
+the margin beside the steps they support, a figure that can be dragged and also
+stepped through the proof one line at a time, and Joyce's commentary below the
+whole thing.
 
-A proposition is not one piece of prose. It has a statement, a proof, marginal
-justifications for the proof's steps, one or more figures, and commentary about
-the whole. Those parts are read differently and used differently. The proof is
-stepped through; the commentary stays put beside it. The statement is quoted by
-other pages. A justification points at the postulate it leans on.
-
-If the page is written as one blob of markup, none of that is available: the
-parts exist only typographically, and any interaction has to re-find them by
-guessing at the HTML. So the first decision is that the content model names the
-parts, and the template assembles them. Everything interactive on this site
-follows from that one choice.
-
-### The project
-
-```
-euclids-elements.lektorproject   project config and publish targets
-models/            one .ini per content type — the fields a page of that kind has
-flowblocks/        repeatable sub-sections a page can hold any number of
-templates/         one .html per model, plus the shared layout
-content/           the pages themselves, as contents.lr text files
-packages/          local plugins
-assets/            css, js, images, copied through to the output
-scripts/           build-time checks
-```
-
-**`models/`** is where the shape of a page is declared. There is a model per
-kind of thing the text contains — proposition, definition, postulate, common
-notion, book, essay — rather than one generic page model, because they differ in
-what they must carry and in how they are cited. A postulate has no proof; a book
-has a table of contents assembled from its children.
-
-**`flowblocks/`** covers the cases where a page holds a variable number of
-something. Not every proposition is just a proposition: some carry a lemma
-before, or a corollary after. Modelling the body as a *list of sections* rather
-than a fixed proof field means those pages need no special case.
-
-**`templates/`** turn a model's fields into HTML. Because the fields are
-separate, the template can wrap each section in its own box, put justifications
-in the margin, and render the guide commentary below — decisions that would be
-hard-coded into the prose otherwise.
-
-### One page in full
-
-A page is a `contents.lr` file in a directory; the directory path is the URL.
-Fields are separated by a line of three dashes, and flow blocks by a `#### name ####` line with `----` between their fields. Proposition I.1 begins:
+None of that is one piece of prose. The statement is quoted by other pages. The
+proof is walked. The citations point at the postulates they lean on and are
+collected back into a *used in* list on those pages. The commentary stays put
+while the proof moves. So the page is stored as those parts, separately, and the
+template puts them back together:
 
 <pre><code>_model: proposition
 &#45;&#45;&#45;
@@ -82,107 +43,150 @@ proof:
 
 Let {AB} be the given finite straight line.
 
-&lt;figure class="diagram"&gt;
-&lt;canvas id="canvas_0" width="340" height="260" tabindex="0"&gt;&lt;/canvas&gt;
-&lt;script type="text/javascript"&gt;
-geomlib.init({
-    canvasid: "canvas_0",
-    elements: [
-        "A;point;free;125,130",
-        "B;point;free;215,130",
-        "AB;line;connect;A,B",
-        ...
-    ],
-    slides: [ ... ],
-});
-&lt;/script&gt;
-&lt;/figure&gt;
+&lt;figure class="diagram"&gt; … the geomlib element list and slides … &lt;/figure&gt;
 
 Describe the circle BCD with centre A and radius AB. [!just I.Post.3]
-...
+…
 ----
 guide:
-...
+
+This proposition is the first…
 </code></pre>
 
-`_model` picks both the field set and the template. `short_label` is the
-citation form other pages use. `order` sorts it among its siblings, which is
-also what drives the previous/next navigation, so no page needs to know its
-neighbours.
+`_model` picks both the field set and the template. Fields are separated by a
+line of three dashes, and a flow block opens with `#### name ####` and separates
+its own fields with four. `short_label` is the form other pages cite. `order`
+sorts the page among its siblings, which is also what drives the previous and
+next links, so no page needs to know its neighbours.
 
-Three things in the proof body are worth pointing at, because each is a small
-extension rather than plain markdown:
+Three things inside the proof are extensions rather than plain markdown.
+`{AB}` marks an element reference, bound to the figure beside it, so hovering
+the letters lights the matching part of the diagram. `[!just I.Post.3]` is a
+justification, rendered in the margin and linked to what it names. And the
+figure's element list feeds both the static diagram and the stepped proof, so
+there is one description of the geometry rather than two that can disagree.
 
-- **`{AB}`** marks an element reference. It becomes a span bound to the figure
-  beside it, so hovering the letters in the prose lights the matching element in
-  the diagram. Described on the [Using](/geomlib/using/) page.
-- **`[!just I.Post.3]`** is a justification. It renders in the margin next to
-  the step it supports and links to the postulate it names.
-- **The `<figure>`** carries the diagram as an element list. The same list also
-  feeds `slides`, so the static figure and the stepped proof are one source of
-  truth rather than two descriptions that can disagree.
+### Models
 
-### Modelling the source, not an idealised version of it
+A model is the set of fields a kind of page has. There is one per kind of thing
+the text contains, rather than a single generic page, because they differ in
+what they carry and in how they are cited.
 
-Joyce often wrote several definitions in one file, with a single commentary
-covering the group. The tempting move is to flatten that — split them into
-independent pages and duplicate the commentary, or merge them into one page and
-lose the individual addresses.
+**Proposition** holds a title, a citation label, and a list of sections. The
+list is what lets a page carry a lemma before the proposition or a corollary
+after it without a special case. It can also pin its own library version, for
+testing a figure against an unreleased build.
 
-Neither is right, so there is a **definition bundle**: each definition gets its
-own page and its own citable address, while a hidden bundle page holds the
-shared commentary. Nothing is duplicated and nothing loses its address.
+**Definition**, **Postulate** and **Common notion** each hold a statement and a
+guide. Definitions additionally name the group they belong to and the book
+subsection they sit in.
 
-This is the general lesson of the conversion. Where the source's structure
-disagrees with the structure you would have chosen, model the source. The
-awkwardness is real and will resurface later as a broken link if it is papered
-over.
+**Definition group** and **Common notion group** hold a guide and nothing else.
+They exist because Joyce often wrote several definitions in one file under one
+shared commentary; the group is a hidden page holding that commentary, so each
+definition can still have its own address without the commentary being copied.
 
-### Extending the generator
+**Book** holds the book's introduction and its contents, the latter as a list of
+subsections interleaving definitions and propositions the way the original did.
 
-Three local plugins live in `packages/`, each answering one mismatch between the
-text and the tooling.
+**Section index** is the listing for one kind of child — a book's definitions,
+or its propositions. It names its child model as a field, so one model and one
+template serve every such listing in the work.
 
-**Citations and element references.** The prose is dense with cross-references.
-Hand-written links would not survive a change of URL scheme, so the source says
-`@I.47` and the plugin resolves it. The same plugin builds the reverse index:
-the *this proposition is used in…* list at the foot of a page is written nowhere,
-but collected from every citation that points at that page. It also renders the
-`{AB}` element references.
+**Other work** is a free-form page with a single body: Joyce's essays, and these
+library pages. **Prematter** and **Prematter index** cover the front matter that
+belongs to no book. **Table of contents** is the root listing. **Page** is a
+plain title and body, for anything needing no structure at all.
 
-**Mathematics** is rendered at build time rather than in the browser, so readers
-are not sent a maths library for the few pages that need one.
+### Flow blocks
 
-**Roman-numeral URLs** is the smallest and most particular. Book X restarts its
-definition numbering in three subsections, so addresses end in fragments like
-`defX.III.6`. Python reads the trailing `.6` as an unrecognised file extension,
-and the development server offered those pages as downloads instead of
-displaying them. Forty lines to say that these are pages.
+A flow block is a section a page can hold any number of, in order.
 
-That last one is the honest shape of most of this work: a text's own numbering
-outliving the assumptions of the tools carrying it.
+**Proposition section** is one boxed unit of a proposition page — a lemma, the
+proposition itself, a corollary, a note. Its `kind` field says which, and the
+book's contents listing reads the same field to decide what appears as the
+book's entry for that proposition.
 
-### Checking what the generator cannot
+**Book subsection** is one batch of a book's contents, so definitions and
+propositions can interleave rather than being forced into two blocks.
 
-A static build validates its own model, not yours. Lektor will happily produce a
-page whose diagram is misspecified — the figure simply does not appear, and the
-page still looks finished.
+### Templates
 
-So every figure on the site is exercised before anything is published. Each
-page's diagram code is run against the real library in a sandbox, and a page that
-throws, or that names an element which does not exist, stops the deploy. The
-check paid for itself immediately: it found a Book IV figure whose element
-declarations had been transposed during conversion, which had been silently
-falling back to a static image ever since it was written.
+**layout.html** is the shell every page extends: the head, the diagram library,
+the header and breadcrumb, and the footer navigation between siblings.
 
-A second check keeps the library version consistent, because a version written
-into prose cannot be templated and will rot without anyone noticing.
+**leaf.html** is the shared body for anything living under a book — definitions,
+postulates, common notions, propositions — which is why those pages agree on
+their furniture without repeating it.
+
+**proposition.html**, **definition.html**, **postulate.html** and
+**commonnotion.html** assemble each model's fields: the statement and proof into
+their boxes, the justifications into the margin, the guide below, and the
+reverse-citation table at the foot.
+
+**book.html**, **section_index.html** and **toc.html** are the listing pages,
+all drawing on the shared macros in **_toc_macros.html** so an entry looks the
+same wherever it appears.
+
+**_macros_refs.html** renders the *referenced by* table, which is written
+nowhere and collected from every citation pointing at the page.
+**_imagemap.html** is the pentagonal book map from the original site.
+
+**other_work.html**, **page.html** and the prematter templates are thin wrappers
+around a body field.
+
+### Content
+
+Every page is a directory holding a `contents.lr` file, and the directory path
+is the URL — so `content/elements/books/bookI/propositions/propI1/` is served at
+`/elements/books/bookI/propositions/propI1/`. Anything sitting beside that file
+is an attachment of the page and is copied through, which is where the original
+diagram images live as fallbacks for readers without scripting.
+
+The tree therefore mirrors the work: books, and under each of them its
+definitions, postulates, common notions and propositions, with the front matter
+and the essays alongside. Nothing computes a page's place from its content;
+position in the tree and the `order` field are enough for the navigation, the
+listings and the breadcrumbs.
+
+### Extensions
+
+Three small plugins, each answering one mismatch between the text and the
+tooling.
+
+The first resolves citations and element references. The prose is dense with
+cross-references, and hand-written links would not survive a change of URL
+scheme, so the source names `@I.47` and the plugin resolves it — and builds the
+reverse index from the same data.
+
+The second renders mathematics at build time, so readers are not sent a maths
+library for the few pages that need one.
+
+The third is forty lines, and the most particular. Book X restarts its
+definition numbering in three subsections, so those addresses end in fragments
+like `defX.III.6`; Python reads the trailing `.6` as an unrecognised file
+extension, and the development server offered the pages as downloads instead of
+displaying them. That is the honest shape of most of this work — a text's own
+numbering outliving the assumptions of the tools carrying it.
+
+### Checking what the build cannot
+
+A static build validates its own model, not yours. A page whose diagram is
+misspecified still builds; the figure simply does not appear, and the page looks
+finished.
+
+So every figure is exercised before anything is published: each page's diagram
+code runs against the real library in a sandbox, and a page that throws, or that
+names an element which does not exist, stops the deploy. It paid for itself at
+once, finding a Book IV figure whose element declarations had been transposed
+during conversion and which had been quietly falling back to a static image ever
+since. A second check keeps the library version consistent, since a version
+written into prose cannot be templated and will rot unnoticed.
 
 ### Reusing it
 
 The site is open source at
 [github.com/brownnrl/euclids-elements-lektor](https://github.com/brownnrl/euclids-elements-lektor).
 The models, flow blocks, templates and plugins are the parts worth lifting; the
-content is Joyce's. See [geomlib](/geomlib/) for the diagram library itself, and
-the [Quickstart](/geomlib/quickstart/) for putting one figure on a page of your
-own.
+content is Joyce's. See [geomlib](/geomlib/) for the diagram library, and the
+[Quickstart](/geomlib/quickstart/) for putting a figure on a page of your own.
