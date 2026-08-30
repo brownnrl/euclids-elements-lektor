@@ -100,6 +100,57 @@ The hidden group page still gets a URL (its own template renders a minimal landi
 
 Lektor's Mistune does NOT process markdown inside raw HTML blocks. Anywhere a markdown body contains a `<figure>`, `<div class="just">`, `<blockquote class="axiom">`, etc., put plain HTML inside (use `<i>` for italics, `<a href>` for links). Failing to do this leaves `*x*` and `[X](Y)` rendering as literal text.
 
+## The subject index
+
+The subject index is the one page whose content is not in its `contents.lr`. It
+is `databags/subject_index.json` — 27 letters, 270 entries, 565 sub-entries, 864
+references — rendered by `templates/subject_index.html` through the
+`subject_index` model. The `.lr` file carries only the model and the title.
+
+Each entry is a record rather than a line of markup:
+
+```json
+{"term": "algorithm, Euclidean",
+ "see": {"refs": [{"href": "#euclideanalgorithm", "label": "Euclidean algorithm"}]}}
+```
+
+- `term` — the heading text. May carry inline emphasis (`<i>Elements</i>`), never anchors.
+- `anchor` — makes the entry a target for other entries' `see` / `see_also`.
+- `cites` — the citations, in order. `href` plus the `label` as printed.
+- `see` / `see_also` — `{refs: [...], tail?}`. `refs` is a list: one See may
+  name several targets. `tail` is prose qualifying them ("See angle, **acute**").
+- `href` + `tail` — a term that is itself a link, with prose after it. One entry
+  uses this (Euclid).
+- `subentries` — the same record shape, one level down.
+
+`scripts/check-subjindex.py` resolves every reference at build time — anchors
+against entries, citations against real pages, fragments against the target's
+section anchors, and each printed label against the target's own `short_label`.
+It gates `publish.sh`.
+
+### Two things to know
+
+**It has its own model, so model-name filters miss it.** `toc.html` and
+`prematter_index.html` select prematter children with
+`F._model == "prematter"`; both concatenate a second query for
+`subject_index`, or the page silently drops out of every listing and becomes
+unreachable.
+
+**It was converted from HTML once.** Joyce's index was a 1500-line body of
+`<br>`-separated entries. The converter was a one-off and is not kept: its
+input no longer exists in the tree, so it could not run. To redo the conversion,
+recover the body from the commit that retired it and adapt from there:
+
+```sh
+git log --diff-filter=M --format=%H -- content/elements/prematter/subjindex/contents.lr
+git show <commit>^:content/elements/prematter/subjindex/contents.lr > /tmp/old.lr
+```
+
+The conversion found 121 broken links, all artifacts of this edition rather
+than errors of Joyce's — his files bundled several definitions each, so his
+index pointed at bundle heads that this edition had split into a page per
+definition.
+
 ## Things that are vanilla Lektor
 
 - Build via `lektor build --output-path build/`
