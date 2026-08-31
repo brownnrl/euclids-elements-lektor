@@ -21,6 +21,17 @@ Let *A* and *BC* be two straight lines, and let *BC* be cut at random at the poi
 <canvas id="canvas_0" width="330" height="250" tabindex="0"></canvas>
 <noscript><img src="propII1.gif" alt="II.1"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the three rectangles but not the whole one they
+    // make up, and not the segments of BC — the proof names both. Everything
+    // added here is fully transparent (;0;0;0;0), so the static figure is
+    // unchanged; the names exist only so a slide can light them.
+    //
+    // Colour: the three parts keep their random fills, and the containing
+    // rectangle BCHG stays unfilled so its own regions fill it.
+    var GIVEN  = ["A1","A2","A","B","C","BC","D","E","BD","DE","EC"];
+    var PERP   = GIVEN.concat(["F","BF","G","BG"]);
+    var BUILT  = PERP.concat(["K","L","H","DBGK","EDKL","CELH","GH","DK","EL","CH"]);
+    var WHOLE  = BUILT.concat(["BCHG"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -46,8 +57,81 @@ Let *A* and *BC* be two straight lines, and let *BC* be cut at random at the poi
             "EDKL;polygon;parallelogram;E,D,K;0;0;0,0,0;random",
             "L;point;vertex;EDKL,4",
             "CELH;polygon;parallelogram;C,E,L;0;0;0,0,0;random",
-            "H;point;vertex;CELH,4"
+            "H;point;vertex;CELH,4",
+            // Hover / highlight targets only — the lines above already draw
+            // every one of these.
+            "BD;line;connect;B,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            "BG;line;connect;B,G;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "DK;line;connect;D,K;0;0;0",
+            "EL;line;connect;E,L;0;0;0",
+            "CH;line;connect;C,H;0;0;0",
+            // The whole rectangle, which the proof calls BH. Unfilled: its
+            // three parts carry the colour.
+            "BCHG;polygon;quadrilateral;B,C,H,G;0;0;0;0"
         ],
+        aliases: { "BH": "BCHG", "BK": "DBGK", "DL": "EDKL", "EH": "CELH",
+                   "GB": "BG", "KD": "DK", "LE": "EL", "HC": "CH",
+                   "CB": "BC", "DB": "BD", "ED": "DE", "CE": "EC" },
+        slides: [
+            { text: "Let {A} and {BC} be two straight lines, and let {BC} be cut at random at the points {D} and {E}.",
+              visible: GIVEN,
+              highlighted: ["A","BC","D","E"] },
+            { text: "I say that the rectangle {A} by {BC} equals the sum of the rectangle {A} by {BD}, the rectangle {A} by {DE}, and the rectangle {A} by {EC}.",
+              visible: GIVEN,
+              highlighted: ["A","BD","DE","EC"] },
+            { text: "Draw {BF} from {B} at right angles to {BC}, and make {BG} equal to {A}.",
+              visible: PERP,
+              highlighted: ["BF","BG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "BF at right angles to BC", ref: "I.11" },
+                  { claim: "BG cut off equal to A",    ref: "I.3" } ] },
+            { text: "Draw {GH} through {G} parallel to {BC}, and through {D}, {E} and {C} draw {DK}, {EL} and {CH} parallel to {BG}.",
+              visible: BUILT,
+              highlighted: ["DBGK","EDKL","CELH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DBGK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "EDKL", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "CELH", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "parallels through G, D, E and C", ref: "I.31" }] },
+            { text: "Then {BH} equals the sum of {BK}, {DL} and {EH}.",
+              visible: WHOLE,
+              highlighted: ["BCHG","DBGK","EDKL","CELH"],
+              transition: { animations: [
+                  { elem: "BCHG", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Now {BH} is the rectangle {A} by {BC}, for it is contained by {GB} and {BC}, and {BG} equals {A}.",
+              visible: WHOLE,
+              highlighted: ["BCHG","BG","BC","A"],
+              justifications: [{ claim: "the rectangle contained by GB and BC", ref: "II.Def.1" }] },
+            { text: "{BK} is the rectangle {A} by {BD}, and {DL} is the rectangle {A} by {DE}, since {DK} equals {BG}. Similarly {EH} is the rectangle {A} by {EC}.",
+              visible: WHOLE,
+              highlighted: ["DBGK","EDKL","CELH","BD","DE","EC","DK"],
+              justifications: [
+                  { claim: "opposite sides of a parallelogram are equal", ref: "I.34" },
+                  { claim: "each part is contained by A and a segment",   ref: "II.Def.1" } ] },
+            { text: "So the rectangle {A} by {BC} equals the sum of the rectangles {A} by {BD}, {A} by {DE}, and {A} by {EC}.",
+              visible: WHOLE,
+              highlighted: ["BCHG","DBGK","EDKL","CELH"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "I.11":      "/elements/books/bookI/propositions/propI11/",
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "I.34":      "/elements/books/bookI/propositions/propI34/",
+        "II.Def.1":  "/elements/books/bookII/definitions/defII1/"
     });
 </script>
 </figure>

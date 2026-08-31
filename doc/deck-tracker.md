@@ -38,8 +38,9 @@ authored with markers against the current pattern becomes rework when
 | Scope | Props | Decks done | Need #91 rework |
 |---|---|---|---|
 | Book I | **48** | **48 (I.1–I.48 — COMPLETE)** | markers on 0.14.0 (see open Qs) |
-| Books II–XIII | 417 | 0 | — |
-| **Total** | **465** | **48** | — |
+| Book II | 14 | 1 (II.1) | — |
+| Books III–XIII | 403 | 0 | — |
+| **Total** | **465** | **49** | — |
 
 ---
 
@@ -101,7 +102,20 @@ Decks are authored in order. Kind: **C** = construction ("To …"),
 
 ---
 
-## Books II–XIII
+## Book II
+
+Geometric algebra: the propositions are about *regions*, so the colour
+carries more of the argument here than in Book I. The recurring shape is a
+whole rectangle decomposed into parts — the I.41 / I.47 idiom applies
+directly, with **the containing figure left unfilled so its own parts fill
+it**. Tracked in [#20](https://github.com/brownnrl/euclids-elements-lektor/issues/20).
+
+| # | Gist | Kind | Status | Slides | Animations | Angle (#91) | Notes |
+|---|---|---|---|---|---|---|---|
+| II.1 | Rectangle on a cut line = sum of the parts | T | ✅ | 8 | Line.straightEdgeConnect, Polygon.outline, Polygon.outlineAndFill | ✓ | **First Book II deck, and the first to use `claim`** (@II.146) — the construction slide pairs "BF at right angles to BC"/@I.11 with "BG cut off equal to A"/@I.3 rather than splitting into two beats. Joyce's figure draws the three rectangles but **not the whole one they make up**, which the proof calls *BH*, and not the segments *BD*/*DE*/*EC* of the cut line — both are named throughout. Added as **fully transparent elements** (`;0;0;0;0`), so the static figure is untouched: verified structurally, 9 elements added, none pre-existing moved or changed visibility. `BCHG` is that whole rectangle, left **unfilled** so its three parts carry the colour — the parts keep Joyce's `random` fills. Aliases carry his names into the captions (`BH`→BCHG, `BK`→DBGK, `DL`→EDKL, `EH`→CELH); the slide sets use the canonical names, since aliases are inert there. Slide 5 outlines `BCHG` alone (`Polygon.outline`, no fill) — the beat where the whole is seen to be the sum. No markers. |
+| II.2–II.14 | | | ⬜ | | | | |
+
+## Books III–XIII
 
 No decks yet. Add a per-book section here as the work reaches each
 book, mirroring the Book I table. Prose conversion for all of these is
