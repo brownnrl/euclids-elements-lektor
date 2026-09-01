@@ -72,6 +72,13 @@ Let {A} and {BC} be two straight lines, and let {BC} be cut at random at the poi
             // three parts carry the colour.
             "BCHG;polygon;quadrilateral;B,C,H,G;0;0;0;0"
         ],
+        // F is a lineSlider, and draggables are auto-unioned into every
+        // slide — so it would stand on the canvas from slide 1, lettered,
+        // before the proof draws BF. Deferring drops it out of that union so
+        // it follows `visible` like anything else. The resting figure is
+        // unaffected. (D and E are draggable too, but slide 1 introduces
+        // them, so they belong there.)
+        deferDraggables: ["F"],
         aliases: { "BH": "BCHG", "BK": "DBGK", "DL": "EDKL", "EH": "CELH",
                    "GB": "BG", "KD": "DK", "LE": "EL", "HC": "CH",
                    "CB": "BC", "DB": "BD", "ED": "DE", "CE": "EC" },
