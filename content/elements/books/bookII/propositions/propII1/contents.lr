@@ -100,7 +100,13 @@ Let {A} and {BC} be two straight lines, and let {BC} be cut at random at the poi
                   { claim: "BG cut off equal to A",    ref: "I.3" } ] },
             { text: "Draw {GH} through {G} parallel to {BC}, and through {D}, {E} and {C} draw {DK}, {EL} and {CH} parallel to {BG}.",
               visible: BUILT,
-              highlighted: ["DBGK","EDKL","CELH"],
+              // Deliberately NOT highlighted: these three are the animation's
+              // own targets. SlateAnimator hides an animated target until its
+              // own cascade step starts (#83), but it sets shouldHighlight at
+              // run start, and drawFace renders a hidden element that is
+              // highlighted — so listing them here paints all three filled
+              // while the first one animates. The animation is the emphasis.
+              highlighted: [],
               transition: { mode: "cascade", animations: [
                   { elem: "DBGK", name: geomlib.A.Polygon.outlineAndFill },
                   { elem: "EDKL", name: geomlib.A.Polygon.outlineAndFill },
