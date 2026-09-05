@@ -91,7 +91,9 @@ Let {A} and {BC} be two straight lines, and let {BC} be cut at random at the poi
               highlighted: ["A","BD","DE","EC"] },
             { text: "Draw {BF} from {B} at right angles to {BC}, and make {BG} equal to {A}.",
               visible: PERP,
-              highlighted: ["BF","BG"],
+              // BF and BG are this slide's animation targets (euclid#171).
+              // A is not, and the step turns on it — "make BG equal to A".
+              highlighted: ["A"],
               transition: { mode: "cascade", animations: [
                   { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "BG", name: geomlib.A.Line.straightEdgeConnect } ] },
@@ -114,7 +116,9 @@ Let {A} and {BC} be two straight lines, and let {BC} be cut at random at the poi
               justifications: [{ claim: "parallels through G, D, E and C", ref: "I.31" }] },
             { text: "Then {BH} equals the sum of {BK}, {DL} and {EH}.",
               visible: WHOLE,
-              highlighted: ["BCHG","DBGK","EDKL","CELH"],
+              // BCHG is this slide's animation target (euclid#171); the three
+              // parts it is being compared with are not, so they keep the gold.
+              highlighted: ["DBGK","EDKL","CELH"],
               transition: { animations: [
                   { elem: "BCHG", name: geomlib.A.Polygon.outline } ] } },
             { text: "Now {BH} is the rectangle {A} by {BC}, for it is contained by {GB} and {BC}, and {BG} equals {A}.",
