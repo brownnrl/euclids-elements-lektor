@@ -97,11 +97,16 @@ So:
   `canvas_1`): a ref placed *after* `canvas_1` binds to `canvas_1`; one
   *between* the canvases binds to `canvas_0`. Order the prose so each
   ref's nearest preceding canvas is the one it means.
-- When the wording can't be reordered, target a canvas explicitly with the
-  raw-HTML span —
-  `<span class="elem-ref" data-elem="AB" data-canvas="canvas_0">AB</span>`
-  (the inline `{AB:canvas_0}` form doesn't survive Mistune's underscore
-  split).
+- When the wording can't be reordered, name the canvas in the ref itself:
+  `{AB:canvas_0}`, or `{AB:canvas_0,canvas_1}` for several, combining with
+  the display override as `{DISPLAY|element:canvas_1}`. This works in markdown
+  prose — `lektor-eucrefs` registers its own inline rule ahead of emphasis and
+  adds `{` to Mistune's `text` stop set, which is what the underscore split
+  used to break (lektor#19).
+- **Inside raw HTML** — a `<center>`, a `<table>`, any block-level HTML —
+  Mistune does not process inline markdown at all, so `{AB}` stays literal
+  there. Use the span form instead:
+  `<span class="elem-ref" data-elem="AB" data-canvas="canvas_0">AB</span>`.
 
 Every element a guide ref names must exist on its target canvas; add an
 invisible highlight target there if the prose names something the diagram
