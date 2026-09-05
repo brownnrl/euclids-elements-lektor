@@ -100,7 +100,7 @@ Let {A} and {BC} be two straight lines, and let {BC} be cut at random at the poi
               justifications: [
                   { claim: "BF at right angles to BC", ref: "I.11" },
                   { claim: "BG cut off equal to A",    ref: "I.3" } ] },
-            { text: "Draw {GH} through {G} parallel to {BC}, and through {D}, {E} and {C} draw {DK}, {EL} and {CH} parallel to {BG}.",
+            { text: "Draw {GH} through {G} parallel to {BC}. Through {D}, {E}, and {C} draw {DK}, {EL}, and {CH} parallel to {BG}.",
               visible: BUILT,
               // Deliberately NOT highlighted: these three are the animation's
               // own targets. SlateAnimator hides an animated target until its
@@ -125,13 +125,17 @@ Let {A} and {BC} be two straight lines, and let {BC} be cut at random at the poi
               visible: WHOLE,
               highlighted: ["BCHG","BG","BC","A"],
               justifications: [{ claim: "the rectangle contained by GB and BC", ref: "II.Def.1" }] },
-            { text: "{BK} is the rectangle {A} by {BD}, and {DL} is the rectangle {A} by {DE}, since {DK} equals {BG}. Similarly {EH} is the rectangle {A} by {EC}.",
+            { text: "{BK} is the rectangle {A} by {BD}, for it is contained by {GB} and {BD}, and {BG} equals {A}.",
               visible: WHOLE,
-              highlighted: ["DBGK","EDKL","CELH","BD","DE","EC","DK"],
+              highlighted: ["DBGK","BD","BG"],
+              justifications: [{ claim: "contained by GB and BD", ref: "II.Def.1" }] },
+            { text: "And {DL} is the rectangle {A} by {DE}, for {DK}, that is {BG}, equals {A}. Similarly also {EH} is the rectangle {A} by {EC}.",
+              visible: WHOLE,
+              highlighted: ["EDKL","CELH","DE","EC","DK"],
               justifications: [
-                  { claim: "opposite sides of a parallelogram are equal", ref: "I.34" },
-                  { claim: "each part is contained by A and a segment",   ref: "II.Def.1" } ] },
-            { text: "So the rectangle {A} by {BC} equals the sum of the rectangles {A} by {BD}, {A} by {DE}, and {A} by {EC}.",
+                  { claim: "DK equals BG, opposite sides of a parallelogram", ref: "I.34" },
+                  { claim: "each part is contained by A and a segment",       ref: "II.Def.1" } ] },
+            { text: "Therefore the rectangle {A} by {BC} equals the sum of the rectangle {A} by {BD}, the rectangle {A} by {DE}, and the rectangle {A} by {EC}.",
               visible: WHOLE,
               highlighted: ["BCHG","DBGK","EDKL","CELH"],
               justifications: [{ ref: "Q.E.D." }] }

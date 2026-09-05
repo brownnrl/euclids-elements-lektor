@@ -15,12 +15,29 @@ statement: If a straight line is cut at random, then the rectangle contained by 
 ----
 proof:
 
-Let the straight line *AB* be cut at random at *C.*
+Let the straight line {AB} be cut at random at {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="200" tabindex="0"></canvas>
 <noscript><img src="propII3.gif" alt="II.3"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the two rectangles but not the whole one they make
+    // up — the proof calls it AE — and none of the named edges (AC, CB, CD,
+    // BE, ED, AF) exist as elements: they are only polygon edges. Everything
+    // added below is fully transparent (;0;0;0 lines, ;0;0;0;0 polygons) so
+    // the static figure is unchanged, with ONE exception: AB, the cut line
+    // itself. Its ink is already there (the two polygons' top edges C-A and
+    // B-C), but no element owns it, and the walk introduces the line two
+    // slides before either polygon is built. It is declared as a plain black
+    // segment exactly coincident with that existing ink — same pixels at rest,
+    // same as II.1's cut line BC.
+    //
+    // Colour: the two parts keep their random fills, and the containing
+    // rectangle ABEF stays unfilled so its own regions fill it.
+    var GIVEN  = ["A","B","C","AB","AC","BC"];
+    var SQUARE = GIVEN.concat(["BCDE","D","E","CD","BE","DE"]);
+    var BUILT  = SQUARE.concat(["DCAF","F","AF","DF"]);
+    var WHOLE  = BUILT.concat(["ABEF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -35,21 +52,120 @@ Let the straight line *AB* be cut at random at *C.*
             "E;point;vertex;BCDE,4",
             "D;point;vertex;BCDE,3",
             "DCAF;polygon;parallelogram;D,C,A;0;0;0,0,0;random",
-            "F;point;vertex;DCAF,4"
+            "F;point;vertex;DCAF,4",
+            // The cut line. Black, and exactly coincident with the top edges
+            // the two polygons already draw — see the note above.
+            "AB;line;connect;A,B",
+            // Hover / highlight targets only — the polygons above already draw
+            // every one of these edges.
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "BE;line;connect;B,E;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            // The part of ED produced beyond D, which the construction walks
+            // out to F. Transitory: it renders gold while its animation runs,
+            // then DCAF's own outline carries the edge.
+            "DF;line;connect;D,F;0;0;0",
+            // The whole rectangle, which the proof calls AE. Unfilled: its
+            // two parts carry the colour. The explicit eighth field (;0) is
+            // what makes the face transparent — an omitted faceColor is a
+            // near-white OPAQUE face, and a highlighted polygon is promoted
+            // within its draw pass, so without it slides 6 and 8 would white
+            // out DCAF and BCDE underneath.
+            "ABEF;polygon;quadrilateral;A,B,E,F;0;0;0;0"
         ],
+        // No deferDraggables here. The auto-unioned draggables are A0/A3 (the
+        // invisible off-canvas carriers at x=+/-1000) and A/B/C, which are all
+        // givens slide 1 introduces — nothing stands on the canvas ahead of
+        // its caption. II.3 has the mirror-image problem instead: D, E and F
+        // are `vertex` points, which are NOT auto-unioned, so each is listed
+        // explicitly in every slide it belongs to (D/E from slide 3, F from
+        // slide 4) or it would lose its dot and its label.
+        aliases: { "CDEB": "BCDE", "CE": "BCDE", "DB": "BCDE",
+                   "AD": "DCAF", "AE": "ABEF",
+                   "CB": "BC", "DC": "CD", "ED": "DE" },
+        slides: [
+            { text: "Let the straight line {AB} be cut at random at {C}.",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "I say that the rectangle {AB} by {BC} equals the sum of the rectangle {AC} by {CB} and the square on {BC}.",
+              visible: GIVEN,
+              highlighted: ["AB","AC","BC"] },
+            { text: "Describe the square {CDEB} on {CB}.",
+              visible: SQUARE,
+              // BC, not BCDE: the square is this slide's animation target, and
+              // a highlighted element draws even while the animator is hiding
+              // it, so listing it would paint it filled from t=0 (euclid#171).
+              // The base it is described on is the honest emphasis.
+              highlighted: ["BC"],
+              transition: { animations: [
+                  { elem: "BCDE", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "the square described on CB", ref: "I.46" }] },
+            { text: "Draw {ED} through to {F}, and draw {AF} through {A} parallel to either {CD} or {BE}.",
+              visible: BUILT,
+              // The parallels the caption names — neither is an animation
+              // target here, so highlighting them is safe (euclid#171).
+              highlighted: ["CD","BE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DF",   name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "AF",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DCAF", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [
+                  { claim: "ED produced through D to F",      ref: "I.Post.2" },
+                  { claim: "AF drawn parallel to CD and BE",  ref: "I.31" } ] },
+            { text: "Then {AE} equals {AD} plus {CE}.",
+              visible: WHOLE,
+              // The two parts, NOT the whole: ABEF is the outline animation's
+              // own target (euclid#171). II.1's equivalent slide listed its
+              // containing rectangle here; this deck does not.
+              highlighted: ["DCAF","BCDE"],
+              transition: { animations: [
+                  { elem: "ABEF", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Now {AE} is the rectangle {AB} by {BC}, for it is contained by {AB} and {BE}, and {BE} equals {BC}.",
+              visible: WHOLE,
+              highlighted: ["ABEF","AB","BE","BC"],
+              justifications: [
+                  { claim: "the rectangle contained by AB and BE", ref: "II.Def.1" },
+                  { claim: "BE = BC, sides of the square on CB",   ref: "I.Def.22" } ] },
+            { text: "{AD} is the rectangle {AC} by {CB}, for {DC} equals {CB}; and {DB} is the square on {CB}.",
+              visible: WHOLE,
+              highlighted: ["DCAF","BCDE","AC","BC","CD"],
+              justifications: [
+                  { claim: "DC = CB, sides of the square on CB",   ref: "I.Def.22" },
+                  { claim: "the rectangle contained by AC and CB", ref: "II.Def.1" } ] },
+            { text: "Therefore the rectangle {AB} by {BC} equals the sum of the rectangle {AC} by {CB} and the square on {BC}.",
+              visible: WHOLE,
+              highlighted: ["ABEF","DCAF","BCDE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.2":  "/elements/books/bookI/postulates/post2/",
+        "I.Def.22":  "/elements/books/bookI/definitions/defI22/",
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "I.46":      "/elements/books/bookI/propositions/propI46/",
+        "II.Def.1":  "/elements/books/bookII/definitions/defII1/"
     });
 </script>
 </figure>
 
-I say that the rectangle *AB* by *BC* equals the sum of the rectangle *AC* by *CB* and the square on *BC.*
+I say that the rectangle {AB} by {BC} equals the sum of the rectangle {AC} by {CB} and the square on {BC}.
 
-Describe the square *CDEB* on *CB.*  Draw *ED*  through to *F,* and draw *AF* through *A* parallel to either *CD* or *BE.* [!just I.46; I.31]
+Describe the square {CDEB} on {CB}.  Draw {ED}  through to {F}, and draw {AF} through {A} parallel to either {CD} or {BE}. [!just I.46; I.31]
 
-Then *AE* equals *AD* plus *CE.*
+Then {AE} equals {AD} plus {CE}.
 
-Now *AE* is the rectangle *AB* by *BC,* for it is contained by *AB* and *BE,* and *BE* equals *BC*;  *AD* is the rectangle *AC* by *CB,* for *DC* equals *CB*; and *DB* is the square on *CB.*
+Now {AE} is the rectangle {AB} by {BC}, for it is contained by {AB} and {BE}, and {BE} equals {BC};  {AD} is the rectangle {AC} by {CB}, for {DC} equals {CB}; and {DB} is the square on {CB}.
 
-Therefore the rectangle  *AB* by *BC* equals the sum of the rectangle *AC* by *CB* and the square on *BC.*
+Therefore the rectangle  {AB} by {BC} equals the sum of the rectangle {AC} by {CB} and the square on {BC}.
 
 Therefore *if a straight line is cut at random, then the rectangle contained by the whole and one of the segments equals the sum of the rectangle contained by the segments and the square on the aforesaid segment.*
 
@@ -58,14 +174,14 @@ Therefore *if a straight line is cut at random, then the rectangle contained by 
 guide:
 
 This proposition is another special case of @II.1.
-In modern algebraic notation it says that if *x* = *y* + *z,* then *xy* = *y*<sup>2</sup> + *yz.*  Identities that are logically equivalent to this implication can be found by eliminating one of the three variables *x, y,*
-or *z.*  Here are two of them.
+In modern algebraic notation it says that if <span class="math">x = y + z</span>, then <span class="math">xy = y^2 + yz</span>.  Identities that are logically equivalent to this implication can be found by eliminating one of the three variables <span class="math">x</span>, <span class="math">y</span>,
+or <span class="math">z</span>.  Here are two of them.
 
-<center>(<i>y</i> + <i>z</i>) <i>y</i> = <i>y</i><sup>2</sup> + <i>yz,</i></center>
+<div class="math display">(y + z)\,y = y^2 + yz,</div>
 
 and
 
-<center><i>xy</i> = <i>y</i><sup>2</sup> + <i>y</i> (<i>x</i> – <i>y</i>).</center>
+<div class="math display">xy = y^2 + y\,(x - y).</div>
 
 #### Use of this proposition
 
