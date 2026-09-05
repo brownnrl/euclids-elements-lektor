@@ -19,6 +19,21 @@ proof:
 <canvas id="canvas_0" width="220" height="220" tabindex="0"></canvas>
 <noscript><img src="propII2.gif" alt="II.2"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the square and its two rectangles, but not the cut
+    // line AB itself, not its segments AC and BC, not the square's sides AD
+    // and BE, and not CF — the proof names every one of them. The five hover
+    // targets added below are fully transparent (;0;0;0), so the static figure
+    // is unchanged. AB is the one exception: it is drawn black, because slides
+    // 1 and 2 cut it before the square exists and would otherwise show three
+    // lettered dots and no line. It lies exactly on the square's B-A edge, so
+    // the resting figure is unchanged there too.
+    //
+    // Colour: the two parts keep their random fills, and the square BADE —
+    // Joyce's AE, the containing figure — stays unfilled (explicit ;0 face) so
+    // its own regions fill it.
+    var GIVEN  = ["A","B","C","AB","AC","BC"];
+    var SQUARE = GIVEN.concat(["D","E","AD","BE","BADE"]);
+    var BUILT  = SQUARE.concat(["F","CF","ACFD","CBEF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -29,27 +44,116 @@ proof:
             "A;point;lineSlider;A0,A3,40,0",
             "B;point;lineSlider;A0,A3,180,0",
             "C;point;lineSlider;A0,A3,110,0",
+            // The cut line. Coincident with the square's B-A edge below.
+            "AB;line;connect;A,B",
             "BADE;polygon;square;B,A;0;0;0,0,0;0",
             "E;point;vertex;BADE,4",
             "D;point;vertex;BADE,3",
             "F;point;parallelogram;D,A,C",
             "ACFD;polygon;quadrilateral;A,C,F,D;0;0;black;random",
-            "CBEF;polygon;quadrilateral;C,B,E,F;0;0;black;random"
+            "CBEF;polygon;quadrilateral;C,B,E,F;0;0;black;random",
+            // Hover / highlight targets only — the square and the two
+            // rectangles above already draw every one of these strokes.
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "BE;line;connect;B,E;0;0;0",
+            // CF is zero-colour like the rest, but it is slide 4's first
+            // animation target: it renders as the gold stroke that makes the
+            // cut while the cascade runs, then tapers away and the black edge
+            // shared by ACFD and CBEF takes over.
+            "CF;line;connect;C,F;0;0;0"
         ],
+        // No deferDraggables. The draggables are A, B and C (lineSliders) plus
+        // the off-canvas carriers A0/A3 at x=+/-1000, which are invisible
+        // (colour 0,0). Slide 1 introduces A, B and C in one sentence, so the
+        // auto-union stands nothing on the canvas the caption has not named.
+        // The derived points do need listing in every slide they belong to,
+        // since they are NOT auto-unioned: D and E (vertex) from slide 3, F
+        // (parallelogram) from slide 4.
+        aliases: { "ADEB": "BADE", "AE": "BADE", "AF": "ACFD", "CE": "CBEF",
+                   "BA": "AB", "CA": "AC", "CB": "BC", "DA": "AD",
+                   "EB": "BE", "FC": "CF" },
+        slides: [
+            { text: "Let the straight line {AB} be cut at random at the point {C}.",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "I say that the sum of the rectangle {BA} by {AC} and the rectangle {AB} by {BC} equals the square on {AB}.",
+              visible: GIVEN,
+              highlighted: ["AC","BC"] },
+            { text: "Describe the square {ADEB} on {AB}.",
+              visible: SQUARE,
+              // BADE is this slide's animation target, so it is deliberately
+              // NOT highlighted (euclid#171) — a highlighted element draws
+              // even while the animator has it hidden.
+              highlighted: ["AB"],
+              transition: { animations: [
+                  { elem: "BADE", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "the square described on AB", ref: "I.46" }] },
+            { text: "Draw {CF} through {C} parallel to either {AD} or {BE}.",
+              visible: BUILT,
+              // Same as slide 3: CF, ACFD and CBEF are this slide's own
+              // animation targets and stay out of `highlighted`, or both
+              // rectangles paint filled from t=0 while CF is still drawing.
+              // The two parallels named in the caption are the emphasis.
+              highlighted: ["AD","BE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CF",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ACFD", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "CBEF", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "CF parallel to AD and BE", ref: "I.31" }] },
+            { text: "Then {AE} equals {AF} plus {CE}.",
+              visible: BUILT,
+              highlighted: ["BADE","ACFD","CBEF"] },
+            { text: "Now {AE} is the square on {AB}.",
+              visible: BUILT,
+              highlighted: ["BADE","AB"] },
+            { text: "{AF} is the rectangle {BA} by {AC}, for it is contained by {DA} and {AC}, and {AD} equals {AB}.",
+              visible: BUILT,
+              // AB is left out on purpose: gold on the whole top edge would
+              // swallow the gold on AC, and AC is what distinguishes this
+              // rectangle. The equality AD = AB is carried by the claim chip.
+              highlighted: ["ACFD","AD","AC"],
+              justifications: [
+                  { claim: "contained by DA and AC",            ref: "II.Def.1" },
+                  { claim: "AD equals AB, sides of the square", ref: "I.Def.22" } ] },
+            { text: "And {CE} is the rectangle {AB} by {BC}, for {BE} equals {AB}.",
+              visible: BUILT,
+              highlighted: ["CBEF","BE","BC"],
+              justifications: [
+                  { claim: "contained by BE and BC",            ref: "II.Def.1" },
+                  { claim: "BE equals AB, sides of the square", ref: "I.Def.22" } ] },
+            { text: "Therefore the sum of the rectangle {BA} by {AC} and the rectangle {AB} by {BC} equals the square on {AB}.",
+              visible: BUILT,
+              highlighted: ["ACFD","CBEF","BADE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "I.46":      "/elements/books/bookI/propositions/propI46/",
+        "I.Def.22":  "/elements/books/bookI/definitions/defI22/",
+        "II.Def.1":  "/elements/books/bookII/definitions/defII1/"
     });
 </script>
 </figure>
 
-Let the straight line *AB* be cut at random at the point *C.*
+Let the straight line {AB} be cut at random at the point {C}.
 
-I say that the sum of the rectangle *BA* by *AC* and the rectangle *AB* by *BC* equals the square on *AB*
+I say that the sum of the rectangle {BA} by {AC} and the rectangle {AB} by {BC} equals the square on {AB}
 
-Describe the square *ADEB* on *AB,* and draw *CF* through *C* parallel to either *AD* or *BE.* [!just I.46; I.31]
-Then *AE* equals *AF* plus *CE.*
+Describe the square {ADEB} on {AB}, and draw {CF} through {C} parallel to either {AD} or {BE}. [!just I.46; I.31]
+Then {AE} equals {AF} plus {CE}.
 
-Now *AE* is the square on *AB*; *AF* is the rectangle *BA* by *AC,* for it is contained by *DA* and *AC,* and *AD* equals *AB*; and *CE* is the rectangle *AB* by *BC,* for *BE* equals *AB.* [!just II.Def.1]
+Now {AE} is the square on {AB}; {AF} is the rectangle {BA} by {AC}, for it is contained by {DA} and {AC}, and {AD} equals {AB}; and {CE} is the rectangle {AB} by {BC}, for {BE} equals {AB}. [!just II.Def.1]
 
-Therefore the sum of the rectangle *BA* by *AC* and the rectangle *AB* by *BC* equals the square on *AB.*
+Therefore the sum of the rectangle {BA} by {AC} and the rectangle {AB} by {BC} equals the square on {AB}.
 
 Therefore *if a straight line is cut at random, then the sum of the rectangles contained by the whole and each of the segments equals the square on the whole.*
 
@@ -61,9 +165,9 @@ guide:
 This proposition is actually a special case of @II.1.  In II.1 Euclid shows that the product of one line by a sum of any number of lines is the sum of the products of that line by each of the lines.  In this proposition, there are just two of those lines and their sum equals the one line.  Rather than using II.1 to prove II.2, Euclid proves II.2 directly.  This suggests that II.1 may have been inserted into the *Elements* after II.2 was included, either by Euclid or someone else.
 
 In modern algebraic notation this proposition says that
-if *y* = *y*<sub>1</sub> + *y*<sub>2</sub>, then *xy* = *x* *y*<sub>1</sub> + *x* *y*<sub>2</sub>.  This can also be stated in a single equation as
+if <span class="math">y = y_1 + y_2</span>, then <span class="math">xy = x y_1 + x y_2</span>.  This can also be stated in a single equation as
 
-<center><i>x</i> (<i>y</i><sub>1</sub> + <i>y</i><sub>2</sub>) = <i>x y</i><sub>1</sub> + <i>x y</i><sub>2</sub>.</center>
+<div class="math display">x\,(y_1 + y_2) = x y_1 + x y_2</div>
 
 #### Use of this proposition
 
