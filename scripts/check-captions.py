@@ -16,6 +16,15 @@ Captions that are legitimately ours — the "Let ... be ..." and "I say that ...
 beats, a closing summary, bracketed asides — are not exempt by rule, but they
 usually score high anyway because Joyce's own text opens the same way.
 
+KNOWN LIMITATION: this catches words a caption CHANGED or INVENTED, not words
+it OMITTED. Dropping a word leaves the rest a perfectly good in-order run, so
+II.5 slide 4 lost both of Joyce's "again"s at a clean 100%. Detecting that
+needs the caption aligned to the passage it walks, and every cheap way of
+guessing that passage — first occurrence of each word, a fixed-size window,
+best-matching run of sentences — misfires badly enough to flag captions that
+are correct. A noisy check is worse than a narrow one, so this stays narrow.
+Omissions are caught by reading the diff against the proof body.
+
 Usage:  python3 scripts/check-captions.py [bookII ...]
 """
 import os
