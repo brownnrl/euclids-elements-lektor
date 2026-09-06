@@ -15,14 +15,44 @@ statement: If a straight line is cut into equal and unequal segments, then the r
 ----
 proof:
 
-Let a straight line *AB* be cut into equal segments at *C* and into unequal segments at *D.*
+Let a straight line {AB} be cut into equal segments at {C} and into unequal segments at {D}.
 
-I say that the rectangle  *AD* by *DB* together with the square on *CD* equals the square on *CB.*
+I say that the rectangle  {AD} by {DB} together with the square on {CD} equals the square on {CB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="350" height="210" tabindex="0"></canvas>
 <noscript><img src="propII5.gif" alt="II.5"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the dissection but names far more of it than it
+    // draws: the segments of AB, the two complements CH and HF, the wholes
+    // CM, DF and AH, the whole square CEFB, and the gnomon NOP itself.
+    // Everything added below is fully transparent (;0;0;0 lines, ;0;0;0;0
+    // polygons) except four black lines — AB, DG, KM and AK — which lie
+    // exactly on top of edges the polygons already draw, so the resting
+    // figure is unchanged either way. They are drawn rather than
+    // transparent because they must stay on the canvas from slide 4 on,
+    // and the polygons whose edges would otherwise carry them do not
+    // arrive until slides 6, 7 and 10.
+    //
+    // Colour: the containing figures are left unfilled so their own parts
+    // fill them. ACLK (the proof's AL) and LHGE (LG) keep Joyce's random
+    // fills; every region added here has an explicit ;0 face.
+    //
+    // NOTE on BCEF: it is declared with four fields, so it gets
+    // defaultFaceColor — a near-white OPAQUE face, not transparency — and
+    // LHGE sits inside it. Highlighting BCEF would promote it within its
+    // draw pass and paint white over the green square (the I.47 bug), so
+    // BCEF is never highlighted; the transparent twin CEFB is the target
+    // for every reference to the whole square. BCEF is animated once, on
+    // slide 3, before LHGE is on the canvas.
+    var GIVEN  = ["A0","A3","A","B","C","D","AB","AC","CB","AD","DB","CD"];
+    var SQUARE = GIVEN.concat(["BCEF","CEFB","E","F","BE","CE","EF","BF","CL","BM"]);
+    var BUILT  = SQUARE.concat(["G","H","K","L","M","DG","KM","AK","DH","LH"]);
+    var COMPL  = BUILT.concat(["CDHL","HMFG"]);
+    var WHOLES = COMPL.concat(["DBMH","CBML","DBFG"]);
+    var HALF   = WHOLES.concat(["ACLK"]);
+    var GNOMON = HALF.concat(["N","O","P","NOPmark","ADHK","NOP"]);
+    var ALL    = GNOMON.concat(["LHGE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -50,25 +80,189 @@ I say that the rectangle  *AD* by *DB* together with the square on *CD* equals t
             "N;point;cutoff;H,K,H,O';black;lightGray",
             "O;point;cutoff;H,D,H,O';black;lightGray",
             "P;point;cutoff;H,G,H,O';black;lightGray",
-            "NOP;sector;arc;P,O,N;0;0;lightGray;0"
+            // Joyce's arc, renamed. It only MARKS the gnomon; the proof's
+            // "gnomon NOP" is the L-shaped region, which is what {NOP}
+            // should light. The arc's nameColor is already 0, so the
+            // rename is invisible in the resting figure.
+            "NOPmark;sector;arc;P,O,N;0;0;lightGray;0",
+
+            // ---- additions for the slideshow ----
+            // The given line, drawn (slide 1 needs something to show), and
+            // its segments as hover / highlight targets on top of it. AB
+            // lies on ACLK's A-C edge plus BCEF's C-B edge.
+            "AB;line;connect;A,B",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            // The square's sides, named in "parallel to either CE or BF …
+            // either AB or EF … either CL or BM". Each is already an edge
+            // of BCEF, so these are targets only.
+            "CE;line;connect;C,E;0;0;0",
+            "BF;line;connect;B,F;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "CL;line;connect;C,L;0;0;0",
+            "BM;line;connect;B,M;0;0;0",
+            // The three lines the construction draws. Black, and each one
+            // coincides with edges the resting figure already has: DG with
+            // DBMH's D-H and LHGE's H-G, KM with ACLK's K-L, LHGE's L-H
+            // and DBMH's H-M, AK with ACLK's K-A.
+            "DG;line;connect;D,G",
+            "KM;line;connect;K,M",
+            "AK;line;connect;A,K",
+            // DH (= DB, which is why AH is the rectangle AD by DB) and
+            // LH (= CD, which is why LG is the square on CD).
+            "DH;line;connect;D,H;0;0;0",
+            "LH;line;connect;L,H;0;0;0",
+            // The regions the proof names but Joyce does not draw. The two
+            // complements …
+            "CDHL;polygon;quadrilateral;C,D,H,L;0;0;0;0",
+            "HMFG;polygon;quadrilateral;H,M,F,G;0;0;0;0",
+            // … the three wholes they add up to …
+            "CBML;polygon;quadrilateral;C,B,M,L;0;0;0;0",
+            "DBFG;polygon;quadrilateral;D,B,F,G;0;0;0;0",
+            "ADHK;polygon;quadrilateral;A,D,H,K;0;0;0;0",
+            // … the whole square, unfilled (see the BCEF note above) …
+            "CEFB;polygon;quadrilateral;C,E,F,B;0;0;0;0",
+            // … and the gnomon itself: the square CEFB less the square LG,
+            // an L-shaped region, so a hexagon C-B-F-G-H-L. Unfilled: its
+            // three parts carry the colour.
+            "NOP;polygon;hexagon;C,B,F,G,H,L;0;0;0;0"
         ],
+        // No deferDraggables. The free / slider points are A0 and A3 (the
+        // off-canvas carriers at x = ±1000, both nameColor and vertexColor
+        // 0) and A, B, D — all givens that slide 1 introduces. Nothing
+        // draggable arrives mid-walk. The reverse default does bite,
+        // though: C (midpoint) and E F G H K L M N O P (vertex /
+        // parallelogram / intersection / cutoff) are derived and are NOT
+        // auto-unioned, so each is listed in every visible set above.
+        aliases: { // Joyce names a rectangle by its diagonal; the element
+                   // is named by its four corners.
+                   "CH": "CDHL", "HF": "HMFG", "DM": "DBMH", "CM": "CBML",
+                   "DF": "DBFG", "AL": "ACLK", "AH": "ADHK", "LG": "LHGE",
+                   // The guide's other names for the same two regions.
+                   "EGHL": "LHGE", "LBG": "NOP",
+                   // The guide writes "the line BC" where the proof
+                   // writes CB.
+                   "BC": "CB" },
+        slides: [
+            { text: "Let a straight line {AB} be cut into equal segments at {C} and into unequal segments at {D}.",
+              visible: GIVEN,
+              highlighted: ["AB","C","D"] },
+            { text: "I say that the rectangle {AD} by {DB} together with the square on {CD} equals the square on {CB}.",
+              visible: GIVEN,
+              highlighted: ["AD","DB","CD","CB"] },
+            { text: "Describe the square {CEFB} on {CB}, and join {BE}.",
+              visible: SQUARE,
+              // Not highlighted: BCEF and BE are this slide's animation
+              // targets (euclid#171). CB, the base it is described on,
+              // carries the emphasis instead.
+              highlighted: ["CB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BCEF", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "BE",   name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "the square CEFB described on CB", ref: "I.46" },
+                  { claim: "join BE",                         ref: "I.Post.1" } ] },
+            { text: "Draw {DG} through {D} parallel to either {CE} or {BF}, again draw {KM} through {H} parallel to either {AB} or {EF}, and again draw {AK} through {A} parallel to either {CL} or {BM}.",
+              visible: BUILT,
+              // All three parallels are animation targets — highlighting
+              // them would paint them from t=0 (euclid#171).
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AK", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "parallels drawn through D, H and A", ref: "I.31" }] },
+            { text: "Then, since the complement {CH} equals the complement {HF},",
+              visible: COMPL,
+              highlighted: ["CDHL","HMFG"],
+              justifications: [{ claim: "the complements about the diameter BE", ref: "I.43" }] },
+            { text: "add {DM} to each. Therefore the whole {CM} equals the whole {DF}.",
+              visible: WHOLES,
+              // DM is the thing being added, so it animates; the two
+              // wholes it makes are what light up.
+              highlighted: ["CBML","DBFG"],
+              transition: { animations: [
+                  { elem: "DBMH", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "add DM to equals", ref: "C.N.2" }] },
+            { text: "But {CM} equals {AL}, since {AC} is also equal to {CB}. Therefore {AL} also equals {DF}.",
+              visible: HALF,
+              highlighted: ["CBML","DBFG","AC","CB"],
+              transition: { animations: [
+                  { elem: "ACLK", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [
+                  { claim: "AL = CM, on the equal bases AC and CB", ref: "I.36" },
+                  { claim: "AL = DF",                               ref: "C.N.1" } ] },
+            { text: "Add {CH} to each. Therefore the whole {AH} equals the gnomon {NOP}.",
+              visible: GNOMON,
+              // The gnomon is the animation target; the two regions being
+              // added and the whole they make carry the highlight.
+              highlighted: ["ACLK","CDHL","ADHK"],
+              transition: { animations: [
+                  { elem: "NOP", name: geomlib.A.Polygon.outline } ] },
+              justifications: [
+                  { claim: "AL + CH = AH, and DF + CH = the gnomon", ref: "C.N.2" },
+                  { claim: "the gnomon NOP",                         ref: "II.Def.2" } ] },
+            { text: "But {AH} is the rectangle {AD} by {DB}, for {DH} equals {DB}. Therefore the gnomon {NOP} also equals the rectangle {AD} by {DB}.",
+              visible: GNOMON,
+              highlighted: ["ADHK","NOP","AD","DB","DH"],
+              justifications: [{ claim: "AH is contained by AD and DH, and DH = DB", ref: "II.Def.1" }] },
+            { text: "Add {LG}, which equals the square on {CD}, to each. Therefore the gnomon {NOP} and {LG} together equal the rectangle {AD} by {DB} together with the square on {CD}.",
+              visible: ALL,
+              highlighted: ["NOP","ADHK","CD"],
+              transition: { animations: [
+                  { elem: "LHGE", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [
+                  { claim: "LH equals CD, so LG is the square on CD", ref: "I.34" },
+                  { claim: "add LG to equals",                        ref: "C.N.2" } ] },
+            { text: "But the gnomon {NOP} together with {LG} is the whole square {CEFB}, which is described on {CB}.",
+              visible: ALL,
+              highlighted: ["NOP","LHGE"],
+              transition: { animations: [
+                  { elem: "CEFB", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "the gnomon and LG make up the square", ref: "II.Def.2" }] },
+            { text: "Therefore the rectangle {AD} by {DB} together with the square on {CD} equals the square on {CB}.",
+              visible: ALL,
+              highlighted: ["ADHK","LHGE","CEFB","CD","CB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "I.34":      "/elements/books/bookI/propositions/propI34/",
+        "I.36":      "/elements/books/bookI/propositions/propI36/",
+        "I.43":      "/elements/books/bookI/propositions/propI43/",
+        "I.46":      "/elements/books/bookI/propositions/propI46/",
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "C.N.1":     "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2":     "/elements/books/bookI/commonnotions/cn2/",
+        "II.Def.1":  "/elements/books/bookII/definitions/defII1/",
+        "II.Def.2":  "/elements/books/bookII/definitions/defII2/"
     });
 </script>
 </figure>
 
-Describe the square *CEFB* on *CB,* and join *BE.*  Draw *DG* through *D* parallel to either *CE* or *BF,* again draw *KM* through *H* parallel to either *AB* or *EF,* and again draw *AK* through *A* parallel to either *CL* or *BM.* [!just I.46; I.31]
+Describe the square {CEFB} on {CB}, and join {BE}.  Draw {DG} through {D} parallel to either {CE} or {BF}, again draw {KM} through {H} parallel to either {AB} or {EF}, and again draw {AK} through {A} parallel to either {CL} or {BM}. [!just I.46; I.31]
 
-Then, since the complement *CH* equals the complement *HF,* add *DM* to each. Therefore the whole *CM* equals the whole *DF.* [!just I.43]
+Then, since the complement {CH} equals the complement {HF}, add {DM} to each. Therefore the whole {CM} equals the whole {DF}. [!just I.43]
 
-But *CM* equals *AL,* since *AC* is also equal to *CB.* Therefore *AL* also equals *DF.* Add *CH* to each. Therefore the whole *AH* equals the gnomon *NOP.* [!just I.36; II.Def.2]
+But {CM} equals {AL}, since {AC} is also equal to {CB}. Therefore {AL} also equals {DF}. Add {CH} to each. Therefore the whole {AH} equals the gnomon {NOP}. [!just I.36; II.Def.2]
 
-But *AH* is the rectangle *AD* by *DB,* for *DH* equals *DB,* therefore the gnomon *NOP* also equals the rectangle *AD* by *DB.*
+But {AH} is the rectangle {AD} by {DB}, for {DH} equals {DB}, therefore the gnomon {NOP} also equals the rectangle {AD} by {DB}.
 
-Add *LG,* which equals the square on *CD,* to each. Therefore the sum of the gnomon *NOP* and *LG* equals the sum of the rectangle *AD* by *DB* and the square on *CD.*
+Add {LG}, which equals the square on {CD}, to each. Therefore the sum of the gnomon {NOP} and {LG} equals the sum of the rectangle {AD} by {DB} and the square on {CD}.
 
-But the gnomon *NOP* together with *LG* is the whole square *CEFB,* which is described on *CB.*
+But the gnomon {NOP} together with {LG} is the whole square {CEFB}, which is described on {CB}.
 
-Therefore the rectangle  *AD* by *DB* together with the square on *CD* equals the square on *CB.*
+Therefore the rectangle  {AD} by {DB} together with the square on {CD} equals the square on {CB}.
 
 Therefore *if a straight line is cut into equal and unequal segments, then the rectangle contained by the unequal segments of the whole together with the square on the straight line between the points of section equals the square on the half.*
 
@@ -76,17 +270,17 @@ Therefore *if a straight line is cut into equal and unequal segments, then the r
 ----
 guide:
 
-In the figure there is a part of a circle denoted with the points *NOP.*  This is supposed to indicate the gnomon which is three parts of the square *BCEF,* the only part left out for the gnomon being the square *EGHL.*  Later versions of the *Elements* did not have this curve in the figure.  Instead, they named the same gnomon as *LBG.*  Either way is sufficient to specify the gnomon.
+In the figure there is a part of a circle denoted with the points {NOP}.  This is supposed to indicate the gnomon which is three parts of the square {BCEF|CEFB}, the only part left out for the gnomon being the square {EGHL}.  Later versions of the *Elements* did not have this curve in the figure.  Instead, they named the same gnomon as {LBG}.  Either way is sufficient to specify the gnomon.
 
 #### Explanation of the proof
 
-We can represent a rectangle algebraically as *xy* where the sides are *x* and *y.*  In the diagram above, take *x* as the line *AD* and *y* as the line *DH,* so that *xy* is the rectangle *AH.* According to this proposition, this product, or rectangle, is the difference of two squares, the large one being the square of (*x* + *y*)/2, which is the square on the line *BC* in the diagram, and the small one being the square of (*x* – *y*)/2, which is the square on the line *LH* (which equals the  square on the line *CD*).
+We can represent a rectangle algebraically as <span class="math">xy</span> where the sides are <span class="math">x</span> and <span class="math">y</span>.  In the diagram above, take <span class="math">x</span> as the line {AD} and <span class="math">y</span> as the line {DH}, so that <span class="math">xy</span> is the rectangle {AH}. According to this proposition, this product, or rectangle, is the difference of two squares, the large one being the square of <span class="math">(x+y)/2</span>, which is the square on the line {BC} in the diagram, and the small one being the square of <span class="math">(x-y)/2</span>, which is the square on the line {LH} (which equals the  square on the line {CD}).
 
 Using symbolic algebra, we can easily verify the identity
 
-<center><img src="propII5c.gif" alt="xy=((x+y)/2) squared minus ((x-y)/2)squared"/></center>
+<div class="math display">xy = \left(\frac{x+y}{2}\right)^{2} - \left(\frac{x-y}{2}\right)^{2}</div>
 
-but Euclid was restricted to geometric arguments.  The argument isn't difficult.  The original rectangle *AH* is the sum of the rectangles *AL* and *CH.*  By proposition @I.43, the rectangles *CH* and *HF* are equal.  And, of course, the rectangles *AL* and *CM* are equal.  Therefore, *AH* = *AL* + *CH* = *CM* + *HF* = *CB*<sup>2</sup> – *LH*<sup>2</sup>, as required.
+but Euclid was restricted to geometric arguments.  The argument isn't difficult.  The original rectangle {AH} is the sum of the rectangles {AL} and {CH}.  By proposition @I.43, the rectangles {CH} and {HF} are equal.  And, of course, the rectangles {AL} and {CM} are equal.  Therefore, {AH} = {AL} + {CH} = {CM} + {HF} = {CB}<sup>2</sup> – {LH}<sup>2</sup>, as required.
 
 #### Solution to a quadratic problem
 
@@ -115,31 +309,42 @@ but Euclid was restricted to geometric arguments.  The argument isn't difficult.
             "S;point;first;Schord",
             "RS;line;connect;R,S",
             "D;point;parallelogram;C,R,S",
-            "SD;line;connect;S,D"
+            "SD;line;connect;S,D",
+            // Hover targets for names the guide prose uses but the figure
+            // does not draw as elements of their own. All fully
+            // transparent (;0;0;0), so the figure is unchanged. CR is the
+            // part of the drawn CQ that the prose actually names.
+            "AD;line;connect;A,D;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "CR;line;connect;C,R;0;0;0"
         ],
+        // The prose calls the semicircle AQB; the element is AQC.
+        aliases: { "AQB": "AQC" }
     });
 </script>
 </figure>
 
 This proposition is set up to help in the solution of a quadratic problem of the following form.
 
-<center>Find two numbers <i>x</i> and <i>y</i> so that their sum is a known value <i>b</i> and their product is a known value <i>c</i><sup>2</sup>.</center>
+<div class="math display">\text{Find two numbers } x \text{ and } y \text{ so that their sum is a known value } b \text{ and their product is a known value } c^{2}.</div>
 
-In terms of the single variable *x,* this is equivalent to solving the quadratic equation, *x*(*b* – *x*) = *c*<sup>2</sup>.  This equation can be written in a standard form as
+In terms of the single variable <span class="math">x</span>, this is equivalent to solving the quadratic equation, <span class="math">x(b-x) = c^2</span>.  This equation can be written in a standard form as
 
-<center><i>x</i><sup>2</sup> + <i>c</i><sup>2</sup> = <i>bx.</i></center>
+<div class="math display">x^{2} + c^{2} = bx.</div>
 
-If *b* is represented as the line *AB* in the diagram, and with *x* = *AD* and *y* = *BD,* the first condition *x* + *y* = *b* is satisfied.  This proposition says that the product *xy* equals the square on *BC* (which is *b*/2) minus the square on *CD.*  Thus, the remaining condition reduces to finding *CD* so that (*b*/2)<sup>2</sup> – *CD*<sup>2</sup> = *c*<sup>2</sup>. By @I.47, if a right triangle is constructed with one side equal to *b*/2 and another equal to *c,* then the hypotenuse will equal the required value for *CD.*  Algebraically, the solutions *AD* for *x* and *BD* for *y* have the values
+If <span class="math">b</span> is represented as the line {AB} in the diagram, and with <span class="math">x</span> = {AD} and <span class="math">y</span> = {BD}, the first condition <span class="math">x + y = b</span> is satisfied.  This proposition says that the product <span class="math">xy</span> equals the square on {BC} (which is <span class="math">b/2</span>) minus the square on {CD}.  Thus, the remaining condition reduces to finding {CD} so that (<span class="math">b/2</span>)<sup>2</sup> – {CD}<sup>2</sup> = <span class="math">c</span><sup>2</sup>. By @I.47, if a right triangle is constructed with one side equal to <span class="math">b/2</span> and another equal to <span class="math">c</span>, then the hypotenuse will equal the required value for {CD}.  Algebraically, the solutions {AD} for <span class="math">x</span> and {BD} for <span class="math">y</span> have the values
 
-<center><img src="propII5b.gif" alt="x = b/2 + sqrt((b squared)/4 - c squared), y = b/2 - sqrt((b squared)/4 - c squared)"/></center>
+<div class="math display">x = \frac{b}{2} + \sqrt{\left(\frac{b}{2}\right)^{2} - c^{2}} \qquad y = \frac{b}{2} - \sqrt{\left(\frac{b}{2}\right)^{2} - c^{2}}</div>
 
 This analysis yields a construction to solve the quadratic problem stated above.
 
 *To cut a given straight line so that the rectangle contained by the unequal segments equals a given square. Thus the given square must not be greater than the square described on the half of the given straight line.*
 
-Let *AB* be the given straight line.  Bisect it at *C.*  Draw the semicircle *AQB* with center *C* and radius *BC.* Construct a perpendicular *CR* to *AB* at *C* equal to the side of the given square.  Draw *RS* parallel to *AB* intersecting the semicircle at *S,* and draw *SD* perpendicular to *AB.*
+Let {AB} be the given straight line.  Bisect it at {C}.  Draw the semicircle {AQB} with center {C} and radius {BC}. Construct a perpendicular {CR} to {AB} at {C} equal to the side of the given square.  Draw {RS} parallel to {AB} intersecting the semicircle at {S}, and draw {SD} perpendicular to {AB}.
 
-Then, as described above, *AB* has been cut at *G* so that *AG* times *GB* equals the given square.
+Then, as described above, {AB} has been cut at *G* so that *AG* times *GB* equals the given square.
 
 This proposition is not found in the *Elements,* but a generalization is.  After @II.14 the given square could be replaced by any given rectilinear figure, since II.14 constructs a square equal to a given rectilinear figure. But the full generalization is not given until proposition @VI.28.  Not only has the given square become a general rectilinear figure, but all the rectangles and squares have been replaced by parallelograms.  That requires generalizing II.4 to parallelograms. that's done in @VI.25 which constructs a parallelgram similar to a given parallelogram and equal to a given rectilinear figure.  It also requires a few technical propositions to carry out the proof.
 
