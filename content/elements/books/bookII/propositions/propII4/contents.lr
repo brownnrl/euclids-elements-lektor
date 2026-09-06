@@ -15,14 +15,46 @@ statement: If a straight line is cut at random, the square on the whole equals t
 ----
 proof:
 
-Let the straight line *AB* be cut at random at *C.*
+Let the straight line {AB} be cut at random at {C}.
 
-I say that the square on *AB* equals the sum of the squares on *AC* and *CB* plus twice the rectangle *AC* by *CB.*
+I say that the square on {AB} equals the sum of the squares on {AC} and {CB} plus twice the rectangle {AC} by {CB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="230" height="220" tabindex="0"></canvas>
 <noscript><img src="propII4.gif" alt="II.4"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the two squares HF and CK but NOT the two equal
+    // rectangles AG and GE that the proof spends its last third on, and not the
+    // segments AC, CB, CG, GK, KB, HG it names throughout. Almost everything
+    // added here is fully transparent (;0;0;0 lines, ;0;0;0;0 polygons) or an
+    // angle marker (hidden in the static figure since 0.9.0), so the resting
+    // figure is unchanged. The two exceptions are commented where they are
+    // declared: the black AB, and the two initiallyHidden rectangles.
+    //
+    // Colour: the two squares on the segments take stable pastels, and the two
+    // rectangles — equal to each other, the "twice the rectangle" of the
+    // enunciation — SHARE one colour. The containing square ADEB is left
+    // unfilled so its own four parts fill it.
+    //
+    // NOTE on BADE: it carries the DEFAULT faceColor (only four ;-fields), i.e.
+    // lighten(bgcolor) — a near-white OPAQUE face, not transparency. That white
+    // is visible in Joyce's resting figure (it is why the AG and GE corners read
+    // white rather than the page's peach), so it stays. But a highlighted
+    // polygon is promoted within its draw pass (#140), so highlighting BADE
+    // would white out the whole decomposition on the closing slides — the
+    // I.41/I.44/I.47 bug. BADE is therefore NEVER named in a slide set; the
+    // fully transparent ADEB below is the highlight/hover target for the whole.
+    var CUT   = ["A","B","C","AB","AC","CB"];
+    var BUILT = CUT.concat(["BADE","D","E","F","G","H","K",
+                            "AD","BE","DE","BD","CF","HK","ADEB"]);
+    var PARL  = BUILT.concat(["angCGB","angADB"]);
+    var ISOSC = PARL.concat(["angABD"]);
+    var EQANG = ISOSC.concat(["CG"]);
+    var EQUIL = EQANG.concat(["GK","KB","CBKG"]);
+    var RTANG = EQUIL.concat(["angKBC","angGCB"]);
+    var RTALL = RTANG.concat(["angCGK","angGKB"]);
+    var AREAS = BUILT.concat(["CG","GK","KB","CBKG","DFGH","HG"]);
+    var TWICE = AREAS.concat(["ACGH","GKEF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -40,41 +72,230 @@ I say that the square on *AB* equals the sum of the squares on *AC* and *CB* plu
             "F;point;parallelogram;D,A,C",
             "CF;line;connect;C,F",
             "G;point;intersection;C,F,B,D",
-            "DFGH;polygon;parallelogram;D,F,G;0;0;0;random",
+            // The two squares on the segments. Joyce's params gave both a
+            // `random` face — a fresh hue on every load, which in a deck whose
+            // argument is "equal regions share a colour" can roll up the same
+            // salmon as the two rectangles below and assert an equality that
+            // does not hold. Fixed pastels instead; same family, so they still
+            // read as the pair of squares on AC and CB.
+            "DFGH;polygon;parallelogram;D,F,G;0;0;0;palegreen",
             "H;point;vertex;DFGH,4",
             "K;point;intersection;G,H,B,E",
             "HK;line;connect;H,K",
-            "CBKG;polygon;quadrilateral;C,B,K,G;0;0;0;random"
+            "CBKG;polygon;quadrilateral;C,B,K,G;0;0;0;lightblue",
+            // AB is drawn BLACK, not transparent: slide 1 is the cut line
+            // alone, before the square exists, so there has to be something to
+            // see. It coincides pixel-for-pixel with the square's own top edge,
+            // so the resting figure is unchanged.
+            "AB;line;connect;A,B",
+            // Hover / highlight targets only — the square, CF and HK already
+            // draw every one of these.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "BE;line;connect;B,E;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "CG;line;connect;C,G;0;0;0",
+            "GK;line;connect;G,K;0;0;0",
+            "KB;line;connect;K,B;0;0;0",
+            "HG;line;connect;H,G;0;0;0",
+            // The two rectangles the proof calls AG and GE. Equal to each
+            // other, so one colour between them. initiallyHidden, so Joyce's
+            // resting figure keeps its two white corners.
+            "ACGH;polygon;quadrilateral;A,C,G,H;0;0;0;lightsalmon",
+            "GKEF;polygon;quadrilateral;G,K,E,F;0;0;0;lightsalmon",
+            // The whole square, which the proof calls ADEB. Unfilled: its four
+            // parts carry the colour. This, not BADE, is what the slides light.
+            "ADEB;polygon;quadrilateral;A,D,E,B;0;0;0;0",
+            // Angles. angABD doubles as GBC (G lies on BD, C on BA — same
+            // rays), and angGCB as BCG; #103 auto-nests the two same-vertex
+            // pairs (at G, CGB inside CGK; at B, ABD inside KBC).
+            "angCGB;sector;angleMarker;G,C,B",
+            "angADB;sector;angleMarker;D,A,B",
+            "angABD;sector;angleMarker;B,A,D",
+            "angKBC;sector;angleMarker;B,K,C",
+            "angGCB;sector;angleMarker;C,G,B",
+            "angCGK;sector;angleMarker;G,C,K",
+            "angGKB;sector;angleMarker;K,G,B"
         ],
+        // No deferDraggables. The only free / slider points are the off-canvas
+        // carriers A0 and A3 (drawn with no name and no vertex) and the three
+        // sliders A, B and C — and slide 1 introduces all three, so the
+        // auto-union is right here. The rest of the figure (D, E, F, G, H, K)
+        // is derived and therefore NOT auto-unioned: each is listed explicitly
+        // in every slide it belongs to, from BUILT on.
+        initiallyHidden: ["ACGH","GKEF"],
+        aliases: { "HF": "DFGH", "CK": "CBKG", "KC": "CBKG", "CGKB": "CBKG",
+                   "AG": "ACGH", "GE": "GKEF",
+                   "BA": "AB", "BC": "CB", "GC": "CG", "BK": "KB", "EB": "BE",
+                   "CGB": "angCGB", "ADB": "angADB", "ABD": "angABD",
+                   "GBC": "angABD", "KBC": "angKBC", "GCB": "angGCB",
+                   "BCG": "angGCB", "CGK": "angCGK", "GKB": "angGKB" },
+        slides: [
+            { text: "Let the straight line {AB} be cut at random at {C}.",
+              visible: CUT,
+              highlighted: ["AB","C"] },
+            { text: "I say that the square on {AB} equals the sum of the squares on {AC} and {CB} plus twice the rectangle {AC} by {CB}.",
+              visible: CUT,
+              highlighted: ["AC","CB"] },
+            { text: "Describe the square {ADEB} on {AB}. Join {BD}. Draw {CF} through {C} parallel to either {AD} or {EB}, and draw {HK} through {G} parallel to either {AB} or {DE}.",
+              visible: BUILT,
+              // Deliberately NOT highlighted: these four are the animation's own
+              // targets. SlateAnimator hides an animated target until its cascade
+              // step starts (#83) but sets shouldHighlight at run start, and
+              // drawFace draws a hidden element that is highlighted — so listing
+              // them paints the whole construction from t=0. The animation is
+              // the emphasis (euclid#171).
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BADE", name: geomlib.A.Polygon.outline },
+                  { elem: "BD",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CF",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HK",   name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "the square ADEB on AB",    ref: "I.46" },
+                  { claim: "CF and HK drawn parallel", ref: "I.31" } ] },
+            { text: "Then, since {CF} is parallel to {AD}, and {BD} falls on them, the exterior angle {CGB} equals the interior and opposite angle {ADB}.",
+              visible: PARL,
+              highlighted: ["CF","AD","BD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angCGB", name: geomlib.A.Sector.sweep },
+                  { elem: "angADB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "exterior CGB = interior opposite ADB", ref: "I.29" } ] },
+            { text: "But the angle {ADB} equals the angle {ABD}, since the side {BA} also equals {AD}.",
+              visible: ISOSC,
+              // angABD is this slide's animation target (euclid#171).
+              highlighted: ["angADB","AB","AD"],
+              transition: { animations: [
+                  { elem: "angABD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "ADB = ABD, since BA = AD", ref: "I.5" } ] },
+            { text: "Therefore the angle {CGB} also equals the angle {GBC}, so that the side {BC} also equals the side {CG}.",
+              visible: EQANG,
+              highlighted: ["angCGB","angABD","CB","CG"],
+              justifications: [
+                  { claim: "equal angles give BC = CG", ref: "I.6" } ] },
+            { text: "But {CB} equals {GK}, and {CG} to {KB}. Therefore {GK} also equals {KB}. Therefore {CGKB} is equilateral.",
+              visible: EQUIL,
+              // CBKG is this slide's animation target (euclid#171).
+              highlighted: ["CB","GK","CG","KB"],
+              transition: { animations: [
+                  { elem: "CBKG", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [
+                  { claim: "opposite sides CB = GK, CG = KB", ref: "I.34" } ] },
+            { text: "I say next that it is also right-angled.",
+              visible: EQUIL,
+              highlighted: ["CBKG"] },
+            { text: "Since {CG} is parallel to {BK}, the sum of the angles {KBC} and {GCB} equals two right angles.",
+              visible: RTANG,
+              highlighted: ["CG","KB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angKBC", name: geomlib.A.Sector.sweep },
+                  { elem: "angGCB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "KBC + GCB = two right angles", ref: "I.29" } ] },
+            { text: "But the angle {KBC} is right. Therefore the angle {BCG} is also right, so that the opposite angles {CGK} and {GKB} are also right.",
+              visible: RTALL,
+              highlighted: ["angKBC","angGCB"],
+              // parallel: CGK and GKB are the opposite pair, carried by one step.
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCGK", name: geomlib.A.Sector.sweep },
+                  { elem: "angGKB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "opposite angles CGK and GKB are right", ref: "I.34" } ] },
+            { text: "Therefore {CGKB} is right-angled, and it was also proved equilateral, therefore it is a square, and it is described on {CB}.",
+              visible: RTALL,
+              highlighted: ["CBKG","CB"],
+              justifications: [
+                  { claim: "equilateral and right-angled, so a square", ref: "I.Def.22" } ] },
+            { text: "For the same reason {HF} is also a square, and it is described on {HG}, that is {AC}. Therefore the squares {HF} and {KC} are the squares on {AC} and {CB}.",
+              visible: AREAS,
+              // DFGH (HF) is this slide's animation target (euclid#171).
+              highlighted: ["HG","AC","CB","CBKG"],
+              transition: { animations: [
+                  { elem: "DFGH", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [
+                  { claim: "opposite sides HG = AC", ref: "I.34" } ] },
+            { text: "Now, since {AG} equals {GE}, and {AG} is the rectangle {AC} by {CB}, for {GC} equals {CB}, "
+                  + "therefore {GE} also equals the rectangle {AC} by {CB}.",
+              visible: TWICE,
+              // ACGH (AG) and GKEF (GE) are this slide's animation targets
+              // (euclid#171); GC and CB, which the step turns on, are not.
+              highlighted: ["CG","CB"],
+              // parallel: the two are equal, and the point is that they arrive
+              // together — one rectangle taken twice.
+              transition: { mode: "parallel", animations: [
+                  { elem: "ACGH", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "GKEF", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [
+                  { claim: "the complements AG and GE are equal", ref: "I.43" },
+                  { claim: "AG is the rectangle AC by CB",        ref: "II.Def.1" } ] },
+            { text: "Therefore the sum of {AG} and {GE} equals twice the rectangle {AC} by {CB}.",
+              visible: TWICE,
+              highlighted: ["ACGH","GKEF"] },
+            { text: "But the squares {HF} and {CK} are also the squares on {AC} and {CB}, therefore the sum of the four "
+                  + "figures {HF}, {CK}, {AG}, and {GE} equals the sum of the squares on {AC} and {CB} plus twice the "
+                  + "rectangle {AC} by {CB}.",
+              visible: TWICE,
+              highlighted: ["DFGH","CBKG","ACGH","GKEF"] },
+            { text: "But {HF}, {CK}, {AG}, and {GE} are the whole {ADEB}, which is the square on {AB}.",
+              visible: TWICE,
+              // ADEB is this slide's animation target (euclid#171).
+              highlighted: ["DFGH","CBKG","ACGH","GKEF"],
+              transition: { animations: [
+                  { elem: "ADEB", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Therefore the square on {AB} equals the sum of the squares on {AC} and {CB} plus twice the rectangle {AC} by {CB}.",
+              visible: TWICE,
+              highlighted: ["ADEB","DFGH","CBKG","ACGH","GKEF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.5":       "/elements/books/bookI/propositions/propI5/",
+        "I.6":       "/elements/books/bookI/propositions/propI6/",
+        "I.29":      "/elements/books/bookI/propositions/propI29/",
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "I.34":      "/elements/books/bookI/propositions/propI34/",
+        "I.43":      "/elements/books/bookI/propositions/propI43/",
+        "I.46":      "/elements/books/bookI/propositions/propI46/",
+        "I.Def.22":  "/elements/books/bookI/definitions/defI22/",
+        "II.Def.1":  "/elements/books/bookII/definitions/defII1/"
     });
 </script>
 </figure>
 
-Describe the square *ADEB* on *AB.* Join *BD.* Draw *CF* through *C* parallel to either *AD* or *EB,* and draw *HK* through *G* parallel to either *AB* or *DE.* [!just I.46; I.31]
+Describe the square {ADEB} on {AB}. Join {BD}. Draw {CF} through {C} parallel to either {AD} or {EB}, and draw {HK} through {G} parallel to either {AB} or {DE}. [!just I.46; I.31]
 
-Then, since *CF* is parallel to *AD,* and *BD* falls on them, the exterior angle *CGB* equals the interior and opposite angle *ADB.* [!just I.29]
+Then, since {CF} is parallel to {AD}, and {BD} falls on them, the exterior angle {CGB} equals the interior and opposite angle {ADB}. [!just I.29]
 
-But the angle *ADB* equals the angle *ABD,* since the side *BA* also equals *AD.* Therefore the angle *CGB* also equals the angle *GBC,* so that the side *BC* also equals the side *CG.* [!just I.5; I.6]
+But the angle {ADB} equals the angle {ABD}, since the side {BA} also equals {AD}. Therefore the angle {CGB} also equals the angle {GBC}, so that the side {BC} also equals the side {CG}. [!just I.5; I.6]
 
-But *CB* equals *GK,* and *CG* to *KB.* Therefore *GK* also equals *KB.* Therefore *CGKB* is equilateral. [!just I.34]
+But {CB} equals {GK}, and {CG} to {KB}. Therefore {GK} also equals {KB}. Therefore {CGKB} is equilateral. [!just I.34]
 
 I say next that it is also right-angled.
 
-Since *CG* is parallel to *BK,* the sum of the angles *KBC* and *GCB* equals two right angles. [!just I.29]
+Since {CG} is parallel to {BK}, the sum of the angles {KBC} and {GCB} equals two right angles. [!just I.29]
 
-But the angle *KBC* is right. Therefore the angle *BCG* is also right, so that the opposite angles *CGK* and *GKB* are also right. [!just I.34]
+But the angle {KBC} is right. Therefore the angle {BCG} is also right, so that the opposite angles {CGK} and {GKB} are also right. [!just I.34]
 
-Therefore *CGKB* is right-angled, and it was also proved equilateral, therefore it is a square, and it is described on *CB.*
+Therefore {CGKB} is right-angled, and it was also proved equilateral, therefore it is a square, and it is described on {CB}.
 
-For the same reason *HF* is also a square, and it is described on *HG,* that is *AC.*  Therefore the squares *HF* and *KC* are the squares on *AC* and *CB.* [!just I.34]
+For the same reason {HF} is also a square, and it is described on {HG}, that is {AC}.  Therefore the squares {HF} and {KC} are the squares on {AC} and {CB}. [!just I.34]
 
-Now, since *AG* equals *GE,* and *AG* is the rectangle *AC* by *CB,* for *GC* equals *CB,* therefore *GE* also equals the rectangle *AC* by *CB.*  Therefore the sum of *AG* and *GE* equals twice the rectangle *AC* by *CB.* [!just I.43]
+Now, since {AG} equals {GE}, and {AG} is the rectangle {AC} by {CB}, for {GC} equals {CB}, therefore {GE} also equals the rectangle {AC} by {CB}.  Therefore the sum of {AG} and {GE} equals twice the rectangle {AC} by {CB}. [!just I.43]
 
-But the squares *HF* and *CK* are also the squares on *AC* and *CB,* therefore the sum of the four figures *HF, CK, AG,* and *GE* equals the sum of the squares on *AC* and *CB* plus twice the rectangle *AC* by *CB.*
+But the squares {HF} and {CK} are also the squares on {AC} and {CB}, therefore the sum of the four figures {HF}, {CK}, {AG}, and {GE} equals the sum of the squares on {AC} and {CB} plus twice the rectangle {AC} by {CB}.
 
-But *HF, CK, AG,* and *GE* are the whole *ADEB,* which is the square on *AB.*
+But {HF}, {CK}, {AG}, and {GE} are the whole {ADEB}, which is the square on {AB}.
 
-Therefore the square on *AB* equals the sum of the squares on *AC* and *CB* plus twice the rectangle *AC* by *CB.*
+Therefore the square on {AB} equals the sum of the squares on {AC} and {CB} plus twice the rectangle {AC} by {CB}.
 
 Therefore *if a straight line is cut at random, the square on the whole equals the squares on the segments plus twice the rectangle contained by the segments.*
 
@@ -82,9 +303,9 @@ Therefore *if a straight line is cut at random, the square on the whole equals t
 ----
 guide:
 
-The statement of the proposition can be interpreted in modern notation as saying that if *x* = *y* + *z,* then *x*<sup>2</sup> = *y*<sup>2</sup> + *z*<sup>2</sup> + 2*yz.*  More simply, as an identity, it says
+The statement of the proposition can be interpreted in modern notation as saying that if <span class="math">x = y + z</span>, then <span class="math">x^2 = y^2 + z^2 + 2yz</span>.  More simply, as an identity, it says
 
-<center>(<i>y</i> + <i>z</i>)<sup>2</sup> = <i>y</i><sup>2</sup> + <i>z</i><sup>2</sup> + 2<i>yz.</i></center>
+<div class="math display">(y + z)^2 = y^2 + z^2 + 2yz</div>
 
 #### Use of this proposition
 

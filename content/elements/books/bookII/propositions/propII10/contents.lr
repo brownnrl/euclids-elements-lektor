@@ -15,14 +15,53 @@ statement: If a straight line is bisected, and a straight line is added to it in
 ----
 proof:
 
-Let a straight line *AB* be bisected at *C,* and let a straight line *BD* be added to it in a straight line.
+Let a straight line {AB} be bisected at {C}, and let a straight line {BD} be added to it in a straight line.
 
-I say that the sum of the squares on *AD* and *DB* is double the sum of the squares on *AC* and *CD.*
+I say that the sum of the squares on {AD} and {DB} is double the sum of the squares on {AC} and {CD}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="250" tabindex="0"></canvas>
 <noscript><img src="propII10.gif" alt="II.10"/></noscript>
 <script type="text/javascript">
+    // Unlike II.1 this is not a region-decomposition proof — nothing is
+    // dissected. The argument is a chain of half-right angles that turns
+    // three isosceles right triangles into three applications of I.47.
+    // So the colour here carries ANGLE MAGNITUDE, not area: red for a
+    // right angle, orange for half of one. That is the deck's one
+    // authored colour decision; Joyce's figure has no fill at all (ECDF
+    // is an outline, face 0), so nothing of his is recoloured.
+    //
+    // Joyce's figure draws neither the segments the proof names as parts
+    // of longer lines (AB, AC, CB, CD, EF, FD, FG, EG) nor the five
+    // triangles the Guide's outline names. Everything added here is
+    // fully transparent (;0;0;0 lines, ;0;0;0;0 polygons), so the static
+    // figure is unchanged; the names exist only so a slide or a {NAME}
+    // hover can light them.
+    //
+    // Three markers carry two of Joyce's names each, because the rays
+    // coincide: D lies on FG, so angle EFD = angle EFG; B lies on EG, so
+    // angle FEB = angle FEG and angle DGB = angle EGF.
+    //
+    // The markers are phase-transitory — each group is dropped once its
+    // step is done rather than accumulating, so this 280x250 canvas
+    // never carries more than six at once. angEFD/angFEB come back on
+    // slide 14 and angACE/angAEB/angBDG on the I.47 slides, where they
+    // are the right angle each application needs.
+    //
+    // No deferDraggables: the only draggables are A, B (free) and D
+    // (lineSlider), and slide 1 introduces all three. The opposite rule
+    // bites instead — C (midpoint), E (last), F (vertex) and G
+    // (intersection) are DERIVED, so they are not auto-unioned and are
+    // listed explicitly in every slide they belong to.
+    var GIVEN  = ["A","B","C","D","AB","AD","AC","CB","CD","DB"];
+    var BUILT  = GIVEN.concat(["E","CE","AE","BE","F","ECDF","EF","FD"]);
+    var PARA   = BUILT.concat(["angCEF","angEFD","angFEB"]);
+    var MET    = BUILT.concat(["G","BG","DG","EG","FG","AG"]);
+    var HALFA  = MET.concat(["angEAC","angAEC","angACE"]);
+    var HALFB  = HALFA.concat(["angCEB","angEBC","angAEB"]);
+    var CORNER = MET.concat(["angEBC","angDBG","angDCE","angBDG","angDGB"]);
+    var ISOF   = MET.concat(["angDGB","angEFD","angFEB","EFG"]);
+    var SQUARE = MET.concat(["ACE","ECB","EFG","AEG","ADG"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -43,39 +82,276 @@ I say that the sum of the squares on *AD* and *DB* is double the sum of the squa
             "AG;line;connect;A,G",
             "BG;line;connect;B,G",
             "DG;line;connect;D,G",
-            "DB;line;connect;D,B"
+            "DB;line;connect;D,B",
+            // Hover / highlight targets only — the lines and the
+            // rectangle above already draw every one of these.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "FD;line;connect;F,D;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "EG;line;connect;E,G;0;0;0",
+            // The five triangles the Guide's outline of the proof names.
+            // Explicit ;0 faces — an omitted faceColor is an OPAQUE
+            // near-white face, and a highlighted polygon is promoted
+            // within its draw pass (#140), so an implicit face here
+            // would paint over the figure the moment one lit.
+            "ACE;polygon;triangle;A,C,E;0;0;0;0",
+            "ECB;polygon;triangle;E,C,B;0;0;0;0",
+            "EFG;polygon;triangle;E,F,G;0;0;0;0",
+            "AEG;polygon;triangle;A,E,G;0;0;0;0",
+            "ADG;polygon;triangle;A,D,G;0;0;0;0",
+            // red = a right angle, orange = half a right angle. Markers
+            // are hidden in the static figure (showAngles defaults
+            // false), so Euclid's arc-free diagram is untouched; the
+            // walk and the prose hovers reveal them. No radius
+            // overrides, so the five at E and the pairs at B and C nest
+            // themselves (#103 auto radius-stepping) — and the explicit
+            // colours survive that pass, which only rewrites markers
+            // still on the default palette.
+            "angEAC;sector;angleMarker;A,E,C;0;0;orange;orange",
+            "angAEC;sector;angleMarker;E,A,C;0;0;orange;orange",
+            "angACE;sector;angleMarker;C,A,E;0;0;red;red",
+            "angDCE;sector;angleMarker;C,D,E;0;0;red;red",
+            "angCEB;sector;angleMarker;E,C,B;0;0;orange;orange",
+            "angEBC;sector;angleMarker;B,E,C;0;0;orange;orange",
+            "angAEB;sector;angleMarker;E,A,B;0;0;red;red",
+            "angCEF;sector;angleMarker;E,C,F;0;0;red;red",
+            "angFEB;sector;angleMarker;E,F,B;0;0;orange;orange",
+            "angEFD;sector;angleMarker;F,E,D;0;0;red;red",
+            "angDBG;sector;angleMarker;B,D,G;0;0;orange;orange",
+            "angBDG;sector;angleMarker;D,B,G;0;0;red;red",
+            "angDGB;sector;angleMarker;G,D,B;0;0;orange;orange"
         ],
+        // ACE, EFG and AEG are TRIANGLES here (the Guide names them), so
+        // the triangle owns the name and the angle keeps its ang…
+        // spelling — the name-collision rule. The proof prose never
+        // writes any of those three as an angle, so no display override
+        // is needed.
+        aliases: { "BA": "AB", "CA": "AC", "BC": "CB", "DC": "CD",
+                   "DA": "AD", "EA": "AE", "EB": "BE", "EC": "CE",
+                   "BD": "DB", "GD": "DG", "GB": "BG", "GA": "AG",
+                   "GF": "FG", "FE": "EF", "DF": "FD", "GE": "EG",
+                   "EAC": "angEAC", "CAE": "angEAC",
+                   "AEC": "angAEC", "CEA": "angAEC",
+                   "DCE": "angDCE", "ECD": "angDCE",
+                   "CEB": "angCEB", "BEC": "angCEB",
+                   "EBC": "angEBC", "CBE": "angEBC",
+                   "AEB": "angAEB", "BEA": "angAEB",
+                   "CEF": "angCEF", "FEC": "angCEF",
+                   "EFD": "angEFD", "DFE": "angEFD",
+                   "FEB": "angFEB", "BEF": "angFEB",
+                   "FEG": "angFEB", "GEF": "angFEB",
+                   "DBG": "angDBG", "GBD": "angDBG",
+                   "BDG": "angBDG", "GDB": "angBDG",
+                   "DGB": "angDGB", "BGD": "angDGB",
+                   "EGF": "angDGB", "FGE": "angDGB" },
+        slides: [
+            { text: "Let a straight line {AB} be bisected at {C}, and let a straight line {BD} be added to it in a straight line.",
+              visible: GIVEN,
+              highlighted: ["AB","C","DB"] },
+            { text: "I say that the sum of the squares on {AD} and {DB} is double the sum of the squares on {AC} and {CD}.",
+              visible: GIVEN,
+              highlighted: ["AD","DB","AC","CD"] },
+            { text: "Draw {CE} from the point {C} at right angles to {AB} and equal to either {AC} or {CB}. Join {EA} and {EB}. Draw {EF} through {E} parallel to {AD}, and draw {FD} through {D} parallel to {CE}.",
+              visible: BUILT,
+              // Deliberately NOT highlighted: these are the animation's
+              // own targets. SlateAnimator hides an animated target until
+              // its own cascade step starts, but sets shouldHighlight at
+              // run start, and a hidden-but-highlighted element still
+              // draws — so listing them here paints the whole
+              // construction from t=0. The animation is the emphasis.
+              highlighted: [],
+              // EF and FD are transparent hover targets, so the stroke
+              // the reader actually sees for Joyce's two parallels is
+              // the rectangle's own outline; one outline draws both.
+              transition: { mode: "cascade", animations: [
+                  { elem: "CE",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AE",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BE",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ECDF", name: geomlib.A.Polygon.outline } ] },
+              justifications: [
+                  { claim: "CE at right angles to AB", ref: "I.11" },
+                  { claim: "CE equal to AC",           ref: "I.3" },
+                  { ref: "I.Post.1" },
+                  { claim: "EF parallel to AD, FD parallel to CE", ref: "I.31" } ] },
+            { text: "Then, since a straight line {EF} falls on the parallel straight lines {EC} and {FD}, the sum of the angles {CEF} and {EFD} equals two right angles.",
+              visible: PARA,
+              highlighted: ["EF","CE","FD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCEF", name: geomlib.A.Sector.sweep },
+                  { elem: "angEFD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "interior angles on the same side sum to two right angles", ref: "I.29" } ] },
+            { text: "Therefore the sum of the angles {FEB} and {EFD} is less than two right angles.",
+              visible: PARA,
+              highlighted: ["angEFD"],
+              transition: { animations: [
+                  { elem: "angFEB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But straight lines produced from angles less than two right angles meet. Therefore {EB} and {FD}, if produced in the direction {B} and {D}, will meet.",
+              visible: PARA,
+              highlighted: ["BE","FD","B","D"],
+              justifications: [{ ref: "I.Post.5" }] },
+            { text: "Let them be produced and meet at {G}, and join {AG}.",
+              visible: MET,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BG", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "DG", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "AG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.2" }, { ref: "I.Post.1" }] },
+            { text: "Then, since {AC} equals {CE}, the angle {EAC} also equals the angle {AEC}.",
+              visible: HALFA,
+              highlighted: ["AC","CE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angEAC", name: geomlib.A.Sector.sweep },
+                  { elem: "angAEC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "the base angles of the isosceles triangle ACE", ref: "I.5" } ] },
+            { text: "The angle at {C} is right, therefore each of the angles {EAC} and {AEC} is half of a right angle.",
+              visible: HALFA,
+              highlighted: ["angEAC","angAEC"],
+              transition: { animations: [
+                  { elem: "angACE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "the three angles sum to two right angles", ref: "I.32" } ] },
+            { text: "For the same reason each of the angles {CEB} and {EBC} is also half of a right angle, therefore the angle {AEB} is right.",
+              visible: HALFB,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angCEB", name: geomlib.A.Sector.sweep },
+                  { elem: "angEBC", name: geomlib.A.Sector.sweep },
+                  { elem: "angAEB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "the base angles of the isosceles triangle ECB", ref: "I.5" },
+                  { claim: "each is half of a right angle",               ref: "I.32" } ] },
+            { text: "And, since the angle {EBC} is half of a right angle, the angle {DBG} is also half of a right angle.",
+              visible: CORNER,
+              highlighted: ["angEBC"],
+              transition: { animations: [
+                  { elem: "angDBG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "vertical angles are equal", ref: "I.15" } ] },
+            { text: "But the angle {BDG} is also right, for it equals the angle {DCE}, since they are alternate.",
+              visible: CORNER,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angDCE", name: geomlib.A.Sector.sweep },
+                  { elem: "angBDG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "alternate angles on the parallels CE and FD", ref: "I.29" } ] },
+            { text: "Therefore the remaining angle {DGB} is half of a right angle. Therefore the angle {DGB} equals the angle {DBG}, so that the side {BD} also equals the side {GD}.",
+              visible: CORNER,
+              highlighted: ["angDBG","DB","DG"],
+              transition: { animations: [
+                  { elem: "angDGB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "the remaining angle of triangle DBG", ref: "I.32" },
+                  { claim: "equal angles subtend equal sides",    ref: "I.6" } ] },
+            { text: "Again, since the angle {EGF} is half of a right angle, and the angle at {F} is right, for it equals the opposite angle, the angle at {C}, the remaining angle {FEG} is half of a right angle. Therefore the angle {EGF} equals the angle {FEG}, so that the side {GF} also equals the side {EF}.",
+              visible: ISOF,
+              highlighted: ["angDGB","FG","EF","EFG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angEFD", name: geomlib.A.Sector.sweep },
+                  { elem: "angFEB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "opposite angles of the parallelogram ECDF", ref: "I.34" },
+                  { claim: "the remaining angle of triangle EFG",       ref: "I.32" },
+                  { claim: "equal angles subtend equal sides",          ref: "I.6" } ] },
+            { text: "Now, since the square on {EC} equals the square on {CA}, the sum of the squares on {EC} and {CA} is double the square on {CA}. But the square on {EA} equals the sum of the squares on {EC} and {CA}, therefore the square on {EA} is double the square on {AC}.",
+              visible: SQUARE.concat(["angACE"]),
+              highlighted: ["CE","AC","AE","ACE"],
+              justifications: [
+                  { claim: "the square on EA, the hypotenuse of ACE", ref: "I.47" } ] },
+            { text: "Again, since {FG} equals {EF}, the square on {FG} also equals the square on {FE}. Therefore the sum of the squares on {GF} and {FE} is double the square on {EF}. But the square on {EG} equals the sum of the squares on {GF} and {FE}, therefore the square on {EG} is double the square on {EF}.",
+              visible: SQUARE.concat(["angEFD"]),
+              highlighted: ["FG","EF","EG"],
+              transition: { animations: [
+                  { elem: "EFG", name: geomlib.A.Polygon.outline } ] },
+              justifications: [
+                  { claim: "the square on EG, the hypotenuse of EFG", ref: "I.47" } ] },
+            { text: "And {EF} equals {CD}, therefore the square on {EG} is double the square on {CD}. But the square on {EA} was also proved to be double the square on {AC}, therefore the sum of the squares on {AE} and {EG} is double the sum of the squares on {AC} and {CD}.",
+              visible: SQUARE,
+              highlighted: ["EF","CD","EG","AE","AC"],
+              justifications: [
+                  { claim: "opposite sides of the parallelogram ECDF are equal", ref: "I.34" } ] },
+            { text: "And the square on {AG} equals the sum of the squares on {AE} and {EG}, therefore the square on {AG} is double the sum of the squares on {AC} and {CD}.",
+              visible: SQUARE.concat(["angAEB"]),
+              highlighted: ["AG","AE","EG"],
+              transition: { animations: [
+                  { elem: "AEG", name: geomlib.A.Polygon.outline } ] },
+              justifications: [
+                  { claim: "the square on AG, the hypotenuse of AEG", ref: "I.47" } ] },
+            { text: "But the sum of the squares on {AD} and {DG} equals the square on {AG}, therefore the sum of the squares on {AD} and {DG} is double the sum of the squares on {AC} and {CD}.",
+              visible: SQUARE.concat(["angBDG"]),
+              highlighted: ["AG","AD","DG"],
+              transition: { animations: [
+                  { elem: "ADG", name: geomlib.A.Polygon.outline } ] },
+              justifications: [
+                  { claim: "the square on AG, the hypotenuse of ADG", ref: "I.47" } ] },
+            { text: "And {DG} equals {DB}, therefore the sum of the squares on {AD} and {DB} is double the sum of the squares on {AC} and {CD}.",
+              visible: SQUARE,
+              highlighted: ["DG","DB","AD","AC","CD"] },
+            { text: "Therefore, if a straight line is bisected and a straight line is added to it in a straight line, the square on the whole with the added straight line and the square on the added straight line together are double the square on the half and the square on the straight line made up of the half and the added straight line.",
+              visible: SQUARE,
+              highlighted: ["AD","DB","AC","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "I.5":       "/elements/books/bookI/propositions/propI5/",
+        "I.6":       "/elements/books/bookI/propositions/propI6/",
+        "I.11":      "/elements/books/bookI/propositions/propI11/",
+        "I.15":      "/elements/books/bookI/propositions/propI15/",
+        "I.29":      "/elements/books/bookI/propositions/propI29/",
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "I.32":      "/elements/books/bookI/propositions/propI32/",
+        "I.34":      "/elements/books/bookI/propositions/propI34/",
+        "I.47":      "/elements/books/bookI/propositions/propI47/",
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "I.Post.2":  "/elements/books/bookI/postulates/post2/",
+        "I.Post.5":  "/elements/books/bookI/postulates/post5/"
     });
 </script>
 </figure>
 
-Draw *CE* from the point *C* at right angles to *AB* and equal to either *AC* or *CB.*  Join *EA* and *EB.*  Draw *EF* through *E* parallel to *AD,* and draw *FD* through *D* parallel to *CE.* [!just I.11, I.3; I.31]
+Draw {CE} from the point {C} at right angles to {AB} and equal to either {AC} or {CB}.  Join {EA} and {EB}.  Draw {EF} through {E} parallel to {AD}, and draw {FD} through {D} parallel to {CE}. [!just I.11, I.3; I.31]
 
-Then, since a straight line *EF* falls on the parallel straight lines *EC* and *FD,* the sum of the angles *CEF* and *EFD*  equals two right angles.  Therefore the sum of the angles *FEB* and *EFD* is less than two right angles. [!just I.29]
+Then, since a straight line {EF} falls on the parallel straight lines {EC} and {FD}, the sum of the angles {CEF} and {EFD}  equals two right angles.  Therefore the sum of the angles {FEB} and {EFD} is less than two right angles. [!just I.29]
 
 [!just I.Post.5]
 
-But straight lines produced from angles less than two right angles meet. Therefore *EB* and *FD,* if produced in the direction *B* and *D,* will meet.
+But straight lines produced from angles less than two right angles meet. Therefore {EB} and {FD}, if produced in the direction {B} and {D}, will meet.
 
-Let them be produced and meet at *G,* and join *AG.*
+Let them be produced and meet at {G}, and join {AG}.
 
-Then, since *AC* equals *CE,* the angle *EAC* also equals the angle *AEC.* The angle at *C* is right, therefore each of the angles *EAC* and *AEC* is half of a right angle. [!just I.5; I.32]
+Then, since {AC} equals {CE}, the angle {EAC} also equals the angle {AEC}. The angle at {C} is right, therefore each of the angles {EAC} and {AEC} is half of a right angle. [!just I.5; I.32]
 
-For the same reason each of the angles *CEB* and *EBC* is also half of a right angle, therefore the angle *AEB* is right.
+For the same reason each of the angles {CEB} and {EBC} is also half of a right angle, therefore the angle {AEB} is right.
 
-And, since the angle *EBC* is half of a right angle, the angle *DBG* is also half of a right angle.  But the angle *BDG* is also right, for it equals the angle *DCE,* since they are alternate.  Therefore the remaining angle *DGB* is half of a right angle. Therefore the angle *DGB* equals the angle *DBG,* so that the side *BD* also equals the side *GD.* [!just I.15, I.29; I.32, I.6]
+And, since the angle {EBC} is half of a right angle, the angle {DBG} is also half of a right angle.  But the angle {BDG} is also right, for it equals the angle {DCE}, since they are alternate.  Therefore the remaining angle {DGB} is half of a right angle. Therefore the angle {DGB} equals the angle {DBG}, so that the side {BD} also equals the side {GD}. [!just I.15, I.29; I.32, I.6]
 
-Again, since the angle *EGF* is half of a right angle, and the angle at *F* is right, for it equals the opposite angle, the angle at *C,*  the remaining angle *FEG* is half of a right angle. Therefore the angle *EGF* equals the angle *FEG,* so that the side *GF* also equals the side *EF.* [!just I.34, I.32; I.6]
+Again, since the angle {EGF} is half of a right angle, and the angle at {F} is right, for it equals the opposite angle, the angle at {C},  the remaining angle {FEG} is half of a right angle. Therefore the angle {EGF} equals the angle {FEG}, so that the side {GF} also equals the side {EF}. [!just I.34, I.32; I.6]
 
-Now, since the square on *EC* equals the square on *CA,* the sum of the squares on *EC* and *CA* is double the square on *CA.*  But the square on *EA* equals the sum of the squares on *EC* and *CA,* therefore the square on *EA* is double the square on *AC.* [!just I.47]
+Now, since the square on {EC} equals the square on {CA}, the sum of the squares on {EC} and {CA} is double the square on {CA}.  But the square on {EA} equals the sum of the squares on {EC} and {CA}, therefore the square on {EA} is double the square on {AC}. [!just I.47]
 
-Again, since *FG* equals *EF,* the square on *FG* also equals the square on *FE.*  Therefore the sum of the squares on *GF* and *FE* is double the square on *EF.*  But the square on *EG* equals the sum of the squares on *GF* and *FE,*  therefore the square on *EG* is double the square on *EF.* [!just I.47]
+Again, since {FG} equals {EF}, the square on {FG} also equals the square on {FE}.  Therefore the sum of the squares on {GF} and {FE} is double the square on {EF}.  But the square on {EG} equals the sum of the squares on {GF} and {FE},  therefore the square on {EG} is double the square on {EF}. [!just I.47]
 
-And *EF* equals *CD,* therefore the square on *EG* is double the square on *CD.* But the square on *EA* was also proved to be double the square on *AC,* therefore the sum of the squares on *AE* and *EG* is double the sum of the squares on *AC* and *CD.* [!just I.34]
+And {EF} equals {CD}, therefore the square on {EG} is double the square on {CD}. But the square on {EA} was also proved to be double the square on {AC}, therefore the sum of the squares on {AE} and {EG} is double the sum of the squares on {AC} and {CD}. [!just I.34]
 
-And the square on *AG* equals the sum of the squares on *AE* and *EG,*  therefore the square on *AG* is double the sum of the squares on *AC* and *CD.* But the sum of the squares on *AD* and *DG* equals the square on *AG,* therefore the sum of the squares on *AD* and *DG* is double the sum of the squares on *AC* and *CD.* [!just I.47]
+And the square on {AG} equals the sum of the squares on {AE} and {EG},  therefore the square on {AG} is double the sum of the squares on {AC} and {CD}. But the sum of the squares on {AD} and {DG} equals the square on {AG}, therefore the sum of the squares on {AD} and {DG} is double the sum of the squares on {AC} and {CD}. [!just I.47]
 
-And *DG* equals *DB,* therefore the sum of the squares on *AD* and *DB* is double the sum of the squares on *AC* and *CD.*
+And {DG} equals {DB}, therefore the sum of the squares on {AD} and {DB} is double the sum of the squares on {AC} and {CD}.
 
 Therefore *if a straight line is bisected, and a straight line is added to it in a straight line, then the square on the whole with the added straight line and the square on the added straight line both together are double the sum of the square on the half and the square described on the straight line made up of the half and the added straight line as on one straight line.*
 
@@ -85,32 +361,38 @@ guide:
 
 #### Outline of the proof
 
-The proof is almost the same as the previous proposition.  The entire situation is the same, except the point *D*  is moved past the end *B* of the line *AB.*
+The proof is almost the same as the previous proposition.  The entire situation is the same, except the point {D}  is moved past the end {B} of the line {AB}.
 
-As before draw *CE* at right angles to *AB* and equal to half of it.  Finish the diagram.  That results in isosceles right triangles, *ACE, ECB,* and *EFG,* as well as two other right triangles, *AEG* and *ADG.* Then,
+As before draw {CE} at right angles to {AB} and equal to half of it.  Finish the diagram.  That results in isosceles right triangles, {ACE}, {ECB}, and {EFG}, as well as two other right triangles, {AEG} and {ADG}. Then,
 
-<center><i>AG</i><sup>2</sup> = <i>AE</i><sup>2</sup> + <i>EG</i><sup>2</sup> = (<i>AC</i><sup>2</sup> + <i>CE</i><sup>2</sup>) + (<i>EF</i><sup>2</sup> + <i>FG</i><sup>2</sup>) = 2(<i>AC</i><sup>2</sup>+<i>CD</i><sup>2</sup>)</center>
+<div class="math display">\begin{aligned}
+\htmlClass{elem-ref}{\htmlData{elem=AG}{AG}}^2 &= \htmlClass{elem-ref}{\htmlData{elem=AE}{AE}}^2 + \htmlClass{elem-ref}{\htmlData{elem=EG}{EG}}^2 \\
+     &= (\htmlClass{elem-ref}{\htmlData{elem=AC}{AC}}^2 + \htmlClass{elem-ref}{\htmlData{elem=CE}{CE}}^2) + (\htmlClass{elem-ref}{\htmlData{elem=EF}{EF}}^2 + \htmlClass{elem-ref}{\htmlData{elem=FG}{FG}}^2) \\
+     &= 2(\htmlClass{elem-ref}{\htmlData{elem=AC}{AC}}^2 + \htmlClass{elem-ref}{\htmlData{elem=CD}{CD}}^2)
+\end{aligned}</div>
 
 But also,
 
-<center><i>AG</i><sup>2</sup> = <i>AD</i><sup>2</sup> + <i>DG</i><sup>2</sup> = <i>AD</i><sup>2</sup> + <i>DB</i><sup>2</sup></center>
+<div class="math display">\begin{aligned}
+\htmlClass{elem-ref}{\htmlData{elem=AG}{AG}}^2 &= \htmlClass{elem-ref}{\htmlData{elem=AD}{AD}}^2 + \htmlClass{elem-ref}{\htmlData{elem=DG}{DG}}^2 \\
+     &= \htmlClass{elem-ref}{\htmlData{elem=AD}{AD}}^2 + \htmlClass{elem-ref}{\htmlData{elem=DB}{DB}}^2
+\end{aligned}</div>
 
-Thus, *AD*<sup>2</sup> + *DB*<sup>2</sup> =
-2(*AC*<sup>2</sup>+*CD*<sup>2</sup>), as desired.
+Thus, <span class="math">\htmlClass{elem-ref}{\htmlData{elem=AD}{AD}}^2 + \htmlClass{elem-ref}{\htmlData{elem=DB}{DB}}^2 = 2(\htmlClass{elem-ref}{\htmlData{elem=AC}{AC}}^2 + \htmlClass{elem-ref}{\htmlData{elem=CD}{CD}}^2)</span>, as desired.
 
 #### Interpretations of this proposition
 
-This proposition can be interpreted to derive the same algebraic identities as the previous proposition. For example, when *y* is identified with *CD* and *z* is identified with *CB,*  then the proposition states that
+This proposition can be interpreted to derive the same algebraic identities as the previous proposition. For example, when <span class="math">y</span> is identified with {CD} and <span class="math">z</span> is identified with {CB}, then the proposition states that
 
-<center>(<i>y</i> + <i>z</i>)<sup>2</sup> + (<i>y</i> – <i>z</i>)<sup>2</sup> = 2 (<i>y</i><sup>2</sup> + <i>z</i><sup>2</sup>).</center>
+<div class="math display">(y + z)^2 + (y - z)^2 = 2\,(y^2 + z^2)</div>
 
 #### Side and diagonal numbers
 
-The diagonal of a square is incommensurable with the side of a square.  Another way of saying that is that the ratio of the diagonal to a side, what is generally known as the square root of 2, is not the ratio of two whole numbers, in other words √2 is an irrational number.  See the [Guide](/elements/books/bookVIII/propositions/propVIII8/) to proposition VIII.8 for details.
+The diagonal of a square is incommensurable with the side of a square.  Another way of saying that is that the ratio of the diagonal to a side, what is generally known as the square root of 2, is not the ratio of two whole numbers, in other words <span class="math">\sqrt{2}</span> is an irrational number.  See the [Guide](/elements/books/bookVIII/propositions/propVIII8/) to proposition VIII.8 for details.
 
-Nonetheless, finding a close rational approximation for √2 is an important goal.  For practical reasons, close approximations are useful, and for theoretical reasons, close approximations are interesting.
+Nonetheless, finding a close rational approximation for <span class="math">\sqrt{2}</span> is an important goal.  For practical reasons, close approximations are useful, and for theoretical reasons, close approximations are interesting.
 
-Some time before Euclid, Plato refers in his *Republic* the "rational diameter" of 5.  A square of side length *s* = 5 has a diameter (diagonal) of *d* = √50, which is irrational.  But 49 is close to 50, so 7 is close to this irrational length.  There are a number of side lengths *s* whose squares *s*<sup>2</sup> differ from a square number *d*<sup>2</sup> by only 1.  The first few are displayed in the table below.  The column labelled "angle" gives the angle opposite the diameter *d.*  By the law of cosines, the cosine of the angle equals 1 – *d*<sup>2</sup>/(2*s*<sup>2</sup>).
+Some time before Euclid, Plato refers in his *Republic* the "rational diameter" of 5.  A square of side length <span class="math">s = 5</span> has a diameter (diagonal) of <span class="math">d = \sqrt{50}</span>, which is irrational.  But 49 is close to 50, so 7 is close to this irrational length.  There are a number of side lengths <span class="math">s</span> whose squares <span class="math">s^2</span> differ from a square number <span class="math">d^2</span> by only 1.  The first few are displayed in the table below.  The column labelled "angle" gives the angle opposite the diameter <span class="math">d</span>.  By the law of cosines, the cosine of the angle equals <span class="math">1 - d^2/(2s^2)</span>.
 
 <center><table>
 <tr><th>side <i>s</i></th><th>diagonal <i>d</i></th><th>relation</th><th>angle</th><th>ratio <i>d/s</i></th></tr>
@@ -140,7 +422,7 @@ Some time before Euclid, Plato refers in his *Republic* the "rational diameter" 
     <td>1.414286</td></tr>
 </table></center>
 
-Note how the squares of the diagonals alternately are less and greater by 1 than twice the squares of the sides, and the angle correspondingly alternates between acute and obtuse, but quickly approaches a right angle. Likewise, the ratio *d/s* is alternately less and greater then the irrational number √2.
+Note how the squares of the diagonals alternately are less and greater by 1 than twice the squares of the sides, and the angle correspondingly alternates between acute and obtuse, but quickly approaches a right angle. Likewise, the ratio <span class="math">d/s</span> is alternately less and greater then the irrational number <span class="math">\sqrt{2}</span>.
 
 <figure class="diagram rdiagram">
 <canvas id="canvas_1" width="350" height="340" tabindex="0"></canvas>
@@ -187,7 +469,7 @@ Note how the squares of the diagonals alternately are less and greater by 1 than
 </script>
 </figure>
 
-Note how the squares of the diagonals alternately are less and greater by 1 than twice the squares of the sides, and the angle correspondingly alternates between acute and obtuse, but quickly approaches a right angle. Likewise, the ratio *d/s* is alternately less and greater then the irrational number √2.
+Note how the squares of the diagonals alternately are less and greater by 1 than twice the squares of the sides, and the angle correspondingly alternates between acute and obtuse, but quickly approaches a right angle. Likewise, the ratio <span class="math">d/s</span> is alternately less and greater then the irrational number <span class="math">\sqrt{2}</span>.
 
 To the right are displayed triangles for the first four lines in the table.  The first triangle has side
 *s*<sub>1</sub> = *OA* = 1 and diagonal
@@ -199,23 +481,22 @@ To the right are displayed triangles for the first four lines in the table.  The
 *s*<sub>4</sub> = *OG* = 12 and
 *d*<sub>4</sub> = *GH* = 17.
 
-The pattern of the lengths of the sides and diagonals is evident.  The next side *s'* is the sum of the current side and diagonal, while the next diagonal *d'* is the sum of twice the current side and diagonal:
+The pattern of the lengths of the sides and diagonals is evident.  The next side <span class="math">s'</span> is the sum of the current side and diagonal, while the next diagonal <span class="math">d'</span> is the sum of twice the current side and diagonal:
 
-<center><i>s'</i>  = <i>s</i> + <i>d</i></center>
+<div class="math display">s' = s + d</div>
 
-<center><i>d'</i> = 2<i>s</i> + <i>d</i>.</center>
+<div class="math display">d' = 2s + d</div>
 
-A pattern requires a verification, and this proposition supplies that.  What needs to be verified is that if 2*s*<sup>2</sup> differs from *d*<sup>2</sup> by exactly 1, then so does
-2*s'*<sup>2</sup> differ from *d'*<sup>2</sup> by exactly 1.
+A pattern requires a verification, and this proposition supplies that.  What needs to be verified is that if <span class="math">2s^2</span> differs from <span class="math">d^2</span> by exactly 1, then so does
+<span class="math">2s^{\prime2}</span> differ from <span class="math">d^{\prime2}</span> by exactly 1.
 
-Let *CD* equal *s,* and let *BC* equal *d.* Then *s'* = *AC* = *CB,* and
-*d'* = *AD.*  By this proposition
+Let <span class="elem-ref" data-elem="CD" data-canvas="canvas_0"><i>CD</i></span> equal <span class="math">s</span>, and let <span class="elem-ref" data-elem="BC" data-canvas="canvas_0"><i>BC</i></span> equal <span class="math">d</span>. Then <span class="math">s'</span> = <span class="elem-ref" data-elem="AC" data-canvas="canvas_0"><i>AC</i></span> = <span class="elem-ref" data-elem="CB" data-canvas="canvas_0"><i>CB</i></span>, and <span class="math">d'</span> = <span class="elem-ref" data-elem="AD" data-canvas="canvas_0"><i>AD</i></span>.  By this proposition
 
-<center><i>d'</i><sup>2</sup> + <i>d</i><sup>2</sup> = 2(<i>s'</i><sup>2</sup> + <i>s</i><sup>2</sup>),</center>
+<div class="math display">d^{\prime2} + d^2 = 2(s^{\prime2} + s^2)</div>
 
 so that
 
-<center><i>d'</i><sup>2</sup> – 2<i>s'</i><sup>2</sup>  = 2<i>s</i><sup>2</sup> – <i>d</i><sup>2</sup>.</center>
+<div class="math display">d^{\prime2} - 2s^{\prime2} = 2s^2 - d^2</div>
 
-Thus, if 2*s*<sup>2</sup> differs from *d*<sup>2</sup> by 1, then
-2*s'*<sup>2</sup> also differs from *d'*<sup>2</sup> by 1.  More precisely, if one difference is +1, then the other difference is –1.
+Thus, if <span class="math">2s^2</span> differs from <span class="math">d^2</span> by 1, then
+<span class="math">2s^{\prime2}</span> also differs from <span class="math">d^{\prime2}</span> by 1.  More precisely, if one difference is +1, then the other difference is –1.

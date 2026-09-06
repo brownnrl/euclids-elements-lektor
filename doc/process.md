@@ -97,11 +97,16 @@ So:
   `canvas_1`): a ref placed *after* `canvas_1` binds to `canvas_1`; one
   *between* the canvases binds to `canvas_0`. Order the prose so each
   ref's nearest preceding canvas is the one it means.
-- When the wording can't be reordered, target a canvas explicitly with the
-  raw-HTML span —
-  `<span class="elem-ref" data-elem="AB" data-canvas="canvas_0">AB</span>`
-  (the inline `{AB:canvas_0}` form doesn't survive Mistune's underscore
-  split).
+- When the wording can't be reordered, name the canvas in the ref itself:
+  `{AB:canvas_0}`, or `{AB:canvas_0,canvas_1}` for several, combining with
+  the display override as `{DISPLAY|element:canvas_1}`. This works in markdown
+  prose — `lektor-eucrefs` registers its own inline rule ahead of emphasis and
+  adds `{` to Mistune's `text` stop set, which is what the underscore split
+  used to break (lektor#19).
+- **Inside raw HTML** — a `<center>`, a `<table>`, any block-level HTML —
+  Mistune does not process inline markdown at all, so `{AB}` stays literal
+  there. Use the span form instead:
+  `<span class="elem-ref" data-elem="AB" data-canvas="canvas_0">AB</span>`.
 
 Every element a guide ref names must exist on its target canvas; add an
 invisible highlight target there if the prose names something the diagram
@@ -122,7 +127,73 @@ words is not.
 
 All framing, narration, and "here's what to notice" belongs in the
 **slideshow captions** (`slides[].text`), which are ours to write — not in
-the guide. (Same spirit as "only build figures Joyce's page had": the
+the guide.
+
+### Captions carry Joyce's sentence, not a paraphrase of it
+
+"Ours to write" governs **which** sentences a slide carries and how the walk
+is paced. It does not license rewording the sentence itself. A caption is his
+prose for that step, tokenized — the same rule as the proof body, arrived at
+from the other direction.
+
+**Consolidating citations is fine. Changing words is not.** Those are separate
+freedoms and it is easy to take the second while reaching for the first.
+
+Caught on II.4 slide 3. Joyce's step reads:
+
+> Describe the square *ADEB* on *AB.* Join *BD.* Draw *CF* through *C* parallel
+> to either *AD* or *EB,* and draw *HK* through *G* parallel to either *AB* or
+> *DE.* [!just I.46; I.31]
+
+and the caption had been written as:
+
+> Describe the square {ADEB} on {AB}, join {BD}, and draw the two parallels —
+> {CF} through {C}, and {HK} through {G}.
+
+It reads well and it is shorter, which is exactly why it slipped through. But
+"the two parallels" throws away *which lines they are parallel to*, and that is
+the content — the next slide's argument turns on `CF ∥ AD`. What the caption may
+do is take his two marginal refs and pair them as claims:
+
+```js
+justifications: [
+    { claim: "the square on AB", ref: "I.46" },
+    { claim: "parallels through C and G", ref: "I.31" },
+]
+```
+
+That is summation of the references, which the `claim` convention exists for.
+The sentence stays his:
+
+```js
+{ text: "Describe the square {ADEB} on {AB}. Join {BD}. Draw {CF} through {C} "
+      + "parallel to either {AD} or {EB}, and draw {HK} through {G} parallel "
+      + "to either {AB} or {DE}." }
+```
+
+Where a caption legitimately is ours: the opening "Let … be …" and "I say that
+…" beats, a closing summary slide, and editorial asides in square brackets.
+Anywhere the slide is walking a step of the proof, the step's own words are the
+caption.
+
+**Split rather than compress.** If a step's sentences won't sit comfortably on
+one slide, the answer is more slides carrying his wording — never fewer slides
+carrying a summary of it. A deck that runs long because it keeps the text
+intact is doing its job; a shorter one that paraphrases is not.
+
+This does not reopen the citation split that `claim` closed. Two different
+reasons to split, and only one of them was retired:
+
+| Reason to split | Verdict |
+|---|---|
+| To keep each statement beside its own citation | **Retired** — `claim` pairs them on one slide |
+| Because one slide cannot carry the step's own words | **Correct** — take the split |
+
+**The guide is looser.** Its commentary is Joyce talking *about* the text
+rather than proving anything, and much of it is informal. Tokenizing is still
+the only change to make to guide prose, but a guide-canvas caption need not
+track his sentences as tightly as a proposition caption does. The strict rule
+is for the proof walk, where the words are the mathematics. (Same spirit as "only build figures Joyce's page had": the
 republished page stays his; our layer is the interactive slideshow on top.)
 
 ### Invisible highlight targets (the Zeno pattern)

@@ -22,6 +22,17 @@ process.stdin.on("end", () => {
             throwOnError: false,
             // Don't pollute output with strict-mode warnings.
             strict: false,
+            // Element formulas in the guides name figure elements, and those
+            // names must stay hoverable. \htmlClass{elem-ref}\htmlData{elem=AG}
+            // emits exactly the class and attribute assets/js/elem-ref-highlight.js
+            // binds, so a derivation can be set as real aligned mathematics
+            // without trading away the link to the diagram.
+            //
+            // Trust is granted to those two commands only — not \href, \url,
+            // \includegraphics or \htmlId — so a formula cannot introduce a
+            // link or pull in a resource.
+            trust: (context) =>
+                context.command === "\\htmlClass" || context.command === "\\htmlData",
         });
         process.stdout.write(html);
     } catch (e) {
