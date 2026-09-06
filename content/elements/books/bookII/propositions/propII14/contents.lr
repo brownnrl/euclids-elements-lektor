@@ -17,16 +17,58 @@ statement: To construct a square equal to a given rectilinear figure.
 ----
 proof:
 
-Let *A* be the given rectilinear figure.
+Let {A} be the given rectilinear figure.
 
-It is required to construct a square equal to the rectilinear figure *A.*
+It is required to construct a square equal to the rectilinear figure {A}.
 
-Construct the rectangular parallelogram *BD* equal to the rectilinear figure *A.* [!just I.45]
+Construct the rectangular parallelogram {BD} equal to the rectilinear figure {A}. [!just I.45]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="470" height="260" tabindex="0"></canvas>
 <noscript><img src="propII14.gif" alt="II.14"/></noscript>
 <script type="text/javascript">
+    // The close of Book II, and — unlike II.12 and II.13 — a genuine
+    // CONSTRUCTION: most of the deck builds something, so the apparatus
+    // (rectangle, production, bisection, semicircle, perpendicular chord) is
+    // shown in full, one animated step per clause. The two borrowed
+    // techniques are assumed per the fatigue rule: I.45 arrives as a single
+    // outlineAndFill on the finished rectangle rather than replaying a whole
+    // proposition, and I.3 / I.10 are long past their demonstration — EF
+    // extends in one stroke and G simply appears, as from I.5 on.
+    //
+    // No squares are drawn. The proof's squares (on EG, GF, GH, HE) would hang
+    // off a 470x260 canvas — the square on EH alone is 94px a side, below D —
+    // so refs stay LITERAL, as in II.1. The one rectangle the proof names,
+    // BE by EF, needs no new element: the proof itself identifies it with BD.
+    //
+    // Everything added below is fully transparent (;0;0;0 lines, ;0;0;0;0
+    // polygons), so the static figure is unchanged. Note that Joyce's own gif
+    // puts H on the LOWER arc of the circle on BF while the semicircle BHF is
+    // drawn above it; that is harmless (H is on the circle either way, so GH
+    // is a radius and EH has the right length) and it is what the source
+    // shows, so it is kept.
+    //
+    // Colour: A and BCDE keep Joyce's random fills. The semicircle BHF has no
+    // explicit faceColor — i.e. a near-white OPAQUE face — which is right,
+    // since his gif shows it filled; it is never in a highlighted set, so the
+    // promote-on-highlight hazard (#140) never fires, and its face lies
+    // entirely above BF where nothing else is drawn.
+    var FIG  = ["A1","A2","A3","A4","A"];
+    // BE1 / E1 are the application's scaffolding — the perpendicular at B that
+    // fixes the rectangle's direction. BE1 paints a ~50px stub along BE that
+    // the rectangle's own edge covers in the resting figure, so it is kept out
+    // of every visible set: otherwise it would sit there on slide 2 while
+    // BCDE, the animation's target, is still held hidden. The resting figure
+    // is unaffected (slide visibility is restored on exit).
+    var RECT = FIG.concat(["B","C","BCDE","D","E","BE","ED"]);
+    // The production and the bisection are separate slides now — his
+    // "produce it to F", "make EF equal to ED" and "and bisect BF at G" are
+    // three clauses, so G and the radii through it arrive a slide after F.
+    var PROD1 = RECT.concat(["F","EF"]);
+    var PROD  = PROD1.concat(["BF","G","GB","GF","GE"]);
+    var SEMI = PROD.concat(["BHF"]);
+    var HGT  = SEMI.concat(["H","EH","GH"]);
+    var RT   = HGT.concat(["HGE","angGEH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,57 +89,221 @@ Construct the rectangular parallelogram *BD* equal to the rectilinear figure *A.
             "EF;line;extend;B,E,E,D",
             "F;point;last;EF",
             "G;point;midpoint;B,F",
-            "BHF;sector;sector;G,F,B",
+            // Given a random face, like A and BCDE beside it. As converted it
+            // had no colour fields at all, so it carried the near-white OPAQUE
+            // default -- neither a colour nor transparent. Joyce's own gif
+            // fills this region: sampling 10px above the diameter inside the
+            // semicircle gives 157 pixels of his pale green, so a fill is what
+            // he drew.
+            //
+            // Arms MUST stay F,B. At exactly 180 degrees the two arm orders are
+            // not two directions round one arc -- they are the two different
+            // semicircles, and F,B is the one above BF where Joyce draws it.
+            // The cost is that A.Sector.sweep runs backwards for this order
+            // (euclid#172: _anticlockwise() is hard-coded true, so a positive
+            // arc angle traces the complement -- a full circle at t=0 closing
+            // to a semicircle). Until that is fixed the slide reveals the
+            // semicircle without sweeping it; swapping the arms to fix the
+            // sweep would put it on the wrong side.
+            "BHF;sector;sector;G,F,B;0;0;0,0,0;random",
             "Gcirc;circle;radius;G,B;0;0;0;0",
             "H';line;perpendicular;E,G;0;0;0",
             "HH2;line;chord;H',Gcirc;0;0;0",
             "H;point;first;HH2",
             "EH;line;connect;E,H",
-            "GH;line;connect;G,H"
+            "GH;line;connect;G,H",
+            // Sides and segments the proof names; the rectangle and the
+            // produced line already draw them.
+            "BE;line;connect;B,E;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "BF;line;connect;B,F;0;0;0",
+            "GB;line;connect;G,B;0;0;0",
+            "GF;line;connect;G,F;0;0;0",
+            "GE;line;connect;G,E;0;0;0",
+            // The right triangle the I.47 step is about, and its right angle.
+            // One marker at that vertex, so no radius override.
+            "HGE;polygon;triangle;H,G,E;0;0;0;0",
+            "angGEH;sector;angleMarker;E,G,H;0;0;red;red",
+            // Guide-only hover targets: the alternative similar-triangles
+            // proof names two lines the figure does not draw, and three
+            // triangles. NOTE the semicircle above is BHF and this triangle is
+            // BFH — one letter apart, both deliberate; do not "fix" either.
+            "BH;line;connect;B,H;0;0;0",
+            "BFH;polygon;triangle;B,F,H;0;0;0;0",
+            "BHE;polygon;triangle;B,H,E;0;0;0;0"
         ],
+        // B and C are free points, and draggables are auto-unioned into every
+        // slide — so they would stand lettered on the canvas from slide 1,
+        // before the proof has said anything but "let A be the given
+        // rectilinear figure". Deferring drops them out of that union so they
+        // follow `visible` and arrive with the rectangle. A1–A4 are NOT
+        // deferred: they are the vertices of the given figure A, which slide 1
+        // introduces. The resting figure is unaffected.
+        deferDraggables: ["B","C"],
+        // Everything else here is derived — D/E (vertex), F (last),
+        // G (midpoint), H (first) — and derived points are NOT auto-unioned,
+        // so each is listed explicitly in the groups above or it loses its dot
+        // and its label.
+        aliases: { "BD": "BCDE", "DE": "ED", "EG": "GE", "HE": "EH",
+                   "GHE": "HGE" },
+        slides: [
+            { text: "Let {A} be the given rectilinear figure. It is required to construct a square equal to the rectilinear figure {A}.",
+              visible: FIG,
+              highlighted: ["A"] },
+            { text: "Construct the rectangular parallelogram {BD} equal to the rectilinear figure {A}.",
+              visible: RECT,
+              // BCDE is this slide's animation target, so it is deliberately
+              // NOT highlighted (euclid#171). SlateAnimator hides an animated
+              // target until its cascade step starts (#83) but sets
+              // shouldHighlight at run start, and drawFace renders a hidden
+              // element that is highlighted — so listing it here would paint
+              // the rectangle filled from t=0. The animation is the emphasis.
+              highlighted: ["A"],
+              transition: { animations: [
+                  { elem: "BCDE", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "a rectangle equal to the figure A", ref: "I.45" }] },
+            { text: "Then, if {BE} equals {ED}, then that which was proposed is done, for a square {BD} has been constructed equal to the rectilinear figure {A}.",
+              visible: RECT,
+              highlighted: ["BE","ED","BCDE","A"] },
+            { text: "But, if not, one of the straight lines {BE} or {ED} is greater.",
+              visible: RECT,
+              highlighted: ["BE","ED"] },
+            // His construction is three clauses — produce, cut off, bisect —
+            // and they get three slides rather than one summarising line.
+            // The figure builds F by extending BE by the length of ED, so the
+            // single EF stroke carries the production; the slide after it
+            // holds still on the equality that fixed where F landed.
+            { text: "Let {BE} be greater, and produce it to {F}.",
+              visible: PROD1,
+              // EF is the animation target (euclid#171); BE, the line being
+              // produced, is not.
+              highlighted: ["BE"],
+              transition: { animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeExtend } ] } },
+            { text: "Make {EF} equal to {ED},",
+              visible: PROD1,
+              highlighted: ["EF","ED"],
+              justifications: [{ claim: "EF cut off equal to ED", ref: "I.3" }] },
+            { text: "and bisect {BF} at {G}.",
+              visible: PROD,
+              // G is the animation target; BF, the line bisected, is not.
+              highlighted: ["BF"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "BF bisected at G", ref: "I.10" }] },
+            { text: "Describe the semicircle {BHF} with center {G} and radius one of the straight lines {GB} or {GF}.",
+              visible: SEMI,
+              highlighted: ["GB","GF"],
+              // No sweep: see euclid#172 and the note on BHF above. Reverting
+              // to a plain reveal is better than an arc that opens complete.
+              justifications: [{ claim: "the semicircle on the diameter BF", ref: "I.Def.18" }] },
+            { text: "Produce {DE} to {H}, and join {GH}.",
+              visible: HGT,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EH", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since the straight line {BF} has been cut into equal segments at {G} and into unequal segments at {E}, the rectangle {BE} by {EF} together with the square on {EG} equals the square on {GF}.",
+              visible: HGT,
+              highlighted: ["BE","EF","GE","GF"],
+              justifications: [{ claim: "equal segments at G, unequal at E", ref: "II.5" }] },
+            { text: "But {GF} equals {GH}, therefore the rectangle {BE} by {EF} together with the square on {GE} equals the square on {GH}.",
+              visible: HGT,
+              highlighted: ["GF","GH","BE","EF","GE"],
+              justifications: [{ claim: "GF and GH are radii of the same circle", ref: "I.Def.15" }] },
+            // The I.47 step is one long sentence of his; it takes two slides
+            // rather than a shortened one. That the angle at E is right is the
+            // reason for the step, and it rides in the claim — his sentence
+            // leaves it to the marginal ref.
+            { text: "But the sum of the squares on {HE} and {EG} equals the square on {GH},",
+              visible: RT,
+              // angGEH is the animation target; the triangle and its sides are
+              // not.
+              highlighted: ["HGE","EH","GE","GH"],
+              transition: { animations: [
+                  { elem: "angGEH", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the right angle at E in the triangle GHE", ref: "I.47" }] },
+            { text: "therefore the rectangle {BE} by {EF} together with the square on {GE} equals the sum of the squares on {HE} and {EG}.",
+              visible: RT,
+              highlighted: ["BE","EF","GE","EH"] },
+            { text: "Subtract the square on {GE} from each. Therefore the remaining rectangle {BE} by {EF} equals the square on {EH}.",
+              visible: RT,
+              highlighted: ["BE","EF","EH"],
+              justifications: [{ claim: "take the square on GE from each", ref: "C.N.3" }] },
+            { text: "But the rectangle {BE} by {EF} is {BD}, for {EF} equals {ED}, therefore the parallelogram {BD} equals the square on {HE}.",
+              visible: RT,
+              highlighted: ["BCDE","EF","ED","EH"] },
+            { text: "And {BD} equals the rectilinear figure {A}. Therefore the rectilinear figure {A} also equals the square which can be described on {EH}.",
+              visible: RT,
+              highlighted: ["BCDE","A","EH"],
+              justifications: [{ claim: "A equals BD, and BD equals the square on EH", ref: "C.N.1" }] },
+            { text: "Therefore a square, namely that which can be described on {EH}, has been constructed equal to the given rectilinear figure {A}.",
+              visible: RT,
+              highlighted: ["EH","A"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+        "I.Def.18": "/elements/books/bookI/definitions/defI18/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.10":     "/elements/books/bookI/propositions/propI10/",
+        "I.45":     "/elements/books/bookI/propositions/propI45/",
+        "I.47":     "/elements/books/bookI/propositions/propI47/",
+        "II.5":     "/elements/books/bookII/propositions/propII5/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.3":    "/elements/books/bookI/commonnotions/cn3/"
     });
 </script>
 </figure>
 
-Then, if *BE* equals *ED,* then that which was proposed is done, for a square *BD* has been constructed equal to the rectilinear figure *A.*
+Then, if {BE} equals {ED}, then that which was proposed is done, for a square {BD} has been constructed equal to the rectilinear figure {A}.
 
-But, if not, one of the straight lines *BE* or *ED* is greater.
+But, if not, one of the straight lines {BE} or {ED} is greater.
 
-Let *BE* be greater, and  produce it to *F.* Make *EF* equal to *ED,* and bisect *BF* at *G.* [!just I.3, I.10]
+Let {BE} be greater, and  produce it to {F}. Make {EF} equal to {ED}, and bisect {BF} at {G}. [!just I.3, I.10]
 
-Describe the semicircle *BHF* with center *G* and radius one of the straight lines *GB* or *GF.* Produce *DE* to *H,* and join *GH.* [!just I.Def.18]
+Describe the semicircle {BHF} with center {G} and radius one of the straight lines {GB} or {GF}. Produce {DE} to {H}, and join {GH}. [!just I.Def.18]
 
-Then, since the straight line *BF* has been cut into equal segments at *G* and into unequal segments at *E,* the rectangle *BE* by *EF* together with the square on *EG* equals the square on *GF.* [!just II.5]
+Then, since the straight line {BF} has been cut into equal segments at {G} and into unequal segments at {E}, the rectangle {BE} by {EF} together with the square on {EG} equals the square on {GF}. [!just II.5]
 
-But *GF* equals *GH,* therefore the rectangle *BE* by *EF* together with the square on *GE* equals the square on *GH.*
+But {GF} equals {GH}, therefore the rectangle {BE} by {EF} together with the square on {GE} equals the square on {GH}.
 
-But the sum of the squares on *HE* and *EG* equals the square on *GH,* therefore the rectangle *BE* by *EF* together with the square on *GE* equals the sum of the squares on *HE* and *EG.* [!just I.47]
+But the sum of the squares on {HE} and {EG} equals the square on {GH}, therefore the rectangle {BE} by {EF} together with the square on {GE} equals the sum of the squares on {HE} and {EG}. [!just I.47]
 
-Subtract the square on *GE* from each. Therefore the remaining rectangle *BE* by *EF* equals the square on *EH.*
+Subtract the square on {GE} from each. Therefore the remaining rectangle {BE} by {EF} equals the square on {EH}.
 
-But the rectangle *BE* by *EF* is *BD,* for *EF* equals *ED,* therefore the parallelogram *BD* equals the square on *HE.*
+But the rectangle {BE} by {EF} is {BD}, for {EF} equals {ED}, therefore the parallelogram {BD} equals the square on {HE}.
 
-And *BD* equals the rectilinear figure *A.*
+And {BD} equals the rectilinear figure {A}.
 
-Therefore the rectilinear figure *A* also equals the square which can be described on *EH.*
+Therefore the rectilinear figure {A} also equals the square which can be described on {EH}.
 
-Therefore a square, namely that which can be described on *EH,* has been constructed equal to the given rectilinear figure *A.*
+Therefore a square, namely that which can be described on {EH}, has been constructed equal to the given rectilinear figure {A}.
 
 <div class="qed">Q.E.F.</div>
 ----
 guide:
 
-The construction of a square equal to a given rectilinear figure is short as described in the proof. The verification that this construction works is also short with the help of Proposition @II.5 and Proposition @I.47, the Pythagorean theorem.  First, Prop. II.5 allows us to convert the rectangle, *BE* by *ED,* into the difference of two squares, *GF*<sup>2</sup> – *GE*<sup>2</sup>.  Note that *GF* equals *GH,* the hypotenuse of a right triangle *GHE.* Using I.47 we can replace the difference of two squares, *GH*<sup>2</sup> – *GE*<sup>2</sup>, by the single square, *EH*<sup>2</sup>.  Thus, the original rectangle equals the square *EH*<sup>2</sup>.
+The construction of a square equal to a given rectilinear figure is short as described in the proof. The verification that this construction works is also short with the help of Proposition @II.5 and Proposition @I.47, the Pythagorean theorem.  First, Prop. II.5 allows us to convert the rectangle, {BE} by {ED}, into the difference of two squares, {GF}<sup>2</sup> – {GE}<sup>2</sup>.  Note that {GF} equals {GH}, the hypotenuse of a right triangle {GHE}. Using I.47 we can replace the difference of two squares, {GH}<sup>2</sup> – {GE}<sup>2</sup>, by the single square, {EH}<sup>2</sup>.  Thus, the original rectangle equals the square {EH}<sup>2</sup>.
 
 #### Quadrature of rectilinear figures
 
 This proposition finishes the quadrature of rectilinear figures.  The narrow meaning of the word "quadrature" is to find a square with the same area of a given figure, also called "squaring" the figure.  In a broader sense, quadrature means finding the area of a given figure.
 
-Proposition @I.45 on application of areas of rectilinear figures allows us to replace the figure under question with a rectangle of the same area.  Now, the semicircle construction in this proposition finds what is called the mean proportional between the sides of the rectangle.  If the sides of the rectangle are denoted *a* and *b,* then the mean proportional *x* between them satisfies the proportion *a* : *x* = *x* : *b,* and that's equivalent to an equality of areas *ab* = *x*<sup>2</sup>, that is to say, the square on this mean proportional has the same area as the rectangle.  Thus, any rectilinear figure can be squared.
+Proposition @I.45 on application of areas of rectilinear figures allows us to replace the figure under question with a rectangle of the same area.  Now, the semicircle construction in this proposition finds what is called the mean proportional between the sides of the rectangle.  If the sides of the rectangle are denoted <span class="math">a</span> and <span class="math">b</span>, then the mean proportional <span class="math">x</span> between them satisfies the proportion <span class="math">a : x = x : b</span>, and that's equivalent to an equality of areas <span class="math">ab = x^2</span>, that is to say, the square on this mean proportional has the same area as the rectangle.  Thus, any rectilinear figure can be squared.
 
 This result is an end in itself. It is not used in the rest of the *Elements.*
 
-There is another proof of this proposition that is based on similar triangles.  Referring to the figure in the proposition, draw lines *BH* and *BF,* and you'll see three similar right triangles: *BFH, BHE,* and *HGE.*  From their similarity it follows that *BE* : *EH* = *EH* : *EF.*  That says *EH* is the required mean proportional.
+There is another proof of this proposition that is based on similar triangles.  Referring to the figure in the proposition, draw lines {BH} and {BF}, and you'll see three similar right triangles: {BFH}, {BHE}, and {HGE}.  From their similarity it follows that {BE} : {EH} = {EH} : {EF}.  That says {EH} is the required mean proportional.
 
 Proportions aren't developed until [Book V](/elements/books/bookV/), and similar triangles aren't mentioned until [Book VI](/elements/books/bookVI/). So in order to complete the theory of quadrature of rectilinear figures early in the *Elements,* Euclid chose a different proof that doesn't depend on similar triangles.  Note that this same result appears in the garb of proportions in Proposition @VI.13.  Also in Book VI, Proposition @VI.17 shows that the square on the mean proportional equals the rectangle on the two straight lines.
 
@@ -105,6 +311,6 @@ Proportions aren't developed until [Book V](/elements/books/bookV/), and similar
 
 What about circles and other shapes?  The general theory of circles is treated in Book III, but there are no propositions about the areas of circles until book XII.  Proposition @XII.2 says the areas of circles are proportional to the squares on their diameters.  That allows the area of two circles to be compared, but it doesn't answer the question "what's the area of this circle?" in the same way that this proposition does for rectilinear figures.  That would require finding a square equal to a given circle.
 
-This problem of quadrature of the circle was one of three famous problems that goes back at least to the time of Anaxagoras, about 150 years before Euclid.  It is equivalent to constructing a line segment of length *π* (relative to a unit length).  This problem was solved by ancient Greek geometers but not by means of the Euclidean tools of straightedge and compass; higher curves were required.  In fact, by the time of Pappus it was believed that the circle could not be squared using only straightedge, compass, and, furthermore, couldn't be squared even with the help of the conic sections (parabola, hyperbola, and ellipse).  But the ancient Greeks had no mathematical proof that it could not be squared.
+This problem of quadrature of the circle was one of three famous problems that goes back at least to the time of Anaxagoras, about 150 years before Euclid.  It is equivalent to constructing a line segment of length <span class="math">\pi</span> (relative to a unit length).  This problem was solved by ancient Greek geometers but not by means of the Euclidean tools of straightedge and compass; higher curves were required.  In fact, by the time of Pappus it was believed that the circle could not be squared using only straightedge, compass, and, furthermore, couldn't be squared even with the help of the conic sections (parabola, hyperbola, and ellipse).  But the ancient Greeks had no mathematical proof that it could not be squared.
 
-That the circle could not be squared with Euclidean tools was not shown until 1882 when Lindemann proved that *π* is a transcendental number.
+That the circle could not be squared with Euclidean tools was not shown until 1882 when Lindemann proved that <span class="math">\pi</span> is a transcendental number.
