@@ -292,7 +292,79 @@ The construction of this proposition cuts a line into two parts *A* and *B* so t
             "AC;line;connect;A,C;0;0;0",
             "EB;line;connect;E,B;0;0;0"
         ],
-        aliases: { "BA": "AB", "CA": "AC", "BE": "EB", "BL": "LB" }
+        aliases: { "BA": "AB", "CA": "AC", "BE": "EB", "BL": "LB" },
+        // A guide canvas that is itself a procedure, so it carries its own
+        // walk (the I.20 / I.47 exception). Joyce narrates it as an ordered
+        // list -- "six circles to be drawn, two lines connected, and one line
+        // extended" -- and the captions are his sentences, one step each.
+        //
+        // The invisible carrier circles (Lcirc, Bcirc, Acirc, Ccirc) stay in
+        // every set: they draw nothing, and Joyce shows only the arcs of them
+        // that matter, which is what the *arc elements are for. Every lettered
+        // point here is derived, so none is auto-unioned and each is listed on
+        // the slide whose sentence names it -- no deferDraggables needed, only
+        // A and B are draggable and both are given.
+        slides: (function () {
+            var CARRIER = ["Lcirc","Bcirc","Acirc","Ccirc"];
+            var GIVEN = CARRIER.concat(["A","B","AB"]);
+            var EXT   = GIVEN.concat(["L","LB","LBarc"]);
+            var MNC   = EXT.concat(["M","N","MLNarc","NBMarc"]);
+            var LINE  = MNC.concat(["MN"]);
+            var CUT   = LINE.concat(["C","AC"]);
+            var CCIRC = CUT.concat(["E1","E2","Carc","Eline"]);
+            var EPT   = CCIRC.concat(["E"]);
+            var FPT   = EPT.concat(["F","EB","FBarc"]);
+            var DONE  = FPT.concat(["H","FHarc"]);
+            return [
+              { text: "Altogether, there are six circles to be drawn, two lines connected, and one line extended. In order, they are as follows.",
+                visible: GIVEN,
+                highlighted: ["AB"] },
+              { text: "Extend {BA} and draw a circle centered at {A} with radius {AB} to determine the point {L}.",
+                visible: EXT,
+                highlighted: ["A"],
+                transition: { mode: "cascade", animations: [
+                    { elem: "LB", name: geomlib.A.Line.straightEdgeExtend },
+                    { elem: "LBarc", name: geomlib.A.Sector.sweep } ] } },
+              { text: "Draw circles centered at {B} and {L} with radius {BL} to determine points {M} and {N}.",
+                visible: MNC,
+                highlighted: ["BL"],
+                transition: { mode: "cascade", animations: [
+                    { elem: "MLNarc", name: geomlib.A.Sector.sweep },
+                    { elem: "NBMarc", name: geomlib.A.Sector.sweep } ] } },
+              { text: "Draw the straight line {MN}.",
+                visible: LINE,
+                transition: { animations: [
+                    { elem: "MN", name: geomlib.A.Line.straightEdgeConnect } ] } },
+              { text: "Then {C} is where it meets the circle centered at {A}.",
+                visible: CUT,
+                highlighted: ["MN","LBarc"],
+                transition: { animations: [
+                    { elem: "C", name: geomlib.A.Point.appear } ] } },
+              { text: "Draw a circle centered at {C} with radius {CA}, and connect the two points where it meets the circle centered at {A}.",
+                visible: CCIRC,
+                highlighted: ["CA"],
+                transition: { mode: "cascade", animations: [
+                    { elem: "Carc", name: geomlib.A.Sector.sweep },
+                    { elem: "Eline", name: geomlib.A.Line.straightEdgeConnect } ] } },
+              { text: "Then {E} is where that line meets {AC}.",
+                visible: EPT,
+                highlighted: ["Eline","AC"],
+                transition: { animations: [
+                    { elem: "E", name: geomlib.A.Point.appear } ] } },
+              { text: "Draw the circle centered at {E} with radius {EB} to determine {F}.",
+                visible: FPT,
+                highlighted: ["EB"],
+                transition: { mode: "cascade", animations: [
+                    { elem: "FBarc", name: geomlib.A.Sector.sweep },
+                    { elem: "F", name: geomlib.A.Point.appear } ] } },
+              { text: "Draw the circle centered at {A} with radius {F} to determine {H}, the desired point to cut {AB}.",
+                visible: DONE,
+                highlighted: ["AB"],
+                transition: { mode: "cascade", animations: [
+                    { elem: "FHarc", name: geomlib.A.Sector.sweep },
+                    { elem: "H", name: geomlib.A.Point.appear } ] } }
+            ];
+        })()
     });
 </script>
 </figure>
