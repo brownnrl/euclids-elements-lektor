@@ -15,14 +15,59 @@ statement: If a straight line is cut at random, then four times the rectangle co
 ----
 proof:
 
-Let a straight line *AB* be cut at random at the point *C.*
+Let a straight line {AB} be cut at random at the point {C}.
 
-I say that four times the rectangle *AB* by *BC* plus the square on *AC* equals the square described on *AB* and *BC* as on one straight line.
+I say that four times the rectangle {AB} by {BC} plus the square on {AC} equals the square described on {AB} and {BC} as on one straight line.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="300" tabindex="0"></canvas>
 <noscript><img src="propII8.gif" alt="II.8"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws every LINE the proof needs — the square AEFD on AD,
+    // the diagonal DE, the parallels CH/BL and MN/OP, the square OH, and the
+    // gnomon arc STU — but it draws none of the twelve REGIONS the proof
+    // argues about, and none of the sub-segments the equalities run through.
+    // Those are added below.
+    //
+    // Colour: the proof is two symmetric halves. The four small squares on CB
+    // (CK, KD, GR, RN) are proved equal to one another and share ORANGE; the
+    // four rectangles AC by CB (AG, MQ, QL, RF) are proved equal to one
+    // another and share GREEN. AK is left UNFILLED because it IS one green
+    // plus one orange, which is what makes "the eight areas are quadruple of
+    // AK" readable at a glance. So are the gnomon STU (its own eight areas
+    // fill it), the two I.43 parallelograms CP and ML, and the whole square
+    // AEFD. OH keeps Joyce's own `random` fill — it is the one region that is
+    // not part of the gnomon, and it is equal to nothing else here.
+    //
+    // The eight coloured areas are `initiallyHidden` (the I.41/I.45/I.47
+    // pattern), so the resting figure — and the figure after a walk, since
+    // clearVisibility restores this baseline — is exactly Joyce's. Everything
+    // else added here is fully transparent (;0;0;0 lines, ;0;0;0;0 polygons)
+    // and exists only so a slide or a {NAME} hover can light it.
+    //
+    // Two exceptions are real black lines: AB and BD. Nothing else in the
+    // figure draws the cut line — the segment A..D exists only as the top edge
+    // of the square DAEF — so without them slides 1-2 would show three
+    // lettered points and no line at all. They lie exactly on that edge, so
+    // the resting figure is unchanged.
+    //
+    // NOTE on DAEF: it is declared with four fields, so its faceColor defaults
+    // to lighten(bgcolor) — a near-white OPAQUE face, not transparency. That
+    // is harmless while nothing highlights or animates it (#140 promotes a
+    // highlighted element within the draw pass, and it would then white out
+    // every coloured region beneath). So the deck never names DAEF in a slide
+    // set: the transparent twin AEFD is the highlight/animation target, and
+    // the prose token {AEFD} resolves to the twin.
+    var GIVEN   = ["A","B","C","AB","AC","CB"];
+    var SQ      = GIVEN.concat(["D","BD","AD","DAEF","AEFD","E","F"]);
+    var FIG     = SQ.concat(["DE","CH","H","BL","L","K","Q","M","O","MN","OP",
+                             "N","P","G","R","OQHE",
+                             "GK","KN","QR","RP","BK","CG","GQ"]);
+    var SQUARES = FIG.concat(["CK","KD","GR","RN"]);
+    var CPP     = SQUARES.concat(["CP"]);
+    var RECTS   = CPP.concat(["AG","MQ","QL","RF"]);
+    var MLP     = RECTS.concat(["ML"]);
+    var GNOMON  = MLP.concat(["AK","STU","N'","S","T","U","UTS"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -57,39 +102,217 @@ I say that four times the rectangle *AB* by *BC* plus the square on *AC* equals 
             "S;point;cutoff;Q,O,K,N';black;lightGray",
             "T;point;cutoff;K,D,K,N';black;lightGray",
             "U;point;cutoff;Q,H,K,N';black;lightGray",
-            "UTS;sector;arc;U,T,S;0;0;lightGray;0"
+            "UTS;sector;arc;U,T,S;0;0;lightGray;0",
+            // The cut line and its produced part. Black, and coincident with
+            // the top edge of the square, so the static figure is unchanged.
+            "AB;line;connect;A,B",
+            "BD;line;connect;B,D",
+            // Hover / highlight targets: the segments the equalities run
+            // through. Every one of these is already drawn by AB, BD, the
+            // square, or the parallels.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "GK;line;connect;G,K;0;0;0",
+            "KN;line;connect;K,N;0;0;0",
+            "QR;line;connect;Q,R;0;0;0",
+            "RP;line;connect;R,P;0;0;0",
+            "BK;line;connect;B,K;0;0;0",
+            "CG;line;connect;C,G;0;0;0",
+            "GQ;line;connect;G,Q;0;0;0",
+            // The containing figures, all UNFILLED so their own parts fill
+            // them. Note the explicit ;0 face — an omitted faceColor is a
+            // near-white OPAQUE face, not transparency.
+            "AEFD;polygon;quadrilateral;A,E,F,D;0;0;0;0",
+            "AK;polygon;quadrilateral;A,B,K,M;0;0;0;0",
+            "CP;polygon;quadrilateral;C,D,P,Q;0;0;0;0",
+            "ML;polygon;quadrilateral;M,K,L,E;0;0;0;0",
+            "STU;polygon;hexagon;A,D,F,H,Q,O;0;0;0;0",
+            // The eight areas of the gnomon. Fill-only and initially hidden,
+            // so Joyce's diagram is untouched; the colour arrives with the
+            // walk. Orange = the four squares on CB, green = the four
+            // rectangles AC by CB.
+            "CK;polygon;quadrilateral;C,B,K,G;0;0;0;orange",
+            "KD;polygon;quadrilateral;K,B,D,N;0;0;0;orange",
+            "GR;polygon;quadrilateral;G,K,R,Q;0;0;0;orange",
+            "RN;polygon;quadrilateral;R,K,N,P;0;0;0;orange",
+            "AG;polygon;quadrilateral;A,C,G,M;0;0;0;green",
+            "MQ;polygon;quadrilateral;M,G,Q,O;0;0;0;green",
+            "QL;polygon;quadrilateral;Q,R,L,H;0;0;0;green",
+            "RF;polygon;quadrilateral;R,P,F,L;0;0;0;green"
         ],
+        initiallyHidden: ["CK","KD","GR","RN","AG","MQ","QL","RF"],
+        // No deferDraggables: the only draggables are A, B and C (lineSliders
+        // on the A0-A3 carrier), and all three are the givens slide 1
+        // introduces. A0/A3 are the off-canvas carrier ends at x = +-1000,
+        // declared ;0,0 so they draw nothing. Every other point here is
+        // derived (extend / vertex / last / intersection / parallelogram /
+        // cutoff / midpoint), so none is auto-unioned and each is listed
+        // explicitly in the visible set that introduces it.
+        aliases: { "BC": "CB", "DK": "KD", "OH": "OQHE" },
+        slides: [
+            { text: "Let a straight line {AB} be cut at random at the point {C}.",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "I say that four times the rectangle {AB} by {BC} plus the square on {AC} equals the square described on {AB} and {BC} as on one straight line.",
+              visible: GIVEN,
+              highlighted: ["AB","CB","AC"] },
+            { text: "Produce the straight line {BD} in a straight line with {AB}, and make {BD} equal to {CB}. Describe the square {AEFD} on {AD}.",
+              visible: SQ,
+              // Not highlighted: both are this slide's animation targets
+              // (euclid#171) — a highlighted element draws even while the
+              // animator is holding it hidden, so listing them paints the
+              // finished square from t=0. The animation is the emphasis.
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BD",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DAEF", name: geomlib.A.Polygon.outline } ] },
+              justifications: [
+                  { claim: "BD produced equal to CB",     ref: "I.3" },
+                  { claim: "the square AEFD described on AD", ref: "I.46" } ] },
+            { text: "And let the figure be drawn.",
+              visible: FIG,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "MN", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "OP", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "parallels through C, B, M and O", ref: "I.31" }] },
+            { text: "Then, since {CB} equals {BD}, while {CB} equals {GK} and {BD} equals {KN}, therefore {GK} also equals {KN}.",
+              visible: FIG,
+              highlighted: ["CB","BD","GK","KN"],
+              justifications: [{ claim: "CB = GK and BD = KN, opposite sides", ref: "I.34" }] },
+            { text: "For the same reason {QR} also equals {RP}.",
+              visible: FIG,
+              highlighted: ["QR","RP"],
+              justifications: [{ claim: "opposite sides of parallelograms", ref: "I.34" }] },
+            { text: "And, since {BC} equals {BD}, and {GK} equals {KN}, therefore {CK} also equals {KD}, and {GR} equals {RN}.",
+              visible: SQUARES,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "KD", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "GR", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "RN", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "equal bases, same parallels", ref: "I.36" }] },
+            { text: "But {CK} equals {RN}, for they are complements of the parallelogram {CP}. Therefore {KD} also equals {GR}.",
+              visible: CPP,
+              highlighted: ["CK","RN","KD","GR"],
+              transition: { animations: [
+                  { elem: "CP", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "CK = RN, complements of CP", ref: "I.43" }] },
+            { text: "Therefore the four areas {DK}, {CK}, {GR}, {RN} equal one another. Therefore the four are quadruple of {CK}.",
+              visible: CPP,
+              highlighted: ["CK","KD","GR","RN"],
+              justifications: [{ claim: "the four are quadruple of CK", ref: "C.N.1" }] },
+            { text: "Again, since {CB} equals {BD}, while {BD} equals {BK}, that is {CG}, and {CB} equals {GK}, that is {GQ}, therefore {CG} also equals {GQ}.",
+              visible: CPP,
+              highlighted: ["CB","BD","BK","CG","GK","GQ"],
+              justifications: [{ claim: "BD = BK = CG and CB = GK = GQ", ref: "I.34" }] },
+            { text: "And, since {CG} equals {GQ}, and {QR} equals {RP}, {AG} also equals {MQ}, and {QL} equals {RF}.",
+              visible: RECTS,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AG", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "MQ", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "QL", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "RF", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "equal bases, same parallels", ref: "I.36" }] },
+            { text: "But {MQ} equals {QL}, for they are complements of the parallelogram {ML}, therefore {AG} also equals {RF}.",
+              visible: MLP,
+              highlighted: ["MQ","QL","AG","RF"],
+              transition: { animations: [
+                  { elem: "ML", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "MQ = QL, complements of ML", ref: "I.43" }] },
+            { text: "Therefore the four areas {AG}, {MQ}, {QL}, {RF} equal one another. Therefore the four are quadruple of {AG}.",
+              visible: MLP,
+              highlighted: ["AG","MQ","QL","RF"],
+              justifications: [{ claim: "the four are quadruple of AG", ref: "C.N.1" }] },
+            { text: "But the four areas {CK}, {KD}, {GR}, {RN} were proved to be quadruple of {CK}, therefore the eight areas, which contain the gnomon {STU}, are quadruple of {AK}.",
+              visible: GNOMON,
+              highlighted: ["CK","KD","GR","RN","AG","MQ","QL","RF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AK",  name: geomlib.A.Polygon.outline },
+                  { elem: "STU", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "the eight areas are the gnomon STU", ref: "II.Def.2" }] },
+            { text: "Now, since {AK} is the rectangle {AB} by {BD}, for {BK} equals {BD}, therefore four times the rectangle {AB} by {BD} is quadruple of {AK}.",
+              visible: GNOMON,
+              highlighted: ["AK","AB","BD","BK"],
+              justifications: [{ claim: "AK is contained by AB and BK", ref: "II.Def.1" }] },
+            { text: "But the gnomon {STU} was also proved to be quadruple of {AK}, therefore four times the rectangle {AB} by {BD} equals the gnomon {STU}.",
+              visible: GNOMON,
+              highlighted: ["STU","AK"],
+              justifications: [{ claim: "both are quadruple of AK", ref: "C.N.1" }] },
+            { text: "Add {OH}, which equals the square on {AC}, to each. Therefore four times the rectangle {AB} by {BD} plus the square on {AC} equals the gnomon {STU} plus {OH}.",
+              visible: GNOMON,
+              highlighted: ["OQHE","AC","STU"],
+              justifications: [{ claim: "equals added to equals", ref: "C.N.2" }] },
+            { text: "But the gnomon {STU} and {OH} are the whole square {AEFD}, which is described on {AD}. Therefore four times the rectangle {AB} by {BD} plus the square on {AC} equals the square on {AD}.",
+              visible: GNOMON,
+              // AEFD is this slide's animation target (euclid#171); the two
+              // parts that make it up are not, so they keep the gold.
+              highlighted: ["STU","OQHE"],
+              transition: { animations: [
+                  { elem: "AEFD", name: geomlib.A.Polygon.outline } ] } },
+            { text: "But {BD} equals {BC}.",
+              visible: GNOMON,
+              highlighted: ["BD","CB"] },
+            { text: "Therefore four times the rectangle {AB} by {BC} together with the square on {AC} equals the square on {AD}, that is to the square described on {AB} and {BC} as on one straight line.",
+              visible: GNOMON,
+              highlighted: ["AB","CB","AC","AEFD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "I.34":      "/elements/books/bookI/propositions/propI34/",
+        "I.36":      "/elements/books/bookI/propositions/propI36/",
+        "I.43":      "/elements/books/bookI/propositions/propI43/",
+        "I.46":      "/elements/books/bookI/propositions/propI46/",
+        "C.N.1":     "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2":     "/elements/books/bookI/commonnotions/cn2/",
+        "II.Def.1":  "/elements/books/bookII/definitions/defII1/",
+        "II.Def.2":  "/elements/books/bookII/definitions/defII2/"
     });
 </script>
 </figure>
 
-Produce the straight line *BD* in a straight line with *AB,* and make *BD* equal to *CB.* Describe the square *AEFD* on *AD,* and let the figure be drawn. [!just I.3, I.46; I.31]
+Produce the straight line {BD} in a straight line with {AB}, and make {BD} equal to {CB}. Describe the square {AEFD} on {AD}, and let the figure be drawn. [!just I.3, I.46; I.31]
 
-Then, since *CB* equals *BD,* while *CB* equals *GK,* and *BD* equals *KN,* therefore *GK* also equals *KN.* [!just I.34]
+Then, since {CB} equals {BD}, while {CB} equals {GK}, and {BD} equals {KN}, therefore {GK} also equals {KN}. [!just I.34]
 
-For the same reason *QR* also equals *RP.*
+For the same reason {QR} also equals {RP}.
 
-And, since *BC* equals *BD,* and *GK* equals *KN,* therefore *CK* also equals *KD,* and *GR* equals *RN.* [!just I.36]
+And, since {BC} equals {BD}, and {GK} equals {KN}, therefore {CK} also equals {KD}, and {GR} equals {RN}. [!just I.36]
 
-But *CK* equals *RN,* for they are complements of the parallelogram *CP.* Therefore *KD* also equals *GR.*  Therefore the four areas *DK, CK, GR, RN* equal one another. Therefore the four are quadruple of *CK.* [!just I.43]
+But {CK} equals {RN}, for they are complements of the parallelogram {CP}. Therefore {KD} also equals {GR}.  Therefore the four areas {DK}, {CK}, {GR}, {RN} equal one another. Therefore the four are quadruple of {CK}. [!just I.43]
 
-Again, since *CB* equals *BD,* while *BD* equals *BK,* that is *CG,* and *CB* equals *GK,* that is *GQ,* therefore *CG* also equals *GQ.* [!just I.34]
+Again, since {CB} equals {BD}, while {BD} equals {BK}, that is {CG}, and {CB} equals {GK}, that is {GQ}, therefore {CG} also equals {GQ}. [!just I.34]
 
-And, since *CG* equals *GQ,* and *QR* equals *RP, AG* also equals *MQ,* and *QL* equals *RF.* [!just I.36]
+And, since {CG} equals {GQ}, and {QR} equals {RP}, {AG} also equals {MQ}, and {QL} equals {RF}. [!just I.36]
 
-But *MQ* equals *QL,* for they are complements of the parallelogram *ML,* therefore *AG* also equals *RF.*  Therefore the four areas *AG, MQ, QL, RF* equal one another. Therefore the four are quadruple of *AG.* But the four areas *CK, KD, GR, RN* were proved to be quadruple of *CK,* therefore the eight areas, which contain the gnomon *STU,* are quadruple of *AK.* [!just I.43]
+But {MQ} equals {QL}, for they are complements of the parallelogram {ML}, therefore {AG} also equals {RF}.  Therefore the four areas {AG}, {MQ}, {QL}, {RF} equal one another. Therefore the four are quadruple of {AG}. But the four areas {CK}, {KD}, {GR}, {RN} were proved to be quadruple of {CK}, therefore the eight areas, which contain the gnomon {STU}, are quadruple of {AK}. [!just I.43]
 
-Now, since *AK* is the rectangle *AB* by *BD,* for *BK* equals *BD,* therefore four times the rectangle *AB* by *BD* is quadruple of *AK.*
+Now, since {AK} is the rectangle {AB} by {BD}, for {BK} equals {BD}, therefore four times the rectangle {AB} by {BD} is quadruple of {AK}.
 
-But the gnomon *STU* was also proved to be quadruple of *AK,* therefore four times the rectangle *AB* by *BD* equals the gnomon *STU*.
+But the gnomon {STU} was also proved to be quadruple of {AK}, therefore four times the rectangle {AB} by {BD} equals the gnomon {STU}.
 
-Add *OH,* which equals the square on *AC,* to each.  Therefore four times the rectangle *AB* by *BD* plus the square on *AC* equals the gnomon *STU* plus *OH.*
+Add {OH}, which equals the square on {AC}, to each.  Therefore four times the rectangle {AB} by {BD} plus the square on {AC} equals the gnomon {STU} plus {OH}.
 
-But the gnomon *STU* and *OH* are the whole square *AEFD,* which is described on *AD.* Therefore four times the rectangle *AB* by *BD* plus the square on *AC* equals the square on *AD.*
+But the gnomon {STU} and {OH} are the whole square {AEFD}, which is described on {AD}. Therefore four times the rectangle {AB} by {BD} plus the square on {AC} equals the square on {AD}.
 
-But *BD* equals *BC.*
+But {BD} equals {BC}.
 
-Therefore four times the rectangle *AB* by *BC* together with the square on *AC* equals the square on *AD,* that is to the square described on *AB* and *BC* as on one straight line.
+Therefore four times the rectangle {AB} by {BC} together with the square on {AC} equals the square on {AD}, that is to the square described on {AB} and {BC} as on one straight line.
 
 Therefore *if a straight line is cut at random, then four times the rectangle contained by the whole and one of the segments plus the square on the remaining segment equals the square described on the whole and the aforesaid segment as on one straight line.*
 
@@ -97,8 +320,8 @@ Therefore *if a straight line is cut at random, then four times the rectangle co
 ----
 guide:
 
-Algebraically, if *x* = *y* + *z,* then 4*xy* + *z*<sup>2</sup> = (*x* + *y*)<sup>2</sup>.  As an identity,
+Algebraically, if <span class="math">x = y + z</span>, then <span class="math">4xy + z^2 = (x + y)^2</span>.  As an identity,
 
-<center>4<i>xy</i> + (<i>x</i> – <i>y</i>)<sup>2</sup> = (<i>x</i> + <i>y</i>)<sup>2</sup>.</center>
+<div class="math display">4xy + (x - y)^2 = (x + y)^2</div>
 
 This proposition is not used in the rest of the *Elements.*
