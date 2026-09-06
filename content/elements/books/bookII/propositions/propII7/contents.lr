@@ -15,14 +15,37 @@ statement: If a straight line is cut at random, then the sum of the square on th
 ----
 proof:
 
-Let a straight line *AB* be cut at random at the point *C.*
+Let a straight line {AB} be cut at random at the point {C}.
 
-I say that the sum of the squares on *AB* and *BC* equals twice the rectangle *AB* by *BC* plus the square on *CA.*
+I say that the sum of the squares on {AB} and {BC} equals twice the rectangle {AB} by {BC} plus the square on {CA}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="250" tabindex="0"></canvas>
 <noscript><img src="propII7.gif" alt="II.7"/></noscript>
 <script type="text/javascript">
+    // Four regions tile the square on AB: the two complements AG and GE, the
+    // square CF on BC, and the square DG on AC. Every sentence of the proof
+    // is an addition over those four tiles — AF = AG + CF, CE = GE + CF, the
+    // gnomon KLM = AG + CF + GE, the whole square = gnomon + DG. Joyce's
+    // figure draws only DG as a region, so the other three, the two sums, the
+    // gnomon and the whole square are added here: fully transparent
+    // (;0;0;0;0) where they are only highlight targets, `initiallyHidden`
+    // where they carry a fill. The static figure is unchanged either way.
+    //
+    // Colour: the equal complements AG and GE share ORANGE; the square CF on
+    // BC is CYAN; the square DG on AC is GREEN. The containers (AF, CE, the
+    // gnomon KLM, the whole ADEB) are left UNFILLED so their own parts fill
+    // them — AF and CE are then visibly the same orange + cyan, which is why
+    // they are equal. Joyce's `random` fill on DG is pinned so it cannot
+    // collide with either.
+    var BASE   = ["A","B","C","AB","AC","CB"];
+    var SQUARE = BASE.concat(["BADE","D","E","ADEB"]);
+    var FIGURE = SQUARE.concat(["BD","CN","N","G","HF","H","F"]);
+    var COMPS  = FIGURE.concat(["ACGH","GFEN"]);
+    var SUMS   = COMPS.concat(["CBFG","ABFH","CBEN"]);
+    var GNOMON = SUMS.concat(["KLM","K","L","M","KLMarc"]);
+    var DOUBLE = GNOMON.concat(["BF"]);
+    var WHOLE  = DOUBLE.concat(["DNGH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -38,9 +61,14 @@ I say that the sum of the squares on *AB* and *BC* equals twice the rectangle *A
             "D;point;vertex;BADE,3",
             "BD;line;connect;B,D",
             "N;point;parallelogram;D,A,C",
-            "../bookI/cn;line;connect;C,N",
+            // Renamed from "../bookI/cn": the converter rewrote this element's
+            // name CN into the URL of the Book I common notions. Nothing
+            // referenced the old name (G is built from the points C,N), and
+            // lines draw no name label, so the fix is inert on screen — and it
+            // keeps the name CN available for the construction slide's claim.
+            "CN;line;connect;C,N",
             "G;point;intersection;C,N,B,D",
-            "DNGH;polygon;parallelogram;D,N,G;0;0;0;random",
+            "DNGH;polygon;parallelogram;D,N,G;0;0;0;green",
             "H;point;vertex;DNGH,4",
             "F;point;intersection;G,H,B,E",
             "HF;line;connect;H,F",
@@ -48,27 +76,164 @@ I say that the sum of the squares on *AB* and *BC* equals twice the rectangle *A
             "K;point;cutoff;G,H,G,L';black;lightGray",
             "L;point;cutoff;G,B,G,L';black;lightGray",
             "M;point;cutoff;G,N,G,L';black;lightGray",
-            "MLK;sector;arc;M,L,K;0;0;lightGray;0"
+            // The gnomon's marker arc, renamed from MLK so the name the proof
+            // uses — KLM — can go to the L-shaped REGION below. The arc never
+            // matched the prose spelling anyway, and sectors draw no name
+            // label, so nothing changes on screen.
+            "KLMarc;sector;arc;M,L,K;0;0;lightGray;0",
+            // The cut line. BADE paints the stroke A-C-B in the static figure,
+            // but it is not visible until the square is described on slide 3,
+            // so these two carry the first two slides. Each coincides exactly
+            // with a stroke the static figure already paints.
+            "AC;line;connect;A,C;0;0",
+            "CB;line;connect;C,B;0;0",
+            // Hover / highlight targets only — the elements above already draw
+            // both of these strokes.
+            "AB;line;connect;A,B;0;0;0",
+            "BF;line;connect;B,F;0;0;0",
+            // The regions the proof names but Joyce's figure does not draw.
+            // Fill-only, and initially hidden so the static figure keeps just
+            // the one region he filled.
+            "ACGH;polygon;quadrilateral;A,C,G,H;0;0;0;orange",
+            "GFEN;polygon;quadrilateral;G,F,E,N;0;0;0;orange",
+            "CBFG;polygon;quadrilateral;C,B,F,G;0;0;0;cyan",
+            // The containers. Explicit ";0" face: an omitted faceColor is a
+            // near-white OPAQUE face (lighten(bgcolor)), and a highlighted
+            // element is promoted within its draw pass — so left implicit,
+            // ADEB alone would white out the whole decomposition on the two
+            // closing slides.
+            "ABFH;polygon;quadrilateral;A,B,F,H;0;0;0;0",
+            "CBEN;polygon;quadrilateral;C,B,E,N;0;0;0;0",
+            "ADEB;polygon;quadrilateral;A,D,E,B;0;0;0;0",
+            // The gnomon as a region: the L-shape AF + GE, six corners.
+            "KLM;polygon;hexagon;A,B,E,N,G,H;0;0;0;0"
         ],
+        // The coloured regions Joyce's figure does not have. Hidden at rest,
+        // revealed by the slide that introduces them (and by a {NAME} hover).
+        initiallyHidden: ["ACGH","GFEN","CBFG"],
+        // No deferDraggables here: the draggables are A, B and C (lineSliders)
+        // plus the invisible off-canvas carriers A0/A3, and slide 1 introduces
+        // all three. The derived points (D, E, N, G, H, F, K, L, M) are the
+        // opposite case — not auto-unioned, so each is listed in every slide
+        // it belongs to.
+        aliases: { "AG": "ACGH", "GE": "GFEN", "CF": "CBFG", "BG": "CBFG",
+                   "AF": "ABFH", "CE": "CBEN", "DG": "DNGH", "GD": "DNGH",
+                   "BA": "AB", "CA": "AC", "BC": "CB", "DB": "BD",
+                   "NC": "CN", "FH": "HF", "FB": "BF" },
+        slides: [
+            { text: "Let a straight line {AB} be cut at random at the point {C}.",
+              visible: BASE,
+              highlighted: ["AB","C"] },
+            { text: "I say that the sum of the squares on {AB} and {BC} equals twice the rectangle {AB} by {BC} plus the square on {CA}.",
+              visible: BASE,
+              // Only the cut line exists yet; {CA} is left to the caption's
+              // hover ref.
+              highlighted: ["AB","CB"] },
+            { text: "Describe the square {ADEB} on {AB},",
+              visible: SQUARE,
+              // BADE is this slide's animation target, so it is deliberately
+              // NOT highlighted (euclid#171) — SlateAnimator hides an animated
+              // target until its step starts, but drawFace still draws a
+              // hidden element that is highlighted, so listing it would paint
+              // the square from t=0. AB, the side it is described on, is not a
+              // target.
+              highlighted: ["AB"],
+              transition: { animations: [
+                  { elem: "BADE", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "the square on AB", ref: "I.46" }] },
+            // Joyce says only "and let the figure be drawn" — he never names
+            // the three lines it consists of, so neither does the caption.
+            // Which lines they are rides in the claim, which is ours to write.
+            { text: "and let the figure be drawn.",
+              visible: FIGURE,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CN", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "the diameter BD, and CN through C and HF through G parallel to the sides", ref: "I.31" }] },
+            { text: "Then, since {AG} equals {GE},",
+              visible: COMPS,
+              // ACGH and GFEN are the animation targets; the diameter they are
+              // complements about is not, and it is the reason they are equal.
+              highlighted: ["BD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ACGH", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "GFEN", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "complements about the diameter BD", ref: "I.43" }] },
+            { text: "add {CF} to each, therefore the whole {AF} equals the whole {CE}.",
+              visible: SUMS,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CBFG", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "ABFH", name: geomlib.A.Polygon.outline },
+                  { elem: "CBEN", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Therefore the sum of {AF} and {CE} is double {AF}.",
+              visible: SUMS,
+              highlighted: ["ABFH","CBEN"] },
+            { text: "But the sum of {AF} and {CE} equals the gnomon {KLM} plus the square {CF}, therefore the gnomon {KLM} plus the square {CF} is double {AF}.",
+              visible: GNOMON,
+              // KLM is the animation target; CF is not — and CF is the point
+              // of the sentence, the piece AF and CE share and so count twice.
+              highlighted: ["CBFG"],
+              transition: { animations: [
+                  { elem: "KLM", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "KLM is the gnomon", ref: "II.Def.2" }] },
+            { text: "But twice the rectangle {AB} by {BC} is also double {AF}, for {BF} equals {BC}, therefore the gnomon {KLM} plus the square {CF} equal twice the rectangle {AB} by {BC}.",
+              visible: DOUBLE,
+              highlighted: ["ABFH","AB","BF","CB"],
+              justifications: [{ claim: "AF is contained by AB and BF", ref: "II.Def.1" }] },
+            { text: "Add {DG}, which is the square on {AC}, to each. Therefore the gnomon {KLM} plus the sum of the squares {BG} and {GD} equals twice the rectangle {AB} by {BC} plus the square on {AC}.",
+              visible: WHOLE,
+              // DNGH is the animation target; AC, the line it is the square
+              // on, is not.
+              highlighted: ["AC"],
+              transition: { animations: [
+                  { elem: "DNGH", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "But the gnomon {KLM} plus the sum of the squares {BG} and {GD} equals the whole {ADEB} plus {CF}, which are squares described on {AB} and {BC}.",
+              visible: WHOLE,
+              // ADEB is the animation target; CF, the square counted a second
+              // time, is not.
+              highlighted: ["CBFG"],
+              transition: { animations: [
+                  { elem: "ADEB", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Therefore the sum of the squares on {AB} and {BC} equals twice the rectangle {AB} by {BC} plus the square on {CA}.",
+              visible: WHOLE,
+              highlighted: ["ADEB","CBFG","DNGH"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "I.43":      "/elements/books/bookI/propositions/propI43/",
+        "I.46":      "/elements/books/bookI/propositions/propI46/",
+        "II.Def.1":  "/elements/books/bookII/definitions/defII1/",
+        "II.Def.2":  "/elements/books/bookII/definitions/defII2/"
     });
 </script>
 </figure>
 
-Describe the square *ADEB* on *AB,* and let the figure be drawn. [!just I.46, I.31]
+Describe the square {ADEB} on {AB}, and let the figure be drawn. [!just I.46, I.31]
 
-Then, since *AG* equals *GE,* add *CF* to each, therefore the whole *AF* equals the whole *CE.* [!just I.43]
+Then, since {AG} equals {GE}, add {CF} to each, therefore the whole {AF} equals the whole {CE}. [!just I.43]
 
-Therefore the sum of *AF* and *CE* is double *AF.*
+Therefore the sum of {AF} and {CE} is double {AF}.
 
-But the sum of *AF* and *CE* equals the gnomon *KLM* plus the square *CF,* therefore the gnomon *KLM* plus the square *CF* is double *AF.*
+But the sum of {AF} and {CE} equals the gnomon {KLM} plus the square {CF}, therefore the gnomon {KLM} plus the square {CF} is double {AF}.
 
-But twice the rectangle *AB* by *BC* is also double  *AF,* for *BF* equals *BC,* therefore the gnomon *KLM* plus the square *CF* equal twice the rectangle *AB* by *BC.*
+But twice the rectangle {AB} by {BC} is also double  {AF}, for {BF} equals {BC}, therefore the gnomon {KLM} plus the square {CF} equal twice the rectangle {AB} by {BC}.
 
-Add *DG,* which is the square on *AC,* to each. Therefore the gnomon *KLM* plus the sum of the squares *BG* and *GD* equals twice the rectangle *AB* by *BC* plus the square on *AC.*
+Add {DG}, which is the square on {AC}, to each. Therefore the gnomon {KLM} plus the sum of the squares {BG} and {GD} equals twice the rectangle {AB} by {BC} plus the square on {AC}.
 
-But the gnomon *KLM* plus the sum of the squares *BG* and *GD* equals the whole *ADEB* plus *CF,* which are squares described on *AB* and *BC.*
+But the gnomon {KLM} plus the sum of the squares {BG} and {GD} equals the whole {ADEB} plus {CF}, which are squares described on {AB} and {BC}.
 
-Therefore the sum of the squares on *AB* and *BC* equals twice the rectangle *AB* by *BC* plus the square on *CA.*
+Therefore the sum of the squares on {AB} and {BC} equals twice the rectangle {AB} by {BC} plus the square on {CA}.
 
 Therefore *if a straight line is cut at random, then the sum of the square on the whole and that on one of the segments equals twice the rectangle contained by the whole and the said segment plus the square on the remaining segment.*
 
@@ -76,8 +241,8 @@ Therefore *if a straight line is cut at random, then the sum of the square on th
 ----
 guide:
 
-We can interpret this algebraically with *x* for *AB, y* for *AC,* and *z* for *CB.*  Then the proposition says that if *x* = *y* + *z,* then *x*<sup>2</sup> + *z*<sup>2</sup> = 2*xz* + *y*<sup>2</sup>.  This can be rewritten as various identities depending on which variable is eliminated, the simplest being
+We can interpret this algebraically with <span class="math">x</span> for {AB}, <span class="math">y</span> for {AC}, and <span class="math">z</span> for {CB}.  Then the proposition says that if <span class="math">x = y + z</span>, then <span class="math">x^2 + z^2 = 2xz + y^2</span>.  This can be rewritten as various identities depending on which variable is eliminated, the simplest being
 
-<center><i>x</i><sup>2</sup> + <i>z</i><sup>2</sup> = 2<i>xz</i> + (<i>x</i> – <i>z</i>)<sup>2</sup>.</center>
+<div class="math display">x^{2} + z^{2} = 2xz + (x - z)^{2}</div>
 
 This proposition is used later in Book II to prove proposition @II.13, and it is used repeatedly in Book X.
