@@ -59,8 +59,8 @@ It is required to cut {AB} so that the rectangle contained by the whole and one 
         background: "35,19,100",
         title: "II.11",
         elements: [
-            "A0;point;free;-1000,120;0,0",
-            "A3;point;free;1000,120;0,0",
+            "A0;point;free;-1000,120;0",
+            "A3;point;free;1000,120;0",
             "A;point;lineSlider;A0,A3,50,100",
             "B;point;lineSlider;A0,A3,190,100",
             "BD;line;perpendicular;B,A;0;0;0",
@@ -118,13 +118,7 @@ It is required to cut {AB} so that the rectangle contained by the whole and one 
               highlighted: ["AB"] },
             { text: "Describe the square {ABDC} on {AB}. Bisect {AC} at the point {E}, and join {BE}.",
               visible: SQ,
-              // Deliberately NOT highlighted: these are the animation's
-              // own targets. SlateAnimator hides an animated target until
-              // its own cascade step starts, but sets shouldHighlight at
-              // run start, and drawFace renders a hidden element that is
-              // highlighted — so listing them here paints the square
-              // filled from t=0. The animation is the emphasis.
-              highlighted: [],
+              highlighted: ["ABDC", "E", "BE"],
               transition: { mode: "cascade", animations: [
                   { elem: "ABDC", name: geomlib.A.Polygon.outlineAndFill },
                   { elem: "E",    name: geomlib.A.Point.appear },

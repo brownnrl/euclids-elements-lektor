@@ -51,8 +51,8 @@ I say that the sum of the squares on {AB} and {BC} equals twice the rectangle {A
         background: "35,19,100",
         title: "II.7",
         elements: [
-            "A0;point;free;-1000,40;0,0",
-            "A3;point;free;1000,40;0,0",
+            "A0;point;free;-1000,40;0",
+            "A3;point;free;1000,40;0",
             "A;point;lineSlider;A0,A3,40,0",
             "B;point;lineSlider;A0,A3,210,0",
             "C;point;lineSlider;A0,A3,150,0",
@@ -131,12 +131,6 @@ I say that the sum of the squares on {AB} and {BC} equals twice the rectangle {A
               highlighted: ["AB","CB"] },
             { text: "Describe the square {ADEB} on {AB},",
               visible: SQUARE,
-              // BADE is this slide's animation target, so it is deliberately
-              // NOT highlighted (euclid#171) — SlateAnimator hides an animated
-              // target until its step starts, but drawFace still draws a
-              // hidden element that is highlighted, so listing it would paint
-              // the square from t=0. AB, the side it is described on, is not a
-              // target.
               highlighted: ["AB"],
               transition: { animations: [
                   { elem: "BADE", name: geomlib.A.Polygon.outline } ] },
@@ -154,8 +148,6 @@ I say that the sum of the squares on {AB} and {BC} equals twice the rectangle {A
               justifications: [{ claim: "the diameter BD, and CN through C and HF through G parallel to the sides", ref: "I.31" }] },
             { text: "Then, since {AG} equals {GE},",
               visible: COMPS,
-              // ACGH and GFEN are the animation targets; the diameter they are
-              // complements about is not, and it is the reason they are equal.
               highlighted: ["BD"],
               transition: { mode: "cascade", animations: [
                   { elem: "ACGH", name: geomlib.A.Polygon.outlineAndFill },
@@ -173,8 +165,6 @@ I say that the sum of the squares on {AB} and {BC} equals twice the rectangle {A
               highlighted: ["ABFH","CBEN"] },
             { text: "But the sum of {AF} and {CE} equals the gnomon {KLM} plus the square {CF}, therefore the gnomon {KLM} plus the square {CF} is double {AF}.",
               visible: GNOMON,
-              // KLM is the animation target; CF is not — and CF is the point
-              // of the sentence, the piece AF and CE share and so count twice.
               highlighted: ["CBFG"],
               transition: { animations: [
                   { elem: "KLM", name: geomlib.A.Polygon.outline } ] },
@@ -185,15 +175,11 @@ I say that the sum of the squares on {AB} and {BC} equals twice the rectangle {A
               justifications: [{ claim: "AF is contained by AB and BF", ref: "II.Def.1" }] },
             { text: "Add {DG}, which is the square on {AC}, to each. Therefore the gnomon {KLM} plus the sum of the squares {BG} and {GD} equals twice the rectangle {AB} by {BC} plus the square on {AC}.",
               visible: WHOLE,
-              // DNGH is the animation target; AC, the line it is the square
-              // on, is not.
               highlighted: ["AC"],
               transition: { animations: [
                   { elem: "DNGH", name: geomlib.A.Polygon.outlineAndFill } ] } },
             { text: "But the gnomon {KLM} plus the sum of the squares {BG} and {GD} equals the whole {ADEB} plus {CF}, which are squares described on {AB} and {BC}.",
               visible: WHOLE,
-              // ADEB is the animation target; CF, the square counted a second
-              // time, is not.
               highlighted: ["CBFG"],
               transition: { animations: [
                   { elem: "ADEB", name: geomlib.A.Polygon.outline } ] } },

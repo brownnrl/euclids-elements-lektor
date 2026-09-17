@@ -53,8 +53,8 @@ I say that the rectangle {AD} by {DB} together with the square on {CB} equals th
         background: "35,19,100",
         title: "II.6",
         elements: [
-            "A0;point;free;-1000,40;0,0",
-            "A3;point;free;1000,40;0,0",
+            "A0;point;free;-1000,40;0",
+            "A3;point;free;1000,40;0",
             "A;point;lineSlider;A0,A3,40,0",
             "B;point;lineSlider;A0,A3,260,0",
             "C;point;midpoint;A,B",
@@ -142,13 +142,7 @@ I say that the rectangle {AD} by {DB} together with the square on {CB} equals th
               highlighted: ["AD","BD"] },
             { text: "Describe the square {CEFD} on {CD}, and join {DE}.",
               visible: SQUARE,
-              // DCEF and DE are this slide's animation targets, so they are
-              // deliberately NOT highlighted (euclid#171) — SlateAnimator
-              // hides an animated target until its cascade step starts, but
-              // drawFace still draws a hidden element that is highlighted, so
-              // listing them here would paint the square from t=0. CD, the
-              // line the square is described on, is not a target.
-              highlighted: ["CD"],
+              highlighted: ["CD", "DE"],
               transition: { mode: "cascade", animations: [
                   { elem: "DCEF", name: geomlib.A.Polygon.outline },
                   { elem: "DE",   name: geomlib.A.Line.straightEdgeConnect } ] },
@@ -180,8 +174,7 @@ I say that the rectangle {AD} by {DB} together with the square on {CB} equals th
             // the two never share a visible set.
             { text: "Add {CM} to each.",
               visible: ADDED,
-              // "each" is AL and HF; CDML is the animation target (euclid#171).
-              highlighted: ["ACLK","HMFG"],
+              highlighted: ["ACLK", "HMFG", "CDML"],
               transition: { animations: [
                   { elem: "CDML", name: geomlib.A.Polygon.outlineAndFill } ] } },
             { text: "Therefore the whole {AM} equals the gnomon {NOP}.",
@@ -203,9 +196,7 @@ I say that the rectangle {AD} by {DB} together with the square on {CB} equals th
               justifications: [{ claim: "LG is the square on CB", ref: "I.34" }] },
             { text: "But the gnomon {NOP} and {LG} are the whole square {CEFD}, which is described on {CD}.",
               visible: WHOLE,
-              // CEFD is the animation target (euclid#171); the two parts it is
-              // made of are not, so they keep the gold.
-              highlighted: ["NOP","LHGE"],
+              highlighted: ["NOP", "LHGE", "CEFD"],
               transition: { animations: [
                   { elem: "CEFD", name: geomlib.A.Polygon.outline } ] } },
             { text: "Therefore the rectangle {AD} by {DB} together with the square on {CB} equals the square on {CD}.",
@@ -277,8 +268,8 @@ The geometric proof is primarily an exercise in cutting and pasting.  The rectan
         background: "0,0,100",
         title: "II.6",
         elements: [
-            "A0;point;free;-1000,130;0,0",
-            "A3;point;free;1000,130;0,0",
+            "A0;point;free;-1000,130;0",
+            "A3;point;free;1000,130;0",
             "A;point;lineSlider;A0,A3,40,0",
             "B;point;lineSlider;A0,A3,210,0",
             "AB;line;connect;A,B",

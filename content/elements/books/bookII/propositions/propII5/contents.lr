@@ -58,8 +58,8 @@ I say that the rectangle  {AD} by {DB} together with the square on {CD} equals t
         background: "35,19,100",
         title: "II.5",
         elements: [
-            "A0;point;free;-1000,40;0,0",
-            "A3;point;free;1000,40;0,0",
+            "A0;point;free;-1000,40;0",
+            "A3;point;free;1000,40;0",
             "A;point;lineSlider;A0,A3,40,0",
             "B;point;lineSlider;A0,A3,310,0",
             "C;point;midpoint;A,B",
@@ -155,10 +155,7 @@ I say that the rectangle  {AD} by {DB} together with the square on {CD} equals t
               highlighted: ["AD","DB","CD","CB"] },
             { text: "Describe the square {CEFB} on {CB}, and join {BE}.",
               visible: SQUARE,
-              // Not highlighted: BCEF and BE are this slide's animation
-              // targets (euclid#171). CB, the base it is described on,
-              // carries the emphasis instead.
-              highlighted: ["CB"],
+              highlighted: ["CB", "BE"],
               transition: { mode: "cascade", animations: [
                   { elem: "BCEF", name: geomlib.A.Polygon.outlineAndFill },
                   { elem: "BE",   name: geomlib.A.Line.straightEdgeConnect } ] },
@@ -167,9 +164,7 @@ I say that the rectangle  {AD} by {DB} together with the square on {CD} equals t
                   { claim: "join BE",                         ref: "I.Post.1" } ] },
             { text: "Draw {DG} through {D} parallel to either {CE} or {BF}, again draw {KM} through {H} parallel to either {AB} or {EF}, and again draw {AK} through {A} parallel to either {CL} or {BM}.",
               visible: BUILT,
-              // All three parallels are animation targets — highlighting
-              // them would paint them from t=0 (euclid#171).
-              highlighted: [],
+              highlighted: ["DG", "KM", "AK"],
               transition: { mode: "cascade", animations: [
                   { elem: "DG", name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "KM", name: geomlib.A.Line.straightEdgeConnect },
@@ -197,8 +192,6 @@ I say that the rectangle  {AD} by {DB} together with the square on {CD} equals t
                   { claim: "AL = DF",                               ref: "C.N.1" } ] },
             { text: "Add {CH} to each. Therefore the whole {AH} equals the gnomon {NOP}.",
               visible: GNOMON,
-              // The gnomon is the animation target; the two regions being
-              // added and the whole they make carry the highlight.
               highlighted: ["ACLK","CDHL","ADHK"],
               transition: { animations: [
                   { elem: "NOP", name: geomlib.A.Polygon.outline } ] },
@@ -293,8 +286,8 @@ but Euclid was restricted to geometric arguments.  The argument isn't difficult.
         background: "0,0,100",
         title: "II.5",
         elements: [
-            "A0;point;free;-1000,130;0,0",
-            "A3;point;free;1000,130;0,0",
+            "A0;point;free;-1000,130;0",
+            "A3;point;free;1000,130;0",
             "A;point;lineSlider;A0,A3,30,0",
             "B;point;lineSlider;A0,A3,220,0",
             "AB;line;connect;A,B",
