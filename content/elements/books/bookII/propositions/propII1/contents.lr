@@ -37,8 +37,8 @@ Let {A} and {BC} be two straight lines, and let {BC} be cut at random at the poi
         background: "35,19,100",
         title: "II.1",
         elements: [
-            "A0;point;free;-1000,40;0,0",
-            "A3;point;free;1000,40;0,0",
+            "A0;point;free;-1000,40;0",
+            "A3;point;free;1000,40;0",
             "A1;point;lineSlider;A0,A3,90,40;0",
             "A2;point;lineSlider;A0,A3,200,40;0",
             "A;line;connect;A1,A2;0,0,0",
@@ -91,9 +91,7 @@ Let {A} and {BC} be two straight lines, and let {BC} be cut at random at the poi
               highlighted: ["A","BD","DE","EC"] },
             { text: "Draw {BF} from {B} at right angles to {BC}, and make {BG} equal to {A}.",
               visible: PERP,
-              // BF and BG are this slide's animation targets (euclid#171).
-              // A is not, and the step turns on it — "make BG equal to A".
-              highlighted: ["A"],
+              highlighted: ["A", "BF", "BG"],
               transition: { mode: "cascade", animations: [
                   { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "BG", name: geomlib.A.Line.straightEdgeConnect } ] },
@@ -102,13 +100,7 @@ Let {A} and {BC} be two straight lines, and let {BC} be cut at random at the poi
                   { claim: "BG cut off equal to A",    ref: "I.3" } ] },
             { text: "Draw {GH} through {G} parallel to {BC}. Through {D}, {E}, and {C} draw {DK}, {EL}, and {CH} parallel to {BG}.",
               visible: BUILT,
-              // Deliberately NOT highlighted: these three are the animation's
-              // own targets. SlateAnimator hides an animated target until its
-              // own cascade step starts (#83), but it sets shouldHighlight at
-              // run start, and drawFace renders a hidden element that is
-              // highlighted — so listing them here paints all three filled
-              // while the first one animates. The animation is the emphasis.
-              highlighted: [],
+              highlighted: ["DBGK", "EDKL", "CELH"],
               transition: { mode: "cascade", animations: [
                   { elem: "DBGK", name: geomlib.A.Polygon.outlineAndFill },
                   { elem: "EDKL", name: geomlib.A.Polygon.outlineAndFill },
@@ -116,9 +108,7 @@ Let {A} and {BC} be two straight lines, and let {BC} be cut at random at the poi
               justifications: [{ claim: "parallels through G, D, E and C", ref: "I.31" }] },
             { text: "Then {BH} equals the sum of {BK}, {DL} and {EH}.",
               visible: WHOLE,
-              // BCHG is this slide's animation target (euclid#171); the three
-              // parts it is being compared with are not, so they keep the gold.
-              highlighted: ["DBGK","EDKL","CELH"],
+              highlighted: ["DBGK", "EDKL", "CELH", "BCHG"],
               transition: { animations: [
                   { elem: "BCHG", name: geomlib.A.Polygon.outline } ] } },
             { text: "Now {BH} is the rectangle {A} by {BC}, for it is contained by {GB} and {BC}, and {BG} equals {A}.",

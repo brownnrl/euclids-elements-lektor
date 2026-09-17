@@ -48,11 +48,10 @@ Construct the rectangular parallelogram {BD} equal to the rectilinear figure {A}
     // is a radius and EH has the right length) and it is what the source
     // shows, so it is kept.
     //
-    // Colour: A and BCDE keep Joyce's random fills. The semicircle BHF has no
-    // explicit faceColor — i.e. a near-white OPAQUE face — which is right,
-    // since his gif shows it filled; it is never in a highlighted set, so the
-    // promote-on-highlight hazard (#140) never fires, and its face lies
-    // entirely above BF where nothing else is drawn.
+    // Colour: A, BCDE and the semicircle BHF all carry random fills (his gif
+    // shows the semicircle filled — pale green, sampled 10px inside the arc).
+    // BHF's face lies entirely above BF where nothing else is drawn, so the
+    // promote-on-highlight hazard (#140) cannot cover anything.
     var FIG  = ["A1","A2","A3","A4","A"];
     // BE1 / E1 are the application's scaffolding — the perpendicular at B that
     // fixes the rectangle's direction. BE1 paints a ~50px stub along BE that
@@ -152,13 +151,7 @@ Construct the rectangular parallelogram {BD} equal to the rectilinear figure {A}
               highlighted: ["A"] },
             { text: "Construct the rectangular parallelogram {BD} equal to the rectilinear figure {A}.",
               visible: RECT,
-              // BCDE is this slide's animation target, so it is deliberately
-              // NOT highlighted (euclid#171). SlateAnimator hides an animated
-              // target until its cascade step starts (#83) but sets
-              // shouldHighlight at run start, and drawFace renders a hidden
-              // element that is highlighted — so listing it here would paint
-              // the rectangle filled from t=0. The animation is the emphasis.
-              highlighted: ["A"],
+              highlighted: ["A", "BCDE"],
               transition: { animations: [
                   { elem: "BCDE", name: geomlib.A.Polygon.outlineAndFill } ] },
               justifications: [{ claim: "a rectangle equal to the figure A", ref: "I.45" }] },
@@ -175,9 +168,7 @@ Construct the rectangular parallelogram {BD} equal to the rectilinear figure {A}
             // holds still on the equality that fixed where F landed.
             { text: "Let {BE} be greater, and produce it to {F}.",
               visible: PROD1,
-              // EF is the animation target (euclid#171); BE, the line being
-              // produced, is not.
-              highlighted: ["BE"],
+              highlighted: ["BE", "EF"],
               transition: { animations: [
                   { elem: "EF", name: geomlib.A.Line.straightEdgeExtend } ] } },
             { text: "Make {EF} equal to {ED},",
@@ -186,7 +177,6 @@ Construct the rectangular parallelogram {BD} equal to the rectilinear figure {A}
               justifications: [{ claim: "EF cut off equal to ED", ref: "I.3" }] },
             { text: "and bisect {BF} at {G}.",
               visible: PROD,
-              // G is the animation target; BF, the line bisected, is not.
               highlighted: ["BF"],
               transition: { animations: [
                   { elem: "G", name: geomlib.A.Point.appear } ] },
@@ -194,8 +184,12 @@ Construct the rectangular parallelogram {BD} equal to the rectilinear figure {A}
             { text: "Describe the semicircle {BHF} with center {G} and radius one of the straight lines {GB} or {GF}.",
               visible: SEMI,
               highlighted: ["GB","GF"],
-              // No sweep: see euclid#172 and the note on BHF above. Reverting
-              // to a plain reveal is better than an arc that opens complete.
+              // Swept from F round to B (geomlib 0.16, euclid#172: the sweep is
+              // monotonic for either arm order; `reverse: true` would trace it
+              // the other way). The arms stay G,F,B — that order picks the
+              // semicircle above BF, which is the one Joyce draws.
+              transition: { animations: [
+                  { elem: "BHF", name: geomlib.A.Sector.sweep } ] },
               justifications: [{ claim: "the semicircle on the diameter BF", ref: "I.Def.18" }] },
             { text: "Produce {DE} to {H}, and join {GH}.",
               visible: HGT,
@@ -218,8 +212,6 @@ Construct the rectangular parallelogram {BD} equal to the rectilinear figure {A}
             // leaves it to the marginal ref.
             { text: "But the sum of the squares on {HE} and {EG} equals the square on {GH},",
               visible: RT,
-              // angGEH is the animation target; the triangle and its sides are
-              // not.
               highlighted: ["HGE","EH","GE","GH"],
               transition: { animations: [
                   { elem: "angGEH", name: geomlib.A.Sector.sweep } ] },

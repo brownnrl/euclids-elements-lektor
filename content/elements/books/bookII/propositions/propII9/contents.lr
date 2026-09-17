@@ -153,11 +153,7 @@ I say that the sum of the squares on {AD} and {DB} is double the sum of the squa
               highlighted: ["AD","DB","AC","CD"] },
             { text: "Draw {CE} from {C} at right angles to {AB}, and make it equal to either {AC} or {CB}. Join {EA} and {EB}.",
               visible: PERP,
-              // Not highlighted: these are this slide's animation targets
-              // (euclid#171) — a highlighted element draws even while the
-              // animator holds it hidden, so listing them paints all three
-              // from t=0. The animation is the emphasis.
-              highlighted: [],
+              highlighted: ["CE", "AE", "BE"],
               transition: { mode: "cascade", animations: [
                   { elem: "CE", name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "AE", name: geomlib.A.Line.straightEdgeConnect },
@@ -185,9 +181,7 @@ I say that the sum of the squares on {AD} and {DB} is double the sum of the squa
               justifications: [{ claim: "the angles at the base of an isosceles triangle", ref: "I.5" }] },
             { text: "And, since the angle at {C|angACE} is right, the sum of the remaining angles {EAC} and {AEC} equals one right angle.",
               visible: ANG2,
-              // angACE is this slide's animation target (euclid#171); the two
-              // remaining angles are not, so they keep the gold.
-              highlighted: ["angEAC","angAEC"],
+              highlighted: ["angEAC", "angAEC", "angACE"],
               transition: { animations: [
                   { elem: "angACE", name: geomlib.A.Sector.sweep } ] },
               justifications: [{ claim: "the three angles of a triangle make two right angles", ref: "I.32" }] },
@@ -205,9 +199,7 @@ I say that the sum of the squares on {AD} and {DB} is double the sum of the squa
               justifications: [{ claim: "the three angles of a triangle make two right angles", ref: "I.32" }] },
             { text: "And, since the angle {GEF|angCEB} is half of a right angle, and the angle {EGF|angEGF} is right, for it equals the interior and opposite angle {ECB|angECB}, the remaining angle {EFG} is half of a right angle.",
               visible: ANG4,
-              // The two markers being swept are this slide's animation targets
-              // (euclid#171); the two angles the step reasons FROM are not.
-              highlighted: ["angCEB","angECB"],
+              highlighted: ["angCEB", "angECB", "angEGF", "angEFG"],
               transition: { mode: "cascade", animations: [
                   { elem: "angEGF", name: geomlib.A.Sector.sweep },
                   { elem: "angEFG", name: geomlib.A.Sector.sweep } ] },
@@ -216,8 +208,7 @@ I say that the sum of the squares on {AD} and {DB} is double the sum of the squa
                   { claim: "the remaining angle EFG is half a right angle",        ref: "I.32" } ] },
             { text: "Therefore the angle {GEF|angCEB} equals the angle {EFG}, so that the side {EG} also equals {GF}.",
               visible: ANG4,
-              // EGF is this slide's animation target (euclid#171).
-              highlighted: ["EG","FG","angCEB","angEFG"],
+              highlighted: ["EG", "FG", "angCEB", "angEFG", "EGF"],
               transition: { animations: [
                   { elem: "EGF", name: geomlib.A.Polygon.outlineAndFill } ] },
               justifications: [{ claim: "sides opposite equal angles are equal", ref: "I.6" }] },
@@ -232,8 +223,7 @@ I say that the sum of the squares on {AD} and {DB} is double the sum of the squa
                   { claim: "the remaining angle BFD is half a right angle",        ref: "I.32" } ] },
             { text: "Therefore the angle at {B|angEBC} equals the angle {DFB}, so that the side {FD} also equals the side {DB}.",
               visible: ANG5,
-              // FDB is this slide's animation target (euclid#171).
-              highlighted: ["DF","DB","angEBC","angDFB"],
+              highlighted: ["DF", "DB", "angEBC", "angDFB", "FDB"],
               transition: { animations: [
                   { elem: "FDB", name: geomlib.A.Polygon.outlineAndFill } ] },
               justifications: [{ claim: "sides opposite equal angles are equal", ref: "I.6" }] },
@@ -267,8 +257,7 @@ I say that the sum of the squares on {AD} and {DB} is double the sum of the squa
               justifications: [{ claim: "the square on AF equals the squares on AE and EF", ref: "I.47" }] },
             { text: "But the sum of the squares on {AD} and {DF} equals the square on {AF}, for the angle at {D|angADF} is right.",
               visible: SQ3,
-              // angADF is this slide's animation target (euclid#171).
-              highlighted: ["AD","DF","AF"],
+              highlighted: ["AD", "DF", "AF", "angADF"],
               transition: { animations: [
                   { elem: "angADF", name: geomlib.A.Sector.sweep } ] },
               justifications: [{ claim: "the square on AF equals the squares on AD and DF", ref: "I.47" }] },
@@ -466,8 +455,7 @@ Thus, {AD}<sup>2</sup> + {DB}<sup>2</sup> = 2({AC}<sup>2</sup>+{CD}<sup>2</sup>)
               highlighted: ["ADRO","PRHF"] },
             { text: "Cut out the rectangle {KQ} and move it to the right to cover the rectangle {MP}.",
               visible: MOVE1,
-              // KQ is the animation's own target (euclid#171), so only its
-              // destination is highlighted.
+              // KQ is the superposition ghost; only its destination MP is highlighted.
               highlighted: ["MP"],
               transition: { animations: [
                   { elem: "KQ", name: geomlib.A.Polygon.superpose,

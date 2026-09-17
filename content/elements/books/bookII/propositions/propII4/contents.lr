@@ -60,8 +60,8 @@ I say that the square on {AB} equals the sum of the squares on {AC} and {CB} plu
         background: "35,19,100",
         title: "II.4",
         elements: [
-            "A0;point;free;-1000,40;0,0",
-            "A3;point;free;1000,40;0,0",
+            "A0;point;free;-1000,40;0",
+            "A3;point;free;1000,40;0",
             "A;point;lineSlider;A0,A3,40,0",
             "B;point;lineSlider;A0,A3,190,0",
             "C;point;lineSlider;A0,A3,130,0",
@@ -140,13 +140,7 @@ I say that the square on {AB} equals the sum of the squares on {AC} and {CB} plu
               highlighted: ["AC","CB"] },
             { text: "Describe the square {ADEB} on {AB}. Join {BD}. Draw {CF} through {C} parallel to either {AD} or {EB}, and draw {HK} through {G} parallel to either {AB} or {DE}.",
               visible: BUILT,
-              // Deliberately NOT highlighted: these four are the animation's own
-              // targets. SlateAnimator hides an animated target until its cascade
-              // step starts (#83) but sets shouldHighlight at run start, and
-              // drawFace draws a hidden element that is highlighted — so listing
-              // them paints the whole construction from t=0. The animation is
-              // the emphasis (euclid#171).
-              highlighted: [],
+              highlighted: ["BD", "CF", "HK"],
               transition: { mode: "cascade", animations: [
                   { elem: "BADE", name: geomlib.A.Polygon.outline },
                   { elem: "BD",   name: geomlib.A.Line.straightEdgeConnect },
@@ -165,8 +159,7 @@ I say that the square on {AB} equals the sum of the squares on {AC} and {CB} plu
                   { claim: "exterior CGB = interior opposite ADB", ref: "I.29" } ] },
             { text: "But the angle {ADB} equals the angle {ABD}, since the side {BA} also equals {AD}.",
               visible: ISOSC,
-              // angABD is this slide's animation target (euclid#171).
-              highlighted: ["angADB","AB","AD"],
+              highlighted: ["angADB", "AB", "AD", "angABD"],
               transition: { animations: [
                   { elem: "angABD", name: geomlib.A.Sector.sweep } ] },
               justifications: [
@@ -178,8 +171,7 @@ I say that the square on {AB} equals the sum of the squares on {AC} and {CB} plu
                   { claim: "equal angles give BC = CG", ref: "I.6" } ] },
             { text: "But {CB} equals {GK}, and {CG} to {KB}. Therefore {GK} also equals {KB}. Therefore {CGKB} is equilateral.",
               visible: EQUIL,
-              // CBKG is this slide's animation target (euclid#171).
-              highlighted: ["CB","GK","CG","KB"],
+              highlighted: ["CB", "GK", "CG", "KB", "CBKG"],
               transition: { animations: [
                   { elem: "CBKG", name: geomlib.A.Polygon.outlineAndFill } ] },
               justifications: [
@@ -211,8 +203,7 @@ I say that the square on {AB} equals the sum of the squares on {AC} and {CB} plu
                   { claim: "equilateral and right-angled, so a square", ref: "I.Def.22" } ] },
             { text: "For the same reason {HF} is also a square, and it is described on {HG}, that is {AC}. Therefore the squares {HF} and {KC} are the squares on {AC} and {CB}.",
               visible: AREAS,
-              // DFGH (HF) is this slide's animation target (euclid#171).
-              highlighted: ["HG","AC","CB","CBKG"],
+              highlighted: ["HG", "AC", "CB", "CBKG", "DFGH"],
               transition: { animations: [
                   { elem: "DFGH", name: geomlib.A.Polygon.outlineAndFill } ] },
               justifications: [
@@ -220,9 +211,7 @@ I say that the square on {AB} equals the sum of the squares on {AC} and {CB} plu
             { text: "Now, since {AG} equals {GE}, and {AG} is the rectangle {AC} by {CB}, for {GC} equals {CB}, "
                   + "therefore {GE} also equals the rectangle {AC} by {CB}.",
               visible: TWICE,
-              // ACGH (AG) and GKEF (GE) are this slide's animation targets
-              // (euclid#171); GC and CB, which the step turns on, are not.
-              highlighted: ["CG","CB"],
+              highlighted: ["CG", "CB", "ACGH", "GKEF"],
               // parallel: the two are equal, and the point is that they arrive
               // together — one rectangle taken twice.
               transition: { mode: "parallel", animations: [
@@ -241,8 +230,7 @@ I say that the square on {AB} equals the sum of the squares on {AC} and {CB} plu
               highlighted: ["DFGH","CBKG","ACGH","GKEF"] },
             { text: "But {HF}, {CK}, {AG}, and {GE} are the whole {ADEB}, which is the square on {AB}.",
               visible: TWICE,
-              // ADEB is this slide's animation target (euclid#171).
-              highlighted: ["DFGH","CBKG","ACGH","GKEF"],
+              highlighted: ["DFGH", "CBKG", "ACGH", "GKEF", "ADEB"],
               transition: { animations: [
                   { elem: "ADEB", name: geomlib.A.Polygon.outline } ] } },
             { text: "Therefore the square on {AB} equals the sum of the squares on {AC} and {CB} plus twice the rectangle {AC} by {CB}.",

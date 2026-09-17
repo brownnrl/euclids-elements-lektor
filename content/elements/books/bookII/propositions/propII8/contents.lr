@@ -73,8 +73,8 @@ I say that four times the rectangle {AB} by {BC} plus the square on {AC} equals 
         background: "35,19,100",
         title: "II.8",
         elements: [
-            "A0;point;free;-1000,40;0,0",
-            "A3;point;free;1000,40;0,0",
+            "A0;point;free;-1000,40;0",
+            "A3;point;free;1000,40;0",
             "A;point;lineSlider;A0,A3,40,0",
             "B;point;lineSlider;A0,A3,210,0",
             "C;point;lineSlider;A0,A3,160,0",
@@ -159,11 +159,7 @@ I say that four times the rectangle {AB} by {BC} plus the square on {AC} equals 
               highlighted: ["AB","CB","AC"] },
             { text: "Produce the straight line {BD} in a straight line with {AB}, and make {BD} equal to {CB}. Describe the square {AEFD} on {AD}.",
               visible: SQ,
-              // Not highlighted: both are this slide's animation targets
-              // (euclid#171) — a highlighted element draws even while the
-              // animator is holding it hidden, so listing them paints the
-              // finished square from t=0. The animation is the emphasis.
-              highlighted: [],
+              highlighted: ["BD"],
               transition: { mode: "cascade", animations: [
                   { elem: "BD",   name: geomlib.A.Line.straightEdgeConnect },
                   { elem: "DAEF", name: geomlib.A.Polygon.outline } ] },
@@ -251,9 +247,7 @@ I say that four times the rectangle {AB} by {BC} plus the square on {AC} equals 
               justifications: [{ claim: "equals added to equals", ref: "C.N.2" }] },
             { text: "But the gnomon {STU} and {OH} are the whole square {AEFD}, which is described on {AD}. Therefore four times the rectangle {AB} by {BD} plus the square on {AC} equals the square on {AD}.",
               visible: GNOMON,
-              // AEFD is this slide's animation target (euclid#171); the two
-              // parts that make it up are not, so they keep the gold.
-              highlighted: ["STU","OQHE"],
+              highlighted: ["STU", "OQHE", "AEFD"],
               transition: { animations: [
                   { elem: "AEFD", name: geomlib.A.Polygon.outline } ] } },
             { text: "But {BD} equals {BC}.",

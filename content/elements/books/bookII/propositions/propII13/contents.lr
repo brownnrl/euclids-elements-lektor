@@ -104,14 +104,7 @@ I say that the square on {AC} is less than the sum of the squares on {CB} and {B
         slides: [
             { text: "Let {ABC} be a triangle having the angle at {B} acute.",
               visible: TRI,
-              // angABC is this slide's animation target, so it is deliberately
-              // NOT highlighted (euclid#171). SlateAnimator hides an animated
-              // target until its cascade step starts (#83) but sets
-              // shouldHighlight at run start, and drawFace renders a hidden
-              // element that is highlighted — so listing it here would paint
-              // the wedge from t=0 and the sweep would have nothing to reveal.
-              // The animation is the emphasis.
-              highlighted: ["ABC"],
+              highlighted: ["ABC", "angABC"],
               transition: { animations: [
                   { elem: "angABC", name: geomlib.A.Sector.sweep } ] },
               justifications: [{ claim: "less than a right angle", ref: "I.Def.12" }] },
@@ -147,8 +140,6 @@ I say that the square on {AC} is less than the sum of the squares on {CB} and {B
               justifications: [{ claim: "the right triangle ADB", ref: "I.47" }] },
             { text: "And the square on {AC} equals the sum of the squares on {AD} and {DC}.",
               visible: RT2,
-              // ADC is this slide's animation target — kept out of
-              // highlighted, per the note on slide 1.
               highlighted: ["AC","AD","DC"],
               transition: { animations: [
                   { elem: "ADC", name: geomlib.A.Polygon.outline } ] },

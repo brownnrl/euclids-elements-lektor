@@ -43,8 +43,8 @@ Let the straight line {AB} be cut at random at {C}.
         background: "35,19,100",
         title: "II.3",
         elements: [
-            "A0;point;free;-1000,30;0,0",
-            "A3;point;free;1000,30;0,0",
+            "A0;point;free;-1000,30;0",
+            "A3;point;free;1000,30;0",
             "A;point;lineSlider;A0,A3,40,0",
             "B;point;lineSlider;A0,A3,240,0",
             "C;point;lineSlider;A0,A3,110,0",
@@ -95,19 +95,13 @@ Let the straight line {AB} be cut at random at {C}.
               highlighted: ["AB","AC","BC"] },
             { text: "Describe the square {CDEB} on {CB}.",
               visible: SQUARE,
-              // BC, not BCDE: the square is this slide's animation target, and
-              // a highlighted element draws even while the animator is hiding
-              // it, so listing it would paint it filled from t=0 (euclid#171).
-              // The base it is described on is the honest emphasis.
-              highlighted: ["BC"],
+              highlighted: ["BC", "BCDE"],
               transition: { animations: [
                   { elem: "BCDE", name: geomlib.A.Polygon.outlineAndFill } ] },
               justifications: [{ claim: "the square described on CB", ref: "I.46" }] },
             { text: "Draw {ED} through to {F}, and draw {AF} through {A} parallel to either {CD} or {BE}.",
               visible: BUILT,
-              // The parallels the caption names — neither is an animation
-              // target here, so highlighting them is safe (euclid#171).
-              highlighted: ["CD","BE"],
+              highlighted: ["CD", "BE", "DF", "AF", "DCAF"],
               transition: { mode: "cascade", animations: [
                   { elem: "DF",   name: geomlib.A.Line.straightEdgeExtend },
                   { elem: "AF",   name: geomlib.A.Line.straightEdgeConnect },
@@ -117,10 +111,7 @@ Let the straight line {AB} be cut at random at {C}.
                   { claim: "AF drawn parallel to CD and BE",  ref: "I.31" } ] },
             { text: "Then {AE} equals {AD} plus {CE}.",
               visible: WHOLE,
-              // The two parts, NOT the whole: ABEF is the outline animation's
-              // own target (euclid#171). II.1's equivalent slide listed its
-              // containing rectangle here; this deck does not.
-              highlighted: ["DCAF","BCDE"],
+              highlighted: ["DCAF", "BCDE", "ABEF"],
               transition: { animations: [
                   { elem: "ABEF", name: geomlib.A.Polygon.outline } ] } },
             { text: "Now {AE} is the rectangle {AB} by {BC}, for it is contained by {AB} and {BE}, and {BE} equals {BC}.",
