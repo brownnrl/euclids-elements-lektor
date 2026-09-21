@@ -21,14 +21,53 @@ To find the center of a given circle.
 ----
 proof:
 
-Let *ABC* be the given circle.
+Let {ABC} be the given circle.
 
-It is required to find the center of the circle *ABC.*
+It is required to find the center of the circle {ABC}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="260" tabindex="0"></canvas>
 <noscript><img alt="III.1 diagram" src="propIII1.gif"/></noscript>
 <script type="text/javascript">
+    // The foundation of Book III — cited by about half its proofs — and a
+    // CONSTRUCTION, so the apparatus is shown in full, one animated step per
+    // clause: the random chord, its bisection, the perpendicular, its
+    // production, the second bisection. I.10 / I.11 are long past their
+    // demonstration (the fatigue rule), so D and F simply appear and the
+    // perpendicular is a single stroke; the marginal ref carries the
+    // justification.
+    //
+    // Joyce's figure draws the perpendicular as ONE chord, EC (first point
+    // E at the bottom, last point C at the top), so a straightEdge trace of
+    // it would run E -> D -> C — backwards against his "Draw DC from D ...
+    // and draw it through to E". DC and DE below are real black lines that
+    // are `initiallyHidden` (as II.8's coloured areas were): the resting
+    // figure is pixel-identical to the converted one (verified by rendering
+    // both against the bundle with a seeded Math.random), and the walk
+    // draws DC upward from D, then DE downward, never showing EC at all.
+    // CE is a transparent twin so "bisect CE at F" has a hover target while
+    // EC stays out of the slide sets.
+    //
+    // Everything else added is fully transparent (;0;0;0): the two halves
+    // of AB the proof names, and the angle markers (hidden at rest —
+    // showAngles defaults false).
+    //
+    // Colour: the circle keeps Joyce's random face. The two angles the I.8
+    // step proves equal share the palette default; the right angle FDB is
+    // red, the book's idiom for a right angle.
+    var GIVEN = ["A","B","ABC"];
+    var LINE  = GIVEN.concat(["AB","D"]);
+    var PERP  = LINE.concat(["DC","C"]);
+    var THRU  = PERP.concat(["DE","E"]);
+    var BIS   = THRU.concat(["CE","F"]);
+    var SUP   = BIS.concat(["G"]);
+    var JOIN  = SUP.concat(["AG","DG","BG"]);
+    var SIDES = JOIN.concat(["AD","DB"]);
+    var ANG   = SIDES.concat(["angADG","angGDB"]);
+    var RT    = ANG.concat(["angFDB"]);
+    // The payoff: everything the reductio needed is gone; the circle, its
+    // three named points, the centre and its radii remain.
+    var DONE  = ["A","B","C","ABC","F","FA","FB","FC"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,38 +88,180 @@ It is required to find the center of the circle *ABC.*
             "G;point;free;150,140",
             "AG;line;connect;A,G",
             "BG;line;connect;B,G",
-            "DG;line;connect;D,G"
+            "DG;line;connect;D,G",
+            // Walk-only halves of the chord EC (initiallyHidden, see above).
+            "DC;line;connect;D,C",
+            "DE;line;connect;D,E",
+            // Hover / highlight targets only — the lines above already draw
+            // every one of these.
+            "CE;line;connect;C,E;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            // The radii from F, which Joyce's figure never draws: the closing slide
+            // clears the construction and draws these three, so "F is the center"
+            // is seen as FA = FB = FC. Transparent at rest.
+            "FA;line;connect;F,A;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "FC;line;connect;F,C;0;0;0",
+            // The two angles at D the reductio compares, and the right angle
+            // FDB that GDB is nested inside. Radii pinned by design: ADG and
+            // GDB are ADJACENT wedges sharing the arm DG, so they share one
+            // radius (auto-nesting would step every marker at a vertex and
+            // stack three rings to 40px on a 100px circle); only FDB, which
+            // contains GDB, sits outside.
+            "angADG;sector;angleMarker;D,A,G,20",
+            "angGDB;sector;angleMarker;D,G,B,20",
+            "angFDB;sector;angleMarker;D,F,B,28;0;0;red;red"
         ],
+        // Draggables are auto-unioned into every slide. G is the supposed
+        // centre the reductio introduces on slide 8, and C' is the third
+        // point that fixes the circle — it draws a dot at the top of the
+        // circle, where C lands later — so both are deferred (checked
+        // against the bundle: `draggable` is true for A, B, C', G only).
+        // A and B are given with the circle, whose name they carry. The
+        // resting figure is unaffected.
+        deferDraggables: ["C'","G"],
+        initiallyHidden: ["DC","DE"],
+        aliases: { "GA": "AG", "GD": "DG", "GB": "BG", "BD": "DB",
+                   "DA": "AD", "BA": "AB",
+                   "ADG": "angADG", "GDB": "angGDB", "FDB": "angFDB" },
+        slides: [
+            { text: "Let {ABC} be the given circle.",
+              visible: GIVEN,
+              highlighted: ["ABC"] },
+            { text: "It is required to find the center of the circle {ABC}.",
+              visible: GIVEN,
+              highlighted: ["ABC"] },
+            { text: "Draw a straight line {AB} through it at random, and bisect it at the point {D}.",
+              visible: LINE,
+              highlighted: ["AB", "D"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AB bisected at D", ref: "I.10" }] },
+            { text: "Draw {DC} from {D} at right angles to {AB},",
+              visible: PERP,
+              // DC and C are the targets; AB, the line it stands on, is not.
+              highlighted: ["AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "C",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "DC at right angles to AB", ref: "I.11" }] },
+            { text: "and draw it through to {E}.",
+              visible: THRU,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "E",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Bisect {CE} at {F}.",
+              visible: BIS,
+              // F is the target; CE, the line bisected, is not.
+              highlighted: ["CE"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "CE bisected at F", ref: "I.10" }] },
+            { text: "I say that {F} is the center of the circle {ABC}.",
+              visible: BIS,
+              highlighted: ["F","ABC"] },
+            { text: "For suppose it is not, but, if possible, let {G} be the center.",
+              visible: SUP,
+              highlighted: [],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "Join {GA}, {GD}, and {GB}.",
+              visible: JOIN,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since {AD} equals {DB}, and {DG} is common, the two sides {AD} and {DG} equal the two sides {BD} and {DG} respectively.",
+              visible: SIDES,
+              highlighted: ["AD","DB","DG"] },
+            { text: "And the base {GA} equals the base {GB}, for they are radii,",
+              visible: SIDES,
+              highlighted: ["AG","BG"],
+              justifications: [{ claim: "GA and GB are radii", ref: "I.Def.15" }] },
+            { text: "therefore the angle {ADG} equals the angle {GDB}.",
+              visible: ANG,
+              highlighted: ["angADG", "angGDB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angADG", name: geomlib.A.Sector.sweep },
+                  { elem: "angGDB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "triangles ADG and BDG, three sides equal to three sides", ref: "I.8" }] },
+            { text: "But, when a straight line standing on a straight line makes the adjacent angles equal to one another, each of the equal angles is right, therefore the angle {GDB} is right.",
+              visible: ANG,
+              highlighted: ["angGDB"],
+              justifications: [{ ref: "I.Def.10" }] },
+            { text: "But the angle {FDB} is also right, therefore the angle {FDB} equals the angle {GDB}, the greater equals the less, which is impossible.",
+              visible: RT,
+              // angFDB is the target; GDB, the angle it is compared with, is
+              // not.
+              highlighted: ["angGDB"],
+              transition: { animations: [
+                  { elem: "angFDB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore {G} is not the center of the circle {ABC}.",
+              visible: RT,
+              highlighted: ["G"] },
+            { text: "Similarly we can prove that neither is any other point except {F}.",
+              visible: RT,
+              highlighted: ["F"] },
+            { text: "Therefore the point {F} is the center of the circle {ABC}.",
+              visible: DONE,
+              highlighted: ["F","FA","FB","FC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FA", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Def.10": "/elements/books/bookI/definitions/defI10/",
+        "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.8":      "/elements/books/bookI/propositions/propI8/",
+        "I.10":     "/elements/books/bookI/propositions/propI10/",
+        "I.11":     "/elements/books/bookI/propositions/propI11/"
     });
 </script>
 </figure>
 
-Draw a straight line *AB* through it at random, and bisect it at the point *D.*  Draw *DC* from *D* at right angles to *AB,* and draw it through to *E.*  Bisect *CE* at *F.* [!just I.10; I.11, I.10]
+Draw a straight line {AB} through it at random, and bisect it at the point {D}.  Draw {DC} from {D} at right angles to {AB}, and draw it through to {E}.  Bisect {CE} at {F}. [!just I.10; I.11, I.10]
 
-I say that *F* is the center of the circle *ABC.*
+I say that {F} is the center of the circle {ABC}.
 
-For suppose it is not, but, if possible, let *G* be the center. Join *GA, GD,* and *GB.*
+For suppose it is not, but, if possible, let {G} be the center. Join {GA}, {GD}, and {GB}.
 
-Then, since *AD* equals *DB,* and *DG* is common, the two sides *AD* and *DG* equal the two sides *BD* and *DG* respectively.  And the base *GA* equals the base *GB,* for they are radii, therefore the angle *ADG* equals the angle *GDB.* [!just I.Def.15; I.8]
+Then, since {AD} equals {DB}, and {DG} is common, the two sides {AD} and {DG} equal the two sides {BD} and {DG} respectively.  And the base {GA} equals the base {GB}, for they are radii, therefore the angle {ADG} equals the angle {GDB}. [!just I.Def.15; I.8]
 
-But, when a straight line standing on a straight line makes the adjacent angles equal to one another, each of the equal angles is right,  therefore the angle *GDB* is right. [!just I.Def.10]
+But, when a straight line standing on a straight line makes the adjacent angles equal to one another, each of the equal angles is right,  therefore the angle {GDB} is right. [!just I.Def.10]
 
-But the angle *FDB* is also right, therefore the angle *FDB* equals the angle *GDB,* the greater equals the less, which is impossible.  Therefore *G* is not the center of the circle *ABC.*
+But the angle {FDB} is also right, therefore the angle {FDB} equals the angle {GDB}, the greater equals the less, which is impossible.  Therefore {G} is not the center of the circle {ABC}.
 
-Similarly we can prove that neither is any other point except *F.*
+Similarly we can prove that neither is any other point except {F}.
 
-Therefore the point *F* is the center of the circle *ABC.*
+Therefore the point {F} is the center of the circle {ABC}.
 
 <div class="qed">Q.E.F.</div>
 ----
 ----
 guide:
 
-Since the definition of a circle, @I.Def.15, includes the existence of a center, Euclid is justified in taking a point *G* as the center.
+Since the definition of a circle, @I.Def.15, includes the existence of a center, Euclid is justified in taking a point {G} as the center.
 
-In this proof *G* is shown to lie on the perpendicular bisector of the line *AB.*  He leaves to the reader to show that *G* actually is the point *F* on the perpendicular bisector, but that's clear since only the midpoint *F* is equidistant from the two points *C* and *E* on the circle.  From that observation it also follows that the center of a circle is unique, although the uniqueness can easily be proved in other ways.
+In this proof {G} is shown to lie on the perpendicular bisector of the line {AB}.  He leaves to the reader to show that {G} actually is the point {F} on the perpendicular bisector, but that's clear since only the midpoint {F} is equidistant from the two points {C} and {E} on the circle.  From that observation it also follows that the center of a circle is unique, although the uniqueness can easily be proved in other ways.
 
-As Todhunter remarked, Euclid implicitly assumes that the perpendicular bisector of *AB* actually intersects the circle in points *C* and *E.*
+As Todhunter remarked, Euclid implicitly assumes that the perpendicular bisector of {AB} actually intersects the circle in points {C} and {E}.
 
 #### Use of this proposition and its corollary
 
