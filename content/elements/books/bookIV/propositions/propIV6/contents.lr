@@ -17,10 +17,10 @@ statement: To inscribe a square in a given circle.
 ----
 proof:
 
-Let *ABCD* be the given circle.
+Let {ABCD} be the given circle.
 
 <figure class="diagram">
-<canvas id="canvas_0" width="290" height="290" tabindex="0"></canvas>
+<canvas id="canvas_0" width="300" height="300" tabindex="0"></canvas>
 <noscript><img alt="IV.6 diagram" src="propIV6.gif"/></noscript>
 <script type="text/javascript">
     geomlib.init({
@@ -37,29 +37,105 @@ Let *ABCD* be the given circle.
             "D;point;perpendicular;E,C",
             "square;polygon;quadrilateral;A,B,C,D;0;0;black;random",
             "AC;line;connect;A,C",
-            "BD;line;connect;B,D"
+            "BD;line;connect;B,D",
+            // Invisible highlight targets: the proof argues over the four
+            // joined sides and the three radii by name, but the figure drew
+            // only the quadrilateral and the two diameters.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "DA;line;connect;D,A;0;0;0",
+            "BE;line;connect;B,E;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "EA;line;connect;E,A;0;0;0",
+            "angAEB;sector;angleMarker;E,A,B;0;0;orange;orange",
+            "angBAD;sector;angleMarker;A,B,D;0;0;orange;orange"
         ],
+        // Joyce writes AD for the side the figure declares DA; the circle and
+        // the inscribed quadrilateral are both named ABCD in the prose, so the
+        // quadrilateral is reached with the display override {ABCD|square}.
+        aliases: {
+            "AD": "DA"
+        },
+        slides: [
+            { text: "Let {ABCD} be the given circle.",
+              visible: ["ABCD"],
+              highlighted: ["ABCD"] },
+            { text: "It is required to inscribe a square in the circle {ABCD}.",
+              visible: ["ABCD"],
+              highlighted: ["ABCD"] },
+            { text: "Draw two diameters {AC} and {BD} of the circle {ABCD} at right angles to one another, and join {AB}, {BC}, {CD}, and {DA}.",
+              visible: ["ABCD", "AC", "BD", "B", "D", "AB", "BC", "CD", "DA"],
+              highlighted: ["AC", "BD", "AB", "BC", "CD", "DA"],
+              transition: { animations: [
+                  { elem: "AC", name: "Line.straightEdgeConnect" },
+                  { elem: "BD", name: "Line.straightEdgeConnect" },
+                  { elem: "AB", name: "Line.straightEdgeConnect" },
+                  { elem: "BC", name: "Line.straightEdgeConnect" },
+                  { elem: "CD", name: "Line.straightEdgeConnect" },
+                  { elem: "DA", name: "Line.straightEdgeConnect" } ] },
+              justifications: [
+                  { claim: "a diameter through the centre", ref: "III.1" },
+                  { claim: "at right angles to one another", ref: "I.11" } ] },
+            { text: "Then, since {BE} equals {ED}, for {E} is the center, and {EA} is common and at right angles, therefore the base {AB} equals the base {AD}.",
+              visible: ["ABCD", "AC", "BD", "B", "D", "AB", "BC", "CD", "DA", "BE", "ED", "EA", "angAEB"],
+              highlighted: ["BE", "ED", "EA", "angAEB", "AB", "DA"],
+              transition: { animations: [
+                  { elem: "angAEB", name: "Sector.sweep" } ] },
+              justifications: [{ claim: "two sides and the included angle", ref: "I.4" }] },
+            { text: "For the same reason each of the straight lines {BC} and {CD} also equals each of the straight lines {AB} and {AD}. Therefore the quadrilateral {ABCD|square} is equilateral.",
+              visible: ["ABCD", "AC", "BD", "B", "D", "AB", "BC", "CD", "DA", "square"],
+              highlighted: ["AB", "BC", "CD", "DA"],
+              transition: { animations: [
+                  { elem: "square", name: "Polygon.outline" } ] } },
+            { text: "I say next that it is also right-angled.",
+              highlighted: ["square"] },
+            { text: "For, since the straight line {BD} is a diameter of the circle {ABCD}, therefore BAD is a semicircle, therefore the angle {BAD|angBAD} is right.",
+              visible: ["ABCD", "AC", "BD", "B", "D", "AB", "BC", "CD", "DA", "square", "angBAD"],
+              highlighted: ["BD", "angBAD"],
+              transition: { animations: [
+                  { elem: "angBAD", name: "Sector.sweep" } ] },
+              justifications: [{ claim: "an angle in a semicircle is right", ref: "III.31" }] },
+            { text: "For the same reason each of the angles ABC, BCD, and CDA is also right. Therefore the quadrilateral {ABCD|square} is right-angled.",
+              visible: ["ABCD", "AC", "BD", "B", "D", "AB", "BC", "CD", "DA", "square"],
+              highlighted: ["square"] },
+            { text: "But it was also proved equilateral, therefore it is a square, and it has been inscribed in the circle {ABCD}. Therefore the square {ABCD|square} has been inscribed in the given circle.",
+              highlighted: ["square", "ABCD"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.4":    "/elements/books/bookI/propositions/propI4/",
+        "I.11":   "/elements/books/bookI/propositions/propI11/",
+        "III.1":  "/elements/books/bookIII/propositions/propIII1/",
+        "III.31": "/elements/books/bookIII/propositions/propIII31/"
     });
 </script>
 </figure>
 
-It is required to inscribe a square in the circle *ABCD.*
+It is required to inscribe a square in the circle {ABCD}.
 
-Draw two diameters *AC* and *BD* of the circle *ABCD* at right angles to one another, and join *AB, BC, CD,* and *DA.* [!just III.1, I.11]
+Draw two diameters {AC} and {BD} of the circle {ABCD} at right angles to one another, and join {AB}, {BC}, {CD}, and {DA}. [!just III.1, I.11]
 
-Then, since *BE* equals *ED,* for *E* is the center, and *EA* is common and at right angles, therefore the base *AB* equals the base *AD.* [!just I.4]
+Then, since {BE} equals {ED}, for {E} is the center, and {EA} is common and at right angles, therefore the base {AB} equals the base {AD}. [!just I.4]
 
-For the same reason each of the straight lines *BC* and *CD* also equals each of the straight lines *AB* and *AD.* Therefore the quadrilateral *ABCD* is equilateral.
+For the same reason each of the straight lines {BC} and {CD} also equals each of the straight lines {AB} and {AD}. Therefore the quadrilateral {ABCD|square} is equilateral.
 
 I say next that it is also right-angled.
 
-For, since the straight line *BD* is a diameter of the circle *ABCD,* therefore *BAD* is a semicircle, therefore the angle *BAD* is right. [!just III.31]
+For, since the straight line {BD} is a diameter of the circle {ABCD}, therefore *BAD* is a semicircle, therefore the angle {BAD|angBAD} is right. [!just III.31]
 
-For the same reason each of the angles *ABC, BCD,* and *CDA* is also right. Therefore the quadrilateral *ABCD* is right-angled.
+For the same reason each of the angles *ABC, BCD,* and *CDA* is also right. Therefore the quadrilateral {ABCD|square} is right-angled.
 
-But it was also proved equilateral, therefore it is a square, and it has been inscribed in the circle *ABCD.*
+But it was also proved equilateral, therefore it is a square, and it has been inscribed in the circle {ABCD}.
 
-Therefore the square *ABCD* has been inscribed in the given circle.
+Therefore the square {ABCD|square} has been inscribed in the given circle.
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
