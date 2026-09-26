@@ -15,7 +15,7 @@ statement: If a straight line passing through the center of a circle bisects a s
 ----
 proof:
 
-Let a straight line *CD* passing through the center of a circle *ABC* bisect a straight line *AB* not passing through the center at the point *F.*
+Let a straight line {CD} passing through the center of a circle {ABC} bisect a straight line {AB} not passing through the center at the point {F}.
 
 I say that it also cuts it at right angles.
 
@@ -23,6 +23,31 @@ I say that it also cuts it at right angles.
 <canvas id="canvas_0" width="240" height="250" tabindex="0"></canvas>
 <noscript><img alt="III.3 diagram" src="propIII3.gif"/></noscript>
 <script type="text/javascript">
+    // Two proofs on one figure — the theorem and its converse — and both
+    // rest on the same construction (the centre E and the radii EA, EB).
+    // The deck hides E, EA, EB again at "Next, let CD cut AB at right
+    // angles" and re-runs the short cascade at "with the same
+    // construction", so the second half is seen to build what it says.
+    //
+    // Joyce's figure draws everything the proof names except the halves of
+    // AB, the common side FE, and the two triangles of the I.26 step — all
+    // added fully transparent (;0;0;0 lines, ;0;0;0;0 polygons), so the
+    // static figure is unchanged. EAF and EBF name BOTH a triangle and an
+    // angle in his prose; the element names belong to the triangles, and
+    // the angles ride on the display override {EAF|angEAF}.
+    //
+    // Colour: the circle keeps Joyce's random face. The two right angles at
+    // F are red (the book's idiom for a right angle); they are adjacent,
+    // not nested, so no radius override. The base angles at A and B the
+    // I.5 step proves equal share magenta.
+    var GIVEN = ["A","B","C","ABC","CD","D","AB","F"];
+    var CEN   = GIVEN.concat(["E","AE","BE"]);
+    var SIDES = CEN.concat(["AF","FB","FE"]);
+    var ANG   = SIDES.concat(["angAFE","angBFE"]);
+    // Second half: the right angles stay, the construction is redone.
+    var P2    = GIVEN.concat(["angAFE","angBFE","AF","FB","FE"]);
+    var P2C   = P2.concat(["E","AE","BE","angEAF","angEBF"]);
+    var P2T   = P2C.concat(["EAF","EBF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -40,31 +65,144 @@ I say that it also cuts it at right angles.
             "D;point;extend;C,E,C,E",
             "CD;line;connect;C,D",
             "AE;line;connect;A,E",
-            "BE;line;connect;B,E"
+            "BE;line;connect;B,E",
+            // Hover / highlight targets only — the lines above already draw
+            // every one of these.
+            "AF;line;connect;A,F;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "FE;line;connect;F,E;0;0;0",
+            "EAF;polygon;triangle;E,A,F;0;0;0;0",
+            "EBF;polygon;triangle;E,B,F;0;0;0;0",
+            // Angle markers (hidden at rest — showAngles defaults false).
+            "angAFE;sector;angleMarker;F,A,E;0;0;red;red",
+            "angBFE;sector;angleMarker;F,B,E;0;0;red;red",
+            "angEAF;sector;angleMarker;A,E,F;0;0;magenta;magenta",
+            "angEBF;sector;angleMarker;B,E,F;0;0;magenta;magenta"
         ],
+        // Nothing to defer: the draggables are A, B and the slider C
+        // (checked against the bundle), and all three are given on slide 1
+        // — C is an end of the given line CD. E (center) and D (extend)
+        // are derived, so they are listed per slide.
+        aliases: { "EA": "AE", "EB": "BE", "FA": "AF", "BF": "FB",
+                   "EF": "FE", "DC": "CD", "BA": "AB",
+                   "AFE": "angAFE", "BFE": "angBFE" },
+        slides: [
+            { text: "Let a straight line {CD} passing through the center of a circle {ABC} bisect a straight line {AB} not passing through the center at the point {F}.",
+              visible: GIVEN,
+              highlighted: ["CD","AB","F"] },
+            { text: "I say that it also cuts it at right angles.",
+              visible: GIVEN,
+              highlighted: ["CD","AB"] },
+            { text: "Take the center {E} of the circle {ABC}, and join {EA} and {EB}.",
+              visible: CEN,
+              highlighted: ["E", "AE", "BE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E",  name: geomlib.A.Point.appear },
+                  { elem: "AE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "the center of the circle", ref: "III.1" },
+                  { ref: "I.Post.1" } ] },
+            { text: "Then, since {AF} equals {FB}, and {FE} is common, two sides equal two sides,",
+              visible: SIDES,
+              highlighted: ["AF","FB","FE"] },
+            { text: "and the base {EA} equals the base {EB}, therefore the angle {AFE} equals the angle {BFE}.",
+              visible: ANG,
+              // The two markers are the targets; the bases are not.
+              highlighted: ["AE","BE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angAFE", name: geomlib.A.Sector.sweep },
+                  { elem: "angBFE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "EA and EB are radii",                                    ref: "I.Def.15" },
+                  { claim: "triangles AFE and BFE, three sides equal to three sides", ref: "I.8" } ] },
+            { text: "But, when a straight line standing on another straight line makes the adjacent angles equal to one another, each of the equal angles is right, therefore each of the angles {AFE} and {BFE} is right.",
+              visible: ANG,
+              highlighted: ["angAFE","angBFE"],
+              justifications: [{ ref: "I.Def.10" }] },
+            { text: "Therefore {CD}, which passes through the center and bisects {AB} which does not pass through the center, also cuts it at right angles.",
+              visible: ANG,
+              highlighted: ["CD","AB"] },
+            // The converse. E and the radii go back out; the right angles
+            // at F are now the hypothesis, so they stay.
+            { text: "Next, let {CD} cut {AB} at right angles.",
+              visible: P2,
+              highlighted: ["CD","AB"] },
+            { text: "I say that it also bisects it, that is, that {AF} equals {FB}.",
+              visible: P2,
+              highlighted: ["AF","FB"] },
+            { text: "For, with the same construction, since {EA} equals {EB}, the angle {EAF|angEAF} also equals the angle {EBF|angEBF}.",
+              visible: P2C,
+              // Every element that arrives here is a target of the cascade.
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E",      name: geomlib.A.Point.appear },
+                  { elem: "AE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angEAF", name: geomlib.A.Sector.sweep },
+                  { elem: "angEBF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "base angles of the isosceles triangle EAB", ref: "I.5" }] },
+            { text: "But the right angle {AFE} equals the right angle {BFE},",
+              visible: P2C,
+              highlighted: ["angAFE","angBFE"] },
+            { text: "therefore {EAF} and {EBF} are two triangles having two angles equal to two angles and one side equal to one side, namely {EF}, which is common to them, and opposite one of the equal angles.",
+              visible: P2T,
+              // The two triangles are the targets; the common side is not.
+              highlighted: ["FE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EAF", name: geomlib.A.Polygon.outline },
+                  { elem: "EBF", name: geomlib.A.Polygon.outline } ] } },
+            // Joyce's sentence has no final stop; it is carried as he wrote it.
+            { text: "Therefore they also have the remaining sides equal to the remaining sides",
+              visible: P2T,
+              highlighted: ["AF","FB"],
+              justifications: [{ claim: "two angles and the side opposite one of them", ref: "I.26" }] },
+            { text: "Therefore {AF} equals {FB}.",
+              visible: P2T,
+              highlighted: ["AF","FB"] },
+            { text: "Therefore if a straight line passing through the center of a circle bisects a straight line not passing through the center, then it also cuts it at right angles; and if it cuts it at right angles, then it also bisects it.",
+              visible: P2T,
+              highlighted: ["CD","AB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Def.10": "/elements/books/bookI/definitions/defI10/",
+        "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.5":      "/elements/books/bookI/propositions/propI5/",
+        "I.8":      "/elements/books/bookI/propositions/propI8/",
+        "I.26":     "/elements/books/bookI/propositions/propI26/",
+        "III.1":    "/elements/books/bookIII/propositions/propIII1/"
     });
 </script>
 </figure>
 
-Take the center *E* of the circle *ABC,* and join *EA* and *EB.* [!just III.1]
+Take the center {E} of the circle {ABC}, and join {EA} and {EB}. [!just III.1]
 
-Then, since *AF* equals *FB,* and *FE* is common, two sides equal two sides, and the base *EA* equals the base *EB,* therefore the angle *AFE* equals the angle *BFE.* [!just I.Def.15; I.8]
+Then, since {AF} equals {FB}, and {FE} is common, two sides equal two sides, and the base {EA} equals the base {EB}, therefore the angle {AFE} equals the angle {BFE}. [!just I.Def.15; I.8]
 
-But, when a straight line standing on another straight line makes the adjacent angles equal to one another, each of the equal angles is right, therefore each of the angles *AFE* and *BFE* is right. [!just I.Def.10]
+But, when a straight line standing on another straight line makes the adjacent angles equal to one another, each of the equal angles is right, therefore each of the angles {AFE} and {BFE} is right. [!just I.Def.10]
 
-Therefore *CD,* which passes through the center and bisects *AB* which does not pass through the center, also cuts it at right angles.
+Therefore {CD}, which passes through the center and bisects {AB} which does not pass through the center, also cuts it at right angles.
 
 <hr>
 
-Next, let *CD* cut *AB* at right angles.
+Next, let {CD} cut {AB} at right angles.
 
-I say that it also bisects it,  that is, that *AF* equals *FB.*
+I say that it also bisects it,  that is, that {AF} equals {FB}.
 
-For, with the same construction, since *EA* equals *EB,* the angle *EAF* also equals the angle *EBF.* [!just I.5]
+For, with the same construction, since {EA} equals {EB}, the angle {EAF|angEAF} also equals the angle {EBF|angEBF}. [!just I.5]
 
-But the right angle *AFE* equals the right angle *BFE,* therefore *EAF* and *EBF* are two triangles having two angles equal to two angles and one side equal to one side, namely *EF,* which is common to them, and opposite one of the equal angles. Therefore they  also have the remaining sides equal to the remaining sides [!just I.26]
+But the right angle {AFE} equals the right angle {BFE}, therefore {EAF} and {EBF} are two triangles having two angles equal to two angles and one side equal to one side, namely {EF}, which is common to them, and opposite one of the equal angles. Therefore they  also have the remaining sides equal to the remaining sides [!just I.26]
 
-Therefore *AF* equals *FB.*
+Therefore {AF} equals {FB}.
 
 Therefore *if a straight line passing through the center of a circle bisects a straight line not passing through the center, then it also cuts it at right angles; and if it cuts it at right angles, then it also bisects it.*
 
