@@ -15,12 +15,30 @@ statement: If two circles touch one another, then they do not have the same cent
 ----
 proof:
 
-Let the two circles *ABC* and *CDE* touch one another at the point *C.*
+Let the two circles {ABC|ABCt} and {CDE} touch one another at the point {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="230" height="230" tabindex="0"></canvas>
 <noscript><img alt="III.6 diagram" src="propIII6.gif"/></noscript>
 <script type="text/javascript">
+    // The twin of III.5 for touching circles; the walk is the same shape —
+    // the supposed common centre F, then FC and FEB, then two radii
+    // arguments that collide.
+    //
+    // Joyce's figure builds the inner circle CDE so that it touches ABC at
+    // C from inside (its centre F' is where the perpendicular bisector of
+    // CD meets FC), and F is the real centre of ABC — the figure draws the
+    // reductio's hypothesis as true for ABC. Both circles carry random
+    // faces, and CDE is drawn INSIDE ABC after it: highlighting ABC would
+    // promote its face within the pass (#140) and paint over CDE. So ABC is
+    // never named in a highlighted set; the fully transparent twin ABCt is
+    // the highlight target, reached from prose and captions through the
+    // display override {ABC|ABCt}. CDE is the last face drawn, so it is
+    // highlighted directly. FE, the piece of FB inside CDE that the proof
+    // compares, is transparent too. The static figure is pixel-unchanged.
+    var GIVEN = ["A","B","C","D","ABC","ABCt","CDE"];
+    var CTR   = GIVEN.concat(["F"]);
+    var DRAWN = CTR.concat(["FC","FB","E","FE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -40,21 +58,83 @@ Let the two circles *ABC* and *CDE* touch one another at the point *C.*
             "F';point;intersection;MN,FC;0;0",
             "CDE;circle;radius;F',C;0;0;black;random",
             "EE';line;chord;FB,CDE;0;0;0",
-            "E;point;first;EE'"
+            "E;point;first;EE'",
+            // Transparent highlight twin of ABC (see the note above) and the
+            // segment FE the proof names.
+            "ABCt;circle;circumcircle;A,B,C;0;0;0;0",
+            "FE;line;connect;F,E;0;0;0"
         ],
+        // Draggables (checked against the bundle): A, B, C, D — every one a
+        // letter of a circle's name, "the two circles ABC and CDE", so
+        // slide 1 introduces them and nothing is deferred. F (center) and E
+        // (first) are derived, so each is listed on the slides it belongs
+        // to. The hidden helpers M, MN and F' draw nothing and stay out of
+        // the sets.
+        aliases: { "FEB": "FB", "BF": "FB", "CF": "FC", "EF": "FE" },
+        slides: [
+            { text: "Let the two circles {ABC|ABCt} and {CDE} touch one another at the point {C}.",
+              visible: GIVEN,
+              highlighted: ["ABCt","CDE","C"] },
+            { text: "I say that they do not have the same center.",
+              visible: GIVEN,
+              highlighted: ["ABCt","CDE"] },
+            { text: "For, if possible, let it be {F}.",
+              visible: CTR,
+              highlighted: ["F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "Join {FC}, and draw {FEB} through at random.",
+              visible: DRAWN,
+              highlighted: ["F", "FC", "FB", "E"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since the point {F} is the center of the circle {ABC|ABCt}, {FC} equals {FB}.",
+              visible: DRAWN,
+              highlighted: ["F","ABCt","FC","FB"],
+              justifications: [{ claim: "FC and FB are radii of the circle ABC", ref: "I.Def.15" }] },
+            { text: "Again, since the point {F} is the center of the circle {CDE}, {FC} equals {FE}.",
+              visible: DRAWN,
+              highlighted: ["F","CDE","FC","FE"],
+              justifications: [{ claim: "FC and FE are radii of the circle CDE", ref: "I.Def.15" }] },
+            { text: "But {FC} was proved equal to {FB}, therefore {FE} also equals {FB}, the less equals the greater, which is impossible.",
+              visible: DRAWN,
+              highlighted: ["FE","FB"],
+              justifications: [{ claim: "FE and FB each equal FC", ref: "C.N.1" }] },
+            { text: "Therefore {F} is not the center of the circles {ABC|ABCt} and {CDE}.",
+              visible: DRAWN,
+              highlighted: ["F","ABCt","CDE"] },
+            { text: "Therefore if two circles touch one another, then they do not have the same center.",
+              visible: DRAWN,
+              highlighted: ["ABCt","CDE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/"
     });
 </script>
 </figure>
 
 I say that they do not have the same center.
 
-For, if possible, let it be *F.*  Join *FC,* and draw *FEB* through at random.
+For, if possible, let it be {F}.  Join {FC}, and draw {FEB} through at random.
 
-Then, since the point *F* is the center of the circle *ABC, FC* equals *FB.*  Again, since the point *F* is the center of the circle *CDE, FC* equals *FE.* [!just I.Def.15]
+Then, since the point {F} is the center of the circle {ABC|ABCt}, {FC} equals {FB}.  Again, since the point {F} is the center of the circle {CDE}, {FC} equals {FE}. [!just I.Def.15]
 
-But *FC* was proved equal to *FB,* therefore *FE* also equals *FB,* the less equals the greater, which is impossible.
+But {FC} was proved equal to {FB}, therefore {FE} also equals {FB}, the less equals the greater, which is impossible.
 
-Therefore *F* is not the center of the circles *ABC* and *CDE.*
+Therefore {F} is not the center of the circles {ABC|ABCt} and {CDE}.
 
 Therefore *if two circles touch one another, then they do not have the same center.*
 
