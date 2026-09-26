@@ -15,12 +15,32 @@ statement: If two circles cut one another, then they do not have the same center
 ----
 proof:
 
-Let the circles *ABC* and *CDG* cut one another at the points *B* and *C.*
+Let the circles {ABC|ABCt} and {CDG} cut one another at the points {B} and {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="250" tabindex="0"></canvas>
 <noscript><img alt="III.5 diagram" src="propIII5.gif"/></noscript>
 <script type="text/javascript">
+    // A reductio: the figure is Joyce's two cutting circles with the
+    // supposed common centre E already placed, and the walk simply names
+    // the pieces in his order — E, then EC and EFG, then the two radii
+    // arguments that collide.
+    //
+    // The two circles ABC and DBC are 4-field elements: no colour fields,
+    // so they carry the near-white OPAQUE default face (rgb(255,255,255)
+    // against the bundle). They are left exactly as converted so the
+    // resting figure stays as Joyce drew it, and they are NEVER highlighted
+    // or animated — a highlighted face is promoted within its pass (#140)
+    // and would paint over the other circle. Two fully transparent twins
+    // (;0;0;0;0) carry the highlight instead: CDG under Joyce's own name
+    // for the second circle, ABCt for the first (the name ABC is taken by
+    // the opaque original, so prose and captions reach the twin through the
+    // display override {ABC|ABCt}). EF is the segment of EG inside ABC that
+    // the proof compares; it is transparent too. The static figure is
+    // pixel-unchanged.
+    var GIVEN = ["A","B","C","D","ABC","DBC","ABCt","CDG"];
+    var CTR   = GIVEN.concat(["E"]);
+    var DRAWN = CTR.concat(["EC","EG","F","EF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,21 +57,84 @@ Let the circles *ABC* and *CDG* cut one another at the points *B* and *C.*
             "EG;line;connect;E,G",
             "FF';line;chord;EG,ABC;0;0;0",
             "F;point;first;FF'",
-            "EC;line;connect;E,C"
+            "EC;line;connect;E,C",
+            // Transparent highlight twins of the two opaque circles (see
+            // the note above) and the segment EF the proof names.
+            "ABCt;circle;circumcircle;A,B,C;0;0;0;0",
+            "CDG;circle;circumcircle;D,B,C;0;0;0;0",
+            "EF;line;connect;E,F;0;0;0"
         ],
+        // Draggables (checked against the bundle): A, B, C, D, E, G. All but
+        // E are letters of the two circles' names — "the circles ABC and
+        // CDG" — so slide 1 introduces them. E is the supposed centre, which
+        // arrives with "if possible, let it be E"; deferred so it follows
+        // `visible`. F is derived (first) and is listed per slide.
+        deferDraggables: ["E"],
+        aliases: { "EFG": "EG", "GE": "EG", "CE": "EC", "FE": "EF" },
+        slides: [
+            { text: "Let the circles {ABC|ABCt} and {CDG} cut one another at the points {B} and {C}.",
+              visible: GIVEN,
+              highlighted: ["ABCt","CDG","B","C"] },
+            { text: "I say that they do not have the same center.",
+              visible: GIVEN,
+              highlighted: ["ABCt","CDG"] },
+            { text: "For, if possible, let it be {E}.",
+              visible: CTR,
+              highlighted: ["E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "Join {EC}, and draw {EFG} through at random.",
+              visible: DRAWN,
+              highlighted: ["E", "EC", "EG", "F"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since the point {E} is the center of the circle {ABC|ABCt}, {EC} equals {EF}.",
+              visible: DRAWN,
+              highlighted: ["E","ABCt","EC","EF"],
+              justifications: [{ claim: "EC and EF are radii of the circle ABC", ref: "I.Def.15" }] },
+            { text: "Again, since the point {E} is the center of the circle {CDG}, {EC} equals {EG}.",
+              visible: DRAWN,
+              highlighted: ["E","CDG","EC","EG"],
+              justifications: [{ claim: "EC and EG are radii of the circle CDG", ref: "I.Def.15" }] },
+            { text: "But {EC} was proved equal to {EF} also, therefore {EF} also equals {EG}, the less equals the greater which is impossible.",
+              visible: DRAWN,
+              highlighted: ["EF","EG"],
+              justifications: [{ claim: "EF and EG each equal EC", ref: "C.N.1" }] },
+            { text: "Therefore the point {E} is not the center of the circles {ABC|ABCt} and {CDG}.",
+              visible: DRAWN,
+              highlighted: ["E","ABCt","CDG"] },
+            { text: "Therefore if two circles cut one another, then they do not have the same center.",
+              visible: DRAWN,
+              highlighted: ["ABCt","CDG"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/"
     });
 </script>
 </figure>
 
 I say that they do not have the same center.
 
-For, if possible, let it be *E.*  Join *EC,* and draw *EFG* through at random.
+For, if possible, let it be {E}.  Join {EC}, and draw {EFG} through at random.
 
-Then, since the point *E* is the center of the circle *ABC, EC* equals *EF.* Again, since the point *E* is the center of the circle *CDG, EC* equals *EG.* [!just I.Def.15]
+Then, since the point {E} is the center of the circle {ABC|ABCt}, {EC} equals {EF}. Again, since the point {E} is the center of the circle {CDG}, {EC} equals {EG}. [!just I.Def.15]
 
-But *EC* was proved equal to *EF* also, therefore *EF* also equals *EG,* the less equals the greater which is impossible.
+But {EC} was proved equal to {EF} also, therefore {EF} also equals {EG}, the less equals the greater which is impossible.
 
-Therefore the point *E* is not the center of the circles *ABC* and *CDG.*
+Therefore the point {E} is not the center of the circles {ABC|ABCt} and {CDG}.
 
 Therefore *if two circles cut one another, then they do not have the same center.*
 
@@ -60,6 +143,6 @@ Therefore *if two circles cut one another, then they do not have the same center
 ----
 guide:
 
-Note that no use was made in the proof of the point *B.*  That means the proof actually shows that *if two circles meet, then they do not have the same center,* and that covers not only this proposition but the next, too, where the two touch each other.
+Note that no use was made in the proof of the point {B}.  That means the proof actually shows that *if two circles meet, then they do not have the same center,* and that covers not only this proposition but the next, too, where the two touch each other.
 
 This proposition is used in @III.10 which states that circles cannot intersect at more than two points.
