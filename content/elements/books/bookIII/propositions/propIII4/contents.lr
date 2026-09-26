@@ -15,12 +15,30 @@ statement: If in a circle two straight lines which do not pass through the cente
 ----
 proof:
 
-Let *ABCD* be a circle, and in it let the two straight lines *AC* and *BD,* which do not pass through the center, cut one another at *E.*
+Let {ABCD} be a circle, and in it let the two straight lines {AC} and {BD}, which do not pass through the center, cut one another at {E}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="255" height="250" tabindex="0"></canvas>
 <noscript><img alt="III.4 diagram" src="propIII4.gif"/></noscript>
 <script type="text/javascript">
+    // A short reductio on III.3. Joyce's figure draws both chords, the
+    // centre and FE; the four half-chords the hypothesis names are added
+    // as transparent twins (;0;0;0), so the static figure is unchanged.
+    //
+    // The two right angles at E are nested — FEA lies inside FEB in his
+    // figure (that is the "less equals the greater"). Same vertex, so they
+    // auto-nest smallest innermost (#103): FEA 21.8, FEB 30.8 read back from
+    // the bundle. (A pinned 34 on FEB was clamped by the short arm to 21.8 —
+    // the same ring as FEA — so the pin it once carried made them overlap.)
+    // Both are red, the book's idiom for a right angle.
+    // Markers are hidden at rest (showAngles defaults false).
+    //
+    // Colour: the circle keeps Joyce's random face.
+    var GIVEN = ["A","B","C","D","ABC","AC","BD","E"];
+    var HYP   = GIVEN.concat(["AE","EC","BE","ED"]);
+    var CEN   = HYP.concat(["F","EF"]);
+    var R1    = CEN.concat(["angFEA"]);
+    var R2    = R1.concat(["angFEB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -36,23 +54,92 @@ Let *ABCD* be a circle, and in it let the two straight lines *AC* and *BD,* whic
             "BD;line;connect;B,D",
             "E;point;intersection;A,C,B,D",
             "F;point;center;ABC;black;green",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // Hover / highlight targets only — the chords already draw
+            // every one of these.
+            "AE;line;connect;A,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            "BE;line;connect;B,E;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "angFEA;sector;angleMarker;E,F,A;0;0;red;red",
+            "angFEB;sector;angleMarker;E,F,B;0;0;red;red"
         ],
+        // Nothing to defer: the draggables are A, B, C and the circleSlider
+        // D (checked against the bundle), and all four are given on slide 1
+        // as the ends of the two chords. E (intersection) and F (center)
+        // are derived, so they are listed per slide.
+        aliases: { "ABCD": "ABC", "FE": "EF", "CA": "AC", "DB": "BD",
+                   "EA": "AE", "CE": "EC", "EB": "BE", "DE": "ED",
+                   "FEA": "angFEA", "FEB": "angFEB" },
+        slides: [
+            { text: "Let {ABCD} be a circle, and in it let the two straight lines {AC} and {BD}, which do not pass through the center, cut one another at {E}.",
+              visible: GIVEN,
+              highlighted: ["AC","BD","E"] },
+            { text: "I say that they do not bisect one another.",
+              visible: GIVEN,
+              highlighted: ["AC","BD"] },
+            { text: "For, if so, let them bisect one another, so that {AE} equals {EC}, and {BE} equals {ED}.",
+              visible: HYP,
+              highlighted: ["AE","EC","BE","ED"] },
+            { text: "Take the center {F} of the circle {ABCD}. Join {FE}.",
+              visible: CEN,
+              highlighted: ["F", "EF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",  name: geomlib.A.Point.appear },
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "the center of the circle", ref: "III.1" },
+                  { ref: "I.Post.1" } ] },
+            { text: "Then, since a straight line {FE} passing through the center bisects a straight line {AC} not passing through the center, it also cuts it at right angles, therefore the angle {FEA} is right.",
+              visible: R1,
+              // angFEA is the target; the two lines are not.
+              highlighted: ["EF","AC"],
+              transition: { animations: [
+                  { elem: "angFEA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "a diameter bisecting a chord is perpendicular to it", ref: "III.3" }] },
+            { text: "Again, since a straight line {FE} bisects a straight line {BD}, it also cuts it at right angles. Therefore the angle {FEB} is right.",
+              visible: R2,
+              highlighted: ["EF","BD"],
+              transition: { animations: [
+                  { elem: "angFEB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "a diameter bisecting a chord is perpendicular to it", ref: "III.3" }] },
+            { text: "But the angle {FEA} was also proved right, therefore the angle {FEA} equals the angle {FEB}, the less equals the greater, which is impossible.",
+              visible: R2,
+              highlighted: ["angFEA","angFEB"] },
+            { text: "Therefore {AC} and {BD} do not bisect one another.",
+              visible: R2,
+              highlighted: ["AC","BD"] },
+            { text: "Therefore if in a circle two straight lines which do not pass through the center cut one another, then they do not bisect one another.",
+              visible: R2,
+              highlighted: ["AC","BD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "III.1":    "/elements/books/bookIII/propositions/propIII1/",
+        "III.3":    "/elements/books/bookIII/propositions/propIII3/"
     });
 </script>
 </figure>
 
 I say that they do not bisect one another.
 
-For, if so, let them bisect one another, so that *AE* equals *EC,* and *BE* equals *ED.*  Take the center *F* of the circle *ABCD.*  Join *FE.* [!just III.1]
+For, if so, let them bisect one another, so that {AE} equals {EC}, and {BE} equals {ED}.  Take the center {F} of the circle {ABCD}.  Join {FE}. [!just III.1]
 
-Then, since a straight line *FE* passing through the center bisects a straight line *AC* not passing through the center, it also cuts it at right angles, therefore the angle *FEA* is right. [!just III.3]
+Then, since a straight line {FE} passing through the center bisects a straight line {AC} not passing through the center, it also cuts it at right angles, therefore the angle {FEA} is right. [!just III.3]
 
-Again, since a straight line *FE* bisects a straight line *BD,* it also cuts it at right angles.  Therefore the angle *FEB* is right. [!just III.3]
+Again, since a straight line {FE} bisects a straight line {BD}, it also cuts it at right angles.  Therefore the angle {FEB} is right. [!just III.3]
 
-But the angle *FEA* was also proved right, therefore the angle *FEA* equals the angle *FEB,* the less equals the greater, which is impossible.
+But the angle {FEA} was also proved right, therefore the angle {FEA} equals the angle {FEB}, the less equals the greater, which is impossible.
 
-Therefore *AC* and *BD* do not bisect one another.
+Therefore {AC} and {BD} do not bisect one another.
 
 Therefore *if in a circle two straight lines which do not pass through the center cut one another, then they do not bisect one another.*
 
