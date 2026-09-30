@@ -38,6 +38,12 @@ Let {ABCD} be the given circle.
             "square;polygon;quadrilateral;A,B,C,D;0;0;black;random",
             "AC;line;connect;A,C",
             "BD;line;connect;B,D",
+            // Semicircle BAD as an invisible highlight target. The two radii
+            // ED and EB are collinear — together they are the diameter BD —
+            // so the wedge is exactly the semicircle, not an approximation of
+            // it. Arm order D,B picks the half containing A (euclid#172:
+            // arm order chooses the side).
+            "BAD;sector;sector;E,D,B;0;0;0;0",
             // Invisible highlight targets: the proof argues over the four
             // joined sides and the three radii by name, but the figure drew
             // only the quadrilateral and the two diameters.
@@ -51,6 +57,11 @@ Let {ABCD} be the given circle.
             "angAEB;sector;angleMarker;E,A,B;0;0;orange;orange",
             "angBAD;sector;angleMarker;A,B,D;0;0;orange;orange"
         ],
+        // A and C are the circle's free points, so without deferring them the
+        // auto-union would stand them on slides 1-2 with labels the caption has
+        // not reached — and only two of the four points the name ABCD implies.
+        // The construction introduces all four with the diameters, in slide 3.
+        deferDraggables: ["A", "C"],
         // Joyce writes AD for the side the figure declares DA; the circle and
         // the inscribed quadrilateral are both named ABCD in the prose, so the
         // quadrilateral is reached with the display override {ABCD|square}.
@@ -65,39 +76,39 @@ Let {ABCD} be the given circle.
               visible: ["ABCD"],
               highlighted: ["ABCD"] },
             { text: "Draw two diameters {AC} and {BD} of the circle {ABCD} at right angles to one another, and join {AB}, {BC}, {CD}, and {DA}.",
-              visible: ["ABCD", "AC", "BD", "B", "D", "AB", "BC", "CD", "DA"],
+              visible: ["ABCD", "AC", "BD", "A", "B", "C", "D", "AB", "BC", "CD", "DA", "square"],
               highlighted: ["AC", "BD", "AB", "BC", "CD", "DA"],
               transition: { animations: [
-                  { elem: "AC", name: "Line.straightEdgeConnect" },
-                  { elem: "BD", name: "Line.straightEdgeConnect" },
-                  { elem: "AB", name: "Line.straightEdgeConnect" },
-                  { elem: "BC", name: "Line.straightEdgeConnect" },
-                  { elem: "CD", name: "Line.straightEdgeConnect" },
-                  { elem: "DA", name: "Line.straightEdgeConnect" } ] },
+                  { elem: "AC",     name: "Line.straightEdgeConnect" },
+                  { elem: "BD",     name: "Line.straightEdgeConnect" },
+                  // The four joins are drawn by the quadrilateral: AB, BC, CD
+                  // and DA are zero-colour highlight targets, so animating
+                  // them individually would draw nothing. Outlining `square`
+                  // traces the same four sides, in order.
+                  { elem: "square", name: "Polygon.outline" } ] },
               justifications: [
                   { claim: "a diameter through the centre", ref: "III.1" },
                   { claim: "at right angles to one another", ref: "I.11" } ] },
             { text: "Then, since {BE} equals {ED}, for {E} is the center, and {EA} is common and at right angles, therefore the base {AB} equals the base {AD}.",
-              visible: ["ABCD", "AC", "BD", "B", "D", "AB", "BC", "CD", "DA", "BE", "ED", "EA", "angAEB"],
+              visible: ["ABCD", "AC", "BD", "A", "B", "C", "D", "AB", "BC", "CD", "DA", "square", "E", "BE", "ED", "EA", "angAEB"],
               highlighted: ["BE", "ED", "EA", "angAEB", "AB", "DA"],
               transition: { animations: [
                   { elem: "angAEB", name: "Sector.sweep" } ] },
               justifications: [{ claim: "two sides and the included angle", ref: "I.4" }] },
             { text: "For the same reason each of the straight lines {BC} and {CD} also equals each of the straight lines {AB} and {AD}. Therefore the quadrilateral {ABCD|square} is equilateral.",
-              visible: ["ABCD", "AC", "BD", "B", "D", "AB", "BC", "CD", "DA", "square"],
-              highlighted: ["AB", "BC", "CD", "DA"],
-              transition: { animations: [
-                  { elem: "square", name: "Polygon.outline" } ] } },
+              visible: ["ABCD", "AC", "BD", "A", "B", "C", "D", "AB", "BC", "CD", "DA", "E", "square"],
+              highlighted: ["AB", "BC", "CD", "DA"] },
             { text: "I say next that it is also right-angled.",
               highlighted: ["square"] },
-            { text: "For, since the straight line {BD} is a diameter of the circle {ABCD}, therefore BAD is a semicircle, therefore the angle {BAD|angBAD} is right.",
-              visible: ["ABCD", "AC", "BD", "B", "D", "AB", "BC", "CD", "DA", "square", "angBAD"],
-              highlighted: ["BD", "angBAD"],
+            { text: "For, since the straight line {BD} is a diameter of the circle {ABCD}, therefore {BAD} is a semicircle, therefore the angle {BAD|angBAD} is right.",
+              visible: ["ABCD", "AC", "BD", "A", "B", "C", "D", "AB", "BC", "CD", "DA", "E", "square", "BAD", "angBAD"],
+              highlighted: ["BD", "BAD", "angBAD"],
               transition: { animations: [
+                  { elem: "BAD",    name: "Sector.sweep" },
                   { elem: "angBAD", name: "Sector.sweep" } ] },
               justifications: [{ claim: "an angle in a semicircle is right", ref: "III.31" }] },
             { text: "For the same reason each of the angles ABC, BCD, and CDA is also right. Therefore the quadrilateral {ABCD|square} is right-angled.",
-              visible: ["ABCD", "AC", "BD", "B", "D", "AB", "BC", "CD", "DA", "square"],
+              visible: ["ABCD", "AC", "BD", "A", "B", "C", "D", "AB", "BC", "CD", "DA", "E", "square"],
               highlighted: ["square"] },
             { text: "But it was also proved equilateral, therefore it is a square, and it has been inscribed in the circle {ABCD}. Therefore the square {ABCD|square} has been inscribed in the given circle.",
               highlighted: ["square", "ABCD"],
@@ -129,7 +140,7 @@ For the same reason each of the straight lines {BC} and {CD} also equals each of
 
 I say next that it is also right-angled.
 
-For, since the straight line {BD} is a diameter of the circle {ABCD}, therefore *BAD* is a semicircle, therefore the angle {BAD|angBAD} is right. [!just III.31]
+For, since the straight line {BD} is a diameter of the circle {ABCD}, therefore {BAD} is a semicircle, therefore the angle {BAD|angBAD} is right. [!just III.31]
 
 For the same reason each of the angles *ABC, BCD,* and *CDA* is also right. Therefore the quadrilateral {ABCD|square} is right-angled.
 
