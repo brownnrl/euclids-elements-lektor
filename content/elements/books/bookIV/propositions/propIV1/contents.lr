@@ -17,9 +17,9 @@ statement: To fit into a given circle a straight line equal to a given straight 
 ----
 proof:
 
-Let *ABC* be the given circle, and *D* the given straight line not greater than the diameter of the circle
+Let {ABC} be the given circle, and {D} the given straight line not greater than the diameter of the circle
 
-It is required to fit a straight line into the circle *ABC* equal to the straight line *D.*
+It is required to fit a straight line into the circle {ABC} equal to the straight line {D}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="240" tabindex="0"></canvas>
@@ -41,27 +41,83 @@ It is required to fit a straight line into the circle *ABC* equal to the straigh
             "D2;point;lineSlider;D0,D3,270,30;0",
             "D;line;connect;D1,D2;black",
             "E;point;cutoff;C,B,D1,D2",
+            // Invisible highlight target: the proof names the radius CE
+            // three times, but the figure only ever drew the point E.
+            "CE;line;connect;C,E;0;0;0",
             "AEF;circle;radius;C,E;0;0;black;0",
             "A'A;line;bichord;ABC,AEF",
             "A;point;last;A'A",
             "AC;line;connect;A,C",
             "F;point;perpendicular;C,E;black;0"
         ],
+        // B and C are the circle's free points; without deferring them the
+        // auto-union stands them, labelled, on slides 1-2, before the diameter
+        // BC that introduces them. D1 and D2 stay auto-unioned: they are the
+        // given line's own endpoints, unlabelled, and dragging them is how a
+        // reader varies the line the proposition is given.
+        deferDraggables: ["B", "C"],
+        // Joyce names the circle EAF and the joined line CA; the figure
+        // declares them AEF and AC.
+        aliases: {
+            "EAF": "AEF",
+            "CA":  "AC"
+        },
+        slides: [
+            { text: "Let {ABC} be the given circle, and {D} the given straight line not greater than the diameter of the circle.",
+              visible: ["ABC", "D"],
+              highlighted: ["ABC", "D"] },
+            { text: "It is required to fit a straight line into the circle {ABC} equal to the straight line {D}.",
+              visible: ["ABC", "D"],
+              highlighted: ["ABC", "D"] },
+            { text: "Draw a diameter {BC} of the circle {ABC}.",
+              visible: ["ABC", "D", "BC", "B", "C"],
+              highlighted: ["BC"],
+              transition: { animations: [
+                  { elem: "BC", name: "Line.straightEdgeConnect" } ] } },
+            { text: "If {BC} equals {D}, then that which was proposed is done, for {BC} has been fitted into the circle {ABC} equal to the straight line {D}.",
+              highlighted: ["BC", "D"] },
+            { text: "But, if {BC} is greater than {D}, make {CE} equal to {D}, describe the circle {EAF} with center {C} and radius {CE}, and join {CA}.",
+              visible: ["ABC", "D", "BC", "B", "C", "E", "CE", "AEF", "F", "A", "AC"],
+              highlighted: ["CE", "AEF", "AC"],
+              transition: { animations: [
+                  { elem: "E",   name: "Point.appear" },
+                  { elem: "AEF", name: "Circle.compass" },
+                  { elem: "A",   name: "Point.appear" },
+                  { elem: "AC",  name: "Line.straightEdgeConnect" } ] },
+              justifications: [{ claim: "CE cut off equal to D", ref: "I.3" }] },
+            { text: "Then, since the point {C} is the center of the circle {EAF}, {CA} equals {CE}.",
+              highlighted: ["AEF", "AC", "CE"] },
+            { text: "But {CE} equals {D}, therefore {D} also equals {CA}.",
+              highlighted: ["CE", "D", "AC"] },
+            { text: "Therefore {CA} has been fitted into the given circle {ABC} equal to the given straight line {D}.",
+              highlighted: ["AC", "ABC", "D"],
+              justifications: [{ ref: "IV.Def.7" }, { ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "IV.Def.7":  "/elements/books/bookIV/definitions/defIV7/"
     });
 </script>
 </figure>
 
-Draw a diameter *BC* of the circle *ABC.*
+Draw a diameter {BC} of the circle {ABC}.
 
-If *BC* equals *D,* then that which was proposed is done, for *BC* has been fitted into the circle *ABC* equal to the straight line *D.*
+If {BC} equals {D}, then that which was proposed is done, for {BC} has been fitted into the circle {ABC} equal to the straight line {D}.
 
-But, if *BC* is greater than *D,* make *CE* equal to *D,* describe the circle *EAF* with center *C* and radius *CE,* and join *CA.* [!just I.3]
+But, if {BC} is greater than {D}, make {CE} equal to {D}, describe the circle {EAF} with center {C} and radius {CE}, and join {CA}. [!just I.3]
 
-Then, since the point *C* is the center of the circle *EAF, CA* equals *CE.*
+Then, since the point {C} is the center of the circle {EAF}, {CA} equals {CE}.
 
-But *CE* equals *D,* therefore *D* also equals *CA.*
+But {CE} equals {D}, therefore {D} also equals {CA}.
 
-Therefore *CA* has been fitted into the given circle *ABC* equal to the given straight line *D.* [!just IV.Def.7]
+Therefore {CA} has been fitted into the given circle {ABC} equal to the given straight line {D}. [!just IV.Def.7]
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
