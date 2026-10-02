@@ -15,12 +15,40 @@ statement: If a point is taken within a circle, and more than two equal straight
 ----
 proof:
 
-Let *D* a point within a circle *ABC,* and from *D* let more than two equal straight lines, namely *DA* and *DB* and *DC,* fall on the circle *ABC.*
+Let {D} a point within a circle {ABC|ABCt}, and from {D} let more than two equal straight lines, namely {DA} and {DB} and {DC}, fall on the circle {ABC|ABCt}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="240" tabindex="0"></canvas>
 <noscript><img alt="III.9 diagram" src="propIII9.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws D as the centre of ABC outright — the
+    // conclusion, not the hypothesis — and draws the three equal lines DA,
+    // DB, DC only as edges of the two filled triangles ABD and BCD, which
+    // also supply AB and BC. Nothing else the proof names is a standalone
+    // element: AE, EB, ED, FD, the segments AB and BC, and the two angles
+    // at E. Every one of these is added below as a fully transparent
+    // element (;0;0;0 lines, ;0;0;0;0 circle), and the two angle markers
+    // are hidden in the static figure, so the resting figure is
+    // pixel-unchanged.
+    //
+    // The circle ABC is a 4-field element: no colour fields, so it carries
+    // the near-white OPAQUE default face (rgb(255,255,255) against the
+    // bundle), and the two random-faced triangles are drawn on top of it.
+    // Highlighting it would promote that face within the pass (#140) and
+    // white out both triangles. It is left exactly as converted and is
+    // NEVER highlighted or animated; the transparent twin ABCt is the
+    // highlight target, reached from prose and captions through the
+    // display override {ABC|ABCt}.
+    //
+    // Slides 1–2 light DA, DB, DC in gold so the hypothesis is visible
+    // before the triangles that draw them arrive; "Join AB and BC" then
+    // brings the two triangles in with outlineAndFill, and their edges
+    // carry the three lines from there on.
+    var GIVEN = ["A","B","C","ABC","ABCt","D","DA","DB","DC"];
+    var JOIN  = GIVEN.concat(["ABD","BCD","AB","BC"]);
+    var BIS   = JOIN.concat(["E","F","AE","EB"]);
+    var THRU  = BIS.concat(["ED","FD","GK","G","K","HL","H","L"]);
+    var ANG   = THRU.concat(["angAED","angBED"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -41,27 +69,133 @@ Let *D* a point within a circle *ABC,* and from *D* let more than two equal stra
             "K;point;last;GK",
             "HL;line;chord;D,F,ABC",
             "H;point;first;HL",
-            "L;point;last;HL"
+            "L;point;last;HL",
+            // Transparent highlight twin of the opaque circle (see above).
+            "ABCt;circle;circumcircle;A,B,C;0;0;0;0",
+            // Hover / highlight targets only — the triangles and the two
+            // chords already draw every one of these.
+            "DA;line;connect;D,A;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "FD;line;connect;F,D;0;0;0",
+            // The two angles at E that I.8 proves equal and so right. Red is
+            // the right-angle colour (II.10 onward). They sit on opposite
+            // sides of ED, so one radius serves both.
+            "angAED;sector;angleMarker;E,A,D;0;0;red;red",
+            "angBED;sector;angleMarker;E,B,D;0;0;red;red"
         ],
+        // Draggables (checked against the bundle): A, B, C — the letters of
+        // the circle's name, introduced on slide 1 — so nothing is
+        // deferred. D (center), E and F (midpoint), G/K/H/L (first/last)
+        // are all derived and NOT auto-unioned, so each is listed in the
+        // groups above from the slide that introduces it.
+        aliases: { "AD": "DA", "BD": "DB", "CD": "DC", "BA": "AB", "CB": "BC",
+                   "EA": "AE", "BE": "EB", "DE": "ED", "DF": "FD",
+                   "KG": "GK", "LH": "HL",
+                   "AED": "angAED", "DEA": "angAED",
+                   "BED": "angBED", "DEB": "angBED" },
+        slides: [
+            { text: "Let {D} a point within a circle {ABC|ABCt}, and from {D} let more than two equal straight lines, namely {DA} and {DB} and {DC}, fall on the circle {ABC|ABCt}.",
+              visible: GIVEN,
+              highlighted: ["DA","DB","DC"] },
+            { text: "I say that the point {D} is the center of the circle {ABC|ABCt}.",
+              visible: GIVEN,
+              // DA, DB, DC are transparent and only the triangles draw them,
+              // so they stay lit here — dropping them would make the
+              // hypothesis vanish a slide before the figure that carries it.
+              highlighted: ["D","DA","DB","DC"] },
+            { text: "Join {AB} and {BC},",
+              visible: JOIN,
+              highlighted: ["ABD", "BCD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ABD", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "BCD", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "and bisect them at the points {E} and {F}.",
+              visible: BIS,
+              highlighted: ["AB", "BC", "E", "F"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E", name: geomlib.A.Point.appear },
+                  { elem: "F", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AB and BC bisected at E and F", ref: "I.10" }] },
+            { text: "Join {ED} and {FD}, and draw them through to the points {G}, {K}, {H}, and {L}.",
+              visible: THRU,
+              highlighted: ["ED", "FD", "GK", "HL"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ED", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GK", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "HL", name: geomlib.A.Line.straightEdgeExtend } ] },
+              justifications: [{ ref: "I.Post.1" }, { ref: "I.Post.2" }] },
+            { text: "Then, since {AE} equals {EB}, and {ED} is common, the two sides {AE} and {ED} equal the two sides {BE} and {ED}, and the base {DA} equals the base {DB},",
+              visible: THRU,
+              highlighted: ["AE","EB","ED","DA","DB"] },
+            { text: "therefore the angle {AED} equals the angle {BED}.",
+              visible: ANG,
+              highlighted: ["angAED", "angBED"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angAED", name: geomlib.A.Sector.sweep },
+                  { elem: "angBED", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the triangles AED and BED have three sides equal", ref: "I.8" }] },
+            { text: "Therefore the angles {AED} and {BED} are each right.",
+              visible: ANG,
+              highlighted: ["angAED","angBED"],
+              justifications: [{ claim: "equal adjacent angles are right", ref: "I.Def.10" }] },
+            { text: "Therefore {GK} cuts {AB} into two equal parts and at right angles.",
+              visible: ANG,
+              highlighted: ["GK","AB","angAED","angBED"] },
+            { text: "And since, if in a circle a straight line cuts a straight line into two equal parts and at right angles, the center of the circle is on the cutting straight line, therefore the center of the circle is on {GK}.",
+              visible: ANG,
+              highlighted: ["GK"],
+              justifications: [{ claim: "the center lies on the line that bisects AB at right angles", ref: "III.1.Cor" }] },
+            { text: "For the same reason the center of the circle {ABC|ABCt} is also on {HL}.",
+              visible: ANG,
+              highlighted: ["HL","BC","ABCt"],
+              justifications: [{ claim: "HL bisects BC at right angles", ref: "III.1.Cor" }] },
+            { text: "And the straight lines {GK} and {HL} have no other point common but the point {D}, therefore the point {D} is the center of the circle {ABC|ABCt}.",
+              visible: ANG,
+              highlighted: ["GK","HL","D"] },
+            { text: "Therefore if a point is taken within a circle, and more than two equal straight lines fall from the point on the circle, then the point taken is the center of the circle.",
+              visible: ANG,
+              highlighted: ["D","DA","DB","DC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Def.10":  "/elements/books/bookI/definitions/defI10/",
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "I.Post.2":  "/elements/books/bookI/postulates/post2/",
+        "I.8":       "/elements/books/bookI/propositions/propI8/",
+        "I.10":      "/elements/books/bookI/propositions/propI10/",
+        "III.1.Cor": "/elements/books/bookIII/propositions/propIII1/#cor"
     });
 </script>
 </figure>
 
-I say that the point *D* is the center of the circle *ABC.*
+I say that the point {D} is the center of the circle {ABC|ABCt}.
 
-Join *AB* and *BC,* and bisect them at the points *E* and *F.*  Join *ED* and *FD,* and draw them through to the points *G, K, H,* and *L.* [!just I.10]
+Join {AB} and {BC}, and bisect them at the points {E} and {F}.  Join {ED} and {FD}, and draw them through to the points {G}, {K}, {H}, and {L}. [!just I.10]
 
-Then, since *AE* equals *EB,* and *ED* is common, the two sides *AE* and *ED* equal the two sides *BE* and *ED,* and the base *DA* equals the base *DB,* therefore the angle *AED* equals the angle *BED.* [!just I.8]
+Then, since {AE} equals {EB}, and {ED} is common, the two sides {AE} and {ED} equal the two sides {BE} and {ED}, and the base {DA} equals the base {DB}, therefore the angle {AED} equals the angle {BED}. [!just I.8]
 
-Therefore the angles *AED* and *BED* are each right. Therefore *GK* cuts *AB* into two equal parts and at right angles.
+Therefore the angles {AED} and {BED} are each right. Therefore {GK} cuts {AB} into two equal parts and at right angles.
 
-<div class="just"><a href="../propIII1/#cor">III.1,Cor</a></div>
+And since, if in a circle a straight line cuts a straight line into two equal parts and at right angles, the center of the circle is on the cutting straight line, therefore the center of the circle is on {GK}. [!just III.1.Cor]
 
-And since, if in a circle a straight line cuts a straight line into two equal parts and at right angles, the center of the circle is on the cutting straight line, therefore the center of the circle is on *GK.*
+For the same reason the center of the circle {ABC|ABCt} is also on {HL}.
 
-For the same reason the center of the circle *ABC* is also on *HL.*
-
-And the straight lines *GK* and *HL* have no other point common but the point *D,* therefore the point *D* is the center of the circle *ABC.*
+And the straight lines {GK} and {HL} have no other point common but the point {D}, therefore the point {D} is the center of the circle {ABC|ABCt}.
 
 Therefore *if a point is taken within a circle, and more than two equal straight lines fall from the point on the circle, then the point taken is the center of the circle.*
 
