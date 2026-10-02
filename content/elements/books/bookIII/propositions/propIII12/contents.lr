@@ -15,12 +15,28 @@ statement: If two circles touch one another externally, then the straight line j
 ----
 proof:
 
-Let the two circles *ABC* and *ADE* touch one another externally at the point *A.*  Take the center *F* of *ABC,* and the center *G* of *ADE.* [!just III.1]
+Let the two circles {ABC} and {ADE} touch one another externally at the point {A}.  Take the center {F} of {ABC}, and the center {G} of {ADE}. [!just III.1]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="320" height="250" tabindex="0"></canvas>
 <noscript><img alt="III.12 diagram" src="propIII12.gif"/></noscript>
 <script type="text/javascript">
+    // The external twin of III.11, and again the IMPOSSIBLE figure: F and
+    // G are free points standing off the true centers, so FG crosses the
+    // circles at C and D instead of passing through A. Two joins and the
+    // false line are the whole construction; the rest is highlight beats.
+    //
+    // As in III.11 the random-filled circles are renamed ABCfill / ADEfill
+    // (circle names are never drawn) and the prose names go to transparent
+    // twins, so a highlighted circle never paints over the other's face
+    // (#140). FC and GD, the parts of the false line the proof compares
+    // with the radii, are transparent twins over FG. The resting figure is
+    // pixel-unchanged.
+    var GIVEN = ["A","B","C'","E","ABCfill","ADEfill","ABC","ADE"];
+    var CENT  = GIVEN.concat(["F","G"]);
+    var FALSE = CENT.concat(["FG","C","D"]);
+    var JOIN  = FALSE.concat(["FA","AG"]);
+    var ARG   = JOIN.concat(["FC","GD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -32,36 +48,119 @@ Let the two circles *ABC* and *ADE* touch one another externally at the point *A
             "E;point;free;280,150;black;0",
             "F;point;free;70,90",
             "G;point;free;180,170",
-            "ABC;circle;circumcircle;A,B,C';0;0;black;random",
-            "O;point;center;ABC;0;0",
+            "ABCfill;circle;circumcircle;A,B,C';0;0;black;random",
+            "O;point;center;ABCfill;0;0",
             "M;point;midpoint;A,E;0;0",
             "MM';line;perpendicular;M,E;0;0;0",
             "M';point;last;MM';0;0",
             "P;point;intersection;M,M',O,A;0;0",
-            "ADE;circle;radius;P,A;0;0;black;random",
+            "ADEfill;circle;radius;P,A;0;0;black;random",
             "FA;line;connect;F,A",
             "AG;line;connect;A,G",
             "FG;line;connect;F,G",
-            "DD';line;chord;FG,ADE;0;0;0",
+            "DD';line;chord;FG,ADEfill;0;0;0",
             "D;point;first;DD'",
-            "C''C;line;chord;FG,ABC;0;0;0",
-            "C;point;last;C''C"
+            "C''C;line;chord;FG,ABCfill;0;0;0",
+            "C;point;last;C''C",
+            // Transparent twins of the two circles, carrying the prose names.
+            "ABC;circle;circumcircle;A,B,C';0;0;0;0",
+            "ADE;circle;radius;P,A;0;0;0;0",
+            // The parts of the false line FCDG the proof compares with
+            // the radii FA and GA; FG already draws both.
+            "FC;line;connect;F,C;0;0;0",
+            "GD;line;connect;G,D;0;0;0"
         ],
+        // Draggables (checked against the bundle): A, B, C', E, F, G. A, B,
+        // E and the unlabelled C' are the given circles' own points, so
+        // they belong on slide 1; F and G are taken on slide 2 and are
+        // deferred out of the auto-union. C and D are derived (last /
+        // first) and are listed per slide.
+        deferDraggables: ["F","G"],
+        aliases: { "AF": "FA", "GA": "AG", "CF": "FC", "DG": "GD",
+                   "FCDG": "FG", "GF": "FG" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”).
+            { text: "If two circles touch one another externally, then the straight line joining their centers passes through the point of contact.",
+              visible: GIVEN,
+              highlighted: [],
+              justifications: [{ ref: "III.12" }] },
+            { text: "Let the two circles {ABC} and {ADE} touch one another externally at the point {A}.",
+              visible: GIVEN,
+              highlighted: ["ABC","ADE","A"] },
+            { text: "Take the center {F} of {ABC}, and the center {G} of {ADE}.",
+              visible: CENT,
+              highlighted: ["ABC", "ADE", "F", "G"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F", name: geomlib.A.Point.appear },
+                  { elem: "G", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the centers of the circles", ref: "III.1" }] },
+            { text: "I say that the straight line joined from {F} to {G} passes through the point of contact at {A}.",
+              visible: CENT,
+              highlighted: ["F","G","A"] },
+            { text: "For suppose it does not, but, if possible, let it pass as {FCDG}.",
+              visible: FALSE,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "C",  name: geomlib.A.Point.appear },
+                  { elem: "D",  name: geomlib.A.Point.appear } ] } },
+            { text: "Join {AF} and {AG}.",
+              visible: JOIN,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FA", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since the point {F} is the center of the circle {ABC}, {FA} equals {FC}.",
+              visible: ARG,
+              highlighted: ["F","FA","FC"],
+              justifications: [{ claim: "FA and FC are radii of the circle ABC", ref: "I.Def.15" }] },
+            { text: "Again, since the point {G} is the center of the circle {ADE}, {GA} equals {GD}.",
+              visible: ARG,
+              highlighted: ["G","AG","GD"],
+              justifications: [{ claim: "GA and GD are radii of the circle ADE", ref: "I.Def.15" }] },
+            { text: "But {FA} was also proved equal to {FC}, therefore {FA} and {AG} equal {FC} and {GD},",
+              visible: ARG,
+              highlighted: ["FA","AG","FC","GD"] },
+            { text: "so that the whole {FG} is greater than {FA} and {AG}, but it is also less, which is impossible.",
+              visible: ARG,
+              highlighted: ["FG","FA","AG"],
+              justifications: [
+                  { claim: "FA and AG, two sides of the triangle FAG, exceed FG", ref: "I.20" } ] },
+            { text: "Therefore the straight line joined from {F} to {G} does not fail to pass through the point of contact at {A}, therefore it passes through it.",
+              visible: ARG,
+              highlighted: ["F","G","A"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.12") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+        "I.20":     "/elements/books/bookI/propositions/propI20/",
+        "III.1":    "/elements/books/bookIII/propositions/propIII1/"
     });
 </script>
 </figure>
 
-I say that the straight line joined from *F* to *G* passes through the point of contact at *A.*
+I say that the straight line joined from {F} to {G} passes through the point of contact at {A}.
 
-For suppose it does not, but, if possible, let it pass as *FCDG.*  Join *AF* and *AG.*
+For suppose it does not, but, if possible, let it pass as {FCDG}.  Join {AF} and {AG}.
 
-Then, since the point *F* is the center of the circle *ABC, FA* equals *FC.*
+Then, since the point {F} is the center of the circle {ABC}, {FA} equals {FC}.
 
-Again, since the point *G* is the center of the circle *ADE, GA* equals GD.
+Again, since the point {G} is the center of the circle {ADE}, {GA} equals {GD}.
 
-But *FA* was also proved equal to *FC,* therefore *FA* and *AG* equal *FC* and *GD,* so that the whole *FG* is greater than *FA* and *AG,* but it is also less, which is impossible. [!just I.20]
+But {FA} was also proved equal to {FC}, therefore {FA} and {AG} equal {FC} and {GD}, so that the whole {FG} is greater than {FA} and {AG}, but it is also less, which is impossible. [!just I.20]
 
-Therefore the straight line joined from *F* to *G* does not fail to pass through the point of contact at *A,* therefore it passes through it.
+Therefore the straight line joined from {F} to {G} does not fail to pass through the point of contact at {A}, therefore it passes through it.
 
 Therefore *if two circles touch one another externally, then the straight line joining their centers passes through the point of contact.*
 
