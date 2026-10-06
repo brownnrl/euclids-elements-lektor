@@ -15,14 +15,36 @@ statement: Of straight lines in a circle the diameter is greatest, and of the re
 ----
 proof:
 
-Let *ABCD* be a circle, *AD* its diameter, and *E* its center.  Let *BC* be nearer to the center *AD,* and *FG* more remote.
+Let {ABCD} be a circle, {AD} its diameter, and {E} its center.  Let {BC} be nearer to the center {AD}, and {FG} more remote.
 
-I say that *AD* is greatest and *BC* greater than *FG.*
+I say that {AD} is greatest and {BC} greater than {FG}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="280" tabindex="0"></canvas>
 <noscript><img alt="III.15 diagram" src="propIII15.gif"/></noscript>
 <script type="text/javascript">
+    // The construction here is real work — two perpendiculars, a cut-off,
+    // a chord at right angles, four joins — and each clause is animated.
+    // The I.3 cut-off is long past its demonstration, so L simply appears
+    // (as from I.5 on); LM "carried through to N" is one stroke of the
+    // chord MN, which is how the figure builds it.
+    //
+    // The random-filled circle is renamed ABCDfill (circle names are never
+    // drawn) and the prose name ABCD goes to a fully transparent twin, so
+    // highlighting the circle never promotes its face over the angle
+    // markers (#140). AE, ED, EL, LM are parts of drawn lines and get
+    // transparent twins. The two angles at E the I.24 step compares are
+    // markers hidden in the static figure; FEG lies inside MEN, so MEN
+    // takes a radius override to sit outside it. Resting figure
+    // pixel-unchanged.
+    var GIVEN  = ["A","D","E","ABCDfill","ABCD","AD"];
+    var CHORDS = GIVEN.concat(["B","C","F","G","BC","FG"]);
+    var PERP   = CHORDS.concat(["H","K","EH","EK"]);
+    var CUT    = PERP.concat(["L","EL"]);
+    var CHORD  = CUT.concat(["MN","M","N","LM"]);
+    var JOIN   = CHORD.concat(["EM","EN","EF","EG"]);
+    var RAD    = JOIN.concat(["AE","ED"]);
+    var ANG    = RAD.concat(["angMEN","angFEG"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -32,12 +54,12 @@ I say that *AD* is greatest and *BC* greater than *FG.*
             "A;point;free;140,35",
             "D;point;free;140,245",
             "E;point;midpoint;A,D;black;green",
-            "ABCD;circle;radius;E,A;0;0;black;random",
+            "ABCDfill;circle;radius;E,A;0;0;black;random",
             "AD;line;connect;A,D",
-            "B;point;circleSlider;ABCD,200,60",
-            "C;point;circleSlider;ABCD,170,200",
-            "F;point;circleSlider;ABCD,50,80",
-            "G;point;circleSlider;ABCD,40,160",
+            "B;point;circleSlider;ABCDfill,200,60",
+            "C;point;circleSlider;ABCDfill,170,200",
+            "F;point;circleSlider;ABCDfill,50,80",
+            "G;point;circleSlider;ABCDfill,40,160",
             "BC;line;connect;B,C",
             "FG;line;connect;F,G",
             "H;point;foot;E,BC",
@@ -46,35 +68,172 @@ I say that *AD* is greatest and *BC* greater than *FG.*
             "EK;line;connect;E,K",
             "L;point;cutoff;E,K,E,H",
             "LL';line;perpendicular;L,E;0;0;0",
-            "MN;line;chord;LL',ABCD",
+            "MN;line;chord;LL',ABCDfill",
             "M;point;first;MN",
             "N;point;last;MN",
             "EF;line;connect;E,F",
             "EG;line;connect;E,G",
             "EM;line;connect;E,M",
-            "EN;line;connect;E,N"
+            "EN;line;connect;E,N",
+            // Transparent twin of the circle under the prose's name.
+            "ABCD;circle;radius;E,A;0;0;0;0",
+            // Parts of drawn lines the proof names: the two radii along
+            // the diameter, the cut-off EL along EK, and LM along the
+            // chord MN.
+            "AE;line;connect;A,E;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "EL;line;connect;E,L;0;0;0",
+            "LM;line;connect;L,M;0;0;0",
+            // The angles at E the I.24 step compares. FEG lies within MEN;
+            // same-vertex markers auto-nest smallest innermost (#103, order
+            // fixed in 0.16 — euclid#175), so no radius is pinned.
+            "angFEG;sector;angleMarker;E,F,G",
+            "angMEN;sector;angleMarker;E,M,N"
         ],
+        // Draggables (checked against the bundle): A, D, B, C, F, G. A and D
+        // are the diameter's ends, given on slide 1. B, C, F, G are the
+        // chords' ends, which the next sentence introduces — deferred so
+        // they arrive with the chords on slide 2 rather than standing
+        // lettered from the first slide. E (midpoint), H, K (foot), L
+        // (cutoff), M, N (first / last) are derived and listed per slide.
+        deferDraggables: ["B","C","F","G"],
+        aliases: { "ME": "EM", "NE": "EN", "FE": "EF", "GE": "EG",
+                   "EA": "AE", "DE": "ED", "LE": "EL", "ML": "LM",
+                   "HE": "EH", "KE": "EK", "DA": "AD", "CB": "BC",
+                   "GF": "FG", "NM": "MN",
+                   "MEN": "angMEN", "NEM": "angMEN",
+                   "FEG": "angFEG", "GEF": "angFEG" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”), split at its seams.
+            { text: "“Of straight lines in a circle the diameter is greatest,”",
+              visible: GIVEN,
+              highlighted: [] },
+            { text: "“and of the rest the nearer to the center is always greater than the more remote.”",
+              visible: GIVEN,
+              highlighted: [],
+              justifications: [{ ref: "III.15" }] },
+            { text: "Let {ABCD} be a circle, {AD} its diameter, and {E} its center.",
+              visible: GIVEN,
+              highlighted: ["ABCD","AD","E"] },
+            { text: "Let {BC} be nearer to the center {AD}, and {FG} more remote.",
+              visible: CHORDS,
+              highlighted: ["BC", "FG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that {AD} is greatest and {BC} greater than {FG}.",
+              visible: CHORDS,
+              highlighted: ["AD","BC","FG"] },
+            { text: "Draw {EH} and {EK} from the center {E} perpendicular to {BC} and {FG}.",
+              visible: PERP,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear },
+                  { elem: "EK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "perpendiculars from E to BC and FG", ref: "I.12" }] },
+            { text: "Then, since {BC} is nearer to the center and {FG} more remote, {EK} is greater than {EH}.",
+              visible: PERP,
+              highlighted: ["EK","EH"],
+              justifications: [{ claim: "the more remote has the greater perpendicular", ref: "III.Def.5" }] },
+            { text: "Make {EL}  equal to {EH}.",
+              visible: CUT,
+              highlighted: ["EL","EH"],
+              transition: { animations: [
+                  { elem: "L", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "EL cut off equal to EH", ref: "I.3" }] },
+            { text: "Draw {LM} through {L} at right angles to {EK}, and carry it through to {N}.",
+              visible: CHORD,
+              highlighted: ["EK"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "MN", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "M",  name: geomlib.A.Point.appear },
+                  { elem: "N",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "LM at right angles to EK", ref: "I.11" }] },
+            { text: "Join {ME}, {EN}, {FE}, and {EG}.",
+              visible: JOIN,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EN", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since {EH} equals {EL}, {BC} also equals {MN}.",
+              visible: JOIN,
+              highlighted: ["EH","EL","BC","MN"],
+              justifications: [{ claim: "equally distant from the center, so equal", ref: "III.14" }] },
+            { text: "Again, since {AE} equals {EM}, and {ED} equals {EN}, {AD} equals the sum of {ME} and {EN}.",
+              visible: RAD,
+              highlighted: ["AE","EM","ED","EN"],
+              justifications: [{ claim: "AE, EM, ED, EN are radii", ref: "I.Def.15" }] },
+            { text: "But the sum of {ME} and {EN} is greater than {MN}, and {MN} equals {BC}, therefore {AD} is greater than {BC}.",
+              visible: RAD,
+              highlighted: ["EM","EN","MN","AD","BC"],
+              justifications: [{ claim: "two sides of the triangle MEN exceed the third", ref: "I.20" }] },
+            { text: "And, since the two sides {ME} and {EN} equal the two sides {FE} and {EG},",
+              visible: RAD,
+              highlighted: ["EM","EN","EF","EG"],
+              justifications: [{ claim: "all four are radii", ref: "I.Def.15" }] },
+            { text: "and the angle {MEN} greater than the angle {FEG},",
+              visible: ANG,
+              highlighted: [],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angMEN", name: geomlib.A.Sector.sweep },
+                  { elem: "angFEG", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the base {MN} is greater than the base {FG}.",
+              visible: ANG,
+              highlighted: ["MN","FG"],
+              justifications: [{ claim: "the greater angle subtends the greater base", ref: "I.24" }] },
+            { text: "But {MN} was proved equal to {BC}.",
+              visible: ANG,
+              highlighted: ["MN","BC"] },
+            { text: "Therefore the diameter {AD} is greatest and {BC} greater than {FG}.",
+              visible: ANG,
+              highlighted: ["AD","BC","FG"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.15") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "I.Def.15":  "/elements/books/bookI/definitions/defI15/",
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "I.11":      "/elements/books/bookI/propositions/propI11/",
+        "I.12":      "/elements/books/bookI/propositions/propI12/",
+        "I.20":      "/elements/books/bookI/propositions/propI20/",
+        "I.24":      "/elements/books/bookI/propositions/propI24/",
+        "III.14":    "/elements/books/bookIII/propositions/propIII14/",
+        "III.Def.5": "/elements/books/bookIII/definitions/defIII5/"
     });
 </script>
 </figure>
 
-Draw *EH* and *EK* from the center *E* perpendicular to *BC* and *FG.* [!just I.12]
+Draw {EH} and {EK} from the center {E} perpendicular to {BC} and {FG}. [!just I.12]
 
-Then, since *BC* is nearer to the center and *FG* more remote, *EK* is greater than *EH.* [!just III.Def.5]
+Then, since {BC} is nearer to the center and {FG} more remote, {EK} is greater than {EH}. [!just III.Def.5]
 
-Make *EL*  equal to *EH.* Draw *LM* through *L* at right angles to *EK,* and carry it through to *N.* Join *ME, EN, FE,* and *EG.* [!just I.3; I.11]
+Make {EL}  equal to {EH}. Draw {LM} through {L} at right angles to {EK}, and carry it through to {N}. Join {ME}, {EN}, {FE}, and {EG}. [!just I.3; I.11]
 
-Then, since *EH* equals *EL, BC* also equals *MN.* [!just III.14]
+Then, since {EH} equals {EL}, {BC} also equals {MN}. [!just III.14]
 
-Again, since *AE* equals *EM,* and *ED* equals *EN, AD* equals the sum of *ME* and *EN.*
+Again, since {AE} equals {EM}, and {ED} equals {EN}, {AD} equals the sum of {ME} and {EN}.
 
-But the sum of *ME* and *EN* is greater than *MN,* and *MN* equals *BC,* therefore *AD* is greater than *BC.* [!just I.20]
+But the sum of {ME} and {EN} is greater than {MN}, and {MN} equals {BC}, therefore {AD} is greater than {BC}. [!just I.20]
 
-And, since the two sides *ME* and *EN* equal the two sides *FE* and *EG,* and the angle *MEN* greater than the angle *FEG,* therefore the base *MN* is greater than the base *FG.* [!just I.24]
+And, since the two sides {ME} and {EN} equal the two sides {FE} and {EG}, and the angle {MEN} greater than the angle {FEG}, therefore the base {MN} is greater than the base {FG}. [!just I.24]
 
-But *MN* was proved equal to *BC.*
+But {MN} was proved equal to {BC}.
 
-Therefore the diameter *AD* is greatest and *BC* greater than *FG.*
+Therefore the diameter {AD} is greatest and {BC} greater than {FG}.
 
 Therefore *of straight lines in a circle the diameter is greatest, and of the rest the nearer to the center is always greater than the more remote.*
 
