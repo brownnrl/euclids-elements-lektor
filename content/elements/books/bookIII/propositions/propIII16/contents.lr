@@ -35,11 +35,26 @@ For suppose it does not, but, if possible, let it fall within as {CA}, and join 
     // every acute rectilinear angle. Joyce's figure carries all three at
     // once; the walk brings each piece on with its own sentence.
     //
-    // Everything added below is fully transparent (;0;0;0 lines, ;0;0;0;0
-    // arc and triangle), so the static figure is unchanged. DG is the
-    // perpendicular the proof draws from D; Joyce draws only DH, the radius
-    // along it (H lies between D and G), so DG renders gold only while its
-    // stroke runs or a slide lights it. CHA is the arc of the circle from C
+    // THE FIGURE IS HEATH'S, NOT JOYCE'S — the one deliberate departure in
+    // this deck, at the author's request. Parts two and three argue about
+    // the impossible figure: FA interposed in the space between the tangent
+    // and the arc, and G, the foot of the perpendicular from D, outside the
+    // circle beyond H (D, H, G). A true construction cannot draw that — any
+    // line through A at an angle to the tangent cuts the circle, so the real
+    // foot lies inside it, which is what Joyce's applet (and his gif, still
+    // the noscript image) shows. Heath draws the supposition instead, and
+    // so does this figure: F low so FA runs through the horn space, G a
+    // slider on FA placed outside the circle (|DG| = 116 against R = 105),
+    // H the cutoff on DG at the radius, between D and G. The angle at G is
+    // "right" by supposition only (it measures 63°). When the text refutes
+    // the supposition (slide 24), F returns to Joyce's position, G slides
+    // back to the true foot Gt inside the circle and H moves out past it —
+    // Heath's figure for the supposition, Joyce's for the refutation.
+    //
+    // Everything else added is fully transparent (;0;0;0 lines, ;0;0;0;0
+    // arc and triangle). DG is the perpendicular the proof draws from D;
+    // Joyce draws only DH, so DG renders gold only while its stroke runs or
+    // a slide lights it. CHA is the arc of the circle from C
     // through H to A — the "circumference CHA" of the horn-angle argument,
     // which needs a name of its own so a slide can light it beside BA and
     // AE. It passes through H, so it tracks the figure however F is dragged.
@@ -84,10 +99,24 @@ For suppose it does not, but, if possible, let it fall within as {CA}, and join 
             "AE';line;perpendicular;A,D;0;0;0",
             "E;point;lineSlider;AE',30,220",
             "AE;line;connect;A,E",
-            "F;point;free;60,110",
+            // F low, as in Heath's figure, so that FA runs through the space
+            // between the tangent and the arc (at Joyce's F it climbed at 36°
+            // and lay inside the circle almost to its edge).
+            "F;point;free;40,205",
             "AF;line;connect;A,F",
-            "G;point;foot;D,AF",
+            // G is the IMPOSSIBLE figure's G, as Heath draws it: on FA, outside
+            // the circle in the horn space, so that DG crosses the circle at H
+            // on its way out (D, H, G) and the angle at G is "right" only by
+            // supposition. The true foot of the perpendicular from D lies
+            // inside the circle and cannot show the thing the text argues
+            // about. A slider on FA, so it stays on the line when F is dragged.
+            "G;point;lineSlider;A,F,171,228",
             "H;point;cutoff;D,G,D,A",
+            // The TRUE foot of the perpendicular from D on FA, invisible: the
+            // target G slides to when the supposition is refuted (slide 24),
+            // collapsing the impossible figure into the real one. H, the
+            // cutoff on DG, follows and lands beyond G (D, G, H).
+            "Gt;point;foot;D,AF;0;0",
             "DH;line;connect;D,H",
             // Hover / highlight targets only — AB already draws DA, and DH
             // draws the part of DG inside the circle.
@@ -107,9 +136,9 @@ For suppose it does not, but, if possible, let it fall within as {CA}, and join 
         // auto-unioned into every slide. Each is introduced mid-walk ("let
         // it fall within as CA", "let it fall as AE", "as FA"), so all three
         // are deferred and follow `visible`. A and B are the given diameter.
-        // D (midpoint), G (foot) and H (cutoff) are derived, so they are
-        // listed per slide instead. The resting figure is unaffected.
-        deferDraggables: ["C","E","F"],
+        // D (midpoint) and H (cutoff) are derived, so they are listed per
+        // slide instead; G is a slider on FA (see above) and is deferred too.
+        deferDraggables: ["C","E","F","G"],
         // ACD is the triangle; the angle ACD takes the display override
         // {ACD|angACD} in prose and captions.
         aliases: { "AD": "DA", "DC": "CD", "AC": "CA", "BA": "AB", "EA": "AE",
@@ -202,30 +231,51 @@ For suppose it does not, but, if possible, let it fall within as {CA}, and join 
             { text: "Therefore another straight line cannot be interposed into the space between the straight line and the circumference.",
               visible: PART3,
               highlighted: ["AE","CHA"] },
-            { text: "I say further that the angle of the semicircle contained by the straight line {BA} and the circumference {CHA} is greater than any acute rectilinear angle, and the remaining angle contained by the circumference {CHA} and the straight line {AE} is less than any acute rectilinear angle.",
+            { text: "I say further that the angle of the semicircle contained by the straight line {BA} and the circumference {CHA} is greater than any acute rectilinear angle,",
               visible: PART3,
-              highlighted: ["AB","CHA","AE"] },
-            // His one long conditional is two slides: the supposition, then
-            // what it would give.
-            { text: "For, if there is any rectilinear angle greater than the angle contained by the straight line {BA} and the circumference {CHA}, and any rectilinear angle less than the angle contained by the circumference {CHA} and the straight line {AE},",
+              highlighted: ["AB","CHA"] },
+            { text: "and the remaining angle contained by the circumference {CHA} and the straight line {AE} is less than any acute rectilinear angle.",
               visible: PART3,
-              highlighted: ["AB","CHA","AE"] },
-            { text: "then into the space between the circumference and the straight line {AE} a straight line will be interposed such as will make an angle contained by straight lines which is greater than the angle contained by the straight line {BA} and the circumference {CHA}, and another angle contained by straight lines which is less than the angle contained by the circumference {CHA} and the straight line {AE}.",
+              highlighted: ["CHA","AE"] },
+            { text: "For, if there is any rectilinear angle greater than the angle contained by the straight line {BA} and the circumference {CHA},",
+              visible: PART3,
+              highlighted: ["AB","CHA"] },
+            { text: "and any rectilinear angle less than the angle contained by the circumference {CHA} and the straight line {AE},",
+              visible: PART3,
+              highlighted: ["CHA","AE"] },
+            { text: "then into the space between the circumference and the straight line {AE} a straight line will be interposed",
+              visible: PART3,
+              highlighted: ["AF","AE","CHA"] },
+            { text: "such as will make an angle contained by straight lines which is greater than the angle contained by the straight line {BA} and the circumference {CHA},",
+              visible: PART3,
+              // BAF has the same rays as the marker DAG (D on AB, G on AF).
+              highlighted: ["AB","CHA","angDAG"],
+              transition: { animations: [
+                  { elem: "angDAG", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and another angle contained by straight lines which is less than the angle contained by the circumference {CHA} and the straight line {AE}.",
               visible: HORN,
-              // FA is that line, and it makes the angles BAF (the marker DAG,
-              // same rays) and FAE — the latter is this slide's animation
-              // target.
-              highlighted: ["AF","angDAG"],
+              highlighted: ["CHA","AE","angFAE"],
               transition: { animations: [
                   { elem: "angFAE", name: geomlib.A.Sector.sweep } ] } },
-            { text: "But such a straight line cannot be interposed, therefore there will not be any acute angle contained by straight lines which is greater than the angle contained by the straight line {BA} and the circumference {CHA}, nor yet any acute angle contained by straight lines which is less than the angle contained by the circumference {CHA} and the straight line {AE}.",
+            { text: "But such a straight line cannot be interposed,",
               visible: HORN,
-              highlighted: ["AB","CHA","AE"],
+              highlighted: ["AF","G","H"],
+              // The refutation undoes the supposed figure and restores
+              // Joyce's: F rises back to his position (at Heath's shallow FA
+              // the true foot lies within 1.4 px of the circle, so G would
+              // land on top of H), then G glides along FA to the true foot
+              // Gt, inside the circle, and H, the cutoff on DG, moves out
+              // past it — the real order D, G, H, with a 20 px gap.
+              transition: { mode: "cascade", animations: [
+                  { elem: "F", name: geomlib.A.Point.followPath, args: { via: [[60, 110]], settle: true } },
+                  { elem: "G", name: geomlib.A.Point.slide, args: { to: "Gt" } } ] },
               justifications: [{ claim: "no straight line can be interposed", ref: "Above" }] },
-            { text: "Therefore the straight line drawn at right angles to the diameter of a circle from its end will fall outside the circle, and into the space between the straight line and the circumference another straight line cannot be interposed, further the angle of the semicircle is greater, and the remaining angle less, than any acute rectilinear angle.",
+            { text: "therefore there will not be any acute angle contained by straight lines which is greater than the angle contained by the straight line {BA} and the circumference {CHA},",
               visible: HORN,
-              highlighted: ["AE","CHA","AB"],
-              justifications: [{ ref: "Q.E.D." }] }
+              highlighted: ["AB","CHA"] },
+            { text: "nor yet any acute angle contained by straight lines which is less than the angle contained by the circumference {CHA} and the straight line {AE}.",
+              visible: HORN,
+              highlighted: ["CHA","AE"] }
         ],
         resolveJustification: function(ref) {
             if (ref === "III.16") return "#prop";
