@@ -129,6 +129,21 @@ All framing, narration, and "here's what to notice" belongs in the
 **slideshow captions** (`slides[].text`), which are ours to write — not in
 the guide.
 
+### Open on the statement
+
+A proof deck's first slide is the proposition's statement, over the resting
+figure, before the proof's first sentence. The walk then starts from what is
+being claimed rather than from "Let *AB* be…", and where Joyce's proof opens
+straight on a reductio with no setting-out — III.10's "For, if possible, let
+the circle *ABC* cut the circle *DEF* at more points than two" — the reader is
+not dropped into the contradiction cold. Highlight the figure the statement is
+about (both circles on III.10), and give the slide a chip to the proposition
+(`ref: "III.10"`, resolved to `#prop` in `resolveJustification`). A statement
+past about twenty words splits at its logical seams like any other caption
+(below), one clause per slide, each clause lit on the figure it describes —
+III.7's guide canvas shows the shape. The statement's words are Joyce's, and
+his closing "Therefore …" restates them, so the caption lint accepts them.
+
 ### Captions carry Joyce's sentence, not a paraphrase of it
 
 "Ours to write" governs **which** sentences a slide carries and how the walk
@@ -188,6 +203,18 @@ reasons to split, and only one of them was retired:
 |---|---|
 | To keep each statement beside its own citation | **Retired** — `claim` pairs them on one slide |
 | Because one slide cannot carry the step's own words | **Correct** — take the split |
+| Because the caption runs past about twenty words | **Correct** — split at a logical seam |
+
+**Twenty words or so is the ceiling.** A caption longer than that is read all
+at once rather than followed, and on a phone the caption panel climbs the
+canvas. Split at the sentence's own logical seams — its commas, semicolons,
+and the pivot words (*then*, *while*, *but*, *therefore*) — not necessarily at
+sentence boundaries and not as the statement is presented. The proposition's
+statement and its closing "Therefore …" restatement are the usual offenders,
+at 60–125 words; III.8's closing became eight slides of one clause each, every
+clause lit on the figure it describes. A long construction sentence splits the
+same way, beat by beat. The wording stays his; only the slide boundaries are
+ours.
 
 **The guide is looser.** Its commentary is Joyce talking *about* the text
 rather than proving anything, and much of it is informal. Tokenizing is still
@@ -318,19 +345,22 @@ whole wedge flashes on its transition) on the slide where the angle
 first matters, and keep them in the `visible` set of every slide they
 should appear on.
 
-Two caveats while the library catches up (tracked in
-[deck-tracker.md](deck-tracker.md) open questions):
+Two things the library now does for you, each with a catch:
 
-- **Same-vertex overlap.** Multiple markers at one vertex render at the
-  same radius and overlap until geomlib 0.8.1 adds auto radius-stepping;
-  until then hand-separate with the radius-override integer.
-- **Initial visibility.** Markers currently always render, including in
-  the initial / static figure (no `visible=false` via params yet). The
-  initial figure should match the source diagram — Euclid draws no angle
-  arcs — so an initial-visibility parameter has been requested of the
-  library session. Once it lands, author markers initially hidden and
-  let the slides reveal them; the modern marker view stays a
-  slide-walk / highlight affordance.
+- **Same-vertex nesting.** Markers sharing a vertex are grouped at
+  `init()`, sorted smallest span innermost, and stepped outward in 9px
+  rings with distinct palette colours (#103, since 0.9.1). An explicit
+  radius override opts that marker out of the stepping; an explicit
+  colour opts it out of the de-clash. Since 0.16.0 the sort runs on the
+  placed figure ([euclid#175](https://github.com/brownnrl/euclid/issues/175)),
+  so derived-point vertices nest correctly too. Read the rings back from
+  the bundle (`ringIndex` on `slate.elements`) when in doubt, and pin a
+  radius only for a *design* reason — a pinned radius is clamped to the
+  shorter arm, so on a short arm it can land on the same ring it was meant
+  to escape (III.4's `angFEB` at 34 rendered at 21.8, on top of `angFEA`).
+- **Initial visibility.** Markers are hidden in the resting figure by
+  default (`showAngles` is false — Euclid draws no angle arcs) and the
+  slides reveal them; `init({ showAngles: true })` shows them at rest.
 
 ### Names, aliases, collisions
 
