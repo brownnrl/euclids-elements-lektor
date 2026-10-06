@@ -15,14 +15,37 @@ statement: Equal straight lines in a circle are equally distant from the center,
 ----
 proof:
 
-Let *AB* and *CD* be equal straight lines in a circle *ABDC.*
+Let {AB} and {CD} be equal straight lines in a circle {ABDC}.
 
-I say that *AB* and *CD* are equally distant from the center.
+I say that {AB} and {CD} are equally distant from the center.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="270" tabindex="0"></canvas>
 <noscript><img alt="III.14 diagram" src="propIII14.gif"/></noscript>
 <script type="text/javascript">
+    // A theorem and its converse on one figure, so one deck walks both
+    // halves over the same construction ("with the same construction" is
+    // Euclid's own instruction). The construction is short — the center,
+    // two perpendiculars, two radii — and each clause is animated; the
+    // rest is highlight beats over the I.47 accounting.
+    //
+    // Joyce's figure draws the halves AF, FB, CG only as parts of the
+    // chords, so they get transparent twins (;0;0;0). The circle is the
+    // random-filled ABC; the prose calls it ABDC, and that name goes to a
+    // transparent twin so a highlight never promotes the fill over the
+    // triangles (#140). EAF and ECG are Joyce's two triangles: converted
+    // with no faceColor field, so they carry the opaque near-white default
+    // — which is what his gif shows, a pale pair on the green — and they
+    // are never named in a slide set. No squares are drawn (none would fit
+    // a 270px canvas), so "the square on AF" lights AF. The two right
+    // angles get red markers, hidden in the static figure. Resting figure
+    // pixel-unchanged.
+    var GIVEN = ["A","B","C","D","AB","CD","ABC","ABDC"];
+    var CENT  = GIVEN.concat(["E"]);
+    var PERP  = CENT.concat(["F","G","EF","EG","EA","EC"]);
+    var RTF   = PERP.concat(["angAFE"]);
+    var HALF  = RTF.concat(["AF","FB"]);
+    var RTG   = HALF.concat(["CG","angCGE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -44,31 +67,174 @@ I say that *AB* and *CD* are equally distant from the center.
             "EF;line;connect;E,F",
             "EG;line;connect;E,G",
             "EAF;polygon;triangle;E,A,F;0;0;0",
-            "ECG;polygon;triangle;E,C,G;0;0;0"
+            "ECG;polygon;triangle;E,C,G;0;0;0",
+            // Transparent twin of the circle under the prose's name.
+            "ABDC;circle;radius;E,A;0;0;0;0",
+            // Halves of the chords; AB and CD already draw them.
+            "AF;line;connect;A,F;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "CG;line;connect;C,G;0;0;0",
+            // The right angles at F and G. One marker per vertex, so no
+            // radius override.
+            "angAFE;sector;angleMarker;F,A,E;0;0;red;red",
+            "angCGE;sector;angleMarker;G,C,E;0;0;red;red"
         ],
+        // Draggables (checked against the bundle): A, E, B, C. A, B and C
+        // are the chords' endpoints and belong to slide 1; E is the center,
+        // declared as a free point, and the proof takes it on slide 3 — so
+        // it is deferred out of the every-slide auto-union. D (vertex) and
+        // F, G (midpoint) are derived and listed per slide.
+        deferDraggables: ["E"],
+        aliases: { "AE": "EA", "CE": "EC", "FA": "AF", "BF": "FB",
+                   "GC": "CG", "FE": "EF", "GE": "EG" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”), split at its seams.
+            { text: "“Equal straight lines in a circle are equally distant from the center,”",
+              visible: GIVEN,
+              highlighted: [] },
+            { text: "“and those which are equally distant from the center equal one another.”",
+              visible: GIVEN,
+              highlighted: [],
+              justifications: [{ ref: "III.14" }] },
+            { text: "Let {AB} and {CD} be equal straight lines in a circle {ABDC}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "I say that {AB} and {CD} are equally distant from the center.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "Take the center {E} of the circle {ABDC}.",
+              visible: CENT,
+              highlighted: ["ABDC", "E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the center of the circle", ref: "III.1" }] },
+            { text: "Draw {EF} and {EG} from {E} perpendicular to {AB} and {CD}, and join {AE} and {EC}.",
+              visible: PERP,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F",  name: geomlib.A.Point.appear },
+                  { elem: "EG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "EA", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "perpendiculars from E to AB and CD", ref: "I.12" },
+                  { ref: "I.Post.1" } ] },
+            { text: "Then, since a straight line {EF} passing through the center cuts a straight line {AB} not passing through the center at right angles, it also bisects it.",
+              visible: RTF,
+              highlighted: ["EF","AB","E"],
+              transition: { animations: [
+                  { elem: "angAFE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "EF through the center at right angles to AB bisects it", ref: "III.3" }] },
+            { text: "Therefore {AF} equals {FB}. Therefore {AB} is double {AF}.",
+              visible: HALF,
+              highlighted: ["AF","FB"] },
+            { text: "For the same reason {CD} is also double {CG}.",
+              visible: RTG,
+              highlighted: ["CD","CG"],
+              transition: { animations: [
+                  { elem: "angCGE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "EG through the center at right angles to CD bisects it", ref: "III.3" }] },
+            { text: "But {AB} equals {CD}, therefore {AF} also equals {CG}.",
+              visible: RTG,
+              highlighted: ["AB","CD","AF","CG"] },
+            { text: "Also, since {AE} equals {EC}, the square on {AE} also equals the square on {EC}.",
+              visible: RTG,
+              highlighted: ["EA","EC"],
+              justifications: [{ claim: "AE and EC are radii of the circle", ref: "I.Def.15" }] },
+            { text: "But the sum of the squares on {AF} and {EF} equals the square on {AE}, for the angle at {F} is right,",
+              visible: RTG,
+              highlighted: ["AF","EF","EA","angAFE"],
+              justifications: [{ claim: "the right angle at F in the triangle EAF", ref: "I.47" }] },
+            { text: "and the sum of the squares on {EG} and {GC} equals the square on {EC}, for the angle at {G} is right.",
+              visible: RTG,
+              highlighted: ["EG","CG","EC","angCGE"],
+              justifications: [{ claim: "the right angle at G in the triangle ECG", ref: "I.47" }] },
+            { text: "Therefore the sum of the squares on {AF} and {FE} equals the sum of the squares on {CG} and {GE}, of which the square on {AF} equals the square on {CG}, for {AF} equals {CG}.",
+              visible: RTG,
+              highlighted: ["AF","EF","CG","EG"] },
+            { text: "Therefore the remaining square on {FE} equals the square on {EG}. Therefore {EF} equals {EG}.",
+              visible: RTG,
+              highlighted: ["EF","EG"],
+              justifications: [{ claim: "subtract the equal squares on AF and CG", ref: "C.N.3" }] },
+            { text: "But straight lines in a circle are said to be equally distant from the center when the perpendiculars drawn to them from the center are equal. Therefore {AB} and {CD} are equally distant from the center.",
+              visible: RTG,
+              highlighted: ["AB","CD","EF","EG"],
+              justifications: [{ claim: "equal perpendiculars from the center", ref: "III.Def.4" }] },
+            // The converse, on the same construction.
+            { text: "Next, let the straight lines {AB} and {CD} be equally distant from the center, that is, let {EF} equal {EG}.",
+              visible: RTG,
+              highlighted: ["EF","EG"],
+              justifications: [{ claim: "equally distant from the center", ref: "III.Def.4" }] },
+            { text: "I say that {AB} also equals {CD}.",
+              visible: RTG,
+              highlighted: ["AB","CD"] },
+            { text: "For, with the same construction, we can prove, as before, that {AB} is double {AF}, and {CD} double {CG}.",
+              visible: RTG,
+              highlighted: ["AB","AF","CD","CG"],
+              justifications: [{ claim: "EF and EG bisect AB and CD", ref: "III.3" }] },
+            { text: "And, since {AE} equals {CE}, the square on {AE} equals the square on {CE}.",
+              visible: RTG,
+              highlighted: ["EA","EC"],
+              justifications: [{ claim: "AE and CE are radii of the circle", ref: "I.Def.15" }] },
+            { text: "But the sum of the squares on {EF} and {FA} equals the square on {AE}, and the sum of the squares on {EG} and {GC} equals the square on {CE}.",
+              visible: RTG,
+              highlighted: ["EF","AF","EA","EG","CG","EC"],
+              justifications: [{ claim: "the right angles at F and G", ref: "I.47" }] },
+            { text: "Therefore the sum of the squares on {EF} and {FA} equals the sum of the squares on {EG} and {GC}, of which the square on {EF} equals the square on {EG}, for {EF} equals {EG}.",
+              visible: RTG,
+              highlighted: ["EF","AF","EG","CG"] },
+            { text: "Therefore the remaining square on {AF} equals the square on {CG}. Therefore {AF} equals {CG}.",
+              visible: RTG,
+              highlighted: ["AF","CG"],
+              justifications: [{ claim: "subtract the equal squares on EF and EG", ref: "C.N.3" }] },
+            { text: "And {AB} is double {AF}, and {CD} double {CG}, therefore {AB} equals {CD}.",
+              visible: RTG,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.14") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "I.Def.15":  "/elements/books/bookI/definitions/defI15/",
+        "I.12":      "/elements/books/bookI/propositions/propI12/",
+        "I.47":      "/elements/books/bookI/propositions/propI47/",
+        "C.N.3":     "/elements/books/bookI/commonnotions/cn3/",
+        "III.1":     "/elements/books/bookIII/propositions/propIII1/",
+        "III.3":     "/elements/books/bookIII/propositions/propIII3/",
+        "III.Def.4": "/elements/books/bookIII/definitions/defIII4/"
     });
 </script>
 </figure>
 
-Take the center *E* of the circle *ABDC.* Draw *EF* and *EG* from *E*  perpendicular to *AB* and *CD,* and join *AE* and *EC.* [!just III.1; I.12]
+Take the center {E} of the circle {ABDC}. Draw {EF} and {EG} from {E}  perpendicular to {AB} and {CD}, and join {AE} and {EC}. [!just III.1; I.12]
 
-Then, since a straight line *EF* passing through the center cuts a straight line *AB* not passing through the center at right angles, it also bisects it.  Therefore *AF* equals *FB.* Therefore *AB* is double *AF.* [!just III.3]
+Then, since a straight line {EF} passing through the center cuts a straight line {AB} not passing through the center at right angles, it also bisects it.  Therefore {AF} equals {FB}. Therefore {AB} is double {AF}. [!just III.3]
 
-For the same reason *CD* is also double *CG.* But *AB* equals *CD,* therefore *AF* also equals *CG.*
+For the same reason {CD} is also double {CG}. But {AB} equals {CD}, therefore {AF} also equals {CG}.
 
-Also, since *AE* equals *EC,* the square on *AE* also equals the square on *EC.*  But the sum of the squares on *AF* and *EF* equals the square on *AE,* for the angle at *F* is right, and the sum of the squares on *EG* and *GC* equals the square on *EC,* for the angle at *G* is right.  Therefore the sum of the squares on *AF* and *FE* equals the sum of the squares on *CG* and *GE,* of which the square on *AF* equals the square on *CG,* for *AF* equals *CG.*  Therefore the remaining square on *FE* equals the square on *EG.*  Therefore *EF* equals *EG.* [!just I.47]
+Also, since {AE} equals {EC}, the square on {AE} also equals the square on {EC}.  But the sum of the squares on {AF} and {EF} equals the square on {AE}, for the angle at {F} is right, and the sum of the squares on {EG} and {GC} equals the square on {EC}, for the angle at {G} is right.  Therefore the sum of the squares on {AF} and {FE} equals the sum of the squares on {CG} and {GE}, of which the square on {AF} equals the square on {CG}, for {AF} equals {CG}.  Therefore the remaining square on {FE} equals the square on {EG}.  Therefore {EF} equals {EG}. [!just I.47]
 
-But straight lines in a circle are said to be equally distant from the center when the perpendiculars drawn to them from the center are equal.  Therefore *AB* and *CD* are equally distant from the center. [!just III.Def.4]
+But straight lines in a circle are said to be equally distant from the center when the perpendiculars drawn to them from the center are equal.  Therefore {AB} and {CD} are equally distant from the center. [!just III.Def.4]
 
 <hr width="50%">
 
-Next, let the straight lines *AB* and *CD* be equally distant from the center, that is, let *EF* equal *EG.*
+Next, let the straight lines {AB} and {CD} be equally distant from the center, that is, let {EF} equal {EG}.
 
-I say that *AB* also equals *CD.*
+I say that {AB} also equals {CD}.
 
-For, with the same construction, we can prove, as before, that *AB* is double *AF,* and *CD* double *CG.*  And, since *AE* equals *CE,* the square on *AE* equals the square on *CE.*  But the sum of the squares on *EF* and *FA* equals the square on *AE,* and the sum of the squares on *EG* and *GC* equals the square on *CE.* [!just I.47]
+For, with the same construction, we can prove, as before, that {AB} is double {AF}, and {CD} double {CG}.  And, since {AE} equals {CE}, the square on {AE} equals the square on {CE}.  But the sum of the squares on {EF} and {FA} equals the square on {AE}, and the sum of the squares on {EG} and {GC} equals the square on {CE}. [!just I.47]
 
-Therefore the sum of the squares on *EF* and *FA* equals the sum of the squares on *EG* and *GC,* of which the square on *EF* equals the square on *EG,* for *EF* equals *EG.* Therefore the remaining square on *AF* equals the square on *CG.*  Therefore *AF* equals *CG.*  And *AB* is double *AF,* and *CD* double *CG,* therefore *AB* equals *CD.*
+Therefore the sum of the squares on {EF} and {FA} equals the sum of the squares on {EG} and {GC}, of which the square on {EF} equals the square on {EG}, for {EF} equals {EG}. Therefore the remaining square on {AF} equals the square on {CG}.  Therefore {AF} equals {CG}.  And {AB} is double {AF}, and {CD} double {CG}, therefore {AB} equals {CD}.
 
 Therefore *equal straight lines in a circle are equally distant from the center, and those which are equally distant from the center equal one another.*
 
