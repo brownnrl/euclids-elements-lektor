@@ -836,3 +836,28 @@ dialog.ctor-source-dialog .ctor-source-actions button:focus-visible {
     background: #eef1ff;
     border-color: #0020C2;
 }
+
+/* Figure row: a figure on the left with a column of paragraphs (and their
+   floated citations) to its right, kept together as one unit. Opt-in per
+   figure — give it data-spans="N" and the `figrows` template filter
+   pairs it with the next N paragraphs (eucrefs plugin). */
+div.figrow {
+    clear: both;
+    display: flex;
+    gap: 1.2em;
+    align-items: flex-start;
+    margin: 0.6em 0;
+}
+div.figrow > figure.diagram {
+    float: none;
+    flex: none;
+    margin: 0.3em 0 0 0;
+}
+div.figrow > div.figtext {
+    flex: 1;
+    min-width: 0;
+}
+@media (max-width: 768px) {
+    div.figrow { display: block; }
+    div.figrow > figure.diagram { margin: 1em auto; display: block; }
+}

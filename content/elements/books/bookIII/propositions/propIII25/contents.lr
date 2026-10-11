@@ -17,83 +17,307 @@ statement: Given a segment of a circle, to describe the complete circle of which
 ----
 proof:
 
-Let *ABC* be the given segment of a circle.
+Let {ABC|ABCseg} be the given segment of a circle.
 
-It is required to describe the complete circle belonging to the segment *ABC,* that is, of which it is a segment.
+It is required to describe the complete circle belonging to the segment {ABC|ABCseg}, that is, of which it is a segment.
 
-Bisect *AC* at *D,* draw *DB* from the point *D* at right angles to *AC,* and join *AB.* [!just I.10; I.11]
+Bisect {AC} at {D}, draw {DB} from the point {D} at right angles to {AC}, and join {AB}. [!just I.10; I.11]
 
 <figure class="diagram">
-<canvas id="canvas_0" width="230" height="230" tabindex="0"></canvas>
+<canvas id="canvas_0" width="250" height="230" tabindex="0"></canvas>
 <noscript><img alt="III.25a diagram" src="propIII25a.gif"/></noscript>
 <script type="text/javascript">
+    // Three canvases, one per case of the trichotomy at B. This is the first
+    // case (angle ABD greater, centre E outside the segment), which carries
+    // the full argument; canvas_1 (semicircle) and canvas_2 (greater than a
+    // semicircle) each carry Joyce's short case sentence as a walk of their
+    // own. Prose refs after canvas_1 that still talk about this figure name
+    // it explicitly ({AE:canvas_0}), since DOM order would bind them to the
+    // nearest preceding canvas.
+    //
+    // Joyce draws the segment as the sector E,A,C with a random face, then
+    // paints the triangle ACE in the background colour to leave only the
+    // segment coloured. That sector is therefore NEVER highlighted — a
+    // highlighted element is promoted within its draw pass (#140) and the
+    // whole wedge would show through the triangle — and the transparent
+    // twin ABCseg carries the name for highlight and hover ({ABC|ABCseg}).
+    //
+    // As converted, `DB` was the invisible perpendicular carrier for the
+    // slider B. It is renamed DB' (the II.1 idiom for BF') so that DB can be
+    // the line the proof draws: a black D–B stroke coincident with the D–B
+    // stretch of BE, which is Joyce's only line through those points but
+    // arrives four slides later than "draw DB" (the II.2 idiom). The rest
+    // of the additions are transparent (;0;0;0 lines, ;0;0;0;0 sector /
+    // circle) or angle markers (hidden in the static figure), so the
+    // resting figure is unchanged. The right angles at D are red, the
+    // Book II convention.
+    //
+    // The completed circle is not in Joyce's figure, so Ecirc is
+    // transparent: gold while its compass animation runs, gold again on
+    // the slides that highlight it, invisible at rest.
+    var SEG   = ["A","C","AC","B","ABC","ACE","ABCseg"];
+    var BIS   = SEG.concat(["D","DB","AB"]);
+    var ANG   = BIS.concat(["angABD","angBAD"]);
+    var CON   = ANG.concat(["E","AE","angBAE"]);
+    var EXT   = CON.concat(["BE","CE"]);
+    var SIDES = EXT.concat(["AD","DC","DE"]);
+    var RT    = SIDES.concat(["angADE","angCDE"]);
+    var CIRC  = RT.concat(["Ecirc"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
         title: "III.25a",
         pivot: "E",
         elements: [
-            "A;point;free;60,30",
-            "C;point;free;60,200",
+            "A;point;free;70,30",
+            "C;point;free;70,200",
             "AC;line;connect;A,C",
             "D;point;midpoint;AC",
-            "DB;line;perpendicular;D,A;0;0;0",
-            "B;point;lineSlider;DB,30,115",
+            "DB';line;perpendicular;D,A;0;0;0",
+            "B;point;lineSlider;DB',40,115",
             "E;point;circumcenter;A,B,C;black;green",
             "BE;line;connect;B,E",
             "AE;line;connect;A,E",
             "CE;line;connect;C,E",
             "ABC;sector;sector;E,A,C;0;0;black;random",
             "AB;line;connect;A,B",
-            "ACE;polygon;triangle;A,C,E;0;0;0;background"
+            "ACE;polygon;triangle;A,C,E;0;0;0;background",
+            // The line the proof draws at D; coincident with BE's D–B stretch.
+            "DB;line;connect;D,B",
+            // Transparent twin of the segment, for highlight and hover.
+            "ABCseg;sector;sector;E,A,C;0;0;0;0",
+            // Halves of AC and the common side DE; AC and BE draw them.
+            "AD;line;connect;A,D;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            // The angles the proof compares. ABE shares its rays with ABD
+            // (D lies on BE), so one marker serves both names.
+            "angABD;sector;angleMarker;B,A,D",
+            "angBAD;sector;angleMarker;A,B,D",
+            "angBAE;sector;angleMarker;A,B,E",
+            // Same explicit radius for both, so they opt out of the same-vertex
+            // ring-stepping and read as two quarter-discs split by DE.
+            "angADE;sector;angleMarker;D,A,E,22;0;0;red;red",
+            "angCDE;sector;angleMarker;D,C,E,22;0;0;red;red",
+            // The completed circle.
+            "Ecirc;circle;radius;E,A;0;0;0;0"
         ],
+        // A, C (free) and B (lineSlider) are the given segment's points, all
+        // introduced on slide 1, so nothing is deferred. D (midpoint) and E
+        // (circumcenter) are derived and NOT auto-unioned, so each is listed
+        // from the slide that introduces it.
+        aliases: { "BA": "AB", "CD": "DC", "DA": "AD", "BD": "DB", "ED": "DE",
+                   "EB": "BE", "EA": "AE", "EC": "CE",
+                   "ABD": "angABD", "ABE": "angABD", "BAD": "angBAD",
+                   "BAE": "angBAE", "ADE": "angADE", "CDE": "angCDE" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”).
+            { text: "Given a segment of a circle, to describe the complete circle of which it is a segment.",
+              visible: SEG,
+              highlighted: [],
+              justifications: [{ ref: "III.25" }] },
+            { text: "Let {ABC|ABCseg} be the given segment of a circle.",
+              visible: SEG,
+              highlighted: ["ABCseg"] },
+            { text: "It is required to describe the complete circle belonging to the segment {ABC|ABCseg}, that is, of which it is a segment.",
+              visible: SEG,
+              highlighted: ["ABCseg"] },
+            { text: "Bisect {AC} at {D}, draw {DB} from the point {D} at right angles to {AC}, and join {AB}.",
+              visible: BIS,
+              highlighted: ["AC", "D", "DB", "AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "D",  name: geomlib.A.Point.appear },
+                  { elem: "DB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AB", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "AC bisected at D",           ref: "I.10" },
+                  { claim: "DB at right angles to AC",   ref: "I.11" } ] },
+            { text: "The angle {ABD} is then greater than, equal to, or less than the angle {BAD}.",
+              visible: ANG,
+              highlighted: [],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABD", name: geomlib.A.Sector.sweep },
+                  { elem: "angBAD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "First let it be greater.",
+              visible: ANG,
+              highlighted: ["angABD"] },
+            { text: "Construct the angle {BAE} on the straight line {BA}, and at the point {A} on it, equal to the angle {ABD}.",
+              visible: CON,
+              highlighted: ["angABD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E",      name: geomlib.A.Point.appear },
+                  { elem: "angBAE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle BAE constructed equal to angle ABD", ref: "I.23" }] },
+            { text: "Draw {DB} through to {E}, and join {EC}.",
+              visible: EXT,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "CE", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.2" }, { ref: "I.Post.1" }] },
+            { text: "Then, since the angle {ABE} equals the angle {BAE}, the straight line {EB} also equals {EA}.",
+              visible: EXT,
+              highlighted: ["angABD","angBAE","BE","AE"],
+              justifications: [{ claim: "equal angles are subtended by equal sides", ref: "I.6" }] },
+            { text: "And, since {AD} equals {DC}, and {DE} is common, the two sides {AD} and {DE} equal the two sides {CD} and {DE} respectively,",
+              visible: SIDES,
+              highlighted: ["AD","DC","DE"] },
+            { text: "and the angle {ADE} equals the angle {CDE}, for each is right, therefore the base {AE} equals the base {CE}.",
+              visible: RT,
+              highlighted: ["AE","CE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angADE", name: geomlib.A.Sector.sweep },
+                  { elem: "angCDE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "two sides and the included right angle", ref: "I.4" }] },
+            { text: "But {AE} was proved equal to {BE}, therefore be also equals {CE}.",
+              visible: RT,
+              highlighted: ["AE","BE","CE"] },
+            { text: "Therefore the three straight lines {AE}, {EB}, and {EC} equal one another.",
+              visible: RT,
+              highlighted: ["AE","BE","CE"] },
+            { text: "Therefore the circle drawn with center {E} and radius one of the straight lines {AE}, {EB}, or {EC} also passes through the remaining points and has been completed.",
+              visible: CIRC,
+              highlighted: ["E", "Ecirc"],
+              transition: { animations: [
+                  { elem: "Ecirc", name: geomlib.A.Circle.compass } ] },
+              justifications: [{ claim: "three equal straight lines from E", ref: "III.9" }] },
+            { text: "Therefore, given a segment of a circle, the complete circle has been described.",
+              visible: CIRC,
+              highlighted: ["Ecirc","E"],
+              justifications: [{ ref: "Q.E.F." }] },
+            { text: "And it is manifest that the segment {ABC|ABCseg} is less than a semicircle, because the center {E} happens to be outside it.",
+              visible: CIRC,
+              highlighted: ["ABCseg","E"] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.25") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification,
+    // shared by all three canvases on this page.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.6":      "/elements/books/bookI/propositions/propI6/",
+        "I.10":     "/elements/books/bookI/propositions/propI10/",
+        "I.11":     "/elements/books/bookI/propositions/propI11/",
+        "I.23":     "/elements/books/bookI/propositions/propI23/",
+        "III.9":    "/elements/books/bookIII/propositions/propIII9/"
     });
 </script>
 </figure>
 
-The angle *ABD* is then greater than, equal to, or less than the angle *BAD.*
+The angle {ABD} is then greater than, equal to, or less than the angle {BAD}.
 
-First let it be greater.  Construct the angle *BAE* on the straight line *BA,* and at the point *A* on it, equal to the angle *ABD.*  Draw *DB* through to *E,* and join *EC.* [!just I.23]
+First let it be greater.  Construct the angle {BAE} on the straight line {BA}, and at the point {A} on it, equal to the angle {ABD}.  Draw {DB} through to {E}, and join {EC}. [!just I.23]
 
-Then, since the angle *ABE* equals the angle *BAE,* the straight line *EB* also equals *EA.* [!just I.6]
+Then, since the angle {ABE} equals the angle {BAE}, the straight line {EB} also equals {EA}. [!just I.6]
 
-And, since *AD* equals *DC,* and *DE* is common, the two sides *AD* and *DE* equal the two sides *CD* and *DE* respectively, and the angle *ADE* equals the angle *CDE,* for each is right, therefore the base *AE* equals the base *CE.* [!just I.4]
+And, since {AD} equals {DC}, and {DE} is common, the two sides {AD} and {DE} equal the two sides {CD} and {DE} respectively, and the angle {ADE} equals the angle {CDE}, for each is right, therefore the base {AE} equals the base {CE}. [!just I.4]
 
-<figure class="diagram rdiagram">
-<canvas id="canvas_1" width="150" height="200" tabindex="0"></canvas>
+<figure class="diagram" data-spans="3">
+<canvas id="canvas_1" width="250" height="230" tabindex="0"></canvas>
 <noscript><img alt="III.25b diagram" src="propIII25b.gif"/></noscript>
 <script type="text/javascript">
+    // The second case: angle ABD equal to angle BAD, D the centre, ABC a
+    // semicircle. Joyce's sentence for it is walked here in three beats.
+    // Additions are transparent (;0;0;0 lines, ;0;0;0;0 circle) or angle
+    // markers (hidden in the static figure); the resting figure is
+    // unchanged.
+    //
+    // The arc ABC has NO Sector.sweep: at exactly 180 degrees the two arm
+    // orders are the two different semicircles, and the order that draws
+    // Joyce's side sweeps backwards (euclid#172) — measured against the
+    // bundle, ink at t=0.5 exceeds t=1. It is revealed without sweeping.
+    var S1 = ["A","C","AC","D","DB","B","ABC","AB","angABD","angBAD"];
+    var S2 = S1.concat(["AD","DC"]);
+    var S3 = S2.concat(["Dcirc"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
         title: "III.25b",
         pivot: "D",
         elements: [
-            "A;point;free;120,30",
-            "C;point;free;120,170",
+            "A;point;free;170,45",
+            "C;point;free;170,185",
             "AC;line;connect;A,C",
             "D;point;midpoint;AC;black;green",
             "DB;line;perpendicular;D,A",
             "B;point;last;DB",
             "ABC;sector;arc;A,B,C;0;0;black;random",
-            "AB;line;connect;A,B"
+            "AB;line;connect;A,B",
+            // Halves of AC; AC draws them.
+            "AD;line;connect;A,D;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            // The two base angles, and the completed circle about D.
+            "angABD;sector;angleMarker;B,A,D",
+            "angBAD;sector;angleMarker;A,B,D",
+            "Dcirc;circle;radius;D,A;0;0;0;0"
         ],
+        // A and C are the only draggables and both are givens; B (last) and
+        // D (midpoint) are derived and listed explicitly.
+        aliases: { "BD": "DB", "DA": "AD", "CD": "DC", "BA": "AB",
+                   "ABD": "angABD", "BAD": "angBAD" },
+        slides: [
+            { text: "Similarly, even if the angle {ABD} equals the angle {BAD}",
+              visible: S1,
+              highlighted: [],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABD", name: geomlib.A.Sector.sweep },
+                  { elem: "angBAD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and {AD} being equal to each of the two {BD} and {DC}, the three straight lines {DA}, {DB}, and {DC} will equal one another,",
+              visible: S2,
+              highlighted: ["AD","DB","DC"] },
+            { text: "{D} will be the center of the completed circle, and {ABC} will clearly be a semicircle.",
+              visible: S3,
+              highlighted: ["D", "ABC", "Dcirc"],
+              transition: { animations: [
+                  { elem: "Dcirc", name: geomlib.A.Circle.compass } ] } }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-But *AE* was proved equal to *BE,* therefore be also equals *CE.*  Therefore the three straight lines *AE, EB,* and *EC* equal one another.
+But {AE:canvas_0} was proved equal to {BE:canvas_0}, therefore be also equals {CE:canvas_0}.  Therefore the three straight lines {AE:canvas_0}, {EB:canvas_0}, and {EC:canvas_0} equal one another.
 
-Therefore the circle drawn with center *E* and radius one of the straight lines *AE, EB,* or *EC* also passes through the remaining points and has been completed. [!just III.9]
+Therefore the circle drawn with center {E:canvas_0} and radius one of the straight lines {AE:canvas_0}, {EB:canvas_0}, or {EC:canvas_0} also passes through the remaining points and has been completed. [!just III.9]
 
 Therefore, given a segment of a circle, the complete circle has been described.
 
 <hr width="30%">
 
-<figure class="diagram">
+<figure class="diagram" data-spans="2">
 <canvas id="canvas_2" width="250" height="230" tabindex="0"></canvas>
 <noscript><img alt="III.25c diagram" src="propIII25c.gif"/></noscript>
 <script type="text/javascript">
+    // The third case: angle ABD less than angle BAD, the centre E on DB
+    // inside the segment, ABC greater than a semicircle. Joyce's sentence
+    // for it is walked here, closing with the Q.E.F. that ends his page.
+    //
+    // The sector ABC is a 4-field element as converted — no colour fields,
+    // so an opaque near-white default face (Joyce's gif fills it green; the
+    // conversion lost that, and it is left as it is). The triangle ACE
+    // likewise has no face field. Neither is ever highlighted: a
+    // highlighted element is promoted within its pass (#140), and the white
+    // wedge would cover the triangle. The transparent twin ABCseg, on the
+    // same arms, carries the name for highlight and hover ({ABC|ABCseg});
+    // ABC itself appears only in `visible`, where it draws as it always did.
+    // Other additions are angle markers (hidden in the static figure) and a
+    // transparent circle, so the resting figure is unchanged. As converted,
+    // `DB` was the invisible perpendicular carrier for the slider B; it is
+    // renamed DB' so the prose's "DB" can resolve to the drawn line BD.
+    var T1 = ["A","C","AC","D","B","BD","AB","ABC","ACE","ABCseg","angABD","angBAD"];
+    var T2 = T1.concat(["E","AE","angBAE"]);
+    var T3 = T2.concat(["Ecirc"]);
     geomlib.init({
         canvasid: "canvas_2",
         background: "35,19,100",
@@ -104,26 +328,65 @@ Therefore, given a segment of a circle, the complete circle has been described.
             "C;point;free;200,200",
             "AC;line;connect;A,C",
             "D;point;midpoint;AC",
-            "DB;line;perpendicular;D,A;0;0;0",
-            "B;point;lineSlider;DB,30,115",
+            "DB';line;perpendicular;D,A;0;0;0",
+            "B;point;lineSlider;DB',30,115",
             "E;point;circumcenter;A,B,C;black;green",
             "BD;line;connect;B,D",
             "AE;line;connect;A,E",
             "ABC;sector;sector;E,A,C",
             "AB;line;connect;A,B",
-            "ACE;polygon;triangle;A,C,E;0;0;0"
+            "ACE;polygon;triangle;A,C,E;0;0;0",
+            // Transparent twin of the 4-field sector (see above).
+            "ABCseg;sector;sector;E,A,C;0;0;0;0",
+            // The angles compared, the constructed angle, the completed circle.
+            "angABD;sector;angleMarker;B,A,D",
+            "angBAD;sector;angleMarker;A,B,D",
+            "angBAE;sector;angleMarker;A,B,E",
+            "Ecirc;circle;radius;E,A;0;0;0;0"
         ],
+        // A, C (free) and B (lineSlider) are the given segment's points;
+        // nothing is deferred. D and E are derived and listed explicitly.
+        aliases: { "BA": "AB", "DB": "BD", "ABD": "angABD", "BAD": "angBAD",
+                   "BAE": "angBAE" },
+        slides: [
+            { text: "But, if the angle {ABD} is less than the angle {BAD},",
+              visible: T1,
+              highlighted: [],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABD", name: geomlib.A.Sector.sweep },
+                  { elem: "angBAD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and if we construct, on the straight line {BA} and at the point {A} on it, an angle equal to the angle {ABD},",
+              visible: T2,
+              highlighted: ["angABD", "AE", "E", "angBAE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E",      name: geomlib.A.Point.appear },
+                  { elem: "angBAE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "an angle constructed equal to angle ABD", ref: "I.23" }] },
+            { text: "the center will fall on {DB} within the segment {ABC|ABCseg}, and the segment {ABC|ABCseg} will clearly be greater than a semicircle.",
+              visible: T2,
+              highlighted: ["E","BD","ABCseg"] },
+            { text: "Therefore, given a segment of a circle, the complete circle has been described.",
+              visible: T3,
+              highlighted: ["E", "Ecirc"],
+              transition: { animations: [
+                  { elem: "Ecirc", name: geomlib.A.Circle.compass } ] },
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-And it is manifest that the segment *ABC* is less than a semicircle, because the center *E* happens to be outside it.
+And it is manifest that the segment {ABC|ABCseg:canvas_0} is less than a semicircle, because the center {E:canvas_0} happens to be outside it.
 
-Similarly, even if the angle *ABD* equals the angle *BAD* and *AD* being equal to each of the two *BD* and *DC,* the three straight lines *DA, DB,* and *DC* will equal one another, *D* will be the center of the completed circle, and *ABC* will clearly be a semicircle.
+Similarly, even if the angle {ABD:canvas_1} equals the angle {BAD:canvas_1} and {AD:canvas_1} being equal to each of the two {BD:canvas_1} and {DC:canvas_1}, the three straight lines {DA:canvas_1}, {DB:canvas_1}, and {DC:canvas_1} will equal one another, {D:canvas_1} will be the center of the completed circle, and {ABC:canvas_1} will clearly be a semicircle.
 
 <hr width="30%">
 
-But, if the angle *ABD* is less than the angle *BAD,* and if we construct, on the straight line *BA* and at the point *A* on it, an angle equal to the angle *ABD,* the center will fall on *DB* within the segment *ABC,* and the segment *ABC* will clearly be greater than a semicircle. [!just I.23]
+But, if the angle {ABD} is less than the angle {BAD}, and if we construct, on the straight line {BA} and at the point {A} on it, an angle equal to the angle {ABD}, the center will fall on {DB} within the segment {ABC|ABCseg}, and the segment {ABC|ABCseg} will clearly be greater than a semicircle. [!just I.23]
 
 Therefore, given a segment of a circle, the complete circle has been described.
 
