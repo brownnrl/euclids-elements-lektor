@@ -15,12 +15,50 @@ statement: In a circle the angle at the center is double the angle at the circum
 ----
 proof:
 
-Let *ABC* be a circle, let the angle *BEC* be an angle at its center, and the angle *BAC* an angle at the circumference, and let them have the same circumference *BC* as base.
+Let {ABC} be a circle, let the angle {BEC} be an angle at its center, and the angle {BAC} an angle at the circumference, and let them have the same circumference {BC} as base.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="270" tabindex="0"></canvas>
 <noscript><img alt="III.20 diagram" src="propIII20.gif"/></noscript>
 <script type="text/javascript">
+    // The proposition is about angles, and Joyce's figure draws none — his
+    // diagram has the circle, the chords and the diameter. The markers below
+    // are the whole addition. showAngles defaults to false (0.9.0+), so they
+    // are hidden in the resting figure and arrive only with the walk or on
+    // hover; the four transparent lines and the transparent arc draw nothing,
+    // so the static figure is pixel-unchanged.
+    //
+    // Colour: each angle at the circumference shares its colour with its
+    // double at the centre — orange for EAB (= EBA) and BEF, teal for EAC and
+    // FEC, magenta for the pair the proposition is about, BAC and BEC. The
+    // second case reuses the scheme: orange EDC / GEC, teal EDB / GEB,
+    // magenta BDC / BEC. Named colours give an OPAQUE face (parseColor has no
+    // alpha), so at each vertex the containing wedge is declared BEFORE the
+    // wedges it contains and the faces pass paints the parts on top of it.
+    // Radii are pinned by hand for the same reason: the auto ring-stepping
+    // (#103) orders by span across ALL markers at a vertex, and E carries
+    // five. The override at D is 28 rather than 34 because the radius is
+    // clamped to 0.45 x the shorter arm, and DC is only ~64px.
+    //
+    // Joyce's AF is one element, and so is DG. "Join AE, and draw it through
+    // to F" is therefore a single straightedge stroke A -> E -> F; AE / EF
+    // (and DE / EG) exist as transparent hover targets so the captions can
+    // name the halves.
+    var CIRC  = ["ABC","A","B","C"];
+    var ANG   = CIRC.concat(["E","EB","EC","AB","AC","angBEC","angBAC"]);
+    var BASE  = ANG.concat(["arcBC"]);
+    var DIAM  = BASE.concat(["AF","F","AE","EF"]);
+    var ISO   = DIAM.concat(["angEAB","angEBA"]);
+    var EXT1  = ISO.concat(["angBEF"]);
+    var EXT2  = EXT1.concat(["angFEC","angEAC"]);
+    // Second case. The first case's markers come off, BAC included; BEC
+    // stays, since it is what the second case is about too.
+    var CASE2 = CIRC.concat(["E","EB","EC","AB","AC","angBEC","arcBC",
+                             "AF","F","AE","EF","D","DB","DC","angBDC"]);
+    var PROD  = CASE2.concat(["DG","G","DE","EG"]);
+    var SIM1  = PROD.concat(["angGEC","angEDC"]);
+    var SIM2  = SIM1.concat(["angGEB","angEDB"]);
+    var DONE  = SIM2.concat(["angBAC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,27 +80,196 @@ Let *ABC* be a circle, let the angle *BEC* be an angle at its center, and the an
             "DC;line;connect;D,C",
             "DB;line;connect;D,B",
             "G;point;extend;D,E,D,E",
-            "DG;line;connect;D,G"
+            "DG;line;connect;D,G",
+            // Hover / highlight targets only — AF and DG already draw these.
+            "AE;line;connect;A,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EG;line;connect;E,G;0;0;0",
+            // The circumference BC the two angles stand on. F is on the
+            // circle (E is the midpoint of AF and the radius is EA), so it
+            // serves as the through-point of the minor arc.
+            "arcBC;sector;arc;B,F,C;0;0;0;0",
+            // Angle markers, containing wedge first at each vertex.
+            "angGEC;sector;angleMarker;E,G,C,46;0;0;orange;orange",
+            "angBEC;sector;angleMarker;E,B,C,34;0;0;magenta;magenta",
+            "angGEB;sector;angleMarker;E,G,B,34;0;0;teal;teal",
+            "angBEF;sector;angleMarker;E,B,F,22;0;0;orange;orange",
+            "angFEC;sector;angleMarker;E,F,C,22;0;0;teal;teal",
+            "angBAC;sector;angleMarker;A,B,C,34;0;0;magenta;magenta",
+            "angEAB;sector;angleMarker;A,E,B,22;0;0;orange;orange",
+            "angEAC;sector;angleMarker;A,E,C,22;0;0;teal;teal",
+            "angEBA;sector;angleMarker;B,E,A,22;0;0;orange;orange",
+            "angEDC;sector;angleMarker;D,E,C,28;0;0;orange;orange",
+            "angEDB;sector;angleMarker;D,E,B,22;0;0;teal;teal",
+            "angBDC;sector;angleMarker;D,B,C,22;0;0;magenta;magenta"
         ],
+        // Draggables (checked against the bundle: A, F, B, C, D) are
+        // auto-unioned into every slide. F arrives with "draw it through to
+        // F" and D with the second case, so both are deferred; A, B and C are
+        // the given circle's letters. E (midpoint) and G (extend) are derived
+        // and NOT auto-unioned, so each is listed in the sets above.
+        deferDraggables: ["F","D"],
+        aliases: { "EA": "AE", "BE": "EB", "CE": "EC", "FA": "AF",
+                   "ED": "DE", "GE": "EG", "GD": "DG", "BD": "DB", "CD": "DC",
+                   "BC": "arcBC", "CB": "arcBC",
+                   "BEC": "angBEC", "CEB": "angBEC",
+                   "BAC": "angBAC", "CAB": "angBAC",
+                   "EAB": "angEAB", "BAE": "angEAB",
+                   "EBA": "angEBA", "ABE": "angEBA",
+                   "BEF": "angBEF", "FEB": "angBEF",
+                   "FEC": "angFEC", "CEF": "angFEC",
+                   "EAC": "angEAC", "CAE": "angEAC",
+                   "BDC": "angBDC", "CDB": "angBDC",
+                   "GEC": "angGEC", "CEG": "angGEC",
+                   "EDC": "angEDC", "CDE": "angEDC",
+                   "GEB": "angGEB", "BEG": "angGEB",
+                   "EDB": "angEDB", "BDE": "angEDB" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”), split at its seams.
+            { text: "“In a circle the angle at the center is double the angle at the circumference”",
+              visible: CIRC,
+              highlighted: [] },
+            { text: "“when the angles have the same circumference as base.”",
+              visible: CIRC,
+              highlighted: [],
+              justifications: [{ ref: "III.20" }] },
+            { text: "Let {ABC} be a circle,",
+              visible: CIRC,
+              highlighted: ["ABC"] },
+            { text: "let the angle {BEC} be an angle at its center, and the angle {BAC} an angle at the circumference,",
+              visible: ANG,
+              highlighted: ["angBEC", "angBAC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBEC", name: geomlib.A.Sector.sweep },
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and let them have the same circumference {BC} as base.",
+              visible: BASE,
+              highlighted: ["arcBC"] },
+            { text: "I say that the angle {BEC} is double the angle {BAC}.",
+              visible: BASE,
+              highlighted: ["angBEC","angBAC"] },
+            { text: "Join {AE}, and draw it through to {F}.",
+              visible: DIAM,
+              highlighted: [],
+              transition: { animations: [
+                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "join AE",              ref: "I.Post.1" },
+                  { claim: "produce it through to F", ref: "I.Post.2" } ] },
+            { text: "Then, since {EA} equals {EB}, the angle {EAB} also equals the angle {EBA}.",
+              visible: ISO,
+              highlighted: ["AE","EB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angEAB", name: geomlib.A.Sector.sweep },
+                  { elem: "angEBA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "EA and EB are radii",                    ref: "I.Def.15" },
+                  { claim: "the base angles of the isosceles triangle EAB", ref: "I.5" } ] },
+            { text: "Therefore the sum of the angles the angles {EAB} and {EBA} is double the angle {EAB}.",
+              visible: ISO,
+              highlighted: ["angEAB","angEBA"] },
+            { text: "But the angle {BEF} equals the sum of the angles {EAB} and {EBA}, therefore the angle {BEF}, is also double the angle {EAB}.",
+              visible: EXT1,
+              highlighted: ["angEAB","angEBA"],
+              transition: { animations: [
+                  { elem: "angBEF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "the exterior angle of the triangle EAB", ref: "I.32" } ] },
+            { text: "For the same reason the angle {FEC} is also double the angle {EAC}.",
+              visible: EXT2,
+              highlighted: [],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angFEC", name: geomlib.A.Sector.sweep },
+                  { elem: "angEAC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "EA equals EC, so the angles EAC and ECA are equal", ref: "I.5" },
+                  { claim: "FEC is the exterior angle of the triangle EAC",   ref: "I.32" } ] },
+            { text: "Therefore the whole angle {BEC} is double the whole angle {BAC}.",
+              visible: EXT2,
+              highlighted: ["angBEC","angBAC"],
+              justifications: [
+                  { claim: "the doubles added together", ref: "C.N.2" } ] },
+            { text: "Again let another straight line be inflected, and let there be another angle {BDC}.",
+              visible: CASE2,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DB",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DC",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angBDC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Join {DE} and produced it to {G}.",
+              visible: PROD,
+              highlighted: [],
+              transition: { animations: [
+                  { elem: "DG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "join DE",           ref: "I.Post.1" },
+                  { claim: "produce it to G",   ref: "I.Post.2" } ] },
+            { text: "Similarly then we can prove that the angle {GEC} is double the angle {EDC},",
+              visible: SIM1,
+              highlighted: [],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angGEC", name: geomlib.A.Sector.sweep },
+                  { elem: "angEDC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "ED equals EC",                                  ref: "I.5" },
+                  { claim: "GEC is the exterior angle of the triangle EDC", ref: "I.32" } ] },
+            { text: "of which the angle {GEB} is double the angle {EDB}.",
+              visible: SIM2,
+              highlighted: [],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angGEB", name: geomlib.A.Sector.sweep },
+                  { elem: "angEDB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "ED equals EB",                                  ref: "I.5" },
+                  { claim: "GEB is the exterior angle of the triangle EDB", ref: "I.32" } ] },
+            { text: "Therefore the remaining angle {BEC} is double the angle {BDC}.",
+              visible: SIM2,
+              highlighted: ["angBEC","angBDC"],
+              justifications: [
+                  { claim: "GEB taken from GEC, EDB from EDC", ref: "C.N.3" } ] },
+            { text: "Therefore in a circle the angle at the center is double the angle at the circumference when the angles have the same circumference as base.",
+              visible: DONE,
+              highlighted: ["angBEC","angBAC","angBDC","arcBC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.20") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+        "I.5":      "/elements/books/bookI/propositions/propI5/",
+        "I.32":     "/elements/books/bookI/propositions/propI32/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/",
+        "C.N.3":    "/elements/books/bookI/commonnotions/cn3/"
     });
 </script>
 </figure>
 
-I say that the angle *BEC* is double the angle *BAC.*
+I say that the angle {BEC} is double the angle {BAC}.
 
-Join *AE,* and draw it through to *F.*
+Join {AE}, and draw it through to {F}.
 
-Then, since *EA* equals *EB,* the angle *EAB* also equals the angle *EBA.* Therefore the sum of the angles the angles *EAB* and *EBA* is double the angle *EAB.* [!just I.5]
+Then, since {EA} equals {EB}, the angle {EAB} also equals the angle {EBA}. Therefore the sum of the angles the angles {EAB} and {EBA} is double the angle {EAB}. [!just I.5]
 
-But the angle *BEF* equals the sum of the angles *EAB* and *EBA,* therefore the angle *BEF,* is also double the angle *EAB.* [!just I.32]
+But the angle {BEF} equals the sum of the angles {EAB} and {EBA}, therefore the angle {BEF}, is also double the angle {EAB}. [!just I.32]
 
-For the same reason the angle *FEC* is also double the angle *EAC.*
+For the same reason the angle {FEC} is also double the angle {EAC}.
 
-Therefore the whole angle *BEC* is double the whole angle *BAC.*
+Therefore the whole angle {BEC} is double the whole angle {BAC}.
 
-Again let another straight line be inflected, and let there be another angle *BDC.*  Join *DE* and produced it to *G.*
+Again let another straight line be inflected, and let there be another angle {BDC}.  Join {DE} and produced it to {G}.
 
-Similarly then we can prove that the angle *GEC* is double the angle *EDC,* of which the angle *GEB* is double the angle *EDB.* Therefore the remaining angle *BEC* is double the angle *BDC.*
+Similarly then we can prove that the angle {GEC} is double the angle {EDC}, of which the angle {GEB} is double the angle {EDB}. Therefore the remaining angle {BEC} is double the angle {BDC}.
 
 Therefore *in a circle the angle at the center is double the angle at the circumference when the angles have the same circumference as base.*
 
