@@ -548,25 +548,37 @@ class EucrefsRendererMixin:
 # --- Figure rows (template filter `figrows`) -----------------------------
 # A figure declares which text it belongs with by one attribute on its own
 # (already raw-HTML) tag: <figure class="diagram" data-spans="2"> pairs it
-# with the next two paragraphs. The markdown stays markdown; the template
+# with the next two paragraphs; a figure placed directly after it joins
+# the same row on its own side. The markdown stays markdown; the template
 # applies this filter to the rendered HTML and wraps the figure and those
 # paragraphs — with the citation blocks that precede them — into
 #   <div class="figrow"><figure…/><div class="figtext">…</div></div>
 # so the figure sits on the left and its paragraphs and their margin notes
 # form one column beside it. A figure without the attribute is untouched.
 _FIG_SPAN_RE = re.compile(r'<figure\b[^>]*\bdata-spans="(\d+)"[^>]*>.*?</figure>', re.S)
-_BLOCK_RE = re.compile(r'\s*(<div class="just">.*?</div>|<p>.*?</p>)', re.S)
+_BLOCK_RE = re.compile(r'\s*(<div class="just">.*?</div>|<p>.*?</p>|<hr[^>]*>)', re.S)
+_NEXT_FIG_RE = re.compile(r'\s*(<figure\b[^>]*>.*?</figure>)', re.S)
 
 def figrows(html):
     from markupsafe import Markup
     s = str(html)
+    if 'data-spans="' not in s:
+        return Markup(s)
     out, pos = [], 0
     for m in _FIG_SPAN_RE.finditer(s):
         if m.start() < pos:
             continue
         want = int(m.group(1))
         out.append(s[pos:m.start()])
-        j, taken, got = m.end(), [], 0
+        # Figures placed back to back join the same row; each goes to the
+        # gutter its own class names (rdiagram -> right, else left).
+        figs, j = [m.group(0)], m.end()
+        while True:
+            f = _NEXT_FIG_RE.match(s, j)
+            if not f:
+                break
+            figs.append(f.group(1)); j = f.end()
+        taken, got = [], 0
         while got < want:
             b = _BLOCK_RE.match(s, j)
             if not b:
@@ -575,11 +587,13 @@ def figrows(html):
             if b.group(1).startswith("<p>"):
                 got += 1
             j = b.end()
-        out.append('<div class="figrow">' + m.group(0) +
+        out.append('<div class="figrow">' + "".join(figs) +
                    '<div class="figtext">' + "\n".join(taken) + '</div></div>')
         pos = j
     out.append(s[pos:])
-    return Markup("".join(out))
+    # The whole proof becomes one centred text column with a figure gutter
+    # either side; rows reach into the gutter on their figure's side.
+    return Markup('<div class="proofgrid">' + "".join(out) + '</div>')
 
 
 class EucrefsPlugin(Plugin):

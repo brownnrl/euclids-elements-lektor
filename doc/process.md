@@ -144,6 +144,26 @@ past about twenty words splits at its logical seams like any other caption
 III.7's guide canvas shows the shape. The statement's words are Joyce's, and
 his closing "Therefore …" restates them, so the caption lint accepts them.
 
+### Figure rows — opt-in, page by page
+
+A page whose figures float awkwardly (III.25: three figures, staircased or
+stranded beside the wrong text) can pair each figure with the paragraphs it
+illustrates. Put one attribute on the figure's own tag — the markdown stays
+markdown:
+
+```
+<figure class="diagram" data-spans="4">          <!-- left gutter -->
+<figure class="diagram rdiagram" data-spans="3"> <!-- right gutter -->
+```
+
+`data-spans="N"` pairs the figure with the next N paragraphs (their
+`[!just]` citations come along). The template's `figrows` filter does the
+rest: on wide screens the proof becomes one centred reading column with the
+figures in the gutters on their own side; in between, figure and text sit
+side by side; on phones the figure is centred with its text below. A page
+with no tagged figure is untouched. Tag a page only when review finds its
+layout at fault — so far, III.25.
+
 ### Captions carry Joyce's sentence, not a paraphrase of it
 
 "Ours to write" governs **which** sentences a slide carries and how the walk

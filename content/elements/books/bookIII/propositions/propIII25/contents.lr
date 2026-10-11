@@ -23,7 +23,7 @@ It is required to describe the complete circle belonging to the segment {ABC|ABC
 
 Bisect {AC} at {D}, draw {DB} from the point {D} at right angles to {AC}, and join {AB}. [!just I.10; I.11]
 
-<figure class="diagram">
+<figure class="diagram" data-spans="4">
 <canvas id="canvas_0" width="250" height="230" tabindex="0"></canvas>
 <noscript><img alt="III.25a diagram" src="propIII25a.gif"/></noscript>
 <script type="text/javascript">
@@ -81,7 +81,7 @@ Bisect {AC} at {D}, draw {DB} from the point {D} at right angles to {AC}, and jo
             "CE;line;connect;C,E",
             "ABC;sector;sector;E,A,C;0;0;black;random",
             "AB;line;connect;A,B",
-            "ACE;polygon;triangle;A,C,E;0;0;0;background",
+            "ACE;polygon;triangle;A,C,E;0;0;0;random",
             // The line the proof draws at D; coincident with BE's D–B stretch.
             "DB;line;connect;D,B",
             // Transparent twin of the segment, for highlight and hover.
@@ -210,6 +210,14 @@ Bisect {AC} at {D}, draw {DB} from the point {D} at right angles to {AC}, and jo
         "I.23":     "/elements/books/bookI/propositions/propI23/",
         "III.9":    "/elements/books/bookIII/propositions/propIII9/"
     });
+    // E sits near the middle of the canvas, where the default label rule
+    // (away from the canvas centre) picks a side almost at random and put
+    // the letter on the line BD. Fix it right, clear of the lines at E.
+    (function () {
+        var sl = geomlib.slates[geomlib.slates.length - 1];
+        var e = sl && sl.lookupElement("E");
+        if (e) { e.align = geomlib.Align.RIGHT; sl.update(); }
+    })();
 </script>
 </figure>
 
@@ -221,7 +229,7 @@ Then, since the angle {ABE} equals the angle {BAE}, the straight line {EB} also 
 
 And, since {AD} equals {DC}, and {DE} is common, the two sides {AD} and {DE} equal the two sides {CD} and {DE} respectively, and the angle {ADE} equals the angle {CDE}, for each is right, therefore the base {AE} equals the base {CE}. [!just I.4]
 
-<figure class="diagram" data-spans="3">
+<figure class="diagram rdiagram" data-spans="5">
 <canvas id="canvas_1" width="250" height="230" tabindex="0"></canvas>
 <noscript><img alt="III.25b diagram" src="propIII25b.gif"/></noscript>
 <script type="text/javascript">
@@ -286,16 +294,7 @@ And, since {AD} equals {DC}, and {DE} is common, the two sides {AD} and {DE} equ
     });
 </script>
 </figure>
-
-But {AE:canvas_0} was proved equal to {BE:canvas_0}, therefore be also equals {CE:canvas_0}.  Therefore the three straight lines {AE:canvas_0}, {EB:canvas_0}, and {EC:canvas_0} equal one another.
-
-Therefore the circle drawn with center {E:canvas_0} and radius one of the straight lines {AE:canvas_0}, {EB:canvas_0}, or {EC:canvas_0} also passes through the remaining points and has been completed. [!just III.9]
-
-Therefore, given a segment of a circle, the complete circle has been described.
-
-<hr width="30%">
-
-<figure class="diagram" data-spans="2">
+<figure class="diagram">
 <canvas id="canvas_2" width="250" height="230" tabindex="0"></canvas>
 <noscript><img alt="III.25c diagram" src="propIII25c.gif"/></noscript>
 <script type="text/javascript">
@@ -333,9 +332,9 @@ Therefore, given a segment of a circle, the complete circle has been described.
             "E;point;circumcenter;A,B,C;black;green",
             "BD;line;connect;B,D",
             "AE;line;connect;A,E",
-            "ABC;sector;sector;E,A,C",
+            "ABC;sector;sector;E,A,C;0;0;black;random",
             "AB;line;connect;A,B",
-            "ACE;polygon;triangle;A,C,E;0;0;0",
+            "ACE;polygon;triangle;A,C,E;0;0;0;random",
             // Transparent twin of the 4-field sector (see above).
             "ABCseg;sector;sector;E,A,C;0;0;0;0",
             // The angles compared, the constructed angle, the completed circle.
@@ -377,8 +376,24 @@ Therefore, given a segment of a circle, the complete circle has been described.
             return (window.eucrefs && window.eucrefs[ref]) || null;
         }
     });
+    // E sits near the middle of the canvas, where the default label rule
+    // (away from the canvas centre) picks a side almost at random and put
+    // the letter on the line BD. Fix it below, clear of the lines at E.
+    (function () {
+        var sl = geomlib.slates[geomlib.slates.length - 1];
+        var e = sl && sl.lookupElement("E");
+        if (e) { e.align = geomlib.Align.BELOW; sl.update(); }
+    })();
 </script>
 </figure>
+
+But {AE:canvas_0} was proved equal to {BE:canvas_0}, therefore be also equals {CE:canvas_0}.  Therefore the three straight lines {AE:canvas_0}, {EB:canvas_0}, and {EC:canvas_0} equal one another.
+
+Therefore the circle drawn with center {E:canvas_0} and radius one of the straight lines {AE:canvas_0}, {EB:canvas_0}, or {EC:canvas_0} also passes through the remaining points and has been completed. [!just III.9]
+
+Therefore, given a segment of a circle, the complete circle has been described.
+
+<hr width="30%">
 
 And it is manifest that the segment {ABC|ABCseg:canvas_0} is less than a semicircle, because the center {E:canvas_0} happens to be outside it.
 

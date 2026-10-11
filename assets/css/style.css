@@ -837,10 +837,10 @@ dialog.ctor-source-dialog .ctor-source-actions button:focus-visible {
     border-color: #0020C2;
 }
 
-/* Figure row: a figure on the left with a column of paragraphs (and their
-   floated citations) to its right, kept together as one unit. Opt-in per
-   figure — give it data-spans="N" and the `figrows` template filter
-   pairs it with the next N paragraphs (eucrefs plugin). */
+/* Figure rows (eucrefs `figrows` filter). A figure tagged
+   data-spans="N" is paired with the next N paragraphs; a figure placed
+   directly after it joins the same row. `diagram` goes left,
+   `diagram rdiagram` right. Untagged pages are not touched. */
 div.figrow {
     clear: both;
     display: flex;
@@ -848,15 +848,31 @@ div.figrow {
     align-items: flex-start;
     margin: 0.6em 0;
 }
-div.figrow > figure.diagram {
-    float: none;
-    flex: none;
-    margin: 0.3em 0 0 0;
+div.figrow > figure.diagram { float: none; flex: none; margin: 0.3em 0 0 0; order: 0; }
+div.figrow > div.figtext { flex: 1; min-width: 0; order: 1; }
+div.figrow > figure.diagram.rdiagram { order: 2; }
+
+/* Wide screens: the figures go out to the margins and the text runs
+   between them, as wide as the screen allows. */
+@media (min-width: 1400px) {
+    div.proofgrid {
+        --gutter: 290px;
+        padding: 0 var(--gutter);
+    }
+    div.proofgrid div.figrow {
+        display: grid;
+        grid-template-columns: var(--gutter) minmax(0, 1fr) var(--gutter);
+        gap: 0;
+        margin-left: calc(-1 * var(--gutter));
+        margin-right: calc(-1 * var(--gutter));
+    }
+    div.proofgrid div.figrow > div.figtext { grid-column: 2; grid-row: 1; }
+    div.proofgrid div.figrow > figure.diagram {
+        grid-column: 1; grid-row: 1; justify-self: center;
+    }
+    div.proofgrid div.figrow > figure.diagram.rdiagram { grid-column: 3; }
 }
-div.figrow > div.figtext {
-    flex: 1;
-    min-width: 0;
-}
+
 @media (max-width: 768px) {
     div.figrow { display: block; }
     div.figrow > figure.diagram { margin: 1em auto; display: block; }
