@@ -15,12 +15,36 @@ statement: On the same straight line there cannot be constructed two similar and
 ----
 proof:
 
-For, if possible, on the same straight line *AB* let two similar and unequal segments of circles *ACB* and *ADB* be constructed on the same side.  Draw *ACD* through, and join *CB* and *DB.*
+For, if possible, on the same straight line {AB} let two similar and unequal segments of circles {ACB} and {ADB} be constructed on the same side.  Draw {ACD} through, and join {CB} and {DB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="130" tabindex="0"></canvas>
 <noscript><img alt="III.23 diagram" src="propIII23.gif"/></noscript>
 <script type="text/javascript">
+    // The two segments are Joyce's own arc elements, BCA and BDA — eight
+    // fields each, black edge and an explicit ;0 face, so they can be named
+    // in slide sets and swept without the 4-field opaque-face hazard. Both
+    // sweep forward as declared (measured against the bundle: 0 -> 99 ->
+    // 195 -> 284 -> 388 and 0 -> 118 -> 229 -> 346 -> 458 pixels), so
+    // A.Sector.sweep is used on them and their arms are untouched.
+    //
+    // His applet never drew DB (the mirror's element list stops at AD),
+    // though his gif shows it and the proof joins it. DB is added as a
+    // transparent line so the caption and the prose can name it and a slide
+    // can light it; the resting figure is unchanged. It is NOT animated: a
+    // zero-colour target renders gold only while its stroke runs and then
+    // disappears, which would read as DB being erased. The join slide
+    // highlights it instead.
+    //
+    // Names: the segment ACB and the angle ACB collide, as do ADB. The
+    // segments take the aliases (they are Joyce's arcs and the more frequent
+    // mention); the angles are angACB / angADB, reached by the display
+    // override {ACB|angACB} in prose and captions. Both markers are magenta:
+    // the proof's claim is that the two angles are equal, which is the
+    // contradiction.
+    var SEGS = ["A","B","AB","C","D","BCA","BDA"];
+    var JOIN = SEGS.concat(["AD","BC","DB"]);
+    var ANG  = JOIN.concat(["angACB","angADB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -34,13 +58,76 @@ For, if possible, on the same straight line *AB* let two similar and unequal seg
             "BC;line;connect;B,C",
             "D;point;lineSlider;A,C,150,30",
             "BDA;sector;arc;B,D,A;0;0;black;0",
-            "AD;line;connect;A,D"
+            "AD;line;connect;A,D",
+            // Hover / highlight target only — see the note above.
+            "DB;line;connect;D,B;0;0;0",
+            // Angle markers.
+            "angACB;sector;angleMarker;C,A,B;0;0;magenta;magenta",
+            "angADB;sector;angleMarker;D,A,B;0;0;magenta;magenta"
         ],
+        // Draggables (checked against the bundle: A, B, C, D) are all letters
+        // of the given line and the two given segments, introduced on slide
+        // 1 — nothing to defer, and no derived points.
+        aliases: { "ACB": "BCA", "ADB": "BDA",
+                   "ACD": "AD", "DA": "AD", "CB": "BC", "BD": "DB", "BA": "AB" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”).
+            { text: "On the same straight line there cannot be constructed two similar and unequal segments of circles on the same side.",
+              visible: SEGS,
+              highlighted: [],
+              justifications: [{ ref: "III.23" }] },
+            { text: "For, if possible, on the same straight line {AB} let two similar and unequal segments of circles {ACB} and {ADB} be constructed on the same side.",
+              visible: SEGS,
+              highlighted: ["AB", "BCA", "BDA"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BCA", name: geomlib.A.Sector.sweep },
+                  { elem: "BDA", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Draw {ACD} through, and join {CB} and {DB}.",
+              visible: JOIN,
+              highlighted: ["DB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "AC drawn through to D", ref: "I.Post.2" },
+                  { claim: "CB and DB joined",      ref: "I.Post.1" } ] },
+            { text: "Then, since the segment {ACB} is similar to the segment {ADB}, and similar segments of circles are those which admit equal angles,",
+              visible: JOIN,
+              highlighted: ["BCA","BDA"],
+              justifications: [
+                  { claim: "similar segments admit equal angles", ref: "III.Def.11" } ] },
+            { text: "the angle {ACB|angACB} equals the angle {ADB|angADB}, the exterior to the interior, which is impossible.",
+              visible: ANG,
+              highlighted: ["DB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angACB", name: geomlib.A.Sector.sweep },
+                  { elem: "angADB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "ACB is exterior to the triangle BCD, ADB interior and opposite", ref: "I.16" } ] },
+            { text: "Therefore on the same straight line there cannot be constructed two similar and unequal segments of circles on the same side.",
+              visible: ANG,
+              highlighted: ["AB","BCA","BDA"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.23") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":   "/elements/books/bookI/postulates/post1/",
+        "I.Post.2":   "/elements/books/bookI/postulates/post2/",
+        "I.16":       "/elements/books/bookI/propositions/propI16/",
+        "III.Def.11": "/elements/books/bookIII/definitions/defIII11/"
     });
 </script>
 </figure>
 
-Then, since the segment *ACB* is similar to the segment *ADB,* and similar segments of circles are those which admit equal angles, the angle *ACB* equals the angle *ADB,* the exterior to the interior, which is impossible. [!just III.Def.11; I.16]
+Then, since the segment {ACB} is similar to the segment {ADB}, and similar segments of circles are those which admit equal angles, the angle {ACB|angACB} equals the angle {ADB|angADB}, the exterior to the interior, which is impossible. [!just III.Def.11; I.16]
 
 Therefore *on the same straight line there cannot be constructed two similar and unequal segments of circles on the same side.*
 
