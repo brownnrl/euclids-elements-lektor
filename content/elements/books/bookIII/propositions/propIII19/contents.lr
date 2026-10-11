@@ -15,12 +15,26 @@ statement: If a straight line touches a circle, and from the point of contact a 
 ----
 proof:
 
-For let a straight line *DE* touch the circle *ABC* at the point *C.* Draw *CA* from *C* at right angles to *DE.* [!just I.11]
+For let a straight line {DE} touch the circle {ABC} at the point {C}. Draw {CA} from {C} at right angles to {DE}. [!just I.11]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="250" tabindex="0"></canvas>
 <noscript><img alt="III.19 diagram" src="propIII19.gif"/></noscript>
 <script type="text/javascript">
+    // The converse of III.18, by reductio: a center F off the perpendicular
+    // CA would make FCE a right angle inside the right angle ACE. Joyce's
+    // figure draws F and CF; the walk brings them on with their sentence.
+    //
+    // Only two angle markers are added, both right angles in red: ACE, the
+    // constructed one, and FCE, the one III.18 forces. Both sit at C and
+    // share the arm CE; auto radius-stepping nests FCE inside ACE. Nothing
+    // else is added, so the static figure is unchanged. O, the midpoint
+    // that centers Joyce's circle, is colourless in his figure and stays
+    // out of every slide set.
+    var GIVEN = ["D","E","DE","ABC","C","B"];
+    var PERP  = GIVEN.concat(["A","AC","angACE"]);
+    var SUPP  = PERP.concat(["F","CF"]);
+    var RT    = SUPP.concat(["angFCE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,23 +51,108 @@ For let a straight line *DE* touch the circle *ABC* at the point *C.* Draw *CA* 
             "AC;line;connect;A,C",
             "B;point;circleSlider;ABC,180,80;0,0,0;0",
             "F;point;free;140,120",
-            "CF;line;connect;C,F"
+            "CF;line;connect;C,F",
+            "angACE;sector;angleMarker;C,A,E;0;0;red;red",
+            "angFCE;sector;angleMarker;C,F,E;0;0;red;red"
         ],
+        // Draggable, checked against the bundle: D, E, C, A, B, F. A is the
+        // end of the perpendicular the second sentence draws and F the
+        // supposed center, so both are deferred to follow `visible`. D, E
+        // and C are the given tangent and its point of contact; B is a
+        // letter of the given circle. O (midpoint) is derived and never
+        // drawn. The resting figure is unaffected.
+        deferDraggables: ["A","F"],
+        aliases: { "CA": "AC", "FC": "CF", "ED": "DE",
+                   "ACE": "angACE", "ECA": "angACE",
+                   "FCE": "angFCE", "ECF": "angFCE" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”), split at its seams.
+            { text: "“If a straight line touches a circle,”",
+              visible: GIVEN,
+              highlighted: [] },
+            { text: "“and from the point of contact a straight line is drawn at right angles to the tangent,”",
+              visible: GIVEN,
+              highlighted: [] },
+            { text: "“the center of the circle will be on the straight line so drawn.”",
+              visible: GIVEN,
+              highlighted: [],
+              justifications: [{ ref: "III.19" }] },
+            { text: "For let a straight line {DE} touch the circle {ABC} at the point {C}.",
+              visible: GIVEN,
+              highlighted: ["DE","ABC","C"] },
+            { text: "Draw {CA} from {C} at right angles to {DE}.",
+              visible: PERP,
+              highlighted: ["C", "DE", "A", "AC", "angACE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "A",      name: geomlib.A.Point.appear },
+                  { elem: "AC",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angACE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "CA at right angles to DE", ref: "I.11" }] },
+            { text: "I say that the center of the circle is on {AC}.",
+              visible: PERP,
+              highlighted: ["AC","ABC"] },
+            { text: "For suppose it is not, but, if possible, let {F} be the center, and join {CF}.",
+              visible: SUPP,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",  name: geomlib.A.Point.appear },
+                  { elem: "CF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            // His III.18 step is two sentences; the marker lands with the
+            // second.
+            { text: "Since a straight line {DE} touches the circle {ABC}, and {FC} has been joined from the center to the point of contact, {FC} is perpendicular to {DE}.",
+              visible: SUPP,
+              highlighted: ["DE","ABC","CF"],
+              justifications: [{ claim: "FC perpendicular to DE", ref: "III.18" }] },
+            { text: "Therefore the angle {FCE} is right.",
+              visible: RT,
+              highlighted: [],
+              transition: { animations: [
+                  { elem: "angFCE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But the angle {ACE} is also right, therefore the angle {FCE} equals the angle {ACE}, the less equals the greater, which is impossible.",
+              visible: RT,
+              highlighted: ["angACE","angFCE"],
+              justifications: [{ claim: "all right angles are equal", ref: "I.Post.4" }] },
+            { text: "Therefore {F} is not the center of the circle {ABC}.",
+              visible: RT,
+              highlighted: ["F","ABC"] },
+            { text: "Similarly we can prove that neither is any other point except a point on {AC}.",
+              visible: RT,
+              highlighted: ["AC"] },
+            { text: "Therefore if a straight line touches a circle, and from the point of contact a straight line is drawn at right angles to the tangent, the center of the circle will be on the straight line so drawn.",
+              visible: RT,
+              highlighted: ["DE","AC","ABC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.19") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.4": "/elements/books/bookI/postulates/post4/",
+        "I.11":     "/elements/books/bookI/propositions/propI11/",
+        "III.18":   "/elements/books/bookIII/propositions/propIII18/"
     });
 </script>
 </figure>
 
-I say that the center of the circle is on *AC.*
+I say that the center of the circle is on {AC}.
 
-For suppose it is not, but, if possible, let *F* be the center, and join *CF.*
+For suppose it is not, but, if possible, let {F} be the center, and join {CF}.
 
-Since a straight line *DE* touches the circle *ABC,* and *FC* has been joined from the center to the point of contact, *FC* is perpendicular to *DE.* Therefore the angle *FCE* is right. [!just III.18]
+Since a straight line {DE} touches the circle {ABC}, and {FC} has been joined from the center to the point of contact, {FC} is perpendicular to {DE}. Therefore the angle {FCE} is right. [!just III.18]
 
-But the angle *ACE* is also right, therefore the angle *FCE* equals the angle *ACE,* the less equals the greater, which is impossible.
+But the angle {ACE} is also right, therefore the angle {FCE} equals the angle {ACE}, the less equals the greater, which is impossible.
 
-Therefore *F* is not the center of the circle *ABC.*
+Therefore {F} is not the center of the circle {ABC}.
 
-Similarly we can prove that neither is any other point except a point on *AC.*
+Similarly we can prove that neither is any other point except a point on {AC}.
 
 Therefore *if a straight line touches a circle, and from the point of contact a straight line is drawn at right angles to the tangent, the center of the circle will be on the straight line so drawn.*
 
