@@ -15,7 +15,7 @@ statement: The sum of the opposite angles of quadrilaterals in circles equals tw
 ----
 proof:
 
-Let *ABCD* be a circle, and let *ABCD* be a quadrilateral in it.
+Let {ABCD} be a circle, and let {ABCD|ABCDq} be a quadrilateral in it.
 
 I say that the sum of the opposite angles equals two right angles.
 
@@ -23,6 +23,38 @@ I say that the sum of the opposite angles equals two right angles.
 <canvas id="canvas_0" width="260" height="230" tabindex="0"></canvas>
 <noscript><img alt="III.22 diagram" src="propIII22.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce names the circle and the quadrilateral both ABCD, and the
+    // element name belongs to the circle (his figure). The quadrilateral is
+    // ABCDq, a transparent polygon, and the prose reaches it through the
+    // display override {ABCD|ABCDq}. The same collision recurs one level
+    // down: "the triangle ABC" and "the angle ABC" — the triangle owns the
+    // name (transparent polygon ABC), the marker is angABC, and every caption
+    // and prose mention of the angle is {ABC|angABC}, as in II.13.
+    //
+    // His figure draws the six lines only. Everything added is transparent
+    // (;0;0;0;0 polygons and arcs) or an angle marker, hidden in the
+    // resting figure (showAngles defaults false), so the static figure is
+    // unchanged. Segments are carried by their arcs: BADC is the major arc
+    // from B round through A and D to C, ADCB the major arc from A through D
+    // and C to B; both endpoint orders were chosen by measuring which arc the
+    // bundle draws (an arc element draws the minor or the major arc
+    // according to its endpoint order — the sign #172 is about).
+    //
+    // Colour: equal angles share a colour — orange CAB = BDC, teal BCA =
+    // ADB; the opposite pair the proof adds, ABC and ADC, are magenta; the
+    // pair the "similarly" covers, BAD and DCB, green. Named colours give an
+    // opaque face, so at A, C and D the containing wedge is declared before
+    // the wedges inside it and the radii are pinned (22 inside, 34 outside).
+    var CIRC = ["ABCD","A","B","C","D"];
+    var QUAD = CIRC.concat(["AB","BC","CD","AD","ABCDq"]);
+    var OPP  = QUAD.concat(["angABC","angADC"]);
+    var DIAG = OPP.concat(["AC","BD"]);
+    var TRI  = DIAG.concat(["ABC","angCAB","angBCA"]);
+    var SEG1 = TRI.concat(["angBDC","segBADC"]);
+    var SEG2 = SEG1.concat(["angADB","segADCB"]);
+    // The "similarly" beat: the triangle's markers and the segments come off,
+    // the other opposite pair comes on.
+    var SIM  = DIAG.concat(["angBAD","angDCB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -38,21 +70,145 @@ I say that the sum of the opposite angles equals two right angles.
             "AD;line;connect;A,D",
             "BC;line;connect;B,C",
             "BD;line;connect;B,D",
-            "CD;line;connect;C,D"
+            "CD;line;connect;C,D",
+            // The quadrilateral and the triangle the proof names; the lines
+            // above already draw every side. Explicit ;0 faces.
+            "ABCDq;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            // The two segments, as their (major) arcs.
+            "segBADC;sector;arc;B,A,C;0;0;0;0",
+            "segADCB;sector;arc;A,D,B;0;0;0;0",
+            // Angle markers, containing wedge first at each vertex.
+            "angBAD;sector;angleMarker;A,B,D,34;0;0;green;green",
+            "angCAB;sector;angleMarker;A,C,B,22;0;0;orange;orange",
+            "angABC;sector;angleMarker;B,A,C;0;0;magenta;magenta",
+            "angDCB;sector;angleMarker;C,D,B,34;0;0;green;green",
+            "angBCA;sector;angleMarker;C,B,A,22;0;0;teal;teal",
+            "angADC;sector;angleMarker;D,A,C,34;0;0;magenta;magenta",
+            "angADB;sector;angleMarker;D,A,B,22;0;0;teal;teal",
+            "angBDC;sector;angleMarker;D,B,C,22;0;0;orange;orange"
         ],
+        // Draggables (checked against the bundle: A, B, C, D) are the four
+        // letters of the given circle and quadrilateral, all introduced on
+        // slide 1 — nothing to defer, and no derived points to list.
+        aliases: { "BA": "AB", "CA": "AC", "DA": "AD", "CB": "BC", "DB": "BD", "DC": "CD",
+                   "CAB": "angCAB", "BAC": "angCAB",
+                   "BCA": "angBCA", "ACB": "angBCA",
+                   "BDC": "angBDC", "CDB": "angBDC",
+                   "ADB": "angADB", "BDA": "angADB",
+                   "ADC": "angADC", "CDA": "angADC",
+                   "BAD": "angBAD", "DAB": "angBAD",
+                   "DCB": "angDCB", "BCD": "angDCB",
+                   "BADC": "segBADC", "ADCB": "segADCB" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”).
+            { text: "The sum of the opposite angles of quadrilaterals in circles equals two right angles.",
+              visible: CIRC,
+              highlighted: [],
+              justifications: [{ ref: "III.22" }] },
+            { text: "Let {ABCD} be a circle,",
+              visible: CIRC,
+              highlighted: ["ABCD"] },
+            { text: "and let {ABCD|ABCDq} be a quadrilateral in it.",
+              visible: QUAD,
+              highlighted: ["ABCDq"] },
+            { text: "I say that the sum of the opposite angles equals two right angles.",
+              visible: OPP,
+              highlighted: ["angABC", "angADC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep },
+                  { elem: "angADC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Join {AC} and {BD}.",
+              visible: DIAG,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since in any triangle the sum of the three angles equals two right angles, the sum of the three angles {CAB}, {ABC|angABC}, and {BCA} of the triangle {ABC} equals two right angles.",
+              visible: TRI,
+              // The triangle and its two new markers are the animation
+              // targets; angABC, already on since slide 3, is not, and keeps
+              // the gold as the third angle of the sum.
+              highlighted: ["angABC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ABC",    name: geomlib.A.Polygon.outline },
+                  { elem: "angCAB", name: geomlib.A.Sector.sweep },
+                  { elem: "angBCA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "the three angles of a triangle", ref: "I.32" } ] },
+            { text: "But the angle {CAB} equals the angle {BDC}, for they are in the same segment {BADC},",
+              visible: SEG1,
+              highlighted: ["angCAB","segBADC"],
+              transition: { animations: [
+                  { elem: "angBDC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "angles in the same segment", ref: "III.21" } ] },
+            { text: "and the angle {ACB} equals the angle {ADB}, for they are in the same segment {ADCB},",
+              visible: SEG2,
+              highlighted: ["angBCA","segADCB"],
+              transition: { animations: [
+                  { elem: "angADB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "angles in the same segment", ref: "III.21" } ] },
+            { text: "therefore the whole angle {ADC} equals the sum of the angles {BAC} and {ACB}.",
+              visible: SEG2,
+              highlighted: ["angADC","angCAB","angBCA"],
+              justifications: [
+                  { claim: "ADC is the sum of BDC and ADB", ref: "C.N.2" } ] },
+            { text: "Add the angle {ABC|angABC} to each.",
+              visible: SEG2,
+              highlighted: ["angABC"] },
+            { text: "Therefore the sum of the angles {ABC|angABC}, {BAC}, and {ACB} equals the sum of the angles {ABC|angABC} and {ADC}.",
+              visible: SEG2,
+              highlighted: ["angABC","angCAB","angBCA","angADC"],
+              justifications: [
+                  { claim: "the angle ABC added to each", ref: "C.N.2" } ] },
+            { text: "But the sum of the angles {ABC|angABC}, {BAC}, and {ACB} equals two right angles, therefore the sum of the angles {ABC|angABC} and {ADC} also equal two right angles.",
+              visible: SEG2,
+              highlighted: ["angABC","angADC"],
+              justifications: [
+                  { claim: "the three angles of the triangle ABC", ref: "I.32" },
+                  { claim: "equal to the same two right angles",    ref: "C.N.1" } ] },
+            { text: "Similarly we can prove that the sum of the angles {BAD} and {DCB} also equals two right angles.",
+              visible: SIM,
+              highlighted: [],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAD", name: geomlib.A.Sector.sweep },
+                  { elem: "angDCB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the sum of the opposite angles of quadrilaterals in circles equals two right angles.",
+              visible: SIM,
+              highlighted: ["angABC","angADC","angBAD","angDCB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.22") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.32":     "/elements/books/bookI/propositions/propI32/",
+        "III.21":   "/elements/books/bookIII/propositions/propIII21/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/"
     });
 </script>
 </figure>
 
-Join *AC* and *BD.*
+Join {AC} and {BD}.
 
-Then, since in any triangle the sum of the three angles equals two right angles, the sum of the three angles *CAB, ABC,* and *BCA* of the triangle *ABC* equals two right angles. [!just I.32]
+Then, since in any triangle the sum of the three angles equals two right angles, the sum of the three angles {CAB}, {ABC|angABC}, and {BCA} of the triangle {ABC} equals two right angles. [!just I.32]
 
-But the angle *CAB* equals the angle *BDC,* for they are in the same segment *BADC,* and the angle *ACB* equals the angle *ADB,* for they are in the same segment *ADCB,* therefore the whole angle *ADC* equals the sum of the angles *BAC* and *ACB.* [!just III.21]
+But the angle {CAB} equals the angle {BDC}, for they are in the same segment {BADC}, and the angle {ACB} equals the angle {ADB}, for they are in the same segment {ADCB}, therefore the whole angle {ADC} equals the sum of the angles {BAC} and {ACB}. [!just III.21]
 
-Add the angle *ABC* to each. Therefore the sum of the angles *ABC, BAC,* and *ACB* equals the sum of the angles *ABC* and *ADC.*  But the sum of the angles *ABC, BAC,* and *ACB* equals two right angles, therefore the sum of the angles *ABC* and *ADC* also equal two right angles.
+Add the angle {ABC|angABC} to each. Therefore the sum of the angles {ABC|angABC}, {BAC}, and {ACB} equals the sum of the angles {ABC|angABC} and {ADC}.  But the sum of the angles {ABC|angABC}, {BAC}, and {ACB} equals two right angles, therefore the sum of the angles {ABC|angABC} and {ADC} also equal two right angles.
 
-Similarly we can prove that the sum of the angles *BAD* and *DCB* also equals two right angles.
+Similarly we can prove that the sum of the angles {BAD} and {DCB} also equals two right angles.
 
 Therefore *the sum of the opposite angles of quadrilaterals in circles equals two right angles.*
 
