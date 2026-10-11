@@ -17,12 +17,47 @@ statement: From a given point to draw a straight line touching a given circle.
 ----
 proof:
 
-Let *A* be the given point, and *BCD* the given circle.
+Let {A} be the given point, and {BCD} the given circle.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="280" tabindex="0"></canvas>
 <noscript><img alt="III.17 diagram" src="propIII17.gif"/></noscript>
 <script type="text/javascript">
+    // A CONSTRUCTION: the tangent from an outside point. The apparatus —
+    // center, join, the outer circle, the perpendicular at D, the two
+    // joins — is shown one animated step per clause; III.1 is assumed per
+    // the fatigue rule and E simply appears.
+    //
+    // Joyce's outer circle is declared first and carries a random fill,
+    // with the given circle BCD filled on top of it. A highlighted element
+    // is promoted within its draw pass (#140), so lighting that circle —
+    // from a slide set or a {AFG} hover — would paint its face over BCD's.
+    // It is therefore renamed AFGfill, never named in a slide set, and a
+    // fully transparent twin AFG carries the name for prose and captions.
+    // The compass animation is safe on AFGfill itself: its face fades in
+    // only after drawProgress has finalised, when the element is no longer
+    // promoted, so BCD stays on top throughout.
+    //
+    // Everything else added is fully transparent (;0;0;0 lines, ;0;0;0;0
+    // polygons and circle), so the static figure is unchanged: ED and EB
+    // are the radii of BCD the I.4 step compares (AE and FE already draw
+    // them), DEF and BEA the two triangles, and three angle markers — the
+    // right angles at D and B in red, and the angle at E they share.
+    // B is a letter of the given circle's name, so it stands with C and D
+    // from the first slide even though the construction only reaches it
+    // ("make EB equal to ED") later: a derived point, listed here, not deferred.
+    var GIVEN = ["A","BCD","B","C","D"];
+    var CENT  = GIVEN.concat(["E","AE"]);
+    // F, like G, is a letter of the circle's name AFG and stands with it
+    // from the moment the circle is described; it is a derived point (the
+    // perpendicular's end), so it is listed here, not deferred.
+    var CIRC  = CENT.concat(["AFGfill","AFG","F","G"]);
+    var PERP  = CIRC.concat(["F","FD","angEDF"]);
+    var JOIN  = PERP.concat(["FE","B","BA"]);
+    var RADII = JOIN.concat(["ED","EB"]);
+    var ANGE  = RADII.concat(["angAEF"]);
+    var TRI   = ANGE.concat(["DEF","BEA"]);
+    var RT    = TRI.concat(["angEBA"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -31,38 +66,159 @@ Let *A* be the given point, and *BCD* the given circle.
             "A;point;free;140,40",
             "E;point;free;140,150",
             "D;point;lineSlider;A,E,140,90",
-            "AFG;circle;radius;E,A;0;0;black;random",
+            // Joyce's AFG, renamed: see the note above.
+            "AFGfill;circle;radius;E,A;0;0;black;random",
+            "AFG;circle;radius;E,A;0;0;0;0",
             "BCD;circle;radius;E,D;0;0;black;random",
             "C;point;circleSlider;BCD,230,160;black;0",
-            "G;point;circleSlider;AFG,220,220;black;0",
+            "G;point;circleSlider;AFGfill,220,220;black;0",
             "AE;line;connect;A,E",
             "DF';line;perpendicular;D,E;0;0;0",
-            "FF';line;chord;DF',AFG;0;0;0",
+            "FF';line;chord;DF',AFGfill;0;0;0",
             "F;point;first;FF'",
             "FD;line;connect;F,D",
             "FE;line;connect;F,E",
             "B;point;cutoff;E,F,E,D",
-            "BA;line;connect;B,A"
+            "BA;line;connect;B,A",
+            // Hover / highlight targets only — AE and FE already draw these.
+            "ED;line;connect;E,D;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "DEF;polygon;triangle;D,E,F;0;0;0;0",
+            "BEA;polygon;triangle;B,E,A;0;0;0;0",
+            "angEDF;sector;angleMarker;D,E,F;0;0;red;red",
+            "angAEF;sector;angleMarker;E,A,F",
+            "angEBA;sector;angleMarker;B,E,A;0;0;red;red"
         ],
+        // Draggable, checked against the bundle: A, E, D, C, G. E is the
+        // center the proof takes on its first construction step and G the
+        // letter the outer circle brings with it, so both are deferred to
+        // follow `visible`. A is the given point; C and D are letters of
+        // the given circle, so they belong on slide 1. F (first) and B
+        // (cutoff) are derived, hence listed per slide. The resting figure
+        // is unaffected.
+        deferDraggables: ["E","G"],
+        aliases: { "EA": "AE", "DF": "FD", "EF": "FE", "AB": "BA",
+                   "DE": "ED", "BE": "EB",
+                   "EDF": "angEDF", "FDE": "angEDF",
+                   "AEF": "angAEF", "FEA": "angAEF",
+                   "EBA": "angEBA", "ABE": "angEBA" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”).
+            { text: "From a given point to draw a straight line touching a given circle.",
+              visible: GIVEN,
+              highlighted: [],
+              justifications: [{ ref: "III.17" }] },
+            { text: "Let {A} be the given point, and {BCD} the given circle.",
+              visible: GIVEN,
+              highlighted: ["A","BCD"] },
+            { text: "It is required to draw from the point {A} a straight line touching the circle {BCD}.",
+              visible: GIVEN,
+              highlighted: ["A","BCD"] },
+            { text: "Take the center {E} of the circle, and join {AE}.",
+              visible: CENT,
+              highlighted: ["E", "AE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E",  name: geomlib.A.Point.appear },
+                  { elem: "AE", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "the center E of the circle", ref: "III.1" },
+                  { ref: "I.Post.1" } ] },
+            { text: "Describe the circle {AFG} with center {E} and radius {EA}.",
+              visible: CIRC,
+              highlighted: ["E","AE"],
+              transition: { animations: [
+                  { elem: "AFGfill", name: geomlib.A.Circle.compass } ] },
+              justifications: [{ claim: "the circle with center E and radius EA", ref: "I.Post.3" }] },
+            { text: "Draw {DF} from {D} at right angles to {EA}.",
+              visible: PERP,
+              highlighted: ["D","AE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",      name: geomlib.A.Point.appear },
+                  { elem: "FD",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angEDF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "DF at right angles to EA", ref: "I.11" }] },
+            { text: "Join {EF} and {AB}.",
+              visible: JOIN,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "B",  name: geomlib.A.Point.appear },
+                  { elem: "BA", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "I say that {AB} has been drawn from the point {A} touching the circle {BCD}.",
+              visible: JOIN,
+              highlighted: ["BA","A","BCD"] },
+            // His sentence pairs two equalities; one slide each so the gold
+            // shows one pair of radii at a time.
+            { text: "For, since {E} is the center of the circles {BCD} and {AFG}, {EA} equals {EF},",
+              visible: RADII,
+              highlighted: ["E","AE","FE"],
+              justifications: [{ claim: "radii of the circle AFG", ref: "I.Def.15" }] },
+            { text: "and {ED} equals {EB}.",
+              visible: RADII,
+              highlighted: ["E","ED","EB"],
+              justifications: [{ claim: "radii of the circle BCD", ref: "I.Def.15" }] },
+            { text: "Therefore the two sides {AE} and {EB} equal the two sides {FE} and {ED}, and they contain a common angle, the angle at {E},",
+              visible: ANGE,
+              highlighted: ["AE","EB","FE","ED"],
+              transition: { animations: [
+                  { elem: "angAEF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the base {DF} equals the base {AB}, and the triangle {DEF} equals the triangle {BEA},",
+              visible: TRI,
+              highlighted: ["FD","BA","DEF","BEA"],
+              justifications: [{ claim: "two sides and the contained angle equal", ref: "I.4" }] },
+            { text: "and the remaining angles to the remaining angles, therefore the angle {EDF} equals the angle {EBA}.",
+              visible: RT,
+              highlighted: ["angEDF"],
+              transition: { animations: [
+                  { elem: "angEBA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the remaining angles opposite the equal sides", ref: "I.4" }] },
+            { text: "But the angle {EDF} is right, therefore the angle {EBA} is also right.",
+              visible: RT,
+              highlighted: ["angEDF","angEBA"] },
+            { text: "Now {EB} is a radius, and the straight line drawn at right angles to the diameter of a circle, from its end, touches the circle, therefore {AB} touches the circle {BCD}.",
+              visible: RT,
+              highlighted: ["EB","angEBA","BA","BCD"],
+              justifications: [{ claim: "at right angles to the diameter from its end", ref: "III.16.Cor" }] },
+            { text: "Therefore from the given point {A} the straight line {AB} has been drawn touching the circle {BCD}.",
+              visible: RT,
+              highlighted: ["A","BA","BCD"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.17") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":   "/elements/books/bookI/postulates/post1/",
+        "I.Post.3":   "/elements/books/bookI/postulates/post3/",
+        "I.Def.15":   "/elements/books/bookI/definitions/defI15/",
+        "I.4":        "/elements/books/bookI/propositions/propI4/",
+        "I.11":       "/elements/books/bookI/propositions/propI11/",
+        "III.1":      "/elements/books/bookIII/propositions/propIII1/",
+        "III.16.Cor": "/elements/books/bookIII/propositions/propIII16/#cor"
     });
 </script>
 </figure>
 
-It is required to draw from the point *A* a straight line touching the circle *BCD.*
+It is required to draw from the point {A} a straight line touching the circle {BCD}.
 
-Take the center *E* of the circle, and join *AE.*  Describe the circle *AFG* with center *E* and radius *EA.*  Draw *DF* from *D* at right angles to *EA.*  Join *EF* and *AB.* [!just III.1; I.11]
+Take the center {E} of the circle, and join {AE}.  Describe the circle {AFG} with center {E} and radius {EA}.  Draw {DF} from {D} at right angles to {EA}.  Join {EF} and {AB}. [!just III.1; I.11]
 
-I say that *AB* has been drawn from the point *A* touching the circle *BCD.*
+I say that {AB} has been drawn from the point {A} touching the circle {BCD}.
 
-For, since *E* is the center of the circles *BCD* and *AFG, EA* equals *EF,* and *ED* equals *EB.*  Therefore the two sides *AE* and *EB* equal the two sides *FE* and *ED,* and they contain a common angle, the angle at *E,* therefore the base *DF* equals the base *AB,* and the triangle *DEF* equals the triangle *BEA,* and the remaining angles to the remaining angles, therefore the angle *EDF* equals the angle *EBA.* [!just I.4]
+For, since {E} is the center of the circles {BCD} and {AFG}, {EA} equals {EF}, and {ED} equals {EB}.  Therefore the two sides {AE} and {EB} equal the two sides {FE} and {ED}, and they contain a common angle, the angle at {E}, therefore the base {DF} equals the base {AB}, and the triangle {DEF} equals the triangle {BEA}, and the remaining angles to the remaining angles, therefore the angle {EDF} equals the angle {EBA}. [!just I.4]
 
-But the angle *EDF* is right, therefore the angle *EBA* is also right.
+But the angle {EDF} is right, therefore the angle {EBA} is also right.
 
-<div class="just"><a href="/elements/books/bookIII/propositions/propIII16/#cor">III.16,Cor</a></div>
+Now {EB} is a radius, and the straight line drawn at right angles to the diameter of a circle, from its end, touches the circle, therefore {AB} touches the circle {BCD}. [!just III.16.Cor]
 
-Now *EB* is a radius, and the straight line drawn at right angles to the diameter of a circle, from its end, touches the circle, therefore *AB* touches the circle *BCD.*
-
-Therefore from the given point *A* the straight line *AB* has been drawn touching the circle *BCD.*
+Therefore from the given point {A} the straight line {AB} has been drawn touching the circle {BCD}.
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
