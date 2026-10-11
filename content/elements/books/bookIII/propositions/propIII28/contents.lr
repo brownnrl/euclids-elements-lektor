@@ -15,12 +15,46 @@ statement: In equal circles equal straight lines cut off equal circumferences, t
 ----
 proof:
 
-Let *ABC* and *DEF* be equal circles, and in the circles let *AB* and *DE* be equal straight lines cutting off *ACB* and *DFE* as greater circumferences and *AGB* and *DHE* as lesser.
+Let {ABC|ABCt} and {DEF|DEFt} be equal circles, and in the circles let {AB} and {DE} be equal straight lines cutting off {ACB} and {DFE} as greater circumferences and {AGB} and {DHE} as lesser.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="400" height="220" tabindex="0"></canvas>
 <noscript><img alt="III.28 diagram" src="propIII28.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the two circles and the two triangles ABK and DEL
+    // — nothing else. The proof names the chords AB and DE on their own, the
+    // four circumferences ACB / AGB / DFE / DHE, the radii AK, KB, DL, LE and
+    // the two angles at the centres. Everything added below is fully
+    // transparent (;0;0;0 lines, ;0;0;0;0 circles and arcs) except AB and
+    // DE, which are real black lines coincident with the triangles' bases:
+    // slides 2–5 cut the circles with the chords before the centres exist,
+    // and without them the chords would be nothing but gold. (Same idiom as
+    // II.2 / II.3 / II.8.) Measured against the bundle with the random fills
+    // pinned: the double stroke shifts 200 anti-aliased pixels by at most
+    // 9/765 per channel; nothing else in the resting figure changes.
+    //
+    // The circles ABC and DEF carry only four ;-fields, i.e. the DEFAULT
+    // faceColor — lighten(bgcolor), a near-white OPAQUE face — which is what
+    // Joyce's resting figure shows, so they stay as declared. But a
+    // highlighted element is promoted within its draw pass (#140), so
+    // highlighting either circle would white out the triangle inside it.
+    // Neither is ever named in a highlighted set or as an animation target;
+    // the fully transparent twins ABCt / DEFt are what the slides and the
+    // prose {ABC|ABCt} refs light.
+    //
+    // Arcs draw counter-clockwise (on screen) from their first arm to their
+    // last, so the arm order picks which arc of the circle is drawn: A,G,B
+    // is the lesser circumference through G, and B,C,A the greater through
+    // C. Both arcs of each pair sweep: under 0.15 A.Sector.sweep ran
+    // backwards on the greater arcs (euclid#172, fixed in 0.16.0 — the
+    // sweep is monotonic for either arm order, and the arm order still
+    // picks the side).
+    var GIVEN = ["ABC","DEF","A","B","C","D","E","F"];
+    var CHORD = GIVEN.concat(["AB","DE"]);
+    var GREAT = CHORD.concat(["ACB","DFE"]);
+    var CUT   = GREAT.concat(["G","H","AGB","DHE"]);
+    var CENT  = CUT.concat(["K","L","ABK","DEL","AK","KB","DL","LE"]);
+    var ANG   = CENT.concat(["angAKB","angDLE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -39,21 +73,147 @@ Let *ABC* and *DEF* be equal circles, and in the circles let *AB* and *DE* be eq
             "G;point;circleSlider;ABC,110,190",
             "H;point;circleSlider;DEF,290,190",
             "ABK;polygon;triangle;A,B,K;0;0;black;random",
-            "DEL;polygon;triangle;D,E,L;0;0;black;random"
+            "DEL;polygon;triangle;D,E,L;0;0;black;random",
+            // Transparent twins of the two circles — the highlight targets.
+            "ABCt;circle;radius;K,C;0;0;0;0",
+            "DEFt;circle;radius;L,K,C;0;0;0;0",
+            // The chords, coincident with the triangles' bases (see above).
+            "AB;line;connect;A,B",
+            "DE;line;connect;D,E",
+            // The radii the proof names — the triangles already draw them.
+            "AK;line;connect;A,K;0;0;0",
+            "KB;line;connect;K,B;0;0;0",
+            "DL;line;connect;D,L;0;0;0",
+            "LE;line;connect;L,E;0;0;0",
+            // The four circumferences. Arm order picks the arc (see above).
+            "ACB;sector;arc;B,C,A;0;0;0;0",
+            "AGB;sector;arc;A,G,B;0;0;0;0",
+            "DFE;sector;arc;E,F,D;0;0;0;0",
+            "DHE;sector;arc;D,H,E;0;0;0;0",
+            // The angles at the centres, one marker each. Equal things share
+            // a colour, so both take the same one rather than the cycled
+            // palette. Markers are hidden in the static figure (showAngles
+            // defaults false), so Euclid's arc-free diagram is untouched.
+            "angAKB;sector;angleMarker;K,A,B;0;0;3b6ea5;9ec5e8",
+            "angDLE;sector;angleMarker;L,D,E;0;0;3b6ea5;9ec5e8"
         ],
+        // Every lettered point but E is draggable here (K, C, L free; A, B,
+        // D, F, G, H circleSliders — checked by dumping `draggable` against
+        // the bundle), and draggables are auto-unioned into every slide. The
+        // centres K and L are not taken until slide 6, and G and H are not
+        // named until the lesser circumferences are cut off, so those four
+        // are deferred and follow `visible`. A–F are the circles' own
+        // letters, which slide 1 introduces. E is derived (`similar`) and so
+        // is listed per slide instead. The resting figure is unaffected.
+        deferDraggables: ["K","L","G","H"],
+        aliases: { "BA": "AB", "ED": "DE", "KA": "AK", "BK": "KB",
+                   "LD": "DL", "EL": "LE",
+                   "BCA": "ACB", "BGA": "AGB", "EFD": "DFE", "EHD": "DHE",
+                   "AKB": "angAKB", "BKA": "angAKB",
+                   "DLE": "angDLE", "ELD": "angDLE" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”), split at its seams.
+            { text: "“In equal circles equal straight lines cut off equal circumferences,”",
+              visible: GIVEN,
+              highlighted: [] },
+            { text: "“the greater circumference equals the greater and the less equals the less.”",
+              visible: GIVEN,
+              highlighted: [],
+              justifications: [{ ref: "III.28" }] },
+            { text: "Let {ABC|ABCt} and {DEF|DEFt} be equal circles,",
+              visible: GIVEN,
+              highlighted: ["ABCt","DEFt"] },
+            { text: "and in the circles let {AB} and {DE} be equal straight lines",
+              visible: CHORD,
+              highlighted: ["AB", "DE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "cutting off {ACB} and {DFE} as greater circumferences",
+              visible: GREAT,
+              highlighted: ["ACB","DFE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ACB", name: geomlib.A.Sector.sweep },
+                  { elem: "DFE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and {AGB} and {DHE} as lesser.",
+              visible: CUT,
+              highlighted: ["AGB", "DHE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AGB", name: geomlib.A.Sector.sweep },
+                  { elem: "DHE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that the greater circumference {ACB} equals the greater circumference {DFE},",
+              visible: CUT,
+              highlighted: ["ACB","DFE"] },
+            { text: "and the less circumference {AGB} equals {DHE}.",
+              visible: CUT,
+              highlighted: ["AGB","DHE"] },
+            { text: "Take the centers {K} and {L} of the circles, and join {AK}, {KB}, {DL}, and {LE}.",
+              visible: CENT,
+              highlighted: ["K", "L", "ABK", "DEL"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "K",   name: geomlib.A.Point.appear },
+                  { elem: "L",   name: geomlib.A.Point.appear },
+                  { elem: "ABK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DEL", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [
+                  { claim: "the centers K and L", ref: "III.1" },
+                  { ref: "I.Post.1" } ] },
+            { text: "Now, since the circles are equal, the radii are also equal, therefore the two sides {AK} and {KB} equal the two sides {DL} and {LE},",
+              visible: CENT,
+              highlighted: ["AK","KB","DL","LE"],
+              justifications: [{ claim: "equal circles have equal radii", ref: "III.Def.1" }] },
+            { text: "and the base {AB} equals the base {DE}, therefore the angle {AKB} equals the angle {DLE}.",
+              visible: ANG,
+              highlighted: ["AB", "DE", "angAKB", "angDLE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angAKB", name: geomlib.A.Sector.sweep },
+                  { elem: "angDLE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "two sides and the base equal two sides and the base", ref: "I.8" }] },
+            { text: "But equal angles stand on equal circumferences when they are at the centers, therefore the circumference {AGB} equals {DHE}.",
+              visible: ANG,
+              highlighted: ["angAKB","angDLE","AGB","DHE"],
+              justifications: [{ claim: "equal angles at the centers stand on equal circumferences", ref: "III.26" }] },
+            { text: "And the whole circle {ABC|ABCt} also equals the whole circle {DEF|DEFt},",
+              visible: ANG,
+              highlighted: ["ABCt","DEFt"] },
+            { text: "therefore the remaining circumference {ACB} also equals the remaining circumference {DFE}.",
+              visible: ANG,
+              highlighted: ["ACB","DFE"],
+              justifications: [{ claim: "subtract the equal circumferences AGB and DHE", ref: "C.N.3" }] },
+            { text: "Therefore in equal circles equal straight lines cut off equal circumferences, the greater circumference equals the greater and the less equals the less.",
+              visible: ANG,
+              highlighted: ["AB","DE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.28") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "I.8":       "/elements/books/bookI/propositions/propI8/",
+        "C.N.3":     "/elements/books/bookI/commonnotions/cn3/",
+        "III.Def.1": "/elements/books/bookIII/definitions/defIII1/",
+        "III.1":     "/elements/books/bookIII/propositions/propIII1/",
+        "III.26":    "/elements/books/bookIII/propositions/propIII26/"
     });
 </script>
 </figure>
 
-I say that the greater circumference *ACB* equals the greater circumference *DFE,* and the less circumference *AGB* equals *DHE.*
+I say that the greater circumference {ACB} equals the greater circumference {DFE}, and the less circumference {AGB} equals {DHE}.
 
-Take the centers *K* and *L* of the circles, and join *AK, KB, DL,* and *LE.* [!just III.1]
+Take the centers {K} and {L} of the circles, and join {AK}, {KB}, {DL}, and {LE}. [!just III.1]
 
-Now, since the circles are equal, the radii are also equal, therefore the two sides *AK* and *KB* equal the two sides *DL* and *LE,* and the base *AB* equals the base *DE,* therefore the angle *AKB* equals the angle *DLE.* [!just I.8]
+Now, since the circles are equal, the radii are also equal, therefore the two sides {AK} and {KB} equal the two sides {DL} and {LE}, and the base {AB} equals the base {DE}, therefore the angle {AKB} equals the angle {DLE}. [!just I.8]
 
-But equal angles stand on equal circumferences when they are at the centers, therefore the circumference *AGB* equals *DHE.* [!just III.26]
+But equal angles stand on equal circumferences when they are at the centers, therefore the circumference {AGB} equals {DHE}. [!just III.26]
 
-And the whole circle *ABC* also equals the whole circle *DEF,* therefore the remaining circumference *ACB* also equals the remaining circumference *DFE.*
+And the whole circle {ABC|ABCt} also equals the whole circle {DEF|DEFt}, therefore the remaining circumference {ACB} also equals the remaining circumference {DFE}.
 
 Therefore *in equal circles equal straight lines cut off equal circumferences, the greater circumference equals the greater and the less equals the less.*
 
