@@ -15,43 +15,178 @@ statement: In equal circles straight lines that cut off equal circumferences are
 ----
 proof:
 
-Let *ABC* and *DEF* be equal circles, and in them let equal circumferences *BGC* and *EHF* be cut off.  Join the straight lines *BC* and *EF.*
+Let {ABC|ABCt} and {DEF|DEFt} be equal circles, and in them let equal circumferences {BGC} and {EHF} be cut off.  Join the straight lines {BC} and {EF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="400" height="220" tabindex="0"></canvas>
-<noscript><img alt="III.29 diagram" src="propIII28.gif"/></noscript>
+<noscript><img alt="III.29 diagram" src="propIII29.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's page reuses the III.28 applet here unchanged — title "III.28",
+    // image propIII28.gif, and III.28's lettering: the triangles are ABK and
+    // DEL on the chords AB and DE, with G and H under them. III.29's prose
+    // is lettered differently: the chords are BC and EF, the circumferences
+    // BGC and EHF, the triangles BKC and ELF. On his figure "BC" is the
+    // chord from the bottom-right slider up to the top point and "BGC" the
+    // greater arc round through G and A, so no walk of his sentences fits
+    // his figure.
+    //
+    // The figure below is his figure RE-LETTERED to his prose, and nothing
+    // else: the same fourteen elements with the same coordinates, only the
+    // letters permuted on each circle (A→B, B→C, C→A; D→E, E→F, F→D) so that
+    // the drawn triangle is BKC on the chord BC over the arc BGC, and ELF on
+    // EF over EHF. Pixel for pixel it is his drawing with different labels.
+    // This is the one deliberate departure from "the resting figure stays
+    // as Joyce drew it" in this deck; revert the element list to III.28's
+    // and the deck cannot be authored. The lettering is Heath's (Green Lion
+    // Press): C→A, A→B, B→C; F→D, D→E, E→F relative to III.28's figure. The
+    // noscript image is a render of this figure, not his propIII28.gif.
+    //
+    // Additions, as in III.28: transparent twins of the two circles (they
+    // carry the opaque near-white default face, so are never highlighted —
+    // #140), real black chords coincident with the triangles' bases so the
+    // chords can be joined before the centres are taken, transparent radii,
+    // transparent arcs for the two circumferences, and one marker per
+    // centre angle. Arcs draw counter-clockwise on screen from first arm to
+    // last, so B,G,C is the lesser arc through G; both sweep forward (a
+    // lesser arc always does — #172 bites only the greater one).
+    var GIVEN = ["ABC","DEF","A","B","C","D","E","F"];
+    var ARCS  = GIVEN.concat(["G","H","BGC","EHF"]);
+    var CHORD = ARCS.concat(["BC","EF"]);
+    var CENT  = CHORD.concat(["K","L"]);
+    var JOIN  = CENT.concat(["BCK","EFL","BK","KC","EL","LF"]);
+    var ANG   = JOIN.concat(["angBKC","angELF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
         title: "III.29",
         elements: [
             "K;point;free;110,110",
-            "C;point;free;110,30;black",
-            "ABC;circle;radius;K,C",
-            "A;point;circleSlider;ABC,60,170",
-            "B;point;circleSlider;ABC,160,170",
+            "A;point;free;110,30;black",
+            "ABC;circle;radius;K,A",
+            "B;point;circleSlider;ABC,60,170",
+            "C;point;circleSlider;ABC,160,170",
             "L;point;free;290,110",
-            "DEF;circle;radius;L,K,C",
-            "D;point;circleSlider;DEF,240,170",
-            "F;point;circleSlider;DEF,290,30",
-            "E;point;similar;L,D,K,A,B",
+            "DEF;circle;radius;L,K,A",
+            "E;point;circleSlider;DEF,240,170",
+            "D;point;circleSlider;DEF,290,30",
+            "F;point;similar;L,E,K,B,C",
             "G;point;circleSlider;ABC,110,190",
             "H;point;circleSlider;DEF,290,190",
-            "ABK;polygon;triangle;A,B,K;0;0;black;random",
-            "DEL;polygon;triangle;D,E,L;0;0;black;random"
+            "BCK;polygon;triangle;B,C,K;0;0;black;random",
+            "EFL;polygon;triangle;E,F,L;0;0;black;random",
+            // Transparent twins of the two circles — the highlight targets.
+            "ABCt;circle;radius;K,A;0;0;0;0",
+            "DEFt;circle;radius;L,K,A;0;0;0;0",
+            // The chords, coincident with the triangles' bases.
+            "BC;line;connect;B,C",
+            "EF;line;connect;E,F",
+            // The radii the proof names — the triangles already draw them.
+            "BK;line;connect;B,K;0;0;0",
+            "KC;line;connect;K,C;0;0;0",
+            "EL;line;connect;E,L;0;0;0",
+            "LF;line;connect;L,F;0;0;0",
+            // The two circumferences cut off.
+            "BGC;sector;arc;B,G,C;0;0;0;0",
+            "EHF;sector;arc;E,H,F;0;0;0;0",
+            // The angles at the centres — equal, so one colour for both.
+            "angBKC;sector;angleMarker;K,B,C;0;0;3b6ea5;9ec5e8",
+            "angELF;sector;angleMarker;L,E,F;0;0;3b6ea5;9ec5e8"
         ],
+        // Draggables (checked against the bundle): K, A, L free; B, C, E, D,
+        // G, H circleSliders. F is derived (`similar`). The centres are not
+        // taken until slide 5 and G, H arrive with the circumferences on
+        // slide 2, so those four are deferred; the rest are the circles'
+        // own letters, introduced on slide 1.
+        deferDraggables: ["K","L","G","H"],
+        aliases: { "CB": "BC", "FE": "EF", "KB": "BK", "CK": "KC",
+                   "LE": "EL", "FL": "LF", "CGB": "BGC", "FHE": "EHF",
+                   "BKC": "angBKC", "CKB": "angBKC",
+                   "ELF": "angELF", "FLE": "angELF" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”).
+            { text: "In equal circles straight lines that cut off equal circumferences are equal.",
+              visible: GIVEN,
+              highlighted: [],
+              justifications: [{ ref: "III.29" }] },
+            { text: "Let {ABC|ABCt} and {DEF|DEFt} be equal circles,",
+              visible: GIVEN,
+              highlighted: ["ABCt","DEFt"] },
+            { text: "and in them let equal circumferences {BGC} and {EHF} be cut off.",
+              visible: ARCS,
+              highlighted: ["BGC", "EHF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BGC", name: geomlib.A.Sector.sweep },
+                  { elem: "EHF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Join the straight lines {BC} and {EF}.",
+              visible: CHORD,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "I say that {BC} equals {EF}.",
+              visible: CHORD,
+              highlighted: ["BC","EF"] },
+            { text: "Take the centers {K} and {L} of the circles.",
+              visible: CENT,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "L", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the centers K and L", ref: "III.1" }] },
+            { text: "Join {BK}, {KC}, {EL}, and {LF}.",
+              visible: JOIN,
+              highlighted: ["BCK", "EFL"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BCK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "EFL", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Now, since the circumference {BGC} equals the circumference {EHF}, the angle {BKC} also equals the angle {ELF}.",
+              visible: ANG,
+              highlighted: ["BGC", "EHF", "angBKC", "angELF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBKC", name: geomlib.A.Sector.sweep },
+                  { elem: "angELF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angles at the centers on equal circumferences", ref: "III.27" }] },
+            { text: "And, since the circles {ABC|ABCt} and {DEF|DEFt} are equal, the radii are also equal, therefore the two sides {BK} and {KC} equal the two sides {EL} and {LF},",
+              visible: ANG,
+              highlighted: ["BK","KC","EL","LF"],
+              justifications: [{ claim: "equal circles have equal radii", ref: "III.Def.1" }] },
+            { text: "and they contain equal angles, therefore the base {BC} equals the base {EF}.",
+              visible: ANG,
+              highlighted: ["angBKC","angELF","BC","EF"],
+              justifications: [{ claim: "two sides and the angle between them", ref: "I.4" }] },
+            { text: "Therefore in equal circles straight lines that cut off equal circumferences are equal.",
+              visible: ANG,
+              highlighted: ["BC","EF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.29") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "I.4":       "/elements/books/bookI/propositions/propI4/",
+        "III.Def.1": "/elements/books/bookIII/definitions/defIII1/",
+        "III.1":     "/elements/books/bookIII/propositions/propIII1/",
+        "III.27":    "/elements/books/bookIII/propositions/propIII27/"
     });
 </script>
 </figure>
 
-I say that *BC* equals *EF.*
+I say that {BC} equals {EF}.
 
-Take the centers *K* and *L* of the circles.  Join *BK, KC, EL,* and *LF.* [!just III.1]
+Take the centers {K} and {L} of the circles.  Join {BK}, {KC}, {EL}, and {LF}. [!just III.1]
 
-Now, since the circumference *BGC* equals the circumference *EHF,* the angle *BKC* also equals the angle *ELF.* [!just III.27]
+Now, since the circumference {BGC} equals the circumference {EHF}, the angle {BKC} also equals the angle {ELF}. [!just III.27]
 
-And, since the circles *ABC* and *DEF* are equal, the radii are also equal, therefore the two sides *BK* and *KC* equal the two sides *EL* and *LF,* and they contain equal angles, therefore the base *BC* equals the base *EF.* [!just I.4]
+And, since the circles {ABC|ABCt} and {DEF|DEFt} are equal, the radii are also equal, therefore the two sides {BK} and {KC} equal the two sides {EL} and {LF}, and they contain equal angles, therefore the base {BC} equals the base {EF}. [!just I.4]
 
 Therefore *in equal circles straight lines that cut off equal circumferences are equal.*
 
