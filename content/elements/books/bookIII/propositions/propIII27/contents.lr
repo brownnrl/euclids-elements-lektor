@@ -15,14 +15,40 @@ statement: In equal circles angles standing on equal circumferences equal one an
 ----
 proof:
 
-For in equal circles *ABC* and *DEF,* on equal circumferences *BC* and *EF,* let the angles *BGC* and *EHF* stand at the centers *G* and *H,* and the angles *BAC* and *EDF* at the circumferences.
+For in equal circles {ABC|ABCc} and {DEF|DEFc}, on equal circumferences {BC} and {EF}, let the angles {BGC} and {EHF} stand at the centers {G} and {H}, and the angles {BAC|angBAC} and {EDF|angEDF} at the circumferences.
 
-I say that the angle *BGC* equals the angle *EHF,* and the angle *BAC* equals the angle *EDF.*
+I say that the angle {BGC} equals the angle {EHF}, and the angle {BAC|angBAC} equals the angle {EDF|angEDF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="470" height="240" tabindex="0"></canvas>
 <noscript><img alt="III.27 diagram" src="propIII27.gif"/></noscript>
 <script type="text/javascript">
+    // The converse of III.26, on the same figure plus the false angle BGK
+    // (K on the arc BC, joined to G). Joyce's figure draws the central
+    // angles as filled sectors (GBC, HEF), the angles at the circumference
+    // as filled triangles, and GK; it does not draw the circumferences BC,
+    // EF, BK as their own elements, nor the angles at A, D and BGK as
+    // angles. Everything added here is fully transparent (;0;0;0;0 sectors /
+    // circles) or an angle marker (hidden in the static figure), so the
+    // resting figure is unchanged.
+    //
+    // In this proof BC, EF and BK are always CIRCUMFERENCES (the chords are
+    // never mentioned), so those names go to transparent arcs about the
+    // centres. GBC (G,B,C) draws the minor arc, and BC / EF / BK keep that
+    // arm order.
+    //
+    // The two circles ABC and DEF are 4-field elements as converted — an
+    // opaque near-white default face — and are left exactly as they are.
+    // They are never named in a highlighted set or a prose ref (a
+    // highlighted element is promoted within its pass, #140, and the white
+    // disc would cover the sectors); the transparent twins ABCc / DEFc carry
+    // the name for highlight and hover. The originals appear only in
+    // `visible`.
+    var CIRC = ["G","A","ABC","B","C","H","DEF","D","E","F","ABCc","DEFc","BC","EF"];
+    var ANG  = CIRC.concat(["GB","GC","HE","HF","GBC","HEF","AB","AC","DE","DF",
+                            "triABC","triDEF","angBAC","angEDF"]);
+    var CON  = ANG.concat(["K","GK","angBGK"]);
+    var CUT  = CON.concat(["BK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,21 +77,113 @@ I say that the angle *BGC* equals the angle *EHF,* and the angle *BAC* equals th
             "HF;line;connect;H,F",
             "HE;line;connect;H,E",
             "K;point;circleSlider;ABC,140,200;black;0",
-            "GK;line;connect;G,K"
+            "GK;line;connect;G,K",
+            // Transparent twins of the two 4-field circles (see above).
+            "ABCc;circle;radius;G,A;0;0;0;0",
+            "DEFc;circle;radius;H,G,A;0;0;0;0",
+            // The circumferences the proof compares.
+            "BC;sector;sector;G,B,C;0;0;0;0",
+            "EF;sector;sector;H,E,F;0;0;0;0",
+            "BK;sector;sector;G,B,K;0;0;0;0",
+            // The angles at the circumference, and the false angle BGK.
+            "angBAC;sector;angleMarker;A,B,C",
+            "angEDF;sector;angleMarker;D,E,F",
+            "angBGK;sector;angleMarker;G,B,K"
         ],
+        // K is a circleSlider, so it would stand lettered on the canvas from
+        // slide 1; the proof constructs it at "Construct the angle BGK". The
+        // other draggables (G, A, B, C, H, D, E) are givens of slide 1.
+        deferDraggables: ["K"],
+        aliases: { "BGC": "GBC", "EHF": "HEF", "BGK": "angBGK",
+                   "BG": "GB", "CG": "GC", "EH": "HE", "FH": "HF", "KG": "GK",
+                   "CB": "BC", "FE": "EF", "KB": "BK" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”), split at its seams.
+            { text: "“In equal circles angles standing on equal circumferences equal one another”",
+              visible: CIRC,
+              highlighted: [] },
+            { text: "“whether they stand at the centers or at the circumferences.”",
+              visible: CIRC,
+              highlighted: [],
+              justifications: [{ ref: "III.27" }] },
+            { text: "For in equal circles {ABC|ABCc} and {DEF|DEFc}, on equal circumferences {BC} and {EF},",
+              visible: CIRC,
+              highlighted: ["ABCc","DEFc","BC","EF"] },
+            { text: "let the angles {BGC} and {EHF} stand at the centers {G} and {H}, and the angles {BAC|angBAC} and {EDF|angEDF} at the circumferences.",
+              visible: ANG,
+              highlighted: ["GBC", "HEF", "AB", "AC", "angBAC", "DE", "DF", "angEDF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "GBC",    name: geomlib.A.Sector.sweep },
+                  { elem: "HEF",    name: geomlib.A.Sector.sweep },
+                  { elem: "AB",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AC",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "DE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DF",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angEDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that the angle {BGC} equals the angle {EHF}, and the angle {BAC|angBAC} equals the angle {EDF|angEDF}.",
+              visible: ANG,
+              highlighted: ["GBC","HEF","angBAC","angEDF"] },
+            { text: "For, if the angle {BGC} does not equal the angle {EHF}, one of them is greater. Let the angle {BGC} be greater.",
+              visible: ANG,
+              highlighted: ["GBC","HEF"] },
+            { text: "Construct the angle {BGK} equal to the angle {EHF} on the straight line {BG} and at the point {G} on it.",
+              visible: CON,
+              highlighted: ["HEF", "GB", "GK", "K", "angBGK"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "GK",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",      name: geomlib.A.Point.appear },
+                  { elem: "angBGK", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle BGK constructed equal to angle EHF", ref: "I.23" }] },
+            { text: "Now equal angles stand on equal circumferences when they are at the centers, therefore the circumference {BK} equals the circumference {EF}.",
+              visible: CUT,
+              highlighted: ["angBGK","HEF","BK","EF"],
+              // Joyce's marker reads I.26 (his page too); carried literally.
+              justifications: [{ claim: "equal angles at the centers stand on equal circumferences", ref: "I.26" }] },
+            { text: "But {EF} equals {BC}, therefore {BK} also equals {BC}, the less equals the greater, which is impossible.",
+              visible: CUT,
+              highlighted: ["EF","BC","BK"] },
+            // The false construction is dropped here.
+            { text: "Therefore the angle {BGC} is not unequal to the angle {EHF}, therefore it equals it.",
+              visible: ANG,
+              highlighted: ["GBC","HEF"] },
+            { text: "And the angle at {A|angBAC} is half of the angle {BGC}, and the angle at {D|angEDF} half of the angle {EHF}, therefore the angle at {A|angBAC} also equals the angle at {D|angEDF}.",
+              visible: ANG,
+              highlighted: ["angBAC","GBC","angEDF","HEF"],
+              justifications: [{ claim: "the angle at the center is double the angle at the circumference", ref: "III.20" }] },
+            { text: "Therefore in equal circles angles standing on equal circumferences equal one another whether they stand at the centers or at the circumferences.",
+              visible: ANG,
+              highlighted: ["GBC","HEF","angBAC","angEDF","BC","EF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.27") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    // "I.26" is what Joyce's page cites at this step (III.26 is meant); the
+    // marker is carried literally, so the slide resolves the same way.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.23":   "/elements/books/bookI/propositions/propI23/",
+        "I.26":   "/elements/books/bookI/propositions/propI26/",
+        "III.20": "/elements/books/bookIII/propositions/propIII20/"
     });
 </script>
 </figure>
 
-For, if the angle *BGC* does not equal the angle *EHF,* one of them is greater.  Let the angle *BGC* be greater. Construct the angle *BGK* equal to the angle *EHF* on the straight line *BG* and at the point *G* on it. [!just I.23]
+For, if the angle {BGC} does not equal the angle {EHF}, one of them is greater.  Let the angle {BGC} be greater. Construct the angle {BGK} equal to the angle {EHF} on the straight line {BG} and at the point {G} on it. [!just I.23]
 
-Now equal angles stand on equal circumferences when they are at the centers, therefore the circumference *BK* equals the circumference *EF.* [!just I.26]
+Now equal angles stand on equal circumferences when they are at the centers, therefore the circumference {BK} equals the circumference {EF}. [!just I.26]
 
-But *EF* equals *BC,* therefore *BK* also equals *BC,* the less equals the greater, which is impossible.
+But {EF} equals {BC}, therefore {BK} also equals {BC}, the less equals the greater, which is impossible.
 
-Therefore the angle *BGC* is not unequal to the angle *EHF,* therefore it equals it.
+Therefore the angle {BGC} is not unequal to the angle {EHF}, therefore it equals it.
 
-And the angle at *A* is half of the angle *BGC,* and the angle at *D* half of the angle *EHF,* therefore the angle at *A* also equals the angle at *D.* [!just III.20]
+And the angle at {A|angBAC} is half of the angle {BGC}, and the angle at {D|angEDF} half of the angle {EHF}, therefore the angle at {A|angBAC} also equals the angle at {D|angEDF}. [!just III.20]
 
 Therefore *in equal circles angles standing on equal circumferences equal one another whether they stand at the centers or at the circumferences.*
 
