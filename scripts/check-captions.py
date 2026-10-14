@@ -34,7 +34,9 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 THRESHOLD = 0.92
 
-TOKEN = re.compile(r"\{([A-Za-z][A-Za-z0-9']*)(?:\|[^}]*)?(?::canvas[^}]*)?\}")
+# The display half may be a phrase ({a less segment|arcADC}), as geomlib's
+# caption parser allows; only the display text counts as Joyce's words.
+TOKEN = re.compile(r"\{([^{}|:]+)(?:\|[^}]*)?(?::canvas[^}]*)?\}")
 
 
 def words(text):
