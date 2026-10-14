@@ -15,14 +15,42 @@ statement: If a point is taken outside a circle and from the point there fall on
 ----
 proof:
 
-Let a point *D* be taken outside the circle *ABC,* from *D* let the two straight lines *DCA* and *DB* fall on the circle *ACB,* let *DCA* cut the circle and *DB* fall on it, and let the rectangle *AD* by *DC* equal the square on *DB.*
+Let a point {D} be taken outside the circle {ABC}, from {D} let the two straight lines {DCA} and {DB} fall on the circle {ACB}, let {DCA} cut the circle and {DB} fall on it, and let the rectangle {AD} by {DC} equal the square on {DB}.
 
-I say that *DB* touches the circle *ABC.*
+I say that {DB} touches the circle {ABC}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="315" height="260" tabindex="0"></canvas>
 <noscript><img alt="III.37 diagram" src="propIII37.gif"/></noscript>
 <script type="text/javascript">
+    // The converse of III.36, argued through a second tangent DE: III.36
+    // gives DE = DB, I.8 then makes the angle at B equal to the right angle
+    // at E, and the III.16 corollary closes it. Joyce's figure draws the
+    // secant, the two lines from D and the three joins from F; the proof
+    // names DC and the two triangles the I.8 step compares, which are
+    // added here as fully transparent elements (;0;0;0 line, ;0;0;0;0
+    // polygons) — the static figure is unchanged. No squares are drawn,
+    // so "the square on DE" keeps its refs literal.
+    //
+    // Two right-angle markers, at E and B. The angle names DEF and DBF
+    // collide with the triangles, so the polygons own the names and the
+    // captions bind the angle with the display override ({DEF|angDEF}).
+    // Markers are hidden in the static figure (showAngles defaults false).
+    //
+    // Draggables, checked against the bundle: A, D and F. A and D are
+    // given; F is the center, taken mid-proof, so it is deferred out of the
+    // every-slide auto-union. C (last of the chord), E (first of the
+    // bichord) and B (last) are derived and listed per slide: E arrives
+    // with "Draw DE touching ABC". AC is Joyce's own colourless chord along
+    // AD and serves as its own hover target for the closing remark. M,
+    // BCEF and EB are the colourless tangent rig and stay out of every set.
+    var GIVEN = ["A","D","ABC","AD","AC","C","B","BD"];
+    var SAY   = GIVEN.concat(["CD"]);
+    var TAN   = SAY.concat(["E","ED"]);
+    var CTR   = TAN.concat(["F","EF","BF","FD"]);
+    var RTE   = CTR.concat(["angDEF"]);
+    var TRI   = RTE.concat(["DEF","DBF"]);
+    var RTB   = TRI.concat(["angDBF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -44,29 +72,152 @@ I say that *DB* touches the circle *ABC.*
             "ED;line;connect;E,D",
             "BD;line;connect;B,D",
             "EF;line;connect;E,F",
-            "BF;line;connect;B,F"
+            "BF;line;connect;B,F",
+            // Hover / highlight target only — AD already draws it.
+            "CD;line;connect;C,D;0;0;0",
+            // The two triangles the I.8 step compares. Explicit ;0 faces —
+            // an omitted faceColor is an opaque near-white face.
+            "DEF;polygon;triangle;D,E,F;0;0;0;0",
+            "DBF;polygon;triangle;D,B,F;0;0;0;0",
+            // The right angle at E (III.18) and the one proved at B.
+            "angDEF;sector;angleMarkerRight;E,D,F;0;0;red;red",
+            "angDBF;sector;angleMarkerRight;B,D,F;0;0;red;red"
         ],
+        deferDraggables: ["F"],
+        aliases: { "DCA": "AD", "DA": "AD", "DB": "BD", "DC": "CD",
+                   "CA": "AC", "DE": "ED", "FE": "EF", "FB": "BF",
+                   "DF": "FD", "ACB": "ABC",
+                   "FED": "angDEF", "FBD": "angDBF" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”), split at its seams.
+            { text: "“If {a point|D} is taken outside a circle and from the point there fall on the circle two straight lines,”",
+              visible: GIVEN,
+              highlighted: ["D","AD","BD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "“if {one of them|AD} cuts the circle, and {the other|BD} falls on it,”",
+              visible: GIVEN,
+              highlighted: ["AD","BD"] },
+            { text: "“and if further the rectangle contained by {the whole of the straight line which cuts the circle|AD}”",
+              visible: GIVEN,
+              highlighted: ["AD"] },
+            { text: "“and {the straight line intercepted on it outside between the point and the convex circumference|CD}”",
+              visible: SAY,
+              highlighted: ["CD"] },
+            { text: "“equals the square on {the straight line which falls on the circle|BD},”",
+              visible: SAY,
+              highlighted: ["BD"] },
+            { text: "“then {the straight line which falls on it|BD} touches the circle.”",
+              visible: SAY,
+              highlighted: ["BD","B"],
+              justifications: [{ ref: "III.37" }] },
+            { text: "Let a point {D} be taken outside the circle {ABC}, from {D} let the two straight lines {DCA} and {DB} fall on the circle {ACB},",
+              visible: GIVEN,
+              highlighted: ["D","AD","BD"] },
+            { text: "let {DCA} cut the circle and {DB} fall on it, and let the rectangle {AD} by {DC} equal the square on {DB}.",
+              visible: SAY,
+              highlighted: ["AD","CD","BD"] },
+            { text: "I say that {DB} touches the circle {ABC}.",
+              visible: SAY,
+              highlighted: ["BD"] },
+            { text: "Draw {DE} touching {ABC}.",
+              visible: TAN,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E",  name: geomlib.A.Point.appear },
+                  { elem: "ED", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "a tangent to the circle from D", ref: "III.17" }] },
+            { text: "Take the center {F} of the circle {ABC}, and join {FE}, {FB}, and {FD}.",
+              visible: CTR,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",  name: geomlib.A.Point.appear },
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "the center of the circle", ref: "III.1" },
+                  { ref: "I.Post.1" } ] },
+            { text: "Thus the angle {FED|angDEF} is right.",
+              visible: RTE,
+              highlighted: ["EF", "ED", "angDEF"],
+              transition: { animations: [
+                  { elem: "angDEF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the tangent is at right angles to the radius FE", ref: "III.18" }] },
+            { text: "Now, since {DE} touches the circle {ABC}, and {DCA} cuts it, the rectangle {AD} by {DC} equals the square on {DE}.",
+              visible: RTE,
+              highlighted: ["ED","AD","CD"],
+              justifications: [{ claim: "the rectangle AD by DC equals the square on the tangent DE", ref: "III.36" }] },
+            { text: "But the rectangle {AD} by {DC} was also equal to the square on {DB}, therefore the square on {DE} equals the square on {DB}. Therefore {DE} equals {DB}.",
+              visible: RTE,
+              highlighted: ["ED","BD"],
+              justifications: [{ claim: "each equals the rectangle AD by DC", ref: "C.N.1" }] },
+            // His I.8 sentence is the premises and then the conclusion;
+            // two slides, so the triangles are seen before the angle lands.
+            { text: "And {FE} equals {FB}, therefore the two sides {DE} and {EF} equal the two sides {DB} and {BF}, and {FD} is the common base of the triangles,",
+              visible: TRI,
+              highlighted: ["DEF","DBF","ED","EF","BD","BF","FD"],
+              justifications: [{ claim: "FE and FB are radii of the same circle", ref: "I.Def.15" }] },
+            { text: "therefore the angle {DEF|angDEF} equals the angle {DBF|angDBF}.",
+              visible: RTB,
+              highlighted: ["angDEF", "angDBF"],
+              transition: { animations: [
+                  { elem: "angDBF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "three sides equal three sides", ref: "I.8" }] },
+            { text: "But the angle {DEF|angDEF} is right, therefore the angle {DBF|angDBF} is also right.",
+              visible: RTB,
+              highlighted: ["angDEF","angDBF"] },
+            { text: "And {FB} produced is a diameter, and the straight line drawn at right angles to the diameter of a circle, from its end, touches the circle, therefore {DB} touches the circle.",
+              visible: RTB,
+              highlighted: ["BF","BD","angDBF"],
+              justifications: [{ claim: "at right angles to the diameter at its end", ref: "III.16.Cor" }] },
+            { text: "Similarly this can be proved to be the case even if the center is on {AC}.",
+              visible: RTB,
+              highlighted: ["AC","F"] },
+            { text: "Therefore if a point is taken outside a circle and from the point there fall on the circle two straight lines, if one of them cuts the circle, and the other falls on it, and if further the rectangle contained by the whole of the straight line which cuts the circle and the straight line intercepted on it outside between the point and the convex circumference equals the square on the straight line which falls on the circle, then the straight line which falls on it touches the circle.",
+              visible: RTB,
+              highlighted: ["AD","CD","BD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.37") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Def.15":   "/elements/books/bookI/definitions/defI15/",
+        "I.Post.1":   "/elements/books/bookI/postulates/post1/",
+        "I.8":        "/elements/books/bookI/propositions/propI8/",
+        "III.1":      "/elements/books/bookIII/propositions/propIII1/",
+        "III.16.Cor": "/elements/books/bookIII/propositions/propIII16/#cor",
+        "III.17":     "/elements/books/bookIII/propositions/propIII17/",
+        "III.18":     "/elements/books/bookIII/propositions/propIII18/",
+        "III.36":     "/elements/books/bookIII/propositions/propIII36/",
+        "C.N.1":      "/elements/books/bookI/commonnotions/cn1/"
     });
 </script>
 </figure>
 
-Draw *DE* touching *ABC.*  Take the center *F* of the circle *ABC,* and join *FE, FB,* and *FD.* [!just III.17, III.1]
+Draw {DE} touching {ABC}.  Take the center {F} of the circle {ABC}, and join {FE}, {FB}, and {FD}. [!just III.17, III.1]
 
-Thus the angle *FED* is right. [!just III.18]
+Thus the angle {FED|angDEF} is right. [!just III.18]
 
-Now, since *DE* touches the circle *ABC,* and *DCA* cuts it, the rectangle *AD* by *DC* equals the square on *DE.* [!just III.36]
+Now, since {DE} touches the circle {ABC}, and {DCA} cuts it, the rectangle {AD} by {DC} equals the square on {DE}. [!just III.36]
 
-But the rectangle *AD* by *DC* was also equal to the square on *DB,* therefore the square on *DE* equals the square on *DB.* Therefore *DE* equals *DB.*
+But the rectangle {AD} by {DC} was also equal to the square on {DB}, therefore the square on {DE} equals the square on {DB}. Therefore {DE} equals {DB}.
 
-And *FE* equals *FB,* therefore the two sides *DE* and *EF* equal the two sides *DB* and *BF,* and *FD* is the common base of the triangles, therefore the angle *DEF* equals the angle *DBF.* [!just I.8]
+And {FE} equals {FB}, therefore the two sides {DE} and {EF} equal the two sides {DB} and {BF}, and {FD} is the common base of the triangles, therefore the angle {DEF|angDEF} equals the angle {DBF|angDBF}. [!just I.8]
 
-But the angle *DEF* is right, therefore the angle *DBF* is also right.
+But the angle {DEF|angDEF} is right, therefore the angle {DBF|angDBF} is also right.
 
-<div class="just"><a href="/elements/books/bookIII/propositions/propIII16/#cor">III.16 Cor</a></div>
+And {FB} produced is a diameter, and the straight line drawn at right angles to the diameter of a circle, from its end, touches the circle, therefore {DB} touches the circle. [!just III.16.Cor]
 
-And *FB* produced is a diameter, and the straight line drawn at right angles to the diameter of a circle, from its end, touches the circle, therefore *DB* touches the circle.
-
-Similarly this can be proved to be the case even if the center is on *AC.*
+Similarly this can be proved to be the case even if the center is on {AC}.
 
 Therefore *if a point is taken outside a circle and from the point there fall on the circle two straight lines, if one of them cuts the circle, and the other falls on it, and if further the rectangle contained by the whole of the straight line which cuts the circle and the straight line intercepted on it outside between the point and the convex circumference equals the square on the straight line which falls on the circle, then the straight line which falls on it touches the circle.*
 
