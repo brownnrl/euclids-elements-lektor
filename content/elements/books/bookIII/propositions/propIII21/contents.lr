@@ -15,12 +15,33 @@ statement: In a circle the angles in the same segment equal one another.
 ----
 proof:
 
-Let *ABCD* be a circle, and let the angles *BAD* and *BED* be angles in the same segment *BAED.*
+Let {ABCD} be a circle, and let the angles {BAD} and {BED} be angles in the same segment {BAED}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="270" tabindex="0"></canvas>
 <noscript><img alt="III.21 diagram" src="propIII21.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the circle, the chord BD, the two angles' arms and
+    // the two radii — no angle arcs, no marking of the segment or of the
+    // circumference BCD the proof names. The three markers are hidden in the
+    // resting figure (showAngles defaults false, 0.9.0+); the two arcs are
+    // fully transparent (;0;0;0;0). The static figure is unchanged.
+    //
+    // A segment has no element of its own, so the segment BAED is carried by
+    // its arc — the chord BD that closes it is already drawn, and is
+    // highlighted alongside. An arc element draws the minor or the major arc
+    // of its endpoints according to their order (the same sign that #172
+    // is about), and this one must be the MAJOR arc through A and E, so its
+    // endpoint order was chosen by measuring which arc the bundle draws.
+    // BCD, the base of the angle at the centre, is the minor arc.
+    //
+    // Colour: the two equal angles in the segment share magenta; the angle
+    // at the centre, which the proof uses to compare them, is orange. One
+    // marker per vertex, so no radius overrides.
+    var CIRC = ["ABCD","A","B","C","D","E"];
+    var ANG  = CIRC.concat(["BD","BA","AD","BE","DE","angBAD","angBED","segBAED"]);
+    var CEN  = ANG.concat(["F","BF","DF"]);
+    var CTR  = CEN.concat(["angBFD","arcBCD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -40,19 +61,101 @@ Let *ABCD* be a circle, and let the angles *BAD* and *BED* be angles in the same
             "DF;line;connect;D,F",
             "E;point;circleSlider;ABCD,240,130",
             "BE;line;connect;B,E",
-            "DE;line;connect;D,E"
+            "DE;line;connect;D,E",
+            // The segment's arc (major, through A and E) and the base
+            // circumference BCD (minor). Transparent hover / highlight targets.
+            "segBAED;sector;arc;D,A,B;0;0;0;0",
+            "arcBCD;sector;arc;B,C,D;0;0;0;0",
+            // Angle markers.
+            "angBAD;sector;angleMarker;A,B,D;0;0;magenta;magenta",
+            "angBED;sector;angleMarker;E,B,D;0;0;magenta;magenta",
+            "angBFD;sector;angleMarker;F,B,D;0;0;orange;orange"
         ],
+        // Draggables (checked against the bundle: C, B, D, A, E) are all
+        // letters of the given circle or of the two given angles, and slide 1
+        // introduces them — nothing to defer. F is a derived point (center)
+        // and NOT auto-unioned, so it is listed from the slide that takes it.
+        aliases: { "AB": "BA", "DA": "AD", "DB": "BD", "EB": "BE", "ED": "DE",
+                   "FB": "BF", "FD": "DF",
+                   "BAD": "angBAD", "DAB": "angBAD",
+                   "BED": "angBED", "DEB": "angBED",
+                   "BFD": "angBFD", "DFB": "angBFD",
+                   "BAED": "segBAED", "BCD": "arcBCD" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”).
+            { text: "In a circle the angles in the same segment equal one another.",
+              visible: CIRC,
+              highlighted: [],
+              justifications: [{ ref: "III.21" }] },
+            { text: "Let {ABCD} be a circle,",
+              visible: CIRC,
+              highlighted: ["ABCD"] },
+            { text: "and let the angles {BAD} and {BED} be angles in the same segment {BAED}.",
+              visible: ANG,
+              highlighted: ["segBAED", "BD", "angBAD", "angBED"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAD", name: geomlib.A.Sector.sweep },
+                  { elem: "angBED", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that the angles {BAD} and {BED} equal one another.",
+              visible: ANG,
+              highlighted: ["angBAD","angBED"] },
+            { text: "Take the center {F} of the circle {ABCD}, and join {BF} and {FD}.",
+              visible: CEN,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",  name: geomlib.A.Point.appear },
+                  { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "the center of the circle found", ref: "III.1" },
+                  { ref: "I.Post.1" } ] },
+            { text: "Now, since the angle {BFD} is at the center, and the angle {BAD} at the circumference, and they have the same circumference {BCD} as base,",
+              visible: CTR,
+              highlighted: ["angBAD","arcBCD"],
+              transition: { animations: [
+                  { elem: "angBFD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the angle {BFD} is double the angle {BAD}.",
+              visible: CTR,
+              highlighted: ["angBFD","angBAD"],
+              justifications: [
+                  { claim: "the angle at the center is double the angle at the circumference", ref: "III.20" } ] },
+            { text: "For the same reason the angle {BFD} is also double the angle {BED}.",
+              visible: CTR,
+              highlighted: ["angBFD","angBED"],
+              justifications: [
+                  { claim: "BFD and BED stand on the same circumference BCD", ref: "III.20" } ] },
+            { text: "Therefore the angle {BAD} equals the angle {BED}.",
+              visible: CTR,
+              highlighted: ["angBAD","angBED"] },
+            { text: "Therefore in a circle the angles in the same segment equal one another.",
+              visible: CTR,
+              highlighted: ["angBAD","angBED","segBAED"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.21") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "III.1":    "/elements/books/bookIII/propositions/propIII1/",
+        "III.20":   "/elements/books/bookIII/propositions/propIII20/"
     });
 </script>
 </figure>
 
-I say that the angles *BAD* and *BED* equal one another.
+I say that the angles {BAD} and {BED} equal one another.
 
-Take the center *F* of the circle *ABCD,* and join *BF* and *FD.* [!just III.1]
+Take the center {F} of the circle {ABCD}, and join {BF} and {FD}. [!just III.1]
 
-Now, since the angle *BFD* is at the center, and the angle *BAD* at the circumference, and they have the same circumference *BCD* as base, therefore the angle *BFD* is double the angle *BAD.* [!just III.20]
+Now, since the angle {BFD} is at the center, and the angle {BAD} at the circumference, and they have the same circumference {BCD} as base, therefore the angle {BFD} is double the angle {BAD}. [!just III.20]
 
-For the same reason the angle *BFD* is also double the angle *BED.*  Therefore the angle *BAD* equals the angle *BED.*
+For the same reason the angle {BFD} is also double the angle {BED}.  Therefore the angle {BAD} equals the angle {BED}.
 
 Therefore *in a circle the angles in the same segment equal one another.*
 

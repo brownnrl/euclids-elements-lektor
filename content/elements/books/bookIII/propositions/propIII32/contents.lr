@@ -15,14 +15,49 @@ statement: If a straight line touches a circle, and from the point of contact th
 ----
 proof:
 
-For let a straight line *EF* touch the circle *ABCD* at the point *B,* and from the point *B* let there be drawn across, in the circle *ABCD,* a straight line *BD* cutting it.
+For let a straight line {EF} touch the circle {ABCD} at the point {B}, and from the point {B} let there be drawn across, in the circle {ABCD}, a straight line {BD} cutting it.
 
-I say that the angles which *BD* makes with the tangent *EF* equal the angles in the alternate segments of the circle, that is, that the angle *FBD* equals the angle constructed in the segment *BAD,* and the angle *EBD* equals the angle constructed in the segment *DCB.*
+I say that the angles which {BD} makes with the tangent {EF} equal the angles in the alternate segments of the circle, that is, that the angle {FBD} equals the angle constructed in the segment {BAD|segBAD}, and the angle {EBD} equals the angle constructed in the segment {DCB|segDCB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="260" tabindex="0"></canvas>
 <noscript><img alt="III.32 diagram" src="propIII32.gif"/></noscript>
 <script type="text/javascript">
+    // The tangent-chord angle. Joyce's figure is the circle, the tangent EF,
+    // the chord BD and the three joins; the proof names two SEGMENTS of the
+    // circle (BAD, DCB), seven angles, the quadrilateral ABCD and the
+    // triangle ABD, none of which the figure draws as elements. Everything
+    // added here is fully transparent (;0;0;0 lines, ;0;0;0;0 circles /
+    // sectors / polygons), so the resting figure is pixel-unchanged; the
+    // names exist so a slide or a hover can light them.
+    //
+    // The circle is declared ABC but the proof calls it ABCD throughout, so
+    // ABCD is a transparent twin: the real circle carries a random face and
+    // a highlighted face is promoted within its pass (#140), which would
+    // paint it over the angle markers. ABC is never named in a slide set.
+    //
+    // A segment is chord + arc. The chord BD is its own line; the arc is a
+    // zero-colour sector, whose drawEdge strokes only the arc (no radii), so
+    // the pair lights as the segment. Arm order decides WHICH arc a sector
+    // draws (euclid#172), so both were checked against the bundle by pixel:
+    // segBAD's arc passes A, segDCB's passes C. Neither is swept.
+    //
+    // Colour: equal angles share a colour — FBD = BAD orange, EBD = BCD
+    // green; right angles red; ABD, the angle subtracted, keeps the palette
+    // default. Same-vertex markers at B ring-step automatically (#103).
+    var GIVEN = ["ABC","ABCD","O","B","D","BD","E","F","EF"];
+    var SAY   = GIVEN.concat(["angFBD","angEBD","segBAD","segDCB"]);
+    // Statement slides: the figure built in the statement's own order.
+    var ST1 = ["ABC","ABCD","O","B","E","F","EF"];
+    var ST2 = ST1.concat(["D","BD"]);
+    var ST3 = ST2.concat(["angFBD","angEBD"]);
+    var ST4 = ST3.concat(["segBAD","segDCB","P","PB","PD","angBPD","C","BC","CD","angBCD"]);
+    var PERP  = SAY.concat(["A","AB"]);
+    var JOINS = PERP.concat(["C","AD","CD","BC"]);
+    var SEMI  = JOINS.concat(["angADB"]);
+    var TRI   = SEMI.concat(["triABD","angBAD","angABD"]);
+    var RT    = TRI.concat(["angABF"]);
+    var QUAD  = RT.concat(["quadABCD","angBCD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,27 +77,211 @@ I say that the angles which *BD* makes with the tangent *EF* equal the angles in
             "BE';line;perpendicular;B,A;0;0;0",
             "E;point;lineSlider;BE',30,230",
             "F;point;lineSlider;BE',230,230",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // Transparent twin of the circle, under the proof's name.
+            "ABCD;circle;radius;O,B;0;0;0;0",
+            // The two segments' arcs: B through A to D, and D through C to B.
+            "segBAD;sector;sector;O,D,B;0;0;0;0",
+            "segDCB;sector;sector;O,B,D;0;0;0;0",
+            // The triangle the I.32 step is about, and the quadrilateral in
+            // the circle for III.22. Explicit ;0 faces — an omitted faceColor
+            // is an opaque near-white face.
+            "triABD;polygon;triangle;A,B,D;0;0;0;0",
+            "quadABCD;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            // Angle markers, hidden in the resting figure (showAngles
+            // defaults false). Equal angles share a colour.
+            "angFBD;sector;angleMarker;B,F,D;0;0;orange;orange",
+            "angEBD;sector;angleMarker;B,E,D;0;0;mediumseagreen;mediumseagreen",
+            "angADB;sector;angleMarkerRight;D,A,B;0;0;red;red",
+            "angBAD;sector;angleMarker;A,B,D;0;0;orange;orange",
+            "angABD;sector;angleMarker;B,A,D",
+            "angABF;sector;angleMarkerRight;B,A,F;0;0;red;red",
+            "angBCD;sector;angleMarker;C,B,D;0;0;mediumseagreen;mediumseagreen",
+            // For the statement slides only: an unlettered point P in the
+            // segment BAD, joined to B and D, so "the angle in the alternate
+            // segment" can be shown — and swung along its arc to show it
+            // stays equal to FBD wherever it is. Hidden at rest.
+            "P;point;circleSlider;ABC,60,130;0",
+            "PB;line;connect;P,B",
+            "PD;line;connect;P,D",
+            "angBPD;sector;angleMarker;P,B,D;0;0;orange;orange"
         ],
+        // Draggables are auto-unioned into every slide. Dumping `draggable`
+        // against the bundle gives A, B, C, D, E, F. The proof draws BA and
+        // takes C at random only after the "I say" — so A and C are deferred
+        // and follow `visible`; B, D, E, F are the givens of slide 1. The
+        // resting figure is unaffected.
+        deferDraggables: ["A","C","P"],
+        initiallyHidden: ["P","PB","PD","angBPD"],
+        aliases: { "BA": "AB", "DC": "CD", "CB": "BC",
+                   "FBD": "angFBD", "DBF": "angFBD",
+                   "EBD": "angEBD", "DBE": "angEBD",
+                   "ADB": "angADB", "BAD": "angBAD", "ABD": "angABD",
+                   "ABF": "angABF", "BCD": "angBCD", "DCB": "angBCD" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”), split at its seams.
+            { text: "“If {a straight line|EF} touches {a circle|ABCD},”",
+              visible: ST1,
+              highlighted: ["EF","B"],
+              transition: { animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "“and from {the point of contact|B} there is drawn across, in the circle, {a straight line cutting the circle|BD},”",
+              visible: ST2,
+              highlighted: ["BD"],
+              transition: { animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "“then the angles which it makes with {the tangent|EF}”",
+              visible: ST3,
+              highlighted: ["angFBD","angEBD","EF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angFBD", name: geomlib.A.Sector.sweep },
+                  { elem: "angEBD", name: geomlib.A.Sector.sweep } ] } },
+            // Each angle in an alternate segment shares its tangent angle's
+            // colour; P and C then travel their arcs and back, and the
+            // markers stay matched — "equal" shown as invariance.
+            { text: "“equal the angles in the alternate segments of the circle.”",
+              visible: ST4,
+              highlighted: ["angFBD","angBPD","angEBD","angBCD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "PB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "PD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angBPD", name: geomlib.A.Sector.sweep },
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angBCD", name: geomlib.A.Sector.sweep },
+                  { elem: "P", name: geomlib.A.Point.followPath, args: { arc: { center: "O", sweep: 55 } } },
+                  { elem: "C", name: geomlib.A.Point.followPath, args: { arc: { center: "O", sweep: -30 } } } ] },
+              justifications: [{ ref: "III.32" }] },
+            { text: "For let a straight line {EF} touch the circle {ABCD} at the point {B}, and from the point {B} let there be drawn across, in the circle {ABCD}, a straight line {BD} cutting it.",
+              visible: GIVEN,
+              highlighted: ["EF", "B", "BD"],
+              transition: { animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that the angles which {BD} makes with the tangent {EF} equal the angles in the alternate segments of the circle,",
+              visible: GIVEN,
+              highlighted: ["BD","EF"] },
+            { text: "that is, that the angle {FBD} equals the angle constructed in the segment {BAD|segBAD}, and the angle {EBD} equals the angle constructed in the segment {DCB|segDCB}.",
+              visible: SAY,
+              // The two markers are the animation's targets; the segments
+              // they are compared with carry the gold.
+              highlighted: ["segBAD","segDCB","BD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angFBD", name: geomlib.A.Sector.sweep },
+                  { elem: "angEBD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Draw {BA} from {B} at right angles to {EF},",
+              visible: PERP,
+              highlighted: ["EF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "A",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "BA at right angles to EF", ref: "I.11" }] },
+            { text: "take a point {C} at random on the circumference {BD|segDCB}, and join {AD}, {DC}, and {CB}.",
+              visible: JOINS,
+              highlighted: ["segDCB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "C",  name: geomlib.A.Point.appear },
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since a straight line {EF} touches the circle {ABCD} at {B}, and {BA} has been drawn from the point of contact at right angles to the tangent, the center of the circle {ABCD} is on {BA}.",
+              visible: JOINS,
+              // O is Joyce's own colourless centre point; highlighted, it
+              // shows as a bare gold dot on BA — no letter, since its
+              // nameColor is 0.
+              highlighted: ["EF","AB","ABCD","O"],
+              justifications: [{ claim: "the center lies on the perpendicular from the point of contact", ref: "III.19" }] },
+            { text: "Therefore {BA} is a diameter of the circle {ABCD}.",
+              visible: JOINS,
+              highlighted: ["AB","O","ABCD"],
+              justifications: [{ claim: "a chord through the center", ref: "I.Def.17" }] },
+            { text: "Therefore the angle {ADB}, being an angle in a semicircle, is right.",
+              visible: SEMI,
+              highlighted: ["segBAD","BD"],
+              transition: { animations: [
+                  { elem: "angADB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the angle in a semicircle is right", ref: "III.31" }] },
+            { text: "Therefore the sum of the remaining angles {BAD} and {ABD} equals one right angle.",
+              visible: TRI,
+              highlighted: ["triABD","angADB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAD", name: geomlib.A.Sector.sweep },
+                  { elem: "angABD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the three angles of the triangle ABD equal two right angles", ref: "I.32" }] },
+            { text: "But the angle {ABF} is also right, therefore the angle {ABF} equals the sum of the angles {BAD} and {ABD}.",
+              visible: RT,
+              highlighted: ["angBAD","angABD"],
+              transition: { animations: [
+                  { elem: "angABF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "ABF is right, BA being at right angles to EF", ref: "I.11" }] },
+            { text: "Subtract the angle {ABD} from each.",
+              visible: RT,
+              highlighted: ["angABD"],
+              justifications: [{ ref: "C.N.3" }] },
+            { text: "Therefore the remaining angle {DBF} equals the angle {BAD} in the alternate segment of the circle.",
+              visible: RT,
+              highlighted: ["angFBD","angBAD","segBAD"] },
+            { text: "Next, since {ABCD|quadABCD} is a quadrilateral in a circle, the sum of its opposite angles equals two right angles.",
+              visible: QUAD,
+              highlighted: ["angBAD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "quadABCD", name: geomlib.A.Polygon.outline },
+                  { elem: "angBCD",   name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "opposite angles of a quadrilateral in a circle", ref: "III.22" }] },
+            { text: "But the sum of the angles {DBF} and {DBE} also equals two right angles, therefore the sum of the angles {DBF} and {DBE} equals the sum of the angles {BAD} and {BCD},",
+              visible: QUAD,
+              highlighted: ["angFBD","angEBD","angBAD","angBCD"],
+              justifications: [{ claim: "DBF and DBE stand on the straight line EF", ref: "I.13" }] },
+            { text: "of which the angle {BAD} was proved equal to the angle {DBF},",
+              visible: QUAD,
+              highlighted: ["angBAD","angFBD"] },
+            { text: "therefore the remaining angle {DBE} equals the angle {DCB} in the alternate segment {DCB|segDCB} of the circle.",
+              visible: QUAD,
+              highlighted: ["angEBD","angBCD","segDCB"],
+              justifications: [{ ref: "C.N.3" }] },
+            { text: "Therefore if a straight line touches a circle, and from the point of contact there is drawn across, in the circle, a straight line cutting the circle, then the angles which it makes with the tangent equal the angles in the alternate segments of the circle.",
+              visible: QUAD,
+              highlighted: ["EF","BD","angFBD","angBAD","angEBD","angBCD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.32") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Def.17": "/elements/books/bookI/definitions/defI17/",
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.11":     "/elements/books/bookI/propositions/propI11/",
+        "I.13":     "/elements/books/bookI/propositions/propI13/",
+        "I.32":     "/elements/books/bookI/propositions/propI32/",
+        "III.19":   "/elements/books/bookIII/propositions/propIII19/",
+        "III.22":   "/elements/books/bookIII/propositions/propIII22/",
+        "III.31":   "/elements/books/bookIII/propositions/propIII31/",
+        "C.N.3":    "/elements/books/bookI/commonnotions/cn3/"
     });
 </script>
 </figure>
 
-Draw *BA* from *B* at right angles to *EF,* take a point *C* at random on the circumference *BD,* and join *AD, DC,* and *CB.* [!just I.11]
+Draw {BA} from {B} at right angles to {EF}, take a point {C} at random on the circumference {BD|segDCB}, and join {AD}, {DC}, and {CB}. [!just I.11]
 
-Then, since a straight line *EF* touches the circle *ABCD* at *B,* and *BA* has been drawn from the point of contact at right angles to the tangent, the center of the circle *ABCD* is on *BA.* [!just III.19]
+Then, since a straight line {EF} touches the circle {ABCD} at {B}, and {BA} has been drawn from the point of contact at right angles to the tangent, the center of the circle {ABCD} is on {BA}. [!just III.19]
 
-Therefore *BA* is a diameter of the circle *ABCD.*  Therefore the angle *ADB,* being an angle in a semicircle, is right. [!just III.31]
+Therefore {BA} is a diameter of the circle {ABCD}.  Therefore the angle {ADB}, being an angle in a semicircle, is right. [!just III.31]
 
-Therefore the sum of the remaining angles *BAD* and *ABD* equals one right angle. [!just I.32]
+Therefore the sum of the remaining angles {BAD} and {ABD} equals one right angle. [!just I.32]
 
-But the angle *ABF* is also right, therefore the angle *ABF* equals the sum of the angles *BAD* and *ABD.*
+But the angle {ABF} is also right, therefore the angle {ABF} equals the sum of the angles {BAD} and {ABD}.
 
-Subtract the angle *ABD* from each.  Therefore the remaining angle *DBF* equals the angle *BAD* in the alternate segment of the circle.
+Subtract the angle {ABD} from each.  Therefore the remaining angle {DBF} equals the angle {BAD} in the alternate segment of the circle.
 
-Next, since *ABCD* is a quadrilateral in a circle, the sum of its opposite angles equals two right angles. [!just III.22]
+Next, since {ABCD|quadABCD} is a quadrilateral in a circle, the sum of its opposite angles equals two right angles. [!just III.22]
 
-But the sum of the angles *DBF* and *DBE* also equals two right angles, therefore the sum of the angles *DBF* and *DBE* equals the sum of the angles *BAD* and *BCD,* of which the angle *BAD* was proved equal to the angle *DBF,* therefore the remaining angle *DBE* equals the angle *DCB* in the alternate segment *DCB* of the circle.
+But the sum of the angles {DBF} and {DBE} also equals two right angles, therefore the sum of the angles {DBF} and {DBE} equals the sum of the angles {BAD} and {BCD}, of which the angle {BAD} was proved equal to the angle {DBF}, therefore the remaining angle {DBE} equals the angle {DCB} in the alternate segment {DCB|segDCB} of the circle.
 
 Therefore *if a straight line touches a circle, and from the point of contact there is drawn across, in the circle, a straight line cutting the circle, then the angles which it makes with the tangent equal the angles in the alternate segments of the circle.*
 

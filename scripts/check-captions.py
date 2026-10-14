@@ -34,7 +34,9 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 THRESHOLD = 0.92
 
-TOKEN = re.compile(r"\{([A-Za-z][A-Za-z0-9']*)(?:\|[^}]*)?(?::canvas[^}]*)?\}")
+# The display half may be a phrase ({a less segment|arcADC}), as geomlib's
+# caption parser allows; only the display text counts as Joyce's words.
+TOKEN = re.compile(r"\{([^{}|:]+)(?:\|[^}]*)?(?::canvas[^}]*)?\}")
 
 
 def words(text):
@@ -68,7 +70,12 @@ def check(path):
     # a hit there is a prompt to look, not a defect.
     body = s.split("----\nproof:", 1)[-1]
     body = re.sub(r"<script[\s\S]*?</script>", " ", body)
-    proof = words(body)
+    # The statement is Joyce's text too, and decks open on it (process.md
+    # "Open on the statement"). Theorems restate it in their closing
+    # "Therefore ..." so it is already in the proof stream; constructions
+    # ("To draw ...") do not, so the statement field is prepended.
+    stmt = re.search(r"^statement:(.*?)^----", s, re.S | re.M)
+    proof = words(stmt.group(1) if stmt else "") + words(body)
     out = []
     for i, c in enumerate(captions, 1):
         cw = words(c)

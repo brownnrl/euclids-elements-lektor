@@ -15,12 +15,29 @@ statement: If a straight line touches a circle, and a straight line is joined fr
 ----
 proof:
 
-For let a straight line *DE* touch the circle *ABC* at the point *C.*  Take the center *F* of the circle *ABC,* and join *FC* from *F* to *C.* [!just III.1]
+For let a straight line {DE} touch the circle {ABC} at the point {C}.  Take the center {F} of the circle {ABC}, and join {FC} from {F} to {C}. [!just III.1]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="330" height="260" tabindex="0"></canvas>
 <noscript><img alt="III.18 diagram" src="propIII18.gif"/></noscript>
 <script type="text/javascript">
+    // A short reductio: if FC is not the perpendicular, the perpendicular
+    // FG is shorter than the radius FB along it. Joyce's figure draws G, FG
+    // and B; the walk brings them on with their sentences.
+    //
+    // Everything added is fully transparent (;0;0;0), so the static figure
+    // is unchanged: FB is the radius along FG (GF already draws it), and
+    // three angle markers — the right angle at G the reductio constructs,
+    // the acute angle FCG it contradicts, and the right angle FCE the
+    // proposition concludes with, which the closing slides sweep. Right
+    // angles are red. The reductio's own markers are dropped once it
+    // closes; G, FG and B stay as Joyce drew them.
+    var GIVEN = ["A","C","ABC","D","E","DE"];
+    var CENT  = GIVEN.concat(["F","CF"]);
+    var PERP  = CENT.concat(["G","GF","angFGC"]);
+    var ACUTE = PERP.concat(["angFCG"]);
+    var BPT   = ACUTE.concat(["B","FB"]);
+    var DONE  = CENT.concat(["G","GF","B","angFCE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -38,27 +55,125 @@ For let a straight line *DE* touch the circle *ABC* at the point *C.*  Take the 
             "DE;line;connect;D,E",
             "G;point;lineSlider;CD',240,110",
             "GF;line;connect;G,F",
-            "B;point;cutoff;F,G,F,C"
+            "B;point;cutoff;F,G,F,C",
+            // Hover / highlight target only — GF already draws it.
+            "FB;line;connect;F,B;0;0;0",
+            "angFGC;sector;angleMarkerRight;G,F,C;0;0;red;red",
+            "angFCG;sector;angleMarker;C,F,G",
+            "angFCE;sector;angleMarkerRight;C,F,E;0;0;red;red"
         ],
+        // Draggable, checked against the bundle: A, C, D, E, G. G is the
+        // foot of the supposed perpendicular, introduced mid-walk, so it is
+        // deferred to follow `visible`. A and C are letters of the given
+        // circle, D and E the ends of the given tangent. F (midpoint) and B
+        // (cutoff) are derived, hence listed per slide. The resting figure
+        // is unaffected.
+        deferDraggables: ["G"],
+        aliases: { "FC": "CF", "FG": "GF", "ED": "DE", "BF": "FB",
+                   "FGC": "angFGC", "CGF": "angFGC",
+                   "FCG": "angFCG", "GCF": "angFCG",
+                   "FCE": "angFCE", "ECF": "angFCE" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”), split at its seams.
+            { text: "“If a straight line touches a circle,”",
+              visible: GIVEN,
+              highlighted: [] },
+            { text: "“and a straight line is joined from the center to the point of contact,”",
+              visible: GIVEN,
+              highlighted: [] },
+            { text: "“the straight line so joined will be perpendicular to the tangent.”",
+              visible: GIVEN,
+              highlighted: [],
+              justifications: [{ ref: "III.18" }] },
+            { text: "For let a straight line {DE} touch the circle {ABC} at the point {C}.",
+              visible: GIVEN,
+              highlighted: ["DE","ABC","C"] },
+            { text: "Take the center {F} of the circle {ABC}, and join {FC} from {F} to {C}.",
+              visible: CENT,
+              highlighted: ["F", "CF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",  name: geomlib.A.Point.appear },
+                  { elem: "CF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "the center F of the circle", ref: "III.1" },
+                  { ref: "I.Post.1" } ] },
+            { text: "I say that {FC} is perpendicular to {DE}.",
+              visible: CENT,
+              highlighted: ["CF","DE"] },
+            { text: "For, if not, draw {FG} from {F} perpendicular to {DE}.",
+              visible: PERP,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G",      name: geomlib.A.Point.appear },
+                  { elem: "GF",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angFGC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "FG perpendicular to DE", ref: "I.12" }] },
+            // His sentence is three clauses with two citations; it takes two
+            // slides, the split at his own semicolon.
+            { text: "Then, since the angle {FGC} is right, the angle {FCG} is acute,",
+              visible: ACUTE,
+              highlighted: ["angFGC"],
+              transition: { animations: [
+                  { elem: "angFCG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "two angles of a triangle are less than two right angles", ref: "I.17" }] },
+            { text: "and the side opposite the greater angle is greater, therefore {FC} is greater than {FG}.",
+              visible: ACUTE,
+              highlighted: ["angFGC","angFCG","CF","GF"],
+              justifications: [{ claim: "the greater angle is subtended by the greater side", ref: "I.19" }] },
+            { text: "But {FC} equals {FB}, therefore {FB} is also greater than {FG}, the less greater than the greater, which is impossible.",
+              visible: BPT,
+              highlighted: ["CF","FB","GF"],
+              transition: { animations: [
+                  { elem: "B", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "FC and FB are radii", ref: "I.Def.15" }] },
+            { text: "Therefore {FG} is not perpendicular to {DE}.",
+              visible: BPT,
+              highlighted: ["GF","DE"] },
+            { text: "Similarly we can prove that neither is any other straight line except {FC}. Therefore {FC} is perpendicular to {DE}.",
+              visible: DONE,
+              highlighted: ["CF","DE"],
+              transition: { animations: [
+                  { elem: "angFCE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore if a straight line touches a circle, and a straight line is joined from the center to the point of contact, the straight line so joined will be perpendicular to the tangent.",
+              visible: DONE,
+              highlighted: ["DE","CF","angFCE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.18") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+        "I.12":     "/elements/books/bookI/propositions/propI12/",
+        "I.17":     "/elements/books/bookI/propositions/propI17/",
+        "I.19":     "/elements/books/bookI/propositions/propI19/",
+        "III.1":    "/elements/books/bookIII/propositions/propIII1/"
     });
 </script>
 </figure>
 
-I say that *FC* is perpendicular to *DE.*
+I say that {FC} is perpendicular to {DE}.
 
-For, if not, draw *FG* from *F* perpendicular to *DE.* [!just I.12]
+For, if not, draw {FG} from {F} perpendicular to {DE}. [!just I.12]
 
-Then, since the angle *FGC* is right, the angle *FCG* is acute, and the side opposite the greater angle is greater, therefore *FC* is greater than *FG.* [!just I.17; I.19]
+Then, since the angle {FGC} is right, the angle {FCG} is acute, and the side opposite the greater angle is greater, therefore {FC} is greater than {FG}. [!just I.17; I.19]
 
-But *FC* equals *FB,* therefore *FB* is also greater than *FG,* the less greater than the greater, which is impossible.
+But {FC} equals {FB}, therefore {FB} is also greater than {FG}, the less greater than the greater, which is impossible.
 
-Therefore *FG* is not perpendicular to *DE.*
+Therefore {FG} is not perpendicular to {DE}.
 
-Similarly we can prove that neither is any other straight line except *FC.* Therefore *FC* is perpendicular to *DE.*
+Similarly we can prove that neither is any other straight line except {FC}. Therefore {FC} is perpendicular to {DE}.
 
 Therefore *if a straight line touches a circle, and a straight line is joined from the center to the point of contact, the straight line so joined will be perpendicular to the tangent.*
 
 <div class="qed">Q.E.D.</div>
 <br clear="all">
 ----
-guide: This proposition is used in @III.19, @III.36, and a other propositions in Books III and IV.
+guide: This proposition is used in @III.19, @III.36, and other propositions in Books III and IV.

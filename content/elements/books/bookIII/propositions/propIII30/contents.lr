@@ -13,18 +13,49 @@ sections:
 #### prop_section ####
 kind: proposition
 ----
-statement: To bisect a given circumference. </font color>
+statement: To bisect a given circumference.
 ----
 proof:
 
-Let *ADB* be the given circumference.
+Let {ADB} be the given circumference.
 
-It is required to bisect the circumference *ADB.*
+It is required to bisect the circumference {ADB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="150" tabindex="0"></canvas>
 <noscript><img alt="III.30 diagram" src="propIII30.gif"/></noscript>
 <script type="text/javascript">
+    // A short CONSTRUCTION, so every step is animated in full: the join, the
+    // bisection, the perpendicular, the two joins to D. The I.10 / I.11 rigs
+    // are long past their demonstration (fatigue rule) — C appears and CD
+    // draws in one stroke.
+    //
+    // Joyce's figure draws the arc ADB, its chord AB, the perpendicular CD
+    // and the chords AD, DB. The proof also names the halves AC and CB, the
+    // two right angles at C, and — the payoff — the two circumferences AD
+    // and DB, which the figure draws only as parts of the one arc ADB. Those
+    // two arcs need a "through" point each (an arc is three points on its
+    // circle), and the figure has none, so each is built from invisible
+    // helpers: O, the circumcenter of A, D, B; the midpoint of the chord; a
+    // cutoff from O toward that midpoint of length OA, whose far end lands
+    // on the circle at the arc's own midpoint. All ;0;0 / ;0;0;0, so the
+    // resting figure is unchanged. Arcs draw counter-clockwise on screen
+    // from first arm to last: D,·,A is the arc from D over to A on the left,
+    // B,·,D from B up to D on the right; both are lesser arcs and both sweep
+    // forward (measured 110 → 214 → 315 → 422 px), so #172 does not bite.
+    //
+    // "AD" and "DB" name both the chords and the circumferences. The chord
+    // elements keep the plain names (they are the drawn lines), and the
+    // prose binds the circumferences with the display override {AD|arcAD}.
+    // D is a lineSlider on the perpendicular and is the letter of the given
+    // circumference ADB, so it is shown from slide 1 and not deferred.
+    var GIVEN = ["ADB","A","D","B"];
+    var JOIN  = GIVEN.concat(["AB","C"]);
+    var PERP  = JOIN.concat(["CD"]);
+    var CHORD = PERP.concat(["AD","BD"]);
+    var HALF  = CHORD.concat(["AC","CB"]);
+    var RT    = HALF.concat(["angACD","angBCD"]);
+    var ARCS  = RT.concat(["arcAD","arcDB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -39,19 +70,127 @@ It is required to bisect the circumference *ADB.*
             "CD;line;connect;C,D",
             "ADB;sector;arc;B,D,A;0;0;black;0",
             "AD;line;connect;A,D",
-            "BD;line;connect;B,D"
+            "BD;line;connect;B,D",
+            // The halves of AB — AB already draws them.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            // The two right angles at C. Red = right angle, as in Book II.
+            // Hidden in the static figure (showAngles defaults false).
+            "angACD;sector;angleMarkerRight;C,A,D;0;0;red;red",
+            "angBCD;sector;angleMarkerRight;C,B,D;0;0;red;red",
+            // Invisible helpers for the two circumferences (see above).
+            "O;point;circumcenter;A,D,B;0;0",
+            "mAD;point;midpoint;A,D;0;0",
+            "mDB;point;midpoint;D,B;0;0",
+            "OmAD;line;cutoff;O,mAD,O,A;0;0;0",
+            "OmDB;line;cutoff;O,mDB,O,A;0;0;0",
+            "pAD;point;last;OmAD;0;0",
+            "pDB;point;last;OmDB;0;0",
+            // The circumferences AD and DB — the payoff.
+            "arcAD;sector;arc;D,pAD,A;0;0;0;0",
+            "arcDB;sector;arc;B,pDB,D;0;0;0;0"
         ],
+        // Draggables (checked against the bundle): A, B free and D a
+        // lineSlider — all three are letters of the given circumference ADB
+        // and belong on slide 1, so nothing is deferred. C is a midpoint,
+        // not auto-unioned, so it is listed from the slide that bisects.
+        aliases: { "BA": "AB", "CA": "AC", "BC": "CB", "DC": "CD",
+                   "DA": "AD", "DB": "BD", "BDA": "ADB",
+                   "ACD": "angACD", "DCA": "angACD",
+                   "BCD": "angBCD", "DCB": "angBCD" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”).
+            { text: "To bisect a given circumference.",
+              visible: GIVEN,
+              highlighted: [],
+              justifications: [{ ref: "III.30" }] },
+            { text: "Let {ADB} be the given circumference.",
+              visible: GIVEN,
+              highlighted: ["ADB"] },
+            { text: "It is required to bisect the circumference {ADB}.",
+              visible: GIVEN,
+              highlighted: ["ADB"] },
+            { text: "Join {AB}, and bisect it at {C}.",
+              visible: JOIN,
+              highlighted: ["AB", "C"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "C",  name: geomlib.A.Point.appear } ] },
+              justifications: [
+                  { ref: "I.Post.1" },
+                  { claim: "AB bisected at C", ref: "I.10" } ] },
+            { text: "Draw {CD} from the point {C} at right angles to the straight line {AB}.",
+              visible: PERP,
+              highlighted: ["AB", "CD"],
+              transition: { animations: [
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "CD at right angles to AB", ref: "I.11" }] },
+            { text: "Join {AD} and {DB}.",
+              visible: CHORD,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since {AC} equals {CB}, and {CD} is common,",
+              visible: HALF,
+              highlighted: ["AC","CB","CD"] },
+            { text: "the two sides {AC} and {CD} equal the two sides {BC} and {CD}, and the angle {ACD} equals the angle {BCD}, for each is right,",
+              visible: RT,
+              highlighted: ["AC", "CB", "CD", "angACD", "angBCD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angACD", name: geomlib.A.Sector.sweep },
+                  { elem: "angBCD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "CD stands at right angles to AB", ref: "I.Def.10" }] },
+            { text: "therefore the base {AD} equals the base {DB}.",
+              visible: RT,
+              highlighted: ["AD","BD"],
+              justifications: [{ claim: "two sides and the angle between them", ref: "I.4" }] },
+            { text: "But equal straight lines cut off equal circumferences, the greater equal to the greater, and the less to the less,",
+              visible: RT,
+              highlighted: ["AD","BD"],
+              justifications: [{ claim: "equal straight lines cut off equal circumferences", ref: "III.28" }] },
+            { text: "and each of the circumferences {AD|arcAD} and {DB|arcDB} is less than a semicircle,",
+              visible: ARCS,
+              highlighted: ["arcAD","arcDB"] },
+            { text: "therefore the circumference {AD|arcAD} equals the circumference {DB|arcDB}.",
+              visible: ARCS,
+              highlighted: ["arcAD", "arcDB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "arcAD", name: geomlib.A.Sector.sweep },
+                  { elem: "arcDB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the given circumference has been bisected at the point {D}.",
+              visible: ARCS,
+              highlighted: ["D","arcAD","arcDB"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.30") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Def.10": "/elements/books/bookI/definitions/defI10/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.10":     "/elements/books/bookI/propositions/propI10/",
+        "I.11":     "/elements/books/bookI/propositions/propI11/",
+        "III.28":   "/elements/books/bookIII/propositions/propIII28/"
     });
 </script>
 </figure>
 
-Join *AB,* and bisect it at *C.*  Draw *CD* from the point *C* at right angles to the straight line *AB.* Join *AD* and *DB.* [!just I.10, I.11]
+Join {AB}, and bisect it at {C}.  Draw {CD} from the point {C} at right angles to the straight line {AB}. Join {AD} and {DB}. [!just I.10, I.11]
 
-Then, since *AC* equals *CB,* and *CD* is common, the two sides *AC* and *CD* equal the two sides *BC* and *CD,* and the angle *ACD* equals the angle *BCD,* for each is right, therefore the base *AD* equals the base *DB.* [!just I.4]
+Then, since {AC} equals {CB}, and {CD} is common, the two sides {AC} and {CD} equal the two sides {BC} and {CD}, and the angle {ACD} equals the angle {BCD}, for each is right, therefore the base {AD} equals the base {DB}. [!just I.4]
 
-But equal straight lines cut off equal circumferences, the greater equal to the greater, and the less to the less, and each of the circumferences *AD* and *DB* is less than a semicircle, therefore the circumference *AD* equals the circumference *DB.* [!just III.28]
+But equal straight lines cut off equal circumferences, the greater equal to the greater, and the less to the less, and each of the circumferences {AD|arcAD} and {DB|arcDB} is less than a semicircle, therefore the circumference {AD|arcAD} equals the circumference {DB|arcDB}. [!just III.28]
 
-Therefore the given circumference has been bisected at the point *D.*
+Therefore the given circumference has been bisected at the point {D}.
 
 <div class="qed">Q.E.F.</div>
 ----

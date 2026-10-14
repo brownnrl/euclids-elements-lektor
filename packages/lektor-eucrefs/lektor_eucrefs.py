@@ -545,6 +545,57 @@ class EucrefsRendererMixin:
         return head
 
 
+# --- Figure rows (template filter `figrows`) -----------------------------
+# A figure declares which text it belongs with by one attribute on its own
+# (already raw-HTML) tag: <figure class="diagram" data-spans="2"> pairs it
+# with the next two paragraphs; a figure placed directly after it joins
+# the same row on its own side. The markdown stays markdown; the template
+# applies this filter to the rendered HTML and wraps the figure and those
+# paragraphs — with the citation blocks that precede them — into
+#   <div class="figrow"><figure…/><div class="figtext">…</div></div>
+# so the figure sits on the left and its paragraphs and their margin notes
+# form one column beside it. A figure without the attribute is untouched.
+_FIG_SPAN_RE = re.compile(r'<figure\b[^>]*\bdata-spans="(\d+)"[^>]*>.*?</figure>', re.S)
+_BLOCK_RE = re.compile(r'\s*(<div class="just">.*?</div>|<p>.*?</p>|<hr[^>]*>)', re.S)
+_NEXT_FIG_RE = re.compile(r'\s*(<figure\b[^>]*>.*?</figure>)', re.S)
+
+def figrows(html):
+    from markupsafe import Markup
+    s = str(html)
+    if 'data-spans="' not in s:
+        return Markup(s)
+    out, pos = [], 0
+    for m in _FIG_SPAN_RE.finditer(s):
+        if m.start() < pos:
+            continue
+        want = int(m.group(1))
+        out.append(s[pos:m.start()])
+        # Figures placed back to back join the same row; each goes to the
+        # gutter its own class names (rdiagram -> right, else left).
+        figs, j = [m.group(0)], m.end()
+        while True:
+            f = _NEXT_FIG_RE.match(s, j)
+            if not f:
+                break
+            figs.append(f.group(1)); j = f.end()
+        taken, got = [], 0
+        while got < want:
+            b = _BLOCK_RE.match(s, j)
+            if not b:
+                break
+            taken.append(b.group(1))
+            if b.group(1).startswith("<p>"):
+                got += 1
+            j = b.end()
+        out.append('<div class="figrow">' + "".join(figs) +
+                   '<div class="figtext">' + "\n".join(taken) + '</div></div>')
+        pos = j
+    out.append(s[pos:])
+    # The whole proof becomes one centred text column with a figure gutter
+    # either side; rows reach into the gutter on their figure's side.
+    return Markup('<div class="proofgrid">' + "".join(out) + '</div>')
+
+
 class EucrefsPlugin(Plugin):
     name = "Euclid citation refs"
     description = "@-prefixed inline citations and [!just …] margin-ref blocks for Euclid's Elements."
@@ -565,6 +616,7 @@ class EucrefsPlugin(Plugin):
         # repo's dist/bundle.js). Templates read this as a global.
         val = os.environ.get("EUCLIDS_GEOMLIB_LOCAL", "").strip().lower()
         self.env.jinja_env.globals["geomlib_local"] = val in ("1", "true", "yes", "on")
+        self.env.jinja_env.filters["figrows"] = figrows
         # Reference tables: forward_refs = what this page cites;
         # referenced_by = which pages cite this one (see above).
         self.env.jinja_env.globals["forward_refs"] = forward_refs

@@ -15,14 +15,76 @@ statement: In a circle the angle in the semicircle is right, that in a greater s
 ----
 proof:
 
-Let *ABCD* be a circle, let *BC* be its diameter, and *E* its center.  Join *BA, AC, AD,* and *DC.*
+Let {ABCD} be a circle, let {BC} be its diameter, and {E} its center.  Join {BA}, {AC}, {AD}, and {DC}.
 
-I say that the angle *BAC* in the semicircle *BAC* is right, the angle *ABC* in the segment *ABC* greater than the semicircle is less than a right angle, and the angle *ADC* in the segment *ADC* less than the semicircle is greater than a right angle.
+I say that the angle {BAC} in the semicircle {BAC|semiBAC} is right, the angle {ABC|angABC} in the segment {ABC|arcABC} greater than the semicircle is less than a right angle, and the angle {ADC} in the segment {ADC|arcADC} less than the semicircle is greater than a right angle.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="280" tabindex="0"></canvas>
 <noscript><img alt="III.31 diagram" src="propIII31.gif"/></noscript>
 <script type="text/javascript">
+    // Thales' theorem and its two companions, in Joyce's own case order: the
+    // three "I say" claims, the I.5 / I.32 argument for the semicircle, the
+    // I.17 case for the greater segment, the III.22 case for the less, then
+    // the two angles OF the segments. Twenty-two slides because his
+    // sentences are kept whole; where one runs long it is split at his own
+    // clause boundaries, never shortened.
+    //
+    // Joyce's figure draws the circle, the diameter, the five chords and AE,
+    // and the production BA→F. The proof also names the semicircle BAC, the
+    // segments ABC and ADC (bound here to their circumferences, which are
+    // exactly what "the angle of the segment" is contained by), the triangle
+    // ABC, the quadrilateral ABCD, the radii BE and CE, and seven angles.
+    // Everything added is fully transparent (;0;0;0 lines, ;0;0;0;0
+    // polygons / arcs / sector), so the resting figure is unchanged. The
+    // circle ABCD has an explicit random face (eight fields), so it may be
+    // highlighted — promotion (#140) keeps it within the face pass, under
+    // every line — but its name collides with the quadrilateral, which is
+    // ABCDq, and with nothing else; the triangle is ABC and the arc through
+    // B is arcABC.
+    //
+    // Arm orders, all measured against the bundle. Arcs and sectors draw
+    // counter-clockwise on screen from first arm to last: A,B,C is the
+    // greater arc down through B (its sweep runs backwards, #172 — 2335 px
+    // at t=0.25 against 1879 at t=1 — so it is never swept); C,D,A is the
+    // lesser arc up through D (sweeps forward, unused). The semicircle is a
+    // sector on E with arms C,B: at exactly 180 degrees the two arm orders
+    // are the two different semicircles, and C,B is the one through A; its
+    // sweep runs backwards for the same reason as II.14's, so it is
+    // revealed without one. NOTE that at 180 degrees the sign of the arc
+    // angle is decided by a cross product that is exactly zero for the
+    // authored coordinates; a drag that leaves it at -0 would flip the
+    // sector to the other side. It is transparent, so at worst a highlight
+    // lands on the wrong half after a drag.
+    //
+    // Markers: BAC and FAC are the two right angles — red, as in Book II —
+    // at radius 34 so that BAE and CAE (radius 22) nest inside BAC and the
+    // "whole angle equals the sum" is drawn, not just said. Equal things
+    // share a colour: ABC with BAE (blue), ACB with CAE (green). Explicit
+    // radii opt those four out of the same-vertex auto-stepping, and the
+    // two big red markers are declared first so the two small ones paint
+    // over them. Markers are hidden in the static figure.
+    var GIVEN = ["ABCD","B","C","BC","E"];
+    var JOIN  = GIVEN.concat(["A","D","AB","AC","AD","CD"]);
+    // The statement slides preview the claims on the figure before the proof
+    // builds it (the proof's own walk starts again from GIVEN).
+    var ST_SEMI  = GIVEN.concat(["A","AB","AC","angBAC","semiBAC"]);
+    var ST_GREAT = GIVEN.concat(["A","AB","AC","arcABC","angABC"]);
+    var ST_LESS  = GIVEN.concat(["A","D","AC","AD","CD","arcADC","angADC"]);
+    var ST_GSEG  = GIVEN.concat(["A","AB","AC","arcABC","tanA","angSegG","angBAC"]);
+    var ST_LSEG  = GIVEN.concat(["A","AB","AC","arcADC","tanA","angSegL","F","AFh","angFAC"]);
+    var SAY1  = JOIN.concat(["angBAC","semiBAC"]);
+    var SAY2  = SAY1.concat(["angABC","arcABC"]);
+    var SAY3  = SAY2.concat(["angADC","arcADC"]);
+    var EXT   = SAY3.concat(["AE","F","FA","AFh"]);
+    var ISO1  = EXT.concat(["BE","angBAE"]);
+    var ISO2  = ISO1.concat(["CE","angACB","angCAE"]);
+    var TRI   = ISO2.concat(["ABC","angFAC"]);
+    // From the I.17 case on, the two base-angle markers at A and the one at
+    // C have done their work and come off; the triangle, the right angles
+    // and the angle at B stay.
+    var SEG   = EXT.concat(["BE","CE","ABC","angFAC"]);
+    var QUAD  = SEG.concat(["ABCDq"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,27 +104,262 @@ I say that the angle *BAC* in the semicircle *BAC* is right, the angle *ABC* in 
             "CD;line;connect;C,D",
             "AE;line;connect;A,E",
             "F;point;lineSlider;A,B,30,30",
-            "FA;line;connect;F,A"
+            "FA;line;connect;F,A",
+            // "carry BA through to F": FA is declared F→A, so its own stroke
+            // would run inward. AFh is a transparent twin declared A→F; it is
+            // the animation target and draws gold outward over FA, which is
+            // revealed plain on the same slide.
+            "AFh;line;connect;A,F;0;0;0",
+            // The radii BE and CE — parts of the diameter.
+            "BE;line;connect;B,E;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            // The semicircle BAC (sector on E, arms C,B — see above), and the
+            // circumferences of the two segments.
+            "semiBAC;sector;sector;E,C,B;0;0;0;0",
+            "arcABC;sector;arc;A,B,C;0;0;0;0",
+            "arcADC;sector;arc;C,D,A;0;0;0;0",
+            // The triangle ABC and the quadrilateral ABCD (the circle owns
+            // the plain name). Explicit ;0 faces — an omitted faceColor is an
+            // opaque near-white face.
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "ABCDq;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            // The "angle of a segment" at A, shown through the tangent at A:
+            // it differs from the angle between the chord AC and the tangent
+            // only by the horn angle, which III.16 shows is less than any
+            // rectilinear angle. Tangent = perpendicular to EA at A, drawn
+            // 2 x 56 px (its ends on a circle about A); the two markers between
+            // it and AC stand for the angles of the greater and less segments.
+            "Wq;point;midpoint;A,C;0;0",
+            "We;point;midpoint;A,Wq;0;0",
+            "Wp;point;midpoint;We,Wq;0;0",
+            "Wcirc;circle;radius;A,Wp;0;0;0;0",
+            "tanA';line;perpendicular;A,E;0;0;0",
+            "tanA;line;chord;tanA',Wcirc;0;0;black",
+            "Ta;point;first;tanA;0;0",
+            "Tb;point;last;tanA;0;0",
+            "angSegG;sector;angleMarker;A,Tb,C,50;0;0;darkorange;rgba(255,140,0,0.35)",
+            "angSegL;sector;angleMarker;A,Ta,C,50;0;0;darkorange;rgba(255,140,0,0.35)",
+            // Angle markers (see above for radii, colours and order).
+            "angBAC;sector;angleMarkerRight;A,B,C,34;0;0;red;red",
+            "angFAC;sector;angleMarkerRight;A,F,C,34;0;0;red;red",
+            "angBAE;sector;angleMarker;A,B,E,22;0;0;3b6ea5;9ec5e8",
+            "angCAE;sector;angleMarker;A,C,E,22;0;0;3f8e4f;a8dbb0",
+            "angABC;sector;angleMarker;B,A,C;0;0;3b6ea5;9ec5e8",
+            "angACB;sector;angleMarker;C,A,B;0;0;3f8e4f;a8dbb0",
+            "angADC;sector;angleMarker;D,A,C;0;0;7a4fa3;cdb8e6"
         ],
+        // Draggables (checked against the bundle): B, C free; A, D
+        // circleSliders; F a lineSlider. B and C are the diameter's ends and
+        // belong on slide 1. A and D are not joined until slide 2 and F is
+        // not reached until "carry BA through to F", so those three are
+        // deferred and follow `visible`. E is a midpoint, not auto-unioned,
+        // so it is listed from slide 1. The resting figure is unaffected.
+        deferDraggables: ["A","D","F"],
+        initiallyHidden: ["tanA","angSegG","angSegL"],
+        aliases: { "BA": "AB", "CA": "AC", "DA": "AD", "DC": "CD", "CB": "BC",
+                   "EA": "AE", "EB": "BE", "EC": "CE", "AF": "FA",
+                   "BAC": "angBAC", "CAB": "angBAC",
+                   "FAC": "angFAC", "CAF": "angFAC",
+                   "BAE": "angBAE", "EAB": "angBAE",
+                   "CAE": "angCAE", "EAC": "angCAE",
+                   "ABE": "angABC", "EBA": "angABC", "CBA": "angABC",
+                   "ACE": "angACB", "ECA": "angACB", "ACB": "angACB", "BCA": "angACB",
+                   "ADC": "angADC", "CDA": "angADC" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”), split at its seams.
+            { text: "“In a circle the angle in {the semicircle|semiBAC} is {right|angBAC},”",
+              visible: ST_SEMI,
+              highlighted: ["semiBAC","angBAC"],
+              // The claim, drawn: join A to the ends of the diameter, mark the
+              // right angle, then carry A along the semicircle each way and
+              // back — the marker rides with it and stays square. A is a
+              // circleSlider, so the swing about E keeps it on the circle.
+              transition: { mode: "cascade", animations: [
+                  { elem: "AB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "A", name: geomlib.A.Point.followPath, args: { arc: { center: "E", sweep: -65 } } },
+                  { elem: "A", name: geomlib.A.Point.followPath, args: { arc: { center: "E", sweep: 65 } } } ] } },
+            { text: "“that in {a greater segment|arcABC} {less than a right angle|angABC},”",
+              visible: ST_GREAT,
+              highlighted: ["arcABC","AC","angABC"],
+              transition: { animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "“and that in {a less segment|arcADC} {greater than a right angle|angADC};”",
+              visible: ST_LESS,
+              highlighted: ["arcADC","AC","angADC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angADC", name: geomlib.A.Sector.sweep } ] } },
+            // The angle OF a segment is the curved angle at A between the
+            // chord AC and the segment's arc. Shown the way the proof argues
+            // it: the greater segment's angle contains the right angle BAC;
+            // the less segment's angle lies inside the right angle FAC.
+            { text: "“further {the angle of the greater segment|angSegG} is greater than {a right angle|angBAC},”",
+              visible: ST_GSEG,
+              highlighted: ["tanA","angSegG","angBAC"],
+              transition: { animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "“and {the angle of the less segment|angSegL} is less than {a right angle|angFAC}.”",
+              visible: ST_LSEG,
+              highlighted: ["tanA","angSegL","AFh","angFAC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AFh", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angFAC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "III.31" }] },
+            { text: "Let {ABCD} be a circle, let {BC} be its diameter, and {E} its center.",
+              visible: GIVEN,
+              highlighted: ["BC","E"],
+              justifications: [{ claim: "BC through the center is a diameter", ref: "I.Def.17" }] },
+            { text: "Join {BA}, {AC}, {AD}, and {DC}.",
+              visible: JOIN,
+              highlighted: ["AB", "AC", "AD", "CD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            // His "I say" sentence names three angles in three regions; one
+            // slide each, the marker sweeping in and the region held gold.
+            { text: "I say that the angle {BAC} in the semicircle {BAC|semiBAC} is right,",
+              visible: SAY1,
+              highlighted: ["semiBAC", "angBAC"],
+              transition: { animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "the angle {ABC|angABC} in the segment {ABC|arcABC} greater than the semicircle is less than a right angle,",
+              visible: SAY2,
+              highlighted: ["arcABC","AC"],
+              transition: { animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the angle {ADC} in the segment {ADC|arcADC} less than the semicircle is greater than a right angle.",
+              visible: SAY3,
+              highlighted: ["arcADC","AC"],
+              transition: { animations: [
+                  { elem: "angADC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Join {AE}, and carry {BA} through to {F}.",
+              visible: EXT,
+              highlighted: ["AE", "AFh"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AE",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AFh", name: geomlib.A.Line.straightEdgeExtend } ] },
+              justifications: [{ ref: "I.Post.1" }, { ref: "I.Post.2" }] },
+            { text: "Then, since {BE} equals {EA}, the angle {ABE} also equals the angle {BAE}.",
+              visible: ISO1,
+              highlighted: ["BE", "AE", "angABC", "angBAE"],
+              transition: { animations: [
+                  { elem: "angBAE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "BE and EA are radii", ref: "I.Def.15" },
+                  { claim: "the angles at the base of the isosceles triangle ABE", ref: "I.5" } ] },
+            { text: "Again, since {CE} equals {EA}, the angle {ACE} also equals the angle {CAE}.",
+              visible: ISO2,
+              highlighted: ["CE", "AE", "angACB", "angCAE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angACB", name: geomlib.A.Sector.sweep },
+                  { elem: "angCAE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "CE and EA are radii", ref: "I.Def.15" },
+                  { claim: "the angles at the base of the isosceles triangle ACE", ref: "I.5" } ] },
+            { text: "Therefore the whole angle {BAC} equals the sum of the two angles {ABC|angABC} and {ACB}.",
+              visible: ISO2,
+              highlighted: ["angBAC","angABC","angACB"],
+              justifications: [{ claim: "equals added to equals", ref: "C.N.2" }] },
+            { text: "But the angle {FAC} exterior to the triangle {ABC} also equals the sum of the two angles {ABC|angABC} and {ACB}.",
+              visible: TRI,
+              highlighted: ["ABC", "angABC", "angACB", "angFAC"],
+              transition: { animations: [
+                  { elem: "angFAC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the exterior angle equals the two interior and opposite angles", ref: "I.32" }] },
+            { text: "Therefore the angle {BAC} also equals the angle {FAC}. Therefore each is right.",
+              visible: TRI,
+              highlighted: ["angBAC","angFAC"],
+              justifications: [
+                  { claim: "each equals the same sum", ref: "C.N.1" },
+                  { claim: "equal adjacent angles on the straight line BF", ref: "I.Def.10" } ] },
+            { text: "Therefore the angle {BAC} in the semicircle {BAC|semiBAC} is right.",
+              visible: TRI,
+              highlighted: ["angBAC","semiBAC"] },
+            { text: "Next, since in the triangle {ABC} the sum of the two angles {ABC|angABC} and {BAC} is less than two right angles, and the angle {BAC} is a right angle, the angle {ABC|angABC} is less than a right angle.",
+              visible: SEG,
+              highlighted: ["ABC","angABC","angBAC"],
+              justifications: [{ claim: "two angles of a triangle are less than two right angles", ref: "I.17" }] },
+            { text: "And it is the angle in the segment {ABC|arcABC} greater than the semicircle.",
+              visible: SEG,
+              highlighted: ["angABC","arcABC","AC"] },
+            { text: "Next, since {ABCD|ABCDq} is a quadrilateral in a circle, and the sum of the opposite angles of quadrilaterals in circles equals two right angles,",
+              visible: QUAD,
+              highlighted: ["angABC", "angADC", "ABCDq"],
+              transition: { animations: [
+                  { elem: "ABCDq", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "opposite angles of a quadrilateral in a circle", ref: "III.22" }] },
+            { text: "while the angle {ABC|angABC} is less than a right angle, therefore the remaining angle {ADC} is greater than a right angle.",
+              visible: QUAD,
+              highlighted: ["angABC","angADC"] },
+            { text: "And it is the angle in the segment {ADC|arcADC} less than the semicircle.",
+              visible: QUAD,
+              highlighted: ["angADC","arcADC","AC"] },
+            // The angles OF the segments — between the circumference and the
+            // chord — are not rectilinear, so they have no marker; each slide
+            // lights the circumference and the chord that contain it.
+            { text: "I say further that the angle of the greater segment, namely that contained by the circumference {ABC|arcABC} and the straight line {AC}, is greater than a right angle,",
+              visible: QUAD,
+              highlighted: ["arcABC","AC"] },
+            { text: "and the angle of the less segment, namely that contained by the circumference {ADC|arcADC} and the straight line {AC}, is less than a right angle.",
+              visible: QUAD,
+              highlighted: ["arcADC","AC"] },
+            { text: "This is at once manifest. For, since the angle contained by the straight lines {BA} and {AC} is right, the angle contained by the circumference {ABC|arcABC} and the straight line {AC} is greater than a right angle.",
+              visible: QUAD,
+              highlighted: ["angBAC","arcABC","AC"] },
+            { text: "Again, since the angle contained by the straight lines {AC} and {AF} is right, the angle contained by the straight line {CA} and the circumference {ADC|arcADC} is less than a right angle.",
+              visible: QUAD,
+              highlighted: ["angFAC","arcADC","AC"] },
+            { text: "Therefore in a circle the angle in the semicircle is right, that in a greater segment less than a right angle, and that in a less segment greater than a right angle; further the angle of the greater segment is greater than a right angle, and the angle of the less segment is less than a right angle.",
+              visible: QUAD,
+              highlighted: ["angBAC","angABC","angADC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.31") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.Def.10": "/elements/books/bookI/definitions/defI10/",
+        "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+        "I.Def.17": "/elements/books/bookI/definitions/defI17/",
+        "I.5":      "/elements/books/bookI/propositions/propI5/",
+        "I.17":     "/elements/books/bookI/propositions/propI17/",
+        "I.32":     "/elements/books/bookI/propositions/propI32/",
+        "III.22":   "/elements/books/bookIII/propositions/propIII22/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/"
     });
 </script>
 </figure>
 
-Join *AE,* and carry *BA* through to *F.*
+Join {AE}, and carry {BA} through to {F}.
 
-Then, since *BE* equals *EA,* the angle *ABE* also equals the angle *BAE.*  Again, since *CE* equals *EA,* the angle *ACE* also equals the angle *CAE.*  Therefore the whole angle *BAC* equals the sum of the two angles *ABC* and *ACB.* [!just I.5]
+Then, since {BE} equals {EA}, the angle {ABE} also equals the angle {BAE}.  Again, since {CE} equals {EA}, the angle {ACE} also equals the angle {CAE}.  Therefore the whole angle {BAC} equals the sum of the two angles {ABC|angABC} and {ACB}. [!just I.5]
 
-But the angle *FAC* exterior to the triangle *ABC* also equals the sum of the two angles *ABC* and *ACB.*  Therefore the angle *BAC* also equals the angle *FAC.*  Therefore each is right.  Therefore the angle *BAC* in the semicircle *BAC* is right. [!just I.32]
+But the angle {FAC} exterior to the triangle {ABC} also equals the sum of the two angles {ABC|angABC} and {ACB}.  Therefore the angle {BAC} also equals the angle {FAC}.  Therefore each is right.  Therefore the angle {BAC} in the semicircle {BAC|semiBAC} is right. [!just I.32]
 
-Next, since in the triangle *ABC* the sum of the two angles *ABC* and *BAC* is less than two right angles, and the angle *BAC* is a right angle, the angle *ABC* is less than a right angle.  And it is the angle in the segment *ABC* greater than the semicircle. [!just I.17]
+Next, since in the triangle {ABC} the sum of the two angles {ABC|angABC} and {BAC} is less than two right angles, and the angle {BAC} is a right angle, the angle {ABC|angABC} is less than a right angle.  And it is the angle in the segment {ABC|arcABC} greater than the semicircle. [!just I.17]
 
-Next, since *ABCD* is a quadrilateral in a circle, and the sum of the opposite angles of quadrilaterals in circles equals two right angles, while the angle *ABC* is less than a right angle, therefore the remaining angle *ADC* is greater than a right angle.  And it is the angle in the segment *ADC* less than the semicircle. [!just III.22]
+Next, since {ABCD|ABCDq} is a quadrilateral in a circle, and the sum of the opposite angles of quadrilaterals in circles equals two right angles, while the angle {ABC|angABC} is less than a right angle, therefore the remaining angle {ADC} is greater than a right angle.  And it is the angle in the segment {ADC|arcADC} less than the semicircle. [!just III.22]
 
-I say further that the angle of the greater segment, namely that contained by the circumference *ABC* and the straight line *AC,* is greater than a right angle, and the angle of the less segment, namely that contained by the circumference *ADC* and the straight line *AC,* is less than a right angle.
+I say further that the angle of the greater segment, namely that contained by the circumference {ABC|arcABC} and the straight line {AC}, is greater than a right angle, and the angle of the less segment, namely that contained by the circumference {ADC|arcADC} and the straight line {AC}, is less than a right angle.
 
-This is at once manifest.  For, since the angle contained by the straight lines *BA* and *AC* is right, the angle contained by the circumference *ABC* and the straight line *AC* is greater than a right angle.
+This is at once manifest.  For, since the angle contained by the straight lines {BA} and {AC} is right, the angle contained by the circumference {ABC|arcABC} and the straight line {AC} is greater than a right angle.
 
-Again, since the angle contained by the straight lines *AC* and *AF* is right, the angle contained by the straight line *CA* and the circumference *ADC* is less than a right angle.
+Again, since the angle contained by the straight lines {AC} and {AF} is right, the angle contained by the straight line {CA} and the circumference {ADC|arcADC} is less than a right angle.
 
 Therefore *in a circle the angle in the semicircle is right, that in a greater segment less than a right angle, and that in a less segment greater than a right angle; further the angle of the greater segment is greater than a right angle, and the angle of the less segment is less than a right angle.*
 

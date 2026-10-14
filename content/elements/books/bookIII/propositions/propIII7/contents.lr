@@ -15,14 +15,43 @@ statement: If on the diameter of a circle a point is taken which is not the cent
 ----
 proof:
 
-Let *ABCD* be a circle, and let *AD* be a diameter of it. Let *F* be a point *F* on *AD* which is not the center of the circle. Let *E* be the center of the circle.  Let straight lines *FB, FC,* and *FG* fall upon the circle *ABCD* from *F.*
+Let {ABCD} be a circle, and let {AD} be a diameter of it. Let {F} be a point {F} on {AD} which is not the center of the circle. Let {E} be the center of the circle.  Let straight lines {FB}, {FC}, and {FG} fall upon the circle {ABCD} from {F}.
 
-I say that *FA* is greatest, *FD* is least, and of the rest *FB* is greater than *FC,* and *FC* greater than *FG.*
+I say that {FA} is greatest, {FD} is least, and of the rest {FB} is greater than {FC}, and {FC} greater than {FG}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="250" tabindex="0"></canvas>
 <noscript><img alt="III.7a diagram" src="propIII7a.gif"/></noscript>
 <script type="text/javascript">
+    // The first half of III.7: from a point F on the diameter, the line
+    // through the center is greatest and the remainder of the diameter
+    // least. Joyce's figure draws the diameter AD and the six lines from B,
+    // C, G to E and to F, but none of the pieces of AD the proof measures
+    // (AE, EF, AF, ED, FD). Everything added here is fully transparent
+    // (;0;0;0 lines), so the static figure is unchanged; the names exist
+    // only so a slide or a hover can light them.
+    //
+    // The angles at E are the proof's currency at the I.24 step -- "the
+    // angle BEF is also greater than the angle CEF". Three markers share
+    // the vertex E and nest from the arm EF; the library ring-steps
+    // same-vertex markers (#103), so no radius overrides. Markers are
+    // hidden in the resting figure. The two markers at F exist for the
+    // guide's "angle BFA is less than the angle CFA" hover only.
+    //
+    // Colour: the circle keeps Joyce's random fill and nothing else is
+    // filled, so no promote-on-highlight hazard (#140) arises.
+    var GIVEN = ["A","D","AD","ABC"];
+    var PT_F  = GIVEN.concat(["F"]);
+    var PT_E  = PT_F.concat(["E"]);
+    var FALL  = PT_E.concat(["B","C","G","BF","CF","GF"]);
+    var CLAIM = FALL.concat(["AF","FD"]);
+    var JOIN  = CLAIM.concat(["BE","CE","GE"]);
+    var TRI   = JOIN.concat(["EF"]);
+    var RAD   = TRI.concat(["AE"]);
+    var ANG2  = RAD.concat(["angBEF","angCEF"]);
+    var ANG3  = ANG2.concat(["angGEF"]);
+    // From the I.20 step on, the angles are done with; the markers come off.
+    var END   = RAD.concat(["ED"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -43,36 +72,175 @@ I say that *FA* is greatest, *FD* is least, and of the rest *FB* is greater than
             "F;point;lineSlider;E,D,200,125",
             "BF;line;connect;B,F",
             "CF;line;connect;C,F",
-            "GF;line;connect;G,F"
+            "GF;line;connect;G,F",
+            // Pieces of the diameter the proof names. Hover / highlight
+            // targets only -- AD already draws every one of them.
+            "AE;line;connect;A,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "FD;line;connect;F,D;0;0;0",
+            // The angles at E the I.24 step compares. Same vertex, nested
+            // from EF: ring-stepped automatically (#103).
+            "angBEF;sector;angleMarker;E,B,F",
+            "angCEF;sector;angleMarker;E,C,F",
+            "angGEF;sector;angleMarker;E,G,F",
+            // Guide-only hover targets: the note's "angle BFA is less than
+            // the angle CFA". Never in a slide set.
+            "angBFA;sector;angleMarker;F,B,A",
+            "angCFA;sector;angleMarker;F,C,A"
         ],
+        // B, C, G are circleSliders and F a lineSlider, and draggables are
+        // auto-unioned into every slide -- so all four would stand lettered
+        // on the canvas from slide 1, before "Let F be a point F on AD" and
+        // "Let straight lines FB, FC, and FG fall upon the circle" have
+        // introduced them. Deferring drops them out of that union so they
+        // follow `visible`. A and D are the diameter's ends, given on
+        // slide 1, so they stay. Checked against the bundle: draggable is
+        // true for exactly A, D, B, C, G, F on this canvas. E is a
+        // midpoint -- derived, NOT auto-unioned -- so it is listed
+        // explicitly from the slide that names it. The resting figure is
+        // unaffected.
+        deferDraggables: ["B","C","G","F"],
+        aliases: { "ABCD": "ABC",
+                   "EB": "BE", "EC": "CE", "EG": "GE",
+                   "FB": "BF", "FC": "CF", "FG": "GF",
+                   "FE": "EF", "FA": "AF", "EA": "AE", "DE": "ED", "DF": "FD",
+                   "DA": "AD",
+                   "BEF": "angBEF", "FEB": "angBEF",
+                   "CEF": "angCEF", "FEC": "angCEF",
+                   "GEF": "angGEF", "FEG": "angGEF",
+                   "BFA": "angBFA", "AFB": "angBFA",
+                   "CFA": "angCFA", "AFC": "angCFA" },
+        slides: [
+            { text: "Let {ABCD} be a circle, and let {AD} be a diameter of it.",
+              visible: GIVEN,
+              highlighted: ["ABC","AD"] },
+            { text: "Let {F} be a point {F} on {AD} which is not the center of the circle.",
+              visible: PT_F,
+              highlighted: ["AD", "F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "Let {E} be the center of the circle.",
+              visible: PT_E,
+              highlighted: [],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "Let straight lines {FB}, {FC}, and {FG} fall upon the circle {ABCD} from {F}.",
+              visible: FALL,
+              highlighted: ["B", "BF", "C", "CF", "G", "GF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "B",  name: geomlib.A.Point.appear },
+                  { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "C",  name: geomlib.A.Point.appear },
+                  { elem: "CF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "GF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that {FA} is greatest, {FD} is least, and of the rest {FB} is greater than {FC}, and {FC} greater than {FG}.",
+              visible: CLAIM,
+              highlighted: ["AF","FD","BF","CF","GF"] },
+            { text: "Join {BE}, {CE}, and {GE}.",
+              visible: JOIN,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since in any triangle the sum of any two sides is greater than the remaining one, the sum of {EB} and {EF} is greater than {BF}.",
+              visible: TRI,
+              highlighted: ["BE","EF","BF"],
+              justifications: [{ claim: "the sum of EB and EF is greater than BF", ref: "I.20" }] },
+            { text: "But {AE} equals {BE}, therefore {AF} is greater than {BF}.",
+              visible: RAD,
+              highlighted: ["AE","BE","AF","BF"] },
+            { text: "Again, since {BE} equals {CE}, and {FE} is common, the two sides {BE} and {EF} equal the two sides {CE} and {EF}.",
+              visible: RAD,
+              highlighted: ["BE","CE","EF"] },
+            { text: "But the angle {BEF} is also greater than the angle {CEF}, therefore the base {BF} is greater than the base {CF}.",
+              visible: ANG2,
+              highlighted: ["BF", "CF", "angBEF", "angCEF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBEF", name: geomlib.A.Sector.sweep },
+                  { elem: "angCEF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the greater angle is subtended by the greater base", ref: "I.24" }] },
+            { text: "For the same reason {CF} is also greater than {GF}.",
+              visible: ANG3,
+              // angGEF is the target; angCEF, already swept, keeps the gold.
+              highlighted: ["CE","GE","EF","CF","GF","angCEF"],
+              transition: { animations: [
+                  { elem: "angGEF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the angle CEF is greater than the angle GEF", ref: "I.24" }] },
+            { text: "Again, since the sum of {GF} and {FE} is greater than {EG}, and {EG} equals {ED}, the sum of {GF} and {FE} is greater than {ED}.",
+              visible: END,
+              highlighted: ["GF","EF","GE","ED"],
+              justifications: [{ claim: "the sum of GF and FE is greater than EG", ref: "I.20" }] },
+            { text: "Subtract {EF} from each. Therefore the remainder {GF} is greater than the remainder {FD}.",
+              visible: END,
+              highlighted: ["EF","GF","FD"] },
+            { text: "Therefore {FA} is greatest, {FD} is least, {FB} is greater than {FC}, and {FC} greater than {FG}.",
+              visible: END,
+              highlighted: ["AF","FD","BF","CF","GF"] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    // Keyed once across both canvases on the page.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.4":  "/elements/books/bookI/propositions/propI4/",
+        "I.20": "/elements/books/bookI/propositions/propI20/",
+        "I.23": "/elements/books/bookI/propositions/propI23/",
+        "I.24": "/elements/books/bookI/propositions/propI24/"
     });
 </script>
 </figure>
 
-Join *BE, CE,* and *GE.*
+Join {BE}, {CE}, and {GE}.
 
-Then, since in any triangle the sum of any two sides is greater than the remaining one, the sum of *EB* and *EF* is greater than *BF.* [!just I.20]
+Then, since in any triangle the sum of any two sides is greater than the remaining one, the sum of {EB} and {EF} is greater than {BF}. [!just I.20]
 
-But *AE* equals *BE,* therefore *AF* is greater than *BF.*
+But {AE} equals {BE}, therefore {AF} is greater than {BF}.
 
-Again, since *BE* equals *CE,* and *FE* is common, the two sides *BE* and *EF* equal the two sides *CE* and *EF.*   But the angle *BEF* is also greater than the angle CEF, therefore the base *BF* is greater than the base *CF.* [!just I.24]
+Again, since {BE} equals {CE}, and {FE} is common, the two sides {BE} and {EF} equal the two sides {CE} and {EF}.   But the angle {BEF} is also greater than the angle {CEF}, therefore the base {BF} is greater than the base {CF}. [!just I.24]
 
-For the same reason *CF* is also greater than *GF.*
+For the same reason {CF} is also greater than {GF}.
 
-Again, since the sum of *GF* and *FE* is greater than *EG,* and *EG* equals *ED,* the sum of *GF* and *FE* is greater than *ED.* [!just I.20]
+Again, since the sum of {GF} and {FE} is greater than {EG}, and {EG} equals {ED}, the sum of {GF} and {FE} is greater than {ED}. [!just I.20]
 
-Subtract *EF*  from each.  Therefore the remainder *GF* is greater than the remainder *FD.*
+Subtract {EF}  from each.  Therefore the remainder {GF} is greater than the remainder {FD}.
 
-Therefore *FA* is greatest, *FD* is least, *FB* is greater than *FC,* and *FC* greater than *FG.*
+Therefore {FA} is greatest, {FD} is least, {FB} is greater than {FC}, and {FC} greater than {FG}.
 
 <hr>
 
-I say also that from the point *F* only two equal straight lines fall on the circle *ABCD,* one on each side of the least *FD.*
+I say also that from the point {F} only two equal straight lines fall on the circle {ABCD}, one on each side of the least {FD}.
 
 <figure class="diagram">
 <canvas id="canvas_1" width="270" height="250" tabindex="0"></canvas>
 <noscript><img alt="III.7b diagram" src="propIII7b.gif"/></noscript>
 <script type="text/javascript">
+    // The second half: only two equal lines fall from F, one on each side
+    // of the least FD. Joyce's figure carries G, GE, GF and the least line
+    // over from the first, and builds H as the reflection of G across the
+    // diameter (the foot G' and the extend through it) -- that IS the
+    // "angle FEH equal to the angle GEF" construction, so the deck reveals
+    // EH and sweeps the two markers rather than replaying I.23. K is the
+    // supposed third equal line.
+    //
+    // Added, all fully transparent: EF and FD (pieces of AD the prose
+    // names) and the two markers at E (hidden in the resting figure).
+    // The static figure is unchanged.
+    var BASE  = ["A","D","AD","E","ABC","F","G","GE","GF","FD"];
+    var ANGLE = BASE.concat(["EF","angGEF","angFEH","H","HE"]);
+    var JOINH = ANGLE.concat(["HF"]);
+    var SUPK  = JOINH.concat(["K","KF"]);
+    var RADK  = SUPK.concat(["KE"]);
+    // The conclusion: K and its lines withdrawn, markers off; FA joins so
+    // the "greatest" clause has something to light.
+    var DONE  = BASE.concat(["EF","H","HE","HF","FA"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -94,25 +262,123 @@ I say also that from the point *F* only two equal straight lines fall on the cir
             "HF;line;connect;H,F",
             "K;point;circleSlider;ABC,160,220",
             "KE;line;connect;K,E",
-            "KF;line;connect;K,F"
+            "KF;line;connect;K,F",
+            // Pieces of the diameter the prose names; AD draws them.
+            "EF;line;connect;E,F;0;0;0",
+            "FD;line;connect;F,D;0;0;0",
+            // F to A, for the conclusion's "greatest" clause. Transparent.
+            "FA;line;connect;F,A;0;0;0",
+            // The given angle GEF and the constructed FEH, on either side
+            // of EF at the one vertex E.
+            "angGEF;sector;angleMarker;E,G,F",
+            "angFEH;sector;angleMarker;E,F,H"
         ],
+        // K is a circleSlider -- draggable, so auto-unioned into every
+        // slide -- but the proof does not suppose FK until "For, if
+        // possible, let FK so fall". Deferred so it follows `visible`.
+        // A, D, G, F are the other draggables here (checked against the
+        // bundle) and all four are carried over from the first figure, so
+        // they belong on slide 1. E (midpoint) and H (extend) are derived
+        // and are listed per slide; G' draws nothing and is never listed.
+        deferDraggables: ["K"],
+        aliases: { "ABCD": "ABC",
+                   "EH": "HE", "FH": "HF", "FG": "GF", "FK": "KF", "EK": "KE",
+                   "EG": "GE", "FE": "EF", "DF": "FD", "DA": "AD",
+                   "GEF": "angGEF", "FEG": "angGEF",
+                   "FEH": "angFEH", "HEF": "angFEH" },
+        slides: [
+            { text: "I say also that from the point {F} only two equal straight lines fall on the circle {ABCD}, one on each side of the least {FD}.",
+              visible: BASE,
+              highlighted: ["F","FD"] },
+            { text: "Construct the angle {FEH} equal to the angle {GEF} on the straight line {EF} and at the point {E} on it.",
+              visible: ANGLE,
+              highlighted: ["EF", "angGEF", "HE", "H", "angFEH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angGEF", name: geomlib.A.Sector.sweep },
+                  { elem: "HE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",      name: geomlib.A.Point.appear },
+                  { elem: "angFEH", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the angle FEH constructed equal to the angle GEF", ref: "I.23" }] },
+            { text: "Join {FH}.",
+              visible: JOINH,
+              highlighted: [],
+              transition: { animations: [
+                  { elem: "HF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since {GE} equals {EH}, and {EF} is common, the two sides {GE} and {EF} equal the two sides {HE} and {EF}, and the angle {GEF} equals the angle {HEF},",
+              visible: JOINH,
+              highlighted: ["GE","HE","EF","angGEF","angFEH"] },
+            { text: "therefore the base {FG} equals the base {FH}.",
+              visible: JOINH,
+              highlighted: ["GF","HF"],
+              justifications: [{ claim: "two sides and the angle between them equal", ref: "I.4" }] },
+            { text: "I say again that another straight line equal to {FG} does not fall on the circle from the point {F}.",
+              visible: JOINH,
+              highlighted: ["GF","F"] },
+            { text: "For, if possible, let {FK} so fall.",
+              visible: SUPK,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "K",  name: geomlib.A.Point.appear },
+                  { elem: "KF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since {FK} equals {FG}, and {FH} equals {FG}, {FK} also equals {FH},",
+              visible: SUPK,
+              highlighted: ["KF","GF","HF"] },
+            // KE is Joyce's figure line, not one his sentence names: it is
+            // the line to the center that made the first half's "nearer /
+            // more remote" comparison, so it arrives on the slide that
+            // appeals to that comparison.
+            { text: "the nearer to the straight line through the center being thus equal to the more remote, which is impossible.",
+              visible: RADK,
+              highlighted: ["KF","HF","HE"],
+              transition: { animations: [
+                  { elem: "KE", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "the nearer is greater than the more remote", ref: "Above" }] },
+            { text: "Therefore another straight line equal to {GF} does not fall from the point {F} upon the circle. Therefore only one straight line so falls.",
+              visible: RADK,
+              highlighted: ["GF","HF"] },
+            { text: "Therefore if on the diameter of a circle a point is taken which is not the center of the circle,",
+              visible: DONE,
+              highlighted: ["AD","F","E"] },
+            { text: "and from the point straight lines fall upon the circle,",
+              visible: DONE,
+              highlighted: ["GF","HF"] },
+            { text: "then that is greatest on which passes through the center,",
+              visible: DONE,
+              highlighted: ["FA"] },
+            { text: "the remainder of the same diameter is least,",
+              visible: DONE,
+              highlighted: ["FD"] },
+            { text: "and of the rest the nearer to the straight line through the center is always greater than the more remote;",
+              visible: DONE,
+              highlighted: ["FA","GF","FD"] },
+            { text: "and only two equal straight lines fall from the point on the circle,",
+              visible: DONE,
+              highlighted: ["GF","HF"] },
+            { text: "one on each side of the least straight line.",
+              visible: DONE,
+              highlighted: ["FD","G","H"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-Construct the angle *FEH* equal to the angle *GEF* on the straight line *EF* and at the point *E* on it.  Join *FH.* [!just I.23]
+Construct the angle {FEH} equal to the angle {GEF} on the straight line {EF} and at the point {E} on it.  Join {FH}. [!just I.23]
 
-Then, since *GE* equals *EH,* and *EF* is common, the two sides *GE* and *EF* equal the two sides *HE* and *EF,* and the angle *GEF* equals the angle *HEF,* therefore the base *FG* equals the base *FH.* [!just I.4]
+Then, since {GE} equals {EH}, and {EF} is common, the two sides {GE} and {EF} equal the two sides {HE} and {EF}, and the angle {GEF} equals the angle {HEF}, therefore the base {FG} equals the base {FH}. [!just I.4]
 
-I say again that another straight line equal to *FG* does not fall on the circle from the point *F.*
+I say again that another straight line equal to {FG} does not fall on the circle from the point {F}.
 
-For, if possible, let *FK* so fall.
+For, if possible, let {FK} so fall.
 
 <div class="just">Above</div>
 
-Then, since *FK* equals *FG,* and *FH* equals *FG, FK* also equals *FH,* the nearer to the straight line through the center being thus equal to the more remote, which is impossible.
+Then, since {FK} equals {FG}, and {FH} equals {FG}, {FK} also equals {FH}, the nearer to the straight line through the center being thus equal to the more remote, which is impossible.
 
-Therefore another straight line equal to *GF* does not fall from the point *F* upon the circle.  Therefore only one straight line  so falls.
+Therefore another straight line equal to {GF} does not fall from the point {F} upon the circle.  Therefore only one straight line  so falls.
 
 Therefore *if on the diameter of a circle a point is taken which is not the center of the circle, and from the point straight lines fall upon the circle, then that is greatest on which passes through the center, the remainder of the same diameter is least, and of the rest the nearer to the straight line through the center is always greater than the more remote; and only two equal straight lines fall from the point on the circle, one on each side of the least straight line.*
 
@@ -120,10 +386,183 @@ Therefore *if on the diameter of a circle a point is taken which is not the cent
 ----
 guide:
 
-The statement of this proposition is daunting.  It concerns the distances from a point *F* inside a circle to the points on the circumference.  The point *F* is assumed not to be the center.  If a diameter *AD* is passed through *F,* then one of the points *A* is the point on the circumference furthest from *F* and the other *D* is the closest.  As a point travels the circumference from *A* to *D* it gets closer to *F.*  The final part of the statement is that if *G* is one point on the circumference, then there is exactly one other point *H* on the circumference the same distance from *F* (assuming, of course, that *G* is neither *A* nor *D*).
+<figure class="diagram rdiagram">
+<canvas id="canvas_2" width="270" height="250" tabindex="0"></canvas>
+<script type="text/javascript">
+    // A guide figure, added at the author's request — Joyce's page has no
+    // third applet. It is canvas_0's figure at canvas_0's coordinates (the
+    // circle on AD about E, F on the diameter, G on the circumference and H
+    // its reflection in AD), and it walks the guide's first paragraph
+    // sentence by sentence: the distances from F, the diameter through F,
+    // a point travelling the arc from A to D (A.Point.followPath, an arc
+    // about E), and the one other point H at G's distance.
+    //
+    // Resting figure: the circle, the diameter, F, and the equal pair FG /
+    // FH. The spokes, the traveller P and its line FP are `initiallyHidden`
+    // and only appear in the walk; FA and FD are transparent over AD.
+    var CIRC   = ["ABC","F"];
+    var SPOKES = CIRC.concat(["P1","P2","P3","P4","P5","FP1","FP2","FP3","FP4","FP5"]);
+    var CENTRE = CIRC.concat(["E"]);
+    var DIAM   = CENTRE.concat(["A","D","AD"]);
+    var ENDS   = DIAM.concat(["FA","FD"]);
+    var TRAVEL = ENDS.concat(["P","FP"]);
+    var ONE    = ENDS.concat(["G","FG"]);
+    var TWO    = ONE.concat(["H","FH"]);
+    // Sets for the statement clauses, which build the figure in the
+    // statement's own order.
+    var SPK    = ["P1","P2","P3","P4","P5","FP1","FP2","FP3","FP4","FP5"];
+    var S_FALL = DIAM.concat(SPK);
+    var S_ENDS = S_FALL.concat(["FA","FD"]);
+    var S_TWO  = ENDS.concat(["G","FG","H","FH"]);
+    geomlib.init({
+        canvasid: "canvas_2",
+        background: "0,0,100",
+        title: "III.7 guide",
+        pivot: "E",
+        elements: [
+            "A;point;free;30,125",
+            "D;point;free;230,125",
+            "AD;line;connect;A,D",
+            "E;point;midpoint;A,D;black;green",
+            "ABC;circle;radius;E,A;0;0;black;random",
+            "F;point;lineSlider;E,D,200,125",
+            "FA;line;connect;F,A;0;0;0",
+            "FD;line;connect;F,D;0;0;0",
+            // Five points on the circumference, unlettered, for "the
+            // distances from a point F inside a circle to the points on
+            // the circumference".
+            "P1;point;circleSlider;ABC,130,25;0",
+            "P2;point;circleSlider;ABC,200,54;0",
+            "P3;point;circleSlider;ABC,60,54;0",
+            "P4;point;circleSlider;ABC,60,196;0",
+            "P5;point;circleSlider;ABC,200,196;0",
+            "FP1;line;connect;F,P1",
+            "FP2;line;connect;F,P2",
+            "FP3;line;connect;F,P3",
+            "FP4;line;connect;F,P4",
+            "FP5;line;connect;F,P5",
+            // The traveller: a free point standing at A, swung about E
+            // through 180 degrees to D. Unlettered — the guide says "a point".
+            "P;point;free;30,125;0",
+            "FP;line;connect;F,P",
+            "G;point;circleSlider;ABC,200,30",
+            "FG;line;connect;F,G",
+            "G';point;foot;G,A,D;0;0",
+            "H;point;extend;G,G',G,G'",
+            "FH;line;connect;F,H"
+        ],
+        initiallyHidden: ["P1","P2","P3","P4","P5","FP1","FP2","FP3","FP4","FP5","P","FP"],
+        // Every draggable but F arrives mid-walk.
+        deferDraggables: ["A","D","G","P","P1","P2","P3","P4","P5"],
+        slides: [
+            // The deck opens on the proposition's statement, one clause per
+            // slide (split at its commas), each shown on the figure; then
+            // each guide sentence is paired, in the chip line, with the
+            // clause of the statement it unpacks.
+            { text: "“If on the diameter of a circle a point is taken which is not the center of the circle,”",
+              visible: DIAM,
+              highlighted: ["AD","F","E"],
+              justifications: [{ ref: "III.7" }] },
+            { text: "“and from the point straight lines fall upon the circle,”",
+              visible: S_FALL,
+              highlighted: ["FP1","FP2","FP3","FP4","FP5"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FP1", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FP2", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FP3", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FP4", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FP5", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "III.7" }] },
+            { text: "“then that is greatest on which passes through the center,”",
+              visible: S_ENDS,
+              highlighted: ["FA"],
+              justifications: [{ ref: "III.7" }] },
+            { text: "“the remainder of the same diameter is least,”",
+              visible: S_ENDS,
+              highlighted: ["FD"],
+              justifications: [{ ref: "III.7" }] },
+            { text: "“and of the rest the nearer to the straight line through the center is always greater than the more remote;”",
+              visible: S_ENDS,
+              // FP3, FP1, FP2 in order of nearness to FA: 157, 122, 71 px.
+              highlighted: ["FA","FP3","FP1","FP2"],
+              justifications: [{ ref: "III.7" }] },
+            { text: "“and only two equal straight lines fall from the point on the circle,”",
+              visible: S_TWO,
+              highlighted: ["FG","FH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FH", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "III.7" }] },
+            { text: "“one on each side of the least straight line.”",
+              visible: S_TWO,
+              highlighted: ["FD","G","H"],
+              justifications: [{ ref: "III.7" }] },
+            { text: "The statement of this proposition is daunting. It concerns the distances from a point {F} inside a circle to the points on the circumference.",
+              visible: SPOKES,
+              highlighted: ["F","FP1","FP2","FP3","FP4","FP5"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FP1", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FP2", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FP3", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FP4", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FP5", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "“from the point straight lines fall upon the circle”", ref: "Statement" }] },
+            { text: "The point {F} is assumed not to be the center.",
+              visible: CENTRE,
+              highlighted: ["F","E"],
+              justifications: [{ claim: "“a point is taken which is not the center of the circle”", ref: "Statement" }] },
+            { text: "If a diameter {AD} is passed through {F},",
+              visible: DIAM,
+              highlighted: ["AD","F"],
+              transition: { animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "“If on the diameter of a circle a point is taken”", ref: "Statement" }] },
+            { text: "then one of the points {A} is the point on the circumference furthest from {F} and the other {D} is the closest.",
+              visible: ENDS,
+              highlighted: ["FA","FD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FA", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [
+                  { claim: "“that is greatest on which passes through the center” — FA", ref: "Statement" },
+                  { claim: "“the remainder of the same diameter is least” — FD", ref: "Statement" } ] },
+            { text: "As a point travels the circumference from {A} to {D} it gets closer to {F}.",
+              visible: TRAVEL,
+              highlighted: ["FP"],
+              // P starts at A; a +180 sweep about E runs clockwise on screen,
+              // i.e. over the top of the circle, and settles at D.
+              transition: { animations: [
+                  { elem: "P", name: geomlib.A.Point.followPath,
+                    args: { arc: { center: "E", sweep: 180 }, settle: true } } ] },
+              justifications: [{ claim: "“of the rest the nearer to the straight line through the center is always greater than the more remote”", ref: "Statement" }] },
+            { text: "The final part of the statement is that if {G} is one point on the circumference,",
+              visible: ONE,
+              highlighted: ["G","FG"],
+              transition: { animations: [
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "“only two equal straight lines fall from the point on the circle”", ref: "Statement" }] },
+            { text: "then there is exactly one other point {H} on the circumference the same distance from {F}",
+              visible: TWO,
+              highlighted: ["FG","FH"],
+              transition: { animations: [
+                  { elem: "FH", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "“only two equal straight lines” — FG and FH", ref: "Statement" }] },
+            { text: "(assuming, of course, that {G} is neither {A} nor {D}).",
+              visible: TWO,
+              highlighted: ["G","A","D"],
+              justifications: [{ claim: "“one on each side of the least straight line” — FD, with G above it and H below", ref: "Statement" }] }
+        ],
+        resolveJustification: function(ref) {
+            return ref === "III.7" ? "#prop" : null;
+        }
+    });
+</script>
+</figure>
+
+The statement of this proposition is daunting.  It concerns the distances from a point {F} inside a circle to the points on the circumference.  The point {F} is assumed not to be the center.  If a diameter {AD} is passed through {F}, then one of the points {A} is the point on the circumference furthest from {F} and the other {D} is the closest.  As a point travels the circumference from {A} to {D} it gets closer to {F}.  The final part of the statement is that if {G} is one point on the circumference, then there is exactly one other point {H} on the circumference the same distance from {F} (assuming, of course, that {G} is neither {A} nor {D}).
 
 #### Note
 
-There is some confusion in the statement of this proposition.  It is not clear what the phrase "the nearer to the straight line through the center" means.  Perhaps it  refers to the angle, so that *FB* is considered nearer to *FA* than *FC* since the angle *BFA* is less than the angle *CFA.*  If so, there there is a missing detail in the proof, as DeMorgan pointed out.  It is declared that the angle *BEF* is greater than the angle *CEF,* but that hasn't been proved.  DeMorgan and others have described various ways to fill this logical gap.
+There is some confusion in the statement of this proposition.  It is not clear what the phrase "the nearer to the straight line through the center" means.  Perhaps it  refers to the angle, so that {FB:canvas_0} is considered nearer to {FA:canvas_0} than {FC:canvas_0} since the angle {BFA:canvas_0} is less than the angle {CFA:canvas_0}.  If so, there there is a missing detail in the proof, as DeMorgan pointed out.  It is declared that the angle {BEF:canvas_0} is greater than the angle {CEF:canvas_0}, but that hasn't been proved.  DeMorgan and others have described various ways to fill this logical gap.
 
 This proposition is not used in the rest of the *Elements.*

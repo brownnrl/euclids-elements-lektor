@@ -15,12 +15,25 @@ statement: If in a circle two straight lines cut one another, then the rectangle
 ----
 proof:
 
-For in the circle *ABCD* let the two straight lines *AC* and *BD* cut one another at the point *E.*
+For in the circle {ABCD} let the two straight lines {AC} and {BD} cut one another at the point {E}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="220" tabindex="0"></canvas>
 <noscript><img alt="III.35a diagram" src="propIII35a.gif"/></noscript>
 <script type="text/javascript">
+    // The first of Joyce's two cases: both chords through the center, so E
+    // is the center and the four segments are radii. Joyce's figure draws
+    // AC and BD whole; the proof names their four segments, so those are
+    // added as fully transparent lines (;0;0;0) — the static figure is
+    // unchanged, the names exist only so a slide can light them. No
+    // rectangles are drawn (they would not fit), so "the rectangle AE by
+    // EC" keeps its refs literal, as in II.1.
+    //
+    // Every draggable here (A, C, B — checked against the bundle) is a
+    // given that slide 1 introduces, so nothing is deferred. E (midpoint)
+    // and D (extend) are derived and so are listed explicitly.
+    var GIVEN = ["A","C","E","ABCD","B","D","AC","BD"];
+    var SEGS  = GIVEN.concat(["AE","EC","DE","EB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -34,15 +47,75 @@ For in the circle *ABCD* let the two straight lines *AC* and *BD* cut one anothe
             "B;point;circleSlider;ABCD,50,110",
             "D;point;extend;B,E,B,E",
             "AC;line;connect;A,C",
-            "BD;line;connect;B,D"
+            "BD;line;connect;B,D",
+            // Hover / highlight targets only — AC and BD already draw them.
+            "AE;line;connect;A,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0"
         ],
+        aliases: { "CA": "AC", "DB": "BD", "EA": "AE", "CE": "EC",
+                   "ED": "DE", "BE": "EB" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”), split at its seams.
+            { text: "“If in a circle two straight lines cut one another,”",
+              visible: GIVEN,
+              highlighted: ["AC","BD","E"],
+              // Draw the two lines, then carry B round the circle and back:
+              // its chord turns with it (D is B through E), so "two straight
+              // lines" reads as any pair, not this one.
+              transition: { mode: "cascade", animations: [
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "B", name: geomlib.A.Point.followPath, args: { arc: { center: "E", sweep: 50 } } } ] } },
+            { text: "“then the rectangle contained by the segments of the one”",
+              visible: SEGS,
+              highlighted: ["AE","EC"] },
+            { text: "“equals the rectangle contained by the segments of the other.”",
+              visible: SEGS,
+              highlighted: ["DE","EB"],
+              justifications: [{ ref: "III.35" }] },
+            { text: "For in the circle {ABCD} let the two straight lines {AC} and {BD} cut one another at the point {E}.",
+              visible: GIVEN,
+              highlighted: ["AC","BD","E"] },
+            { text: "I say that the rectangle {AE} by {EC} equals the rectangle {DE} by {EB}.",
+              visible: SEGS,
+              highlighted: ["AE","EC","DE","EB"] },
+            { text: "If now {AC} and {BD} are through the center, so that {E} is the center of the circle {ABCD},",
+              visible: SEGS,
+              highlighted: ["AC","BD","E"] },
+            { text: "it is manifest that, {AE}, {EC}, {DE}, and {EB} being equal, the rectangle {AE} by {EC} also equals the rectangle {DE} by {EB}.",
+              visible: SEGS,
+              highlighted: ["AE","EC","DE","EB"],
+              justifications: [{ claim: "AE, EC, DE and EB are radii of the same circle", ref: "I.Def.15" }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.35") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.12":     "/elements/books/bookI/propositions/propI12/",
+        "I.47":     "/elements/books/bookI/propositions/propI47/",
+        "II.5":     "/elements/books/bookII/propositions/propII5/",
+        "III.1":    "/elements/books/bookIII/propositions/propIII1/",
+        "III.3":    "/elements/books/bookIII/propositions/propIII3/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/",
+        "C.N.3":    "/elements/books/bookI/commonnotions/cn3/"
     });
 </script>
 </figure>
 
-I say that the rectangle  *AE* by *EC* equals the rectangle  *DE* by *EB.*
+I say that the rectangle  {AE} by {EC} equals the rectangle  {DE} by {EB}.
 
-If now *AC* and *BD* are through the center, so that *E* is the center of the circle *ABCD,* it is manifest that, *AE, EC, DE,* and *EB* being equal, the rectangle *AE* by *EC* also equals the rectangle  *DE* by *EB.*
+If now {AC} and {BD} are through the center, so that {E} is the center of the circle {ABCD}, it is manifest that, {AE}, {EC}, {DE}, and {EB} being equal, the rectangle {AE} by {EC} also equals the rectangle  {DE} by {EB}.
 
 <hr width="30%">
 
@@ -50,6 +123,34 @@ If now *AC* and *BD* are through the center, so that *E* is the center of the ci
 <canvas id="canvas_1" width="260" height="270" tabindex="0"></canvas>
 <noscript><img alt="III.35b diagram" src="propIII35b.gif"/></noscript>
 <script type="text/javascript">
+    // The general case, and the whole of the argument: a perpendicular from
+    // the center bisects each chord (III.3), II.5 turns the rectangle into a
+    // difference of squares, and I.47 moves that difference up to the
+    // radius. Joyce's figure draws the perpendiculars and the three joins;
+    // the proof names the segments of the two chords (AG, GC, AE, EC, EG,
+    // DE, EB), which are added here as fully transparent lines (;0;0;0).
+    // No squares are drawn, so "the square on FE" keeps its refs literal.
+    //
+    // Two right-angle markers, at the feet G and H. Markers are hidden in
+    // the static figure (showAngles defaults false), so Joyce's arc-free
+    // diagram is untouched. In his figure E lies on the C side of G and on
+    // the B side of H, so the one marker at G serves both I.47 triangles
+    // (FGE and FGC share the ray GC) and likewise at H.
+    //
+    // Draggables, checked against the bundle: A, C, B, D and F. The first
+    // four are the given chords, introduced on slide 1. F is the center,
+    // which the proof does not take until its second sentence, so it is
+    // deferred out of the every-slide auto-union. G, H (midpoint) and E
+    // (intersection) are derived and listed per slide. GF' is the
+    // colourless carrier of F and is kept out of every set.
+    var GIVEN = ["A","C","AC","ABCD","B","D","BD","E"];
+    var CTR   = GIVEN.concat(["F"]);
+    var PERP  = CTR.concat(["G","FG","H","HF"]);
+    var JOIN  = PERP.concat(["BF","CF","EF"]);
+    var RT    = JOIN.concat(["angFGC"]);
+    var BIS   = RT.concat(["AG","GC"]);
+    var CUT   = BIS.concat(["AE","EC","EG"]);
+    var SAME  = CUT.concat(["DE","EB","angFHB"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -71,29 +172,131 @@ If now *AC* and *BD* are through the center, so that *E* is the center of the ci
             "BF;line;connect;B,F",
             "CF;line;connect;C,F",
             "H;point;midpoint;B,D",
-            "HF;line;connect;H,F"
+            "HF;line;connect;H,F",
+            // Hover / highlight targets only — AC and BD already draw them.
+            "AG;line;connect;A,G;0;0;0",
+            "GC;line;connect;G,C;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            "EG;line;connect;E,G;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            // The right angles at the feet of the two perpendiculars.
+            "angFGC;sector;angleMarkerRight;G,F,C;0;0;red;red",
+            "angFHB;sector;angleMarkerRight;H,F,B;0;0;red;red"
         ],
+        deferDraggables: ["F"],
+        aliases: { "CA": "AC", "DB": "BD", "GF": "FG", "FH": "HF",
+                   "FB": "BF", "FC": "CF", "FE": "EF", "GA": "AG",
+                   "CG": "GC", "EA": "AE", "CE": "EC", "GE": "EG",
+                   "ED": "DE", "BE": "EB",
+                   "FGC": "angFGC", "CGF": "angFGC", "EGF": "angFGC",
+                   "FGE": "angFGC", "FHB": "angFHB", "BHF": "angFHB" },
+        slides: [
+            { text: "Next let {AC} and {DB} not be through the center.",
+              visible: GIVEN,
+              highlighted: ["AC","BD"] },
+            // Joyce's "Take the center F let the center of ABCD" is
+            // reproduced as it stands on his page.
+            { text: "Take the center {F} let the center of {ABCD}.",
+              visible: CTR,
+              highlighted: ["F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the center of the circle", ref: "III.1" }] },
+            { text: "Draw {FG} and {FH} from {F} perpendicular to the straight lines {AC} and {DB}.",
+              visible: PERP,
+              highlighted: ["AC", "BD", "FG", "G", "HF", "H"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "HF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "perpendiculars from F to AC and DB", ref: "I.12" }] },
+            { text: "Join {FB}, {FC}, and {FE}.",
+              visible: JOIN,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            // His III.3 sentence is one clause of premise and one of
+            // conclusion; two slides, so the bisection lands on its own.
+            { text: "Then, since a straight line {GF} through the center cuts a straight line {AC} not through the center at right angles, it also bisects it,",
+              visible: RT,
+              highlighted: ["FG", "AC", "angFGC"],
+              transition: { animations: [
+                  { elem: "angFGC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore {AG} equals {GC}.",
+              visible: BIS,
+              highlighted: ["AG","GC","G"],
+              justifications: [{ claim: "a perpendicular through the center bisects the chord", ref: "III.3" }] },
+            { text: "Since, then, the straight line {AC} has been cut into equal parts at {G} and into unequal parts at {E}, the rectangle {AE} by {EC} together with the square on {EG} equals the square on {GC}.",
+              visible: CUT,
+              highlighted: ["AC","G","E"],
+              justifications: [{ claim: "equal segments at G, unequal at E", ref: "II.5" }] },
+            { text: "Add the square on {GF}. Therefore the rectangle {AE} by {EC} plus the sum of the squares on {GE} and {GF} equals the sum of the squares on {CG} and {GF}.",
+              visible: CUT,
+              highlighted: ["FG","EG","GC"],
+              justifications: [{ claim: "add the square on GF to each", ref: "C.N.2" }] },
+            { text: "But the square on {FE} equals the sum of the squares on {EG} and {GF}, and the square on {FC} equals the sum of the squares on {CG} and {GF}.",
+              visible: CUT,
+              highlighted: ["EF","EG","FG","CF","GC","angFGC"],
+              justifications: [{ claim: "the right angle at G in the triangles FGE and FGC", ref: "I.47" }] },
+            { text: "Therefore the rectangle {AE} by {EC} plus the square on {FE} equals the square on {FC}.",
+              visible: CUT,
+              highlighted: ["AE","EC","EF","CF"] },
+            { text: "And {FC} equals {FB}, therefore the rectangle {AE} by {EC} plus the square on {EF} equals the square on {FB}.",
+              visible: CUT,
+              highlighted: ["CF","BF"],
+              justifications: [{ claim: "FC and FB are radii of the same circle", ref: "I.Def.15" }] },
+            { text: "For the same reason, also, the rectangle {DE} by {EB} plus the square on {FE} equals the square on {FB}.",
+              visible: SAME,
+              highlighted: ["HF", "DE", "EB", "EF", "BF", "angFHB"],
+              transition: { animations: [
+                  { elem: "angFHB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "FH through the center bisects DB at H", ref: "III.3" },
+                  { claim: "equal segments at H, unequal at E",     ref: "II.5" },
+                  { claim: "the right angle at H",                  ref: "I.47" } ] },
+            { text: "But the rectangle {AE} by {EC} plus the square on {FE} was also proved equal to the square on {FB}, therefore the rectangle {AE} by {EC} plus the square on {FE} equals the rectangle {DE} by {EB} plus the square on {FE}.",
+              visible: SAME,
+              highlighted: ["AE","EC","DE","EB","EF"],
+              justifications: [{ claim: "each equals the square on FB", ref: "C.N.1" }] },
+            { text: "Subtract the square on {FE} from each. Therefore the remaining rectangle {AE} by {EC} equals the rectangle {DE} by {EB}.",
+              visible: SAME,
+              highlighted: ["AE","EC","DE","EB"],
+              justifications: [{ claim: "subtract the square on FE from each", ref: "C.N.3" }] },
+            { text: "Therefore if in a circle two straight lines cut one another, then the rectangle contained by the segments of the one equals the rectangle contained by the segments of the other.",
+              visible: SAME,
+              highlighted: ["AE","EC","DE","EB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-Next let *AC* and *DB* not be through the center.  Take the center *F* let the center of *ABCD.*  Draw *FG* and *FH* from *F* perpendicular  to the straight lines *AC* and *DB.*  Join *FB, FC,* and *FE.* [!just III.1; I.12]
+Next let {AC} and {DB} not be through the center.  Take the center {F} let the center of {ABCD}.  Draw {FG} and {FH} from {F} perpendicular  to the straight lines {AC} and {DB}.  Join {FB}, {FC}, and {FE}. [!just III.1; I.12]
 
-Then, since a straight line *GF* through the center cuts a straight line *AC* not through the center at right angles, it also bisects it, therefore *AG* equals *GC.* [!just III.3]
+Then, since a straight line {GF} through the center cuts a straight line {AC} not through the center at right angles, it also bisects it, therefore {AG} equals {GC}. [!just III.3]
 
-Since, then, the straight line *AC* has been cut into equal parts at *G* and into unequal parts at *E,* the rectangle *AE* by *EC* together with the square on *EG* equals the square on *GC.* [!just II.5]
+Since, then, the straight line {AC} has been cut into equal parts at {G} and into unequal parts at {E}, the rectangle {AE} by {EC} together with the square on {EG} equals the square on {GC}. [!just II.5]
 
-Add the square on *GF.*  Therefore the rectangle *AE* by *EC* plus the sum of the squares on *GE* and *GF* equals the sum of the squares on *CG* and *GF.*
+Add the square on {GF}.  Therefore the rectangle {AE} by {EC} plus the sum of the squares on {GE} and {GF} equals the sum of the squares on {CG} and {GF}.
 
-But the square on *FE* equals the sum of the squares on *EG* and *GF,* and the square on *FC* equals the sum of the squares on *CG* and *GF.* Therefore the rectangle *AE* by *EC* plus the square on *FE* equals the square on *FC.* [!just I.47]
+But the square on {FE} equals the sum of the squares on {EG} and {GF}, and the square on {FC} equals the sum of the squares on {CG} and {GF}. Therefore the rectangle {AE} by {EC} plus the square on {FE} equals the square on {FC}. [!just I.47]
 
-And *FC* equals *FB,* therefore the rectangle *AE* by *EC* plus the square on *EF* equals the square on *FB.*
+And {FC} equals {FB}, therefore the rectangle {AE} by {EC} plus the square on {EF} equals the square on {FB}.
 
-For the same reason, also, the rectangle *DE* by *EB* plus the square on *FE* equals the square on *FB.*
+For the same reason, also, the rectangle {DE} by {EB} plus the square on {FE} equals the square on {FB}.
 
-But the rectangle *AE* by *EC* plus the square on *FE* was also proved equal to the square on *FB,* therefore the rectangle *AE* by *EC* plus the square on *FE* equals the rectangle *DE* by *EB* plus the square on *FE.*
+But the rectangle {AE} by {EC} plus the square on {FE} was also proved equal to the square on {FB}, therefore the rectangle {AE} by {EC} plus the square on {FE} equals the rectangle {DE} by {EB} plus the square on {FE}.
 
-Subtract the square on *FE* from each.  Therefore the remaining rectangle *AE* by *EC* equals the rectangle *DE* by *EB.*
+Subtract the square on {FE} from each.  Therefore the remaining rectangle {AE} by {EC} equals the rectangle {DE} by {EB}.
 
 Therefore *if in a circle two straight lines cut one another, then the rectangle contained by the segments of the one equals the rectangle contained by the segments of the other.*
 
@@ -101,6 +304,6 @@ Therefore *if in a circle two straight lines cut one another, then the rectangle
 ----
 guide:
 
-By means of proposition @VI.16, the statement, "the rectangle *AE* by *EC* equals the rectangle *DE* by *EB,*" may be converted into one about ratios, namely, "*AE* : *EB* = *DE* : *EC.*"
+By means of proposition @VI.16, the statement, "the rectangle {AE:canvas_0,canvas_1} by {EC:canvas_0,canvas_1} equals the rectangle {DE:canvas_0,canvas_1} by {EB:canvas_0,canvas_1}," may be converted into one about ratios, namely, "{AE:canvas_0,canvas_1} : {EB:canvas_0,canvas_1} = {DE:canvas_0,canvas_1} : {EC:canvas_0,canvas_1}."
 
 This proposition is not used in the rest of the *Elements.*

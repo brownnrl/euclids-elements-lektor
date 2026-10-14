@@ -15,12 +15,35 @@ statement: A circle does not touch another circle at more than one point whether
 ----
 proof:
 
-For, if possible, let the circle *ABDC* touch the circle *EBFD,* first internally, at more points than one, namely *D* and *B.*
+For, if possible, let the circle {ABDC} touch the circle *EBFD,* first internally, at more points than one, namely {D} and {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="250" tabindex="0"></canvas>
 <noscript><img alt="III.13a diagram" src="propIII13a.gif"/></noscript>
 <script type="text/javascript">
+    // Two impossible figures, one per canvas, each with its own walk: this
+    // one is the internal case, canvas_1 the external. The proof prose
+    // between the canvases binds to canvas_0 by DOM order and everything
+    // after canvas_1 (the external case and the guide) to canvas_1, which
+    // is what each passage means, so no ref needs a canvas selector.
+    //
+    // The inner "circle" EBFD is Joyce's four-arc figure (arcTR, arcRS,
+    // arcSU, arcUT) — it cannot be a circle, which is the point. There is
+    // no single element for a {NAME} ref to bind, so EBFD stays literal in
+    // the prose; the slides light all four arcs together.
+    //
+    // ABD is the random-filled outer circle. The prose calls it ABDC (and
+    // once ABCD), so a fully transparent twin carries those names; the
+    // filled one is never in a slide set, since a highlighted face is
+    // promoted over the arcs' region (#140). BG, GD, HD, BH are the parts
+    // of BD the argument compares — transparent twins over the drawn line.
+    // Resting figure pixel-unchanged.
+    var ARCS  = ["arcTR","arcRS","arcSU","arcUT"];
+    var GIVEN = ["A","B","C","D","E","F","ABD","ABDC"].concat(ARCS);
+    var CENT  = GIVEN.concat(["G","H"]);
+    var LINE  = CENT.concat(["BD"]);
+    var ARG   = LINE.concat(["BG","GD","HD"]);
+    var ARG2  = ARG.concat(["BH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -50,26 +73,111 @@ For, if possible, let the circle *ABDC* touch the circle *EBFD,* first internall
             "arcTR;sector;sector;V,T,R;0;0;black;0",
             "arcRS;sector;sector;P,R,S;0;0;black;0",
             "arcSU;sector;sector;N,S,U;0;0;black;0",
-            "arcUT;sector;sector;Q,U,T;0;0;black;0"
+            "arcUT;sector;sector;Q,U,T;0;0;black;0",
+            // Transparent twin of the outer circle, under the prose name.
+            "ABDC;circle;circumcircle;A,B,D;0;0;0;0",
+            // Segments of BD the argument compares; BD already draws them.
+            "BG;line;connect;B,G;0;0;0",
+            "GD;line;connect;G,D;0;0;0",
+            "HD;line;connect;H,D;0;0;0",
+            "BH;line;connect;B,H;0;0;0"
         ],
+        // Draggables (checked against the bundle): A, B, D, C — all points
+        // of the given circles, introduced on slide 1, so nothing is
+        // deferred. G and H are intersections (derived) and are listed per
+        // slide; E and F are cutoffs likewise, but they only label the
+        // inner figure and belong to slide 1.
+        aliases: { "ABCD": "ABDC", "BGHD": "BD", "GB": "BG", "DG": "GD",
+                   "DH": "HD", "HB": "BH" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”).
+            { text: "A circle does not touch another circle at more than one point whether it touches it internally or externally.",
+              visible: GIVEN,
+              highlighted: [],
+              justifications: [{ ref: "III.13" }] },
+            { text: "For, if possible, let the circle {ABDC} touch the circle EBFD, first internally, at more points than one, namely {D} and {B}.",
+              visible: GIVEN,
+              highlighted: ["ABDC","D","B"].concat(ARCS) },
+            { text: "Take the center {G} of the circle {ABDC} and the center {H} of EBFD.",
+              visible: CENT,
+              highlighted: ["G", "H"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G", name: geomlib.A.Point.appear },
+                  { elem: "H", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the centers of the circles", ref: "III.1" }] },
+            { text: "Therefore the straight line joined from {G} to {H} falls on {B} and {D}.",
+              visible: CENT,
+              highlighted: ["G","H","B","D"],
+              justifications: [
+                  { claim: "the line of centers falls on the point of contact", ref: "III.11" } ] },
+            { text: "Let it so fall, as {BGHD}.",
+              visible: LINE,
+              highlighted: [],
+              transition: { animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since the point {G} is the center of the circle {ABCD} and {BG} equals {GD}, therefore {BG} is greater than {HD}.",
+              visible: ARG,
+              highlighted: ["G","BG","GD","HD"],
+              justifications: [
+                  { claim: "BG and GD are radii of the circle ABDC", ref: "I.Def.15" },
+                  { claim: "HD is a part of GD",                     ref: "C.N.5" } ] },
+            { text: "Therefore {BH} is much greater than {HD}.",
+              visible: ARG2,
+              highlighted: ["BH","HD"] },
+            { text: "Again, since the point {H} is the center of the circle EBFD, {BH} equals {HD}, but it was also proved much greater than it, which is impossible.",
+              visible: ARG2,
+              highlighted: ["H","BH","HD"],
+              justifications: [{ claim: "BH and HD are radii of the circle EBFD", ref: "I.Def.15" }] },
+            { text: "Therefore a circle does not touch a circle internally at more points than one.",
+              visible: ARG2,
+              highlighted: ["ABDC"].concat(ARCS) }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.13") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup, shared by both canvases' decks.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "I.Def.15":  "/elements/books/bookI/definitions/defI15/",
+        "C.N.5":     "/elements/books/bookI/commonnotions/cn5/",
+        "III.1":     "/elements/books/bookIII/propositions/propIII1/",
+        "III.2":     "/elements/books/bookIII/propositions/propIII2/",
+        "III.11":    "/elements/books/bookIII/propositions/propIII11/",
+        "III.Def.3": "/elements/books/bookIII/definitions/defIII3/"
     });
 </script>
 </figure>
 
-Take the center *G* of the circle *ABDC* and the center *H* of *EBFD.* [!just III.1]
+Take the center {G} of the circle {ABDC} and the center {H} of *EBFD.* [!just III.1]
 
-Therefore the straight line joined from *G* to *H* falls on *B* and *D.* [!just III.11]
+Therefore the straight line joined from {G} to {H} falls on {B} and {D}. [!just III.11]
 
-Let it so fall, as *BGHD.*
+Let it so fall, as {BGHD}.
 
-Then, since the point *G* is the center of the circle *ABCD* and *BG* equals *GD,* therefore *BG* is greater than *HD.*  Therefore *BH* is much greater than HD.
+Then, since the point {G} is the center of the circle {ABCD} and {BG} equals {GD}, therefore {BG} is greater than {HD}.  Therefore {BH} is much greater than {HD}.
 
-Again, since the point *H* is the center of the circle *EBFD, BH* equals *HD,* but it was also proved much greater than it, which is impossible.
+Again, since the point {H} is the center of the circle *EBFD,* {BH} equals {HD}, but it was also proved much greater than it, which is impossible.
 
 <figure class="diagram rdiagram">
 <canvas id="canvas_1" width="270" height="250" tabindex="0"></canvas>
 <noscript><img alt="III.13b diagram" src="propIII13b.gif"/></noscript>
 <script type="text/javascript">
+    // The external case. ACK is a 4-field circle — no colour fields, so it
+    // carries the opaque near-white default face, and it sits over the
+    // lens it shares with the blue circle. It is left exactly as
+    // converted and never named in a highlighted set: a highlighted face
+    // is promoted over everything behind it (#140). ACKh is its fully
+    // transparent twin, and the prose reaches it with {ACK|ACKh}. ABDC is
+    // the transparent twin of the filled ABC under the prose's name.
+    // Resting figure pixel-unchanged.
+    var GIVEN = ["A","B","C","D","ABC","ABDC"];
+    var TOUCH = GIVEN.concat(["K","ACK","ACKh"]);
+    var JOIN  = TOUCH.concat(["AC"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -84,8 +192,49 @@ Again, since the point *H* is the center of the circle *EBFD, BH* equals *HD,* b
             "M;point;midpoint;A,C;0;0",
             "KK';line;perpendicular;M,A;0;0;0",
             "K;point;lineSlider;KK',220,40;black",
-            "ACK;circle;circumcircle;A,C,K"
+            "ACK;circle;circumcircle;A,C,K",
+            // Transparent twins: the blue circle under the prose's name,
+            // and the highlight target standing in for ACK.
+            "ABDC;circle;circumcircle;A,B,C;0;0;0;0",
+            "ACKh;circle;circumcircle;A,C,K;0;0;0;0"
         ],
+        // Draggables (checked against the bundle): A, B, C, D, K. The first
+        // four are the given circle's points; K is the lineSlider that
+        // fixes the second circle, which arrives on slide 2, so it is
+        // deferred out of the auto-union.
+        deferDraggables: ["K"],
+        aliases: { "ABCD": "ABDC", "CA": "AC" },
+        slides: [
+            { text: "I say further that neither does it so touch it externally.",
+              visible: GIVEN,
+              highlighted: ["ABDC"] },
+            { text: "For, if possible, let the circle {ACK|ACKh} touch the circle {ABDC} at more points than one, namely {A} and {C}.",
+              visible: TOUCH,
+              highlighted: ["ACKh","ABDC","A","C"] },
+            { text: "Join {AC}.",
+              visible: JOIN,
+              highlighted: [],
+              transition: { animations: [
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since on the circumference of each of the circles {ABDC} and {ACK|ACKh} two points {A} and {C} have been taken at random, the straight line joining the points falls within each circle,",
+              visible: JOIN,
+              highlighted: ["A","C","AC"],
+              justifications: [
+                  { claim: "a straight line joining two points on a circle falls within it", ref: "III.2" } ] },
+            { text: "but it fell within the circle {ABCD} and outside {ACK|ACKh}, which is absurd.",
+              visible: JOIN,
+              highlighted: ["AC","ABDC","ACKh"],
+              justifications: [
+                  { claim: "circles that touch do not cut one another", ref: "III.Def.3" } ] },
+            { text: "Therefore a circle does not touch a circle externally at more points than one. And it was proved that neither does it so touch it internally.",
+              visible: JOIN,
+              highlighted: ["ABDC","ACKh"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
@@ -96,9 +245,9 @@ Therefore a circle does not touch a circle internally at more points than one.
 
 I say further that neither does it so touch it externally.
 
-For, if possible, let the circle *ACK* touch the circle *ABDC* at more points than one, namely *A* and *C.*  Join *AC.*
+For, if possible, let the circle {ACK|ACKh} touch the circle {ABDC} at more points than one, namely {A} and {C}.  Join {AC}.
 
-Then, since on the circumference of each of the circles *ABDC* and *ACK* two points *A* and *C* have been taken at random, the straight line joining the points falls within each circle, but it fell within the circle *ABCD* and outside *ACK,* which is absurd. [!just III.2; III.Def.3]
+Then, since on the circumference of each of the circles {ABDC} and {ACK|ACKh} two points {A} and {C} have been taken at random, the straight line joining the points falls within each circle, but it fell within the circle {ABCD} and outside {ACK|ACKh}, which is absurd. [!just III.2; III.Def.3]
 
 Therefore a circle does not touch a circle externally at more points than one.
 
@@ -110,7 +259,7 @@ Therefore *a circle does not touch another circle at more than one point whether
 ----
 guide:
 
-In the second impossible figure there are three curves connecting *A* to *C.*  The two circles are not supposed to cut each other, but just to touch each other at the two points *A* and *C,* and the straight line *AC* should lie between the two circles and not within either one.
+In the second impossible figure there are three curves connecting {A} to {C}.  The two circles are not supposed to cut each other, but just to touch each other at the two points {A} and {C}, and the straight line {AC} should lie between the two circles and not within either one.
 
 There are logical flaws in this proof similar to those in the last two proofs.
 

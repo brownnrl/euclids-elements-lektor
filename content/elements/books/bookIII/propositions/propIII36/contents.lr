@@ -15,14 +15,35 @@ statement: If a point is taken outside a circle and two straight lines fall from
 ----
 proof:
 
-Let a point *D* be taken outside the circle *ABC,* and from *D* let the two straight lines *DCA* and *DB* fall on the circle *ABC.*  Let *DCA* cut the circle *ABC,* and let *BD* touch it.
+Let a point {D} be taken outside the circle {ABC}, and from {D} let the two straight lines {DCA} and {DB} fall on the circle {ABC}.  Let {DCA} cut the circle {ABC}, and let {BD} touch it.
 
-I say that the rectangle  *AD* by *DC* equals the square on *DB.*
+I say that the rectangle  {AD} by {DC} equals the square on {DB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="250" tabindex="0"></canvas>
 <noscript><img alt="III.36a diagram" src="propIII36a.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's first case: the secant DCA through the center F. His figure
+    // draws AD whole, with C a slider on it; the proof names AC, CD, FC and
+    // FD, which are added here as fully transparent lines (;0;0;0) — the
+    // static figure is unchanged. No squares are drawn (a square on DB
+    // would hang off the canvas), so "the square on DB" keeps its refs
+    // literal, as in II.14.
+    //
+    // One right-angle marker, at B, for III.18 and the I.47 step. Markers
+    // are hidden in the static figure (showAngles defaults false).
+    //
+    // Draggables, checked against the bundle: A, D and C — all givens that
+    // slide 1 introduces, so nothing is deferred. F (midpoint) and B (first
+    // of the bichord) are derived and listed per slide: F does not appear
+    // until "let F be the center". M, BDF and BB' are the colourless rig
+    // that places the tangent point and stay out of every set.
+    var GIVEN = ["A","D","ABC","AD","C","B","BD"];
+    var SAY   = GIVEN.concat(["CD"]);
+    var CTR   = SAY.concat(["F"]);
+    var JOIN  = CTR.concat(["BF"]);
+    var RT    = JOIN.concat(["angFBD"]);
+    var CUT   = RT.concat(["AC","FC","FD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -40,32 +61,155 @@ I say that the rectangle  *AD* by *DC* equals the square on *DB.*
             "BB';line;bichord;ABC,BDF;0;0;0",
             "B;point;first;BB'",
             "BF;line;connect;B,F",
-            "BD;line;connect;B,D"
+            "BD;line;connect;B,D",
+            // Hover / highlight targets only — AD already draws them.
+            "AC;line;connect;A,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "FC;line;connect;F,C;0;0;0",
+            "FD;line;connect;F,D;0;0;0",
+            // The right angle between the tangent and the radius.
+            "angFBD;sector;angleMarkerRight;B,F,D;0;0;red;red"
         ],
+        aliases: { "DCA": "AD", "DA": "AD", "DB": "BD", "DC": "CD",
+                   "CA": "AC", "CF": "FC", "DF": "FD", "FB": "BF",
+                   "FBD": "angFBD", "DBF": "angFBD" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”), split at its seams.
+            { text: "“If {a point|D} is taken outside a circle and two straight lines fall from it on the circle,”",
+              visible: GIVEN,
+              highlighted: ["D","AD","BD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "“and if {one of them|AD} cuts the circle and {the other|BD} touches it,”",
+              visible: GIVEN,
+              highlighted: ["AD","BD","B"] },
+            { text: "“then the rectangle contained by {the whole of the straight line which cuts the circle|AD}”",
+              visible: GIVEN,
+              highlighted: ["AD"] },
+            { text: "“and {the straight line intercepted on it outside between the point and the convex circumference|CD}”",
+              visible: SAY,
+              highlighted: ["CD"] },
+            { text: "“equals the square on {the tangent|BD}.”",
+              visible: SAY,
+              highlighted: ["BD"],
+              justifications: [{ ref: "III.36" }] },
+            { text: "Let a point {D} be taken outside the circle {ABC}, and from {D} let the two straight lines {DCA} and {DB} fall on the circle {ABC}.",
+              visible: GIVEN,
+              highlighted: ["D","AD","BD"] },
+            { text: "Let {DCA} cut the circle {ABC}, and let {BD} touch it.",
+              visible: GIVEN,
+              highlighted: ["AD","BD"] },
+            { text: "I say that the rectangle {AD} by {DC} equals the square on {DB}.",
+              visible: SAY,
+              highlighted: ["AD","CD","BD"] },
+            { text: "Then {DCA} is either through the center or not through the center.",
+              visible: SAY,
+              highlighted: ["AD"] },
+            { text: "First let it be through the center, and let {F} be the center of the circle {ABC}.",
+              visible: CTR,
+              highlighted: ["AD", "F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "Join {FB}.",
+              visible: JOIN,
+              highlighted: [],
+              transition: { animations: [
+                  { elem: "BF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Therefore the angle {FBD} is right.",
+              visible: RT,
+              highlighted: ["BF", "BD", "angFBD"],
+              transition: { animations: [
+                  { elem: "angFBD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the tangent is at right angles to the radius FB", ref: "III.18" }] },
+            { text: "And, since {AC} has been bisected at {F}, and {CD} is added to it, the rectangle {AD} by {DC} plus the square on {FC} equals the square on {FD}.",
+              visible: CUT,
+              highlighted: ["AC","F","CD"],
+              justifications: [{ claim: "AC bisected at F, with CD added", ref: "II.6" }] },
+            { text: "But {FC} equals {FB}, therefore the rectangle {AD} by {DC} plus the square on {FB} equals the square on {FD}.",
+              visible: CUT,
+              highlighted: ["FC","BF"],
+              justifications: [{ claim: "FC and FB are radii of the same circle", ref: "I.Def.15" }] },
+            { text: "And the sum of the squares on {FB} and {BD} equals the square on {FD}, therefore the rectangle {AD} by {DC} plus the square on {FB} equals the sum of the squares on {FB} and {BD}.",
+              visible: CUT,
+              highlighted: ["BF","BD","FD","angFBD"],
+              justifications: [{ claim: "the right angle at B in the triangle FBD", ref: "I.47" }] },
+            { text: "Subtract the square on {FB} from each. Therefore the remaining rectangle {AD} by {DC} equals the square on the tangent {DB}.",
+              visible: CUT,
+              highlighted: ["AD","CD","BD"],
+              justifications: [{ claim: "subtract the square on FB from each", ref: "C.N.3" }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.36") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.12":     "/elements/books/bookI/propositions/propI12/",
+        "I.47":     "/elements/books/bookI/propositions/propI47/",
+        "II.6":     "/elements/books/bookII/propositions/propII6/",
+        "III.1":    "/elements/books/bookIII/propositions/propIII1/",
+        "III.3":    "/elements/books/bookIII/propositions/propIII3/",
+        "III.18":   "/elements/books/bookIII/propositions/propIII18/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/",
+        "C.N.3":    "/elements/books/bookI/commonnotions/cn3/"
     });
 </script>
 </figure>
 
-Then *DCA* is either through the center or not through the center.
+Then {DCA} is either through the center or not through the center.
 
-First let it be through the center, and let *F* be the center of the circle *ABC.*  Join *FB.*  Therefore the angle *FBD* is right. [!just III.18]
+First let it be through the center, and let {F} be the center of the circle {ABC}.  Join {FB}.  Therefore the angle {FBD} is right. [!just III.18]
 
-And, since *AC* has been bisected at *F,* and *CD* is added to it, the rectangle *AD* by *DC* plus the square on *FC* equals the square on *FD.* [!just II.6]
+And, since {AC} has been bisected at {F}, and {CD} is added to it, the rectangle {AD} by {DC} plus the square on {FC} equals the square on {FD}. [!just II.6]
 
-But *FC* equals *FB,* therefore the rectangle *AD* by *DC* plus the square on *FB* equals the square on *FD.*
+But {FC} equals {FB}, therefore the rectangle {AD} by {DC} plus the square on {FB} equals the square on {FD}.
 
-And the sum of the squares on *FB* and *BD* equals the square on *FD,* therefore the rectangle *AD* by *DC* plus the square on *FB* equals the sum of the squares on *FB* and *BD.* [!just I.47]
+And the sum of the squares on {FB} and {BD} equals the square on {FD}, therefore the rectangle {AD} by {DC} plus the square on {FB} equals the sum of the squares on {FB} and {BD}. [!just I.47]
 
-Subtract the square on *FB* from each.  Therefore the remaining rectangle *AD* by *DC* equals the square on the tangent *DB.*
+Subtract the square on {FB} from each.  Therefore the remaining rectangle {AD} by {DC} equals the square on the tangent {DB}.
 
-Again, let *DCA* not be through the center of the circle *ABC.* Take the center *E,* and draw *EF* from *E* perpendicular to *AC.*  Join *EB, EC,* and *ED.* [!just III.1]
+Again, let {DCA:canvas_1} not be through the center of the circle {ABC:canvas_1}. Take the center {E:canvas_1}, and draw {EF:canvas_1} from {E:canvas_1} perpendicular to {AC:canvas_1}.  Join {EB:canvas_1}, {EC:canvas_1}, and {ED:canvas_1}. [!just III.1]
 
-Then the angle *EBD* is right. [!just III.18]
+Then the angle {EBD:canvas_1} is right. [!just III.18]
 
 <figure class="diagram">
 <canvas id="canvas_1" width="280" height="230" tabindex="0"></canvas>
 <noscript><img alt="III.36b diagram" src="propIII36b.gif"/></noscript>
 <script type="text/javascript">
+    // The general case. The argument is III.35's run in the other
+    // direction — a perpendicular from the center bisects the chord
+    // (III.3), II.6 turns the rectangle into a difference of squares, and
+    // I.47 carries it up to the radius, twice. Joyce's figure draws AD,
+    // the perpendicular EF and the three joins; the proof names AF, FC, CD
+    // and FD, added here as fully transparent lines (;0;0;0). AC is his own
+    // colourless chord along AD and serves as its own hover target. No
+    // squares are drawn, so "the square on ED" keeps its refs literal.
+    //
+    // Two right-angle markers: at F (the foot of the perpendicular) and at
+    // B (tangent against radius). C and D lie on the same side of F, so
+    // the one marker at F serves both I.47 triangles EFC and EFD.
+    //
+    // Draggables, checked against the bundle: A, D and E. A and D are given;
+    // E is the center, which the proof takes after the case is stated, so
+    // it is deferred out of the every-slide auto-union. C (last of the
+    // chord), F (midpoint) and B (last of the bichord) are derived and
+    // listed per slide. M, BDE and B'B are the colourless tangent rig and
+    // stay out of every set.
+    var GIVEN = ["A","D","AD","ABC","AC","C","B","BD"];
+    var CTR   = GIVEN.concat(["E","F","EF"]);
+    var JOIN  = CTR.concat(["BE","EC","DE"]);
+    var RTB   = JOIN.concat(["angEBD"]);
+    var RTF   = RTB.concat(["angEFC"]);
+    var BIS   = RTF.concat(["AF","FC"]);
+    var CUT   = BIS.concat(["CD","FD"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -87,25 +231,115 @@ Then the angle *EBD* is right. [!just III.18]
             "B'B;line;bichord;ABC,BDE;0;0;0",
             "B;point;last;B'B",
             "BE;line;connect;B,E",
-            "BD;line;connect;B,D"
+            "BD;line;connect;B,D",
+            // Hover / highlight targets only — AD already draws them.
+            "AF;line;connect;A,F;0;0;0",
+            "FC;line;connect;F,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "FD;line;connect;F,D;0;0;0",
+            // The right angles at the foot F and at the point of contact B.
+            "angEFC;sector;angleMarkerRight;F,E,C;0;0;red;red",
+            "angEBD;sector;angleMarkerRight;B,E,D;0;0;red;red"
         ],
+        deferDraggables: ["E"],
+        aliases: { "DCA": "AD", "DA": "AD", "DB": "BD", "DC": "CD",
+                   "CA": "AC", "ED": "DE", "EB": "BE", "FE": "EF",
+                   "CE": "EC", "FA": "AF", "CF": "FC", "DF": "FD",
+                   "EFC": "angEFC", "CFE": "angEFC", "EFD": "angEFC",
+                   "DFE": "angEFC", "EBD": "angEBD", "DBE": "angEBD" },
+        slides: [
+            { text: "Again, let {DCA} not be through the center of the circle {ABC}.",
+              visible: GIVEN,
+              highlighted: ["AD","BD"] },
+            { text: "Take the center {E}, and draw {EF} from {E} perpendicular to {AC}.",
+              visible: CTR,
+              highlighted: ["AC", "E", "EF", "F"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E",  name: geomlib.A.Point.appear },
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F",  name: geomlib.A.Point.appear } ] },
+              justifications: [
+                  { claim: "the center of the circle",   ref: "III.1" },
+                  { claim: "EF perpendicular to AC",     ref: "I.12" } ] },
+            { text: "Join {EB}, {EC}, and {ED}.",
+              visible: JOIN,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then the angle {EBD} is right.",
+              visible: RTB,
+              highlighted: ["BE", "BD", "angEBD"],
+              transition: { animations: [
+                  { elem: "angEBD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the tangent is at right angles to the radius EB", ref: "III.18" }] },
+            // His III.3 sentence is one clause of premise and one of
+            // conclusion; two slides, so the bisection lands on its own.
+            { text: "And, since a straight line {EF} through the center cuts a straight line {AC} not through the center at right angles, it also bisects it,",
+              visible: RTF,
+              highlighted: ["EF", "AC", "angEFC"],
+              transition: { animations: [
+                  { elem: "angEFC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore {AF} equals {FC}.",
+              visible: BIS,
+              highlighted: ["AF","FC","F"],
+              justifications: [{ claim: "a perpendicular through the center bisects the chord", ref: "III.3" }] },
+            { text: "Now, since the straight line {AC} has been bisected at the point {F}, and {CD} is added to it, the rectangle {AD} by {DC} plus the square on {FC} equals the square on {FD}.",
+              visible: CUT,
+              highlighted: ["AC","F","CD"],
+              justifications: [{ claim: "AC bisected at F, with CD added", ref: "II.6" }] },
+            { text: "Add the square on {FE} to each. Therefore the rectangle {AD} by {DC} plus the sum of the squares on {CF} and {FE} equals the sum of the squares on {FD} and {FE}.",
+              visible: CUT,
+              highlighted: ["EF","FC","FD"],
+              justifications: [{ claim: "add the square on FE to each", ref: "C.N.2" }] },
+            // The I.47 step is one long sentence of his; it takes two
+            // slides rather than a shortened one.
+            { text: "But the square on {EC} equals the sum of the squares on {CF} and {FE}, for the angle {EFC} is right, and the square on {ED} equals the sum of the squares on {DF} and {FE},",
+              visible: CUT,
+              highlighted: ["EC","FC","EF","DE","FD","angEFC"],
+              justifications: [{ claim: "the right angle at F in the triangles EFC and EFD", ref: "I.47" }] },
+            { text: "therefore the rectangle {AD} by {DC} plus the square on {EC} equals the square on {ED}.",
+              visible: CUT,
+              highlighted: ["AD","CD","EC","DE"] },
+            { text: "And {EC} equals {EB}, therefore the rectangle {AD} by {DC} plus the square on {EB} equals the square on {ED}.",
+              visible: CUT,
+              highlighted: ["EC","BE"],
+              justifications: [{ claim: "EC and EB are radii of the same circle", ref: "I.Def.15" }] },
+            { text: "But the sum of the squares on {EB} and {BD} equals the square on {ED}, for the angle {EBD} is right, therefore the rectangle {AD} by {DC} plus the square on {EB} equals the sum of the squares on {EB} and {BD}.",
+              visible: CUT,
+              highlighted: ["BE","BD","DE","angEBD"],
+              justifications: [{ claim: "the right angle at B in the triangle EBD", ref: "I.47" }] },
+            { text: "Subtract the square on {EB} from each. Therefore the remaining rectangle {AD} by {DC} equals the square on {DB}.",
+              visible: CUT,
+              highlighted: ["AD","CD","BD"],
+              justifications: [{ claim: "subtract the square on EB from each", ref: "C.N.3" }] },
+            { text: "Therefore if a point is taken outside a circle and two straight lines fall from it on the circle, and if one of them cuts the circle and the other touches it, then the rectangle contained by the whole of the straight line which cuts the circle and the straight line intercepted on it outside between the point and the convex circumference equals the square on the tangent.",
+              visible: CUT,
+              highlighted: ["AD","CD","BD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-And, since a straight line *EF* through the center cuts a straight line *AC* not through the center at right angles, it also bisects it, therefore *AF* equals *FC.* [!just III.3]
+And, since a straight line {EF} through the center cuts a straight line {AC} not through the center at right angles, it also bisects it, therefore {AF} equals {FC}. [!just III.3]
 
-Now, since the straight line *AC* has been bisected at the point *F,* and *CD* is added to it, the rectangle *AD* by *DC* plus the square on *FC* equals the square on *FD.* [!just II.6]
+Now, since the straight line {AC} has been bisected at the point {F}, and {CD} is added to it, the rectangle {AD} by {DC} plus the square on {FC} equals the square on {FD}. [!just II.6]
 
-Add the square on *FE* to each.  Therefore the rectangle *AD* by *DC* plus the sum of the squares on *CF* and *FE* equals the sum of the squares on *FD* and *FE.*
+Add the square on {FE} to each.  Therefore the rectangle {AD} by {DC} plus the sum of the squares on {CF} and {FE} equals the sum of the squares on {FD} and {FE}.
 
-But the square on *EC* equals the sum of the squares on *CF* and *FE,* for the angle *EFC* is right, and the square on *ED* equals the sum of the squares on *DF* and *FE,* therefore the rectangle *AD* by *DC* plus the square on *EC* equals the square on *ED.* [!just I.47]
+But the square on {EC} equals the sum of the squares on {CF} and {FE}, for the angle {EFC} is right, and the square on {ED} equals the sum of the squares on {DF} and {FE}, therefore the rectangle {AD} by {DC} plus the square on {EC} equals the square on {ED}. [!just I.47]
 
-And *EC* equals *EB,* therefore the rectangle *AD* by *DC* plus the square on *EB* equals the square on *ED.*
+And {EC} equals {EB}, therefore the rectangle {AD} by {DC} plus the square on {EB} equals the square on {ED}.
 
-But the sum of the squares on *EB* and *BD* equals the square on *ED,* for the angle *EBD* is right, therefore the rectangle *AD* by *DC* plus the square on *EB* equals the sum of the squares on *EB* and *BD.* [!just I.47]
+But the sum of the squares on {EB} and {BD} equals the square on {ED}, for the angle {EBD} is right, therefore the rectangle {AD} by {DC} plus the square on {EB} equals the sum of the squares on {EB} and {BD}. [!just I.47]
 
-Subtract the square on *EB* from each.  Therefore the remaining rectangle *AD* by *DC* equals the square on *DB.*
+Subtract the square on {EB} from each.  Therefore the remaining rectangle {AD} by {DC} equals the square on {DB}.
 
 Therefore *if a point is taken outside a circle and two straight lines fall from it on the circle, and if one of them cuts the circle and the other touches it, then the rectangle contained by the whole of the straight line which cuts the circle and the straight line intercepted on it outside between the point and the convex circumference equals the square on the tangent.*
 

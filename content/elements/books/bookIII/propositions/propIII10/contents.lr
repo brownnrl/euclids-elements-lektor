@@ -15,12 +15,40 @@ statement: A circle does not cut a circle at more than two points.
 ----
 proof:
 
-For, if possible, let the circle *ABC* cut the circle *DEF* at more points than two, namely *B, G, F,* and *H.*
+For, if possible, let the circle {ABC} cut the circle *DEF* at more points than two, namely {B}, {G}, {F}, and {H}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="300" tabindex="0"></canvas>
 <noscript><img alt="III.10 diagram" src="propIII10.gif"/></noscript>
 <script type="text/javascript">
+    // An impossible figure, as Joyce's guide says: the "circle" DEF is four
+    // arcs (arcFG, arcGB, arcBH, arcHF) joined at the four meeting points,
+    // and it is GIVEN — the reductio starts from it — so the arcs are never
+    // animated and euclid#172 (Sector.sweep direction) does not arise here.
+    // There is no single element for DEF, so the name stays literal in
+    // prose and captions and the four arcs are lit together wherever the
+    // proof names it.
+    //
+    // ABC carries a random face; every 2-D element after it is transparent
+    // (the arcs, the helper triangle, the two carrier circles), so
+    // highlighting ABC directly promotes nothing over anything (#140) and no
+    // twin is needed. What the figure does not draw as a named element is
+    // BH (drawn as HB — an alias), the two perpendiculars KC and LM (drawn
+    // whole as AC and EM), and the chord NO of ABC along EM; those three are
+    // added as fully transparent lines, so the resting figure is
+    // pixel-unchanged.
+    //
+    // A, C, D, E are letters of the two circles' names — "the circle ABC
+    // cut the circle DEF" — and stand from slide 1, as in Joyce's figure;
+    // the perpendiculars are then carried through to A and E, which are
+    // already there. N and O arrive with "a straight line NO", the first
+    // time the proof names them.
+    var GIVEN = ["B","F","H","G","ABC","arcFG","arcGB","arcBH","arcHF","A","C","D","E"];
+    var JOIN  = GIVEN.concat(["HB","BG","K","L"]);
+    var PERP  = JOIN.concat(["KC","LM","AC","EM","M"]);
+    var CHORD = PERP.concat(["N","O","NO"]);
+    var CTR   = CHORD.concat(["P"]);
+    var DEF   = ["arcFG","arcGB","arcBH","arcHF"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -59,21 +87,108 @@ For, if possible, let the circle *ABC* cut the circle *DEF* at more points than 
             "E;point;last;EE'",
             "M;point;first;MM'",
             "EM;line;connect;E,M",
-            "D;point;cutoff;Y,A,Y,B;black;0"
+            "D;point;cutoff;Y,A,Y,B;black;0",
+            // Hover / highlight targets only — AC and EM already draw all
+            // three of these.
+            "KC;line;connect;K,C;0;0;0",
+            "LM;line;connect;L,M;0;0;0",
+            "NO;line;connect;N,O;0;0;0"
         ],
+        // Draggables (checked against the bundle): B, F, H and the slider G
+        // — the four meeting points, all named on slide 1 — so nothing is
+        // deferred. P (center), K/L (midpoint), A/C/O/N/D (cutoff/extend),
+        // E/M (last/first) are derived and NOT auto-unioned, so each is
+        // listed in the groups above from the slide that introduces it.
+        // The hidden helpers S, Y, Z, W, X draw nothing and stay out.
+        aliases: { "BH": "HB", "GB": "BG", "CA": "AC", "ME": "EM",
+                   "ON": "NO", "CK": "KC", "ML": "LM" },
+        slides: [
+            // Joyce's proof opens straight on the reductio, with no
+            // setting-out, so the deck states the proposition first over the
+            // resting figure (process.md: "Open on the statement").
+            { text: "A circle does not cut a circle at more than two points.",
+              visible: GIVEN,
+              highlighted: ["ABC"].concat(DEF),
+              justifications: [{ ref: "III.10" }] },
+            { text: "For, if possible, let the circle {ABC} cut the circle DEF at more points than two, namely {B}, {G}, {F}, and {H}.",
+              visible: GIVEN,
+              highlighted: DEF.concat(["B","G","F","H"]) },
+            { text: "Join {BH} and {BG}, and bisect them at the points {K} and {L}.",
+              visible: JOIN,
+              highlighted: ["HB", "BG", "K", "L"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "HB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",  name: geomlib.A.Point.appear },
+                  { elem: "L",  name: geomlib.A.Point.appear } ] },
+              justifications: [
+                  { ref: "I.Post.1" },
+                  { claim: "BH and BG bisected at K and L", ref: "I.10" } ] },
+            { text: "Draw {KC} and {LM} from {K} and {L} at right angles to {BH} and {BG}, and carry them through to the points {A} and {E}.",
+              visible: PERP,
+              highlighted: ["HB", "BG", "KC", "AC", "LM", "EM"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "KC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "LM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EM", name: geomlib.A.Line.straightEdgeExtend } ] },
+              justifications: [
+                  { claim: "KC and LM at right angles to BH and BG", ref: "I.11" },
+                  { claim: "carried through to A and E",             ref: "I.Post.2" } ] },
+            { text: "Then, since in the circle {ABC} a straight line {AC} cuts a straight line {BH} into two equal parts and at right angles, the center of the circle {ABC} lies on {AC}.",
+              visible: PERP,
+              highlighted: ["AC","HB","K"],
+              justifications: [{ claim: "the center lies on the line that bisects BH at right angles", ref: "III.1.Cor" }] },
+            { text: "Again, since in the same circle {ABC} a straight line {NO} cuts a straight line {BG} into two equal parts and at right angles, the center of the circle {ABC} lies on {NO}.",
+              visible: CHORD,
+              highlighted: ["NO", "BG", "L", "N", "O"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "N", name: geomlib.A.Point.appear },
+                  { elem: "O", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the center lies on the line that bisects BG at right angles", ref: "III.1.Cor" }] },
+            { text: "But it was also proved to lie on {AC}, and the straight lines {AC} and {NO} meet at no point except at {P}, therefore the point {P} is the center of the circle {ABC}.",
+              visible: CTR,
+              highlighted: ["AC", "NO", "P"],
+              transition: { animations: [
+                  { elem: "P", name: geomlib.A.Point.appear } ] } },
+            { text: "Similarly we can prove that {P} is also the center of the circle DEF,",
+              visible: CTR,
+              highlighted: DEF.concat(["P"]) },
+            { text: "therefore the two circles {ABC} and DEF which cut one another have the same center {P}, which is impossible.",
+              visible: CTR,
+              highlighted: DEF.concat(["ABC","P"]),
+              justifications: [{ claim: "circles that cut one another have different centers", ref: "III.5" }] },
+            { text: "Therefore a circle does not cut a circle at more than two points.",
+              visible: CTR,
+              highlighted: DEF.concat(["ABC"]),
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.10") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "I.Post.2":  "/elements/books/bookI/postulates/post2/",
+        "I.10":      "/elements/books/bookI/propositions/propI10/",
+        "I.11":      "/elements/books/bookI/propositions/propI11/",
+        "III.1.Cor": "/elements/books/bookIII/propositions/propIII1/#cor",
+        "III.5":     "/elements/books/bookIII/propositions/propIII5/"
     });
 </script>
 </figure>
 
-Join *BH* and *BG,* and bisect them at the points *K* and *L.* Draw  *KC* and *LM* from *K* and *L* at right angles to *BH* and *BG,*  and carry them through to the points *A* and *E.* [!just I.10; I.11]
+Join {BH} and {BG}, and bisect them at the points {K} and {L}. Draw  {KC} and {LM} from {K} and {L} at right angles to {BH} and {BG},  and carry them through to the points {A} and {E}. [!just I.10; I.11]
 
-<div class="just"><a href="../propIII1/#cor">III.1,Cor</a></div>
+Then, since in the circle {ABC} a straight line {AC} cuts a straight line {BH} into two equal parts and at right angles, the center of the circle {ABC} lies on {AC}.  Again, since in the same circle {ABC} a straight line {NO} cuts a straight line {BG} into two equal parts and at right angles, the center of the circle {ABC} lies on {NO}. [!just III.1.Cor]
 
-Then, since in the circle *ABC* a straight line *AC* cuts a straight line *BH* into two equal parts and at right angles, the center of the circle *ABC* lies on *AC.*  Again, since in the same circle *ABC* a straight line *NO* cuts a straight line *BG* into two equal parts and at right angles, the center of the circle *ABC* lies on *NO.*
+But it was also proved to lie on {AC}, and the straight lines {AC} and {NO} meet at no point except at {P}, therefore the point {P} is the center of the circle {ABC}.
 
-But it was also proved to lie on *AC,* and the straight lines *AC* and *NO* meet at no point except at *P,* therefore the point *P* is the center of the circle *ABC.*
-
-Similarly we can prove that *P* is also the center of the circle *DEF,* therefore the two circles *ABC* and *DEF* which cut one another have the same center *P,* which is impossible. [!just III.5]
+Similarly we can prove that {P} is also the center of the circle *DEF,* therefore the two circles {ABC} and *DEF* which cut one another have the same center {P}, which is impossible. [!just III.5]
 
 Therefore *a circle does not cut a circle at more than two points.*
 
@@ -82,10 +197,10 @@ Therefore *a circle does not cut a circle at more than two points.*
 ----
 guide:
 
-The figure is another impossible figure.  Both curves are supposed to be circumferences of circles, but, of course, they cannot both be drawn as circles since the situation is proved not to occur.  Although Euclid names four points where the circles meet, only three, *B, G,* and *H,* are used in the proof.
+The figure is another impossible figure.  Both curves are supposed to be circumferences of circles, but, of course, they cannot both be drawn as circles since the situation is proved not to occur.  Although Euclid names four points where the circles meet, only three, {B}, {G}, and {H}, are used in the proof.
 
 The proof actually shows that the two circles cannot *meet* in more than two points, where "meet" could be either cut or touch.
 
-Heath remarks that the lines bisecting *BG* and *BH* have not been shown to meet.  In fact, they have, since the center of the circle *ABC* has been shown to be on both.
+Heath remarks that the lines bisecting {BG} and {BH} have not been shown to meet.  In fact, they have, since the center of the circle {ABC} has been shown to be on both.
 
 This proposition is used in @III.24.
