@@ -17,12 +17,38 @@ statement: From a given circle to cut off a segment admitting an angle equal to 
 ----
 proof:
 
-Let *ABC* be the given circle, and the angle at *D* the given rectilinear angle.
+Let {ABC|circABC} be the given circle, and the angle at {D|angD} the given rectilinear angle.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="320" height="240" tabindex="0"></canvas>
 <noscript><img alt="III.34 diagram" src="propIII34.gif"/></noscript>
 <script type="text/javascript">
+    // A short construction — the converse figure of III.33: the circle is
+    // given and the segment is cut off it. Joyce's figure draws the circle,
+    // the given angle at D, the tangent EF and the filled triangle ABC; the
+    // chord BC is declared (a chord construction fixing C) but with zero
+    // colour, so the triangle's own edge is the only ink it has. Everything
+    // added here is fully transparent (;0;0;0 lines, ;0;0;0;0 circles /
+    // sectors), so the resting figure is pixel-unchanged.
+    //
+    // The circle ABC carries a random face, and a highlighted face is
+    // promoted within its pass (#140) — over the filled triangle. So the
+    // slides and the prose light circABC, a transparent twin, and ABC is
+    // never named in a slide set.
+    //
+    // "The angle at D" is the marker angD; the element D is Joyce's label-
+    // only polygon (edges and face 0) whose sole purpose is to place the
+    // letter, so {D|angD} binds the phrase to the wedge, not to an invisible
+    // triangle. The segment BAC is chord + arc: BC plus segBAC, a zero-colour
+    // sector whose drawEdge strokes only the arc; its arm order was checked
+    // by pixel against the bundle (euclid#172) so the arc passes A. Not
+    // swept.
+    //
+    // Colour: the three equal angles — at D, FBC, BAC — share orange.
+    var GIVEN = ["ABC","circABC","A","D1","D2","D3","D12","D23","D","angD"];
+    var TANG  = GIVEN.concat(["E","F","EF","B","FB"]);
+    var ANG   = TANG.concat(["C","BC","angFBC"]);
+    var SEG   = ANG.concat(["triABC","angBAC","segBAC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,21 +73,106 @@ Let *ABC* be the given circle, and the angle at *D* the given rectilinear angle.
             "C';point;similar;F,B,D1,D2,D3;0;0",
             "BC;line;chord;B,C',ABC;0;0;0",
             "C;point;last;BC",
-            "triABC;polygon;triangle;A,B,C;0;0;black;random"
+            "triABC;polygon;triangle;A,B,C;0;0;black;random",
+            // Transparent twin of the circle, for highlighting.
+            "circABC;circle;radius;O,B;0;0;0;0",
+            // The half of the tangent the angle is constructed on.
+            "FB;line;connect;F,B;0;0;0",
+            // The arc of the segment BAC: B through A to C.
+            "segBAC;sector;sector;O,B,C;0;0;0;0",
+            // Angle markers, hidden in the resting figure.
+            "angD;sector;angleMarker;D2,D1,D3;0;0;orange;orange",
+            "angFBC;sector;angleMarker;B,F,C;0;0;orange;orange",
+            "angBAC;sector;angleMarker;A,B,C;0;0;orange;orange"
         ],
+        // Dumping `draggable` against the bundle gives D1, D2, D3, A, E, F, B.
+        // The tangent EF and its point of contact B arrive with "Draw EF
+        // touching ABC at the point B", so E, F and B are deferred; A is a
+        // point of the given circle and D1–D3 the arms of the given angle,
+        // so they belong on slide 1. C is a `last` point — derived, not
+        // auto-unioned — and is listed per slide.
+        deferDraggables: ["E","F","B"],
+        aliases: { "FE": "EF", "BF": "FB", "CB": "BC",
+                   "FBC": "angFBC", "CBF": "angFBC",
+                   "BAC": "angBAC", "CAB": "angBAC" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md “Open on the statement”).
+            { text: "From a given circle to cut off a segment admitting an angle equal to a given rectilinear angle.",
+              visible: GIVEN,
+              highlighted: [],
+              justifications: [{ ref: "III.34" }] },
+            { text: "Let {ABC|circABC} be the given circle, and the angle at {D|angD} the given rectilinear angle.",
+              visible: GIVEN,
+              highlighted: ["circABC", "angD"],
+              transition: { animations: [
+                  { elem: "angD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "It is required to cut off from the circle {ABC|circABC} a segment admitting an angle equal to the given rectilinear angle, the angle at {D|angD}.",
+              visible: GIVEN,
+              highlighted: ["circABC","angD"] },
+            { text: "Draw {EF} touching {ABC|circABC} at the point {B}.",
+              visible: TANG,
+              highlighted: ["circABC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "B",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "EF touching the circle at B", ref: "III.17" }] },
+            // The chord BC has no ink of its own until the triangle arrives
+            // on the III.32 slide, so here it is carried by the gold
+            // highlight rather than by an animation: a zero-colour line
+            // animated would fade with the emphasis taper and vanish.
+            { text: "Construct the angle {FBC} equal to the angle at {D|angD} on the straight line {FB} and at the point {B} on it.",
+              visible: ANG,
+              highlighted: ["BC","FB","angD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "C",      name: geomlib.A.Point.appear },
+                  { elem: "angFBC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle FBC constructed equal to the angle at D", ref: "I.23" }] },
+            { text: "Then, since a straight line {EF} touches the circle {ABC|circABC}, and {BC} has been drawn across from the point of contact at {B},",
+              visible: ANG,
+              highlighted: ["EF","BC","B"] },
+            { text: "the angle {FBC} equals the angle constructed in the alternate segment {BAC|segBAC}.",
+              visible: SEG,
+              highlighted: ["angFBC","segBAC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "triABC", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the tangent-chord angle equals the angle in the alternate segment", ref: "III.32" }] },
+            { text: "But the angle {FBC} equals the angle at {D|angD}, therefore the angle in the segment {BAC|segBAC} equals the angle at {D|angD}.",
+              visible: SEG,
+              highlighted: ["angFBC","angD","angBAC","segBAC"],
+              justifications: [{ ref: "C.N.1" }] },
+            { text: "Therefore from the given circle {ABC|circABC} the segment {BAC|segBAC} has been cut off admitting an angle equal to the given rectilinear angle, the angle at {D|angD}.",
+              visible: SEG,
+              highlighted: ["circABC","segBAC","BC","angBAC","angD"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "III.34") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.23":   "/elements/books/bookI/propositions/propI23/",
+        "III.17": "/elements/books/bookIII/propositions/propIII17/",
+        "III.32": "/elements/books/bookIII/propositions/propIII32/",
+        "C.N.1":  "/elements/books/bookI/commonnotions/cn1/"
     });
 </script>
 </figure>
 
-It is required to cut off from the circle *ABC* a segment admitting an angle equal to the given rectilinear angle, the angle at *D.*
+It is required to cut off from the circle {ABC|circABC} a segment admitting an angle equal to the given rectilinear angle, the angle at {D|angD}.
 
-Draw *EF* touching *ABC* at the point *B.*  Construct the angle *FBC* equal to the angle at *D* on the straight line *FB* and at the point *B* on it. [!just III.17; I.23]
+Draw {EF} touching {ABC|circABC} at the point {B}.  Construct the angle {FBC} equal to the angle at {D|angD} on the straight line {FB} and at the point {B} on it. [!just III.17; I.23]
 
-Then, since a straight line *EF* touches the circle *ABC,* and *BC* has been drawn across from the point of contact at *B,* the angle *FBC* equals the angle constructed in the alternate segment *BAC.* [!just III.32]
+Then, since a straight line {EF} touches the circle {ABC|circABC}, and {BC} has been drawn across from the point of contact at {B}, the angle {FBC} equals the angle constructed in the alternate segment {BAC|segBAC}. [!just III.32]
 
-But the angle *FBC* equals the angle at *D,* therefore the angle in the segment *BAC* equals the angle at *D.*
+But the angle {FBC} equals the angle at {D|angD}, therefore the angle in the segment {BAC|segBAC} equals the angle at {D|angD}.
 
-Therefore from the given circle *ABC* the segment *BAC* has been cut off admitting an angle equal to the given rectilinear angle, the angle at *D.*
+Therefore from the given circle {ABC|circABC} the segment {BAC|segBAC} has been cut off admitting an angle equal to the given rectilinear angle, the angle at {D|angD}.
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
