@@ -162,7 +162,7 @@ rest: on wide screens the proof becomes one centred reading column with the
 figures in the gutters on their own side; in between, figure and text sit
 side by side; on phones the figure is centred with its text below. A page
 with no tagged figure is untouched. Tag a page only when review finds its
-layout at fault — so far, III.25.
+layout at fault — so far, III.25 and III.33.
 
 ### Captions carry Joyce's sentence, not a paraphrase of it
 
