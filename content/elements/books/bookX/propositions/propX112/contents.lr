@@ -15,16 +15,36 @@ statement: The square on a rational straight line applied to the binomial straig
 ----
 proof:
 
-Let *A* be a rational straight line, let *BC* be a binomial, let *DC* be its greater term, and let the rectangle *BC* by *EF* equal the square on *A*.
+Let {A} be a rational straight line, let {BC} be a binomial, let {DC} be its greater term, and let the rectangle {BC} by {EF} equal the square on {A}.
 
-I say that *EF* is an apotome the terms of which are commensurable with *CD* and *DB*, and in the same ratio, and further, *EF* has the same order as *BC*.
+I say that {EF} is an apotome the terms of which are commensurable with {CD} and {DB}, and in the same ratio, and further, {EF} has the same order as {BC}.
 
-Again let the rectangle *BD* by *G* equal the square on *A*.
+Again let the rectangle {BD} by {G} equal the square on {A}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="360" height="125" tabindex="0"></canvas>
 <noscript><img alt="X.112 diagram" src="propX112.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the rational line A, the binomial BC with D on it (DC
+    // the greater term), the line G, and the line KH carrying E, F (EF the
+    // apotome), H (EH = G) and K.
+    // Added, all hidden at rest: solid twins EF, EH, KE (initiallyHidden),
+    // all stroking from E, so the walk can set out EF, then EH, then KE
+    // before Joyce's KH is shown whole; transparent targets CD, BD, HF, FK
+    // (;0;0;0) for the parts the text names. No polygons, no angles. "Since,
+    // then CD" (no comma) is Joyce's and is left. The text's "the rational
+    // straight line set out" is no drawn line, so it is not lit.
+    //
+    // Draggables (checked against the bundle): A1, A2 (the line A), B, C, D
+    // (line sliders, the givens) and E, G1 (line sliders), which arrive with
+    // "the rectangle BC by EF" and "the rectangle BD by G", so they are
+    // deferred. F, G2, H, K are derived and listed per slide.
+    var BIN   = ["A1","A2","A","B","C","D","BC","CD","BD"];
+    var GIVEN = BIN.concat(["E","F","EF"]);
+    var WG    = GIVEN.concat(["G1","G2","G"]);
+    var WH    = WG.concat(["H","EH","HF"]);
+    var WK    = WH.concat(["K","KE","FK"]);
+    var ALL   = WK.concat(["KH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,41 +71,294 @@ Again let the rectangle *BD* by *G* equal the square on *A*.
             "H;point;cutoff;E,K3,G1,G2",
             "Q;point;cutoff;H,F,F,E;0;0",
             "K;point;proportion;F,Q,E,F,E,F,E,K0",
-            "KH;line;connect;K,H"
+            "KH;line;connect;K,H",
+            // Slide-only twins and highlight targets.
+            "EF;line;connect;E,F",
+            "EH;line;connect;E,H",
+            "KE;line;connect;E,K",
+            "CD;line;connect;C,D;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "HF;line;connect;H,F;0;0;0",
+            "FK;line;connect;F,K;0;0;0"
         ],
+        initiallyHidden: ["EF","EH","KE"],
+        deferDraggables: ["E","G1"],
+        aliases: { "CB": "BC", "DC": "CD", "DB": "BD", "FE": "EF", "HE": "EH",
+                   "EK": "KE", "KF": "FK", "HK": "KH" },
+        slides: [
+            { text: "“The square on a rational straight line applied to the binomial straight line produces as breadth an apotome",
+              visible: ALL,
+              highlighted: ["A","BC","EF"],
+              justifications: [{ ref: "X.112" }] },
+            { text: "the terms of which are commensurable with the terms of the binomial straight line and moreover in the same ratio;",
+              visible: ALL,
+              highlighted: ["CD","BD"] },
+            { text: "and further the apotome so arising has the same order as the binomial straight line.”",
+              visible: ALL,
+              highlighted: ["EF","BC"] },
+            { text: "Let {A} be a rational straight line, let {BC} be a binomial, let {DC} be its greater term,",
+              visible: BIN,
+              highlighted: ["A","BC","CD"] },
+            { text: "and let the rectangle {BC} by {EF} equal the square on {A}.",
+              visible: GIVEN,
+              highlighted: ["BC","EF","A"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F", name: geomlib.A.Point.appear },
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that {EF} is an apotome the terms of which are commensurable with {CD} and {DB},",
+              visible: GIVEN,
+              highlighted: ["EF","CD","BD"] },
+            { text: "and in the same ratio, and further, {EF} has the same order as {BC}.",
+              visible: GIVEN,
+              highlighted: ["EF","BC"] },
+            { text: "Again let the rectangle {BD} by {G} equal the square on {A}.",
+              visible: WG,
+              highlighted: ["BD","G","A"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since, then, the rectangle {BC} by {EF} equals the rectangle {BD} by {G},",
+              visible: WG,
+              highlighted: ["BC","EF","BD","G"] },
+            { text: "therefore {CB} is to {BD} as {G} is to {EF}.",
+              visible: WG,
+              highlighted: ["BC","BD","G","EF"],
+              justifications: [{ claim: "CB : BD = G : EF", ref: "VI.16" }] },
+            { text: "But {CB} is greater than {BD}, therefore {G} is also greater than {EF}.",
+              visible: WG,
+              highlighted: ["BC","BD","G","EF"],
+              justifications: [{ claim: "G > EF", ref: "V.Def.5" }] },
+            { text: "Let {EH} equal {G}.",
+              visible: WH,
+              highlighted: ["EH","G"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "H", name: geomlib.A.Point.appear },
+                  { elem: "EH", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {CB} is to {BD} as {HE} is to {EF},",
+              visible: WH,
+              highlighted: ["BC","BD","EH","EF"] },
+            { text: "therefore, taken separately, {CD} is to {BD} as {HF} is to {FE}.",
+              visible: WH,
+              highlighted: ["CD","BD","HF","EF"],
+              justifications: [{ claim: "CD : BD = HF : FE", ref: "V.17" }] },
+            { text: "Let it be contrived that {HF} is to {FE} as {FK} is to {KE}.",
+              visible: WK,
+              highlighted: ["HF","EF","FK","KE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "KE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then the whole {HK} is to the whole {KF} as {FK} is to {KE},",
+              visible: ALL,
+              highlighted: ["KH","FK","KE"] },
+            { text: "for one of the antecedents is to one of the consequents",
+              visible: ALL,
+              highlighted: ["FK","KE"] },
+            { text: "as the sum of the antecedents is to the sum of the consequents.",
+              visible: ALL,
+              highlighted: ["KH","FK"],
+              justifications: [{ claim: "HK : KF = FK : KE", ref: "V.12" }] },
+            { text: "But {FK} is to {KE} as {CD} is to {DB},",
+              visible: ALL,
+              highlighted: ["FK","KE","CD","BD"] },
+            { text: "therefore {HK} is to {KF} as {CD} is to {DB}.",
+              visible: ALL,
+              highlighted: ["KH","FK","CD","BD"],
+              justifications: [{ claim: "HK : KF = CD : DB", ref: "V.11" }] },
+            { text: "But the square on {CD} is commensurable with the square on {DB},",
+              visible: ALL,
+              highlighted: ["CD","BD"],
+              justifications: [{ claim: "BC a binomial", ref: "X.36" }] },
+            { text: "therefore the square on {HK} is commensurable with the square on {KF}.",
+              visible: ALL,
+              highlighted: ["KH","FK"],
+              justifications: [{ claim: "HK² : KF² = CD² : DB²", ref: "VI.22" },
+                               { claim: "HK², KF² commensurable", ref: "X.11" }] },
+            { text: "And the square on {HK} is to the square on {KF} as {HK} is to {KE},",
+              visible: ALL,
+              highlighted: ["KH","FK","KE"] },
+            { text: "since the three straight lines {HK}, {KF}, and {KE} are proportional.",
+              visible: ALL,
+              highlighted: ["KH","FK","KE"],
+              justifications: [{ claim: "HK² : KF² = HK : KE", ref: "V.Def.9" }] },
+            { text: "Therefore {HK} is commensurable in length with {KE},",
+              visible: ALL,
+              highlighted: ["KH","KE"] },
+            { text: "so that {HE} is also commensurable in length with {EK}.",
+              visible: ALL,
+              highlighted: ["EH","KE"],
+              justifications: [{ claim: "HE, EK commensurable", ref: "X.15" }] },
+            { text: "Now, since the square on {A} equals the rectangle {EH} by {BD},",
+              visible: ALL,
+              highlighted: ["A","EH","BD"] },
+            { text: "while the square on {A} is rational, therefore the rectangle {EH} by {BD} is also rational.",
+              visible: ALL,
+              highlighted: ["A","EH","BD"] },
+            { text: "And it is applied to the rational straight line {BD},",
+              visible: ALL,
+              highlighted: ["EH","BD"] },
+            { text: "therefore {EH} is rational and commensurable in length with {BD},",
+              visible: ALL,
+              highlighted: ["EH","BD"],
+              justifications: [{ claim: "EH rational, commensurable with BD", ref: "X.20" }] },
+            { text: "so that {EK}, being commensurable with it, is also rational and commensurable in length with {BD}.",
+              visible: ALL,
+              highlighted: ["KE","EH","BD"] },
+            { text: "Since, then {CD} is to {DB} as {FK} is to {KE},",
+              visible: ALL,
+              highlighted: ["CD","BD","FK","KE"] },
+            { text: "while {CD} and {DB} are straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["CD","BD"] },
+            { text: "therefore {FK} and {KE} are also commensurable in square only.",
+              visible: ALL,
+              highlighted: ["FK","KE"],
+              justifications: [{ claim: "FK, KE commensurable in square only", ref: "X.11" }] },
+            { text: "But {KE} is rational, therefore {FK} is also rational.",
+              visible: ALL,
+              highlighted: ["KE","FK"] },
+            { text: "Therefore {FK} and {KE} are rational straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["FK","KE"] },
+            { text: "therefore {EF} is an apotome.",
+              visible: ALL,
+              highlighted: ["EF"],
+              justifications: [{ claim: "EF an apotome", ref: "X.73" }] },
+            { text: "Now the square on {CD} is greater than the square on {DB}",
+              visible: ALL,
+              highlighted: ["CD","BD"] },
+            { text: "either by the square on a straight line commensurable with {CD}",
+              visible: ALL,
+              highlighted: ["CD"] },
+            { text: "or by the square on a straight line incommensurable with it.",
+              visible: ALL,
+              highlighted: ["CD"] },
+            { text: "If the square on {CD} is greater than the square on {DB}",
+              visible: ALL,
+              highlighted: ["CD","BD"] },
+            { text: "by the square on a straight line commensurable with {CD},",
+              visible: ALL,
+              highlighted: ["CD"] },
+            { text: "then the square on {FK} is also greater than the square on {KE}",
+              visible: ALL,
+              highlighted: ["FK","KE"] },
+            { text: "by the square on a straight line commensurable with {FK}.",
+              visible: ALL,
+              highlighted: ["FK"],
+              justifications: [{ claim: "FK² − KE² commensurable with FK", ref: "X.14" }] },
+            { text: "And, if {CD} is commensurable in length with the rational straight line set out, then {FK} is also;",
+              visible: ALL,
+              highlighted: ["CD","FK"] },
+            { text: "if {BD} is so commensurable, then {KE} is also;",
+              visible: ALL,
+              highlighted: ["BD","KE"] },
+            { text: "but, if neither of the straight lines {CD} nor {DB} is so commensurable,",
+              visible: ALL,
+              highlighted: ["CD","BD"] },
+            { text: "then neither of the straight lines {FK} nor {KE} is so.",
+              visible: ALL,
+              highlighted: ["FK","KE"],
+              justifications: [{ ref: "X.11" },
+                               { ref: "X.12" }] },
+            { text: "But, if the square on {CD} is greater than the square on {DB}",
+              visible: ALL,
+              highlighted: ["CD","BD"] },
+            { text: "by the square on a straight line incommensurable with {CD},",
+              visible: ALL,
+              highlighted: ["CD"] },
+            { text: "then the square on {FK} is also greater than the square on {KE}",
+              visible: ALL,
+              highlighted: ["FK","KE"] },
+            { text: "by the square on a straight line incommensurable with {FK}.",
+              visible: ALL,
+              highlighted: ["FK"],
+              justifications: [{ claim: "FK² − KE² incommensurable with FK", ref: "X.14" }] },
+            { text: "And, if {CD} is commensurable with the rational straight line set out, then {FK} is also;",
+              visible: ALL,
+              highlighted: ["CD","FK"] },
+            { text: "if {BD} is so commensurable, then {KE} is also;",
+              visible: ALL,
+              highlighted: ["BD","KE"] },
+            { text: "but, if neither of the straight lines {CD} nor {DB} is so commensurable,",
+              visible: ALL,
+              highlighted: ["CD","BD"] },
+            { text: "then neither of the straight lines {FK} nor {KE} is so,",
+              visible: ALL,
+              highlighted: ["FK","KE"] },
+            { text: "so that {FE} is an apotome, the terms of which, {FK} and {KE}",
+              visible: ALL,
+              highlighted: ["EF","FK","KE"] },
+            { text: "are commensurable with the terms {CD} and {DB} of the binomial straight line and in the same ratio,",
+              visible: ALL,
+              highlighted: ["FK","KE","CD","BD"] },
+            { text: "and it has the same order as {BC}.",
+              visible: ALL,
+              highlighted: ["EF","BC"] },
+            { text: "Therefore, the square on a rational straight line applied to the binomial straight line produces as breadth an apotome",
+              visible: ALL,
+              highlighted: ["A","BC","EF"] },
+            { text: "the terms of which are commensurable with the terms of the binomial straight line and moreover in the same ratio;",
+              visible: ALL,
+              highlighted: ["FK","KE","CD","BD"] },
+            { text: "and further the apotome so arising has the same order as the binomial straight line.",
+              visible: ALL,
+              highlighted: ["EF","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.112") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.Def.5": "/elements/books/bookV/definitions/defV5/",
+        "V.Def.9": "/elements/books/bookV/definitions/defV9/",
+        "V.11":    "/elements/books/bookV/propositions/propV11/",
+        "V.12":    "/elements/books/bookV/propositions/propV12/",
+        "V.17":    "/elements/books/bookV/propositions/propV17/",
+        "VI.16":   "/elements/books/bookVI/propositions/propVI16/",
+        "VI.22":   "/elements/books/bookVI/propositions/propVI22/",
+        "X.11":    "/elements/books/bookX/propositions/propX11/",
+        "X.12":    "/elements/books/bookX/propositions/propX12/",
+        "X.14":    "/elements/books/bookX/propositions/propX14/",
+        "X.15":    "/elements/books/bookX/propositions/propX15/",
+        "X.20":    "/elements/books/bookX/propositions/propX20/",
+        "X.36":    "/elements/books/bookX/propositions/propX36/",
+        "X.73":    "/elements/books/bookX/propositions/propX73/"
     });
 </script>
 </figure>
 
-Since, then, the rectangle *BC* by *EF* equals the rectangle *BD* by *G*, therefore *CB* is to *BD* as *G* is to *EF*. But *CB* is greater than *BD*, therefore *G* is also greater than *EF*. [!just VI.16; V.Def.5]
+Since, then, the rectangle {BC} by {EF} equals the rectangle {BD} by {G}, therefore {CB} is to {BD} as {G} is to {EF}. But {CB} is greater than {BD}, therefore {G} is also greater than {EF}. [!just VI.16; V.Def.5]
 
-Let *EH* equal *G*. Then *CB* is to *BD* as *HE* is to *EF*, therefore, taken separately, *CD* is to *BD* as *HF* is to *FE*. [!just V.17]
+Let {EH} equal {G}. Then {CB} is to {BD} as {HE} is to {EF}, therefore, taken separately, {CD} is to {BD} as {HF} is to {FE}. [!just V.17]
 
-Let it be contrived that *HF* is to *FE* as *FK* is to *KE*. Then the whole *HK* is to the whole *KF* as *FK* is to *KE*, for one of the antecedents is to one of the consequents as the sum of the antecedents is to the sum of the consequents. [!just V.12]
+Let it be contrived that {HF} is to {FE} as {FK} is to {KE}. Then the whole {HK} is to the whole {KF} as {FK} is to {KE}, for one of the antecedents is to one of the consequents as the sum of the antecedents is to the sum of the consequents. [!just V.12]
 
-But *FK* is to *KE* as *CD* is to *DB*, therefore *HK* is to *KF* as *CD* is to *DB*. [!just V.11]
+But {FK} is to {KE} as {CD} is to {DB}, therefore {HK} is to {KF} as {CD} is to {DB}. [!just V.11]
 
-But the square on *CD* is commensurable with the square on *DB*, therefore the square on *HK* is commensurable with the square on *KF*. [!just X.36, VI.22; X.11]
+But the square on {CD} is commensurable with the square on {DB}, therefore the square on {HK} is commensurable with the square on {KF}. [!just X.36, VI.22; X.11]
 
-And the square on *HK* is to the square on *KF* as *HK* is to *KE*, since the three straight lines *HK*, *KF*, and *KE* are proportional. Therefore *HK* is commensurable in length with *KE*, so that *HE* is also commensurable in length with *EK*. [!just V.Def.9; X.15]
+And the square on {HK} is to the square on {KF} as {HK} is to {KE}, since the three straight lines {HK}, {KF}, and {KE} are proportional. Therefore {HK} is commensurable in length with {KE}, so that {HE} is also commensurable in length with {EK}. [!just V.Def.9; X.15]
 
-Now, since the square on *A* equals the rectangle *EH* by *BD*, while the square on *A* is rational, therefore the rectangle *EH* by *BD* is also rational.
+Now, since the square on {A} equals the rectangle {EH} by {BD}, while the square on {A} is rational, therefore the rectangle {EH} by {BD} is also rational.
 
-And it is applied to the rational straight line *BD*, therefore *EH* is rational and commensurable in length with *BD*, so that *EK*, being commensurable with it, is also rational and commensurable in length with *BD*. [!just X.20]
+And it is applied to the rational straight line {BD}, therefore {EH} is rational and commensurable in length with {BD}, so that {EK}, being commensurable with it, is also rational and commensurable in length with {BD}. [!just X.20]
 
-Since, then *CD* is to *DB* as *FK* is to *KE*, while *CD* and *DB* are straight lines commensurable in square only, therefore *FK* and *KE* are also commensurable in square only. But *KE* is rational, therefore *FK* is also rational. [!just X.11]
+Since, then {CD} is to {DB} as {FK} is to {KE}, while {CD} and {DB} are straight lines commensurable in square only, therefore {FK} and {KE} are also commensurable in square only. But {KE} is rational, therefore {FK} is also rational. [!just X.11]
 
-Therefore *FK* and *KE* are rational straight lines commensurable in square only, therefore *EF* is an apotome. [!just X.73]
+Therefore {FK} and {KE} are rational straight lines commensurable in square only, therefore {EF} is an apotome. [!just X.73]
 
-Now the square on *CD* is greater than the square on *DB* either by the square on a straight line commensurable with *CD* or by the square on a straight line incommensurable with it.
+Now the square on {CD} is greater than the square on {DB} either by the square on a straight line commensurable with {CD} or by the square on a straight line incommensurable with it.
 
-If the square on *CD* is greater than the square on *DB* by the square on a straight line commensurable with *CD*, then the square on *FK* is also greater than the square on *KE* by the square on a straight line commensurable with *FK*. [!just X.14]
+If the square on {CD} is greater than the square on {DB} by the square on a straight line commensurable with {CD}, then the square on {FK} is also greater than the square on {KE} by the square on a straight line commensurable with {FK}. [!just X.14]
 
-And, if *CD* is commensurable in length with the rational straight line set out, then *FK* is also; if *BD* is so commensurable, then *KE* is also; but, if neither of the straight lines *CD* nor *DB* is so commensurable, then neither of the straight lines *FK* nor *KE* is so. [!just X.11; X.12]
+And, if {CD} is commensurable in length with the rational straight line set out, then {FK} is also; if {BD} is so commensurable, then {KE} is also; but, if neither of the straight lines {CD} nor {DB} is so commensurable, then neither of the straight lines {FK} nor {KE} is so. [!just X.11; X.12]
 
-But, if the square on *CD* is greater than the square on *DB* by the square on a straight line incommensurable with *CD*, then the square on *FK* is also greater than the square on *KE* by the square on a straight line incommensurable with *FK*. [!just X.14]
+But, if the square on {CD} is greater than the square on {DB} by the square on a straight line incommensurable with {CD}, then the square on {FK} is also greater than the square on {KE} by the square on a straight line incommensurable with {FK}. [!just X.14]
 
-And, if *CD* is commensurable with the rational straight line set out, then *FK* is also; if *BD* is so commensurable, then *KE* is also; but, if neither of the straight lines *CD* nor *DB* is so commensurable, then neither of the straight lines *FK* nor *KE* is so, so that *FE* is an apotome, the terms of which, *FK* and *KE* are commensurable with the terms *CD* and *DB* of the binomial straight line and in the same ratio, and it has the same order as *BC*.
+And, if {CD} is commensurable with the rational straight line set out, then {FK} is also; if {BD} is so commensurable, then {KE} is also; but, if neither of the straight lines {CD} nor {DB} is so commensurable, then neither of the straight lines {FK} nor {KE} is so, so that {FE} is an apotome, the terms of which, {FK} and {KE} are commensurable with the terms {CD} and {DB} of the binomial straight line and in the same ratio, and it has the same order as {BC}.
 
 Therefore, *the square on a rational straight line applied to the binomial straight line produces as breadth an apotome the terms of which are commensurable with the terms of the binomial straight line and moreover in the same ratio; and further the apotome so arising has the same order as the binomial straight line.*
 
