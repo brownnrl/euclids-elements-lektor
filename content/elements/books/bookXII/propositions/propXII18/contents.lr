@@ -15,20 +15,41 @@ statement: Spheres are to one another in triplicate ratio of their respective di
 ----
 proof:
 
-Let the *ABC* and *DEF* be spheres, and let *BC* and *EF* be their diameters.
+Let the {ABC} and {DEF} be spheres, and let {BC} and {EF} be their diameters.
 
-I say that the sphere *ABC* has to the sphere *DEF* the ratio triplicate of that which *BC* has to *EF.*
+I say that the sphere {ABC} has to the sphere {DEF} the ratio triplicate of that which {BC} has to {EF}.
 
-For, if the sphere *ABC* has not to the sphere *DEF* the ratio triplicate of that which *BC* has to *EF,* then the sphere *ABC* has either to some less sphere than the sphere *DEF,* or to a greater, the ratio triplicate of that which *BC* has to *EF.*
+For, if the sphere {ABC} has not to the sphere {DEF} the ratio triplicate of that which {BC} has to {EF}, then the sphere {ABC} has either to some less sphere than the sphere {DEF}, or to a greater, the ratio triplicate of that which {BC} has to {EF}.
 
-First, let it have that ratio to a less sphere *GHK.*
+First, let it have that ratio to a less sphere {GHK}.
 
-Let *DEF* be about the same center with *GHK.* Inscribe in the greater sphere *DEF* a polyhedral solid which does not touch the lesser sphere *GHK* at its surface. [!just XII.17]
+Let {DEF} be about the same center with {GHK}. Inscribe in the greater sphere {DEF} a polyhedral solid which does not touch the lesser sphere {GHK} at its surface. [!just XII.17]
 
 <center>
 <canvas id="canvas_0" width="540" height="300" tabindex="0"></canvas>
 <noscript><img alt="XII.18 diagram" src="propXII18.gif"/></noscript>
 <script type="text/javascript">
+    // Double reductio. Case 1: ABC has the triplicate ratio to a sphere GHK
+    // less than DEF; set GHK about DEF's center, inscribe in DEF a
+    // polyhedron clear of GHK (XII.17) and a similar one in ABC; by
+    // XII.17.Cor and V.16 GHK would exceed the polyhedron enclosing it.
+    // Case 2 (a greater sphere LMN) inverts to case 1 by XII.2's lemma.
+    //
+    // Joyce's figure draws the four spheres as circles, with the diameters
+    // BC and EF; the polyhedra are not drawn. All kept. Additions are
+    // transparent: faceless twins ABC, DEF, GHK, LMN of the filled circles
+    // (a lit filled circle is raised over the figure, #140, and DEF's would
+    // cover GHK), and octagons polyABC, polyDEF standing for the inscribed
+    // polyhedral solids, lit only when the proof names them (polyDEF clears
+    // GHK at rest; dragging H out toward E can make it cut GHK).
+    // Draggables (checked against the bundle): B, C, E, F lineSliders, the
+    // givens; H (GHK) and M, N (LMN) deferred until their spheres arrive;
+    // B0, B3, M0, M3 off-canvas. A, D, G, K, L are derived, listed per slide.
+    var GIV  = ["ABCsphere","DEFsphere","ABC","DEF","A","B","C","D","E","F","BC","EF"];
+    var LESS = GIV.concat(["GHKsphere","GHK","G","H","K"]);
+    var POLY = LESS.concat(["polyDEF"]);
+    var POL2 = POLY.concat(["polyABC"]);
+    var MORE = GIV.concat(["LMNsphere","LMN","L","M","N"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -58,37 +79,185 @@ Let *DEF* be about the same center with *GHK.* Inscribe in the greater sphere *D
             "N;point;lineSlider;M0,M3,340,0",
             "LMNcenter;point;midpoint;M,N;0;0",
             "L;point;perpendicular;LMNcenter,N",
-            "LMNsphere;circle;radius;LMNcenter,M;0;0;black;random"
+            "LMNsphere;circle;radius;LMNcenter,M;0;0;black;random",
+            // Faceless twins of the four spheres.
+            "ABC;circle;radius;ABCcenter,B;0;0;0;0",
+            "DEF;circle;radius;DEFcenter,D;0;0;0;0",
+            "GHK;circle;radius;DEFcenter,H;0;0;0;0",
+            "LMN;circle;radius;LMNcenter,M;0;0;0;0",
+            // Octagons standing for the inscribed polyhedral solids.
+            "dB;point;extend;D,DEFcenter,DEFcenter,D;0;0",
+            "d1';point;midpoint;D,F;0;0",
+            "d1;point;cutoff;DEFcenter,d1',DEFcenter,D;0;0",
+            "d2';point;midpoint;F,dB;0;0",
+            "d2;point;cutoff;DEFcenter,d2',DEFcenter,D;0;0",
+            "d3';point;midpoint;dB,E;0;0",
+            "d3;point;cutoff;DEFcenter,d3',DEFcenter,D;0;0",
+            "d4';point;midpoint;E,D;0;0",
+            "d4;point;cutoff;DEFcenter,d4',DEFcenter,D;0;0",
+            "polyDEF;polygon;octagon;D,d1,F,d2,dB,d3,E,d4;0;0;0;0",
+            "aB;point;extend;A,ABCcenter,ABCcenter,A;0;0",
+            "a1';point;midpoint;A,C;0;0",
+            "a1;point;cutoff;ABCcenter,a1',ABCcenter,A;0;0",
+            "a2';point;midpoint;C,aB;0;0",
+            "a2;point;cutoff;ABCcenter,a2',ABCcenter,A;0;0",
+            "a3';point;midpoint;aB,B;0;0",
+            "a3;point;cutoff;ABCcenter,a3',ABCcenter,A;0;0",
+            "a4';point;midpoint;B,A;0;0",
+            "a4;point;cutoff;ABCcenter,a4',ABCcenter,A;0;0",
+            "polyABC;polygon;octagon;A,a1,C,a2,aB,a3,B,a4;0;0;0;0"
         ],
+        deferDraggables: ["H","M","N"],
+        slides: [
+            { text: "“Spheres are to one another in triplicate ratio of their respective diameters.”",
+              visible: GIV,
+              highlighted: ["ABC","DEF","BC","EF"],
+              justifications: [{ ref: "XII.18" }] },
+            // Joyce's wording, left literal: "Let the ABC and DEF be spheres".
+            { text: "Let the {ABC} and {DEF} be spheres, and let {BC} and {EF} be their diameters.",
+              highlighted: ["ABC","DEF","BC","EF"] },
+            { text: "I say that the sphere {ABC} has to the sphere {DEF}",
+              highlighted: ["ABC","DEF"] },
+            { text: "the ratio triplicate of that which {BC} has to {EF}.",
+              highlighted: ["BC","EF"] },
+            { text: "For, if the sphere {ABC} has not to the sphere {DEF}",
+              highlighted: ["ABC","DEF"] },
+            { text: "the ratio triplicate of that which {BC} has to {EF},",
+              highlighted: ["BC","EF"] },
+            { text: "then the sphere {ABC} has either to some less sphere than the sphere {DEF}, or to a greater,",
+              highlighted: ["ABC","DEF"] },
+            { text: "the ratio triplicate of that which {BC} has to {EF}.",
+              highlighted: ["BC","EF"] },
+            { text: "First, let it have that ratio to a less sphere {GHK}.",
+              visible: LESS,
+              highlighted: ["GHK"],
+              transition: { animations: [
+                  { elem: "GHK", name: geomlib.A.Circle.compass } ] } },
+            { text: "Let {DEF} be about the same center with {GHK}.",
+              highlighted: ["DEF","GHK"] },
+            { text: "Inscribe in the greater sphere {DEF} a polyhedral solid which does not touch the lesser sphere {GHK} at its surface.",
+              visible: POLY,
+              highlighted: ["DEF","polyDEF","GHK"],
+              transition: { animations: [
+                  { elem: "polyDEF", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "XII.17" }] },
+            { text: "Also inscribe in the sphere {ABC} a polyhedral solid similar to the polyhedral solid in the sphere {DEF}.",
+              visible: POL2,
+              highlighted: ["ABC","polyABC","polyDEF"],
+              transition: { animations: [
+                  { elem: "polyABC", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Therefore the polyhedral solid in {ABC} has to the polyhedral solid in {DEF}",
+              highlighted: ["polyABC","polyDEF"] },
+            { text: "the ratio triplicate of that which {BC} has to {EF}.",
+              highlighted: ["BC","EF"],
+              justifications: [{ ref: "XII.17.Cor" }] },
+            { text: "But the sphere {ABC} also has to the sphere {GHK} the ratio triplicate of that which {BC} has to {EF},",
+              highlighted: ["ABC","GHK","BC","EF"] },
+            { text: "therefore the sphere {ABC} is to the sphere {GHK}",
+              highlighted: ["ABC","GHK"] },
+            { text: "as the polyhedral solid in the sphere {ABC} is to the polyhedral solid in the sphere {DEF},",
+              highlighted: ["polyABC","polyDEF"] },
+            { text: "and, alternately the sphere {ABC} is to the polyhedron in it",
+              highlighted: ["ABC","polyABC"] },
+            { text: "as the sphere {GHK} is to the polyhedral solid in the sphere {DEF}.",
+              highlighted: ["GHK","polyDEF"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "But the sphere {ABC} is greater than the polyhedron in it,",
+              highlighted: ["ABC","polyABC"] },
+            { text: "therefore the sphere {GHK} is also greater than the polyhedron in the sphere {DEF}.",
+              highlighted: ["GHK","polyDEF"],
+              justifications: [{ ref: "V.Def.5" }] },
+            { text: "But it is also less, for it is enclosed by it.",
+              highlighted: ["GHK","polyDEF"] },
+            { text: "Therefore the sphere {ABC} has not to a less sphere than the sphere {DEF}",
+              highlighted: ["ABC","DEF"] },
+            { text: "the ratio triplicate of that which the diameter {BC} has to {EF}.",
+              highlighted: ["BC","EF"] },
+            { text: "Similarly we can prove that neither has the sphere {DEF} to a less sphere than the sphere {ABC}",
+              visible: GIV,
+              highlighted: ["DEF","ABC"] },
+            { text: "the ratio triplicate of that which {EF} has to {BC}.",
+              highlighted: ["EF","BC"] },
+            { text: "I say next that neither has the sphere {ABC} to any greater sphere than the sphere {DEF}",
+              highlighted: ["ABC","DEF"] },
+            { text: "the ratio triplicate of that which {BC} has to {EF}.",
+              highlighted: ["BC","EF"] },
+            { text: "For, if possible, let it have that ratio to a greater, {LMN}.",
+              visible: MORE,
+              highlighted: ["LMN"],
+              transition: { animations: [
+                  { elem: "LMN", name: geomlib.A.Circle.compass } ] } },
+            { text: "Therefore, inversely, the sphere {LMN} has to the sphere {ABC}",
+              highlighted: ["LMN","ABC"] },
+            { text: "the ratio triplicate of that which the diameter {EF} has to the diameter {BC}.",
+              highlighted: ["EF","BC"],
+              justifications: [{ ref: "XII.2,Lemma" }] },
+            { text: "But, since {LMN} is greater than {DEF},",
+              highlighted: ["LMN","DEF"] },
+            { text: "therefore the sphere {LMN} is to the sphere {ABC}",
+              highlighted: ["LMN","ABC"] },
+            { text: "as the sphere {DEF} is to some less sphere than the sphere {ABC}, as was before proved.",
+              highlighted: ["DEF","ABC"] },
+            { text: "Therefore the sphere {DEF} also has to some less sphere than the sphere {ABC}",
+              highlighted: ["DEF","ABC"] },
+            { text: "the ratio triplicate of that which {EF} has to {BC}, which was proved impossible.",
+              highlighted: ["EF","BC"] },
+            { text: "Therefore the sphere {ABC} has not to any sphere greater than the sphere {DEF}",
+              highlighted: ["ABC","DEF"] },
+            { text: "the ratio triplicate of that which {BC} has to {EF}.",
+              highlighted: ["BC","EF"] },
+            { text: "But it was proved that neither has it that ratio to a less sphere.",
+              visible: GIV,
+              highlighted: ["ABC"] },
+            { text: "Therefore the sphere {ABC} has to the sphere {DEF} the ratio triplicate of that which {BC} has to {EF}.",
+              highlighted: ["ABC","DEF","BC","EF"] },
+            { text: "Therefore, spheres are to one another in triplicate ratio of their respective diameters.",
+              highlighted: ["ABC","DEF","BC","EF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.18") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.16":        "/elements/books/bookV/propositions/propV16/",
+        "V.Def.5":     "/elements/books/bookV/definitions/defV5/",
+        "XII.2,Lemma": "/elements/books/bookXII/propositions/propXII2/#lemma",
+        "XII.17":      "/elements/books/bookXII/propositions/propXII17/",
+        "XII.17.Cor":  "/elements/books/bookXII/propositions/propXII17/#cor"
     });
 </script>
 </center>
 
-Also inscribe in the sphere *ABC* a polyhedral solid similar to the polyhedral solid in the sphere *DEF.* Therefore the polyhedral solid in *ABC* has to the polyhedral solid in *DEF* the ratio triplicate of that which *BC* has to *EF.* [!just XII.17.Cor]
+Also inscribe in the sphere {ABC} a polyhedral solid similar to the polyhedral solid in the sphere {DEF}. Therefore the polyhedral solid in {ABC} has to the polyhedral solid in {DEF} the ratio triplicate of that which {BC} has to {EF}. [!just XII.17.Cor]
 
-But the sphere *ABC* also has to the sphere *GHK* the ratio triplicate of that which *BC* has to *EF,* therefore the sphere *ABC* is to the sphere *GHK* as the polyhedral solid in the sphere *ABC* is to the polyhedral solid in the sphere *DEF,* and, alternately the sphere *ABC* is to the polyhedron in it as the sphere *GHK* is to the polyhedral solid in the sphere *DEF.* [!just V.16]
+But the sphere {ABC} also has to the sphere {GHK} the ratio triplicate of that which {BC} has to {EF}, therefore the sphere {ABC} is to the sphere {GHK} as the polyhedral solid in the sphere {ABC} is to the polyhedral solid in the sphere {DEF}, and, alternately the sphere {ABC} is to the polyhedron in it as the sphere {GHK} is to the polyhedral solid in the sphere {DEF}. [!just V.16]
 
-But the sphere *ABC* is greater than the polyhedron in it, therefore the sphere *GHK* is also greater than the polyhedron in the sphere *DEF.* [!just V.Def.5]
+But the sphere {ABC} is greater than the polyhedron in it, therefore the sphere {GHK} is also greater than the polyhedron in the sphere {DEF}. [!just V.Def.5]
 
-But it is also less, for it is enclosed by it. Therefore the sphere *ABC* has not to a less sphere than the sphere *DEF* the ratio triplicate of that which the diameter *BC* has to *EF.*
+But it is also less, for it is enclosed by it. Therefore the sphere {ABC} has not to a less sphere than the sphere {DEF} the ratio triplicate of that which the diameter {BC} has to {EF}.
 
-Similarly we can prove that neither has the sphere *DEF* to a less sphere than the sphere *ABC* the ratio triplicate of that which *EF* has to *BC.*
+Similarly we can prove that neither has the sphere {DEF} to a less sphere than the sphere {ABC} the ratio triplicate of that which {EF} has to {BC}.
 
-I say next that neither has the sphere *ABC* to any greater sphere than the sphere *DEF* the ratio triplicate of that which *BC* has to *EF.*
+I say next that neither has the sphere {ABC} to any greater sphere than the sphere {DEF} the ratio triplicate of that which {BC} has to {EF}.
 
-For, if possible, let it have that ratio to a greater, *LMN.* Therefore, inversely, the sphere *LMN* has to the sphere *ABC* the ratio triplicate of that which the diameter *EF* has to the diameter *BC.*
+For, if possible, let it have that ratio to a greater, {LMN}. Therefore, inversely, the sphere {LMN} has to the sphere {ABC} the ratio triplicate of that which the diameter {EF} has to the diameter {BC}.
 
 <div class="just"><a href="/elements/books/bookXII/propositions/propXII2/#lemma">XII.2,Lemma</a></div>
 
-But, since *LMN* is greater than *DEF,* therefore the sphere *LMN* is to the sphere *ABC* as the sphere *DEF* is to some less sphere than the sphere *ABC,* as was before proved.
+But, since {LMN} is greater than {DEF}, therefore the sphere {LMN} is to the sphere {ABC} as the sphere {DEF} is to some less sphere than the sphere {ABC}, as was before proved.
 
-Therefore the sphere *DEF* also has to some less sphere than the sphere *ABC* the ratio triplicate of that which *EF* has to *BC,* which was proved impossible.
+Therefore the sphere {DEF} also has to some less sphere than the sphere {ABC} the ratio triplicate of that which {EF} has to {BC}, which was proved impossible.
 
-Therefore the sphere *ABC* has not to any sphere greater than the sphere *DEF* the ratio triplicate of that which *BC* has to *EF.*
+Therefore the sphere {ABC} has not to any sphere greater than the sphere {DEF} the ratio triplicate of that which {BC} has to {EF}.
 
 But it was proved that neither has it that ratio to a less sphere.
 
-Therefore the sphere *ABC* has to the sphere *DEF* the ratio triplicate of that which *BC* has to *EF.*
+Therefore the sphere {ABC} has to the sphere {DEF} the ratio triplicate of that which {BC} has to {EF}.
 
 Therefore, *spheres are to one another in triplicate ratio of their respective diameters.*
 

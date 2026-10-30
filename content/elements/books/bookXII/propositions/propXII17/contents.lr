@@ -19,7 +19,7 @@ statement: Given two spheres about the same center, to inscribe in the greater s
 ----
 proof:
 
-Let there be two spheres about the same center *A.*
+Let there be two spheres about the same center {A}.
 
 It is required to inscribe in the greater sphere a polyhedral solid which does not touch the lesser sphere at its surface.
 
@@ -31,6 +31,62 @@ And it is clear that this circle is the greatest possible, for the diameter of t
 <canvas id="canvas_0" width="500" height="500" tabindex="0"></canvas>
 <noscript><img alt="XII.17 diagram" src="propXII17.gif"/></noscript>
 <script type="text/javascript">
+    // The two spheres are cut by the plane of BCDE; the polygon of XII.16
+    // is inscribed in BCDE (one quadrant, BKLME, drawn), the great circles
+    // BOD, KON stand at right angles to it through AO, and the quadrants
+    // BO, KO take chords equal to the polygon's sides. KBPS, SPQT, TQRU and
+    // URO are each in one plane (XI.7), so with A they give pyramids. The
+    // perpendicular AX on KBPS is then compared with AZ (Z the foot of K
+    // on BV) and shown greater than AG.
+    //
+    // Joyce's figure is kept as drawn. Additions are transparent unless
+    // noted: faceless twins of the spheres (sphGreater, sphLesser) and of
+    // the faces PSKB, QTSP, RUTQ, ORU (KBPS, SPQT, TQRU, URO, named as the
+    // prose names them) — the originals have opaque faces, raised over the
+    // figure when lit (#140); the segments KA, AB, BV, VA, KW, WA, XP, XS,
+    // BZ, DZ, ZA, AG; the joins AP, AS, AQ, AT, AR, AU of the pyramids; and
+    // the circle Xcirc about X through B, K, P, S. The chords BP, PQ, QR,
+    // RO, KS, ST, TU, UO and the joins SP, TQ, UR are solid slide twins
+    // over the faces' edges, hidden at rest (initiallyHidden), so they can
+    // stroke as the proof inscribes them. Right angles (angleMarkerRight):
+    // BAC (diameters at right angles), OAB (AO set up at right angles to
+    // the plane), PVA and SWA (the perpendiculars), AXB and AXK, KZB, and
+    // BKD (III.31). The quadrants BE, BO, KO and the semicircle BED hover
+    // their whole circles. Z coincides with V in this figure (BV = BZ), as
+    // Joyce's original also places it; its label is hidden there.
+    // Draggables (checked against the bundle): A free; B planeSlider and G
+    // lineSlider, both deferred until the circles BCDE and FGH are named.
+    var GIV   = ["Bsphere","Gsphere","sphGreater","sphLesser","A"];
+    var CIR   = GIV.concat(["BCDE","FGH"]);
+    var LET   = CIR.concat(["B","C","D","E","F","G","H"]);
+    var DIA   = LET.concat(["BD","CE","angBAC"]);
+    var POLY  = DIA.concat(["K","L","M","BK","KL","LM","ME"]);
+    var KNs   = POLY.concat(["N","KN","KA"]);
+    var AOs   = KNs.concat(["AO","O","angOAB"]);
+    var SEMI  = AOs.concat(["BOD","KON"]);
+    var INS1  = SEMI.concat(["P","Q","R","BP","PQ","QR","RO"]);
+    var INS2  = INS1.concat(["S","T","U","KS","ST","TU","UO"]);
+    var JN    = INS2.concat(["SP","TQ","UR"]);
+    var PERP  = JN.concat(["PV","SW"]);
+    var FALL  = PERP.concat(["V","W","VW","angPVA","angSWA"]);
+    var PAR   = FALL.concat(["BV","VA","KW","WA","AB"]);
+    var Q1    = PAR.concat(["PSKB","KBPS"]);
+    var Q2    = Q1.concat(["QTSP","SPQT","RUTQ","TQRU"]);
+    var TRI   = Q2.concat(["ORU","URO"]);
+    var PYR   = TRI.concat(["AP","AS","AQ","AT","AR","AU"]);
+    var AXs   = PYR.concat(["AX","X","BX","KX"]);
+    var RA    = AXs.concat(["angAXB","angAXK"]);
+    var XPS   = RA.concat(["XP","XS"]);
+    var CIRC  = XPS.concat(["Xcirc"]);
+    var KZs   = CIRC.concat(["Z","KZ","angKZB","BZ","DZ"]);
+    var KDs   = KZs.concat(["KD","angBKD"]);
+    var ZAs   = KDs.concat(["ZA","AG"]);
+    var SPH   = ["sphGreater","sphLesser"];
+    var QUAD  = ["BK","KL","LM","ME"];
+    var CH_B  = ["BP","PQ","QR","RO"];
+    var CH_K  = ["KS","ST","TU","UO"];
+    var FACES = ["KBPS","SPQT","TQRU","URO"];
+    var APEX  = ["AP","AS","AQ","AT","AR","AU"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -92,79 +148,533 @@ And it is clear that this circle is the greatest possible, for the diameter of t
             "KX;line;connect;K,X",
             "Z;point;foot;K,B,V;0",
             "KZ;line;connect;K,Z",
-            "KD;line;connect;K,D"
+            "KD;line;connect;K,D",
+            // Faceless twins of the faces, and of the spheres as screen circles
+            // on their outlines (a sphere draws no highlight).
+            "sphGreater;circle;radius;A,B;0;0;0;0",
+            "sphLesser;circle;radius;A,F;0;0;0;0",
+            "KBPS;polygon;quadrilateral;K,B,P,S;0;0;0;0",
+            "SPQT;polygon;quadrilateral;S,P,Q,T;0;0;0;0",
+            "TQRU;polygon;quadrilateral;T,Q,R,U;0;0;0;0",
+            "URO;polygon;triangle;U,R,O;0;0;0;0",
+            // Slide twins of the chords and joins, hidden at rest.
+            "BP;line;connect;B,P",
+            "PQ;line;connect;P,Q",
+            "QR;line;connect;Q,R",
+            "RO;line;connect;R,O",
+            "KS;line;connect;K,S",
+            "ST;line;connect;S,T",
+            "TU;line;connect;T,U",
+            "UO;line;connect;U,O",
+            "SP;line;connect;S,P",
+            "TQ;line;connect;T,Q",
+            "UR;line;connect;U,R",
+            // Segments the proof names but the figure does not draw.
+            "KA;line;connect;K,A;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "BV;line;connect;B,V;0;0;0",
+            "VA;line;connect;V,A;0;0;0",
+            "KW;line;connect;K,W;0;0;0",
+            "WA;line;connect;W,A;0;0;0",
+            "AP;line;connect;A,P;0;0;0",
+            "AS;line;connect;A,S;0;0;0",
+            "AQ;line;connect;A,Q;0;0;0",
+            "AT;line;connect;A,T;0;0;0",
+            "AR;line;connect;A,R;0;0;0",
+            "AU;line;connect;A,U;0;0;0",
+            "XP;line;connect;X,P;0;0;0",
+            "XS;line;connect;X,S;0;0;0",
+            "Xcirc;circle;radius;X,B,KBPSplane;0;0;0;0",
+            "BZ;line;connect;B,Z;0;0;0",
+            "DZ;line;connect;D,Z;0;0;0",
+            "ZA;line;connect;Z,A;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            // Right angles.
+            "angBAC;sector;angleMarkerRight;A,B,C",
+            "angOAB;sector;angleMarkerRight;A,O,B",
+            "angPVA;sector;angleMarkerRight;V,P,A",
+            "angSWA;sector;angleMarkerRight;W,S,A",
+            "angAXB;sector;angleMarkerRight;X,A,B",
+            "angAXK;sector;angleMarkerRight;X,A,K",
+            "angKZB;sector;angleMarkerRight;Z,K,B",
+            "angBKD;sector;angleMarkerRight;K,B,D"
         ],
+        initiallyHidden: ["BP","PQ","QR","RO","KS","ST","TU","UO","SP","TQ","UR"],
+        deferDraggables: ["B","G"],
+        slides: [
+            { text: "“Given two spheres about the same center,",
+              visible: GIV,
+              highlighted: SPH.concat(["A"]),
+              justifications: [{ ref: "XII.17" }] },
+            { text: "to inscribe in the greater sphere a polyhedral solid",
+              highlighted: ["sphGreater"] },
+            { text: "which does not touch the lesser sphere at its surface.”",
+              highlighted: ["sphLesser"] },
+            { text: "Let there be two spheres about the same center {A}.",
+              highlighted: SPH.concat(["A"]) },
+            { text: "It is required to inscribe in the greater sphere a polyhedral solid",
+              highlighted: ["sphGreater"] },
+            { text: "which does not touch the lesser sphere at its surface.",
+              highlighted: ["sphLesser"] },
+            { text: "Cut the spheres by any plane through the center. Then the sections are circles,",
+              visible: CIR,
+              highlighted: ["BCDE","FGH"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BCDE", name: geomlib.A.Circle.compass },
+                  { elem: "FGH", name: geomlib.A.Circle.compass } ] } },
+            { text: "for as a sphere is produced by the diameter remaining fixed and the semicircle being carried round it,",
+              highlighted: ["sphGreater"] },
+            { text: "hence, in whatever position we conceive the semicircle to be,",
+              highlighted: ["sphGreater"] },
+            { text: "the plane carried through it produces a circle on the circumference of the sphere.",
+              highlighted: ["BCDE","sphGreater"],
+              justifications: [{ claim: "a sphere: a semicircle carried round", ref: "XI.Def.14" }] },
+            { text: "And it is clear that this circle is the greatest possible,",
+              highlighted: ["BCDE"] },
+            { text: "for the diameter of the sphere, which is of course the diameter both of the semicircle and of the circle,",
+              highlighted: ["BCDE"] },
+            { text: "is greater than all the straight lines drawn across in the circle or the sphere.",
+              highlighted: ["BCDE","sphGreater"] },
+            { text: "Let then {BCDE} be the circle in the greater sphere, and {FGH} the circle in the lesser sphere.",
+              visible: LET,
+              highlighted: ["BCDE","FGH"] },
+            { text: "Draw two diameters in them, {BD} and {CE}, at right angles to one another.",
+              visible: DIA,
+              highlighted: ["BD","CE"],
+              transition: { animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.11" }] },
+            { text: "Then, given the two circles {BCDE} and {FGH} about the same center,",
+              highlighted: ["BCDE","FGH"] },
+            { text: "inscribe in the greater circle {BCDE} an equilateral polygon with an even number of sides",
+              visible: POLY,
+              highlighted: ["BCDE"].concat(QUAD),
+              transition: { animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "BK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "L", name: geomlib.A.Point.appear },
+                  { elem: "KL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "M", name: geomlib.A.Point.appear },
+                  { elem: "LM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ME", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "which does not touch the lesser circle {FGH}.",
+              highlighted: ["FGH"].concat(QUAD),
+              justifications: [{ ref: "XII.16" }] },
+            { text: "Let {BK}, {KL}, {LM}, and {ME} be its sides in the quadrant {BE|BCDE}.",
+              highlighted: QUAD },
+            { text: "Join {KA} and carry it through to {N}.",
+              visible: KNs,
+              highlighted: ["KN"],
+              transition: { animations: [
+                  { elem: "KN", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "N", name: geomlib.A.Point.appear } ] } },
+            { text: "Set {AO} up from the point {A} at right angles to the plane of the circle {BCDE},",
+              visible: AOs,
+              highlighted: ["AO","BCDE"],
+              transition: { animations: [
+                  { elem: "AO", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angOAB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and let it meet the surface of the sphere at {O}.",
+              highlighted: ["O","sphGreater"],
+              transition: { animations: [
+                  { elem: "O", name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "XI.12" }] },
+            { text: "Carry planes through {AO} and each of the straight lines {BD} and {KN}.",
+              highlighted: ["AO","BD","KN"] },
+            { text: "They make the greatest circles on the surface of the sphere for the reason stated.",
+              highlighted: ["sphGreater"] },
+            { text: "Let them make such, and in them let {BOD} and {KON} be the semicircles on {BD} and {KN}.",
+              visible: SEMI,
+              highlighted: ["BOD","KON","BD","KN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BOD", name: geomlib.A.Circle.compass },
+                  { elem: "KON", name: geomlib.A.Circle.compass } ] } },
+            { text: "Now, since {OA|AO} is at right angles to the plane of the circle {BCDE},",
+              highlighted: ["AO","BCDE","angOAB"] },
+            { text: "therefore all the planes through {OA|AO} are also at right angles to the plane of the circle {BCDE}.",
+              highlighted: ["AO","BCDE"] },
+            { text: "Hence the semicircles {BOD} and {KON} are also at right angles to the plane of the circle {BCDE}.",
+              highlighted: ["BOD","KON","BCDE"],
+              justifications: [{ ref: "XI.18" }] },
+            { text: "And, since the semicircles {BED|BCDE}, {BOD}, and {KON} are equal,",
+              highlighted: ["BCDE","BOD","KON"] },
+            { text: "for they are on equal diameters {BD} and {KN},",
+              highlighted: ["BD","KN"] },
+            { text: "therefore the quadrants {BE|BCDE}, {BO|BOD}, and {KO|KON} equal one another.",
+              highlighted: ["BCDE","BOD","KON"] },
+            { text: "Therefore there are as many straight lines in the quadrants {BO|BOD} and {KO|KON}",
+              highlighted: ["BOD","KON"] },
+            { text: "equal to the straight lines {BK}, {KL}, {LM}, and {ME}",
+              highlighted: QUAD },
+            { text: "as there are sides of the polygon in the quadrant {BE|BCDE}.",
+              highlighted: QUAD },
+            { text: "Inscribe them as {BP}, {PQ}, {QR}, and {RO}",
+              visible: INS1,
+              highlighted: CH_B,
+              transition: { animations: [
+                  { elem: "BP", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "P", name: geomlib.A.Point.appear },
+                  { elem: "PQ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "Q", name: geomlib.A.Point.appear },
+                  { elem: "QR", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "R", name: geomlib.A.Point.appear },
+                  { elem: "RO", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and as {KS}, {ST}, {TU}, and {UO}.",
+              visible: INS2,
+              highlighted: CH_K,
+              transition: { animations: [
+                  { elem: "KS", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "S", name: geomlib.A.Point.appear },
+                  { elem: "ST", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "T", name: geomlib.A.Point.appear },
+                  { elem: "TU", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "U", name: geomlib.A.Point.appear },
+                  { elem: "UO", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "IV.1" }] },
+            { text: "Join {SP}, {TQ}, {UR},",
+              visible: JN,
+              highlighted: ["SP","TQ","UR"],
+              transition: { animations: [
+                  { elem: "SP", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "TQ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "UR", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and draw perpendiculars from {P} and {S} to the plane of the circle {BCDE}.",
+              visible: PERP,
+              highlighted: ["P","S","PV","SW"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "PV", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "SW", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "XI.11" }] },
+            { text: "These will fall on {BD} and {KN}, the common sections of the planes,",
+              highlighted: ["BD","KN","PV","SW"] },
+            { text: "for the planes of {BOD} and {KON} are also at right angles to the plane of the circle {BCDE}.",
+              highlighted: ["BOD","KON","BCDE"],
+              justifications: [{ ref: "XI.Def.4" }] },
+            { text: "Let them so fall as {PV} and {SW}, and join {WV|VW}.",
+              visible: FALL,
+              highlighted: ["PV","SW","VW"],
+              transition: { animations: [
+                  { elem: "V", name: geomlib.A.Point.appear },
+                  { elem: "W", name: geomlib.A.Point.appear },
+                  { elem: "angPVA", name: geomlib.A.Sector.sweep },
+                  { elem: "angSWA", name: geomlib.A.Sector.sweep },
+                  { elem: "VW", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now since, in the equal semicircles {BOD} and {KON}, equal straight lines {BP} and {KS} have been cut off,",
+              visible: PAR,
+              highlighted: ["BOD","KON","BP","KS"] },
+            { text: "and the perpendiculars {PV} and {SW} have been drawn,",
+              highlighted: ["PV","SW","angPVA","angSWA"] },
+            { text: "therefore {PV} equals {SW}, and {BV} equals {KW}.",
+              highlighted: ["PV","SW","BV","KW"],
+              justifications: [{ ref: "III.27" }, { ref: "I.26" }] },
+            { text: "But the whole {BA|AB} also equals the whole {KA},",
+              highlighted: ["AB","KA"] },
+            { text: "therefore the remainder {VA} also equals the remainder {WA}.",
+              highlighted: ["VA","WA"] },
+            { text: "Therefore {BV} is to {VA} as {KW} is to {WA}. Therefore {WV|VW} is parallel to {KB|BK}.",
+              highlighted: ["BV","VA","KW","WA","VW","BK"],
+              justifications: [{ ref: "VI.2" }] },
+            { text: "And, since each of the straight lines {PV} and {SW}",
+              highlighted: ["PV","SW"] },
+            { text: "is at right angles to the plane of the circle {BCDE},",
+              highlighted: ["PV","SW","BCDE","angPVA","angSWA"] },
+            { text: "therefore {PV} is parallel to {SW}.",
+              highlighted: ["PV","SW"],
+              justifications: [{ ref: "XI.6" }] },
+            { text: "But it was also proved equal to it, therefore {WV|VW} and {SP} are equal and parallel.",
+              highlighted: ["VW","SP"],
+              justifications: [{ ref: "I.33" }] },
+            { text: "And, since {WV|VW} is parallel to {SP}, and {WV|VW} is parallel to {KB|BK},",
+              highlighted: ["VW","SP","BK"] },
+            { text: "therefore {SP} is also parallel to {KB|BK}.",
+              highlighted: ["SP","BK"],
+              justifications: [{ ref: "XI.9" }] },
+            { text: "And {BP} and {KS} join their ends, therefore the quadrilateral {KBPS} is in one plane,",
+              visible: Q1,
+              highlighted: ["BP","KS","KBPS"],
+              transition: { animations: [
+                  { elem: "KBPS", name: geomlib.A.Polygon.outline } ] } },
+            { text: "for if two straight lines are parallel, and points are taken at random on each of them,",
+              highlighted: ["SP","BK"] },
+            { text: "then the straight line joining the points is in the same plane with the parallels.",
+              highlighted: ["KBPS"] },
+            { text: "For the same reason each of the quadrilaterals {SPQT} and {TQRU} is also in one plane.",
+              visible: Q2,
+              highlighted: ["SPQT","TQRU"],
+              transition: { animations: [
+                  { elem: "SPQT", name: geomlib.A.Polygon.outline },
+                  { elem: "TQRU", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "XI.7" }] },
+            { text: "But the triangle {URO} is also in one plane.",
+              visible: TRI,
+              highlighted: ["URO"],
+              transition: { animations: [
+                  { elem: "URO", name: geomlib.A.Polygon.outline } ] } },
+            { text: "If then we join straight lines from the points {P}, {S}, {Q}, {T}, {R}, and {U} to {A},",
+              visible: PYR,
+              highlighted: APEX,
+              transition: { mode: "parallel", animations: [
+                  { elem: "AP", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AS", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AQ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AT", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AR", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AU", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "then there will be constructed a certain polyhedral solid figure between the circumferences {BO|BOD} and {KO|KON}",
+              highlighted: FACES.concat(APEX) },
+            { text: "consisting of pyramids of which the quadrilaterals {KBPS}, {SPQT}, and {TQRU} and the triangle {URO} are the bases",
+              highlighted: FACES },
+            { text: "and the point {A} is the vertex.",
+              highlighted: FACES.concat(APEX).concat(["A"]),
+              justifications: [{ ref: "XI.2" }] },
+            { text: "And, if we make the same construction in the case of each of the sides {KL}, {LM}, and {ME}",
+              highlighted: ["KL","LM","ME"] },
+            { text: "as in the case of {BK}, and further, in the case of the remaining three quadrants,",
+              highlighted: ["BK","BCDE"] },
+            { text: "then there will be constructed a certain polyhedral figure inscribed in the sphere and contained by pyramids,",
+              highlighted: ["sphGreater"].concat(FACES) },
+            { text: "of which the said quadrilaterals and the triangle {URO}, and the others corresponding to them, are the bases",
+              highlighted: FACES },
+            { text: "and the point {A} is the vertex.",
+              highlighted: FACES.concat(APEX).concat(["A"]) },
+            { text: "I say that the said polyhedron does not touch the lesser sphere",
+              highlighted: FACES.concat(["sphLesser"]) },
+            { text: "at the surface on which the circle {FGH} is.",
+              highlighted: ["FGH","sphLesser"] },
+            { text: "Draw {AX} from the point {A} perpendicular to the plane of the quadrilateral {KBPS},",
+              visible: AXs,
+              highlighted: ["AX","KBPS"],
+              transition: { animations: [
+                  { elem: "AX", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and let it meet the plane at the point {X}. Join {XB|BX} and {XK|KX}.",
+              highlighted: ["X","BX","KX"],
+              transition: { animations: [
+                  { elem: "X", name: geomlib.A.Point.appear },
+                  { elem: "BX", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KX", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "XI.11" }] },
+            { text: "Then, since {AX} is at right angles to the plane of the quadrilateral {KBPS},",
+              highlighted: ["AX","KBPS"] },
+            { text: "therefore it is also at right angles to all the straight lines",
+              highlighted: ["AX"] },
+            { text: "which meet it and are in the plane of the quadrilateral.",
+              highlighted: ["AX","KBPS"] },
+            { text: "Therefore {AX} is at right angles to each of the straight lines {BX} and {XK|KX}.",
+              visible: RA,
+              highlighted: ["AX","BX","KX"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angAXB", name: geomlib.A.Sector.sweep },
+                  { elem: "angAXK", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "XI.Def.3" }] },
+            { text: "And, since {AB} equals {AK|KA}, therefore the square on {AB} equals the square on {AK|KA}.",
+              highlighted: ["AB","KA"] },
+            { text: "And the sum of the squares on {AX} and {XB|BX} equals the square on {AB},",
+              highlighted: ["AX","BX","AB"] },
+            { text: "for the angle at {X} is right,",
+              highlighted: ["angAXB"] },
+            { text: "and the sum of the squares on {AX} and {XK|KX} equals the square on {AK|KA}.",
+              highlighted: ["AX","KX","KA","angAXK"],
+              justifications: [{ ref: "I.47" }] },
+            { text: "Therefore the sum of the squares on {AX} and {XB|BX} equals the sum of the squares on {AX} and {XK|KX}.",
+              highlighted: ["AX","BX","KX"] },
+            { text: "Subtract the square on {AX} from each,",
+              highlighted: ["AX"] },
+            { text: "therefore the remainder, the square on {BX}, equals the remainder, the square on {XK|KX}. Therefore {BX} equals {XK|KX}.",
+              highlighted: ["BX","KX"] },
+            { text: "Similarly we can prove that the straight lines joined from {X} to {P} and {S}",
+              visible: XPS,
+              highlighted: ["XP","XS"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "XP", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "XS", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "are equal to each of the straight lines {BX} and {XK|KX}.",
+              highlighted: ["XP","XS","BX","KX"] },
+            // Joyce's slip, left literal: "radius on of" for "radius one of".
+            { text: "Therefore the circle with center {X} and radius on of the straight lines {XB|BX} or {XK|KX}",
+              visible: CIRC,
+              highlighted: ["Xcirc","X","BX","KX"],
+              transition: { animations: [
+                  { elem: "Xcirc", name: geomlib.A.Circle.compass } ] } },
+            { text: "passes through {P} and {S} also,",
+              highlighted: ["Xcirc","P","S"] },
+            { text: "and {KBPS} is a quadrilateral in a circle.",
+              highlighted: ["KBPS","Xcirc"] },
+            { text: "Now, since {KB|BK} is greater than {WV|VW}, and {WV|VW} equals {SP}, therefore {KB|BK} is greater than {SP}.",
+              highlighted: ["BK","VW","SP"] },
+            { text: "But {KB|BK} equals each of the straight lines {KS} and {BP},",
+              highlighted: ["BK","KS","BP"] },
+            { text: "therefore each of the straight lines {KS} and {BP} is greater than {SP}.",
+              highlighted: ["KS","BP","SP"] },
+            { text: "And, since {KBPS} is a quadrilateral in a circle, and {KB|BK}, {BP}, and {KS} are equal, and {PS|SP} less,",
+              highlighted: ["Xcirc","BK","BP","KS","SP"] },
+            { text: "and {BX} is the radius of the circle,",
+              highlighted: ["Xcirc","BX"] },
+            { text: "therefore the square on {KB|BK} is greater than double the square on {BX}.",
+              highlighted: ["BK","BX"] },
+            { text: "Draw {KZ} from {K} perpendicular to {BV}.",
+              visible: KZs,
+              highlighted: ["KZ","BV"],
+              transition: { animations: [
+                  { elem: "KZ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angKZB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.12" }] },
+            { text: "Then, since {BD} is less than double {DZ},",
+              highlighted: ["BD","DZ"] },
+            { text: "and {BD} is to {DZ} as the rectangle {DB|BD} by {BZ} is to the rectangle {DZ} by {ZB|BZ},",
+              highlighted: ["BD","DZ","BZ"] },
+            { text: "therefore if a square is described on {BZ} and the parallelogram on {ZD|DZ} is completed,",
+              highlighted: ["BZ","DZ"] },
+            { text: "then the rectangle {DB|BD} by {BZ} is also less than double the rectangle {DZ} by {ZB|BZ}.",
+              highlighted: ["BD","BZ","DZ"],
+              justifications: [{ ref: "I.46" }] },
+            { text: "And, if {KD} is joined,",
+              visible: KDs,
+              highlighted: ["KD"],
+              transition: { animations: [
+                  { elem: "KD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angBKD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle BKD right", ref: "III.31" }] },
+            { text: "then the rectangle {DB|BD} by {BZ} equals the square on {BK},",
+              highlighted: ["BD","BZ","BK"] },
+            { text: "and the rectangle {DZ} by {ZB|BZ} equals the square on {KZ}.",
+              highlighted: ["DZ","BZ","KZ"],
+              justifications: [{ ref: "VI.8.Cor" }] },
+            { text: "Therefore the square on {KB|BK} is less than double the square on {KZ}.",
+              highlighted: ["BK","KZ"] },
+            { text: "But the square on {KB|BK} is greater than double the square on {BX},",
+              highlighted: ["BK","BX"] },
+            { text: "therefore the square on {KZ} is greater than the square on {BX}.",
+              highlighted: ["KZ","BX"] },
+            { text: "And, since {BA|AB} equals {KA}, therefore the square on {BA|AB} equals the square on {AK|KA}.",
+              highlighted: ["AB","KA"] },
+            { text: "And the sum of the squares on {BX} and {XA|AX} equals the square on {BA|AB},",
+              visible: ZAs,
+              highlighted: ["BX","AX","AB","angAXB"] },
+            { text: "and the sum of the squares on {KZ} and {ZA} equals the square on {KA},",
+              highlighted: ["KZ","ZA","KA","angKZB"] },
+            { text: "therefore the sum of the squares on {BX} and {XA|AX} equals the sum of the squares on {KZ} and {ZA},",
+              highlighted: ["BX","AX","KZ","ZA"] },
+            { text: "and of these the square on {KZ} is greater than the square on {BX},",
+              highlighted: ["KZ","BX"] },
+            { text: "therefore the remainder, the square on {ZA}, is less than the square on {XA|AX}.",
+              highlighted: ["ZA","AX"],
+              justifications: [{ ref: "I.47" }] },
+            { text: "Therefore {AX} is greater than {AZ|ZA}. Therefore {AX} is much greater than {AG}.",
+              highlighted: ["AX","ZA","AG"] },
+            { text: "And {AX} is the perpendicular on one base of the polyhedron, and {AG} on the surface of the lesser sphere,",
+              highlighted: ["AX","KBPS","AG","sphLesser"] },
+            { text: "hence the polyhedron does not touch the lesser sphere on its surface.",
+              highlighted: FACES.concat(["sphLesser"]) },
+            { text: "Therefore, given two spheres about the same center,",
+              highlighted: SPH.concat(["A"]) },
+            { text: "a polyhedral solid has been inscribed in the greater sphere which does not touch the lesser sphere at its surface.",
+              highlighted: FACES.concat(["sphGreater","sphLesser"]),
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.17") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.11":      "/elements/books/bookI/propositions/propI11/",
+        "I.12":      "/elements/books/bookI/propositions/propI12/",
+        "I.26":      "/elements/books/bookI/propositions/propI26/",
+        "I.33":      "/elements/books/bookI/propositions/propI33/",
+        "I.46":      "/elements/books/bookI/propositions/propI46/",
+        "I.47":      "/elements/books/bookI/propositions/propI47/",
+        "III.27":    "/elements/books/bookIII/propositions/propIII27/",
+        "III.31":    "/elements/books/bookIII/propositions/propIII31/",
+        "IV.1":      "/elements/books/bookIV/propositions/propIV1/",
+        "VI.2":      "/elements/books/bookVI/propositions/propVI2/",
+        "VI.8.Cor":  "/elements/books/bookVI/propositions/propVI8/#cor",
+        "XI.Def.3":  "/elements/books/bookXI/definitions/defXI3/",
+        "XI.Def.4":  "/elements/books/bookXI/definitions/defXI4/",
+        "XI.Def.14": "/elements/books/bookXI/definitions/defXI14/",
+        "XI.2":      "/elements/books/bookXI/propositions/propXI2/",
+        "XI.6":      "/elements/books/bookXI/propositions/propXI6/",
+        "XI.7":      "/elements/books/bookXI/propositions/propXI7/",
+        "XI.9":      "/elements/books/bookXI/propositions/propXI9/",
+        "XI.11":     "/elements/books/bookXI/propositions/propXI11/",
+        "XI.12":     "/elements/books/bookXI/propositions/propXI12/",
+        "XI.18":     "/elements/books/bookXI/propositions/propXI18/",
+        "XII.16":    "/elements/books/bookXII/propositions/propXII16/"
     });
 </script>
 </center>
 
-Let then *BCDE* be the circle in the greater sphere, and *FGH* the circle in the lesser sphere. Draw two diameters in them, *BD* and *CE,* at right angles to one another. [!just I.11]
+Let then {BCDE} be the circle in the greater sphere, and {FGH} the circle in the lesser sphere. Draw two diameters in them, {BD} and {CE}, at right angles to one another. [!just I.11]
 
-Then, given the two circles *BCDE* and *FGH* about the same center, inscribe in the greater circle *BCDE* an equilateral polygon with an even number of sides which does not touch the lesser circle *FGH.* [!just XII.16]
+Then, given the two circles {BCDE} and {FGH} about the same center, inscribe in the greater circle {BCDE} an equilateral polygon with an even number of sides which does not touch the lesser circle {FGH}. [!just XII.16]
 
-Let *BK, KL, LM,* and *ME* be its sides in the quadrant *BE.* Join *KA* and carry it through to *N.* Set *AO* up from the point *A* at right angles to the plane of the circle *BCDE,* and let it meet the surface of the sphere at *O.* [!just XI.12]
+Let {BK}, {KL}, {LM}, and {ME} be its sides in the quadrant {BE|BCDE}. Join {KA} and carry it through to {N}. Set {AO} up from the point {A} at right angles to the plane of the circle {BCDE}, and let it meet the surface of the sphere at {O}. [!just XI.12]
 
-Carry planes through *AO* and each of the straight lines *BD* and *KN.* They make the greatest circles on the surface of the sphere for the reason stated.
+Carry planes through {AO} and each of the straight lines {BD} and {KN}. They make the greatest circles on the surface of the sphere for the reason stated.
 
-Let them make such, and in them let *BOD* and *KON* be the semicircles on *BD* and *KN.*
+Let them make such, and in them let {BOD} and {KON} be the semicircles on {BD} and {KN}.
 
-Now, since *OA* is at right angles to the plane of the circle *BCDE,* therefore all the planes through *OA* are also at right angles to the plane of the circle *BCDE.* Hence the semicircles *BOD* and *KON* are also at right angles to the plane of the circle *BCDE.* [!just XI.18]
+Now, since {OA|AO} is at right angles to the plane of the circle {BCDE}, therefore all the planes through {OA|AO} are also at right angles to the plane of the circle {BCDE}. Hence the semicircles {BOD} and {KON} are also at right angles to the plane of the circle {BCDE}. [!just XI.18]
 
-And, since the semicircles *BED, BOD,* and *KON* are equal, for they are on equal diameters *BD* and *KN,* therefore the quadrants *BE, BO,* and *KO* equal one another.
+And, since the semicircles {BED|BCDE}, {BOD}, and {KON} are equal, for they are on equal diameters {BD} and {KN}, therefore the quadrants {BE|BCDE}, {BO|BOD}, and {KO|KON} equal one another.
 
-Therefore there are as many straight lines in the quadrants *BO* and *KO* equal to the straight lines *BK, KL, LM,* and *ME* as there are sides of the polygon in the quadrant *BE.*
+Therefore there are as many straight lines in the quadrants {BO|BOD} and {KO|KON} equal to the straight lines {BK}, {KL}, {LM}, and {ME} as there are sides of the polygon in the quadrant {BE|BCDE}.
 
-Inscribe them as *BP, PQ, QR,* and *RO* and as *KS, ST, TU,* and *UO.* Join *SP, TQ, UR,* and draw perpendiculars from *P* and *S* to the plane of the circle *BCDE.* [!just IV.1; XI.11]
+Inscribe them as {BP}, {PQ}, {QR}, and {RO} and as {KS}, {ST}, {TU}, and {UO}. Join {SP}, {TQ}, {UR}, and draw perpendiculars from {P} and {S} to the plane of the circle {BCDE}. [!just IV.1; XI.11]
 
-These will fall on *BD* and *KN,* the common sections of the planes, for the planes of *BOD* and *KON* are also at right angles to the plane of the circle *BCDE.* [!just XI.Def.4]
+These will fall on {BD} and {KN}, the common sections of the planes, for the planes of {BOD} and {KON} are also at right angles to the plane of the circle {BCDE}. [!just XI.Def.4]
 
-Let them so fall as *PV* and *SW,* and join *WV.*
+Let them so fall as {PV} and {SW}, and join {WV|VW}.
 
-Now since, in the equal semicircles *BOD* and *KON,* equal straight lines *BP* and *KS* have been cut off, and the perpendiculars *PV* and *SW* have been drawn, therefore *PV* equals *SW,* and *BV* equals *KW.* [!just III.27; I.26]
+Now since, in the equal semicircles {BOD} and {KON}, equal straight lines {BP} and {KS} have been cut off, and the perpendiculars {PV} and {SW} have been drawn, therefore {PV} equals {SW}, and {BV} equals {KW}. [!just III.27; I.26]
 
-But the whole *BA* also equals the whole *KA,* therefore the remainder *VA* also equals the remainder *WA.* Therefore *BV* is to *VA* as *KW* is to *WA.* Therefore *WV* is parallel to *KB.* [!just VI.2]
+But the whole {BA|AB} also equals the whole {KA}, therefore the remainder {VA} also equals the remainder {WA}. Therefore {BV} is to {VA} as {KW} is to {WA}. Therefore {WV|VW} is parallel to {KB|BK}. [!just VI.2]
 
-And, since each of the straight lines *PV* and *SW* is at right angles to the plane of the circle *BCDE,* therefore *PV* is parallel to *SW.* [!just XI.6]
+And, since each of the straight lines {PV} and {SW} is at right angles to the plane of the circle {BCDE}, therefore {PV} is parallel to {SW}. [!just XI.6]
 
-But it was also proved equal to it, therefore *WV* and *SP* are equal and parallel. [!just I.33]
+But it was also proved equal to it, therefore {WV|VW} and {SP} are equal and parallel. [!just I.33]
 
-And, since *WV* is parallel to *SP,* and *WV* is parallel to *KB,* therefore *SP* is also parallel to *KB.* [!just XI.9]
+And, since {WV|VW} is parallel to {SP}, and {WV|VW} is parallel to {KB|BK}, therefore {SP} is also parallel to {KB|BK}. [!just XI.9]
 
-And *BP* and *KS* join their ends, therefore the quadrilateral *KBPS* is in one plane, for if two straight lines are parallel, and points are taken at random on each of them, then the straight line joining the points is in the same plane with the parallels. For the same reason each of the quadrilaterals *SPQT* and *TQRU* is also in one plane. [!just XI.7]
+And {BP} and {KS} join their ends, therefore the quadrilateral {KBPS} is in one plane, for if two straight lines are parallel, and points are taken at random on each of them, then the straight line joining the points is in the same plane with the parallels. For the same reason each of the quadrilaterals {SPQT} and {TQRU} is also in one plane. [!just XI.7]
 
-But the triangle *URO* is also in one plane. If then we join straight lines from the points *P, S, Q, T, R,* and *U* to *A,* then there will be constructed a certain polyhedral solid figure between the circumferences *BO* and *KO* consisting of pyramids of which the quadrilaterals *KBPS, SPQT,* and *TQRU* and the triangle *URO* are the bases and the point *A* is the vertex. [!just XI.2]
+But the triangle {URO} is also in one plane. If then we join straight lines from the points {P}, {S}, {Q}, {T}, {R}, and {U} to {A}, then there will be constructed a certain polyhedral solid figure between the circumferences {BO|BOD} and {KO|KON} consisting of pyramids of which the quadrilaterals {KBPS}, {SPQT}, and {TQRU} and the triangle {URO} are the bases and the point {A} is the vertex. [!just XI.2]
 
-And, if we make the same construction in the case of each of the sides *KL, LM,* and *ME* as in the case of *BK,* and further, in the case of the remaining three quadrants, then there will be constructed a certain polyhedral figure inscribed in the sphere and contained by pyramids, of which the said quadrilaterals and the triangle *URO,* and the others corresponding to them, are the bases and the point *A* is the vertex.
+And, if we make the same construction in the case of each of the sides {KL}, {LM}, and {ME} as in the case of {BK}, and further, in the case of the remaining three quadrants, then there will be constructed a certain polyhedral figure inscribed in the sphere and contained by pyramids, of which the said quadrilaterals and the triangle {URO}, and the others corresponding to them, are the bases and the point {A} is the vertex.
 
-I say that the said polyhedron does not touch the lesser sphere at the surface on which the circle *FGH* is.
+I say that the said polyhedron does not touch the lesser sphere at the surface on which the circle {FGH} is.
 
-Draw *AX* from the point *A* perpendicular to the plane of the quadrilateral *KBPS,* and let it meet the plane at the point *X.* Join *XB* and *XK.* [!just XI.11]
+Draw {AX} from the point {A} perpendicular to the plane of the quadrilateral {KBPS}, and let it meet the plane at the point {X}. Join {XB|BX} and {XK|KX}. [!just XI.11]
 
-Then, since *AX* is at right angles to the plane of the quadrilateral *KBPS,* therefore it is also at right angles to all the straight lines which meet it and are in the plane of the quadrilateral. Therefore *AX* is at right angles to each of the straight lines *BX* and *XK.* [!just XI.Def.3]
+Then, since {AX} is at right angles to the plane of the quadrilateral {KBPS}, therefore it is also at right angles to all the straight lines which meet it and are in the plane of the quadrilateral. Therefore {AX} is at right angles to each of the straight lines {BX} and {XK|KX}. [!just XI.Def.3]
 
-And, since *AB* equals *AK,* therefore the square on *AB* equals the square on *AK.* And the sum of the squares on *AX* and *XB* equals the square on *AB,* for the angle at *X* is right, and the sum of the squares on *AX* and *XK* equals the square on *AK.* [!just I.47]
+And, since {AB} equals {AK|KA}, therefore the square on {AB} equals the square on {AK|KA}. And the sum of the squares on {AX} and {XB|BX} equals the square on {AB}, for the angle at {X} is right, and the sum of the squares on {AX} and {XK|KX} equals the square on {AK|KA}. [!just I.47]
 
-Therefore the sum of the squares on *AX* and *XB* equals the sum of the squares on *AX* and *XK.*
+Therefore the sum of the squares on {AX} and {XB|BX} equals the sum of the squares on {AX} and {XK|KX}.
 
-Subtract the square on *AX* from each, therefore the remainder, the square on *BX,* equals the remainder, the square on *XK.* Therefore *BX* equals *XK.*
+Subtract the square on {AX} from each, therefore the remainder, the square on {BX}, equals the remainder, the square on {XK|KX}. Therefore {BX} equals {XK|KX}.
 
-Similarly we can prove that the straight lines joined from *X* to *P* and *S* are equal to each of the straight lines *BX* and *XK.*
+Similarly we can prove that the straight lines joined from {X} to {P} and {S} are equal to each of the straight lines {BX} and {XK|KX}.
 
-Therefore the circle with center *X* and radius on of the straight lines *XB* or *XK* passes through *P* and *S* also, and *KBPS* is a quadrilateral in a circle.
+Therefore the circle with center {X} and radius on of the straight lines {XB|BX} or {XK|KX} passes through {P} and {S} also, and {KBPS} is a quadrilateral in a circle.
 
-Now, since *KB* is greater than *WV,* and *WV* equals *SP,* therefore *KB* is greater than *SP.* But *KB* equals each of the straight lines *KS* and *BP,* therefore each of the straight lines *KS* and *BP* is greater than *SP.* And, since *KBPS* is a quadrilateral in a circle, and *KB, BP,* and *KS* are equal, and *PS* less, and *BX* is the radius of the circle, therefore the square on *KB* is greater than double the square on *BX.*
+Now, since {KB|BK} is greater than {WV|VW}, and {WV|VW} equals {SP}, therefore {KB|BK} is greater than {SP}. But {KB|BK} equals each of the straight lines {KS} and {BP}, therefore each of the straight lines {KS} and {BP} is greater than {SP}. And, since {KBPS} is a quadrilateral in a circle, and {KB|BK}, {BP}, and {KS} are equal, and {PS|SP} less, and {BX} is the radius of the circle, therefore the square on {KB|BK} is greater than double the square on {BX}.
 
-Draw *KZ* from *K* perpendicular to *BV.* [!just I.12]
+Draw {KZ} from {K} perpendicular to {BV}. [!just I.12]
 
-Then, since *BD* is less than double *DZ,* and *BD* is to *DZ* as the rectangle *DB* by *BZ* is to the rectangle *DZ* by *ZB,* therefore if a square is described on *BZ* and the parallelogram on *ZD* is completed, then the rectangle *DB* by *BZ* is also less than double the rectangle *DZ* by *ZB.* And, if *KD* is joined, then the rectangle *DB* by *BZ* equals the square on *BK,* and the rectangle *DZ* by *ZB* equals the square on *KZ.* Therefore the square on *KB* is less than double the square on *KZ.* [!just I.46; III.31; VI.8.Cor]
+Then, since {BD} is less than double {DZ}, and {BD} is to {DZ} as the rectangle {DB|BD} by {BZ} is to the rectangle {DZ} by {ZB|BZ}, therefore if a square is described on {BZ} and the parallelogram on {ZD|DZ} is completed, then the rectangle {DB|BD} by {BZ} is also less than double the rectangle {DZ} by {ZB|BZ}. And, if {KD} is joined, then the rectangle {DB|BD} by {BZ} equals the square on {BK}, and the rectangle {DZ} by {ZB|BZ} equals the square on {KZ}. Therefore the square on {KB|BK} is less than double the square on {KZ}. [!just I.46; III.31; VI.8.Cor]
 
-But the square on *KB* is greater than double the square on *BX,* therefore the square on *KZ* is greater than the square on *BX.* And, since *BA* equals *KA,* therefore the square on *BA* equals the square on *AK.*
+But the square on {KB|BK} is greater than double the square on {BX}, therefore the square on {KZ} is greater than the square on {BX}. And, since {BA|AB} equals {KA}, therefore the square on {BA|AB} equals the square on {AK|KA}.
 
-And the sum of the squares on *BX* and *XA* equals the square on *BA,* and the sum of the squares on *KZ* and *ZA* equals the square on *KA,* therefore the sum of the squares on *BX* and *XA* equals the sum of the squares on *KZ* and *ZA,* and of these the square on *KZ* is greater than the square on *BX,* therefore the remainder, the square on *ZA,* is less than the square on *XA.* [!just I.47]
+And the sum of the squares on {BX} and {XA|AX} equals the square on {BA|AB}, and the sum of the squares on {KZ} and {ZA} equals the square on {KA}, therefore the sum of the squares on {BX} and {XA|AX} equals the sum of the squares on {KZ} and {ZA}, and of these the square on {KZ} is greater than the square on {BX}, therefore the remainder, the square on {ZA}, is less than the square on {XA|AX}. [!just I.47]
 
-Therefore *AX* is greater than *AZ.* Therefore *AX* is much greater than *AG.*
+Therefore {AX} is greater than {AZ|ZA}. Therefore {AX} is much greater than {AG}.
 
-And *AX* is the perpendicular on one base of the polyhedron, and *AG* on the surface of the lesser sphere, hence the polyhedron does not touch the lesser sphere on its surface.
+And {AX} is the perpendicular on one base of the polyhedron, and {AG} on the surface of the lesser sphere, hence the polyhedron does not touch the lesser sphere on its surface.
 
 Therefore, given two spheres about the same center, a polyhedral solid has been inscribed in the greater sphere which does not touch the lesser sphere at its surface.
 
@@ -188,14 +698,14 @@ kind: corollary
 ----
 proof:
 
-But if in another sphere a polyhedral solid is inscribed similar to the solid in the sphere *BCDE,* then the polyhedral solid in the sphere *BCDE* has to the polyhedral solid in the other sphere the ratio triplicate of that which the diameter of the sphere *BCDE* has to the diameter of the other sphere.
+But if in another sphere a polyhedral solid is inscribed similar to the solid in the sphere {BCDE|sphGreater}, then the polyhedral solid in the sphere {BCDE|sphGreater} has to the polyhedral solid in the other sphere the ratio triplicate of that which the diameter of the sphere {BCDE|sphGreater} has to the diameter of the other sphere.
 
 For, the solids being divided into their pyramids similar in multitude and arrangement, the pyramids will be similar.
 
-But similar pyramids are to one another in the triplicate ratio of their corresponding sides, therefore the pyramid with the quadrilateral base *KBPS* and the vertex *A* has to the similarly arranged pyramid in the other sphere the ratio triplicate of that which the corresponding side has to the corresponding side, that is, of that which the radius *AB* of the sphere about *A* as center has to the radius of the other sphere. [!just XII.8.Cor]
+But similar pyramids are to one another in the triplicate ratio of their corresponding sides, therefore the pyramid with the quadrilateral base {KBPS} and the vertex {A} has to the similarly arranged pyramid in the other sphere the ratio triplicate of that which the corresponding side has to the corresponding side, that is, of that which the radius {AB} of the sphere about {A} as center has to the radius of the other sphere. [!just XII.8.Cor]
 
-Similarly each pyramid of those in the sphere about *A* as center has to each similarly arranged pyramid of those in the other sphere the ratio triplicate of that which *AB* has to the radius of the other sphere.
+Similarly each pyramid of those in the sphere about {A} as center has to each similarly arranged pyramid of those in the other sphere the ratio triplicate of that which {AB} has to the radius of the other sphere.
 
-And one of the antecedents is to one of the consequents as all the antecedents are to all the consequents, hence the whole polyhedral solid in the sphere about *A* as center has to the whole polyhedral solid in the other sphere the ratio triplicate of that which *AB* has to the radius of the other sphere, that is, of that which the diameter *BD* has to the diameter of the other sphere. [!just V.12]
+And one of the antecedents is to one of the consequents as all the antecedents are to all the consequents, hence the whole polyhedral solid in the sphere about {A} as center has to the whole polyhedral solid in the other sphere the ratio triplicate of that which {AB} has to the radius of the other sphere, that is, of that which the diameter {BD} has to the diameter of the other sphere. [!just V.12]
 
 <div class="qed">Q.E.D.</div>
