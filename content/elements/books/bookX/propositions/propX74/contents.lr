@@ -15,14 +15,22 @@ statement: If from a medial straight line there is subtracted a medial straight 
 ----
 proof:
 
-From the medial straight line *AB* let there be subtracted the medial straight line *BC* which is commensurable with *AB* in square only and with *AB* makes the rectangle *AB* by *BC* rational.
+From the medial straight line {AB} let there be subtracted the medial straight line {BC} which is commensurable with {AB} in square only and with {AB} makes the rectangle {AB} by {BC} rational.
 
-I say that the remainder *AC* is irrational, and let it be called an apotome of a medial straight line.
+I say that the remainder {AC} is irrational, and let it be called an apotome of a medial straight line.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="65" tabindex="0"></canvas>
 <noscript><img alt="X.74 diagram" src="propX74.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure (as X.73): the line AB with C on it (A0, A3 are
+    // off-canvas anchors for the line sliders). Added, hidden at rest:
+    // transparent targets BC, AC (;0;0;0) so the subtracted line and the
+    // remainder can light separately. Resting figure unchanged.
+    //
+    // Draggables (checked against the bundle): A0, A3 (free, off-canvas)
+    // and A, B, C (line sliders), all givens; nothing is deferred.
+    var ALL = ["A","B","C","AB","BC","AC"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -33,19 +41,82 @@ I say that the remainder *AC* is irrational, and let it be called an apotome of 
             "A;point;lineSlider;A0,A3,30,0",
             "B;point;lineSlider;A0,A3,210,0",
             "C;point;lineSlider;A0,A3,100,0",
-            "AB;line;connect;A,B"
+            "AB;line;connect;A,B",
+            // Slide-only highlight targets.
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0"
         ],
+        slides: [
+            { text: "“If from a medial straight line there is subtracted a medial straight line",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "X.74" }] },
+            { text: "which is commensurable with the whole in square only, and which contains with the whole a rational rectangle,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "then the remainder is irrational; let it be called first apotome of a medial straight line.”",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "From the medial straight line {AB} let there be subtracted the medial straight line {BC}",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "which is commensurable with {AB} in square only and with {AB} makes the rectangle {AB} by {BC} rational.",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "I say that the remainder {AC} is irrational, and let it be called an apotome of a medial straight line.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Since {AB} and {BC} are medial, the squares on {AB} and {BC} are also medial.",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "But twice the rectangle {AB} by {BC} is rational,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "Therefore twice the rectangle {AB} by {BC} is also incommensurable with the remainder, the square on {AC},",
+              visible: ALL,
+              highlighted: ["AB","BC","AC"],
+              justifications: [{ claim: "AB² + BC² = 2 AB·BC + AC²", ref: "II.7" },
+                               { claim: "2 AB·BC, AC² incommensurable", ref: "X.16" }] },
+            { text: "since, if the whole is incommensurable with one of the magnitudes, then the original magnitudes are also incommensurable.",
+              visible: ALL,
+              highlighted: ["AB","BC","AC"] },
+            { text: "But twice the rectangle {AB} by {BC} is rational,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the square on {AC} is irrational, therefore {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Let it be called a first apotome of a medial straight line.",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ ref: "X.Def.I.4" }, { ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.74") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.7":      "/elements/books/bookII/propositions/propII7/",
+        "X.16":      "/elements/books/bookX/propositions/propX16/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-Since *AB* and *BC* are medial, the squares on *AB* and *BC* are also medial. But twice the rectangle *AB* by *BC* is rational, therefore the sum of the squares on *AB* and *BC* is incommensurable with twice the rectangle *AB* by *BC*.
+Since {AB} and {BC} are medial, the squares on {AB} and {BC} are also medial. But twice the rectangle {AB} by {BC} is rational, therefore the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC}.
 
 <div class="just">cf. <a href="/elements/books/bookII/propositions/propII7/">II.7</a><br><a href="/elements/books/bookX/propositions/propX16/">X.16</a></div>
 
-Therefore twice the rectangle *AB* by *BC* is also incommensurable with the remainder, the square on *AC*, since, if the whole is incommensurable with one of the magnitudes, then the original magnitudes are also incommensurable.
+Therefore twice the rectangle {AB} by {BC} is also incommensurable with the remainder, the square on {AC}, since, if the whole is incommensurable with one of the magnitudes, then the original magnitudes are also incommensurable.
 
-But twice the rectangle *AB* by *BC* is rational, therefore the square on *AC* is irrational, therefore *AC* is irrational. Let it be called a first apotome of a medial straight line. [!just X.Def.I.4]
+But twice the rectangle {AB} by {BC} is rational, therefore the square on {AC} is irrational, therefore {AC} is irrational. Let it be called a first apotome of a medial straight line. [!just X.Def.I.4]
 
 <div class="qed">Q.E.D.</div>
 ----

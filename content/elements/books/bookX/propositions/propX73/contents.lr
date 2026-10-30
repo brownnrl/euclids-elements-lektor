@@ -15,14 +15,22 @@ statement: If from a rational straight line there is subtracted a rational strai
 ----
 proof:
 
-From the rational straight line *AB* let the rational straight line *BC*, commensurable with the whole in square only, be subtracted.
+From the rational straight line {AB} let the rational straight line {BC}, commensurable with the whole in square only, be subtracted.
 
-I say that the remainder *AC* is the irrational straight line called apotome.
+I say that the remainder {AC} is the irrational straight line called apotome.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="65" tabindex="0"></canvas>
 <noscript><img alt="X.73 diagram" src="propX73.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the line AB with C on it (A0, A3 are off-canvas
+    // anchors for the line sliders). Added, hidden at rest: transparent
+    // targets BC, AC (;0;0;0) so the subtracted line and the remainder can
+    // light separately. Resting figure unchanged.
+    //
+    // Draggables (checked against the bundle): A0, A3 (free, off-canvas)
+    // and A, B, C (line sliders), all givens; nothing is deferred.
+    var ALL = ["A","B","C","AB","BC","AC"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -33,19 +41,93 @@ I say that the remainder *AC* is the irrational straight line called apotome.
             "A;point;lineSlider;A0,A3,30,0",
             "B;point;lineSlider;A0,A3,210,0",
             "C;point;lineSlider;A0,A3,100,0",
-            "AB;line;connect;A,B"
+            "AB;line;connect;A,B",
+            // Slide-only highlight targets.
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0"
         ],
+        slides: [
+            { text: "“If from a rational straight line there is subtracted a rational straight line commensurable with the whole in square only,",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "X.73" }] },
+            { text: "then the remainder is irrational; let it be called an apotome.”",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "From the rational straight line {AB} let the rational straight line {BC}, commensurable with the whole in square only, be subtracted.",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "I say that the remainder {AC} is the irrational straight line called apotome.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Since {AB} is incommensurable in length with {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "and {AB} is to {BC} as the square on {AB} is to the rectangle {AB} by {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the square on {AB} is incommensurable with the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "AB², AB·BC incommensurable", ref: "X.11" }] },
+            { text: "But the sum of the squares on {AB} and {BC} is commensurable with the square on {AB},",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "AB² + BC², AB² commensurable", ref: "X.15" }] },
+            { text: "and twice the rectangle {AB} by {BC} is commensurable with the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "2 AB·BC, AB·BC commensurable", ref: "X.6" }] },
+            { text: "And, inasmuch as the sum of the squares on {AB} and {BC}",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "equal twice the rectangle {AB} by {BC} together with the square on {CA|AC},",
+              visible: ALL,
+              highlighted: ["AB","BC","AC"],
+              justifications: [{ claim: "AB² + BC² = 2 AB·BC + AC²", ref: "II.7" }] },
+            { text: "therefore the sum of the squares on {AB} and {BC} is also incommensurable with the remainder, the square on {AC}.",
+              visible: ALL,
+              highlighted: ["AB","BC","AC"],
+              justifications: [{ claim: "AB² + BC², 2 AB·BC incommensurable", ref: "X.13" },
+                               { claim: "AB² + BC², AC² incommensurable", ref: "X.16" }] },
+            { text: "But the sum of the squares on {AB} and {BC} is rational,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Let it be called an apotome.",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ ref: "X.Def.I.4" }, { ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.73") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.7":      "/elements/books/bookII/propositions/propII7/",
+        "X.6":       "/elements/books/bookX/propositions/propX6/",
+        "X.11":      "/elements/books/bookX/propositions/propX11/",
+        "X.13":      "/elements/books/bookX/propositions/propX13/",
+        "X.15":      "/elements/books/bookX/propositions/propX15/",
+        "X.16":      "/elements/books/bookX/propositions/propX16/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-Since *AB* is incommensurable in length with *BC*, and *AB* is to *BC* as the square on *AB* is to the rectangle *AB* by *BC*, therefore the square on *AB* is incommensurable with the rectangle *AB* by *BC*. [!just X.11]
+Since {AB} is incommensurable in length with {BC}, and {AB} is to {BC} as the square on {AB} is to the rectangle {AB} by {BC}, therefore the square on {AB} is incommensurable with the rectangle {AB} by {BC}. [!just X.11]
 
-But the sum of the squares on *AB* and *BC* is commensurable with the square on *AB*, and twice the rectangle *AB* by *BC* is commensurable with the rectangle *AB* by *BC*. [!just X.15; X.6]
+But the sum of the squares on {AB} and {BC} is commensurable with the square on {AB}, and twice the rectangle {AB} by {BC} is commensurable with the rectangle {AB} by {BC}. [!just X.15; X.6]
 
-And, inasmuch as the sum of the squares on *AB* and *BC* equal twice the rectangle *AB* by *BC* together with the square on *CA*, therefore the sum of the squares on *AB* and *BC* is also incommensurable with the remainder, the square on *AC*. [!just II.7, X.13; X.16]
+And, inasmuch as the sum of the squares on {AB} and {BC} equal twice the rectangle {AB} by {BC} together with the square on {CA|AC}, therefore the sum of the squares on {AB} and {BC} is also incommensurable with the remainder, the square on {AC}. [!just II.7, X.13; X.16]
 
-But the sum of the squares on *AB* and *BC* is rational, therefore *AC* is irrational. Let it be called an apotome. [!just X.Def.I.4]
+But the sum of the squares on {AB} and {BC} is rational, therefore {AC} is irrational. Let it be called an apotome. [!just X.Def.I.4]
 
 <div class="qed">Q.E.D.</div>
 ----
