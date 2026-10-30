@@ -15,16 +15,25 @@ statement: If two mean proportional numbers fall between two numbers, then the n
 ----
 proof:
 
-Let two mean proportional numbers *C* and *D* fall between the two numbers *A* and *B.*
+Let two mean proportional numbers {C} and {D} fall between the two numbers {A} and {B}.
 
-I say that *A* and *B* are similar solid numbers.
+I say that {A} and {B} are similar solid numbers.
 
-Take three numbers *E, F,* and *G,* the least of those which have the same ratio with *A, C,* and *D.* Then the extremes of them *E* and *G* are relatively prime. [!just VII.33; VIII.2, VIII.3]
+Take three numbers {E}, {F}, and {G}, the least of those which have the same ratio with {A}, {C}, and {D}. Then the extremes of them {E} and {G} are relatively prime. [!just VII.33; VIII.2, VIII.3]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="510" height="170" tabindex="0"></canvas>
 <noscript><img alt="VIII.21 diagram" src="propVIII21.gif"/></noscript>
 <script type="text/javascript">
+    // A walk of the proof over Joyce's lines. The givens A, C, D, B stand
+    // from the start; E, F, G, the sides H, K, L, M, and then N and O are
+    // stroked as the proof brings them in. The rest is highlight beats.
+    var GIVEN = ["A","B","C","D","A1","A2","B1","B2","C1","C2","D1","D2"];
+    var EFGv  = GIVEN.concat(["E","F","G","E1","E2","F1","F2","G1","G2"]);
+    var HKv   = EFGv.concat(["H","K","H1","H2","K1","K2"]);
+    var LMv   = HKv.concat(["L","M","L1","L2","M1","M2"]);
+    var Nv    = LMv.concat(["N","N1","N2"]);
+    var ALL   = Nv.concat(["O","O1","O2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -86,37 +95,205 @@ Take three numbers *E, F,* and *G,* the least of those which have the same ratio
             "D2;point;proportion;H,L,C,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        // Draggables (checked against the bundle): every free left end, the
+        // lineSlider ends H2, K2, N2, L2, and the unit U1, U2, all colourless.
+        // A, B, C, D are given; E, F, G, then H, K, L, M, then N and O are
+        // brought in mid-walk, so their draggable ends are deferred and listed
+        // in the slides that introduce them. Each is stroked from its left
+        // end. No elements added.
+        deferDraggables: ["E1","F1","G1","H1","H2","K1","K2","L1","L2","M1","N1","N2","O1"],
+        slides: [
+            { text: "If two mean proportional numbers fall between two numbers, then the numbers are similar solid numbers.",
+              visible: GIVEN,
+              highlighted: ["A","C","D","B"],
+              justifications: [{ ref: "VIII.21" }] },
+            { text: "Let two mean proportional numbers {C} and {D} fall between the two numbers {A} and {B}.",
+              visible: GIVEN,
+              highlighted: ["C","D","A","B"] },
+            { text: "I say that {A} and {B} are similar solid numbers.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Take three numbers {E}, {F}, and {G}, the least of those which have the same ratio with {A}, {C}, and {D}.",
+              visible: EFGv,
+              highlighted: ["E","F","G","A","C","D"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "least numbers in the ratio of A, C, D", ref: "VII.33" },
+                               { ref: "VIII.2" }] },
+            { text: "Then the extremes of them {E} and {G} are relatively prime.",
+              visible: EFGv,
+              highlighted: ["E","G"],
+              justifications: [{ claim: "E and G relatively prime", ref: "VIII.3" }] },
+            { text: "Now, since one mean proportional number {F} has fallen between {E} and {G},",
+              visible: EFGv,
+              highlighted: ["F","E","G"] },
+            { text: "therefore {E} and {G} are similar plane numbers.",
+              visible: EFGv,
+              highlighted: ["E","G"],
+              justifications: [{ claim: "E and G similar plane", ref: "VIII.20" }] },
+            { text: "Let, then, {H} and {K} be the sides of {E},",
+              visible: HKv,
+              highlighted: ["H","K","E"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and {L} and {M} the sides of {G}.",
+              visible: LMv,
+              highlighted: ["L","M","G"],
+              transition: { animations: [
+                  { elem: "L", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "M", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore it is manifest from the theorem before this that {E}, {F}, and {G} are continuously proportional",
+              visible: LMv,
+              highlighted: ["E","F","G"],
+              justifications: [{ ref: "VIII.20" }] },
+            { text: "in the ratio of {H} to {L}, and that of {K} to {M}.",
+              visible: LMv,
+              highlighted: ["E","F","G","H","L","K","M"] },
+            { text: "Now, since {E}, {F}, and {G} are the least of the numbers which have the same ratio with {A}, {C}, and {D},",
+              visible: LMv,
+              highlighted: ["E","F","G","A","C","D"] },
+            { text: "and the multitude of the numbers {E}, {F}, and {G} equals the multitude of the numbers {A}, {C}, and {D},",
+              visible: LMv,
+              highlighted: ["E","F","G","A","C","D"] },
+            { text: "therefore, ex aequali {E} is to {G} as {A} is to {D}.",
+              visible: LMv,
+              highlighted: ["E","G","A","D"],
+              justifications: [{ claim: "ex aequali, E : G = A : D", ref: "VII.14" }] },
+            { text: "But {E} and {G} are relatively prime, primes are also least,",
+              visible: LMv,
+              highlighted: ["E","G"],
+              justifications: [{ claim: "relatively prime numbers are least", ref: "VII.21" }] },
+            { text: "and the least measure those which have the same ratio with them the same number of times,",
+              visible: LMv,
+              highlighted: ["E","G","A","D"] },
+            { text: "the greater the greater and the less the less, that is, the antecedent the antecedent and the consequent the consequent,",
+              visible: LMv,
+              highlighted: ["E","G","A","D"] },
+            { text: "therefore {E} measures {A} the same number of times that {G} measures {D}.",
+              visible: LMv,
+              highlighted: ["E","A","G","D"],
+              justifications: [{ claim: "E measures A as often as G measures D", ref: "VII.20" }] },
+            { text: "Let there be as many units in {N} as times that {E} measures {A}.",
+              visible: Nv,
+              highlighted: ["N","E","A"],
+              transition: { animations: [
+                  { elem: "N", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {N} multiplied by {E} makes {A}.",
+              visible: Nv,
+              highlighted: ["N","E","A"] },
+            { text: "But {E} is the product of {H} and {K},",
+              visible: Nv,
+              highlighted: ["E","H","K"] },
+            { text: "therefore {N} multiplied by the product of {H} and {K} makes {A}.",
+              visible: Nv,
+              highlighted: ["N","H","K","A"] },
+            { text: "Therefore {A} is solid, and {H}, {K}, and {N} are its sides.",
+              visible: Nv,
+              highlighted: ["A","H","K","N"] },
+            { text: "Again, since {E}, {F}, and {G} are the least of the numbers which have the same ratio as {C}, {D}, and {B},",
+              visible: Nv,
+              highlighted: ["E","F","G","C","D","B"] },
+            { text: "therefore {E} measures {C} the same number of times that {G} measures {B}.",
+              visible: Nv,
+              highlighted: ["E","C","G","B"] },
+            { text: "Let there be as many units in {O} as times that {E} measures {C}.",
+              visible: ALL,
+              highlighted: ["O","E","C"],
+              transition: { animations: [
+                  { elem: "O", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {G} measures {B} according to the units in {O}, therefore {O} multiplied by {G} makes {B}.",
+              visible: ALL,
+              highlighted: ["G","B","O"] },
+            { text: "But {G} is the product of {L} and {M},",
+              visible: ALL,
+              highlighted: ["G","L","M"] },
+            { text: "therefore {O} multiplied by the product of {L} and {M} makes {B}.",
+              visible: ALL,
+              highlighted: ["O","L","M","B"] },
+            { text: "Therefore {B} is solid, and {L}, {M}, and {O} are its sides.",
+              visible: ALL,
+              highlighted: ["B","L","M","O"] },
+            { text: "Therefore {A} and {B} are solid.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "I say that they are also similar.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "Since {N} and {O} multiplied by {E} make {A} and {C},",
+              visible: ALL,
+              highlighted: ["N","O","E","A","C"] },
+            { text: "therefore {N} is to {O} as {A} is to {C}, that is, {E} to {F}.",
+              visible: ALL,
+              highlighted: ["N","O","A","C","E","F"],
+              justifications: [{ claim: "N : O = A : C", ref: "VII.18" }] },
+            { text: "But {E} is to {F} as {H} is to {L}, and as {K} is to {M},",
+              visible: ALL,
+              highlighted: ["E","F","H","L","K","M"] },
+            { text: "therefore {H} is to {L} as {K} is to {M}, and as {N} is to {O}.",
+              visible: ALL,
+              highlighted: ["H","L","K","M","N","O"] },
+            { text: "And {H}, {K}, and {N} are the sides of {A}, and {O}, {L}, and {M} the sides of {B}.",
+              visible: ALL,
+              highlighted: ["H","K","N","A","O","L","M","B"] },
+            { text: "Therefore {A} and {B} are similar solid numbers.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "Therefore, if two mean proportional numbers fall between two numbers, then the numbers are similar solid numbers.",
+              visible: ALL,
+              highlighted: ["A","C","D","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.21") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.14": "/elements/books/bookVII/propositions/propVII14/",
+        "VII.18": "/elements/books/bookVII/propositions/propVII18/",
+        "VII.20": "/elements/books/bookVII/propositions/propVII20/",
+        "VII.21": "/elements/books/bookVII/propositions/propVII21/",
+        "VII.33": "/elements/books/bookVII/propositions/propVII33/",
+        "VIII.2": "/elements/books/bookVIII/propositions/propVIII2/",
+        "VIII.3": "/elements/books/bookVIII/propositions/propVIII3/",
+        "VIII.20": "/elements/books/bookVIII/propositions/propVIII20/"
     });
 </script>
 </figure>
 
-Now, since one mean proportional number *F* has fallen between *E* and *G,* therefore *E* and *G* are similar plane numbers. [!just VIII.20]
+Now, since one mean proportional number {F} has fallen between {E} and {G}, therefore {E} and {G} are similar plane numbers. [!just VIII.20]
 
-Let, then, *H* and *K* be the sides of *E,* and *L* and *M* the sides of *G.*
+Let, then, {H} and {K} be the sides of {E}, and {L} and {M} the sides of {G}.
 
-Therefore it is manifest from the theorem before this that *E, F,* and *G* are continuously proportional in the ratio of *H* to *L,* and that of *K* to *M.*
+Therefore it is manifest from the theorem before this that {E}, {F}, and {G} are continuously proportional in the ratio of {H} to {L}, and that of {K} to {M}.
 
-Now, since *E, F,* and *G* are the least of the numbers which have the same ratio with *A, C,* and *D,* and the multitude of the numbers *E, F,* and *G* equals the multitude of the numbers *A, C,* and *D,* therefore, *ex aequali E* is to *G* as *A* is to *D.* [!just VII.14]
+Now, since {E}, {F}, and {G} are the least of the numbers which have the same ratio with {A}, {C}, and {D}, and the multitude of the numbers {E}, {F}, and {G} equals the multitude of the numbers {A}, {C}, and {D}, therefore, *ex aequali* {E} is to {G} as {A} is to {D}. [!just VII.14]
 
-But *E* and *G* are relatively prime, primes are also least, and the least measure those which have the same ratio with them the same number of times, the greater the greater and the less the less, that is, the antecedent the antecedent and the consequent the consequent, therefore *E* measures *A* the same number of times that *G* measures *D.* [!just VII.21; VII.20]
+But {E} and {G} are relatively prime, primes are also least, and the least measure those which have the same ratio with them the same number of times, the greater the greater and the less the less, that is, the antecedent the antecedent and the consequent the consequent, therefore {E} measures {A} the same number of times that {G} measures {D}. [!just VII.21; VII.20]
 
-Let there be as many units in *N* as times that *E* measures *A.* Then *N* multiplied by *E* makes *A.* But *E* is the product of *H* and *K,* therefore *N* multiplied by the product of *H* and *K* makes *A.*
+Let there be as many units in {N} as times that {E} measures {A}. Then {N} multiplied by {E} makes {A}. But {E} is the product of {H} and {K}, therefore {N} multiplied by the product of {H} and {K} makes {A}.
 
-Therefore *A* is solid, and *H, K,* and *N* are its sides.
+Therefore {A} is solid, and {H}, {K}, and {N} are its sides.
 
-Again, since *E, F,* and *G* are the least of the numbers which have the same ratio as *C, D,* and *B,* therefore *E* measures *C* the same number of times that *G* measures *B.*
+Again, since {E}, {F}, and {G} are the least of the numbers which have the same ratio as {C}, {D}, and {B}, therefore {E} measures {C} the same number of times that {G} measures {B}.
 
-Let there be as many units in *O* as times that *E* measures *C.* Then *G* measures *B* according to the units in *O,* therefore *O* multiplied by *G* makes *B.*
+Let there be as many units in {O} as times that {E} measures {C}. Then {G} measures {B} according to the units in {O}, therefore {O} multiplied by {G} makes {B}.
 
-But *G* is the product of *L* and *M,* therefore *O* multiplied by the product of *L* and *M* makes *B.* Therefore *B* is solid, and *L, M,* and *O* are its sides. Therefore *A* and *B* are solid.
+But {G} is the product of {L} and {M}, therefore {O} multiplied by the product of {L} and {M} makes {B}. Therefore {B} is solid, and {L}, {M}, and {O} are its sides. Therefore {A} and {B} are solid.
 
 I say that they are also similar.
 
-Since *N* and *O* multiplied by *E* make *A* and *C,* therefore *N* is to *O* as *A* is to *C,* that is, *E* to *F.* [!just VII.18]
+Since {N} and {O} multiplied by {E} make {A} and {C}, therefore {N} is to {O} as {A} is to {C}, that is, {E} to {F}. [!just VII.18]
 
-But *E* is to *F* as *H* is to *L,* and as *K* is to *M,* therefore *H* is to *L* as *K* is to *M,* and as *N* is to *O.*
+But {E} is to {F} as {H} is to {L}, and as {K} is to {M}, therefore {H} is to {L} as {K} is to {M}, and as {N} is to {O}.
 
-And *H, K,* and *N* are the sides of *A,* and *O, L,* and *M* the sides of *B.* Therefore *A* and *B* are similar solid numbers.
+And {H}, {K}, and {N} are the sides of {A}, and {O}, {L}, and {M} the sides of {B}. Therefore {A} and {B} are similar solid numbers.
 
 Therefore, *if two mean proportional numbers fall between two numbers, then the numbers are similar solid numbers.*
 

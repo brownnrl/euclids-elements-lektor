@@ -15,12 +15,15 @@ statement: If three numbers are in continued proportion, and the first is square
 ----
 proof:
 
-Let *A, B,* and *C* be three numbers in continued proportion, and let *A* the first be square.
+Let {A}, {B}, and {C} be three numbers in continued proportion, and let {A} the first be square.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="220" height="140" tabindex="0"></canvas>
 <noscript><img alt="VIII.22 diagram" src="propVIII22.gif"/></noscript>
 <script type="text/javascript">
+    // A walk of the proof over Joyce's lines: all three numbers are givens,
+    // nothing is constructed, so every beat is a highlight.
+    var GIVEN = ["A","B","C","C2"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,13 +45,55 @@ Let *A, B,* and *C* be three numbers in continued proportion, and let *A* the fi
             "C2;point;proportion;A1,A2,B1,B2,B1,B2,C1,C3;0",
             "C;line;connect;C1,C2;black"
         ],
+        // Draggables (checked against the bundle): the lineSlider ends and
+        // the colourless rails A0, A3, B0, B3, C0, C3; every one belongs to a
+        // given, so nothing is deferred. No elements added.
+        slides: [
+            { text: "If three numbers are in continued proportion, and the first is square, then the third is also square.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "VIII.22" }] },
+            { text: "Let {A}, {B}, and {C} be three numbers in continued proportion,",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "and let {A} the first be square.",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "I say that {C} the third is also square.",
+              visible: GIVEN,
+              highlighted: ["C"] },
+            { text: "Since between {A} and {C} there is one mean proportional number, {B},",
+              visible: GIVEN,
+              highlighted: ["A","C","B"] },
+            { text: "therefore {A} and {C} are similar plane numbers.",
+              visible: GIVEN,
+              highlighted: ["A","C"],
+              justifications: [{ claim: "A and C similar plane", ref: "VIII.20" }] },
+            { text: "But {A} is square, therefore {C} is also square.",
+              visible: GIVEN,
+              highlighted: ["A","C"] },
+            { text: "Therefore, if three numbers are in continued proportion, and the first is square, then the third is also square.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.22") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VIII.20": "/elements/books/bookVIII/propositions/propVIII20/"
     });
 </script>
 </figure>
 
-I say that *C* the third is also square.
+I say that {C} the third is also square.
 
-Since between *A* and *C* there is one mean proportional number, *B,* therefore *A* and *C* are similar plane numbers. But *A* is square, therefore *C* is also square. [!just VIII.20]
+Since between {A} and {C} there is one mean proportional number, {B}, therefore {A} and {C} are similar plane numbers. But {A} is square, therefore {C} is also square. [!just VIII.20]
 
 Therefore, *if three numbers are in continued proportion, and the first is square, then the third is also square.*
 
