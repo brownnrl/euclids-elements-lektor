@@ -17,12 +17,29 @@ statement: To set up a straight line at right angles to a given plane from a giv
 ----
 proof:
 
-Let the plane of reference be the given plane and *A* the point in it.
+Let the plane of reference be the given plane and {A} the point in it.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="240" height="200" tabindex="0"></canvas>
 <noscript><img alt="XI.12 diagram" src="propXI12.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the plane of reference P drawn in oblique view, with A
+    // in it, BC dropped from the elevated point B, and AD parallel to BC
+    // (D = A + B − C).
+    //
+    // Added: PT, a transparent faceless twin of P (the filled plane would
+    // be raised over the figure if highlighted, #140). BC and AD are
+    // declared from B and from A, so they stroke as drawn without twins.
+    // The text names no angle (only lines at right angles to the plane),
+    // so there are no angle markers.
+    //
+    // Draggables (checked against the bundle): X, Y, Z (far-off direction
+    // points), P0, A free; P1, P3 sliders; B free and C a slider. B and C
+    // arrive with "From an elevated point B draw BC", so they are deferred.
+    // D and P2 are derived and listed per slide.
+    var GIVEN = ["P","PT","P2","A"];
+    var BCv   = GIVEN.concat(["B","C","BC"]);
+    var ALL   = BCv.concat(["D","AD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -41,19 +58,75 @@ Let the plane of reference be the given plane and *A* the point in it.
             "C;point;lineSlider;B,Y,150,120",
             "BC;line;connect;B,C",
             "D;point;parallelogram;A,C,B",
-            "AD;line;connect;A,D"
+            "AD;line;connect;A,D",
+            // Transparent highlight target.
+            "PT;polygon;quadrilateral;P0,P1,P2,P3;0;0;0;0"
         ],
+        deferDraggables: ["B","C"],
+        slides: [
+            { text: "“To set up a straight line at right angles to a given plane from a given point in it.”",
+              visible: GIVEN,
+              highlighted: ["A","PT"],
+              justifications: [{ ref: "XI.12" }] },
+            { text: "Let the {plane of reference|PT} be the given plane and {A} the point in it.",
+              visible: GIVEN,
+              highlighted: ["PT","A"] },
+            { text: "It is required to set up from the point {A} a straight line at right angles to the {plane of reference|PT}.",
+              visible: GIVEN,
+              highlighted: ["A","PT"] },
+            { text: "From an elevated point {B} draw {BC} perpendicular to the {plane of reference|PT},",
+              visible: BCv,
+              highlighted: ["BC","PT"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "B",  name: geomlib.A.Point.appear },
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "C",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "BC perpendicular to the plane", ref: "XI.11" }] },
+            { text: "and draw {AD} parallel to {BC} through the point {A}.",
+              visible: ALL,
+              highlighted: ["AD","BC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AD parallel to BC", ref: "I.31" }] },
+            { text: "Then since {AD} and {BC} are two parallel straight lines,",
+              visible: ALL,
+              highlighted: ["AD","BC"] },
+            { text: "and one of them, {BC}, is at right angles to the {plane of reference|PT},",
+              visible: ALL,
+              highlighted: ["BC","PT"] },
+            { text: "therefore the remaining one, {AD}, is also at right angles to the {plane of reference|PT}.",
+              visible: ALL,
+              highlighted: ["AD","PT"],
+              justifications: [{ claim: "parallel to a line at right angles to a plane", ref: "XI.8" }] },
+            { text: "Therefore {AD} is set up at right angles to the given plane from the point {A} in it.",
+              visible: ALL,
+              highlighted: ["AD","A","PT"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.12") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.31":  "/elements/books/bookI/propositions/propI31/",
+        "XI.8":  "/elements/books/bookXI/propositions/propXI8/",
+        "XI.11": "/elements/books/bookXI/propositions/propXI11/"
     });
 </script>
 </figure>
 
-It is required to set up from the point *A* a straight line at right angles to the plane of reference.
+It is required to set up from the point {A} a straight line at right angles to the plane of reference.
 
-From an elevated point *B* draw *BC* perpendicular to the plane of reference, and draw *AD* parallel to *BC* through the point *A.* [!just XI.11, I.31]
+From an elevated point {B} draw {BC} perpendicular to the plane of reference, and draw {AD} parallel to {BC} through the point {A}. [!just XI.11, I.31]
 
-Then since *AD* and *BC* are two parallel straight lines, and one of them, *BC,* is at right angles to the plane of reference, therefore the remaining one, *AD,* is also at right angles to the plane of reference. [!just XI.8]
+Then since {AD} and {BC} are two parallel straight lines, and one of them, {BC}, is at right angles to the plane of reference, therefore the remaining one, {AD}, is also at right angles to the plane of reference. [!just XI.8]
 
-Therefore *AD* is set up at right angles to the given plane from the point *A* in it.
+Therefore {AD} is set up at right angles to the given plane from the point {A} in it.
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">

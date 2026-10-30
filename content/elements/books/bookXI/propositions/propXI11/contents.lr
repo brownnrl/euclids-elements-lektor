@@ -17,14 +17,38 @@ statement: To draw a straight line perpendicular to a given plane from a given e
 ----
 proof:
 
-Let *A* be the given elevated point, and the plane of reference the given plane.
+Let {A} be the given elevated point, and the plane of reference the given plane.
 
-It is required to draw from the point *A* a straight line perpendicular to the plane of reference.
+It is required to draw from the point {A} a straight line perpendicular to the plane of reference.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="310" height="300" tabindex="0"></canvas>
 <noscript><img alt="XI.11 diagram" src="propXI11.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: a true 3-D scene (pivot on the plane of reference,
+    // xyplane), with A on the "ceiling" plane above it and B, C, E sliders in
+    // the plane of reference.
+    //
+    // Added, all transparent: PT, a faceless quadrilateral over xyplane's
+    // corners (a plane element draws no highlight, and a filled one would be
+    // raised over the figure, #140), and planeADE, the plane through ED and
+    // DA, as the triangle ADE. The right angles (ADC and EDC by
+    // construction, AFE by construction, AFH as proved) are angleMarkerRight
+    // squares, shown only on the slides that talk about them.
+    //
+    // Joyce's "if a straight is set up" (no "line") is left literal.
+    //
+    // Draggables (checked against the bundle): origin, y, z (the scene's
+    // frame), A, B, C, E. B and C arrive with "Draw any straight line BC",
+    // E with "draw DE", so they are deferred. D, F, G, H are derived and
+    // listed per slide.
+    var GIVEN = ["xyplane","PT","Oz","A"];
+    var BCv   = GIVEN.concat(["B","C","BC"]);
+    var ADv   = BCv.concat(["D","AD"]);
+    var DEv   = ADv.concat(["E","DE"]);
+    var AFv   = DEv.concat(["F","AF"]);
+    var ALL   = AFv.concat(["G","H","GH"]);
+    var PLN   = ALL.concat(["planeADE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -53,37 +77,179 @@ It is required to draw from the point *A* a straight line perpendicular to the p
             "AF;line;connect;A,F",
             "G;point;parallelogram;B,D,F",
             "H;point;parallelogram;C,D,F",
-            "GH;line;connect;G,H"
+            "GH;line;connect;G,H",
+            // Transparent highlight targets.
+            "xyD;point;parallelogram;x,origin,y;0;0",
+            "PT;polygon;quadrilateral;origin,x,xyD,y;0;0;0;0",
+            "planeADE;polygon;triangle;A,D,E;0;0;0;0",
+            "angADC;sector;angleMarkerRight;D,A,C",
+            "angEDC;sector;angleMarkerRight;D,E,C",
+            "angAFE;sector;angleMarkerRight;F,A,E",
+            "angAFH;sector;angleMarkerRight;F,A,H"
         ],
+        deferDraggables: ["B","C","E"],
+        aliases: { "DA": "AD", "ED": "DE", "FA": "AF" },
+        slides: [
+            { text: "“To draw a straight line perpendicular to a given plane from a given elevated point.”",
+              visible: GIVEN,
+              highlighted: ["A","PT"],
+              justifications: [{ ref: "XI.11" }] },
+            { text: "Let {A} be the given elevated point, and the {plane of reference|PT} the given plane.",
+              visible: GIVEN,
+              highlighted: ["A","PT"] },
+            { text: "It is required to draw from the point {A} a straight line perpendicular to the {plane of reference|PT}.",
+              visible: GIVEN,
+              highlighted: ["A","PT"] },
+            { text: "Draw any straight line {BC} at random in the {plane of reference|PT},",
+              visible: BCv,
+              highlighted: ["BC","PT"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "B",  name: geomlib.A.Point.appear },
+                  { elem: "C",  name: geomlib.A.Point.appear },
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and draw {AD} from the point {A} perpendicular to {BC}.",
+              visible: ADv.concat(["angADC"]),
+              highlighted: ["AD","BC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",      name: geomlib.A.Point.appear },
+                  { elem: "angADC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "AD perpendicular to BC", ref: "I.12" }] },
+            { text: "Then if {AD} is also perpendicular to the {plane of reference|PT}, then that which was proposed is done.",
+              visible: ADv,
+              highlighted: ["AD","PT"] },
+            { text: "But if not, draw {DE} from the point {D} at right angles to {BC} and in the {plane of reference|PT},",
+              visible: DEv.concat(["angEDC"]),
+              highlighted: ["DE","BC","PT"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E",      name: geomlib.A.Point.appear },
+                  { elem: "angEDC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "DE at right angles to BC", ref: "I.11" }] },
+            { text: "draw {AF} from {A} perpendicular to {DE},",
+              visible: AFv.concat(["angAFE"]),
+              highlighted: ["AF","DE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AF",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F",      name: geomlib.A.Point.appear },
+                  { elem: "angAFE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "AF perpendicular to DE", ref: "I.12" }] },
+            { text: "and draw {GH} through the point {F} parallel to {BC}.",
+              visible: ALL,
+              highlighted: ["GH","F","BC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "GH parallel to BC", ref: "I.31" }] },
+            { text: "Now, since {BC} is at right angles to each of the straight lines {DA} and {DE},",
+              visible: ALL.concat(["angADC","angEDC"]),
+              highlighted: ["BC","AD","DE","angADC","angEDC"] },
+            { text: "therefore {BC} is also at right angles to the plane through {ED} and {DA}.",
+              visible: PLN.concat(["angADC","angEDC"]),
+              highlighted: ["BC","planeADE"],
+              transition: { animations: [
+                  { elem: "planeADE", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "at right angles to two lines at their section", ref: "XI.4" }] },
+            { text: "And {GH} is parallel to it,",
+              visible: PLN,
+              highlighted: ["GH","BC"] },
+            { text: "but if two straight lines are parallel, and one of them is at right angles to any plane,",
+              visible: PLN,
+              highlighted: ["GH","BC","planeADE"] },
+            { text: "then the remaining one is also at right angles to the same plane,",
+              visible: PLN,
+              highlighted: ["GH","planeADE"] },
+            { text: "therefore {GH} is also at right angles to the plane through {ED} and {DA}.",
+              visible: PLN,
+              highlighted: ["GH","planeADE"],
+              justifications: [{ claim: "parallel to a line at right angles to a plane", ref: "XI.8" }] },
+            { text: "Therefore {GH} is also at right angles to all the straight lines which meet it",
+              visible: PLN,
+              highlighted: ["GH"],
+              justifications: [{ claim: "a line at right angles to a plane", ref: "XI.Def.3" }] },
+            { text: "and are in the plane through {ED} and {DA}.",
+              visible: PLN,
+              highlighted: ["DE","AD","planeADE"] },
+            { text: "But {AF} meets it and lies in the plane through {ED} and {DA},",
+              visible: PLN,
+              highlighted: ["AF","GH","planeADE"] },
+            { text: "therefore {GH} is at right angles to {FA}, so that {FA} is also at right angles to {GH}.",
+              visible: ALL.concat(["angAFH"]),
+              highlighted: ["GH","AF","angAFH"],
+              transition: { animations: [
+                  { elem: "angAFH", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But {AF} is also at right angles to {DE},",
+              visible: ALL.concat(["angAFE"]),
+              highlighted: ["AF","DE","angAFE"] },
+            { text: "therefore {AF} is at right angles to each of the straight lines {GH} and {DE}.",
+              visible: ALL.concat(["angAFH","angAFE"]),
+              highlighted: ["AF","GH","DE","angAFH","angAFE"] },
+            { text: "But if a straight is set up at right angles to two straight lines which cut one another at their intersection point,",
+              visible: ALL.concat(["angAFH","angAFE"]),
+              highlighted: ["AF","GH","DE"] },
+            { text: "then it also is at right angles to the plane through them.",
+              visible: ALL.concat(["angAFH","angAFE"]),
+              highlighted: ["AF","PT"] },
+            { text: "Therefore {FA} is at right angles to the plane through {ED} and {GH}.",
+              visible: ALL.concat(["angAFH","angAFE"]),
+              highlighted: ["AF","DE","GH"],
+              justifications: [{ claim: "at right angles to two lines at their section", ref: "XI.4" }] },
+            { text: "But the plane through {ED} and {GH} is the {plane of reference|PT},",
+              visible: ALL,
+              highlighted: ["DE","GH","PT"] },
+            { text: "therefore {AF} is at right angles to the {plane of reference|PT}.",
+              visible: ALL,
+              highlighted: ["AF","PT"] },
+            { text: "Therefore from the given elevated point {A} the straight line {AF} has been drawn perpendicular to the {plane of reference|PT}.",
+              visible: ALL,
+              highlighted: ["A","AF","PT"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.11") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.11":     "/elements/books/bookI/propositions/propI11/",
+        "I.12":     "/elements/books/bookI/propositions/propI12/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "XI.Def.3": "/elements/books/bookXI/definitions/defXI3/",
+        "XI.4":     "/elements/books/bookXI/propositions/propXI4/",
+        "XI.8":     "/elements/books/bookXI/propositions/propXI8/"
     });
 </script>
 </figure>
 
-Draw any straight line *BC* at random in the plane of reference, and draw *AD* from the point *A* perpendicular to *BC.* [!just I.12]
+Draw any straight line {BC} at random in the plane of reference, and draw {AD} from the point {A} perpendicular to {BC}. [!just I.12]
 
-Then if *AD* is also perpendicular to the plane of reference, then that which was proposed is done.
+Then if {AD} is also perpendicular to the plane of reference, then that which was proposed is done.
 
-But if not, draw *DE* from the point *D* at right angles to *BC* and in the plane of reference, draw *AF* from *A* perpendicular to *DE,* and draw *GH* through the point *F* parallel to *BC.* [!just I.11, I.12; I.31]
+But if not, draw {DE} from the point {D} at right angles to {BC} and in the plane of reference, draw {AF} from {A} perpendicular to {DE}, and draw {GH} through the point {F} parallel to {BC}. [!just I.11, I.12; I.31]
 
-Now, since *BC* is at right angles to each of the straight lines *DA* and *DE,* therefore *BC* is also at right angles to the plane through *ED* and *DA.* [!just XI.4]
+Now, since {BC} is at right angles to each of the straight lines {DA} and {DE}, therefore {BC} is also at right angles to the plane through {ED} and {DA}. [!just XI.4]
 
-And *GH* is parallel to it, but if two straight lines are parallel, and one of them is at right angles to any plane, then the remaining one is also at right angles to the same plane, therefore *GH* is also at right angles to the plane through *ED* and *DA.* [!just XI.8]
+And {GH} is parallel to it, but if two straight lines are parallel, and one of them is at right angles to any plane, then the remaining one is also at right angles to the same plane, therefore {GH} is also at right angles to the plane through {ED} and {DA}. [!just XI.8]
 
-Therefore *GH* is also at right angles to all the straight lines which meet it and are in the plane through *ED* and *DA.* [!just XI.Def.3]
+Therefore {GH} is also at right angles to all the straight lines which meet it and are in the plane through {ED} and {DA}. [!just XI.Def.3]
 
-But *AF* meets it and lies in the plane through *ED* and *DA,* therefore *GH* is at right angles to *FA,* so that *FA* is also at right angles to *GH.* But *AF* is also at right angles to *DE,* therefore *AF* is at right angles to each of the straight lines *GH* and *DE.*
+But {AF} meets it and lies in the plane through {ED} and {DA}, therefore {GH} is at right angles to {FA}, so that {FA} is also at right angles to {GH}. But {AF} is also at right angles to {DE}, therefore {AF} is at right angles to each of the straight lines {GH} and {DE}.
 
-But if a straight is set up at right angles to two straight lines which cut one another at their intersection point, then it also is at right angles to the plane through them. Therefore *FA* is at right angles to the plane through *ED* and *GH.* [!just XI.4]
+But if a straight is set up at right angles to two straight lines which cut one another at their intersection point, then it also is at right angles to the plane through them. Therefore {FA} is at right angles to the plane through {ED} and {GH}. [!just XI.4]
 
-But the plane through *ED* and *GH* is the plane of reference, therefore *AF* is at right angles to the plane of reference.
+But the plane through {ED} and {GH} is the plane of reference, therefore {AF} is at right angles to the plane of reference.
 
-Therefore from the given elevated point *A* the straight line *AF* has been drawn perpendicular to the plane of reference.
+Therefore from the given elevated point {A} the straight line {AF} has been drawn perpendicular to the plane of reference.
 
 <div class="qed">Q.E.F.</div>
 ----
 guide:
 
-In the proof, before the line *AD* can be drawn from the point *A* perpendicular to the line *BC,* it is necessary to know that the point and line belong to the same plane. Such a plane can be specified by taking the line *BC* and a line from *A* to any point on *BC* since two intersecting lines determine a plane (@XI.2).
+In the proof, before the line {AD} can be drawn from the point {A} perpendicular to the line {BC}, it is necessary to know that the point and line belong to the same plane. Such a plane can be specified by taking the line {BC} and a line from {A} to any point on {BC} since two intersecting lines determine a plane (@XI.2).
 
 #### Use of this proposition
 
