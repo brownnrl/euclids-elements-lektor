@@ -15,18 +15,25 @@ statement: If as many numbers as we please are in continued proportion, and ther
 ----
 proof:
 
-Let there be as many numbers as we please in continued proportion, *A, BC, D,* and *EF,* beginning from *A* as least, and let there be subtracted from *BC* and *EF* the numbers *BG* and *FH,* each equal to *A.*
+Let there be as many numbers as we please in continued proportion, {A}, {BC}, {D}, and {EF}, beginning from {A} as least, and let there be subtracted from {BC} and {EF} the numbers {BG} and {FH}, each equal to {A}.
 
-I say that *GC* is to *A* as *EH* is to the sum of *A, BC,* and *D.*
+I say that {GC} is to {A} as {EH} is to the sum of {A}, {BC}, and {D}.
 
-Make *FK* equal to *BC,* and *FL* equal to *D.*
+Make {FK} equal to {BC}, and {FL} equal to {D}.
 
-Then, since *FK* equals *BC,* and of these the part *FH* equals the part *BG,* therefore the remainder *HK* equals the remainder *GC.*
+Then, since {FK} equals {BC}, and of these the part {FH} equals the part {BG}, therefore the remainder {HK} equals the remainder {GC}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="165" tabindex="0"></canvas>
 <noscript><img alt="IX.35 diagram" src="propIX35.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: the walk is highlight beats over Joyce's four lines.
+    // G, H (the subtractions) and K, L (FK = BC, FL = D) are derived cutoffs,
+    // so their appearances are the only animations and no draggable arrives
+    // mid-walk. The named parts of BC and EF are transparent twins.
+    var GIVEN  = ["A1","A2","A","B","C","BC","D1","D2","D","E","F","EF"];
+    var WITHGH = GIVEN.concat(["G","H","BG","GC","FH","EH"]);
+    var ALL    = WITHGH.concat(["K","L","FK","FL","HK","EL","LK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -57,17 +64,134 @@ Then, since *FK* equals *BC,* and of these the part *FH* equals the part *BG,* t
             "G;point;cutoff;B,C,A1,A2",
             "H;point;cutoff;F,E,A1,A2",
             "K;point;cutoff;F,E,B,C",
-            "L;point;cutoff;F,E,D1,D2"
+            "L;point;cutoff;F,E,D1,D2",
+            "BG;line;connect;B,G;0;0;0",
+            "GC;line;connect;G,C;0;0;0",
+            "FH;line;connect;F,H;0;0;0",
+            "EH;line;connect;E,H;0;0;0",
+            "FK;line;connect;F,K;0;0;0",
+            "FL;line;connect;F,L;0;0;0",
+            "HK;line;connect;H,K;0;0;0",
+            "EL;line;connect;E,L;0;0;0",
+            "LK;line;connect;L,K;0;0;0"
         ],
+        aliases: { "LF": "FL", "KH": "HK", "HF": "FH", "CG": "GC" },
+        slides: [
+            { text: "“If as many numbers as we please are in continued proportion,",
+              visible: GIVEN,
+              highlighted: ["A","BC","D","EF"],
+              justifications: [{ ref: "IX.35" }] },
+            { text: "and there is subtracted from the second and the last numbers equal to the first,",
+              visible: GIVEN,
+              highlighted: ["BC","EF","A"] },
+            { text: "then the excess of the second is to the first",
+              visible: GIVEN,
+              highlighted: ["BC","A"] },
+            { text: "as the excess of the last is to the sum of all those before it.”",
+              visible: GIVEN,
+              highlighted: ["EF","A","BC","D"] },
+            { text: "Let there be as many numbers as we please in continued proportion, {A}, {BC}, {D}, and {EF},",
+              visible: GIVEN,
+              highlighted: ["A","BC","D","EF"] },
+            { text: "beginning from {A} as least,",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "and let there be subtracted from {BC} and {EF} the numbers {BG} and {FH}, each equal to {A}.",
+              visible: WITHGH,
+              highlighted: ["BG","FH","A"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "G", name: geomlib.A.Point.appear },
+                  { elem: "H", name: geomlib.A.Point.appear } ] } },
+            { text: "I say that {GC} is to {A} as {EH} is to the sum of {A}, {BC}, and {D}.",
+              visible: WITHGH,
+              highlighted: ["GC","A","EH","BC","D"] },
+            { text: "Make {FK} equal to {BC}, and {FL} equal to {D}.",
+              visible: ALL,
+              highlighted: ["FK","BC","FL","D"],
+              transition: { animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "L", name: geomlib.A.Point.appear } ] } },
+            { text: "Then, since {FK} equals {BC}, and of these the part {FH} equals the part {BG},",
+              visible: ALL,
+              highlighted: ["FK","BC","FH","BG"] },
+            { text: "therefore the remainder {HK} equals the remainder {GC}.",
+              visible: ALL,
+              highlighted: ["HK","GC"] },
+            { text: "And since {EF} is to {D} as {D} is to {BC}, and as {BC} is to {A},",
+              visible: ALL,
+              highlighted: ["EF","D","BC","A"] },
+            { text: "while {D} equals {FL}, {BC} equals {FK}, and {A} equals {FH},",
+              visible: ALL,
+              highlighted: ["D","FL","BC","FK","A","FH"] },
+            { text: "therefore {EF} is to {FL} as {LF} is to {FK}, and as {FK} is to {FH}.",
+              visible: ALL,
+              highlighted: ["EF","FL","FK","FH"] },
+            { text: "Taken separately {EL} is to {LF} as {LK} is to {FK}, and as {KH} is to {FH}.",
+              visible: ALL,
+              highlighted: ["EL","FL","LK","FK","HK","FH"],
+              justifications: [
+                  { claim: "taken separately", ref: "VII.11" },
+                  { claim: "alternately", ref: "VII.13" } ] },
+            { text: "Since one of the antecedents is to one of the consequents",
+              visible: ALL,
+              highlighted: ["HK","FH"] },
+            { text: "as the sum of the antecedents is to the sum of the consequents,",
+              visible: ALL,
+              highlighted: ["EL","LK","HK","FL","FK","FH"] },
+            { text: "therefore {KH} is to {FH} as the sum of {EL}, {LK}, and {KH} is to the sum of {LF}, {FK}, and {HF}.",
+              visible: ALL,
+              highlighted: ["HK","FH","EL","LK","FL","FK"],
+              justifications: [{ claim: "one antecedent : one consequent = sum : sum", ref: "VII.12" }] },
+            { text: "But {KH} equals {CG}, {FH} equals {A},",
+              visible: ALL,
+              highlighted: ["HK","GC","FH","A"] },
+            { text: "and the sum of {LF}, {FK}, and {HF} equals the sum of {D}, {BC}, and {A},",
+              visible: ALL,
+              highlighted: ["FL","FK","FH","D","BC","A"] },
+            { text: "therefore {CG} is to {A} as {EH} is to the sum of {D}, {BC}, and {A}.",
+              visible: ALL,
+              highlighted: ["GC","A","EH","D","BC"] },
+            { text: "Therefore the excess of the second is to the first",
+              visible: ALL,
+              highlighted: ["GC","A"] },
+            { text: "as the excess of the last is to the sum of those before it.",
+              visible: ALL,
+              highlighted: ["EH","A","BC","D"] },
+            { text: "Therefore, if as many numbers as we please are in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","BC","D","EF"] },
+            { text: "and there is subtracted from the second and the last numbers equal to the first,",
+              visible: ALL,
+              highlighted: ["BG","FH","A"] },
+            { text: "then the excess of the second is to the first",
+              visible: ALL,
+              highlighted: ["GC","A"] },
+            { text: "as the excess of the last is to the sum of all those before it.",
+              visible: ALL,
+              highlighted: ["EH","A","BC","D"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.35") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.11": "/elements/books/bookVII/propositions/propVII11/",
+        "VII.12": "/elements/books/bookVII/propositions/propVII12/",
+        "VII.13": "/elements/books/bookVII/propositions/propVII13/"
     });
 </script>
 </figure>
 
-And since *EF* is to *D* as *D* is to *BC,* and as *BC* is to *A,* while *D* equals *FL, BC* equals *FK,* and *A* equals *FH,* therefore *EF* is to *FL* as *LF* is to *FK,* and as *FK* is to *FH.* Taken separately *EL* is to *LF* as *LK* is to *FK,* and as *KH* is to *FH.* [!just VII.11; VII.13]
+And since {EF} is to {D} as {D} is to {BC}, and as {BC} is to {A}, while {D} equals {FL}, {BC} equals {FK}, and {A} equals {FH}, therefore {EF} is to {FL} as {LF} is to {FK}, and as {FK} is to {FH}. Taken separately {EL} is to {LF} as {LK} is to {FK}, and as {KH} is to {FH}. [!just VII.11; VII.13]
 
-Since one of the antecedents is to one of the consequents as the sum of the antecedents is to the sum of the consequents, therefore *KH* is to *FH* as the sum of *EL, LK,* and *KH* is to the sum of *LF, FK,* and *HF.* [!just VII.12]
+Since one of the antecedents is to one of the consequents as the sum of the antecedents is to the sum of the consequents, therefore {KH} is to {FH} as the sum of {EL}, {LK}, and {KH} is to the sum of {LF}, {FK}, and {HF}. [!just VII.12]
 
-But *KH* equals *CG, FH* equals *A,* and the sum of *LF, FK,* and *HF* equals the sum of *D, BC,* and *A,* therefore *CG* is to *A* as *EH* is to the sum of *D, BC,* and *A.*
+But {KH} equals {CG}, {FH} equals {A}, and the sum of {LF}, {FK}, and {HF} equals the sum of {D}, {BC}, and {A}, therefore {CG} is to {A} as {EH} is to the sum of {D}, {BC}, and {A}.
 
 Therefore the excess of the second is to the first as the excess of the last is to the sum of those before it.
 
@@ -105,15 +229,15 @@ The proof is much more comprehisible when it's translated into algebraic notatio
 
 <center><table cellspacing=10>
 <tr valign=top><td>
-<i>A</i> = <i>a</i><sub>1</sub>
-<br><i>BC</i> = <i>a</i><sub>2</sub>
+<span class="elem-ref" data-elem="A"><i>A</i></span> = <i>a</i><sub>1</sub>
+<br><span class="elem-ref" data-elem="BC"><i>BC</i></span> = <i>a</i><sub>2</sub>
 <br>      ...
-<br><i>D</i> = <i>a</i><sub><i>n</i></sub>
-<br><i>EF</i> = <i>a</i><sub><i>n</i>+1</sub>
+<br><span class="elem-ref" data-elem="D"><i>D</i></span> = <i>a</i><sub><i>n</i></sub>
+<br><span class="elem-ref" data-elem="EF"><i>EF</i></span> = <i>a</i><sub><i>n</i>+1</sub>
 </td>
-<td><i>BG</i> = <i>FH</i> = <i>a</i><sub>1</sub>
-<br><i>GC</i> = <i>a</i><sub>2</sub> – <i>a</i><sub>1</sub>
-<br><i>EH</i> = <i>a</i><sub><i>n</i>+1</sub> – <i>a</i><sub>1</sub>
+<td><span class="elem-ref" data-elem="BG"><i>BG</i></span> = <span class="elem-ref" data-elem="FH"><i>FH</i></span> = <i>a</i><sub>1</sub>
+<br><span class="elem-ref" data-elem="GC"><i>GC</i></span> = <i>a</i><sub>2</sub> – <i>a</i><sub>1</sub>
+<br><span class="elem-ref" data-elem="EH"><i>EH</i></span> = <i>a</i><sub><i>n</i>+1</sub> – <i>a</i><sub>1</sub>
 <i>a</i><sub>2</sub> : <i>a</i><sub>1</sub>.
 </td></tr>
 </table></center>

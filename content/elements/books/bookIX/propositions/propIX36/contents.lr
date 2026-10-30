@@ -15,16 +15,28 @@ statement: If as many numbers as we please beginning from a unit are set out con
 ----
 proof:
 
-Let as many numbers as we please, *A, B, C,* and *D,* beginning from a unit be set out in double proportion, until the sum of all becomes prime, let *E* equal the sum, and let *E* multiplied by *D* make *FG.*
+Let as many numbers as we please, {A}, {B}, {C}, and {D}, beginning from a unit be set out in double proportion, until the sum of all becomes prime, let {E} equal the sum, and let {E} multiplied by {D} make {FG}.
 
-I say that *FG* is perfect.
+I say that {FG} is perfect.
 
-For, however many *A, B, C,* and *D* are in multitude, take so many *E, HK, L,* and *M* in double proportion beginning from *E.*
+For, however many {A}, {B}, {C}, and {D} are in multitude, take so many {E}, {HK}, {L}, and {M} in double proportion beginning from {E}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="420" height="230" tabindex="0"></canvas>
 <noscript><img alt="IX.36 diagram" src="propIX36.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: the walk is highlight beats over Joyce's figure.
+    // HK, L, M (taken in double proportion from E) and the reductio's P, Q
+    // are the only stroked animations; their slider ends are deferred, and
+    // P, Q are withdrawn at the close. N, O (the IX.35 subtractions) are
+    // derived cutoffs that appear. HN, NK, FO, OG are transparent twins.
+    // The unit (U1-U2) sits off-canvas in Joyce's figure and is not drawn.
+    var GIVEN  = ["A1","A2","A","B1","B2","B","C1","C2","C","D1","D2","D",
+                  "E1","E2","E","F","G","FG"];
+    var WITHM  = GIVEN.concat(["H","K","HK","L1","L2","L","M1","M2","M"]);
+    var WITHNO = WITHM.concat(["N","O","HN","NK","FO","OG"]);
+    var WITHP  = WITHNO.concat(["P1","P2","P"]);
+    var WITHQ  = WITHP.concat(["Q1","Q2","Q"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -79,53 +91,309 @@ For, however many *A, B, C,* and *D* are in multitude, take so many *E, HK, L,* 
             "P;line;connect;P1,P2;black",
             "Q1;point;lineSlider;P0,P3,150,0;0",
             "Q2;point;proportion;P1,P2,F,G,U1,U2,Q1,P3;0",
-            "Q;line;connect;Q1,Q2;black"
+            "Q;line;connect;Q1,Q2;black",
+            "HN;line;connect;H,N;0;0;0",
+            "NK;line;connect;N,K;0;0;0",
+            "FO;line;connect;F,O;0;0;0",
+            "OG;line;connect;O,G;0;0;0"
         ],
+        aliases: { "KH": "HK" },
+        deferDraggables: ["H","L1","M1","P1","P2","Q1"],
+        slides: [
+            { text: "“If as many numbers as we please beginning from a unit are set out continuously in double proportion",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "IX.36" }] },
+            { text: "until the sum of all becomes prime,",
+              visible: GIVEN,
+              highlighted: ["E"] },
+            { text: "and if the sum multiplied into the last makes some number,",
+              visible: GIVEN,
+              highlighted: ["E","D","FG"] },
+            { text: "then the product is perfect.”",
+              visible: GIVEN,
+              highlighted: ["FG"] },
+            { text: "Let as many numbers as we please, {A}, {B}, {C}, and {D},",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "beginning from a unit be set out in double proportion,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "until the sum of all becomes prime, let {E} equal the sum,",
+              visible: GIVEN,
+              highlighted: ["E"] },
+            { text: "and let {E} multiplied by {D} make {FG}.",
+              visible: GIVEN,
+              highlighted: ["E","D","FG"] },
+            { text: "I say that {FG} is perfect.",
+              visible: GIVEN,
+              highlighted: ["FG"] },
+            { text: "For, however many {A}, {B}, {C}, and {D} are in multitude,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "take so many {E}, {HK}, {L}, and {M} in double proportion beginning from {E}.",
+              visible: WITHM,
+              highlighted: ["E","HK","L","M"],
+              transition: { animations: [
+                  { elem: "HK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "L",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "M",  name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore, ex aequali {A} is to {D} as {E} is to {M}.",
+              visible: WITHM,
+              highlighted: ["A","D","E","M"],
+              justifications: [{ claim: "ex aequali A : D = E : M", ref: "VII.14" }] },
+            { text: "Therefore the product of {E} and {D} equals the product of {A} and {M}.",
+              visible: WITHM,
+              highlighted: ["E","D","A","M"],
+              justifications: [{ claim: "E × D = A × M", ref: "VII.19" }] },
+            { text: "And the product of {E} and {D} is {FG}, therefore the product of {A} and {M} is also {FG}.",
+              visible: WITHM,
+              highlighted: ["E","D","FG","A","M"] },
+            { text: "Therefore {A} multiplied by {M} makes {FG}.",
+              visible: WITHM,
+              highlighted: ["A","M","FG"] },
+            { text: "Therefore {M} measures {FG} according to the units in {A}.",
+              visible: WITHM,
+              highlighted: ["M","FG","A"] },
+            { text: "And {A} is a dyad, therefore {FG} is double of {M}.",
+              visible: WITHM,
+              highlighted: ["A","FG","M"] },
+            { text: "But {M}, {L}, {HK}, and {E} are continuously double of each other,",
+              visible: WITHM,
+              highlighted: ["M","L","HK","E"] },
+            { text: "therefore {E}, {HK}, {L}, {M}, and {FG} are continuously proportional in double proportion.",
+              visible: WITHM,
+              highlighted: ["E","HK","L","M","FG"] },
+            { text: "Subtract from the second {HK} and the last {FG} the numbers {HN} and {FO}, each equal to the first {E}.",
+              visible: WITHNO,
+              highlighted: ["HN","FO","E"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "N", name: geomlib.A.Point.appear },
+                  { elem: "O", name: geomlib.A.Point.appear } ] } },
+            { text: "Therefore the excess of the second is to the first",
+              visible: WITHNO,
+              highlighted: ["NK","E"] },
+            { text: "as the excess of the last is to the sum of those before it.",
+              visible: WITHNO,
+              highlighted: ["OG","M","L","HK","E"] },
+            { text: "Therefore {NK} is to {E} as {OG} is to the sum of {M}, {L}, {KH}, and {E}.",
+              visible: WITHNO,
+              highlighted: ["NK","E","OG","M","L","HK"],
+              justifications: [{ claim: "NK : E = OG : M + L + KH + E", ref: "IX.35" }] },
+            { text: "And {NK} equals {E}, therefore {OG} also equals {M}, {L}, {HK}, {E}.",
+              visible: WITHNO,
+              highlighted: ["NK","E","OG","M","L","HK"] },
+            { text: "But {FO} also equals {E}, and {E} equals the sum of {A}, {B}, {C}, {D} and the unit.",
+              visible: WITHNO,
+              highlighted: ["FO","E","A","B","C","D"] },
+            { text: "Therefore the whole {FG} equals the sum of {E}, {HK}, {L}, {M}, {A}, {B}, {C}, {D}, and the unit,",
+              visible: WITHNO,
+              highlighted: ["FG","E","HK","L","M","A","B","C","D"] },
+            { text: "and it is measured by them.",
+              visible: WITHNO,
+              highlighted: ["FG","E","HK","L","M","A","B","C","D"] },
+            { text: "I say also that {FG} is not measured by any other number",
+              visible: WITHNO,
+              highlighted: ["FG"] },
+            { text: "except {A}, {B}, {C}, {D}, {E}, {HK}, {L}, {M}, and the unit.",
+              visible: WITHNO,
+              highlighted: ["A","B","C","D","E","HK","L","M"] },
+            { text: "If possible, let some number {P} measure {FG},",
+              visible: WITHP,
+              highlighted: ["P","FG"],
+              transition: { animations: [
+                  { elem: "P", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and let {P} not be the same with any of the numbers {A}, {B}, {C}, {D}, {E}, {HK}, {L}, or {M}.",
+              visible: WITHP,
+              highlighted: ["P","A","B","C","D","E","HK","L","M"] },
+            { text: "And, as many times as {P} measures {FG}, so many units let there be in {Q},",
+              visible: WITHQ,
+              highlighted: ["P","FG","Q"],
+              transition: { animations: [
+                  { elem: "Q", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "therefore {Q} multiplied by {P} makes {FG}.",
+              visible: WITHQ,
+              highlighted: ["Q","P","FG"] },
+            { text: "But, further, {E} multiplied by {D} makes {FG},",
+              visible: WITHQ,
+              highlighted: ["E","D","FG"] },
+            { text: "therefore {E} is to {Q} as {P} is to {D}.",
+              visible: WITHQ,
+              highlighted: ["E","Q","P","D"],
+              justifications: [{ claim: "E : Q = P : D", ref: "VII.19" }] },
+            { text: "And, since {A}, {B}, {C}, and {D} are continuously proportional beginning from a unit,",
+              visible: WITHQ,
+              highlighted: ["A","B","C","D"] },
+            { text: "therefore {D} is not measured by any other number except {A}, {B}, or {C}.",
+              visible: WITHQ,
+              highlighted: ["D","A","B","C"],
+              justifications: [{ claim: "D is measured only by A, B, C", ref: "IX.13" }] },
+            { text: "And, by hypothesis, {P} is not the same with any of the numbers {A}, {B}, or {C},",
+              visible: WITHQ,
+              highlighted: ["P","A","B","C"] },
+            { text: "therefore {P} does not measure {D}.",
+              visible: WITHQ,
+              highlighted: ["P","D"] },
+            { text: "But {P} is to {D} as {E} is to {Q}, therefore neither does {E} measure {Q}.",
+              visible: WITHQ,
+              highlighted: ["P","D","E","Q"],
+              justifications: [{ claim: "E does not measure Q", ref: "VII.Def.20" }] },
+            { text: "And {E} is prime, and any prime number is prime to any number which it does not measure.",
+              visible: WITHQ,
+              highlighted: ["E"] },
+            { text: "Therefore {E} and {Q} are relatively prime.",
+              visible: WITHQ,
+              highlighted: ["E","Q"],
+              justifications: [{ claim: "E and Q are relatively prime", ref: "VII.29" }] },
+            { text: "But primes are also least,",
+              visible: WITHQ,
+              highlighted: ["E","Q"],
+              justifications: [{ claim: "primes are least", ref: "VII.21" }] },
+            { text: "and the least numbers measure those which have the same ratio the same number of times,",
+              visible: WITHQ,
+              highlighted: ["E","Q","P","D"] },
+            { text: "the antecedent the antecedent and the consequent the consequent,",
+              visible: WITHQ,
+              highlighted: ["E","Q","P","D"] },
+            { text: "and {E} is to {Q} as {P} is to {D},",
+              visible: WITHQ,
+              highlighted: ["E","Q","P","D"] },
+            { text: "therefore {E} measures {P} the same number of times that {Q} measures {D}.",
+              visible: WITHQ,
+              highlighted: ["E","P","Q","D"],
+              justifications: [{ claim: "least numbers measure those in the same ratio", ref: "VII.20" }] },
+            { text: "But {D} is not measured by any other number except {A}, {B}, or {C},",
+              visible: WITHQ,
+              highlighted: ["D","A","B","C"] },
+            { text: "therefore {Q} is the same with one of the numbers {A}, {B}, or {C}.",
+              visible: WITHQ,
+              highlighted: ["Q","A","B","C"] },
+            { text: "Let it be the same with {B}.",
+              visible: WITHQ,
+              highlighted: ["Q","B"] },
+            { text: "And, however many {B}, {C}, and {D} are in multitude,",
+              visible: WITHQ,
+              highlighted: ["B","C","D"] },
+            { text: "take so many {E}, {HK}, and {L} beginning from {E}.",
+              visible: WITHQ,
+              highlighted: ["E","HK","L"] },
+            { text: "Now {E}, {HK}, and {L} are in the same ratio with {B}, {C}, and {D},",
+              visible: WITHQ,
+              highlighted: ["E","HK","L","B","C","D"] },
+            { text: "therefore, ex aequali {B} is to {D} as {E} is to {L}.",
+              visible: WITHQ,
+              highlighted: ["B","D","E","L"],
+              justifications: [{ claim: "ex aequali B : D = E : L", ref: "VII.14" }] },
+            { text: "Therefore the product of {B} and {L} equals the product of {D} and {E}.",
+              visible: WITHQ,
+              highlighted: ["B","L","D","E"],
+              justifications: [{ claim: "B × L = D × E", ref: "VII.19" }] },
+            { text: "But the product of {D} and {E} equals the product of {Q} and {P},",
+              visible: WITHQ,
+              highlighted: ["D","E","Q","P"] },
+            { text: "therefore the product of {Q} and {P} also equals the product of {B} and {L}.",
+              visible: WITHQ,
+              highlighted: ["Q","P","B","L"] },
+            { text: "Therefore {Q} is to {B} as {L} is to {P}.",
+              visible: WITHQ,
+              highlighted: ["Q","B","L","P"],
+              justifications: [{ claim: "Q : B = L : P", ref: "VII.19" }] },
+            { text: "And {Q} is the same with {B}, therefore {L} is also the same with {P},",
+              visible: WITHQ,
+              highlighted: ["Q","B","L","P"] },
+            { text: "which is impossible, for by hypothesis {P} is not the same with any of the numbers set out.",
+              visible: WITHQ,
+              highlighted: ["P"] },
+            { text: "Therefore no number measures {FG} except {A}, {B}, {C}, {D}, {E}, {HK}, {L}, {M}, and the unit.",
+              visible: WITHNO,
+              highlighted: ["FG","A","B","C","D","E","HK","L","M"] },
+            { text: "And {FG} was proved equal to the sum of {A}, {B}, {C}, {D}, {E}, {HK}, {L}, {M}, and the unit,",
+              visible: WITHNO,
+              highlighted: ["FG","A","B","C","D","E","HK","L","M"] },
+            { text: "and a perfect number is that which equals its own parts,",
+              visible: WITHNO,
+              highlighted: ["FG"],
+              justifications: [{ claim: "perfect number", ref: "VII.Def.22" }] },
+            { text: "therefore {FG} is perfect.",
+              visible: WITHNO,
+              highlighted: ["FG"] },
+            { text: "Therefore, if as many numbers as we please beginning from a unit are set out continuously in double proportion",
+              visible: WITHNO,
+              highlighted: ["A","B","C","D"] },
+            { text: "until the sum of all becomes prime,",
+              visible: WITHNO,
+              highlighted: ["E"] },
+            { text: "and if the sum multiplied into the last makes some number,",
+              visible: WITHNO,
+              highlighted: ["E","D","FG"] },
+            { text: "then the product is perfect.",
+              visible: WITHNO,
+              highlighted: ["FG"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.36") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "VII.Def.22": "/elements/books/bookVII/definitions/defVII22/",
+        "VII.14": "/elements/books/bookVII/propositions/propVII14/",
+        "VII.19": "/elements/books/bookVII/propositions/propVII19/",
+        "VII.20": "/elements/books/bookVII/propositions/propVII20/",
+        "VII.21": "/elements/books/bookVII/propositions/propVII21/",
+        "VII.29": "/elements/books/bookVII/propositions/propVII29/",
+        "IX.13":  "/elements/books/bookIX/propositions/propIX13/",
+        "IX.35":  "/elements/books/bookIX/propositions/propIX35/"
     });
 </script>
 </figure>
 
-Therefore, *ex aequali A* is to *D* as *E* is to *M.* Therefore the product of *E* and *D* equals the product of *A* and *M.* And the product of *E* and *D* is *FG,* therefore the product of *A* and *M* is also *FG.* [!just VII.14; VII.19]
+Therefore, *ex aequali* {A} is to {D} as {E} is to {M}. Therefore the product of {E} and {D} equals the product of {A} and {M}. And the product of {E} and {D} is {FG}, therefore the product of {A} and {M} is also {FG}. [!just VII.14; VII.19]
 
-Therefore *A* multiplied by *M* makes *FG.* Therefore *M* measures *FG* according to the units in *A.* And *A* is a dyad, therefore *FG* is double of *M.*
+Therefore {A} multiplied by {M} makes {FG}. Therefore {M} measures {FG} according to the units in {A}. And {A} is a dyad, therefore {FG} is double of {M}.
 
-But *M, L, HK,* and *E* are continuously double of each other, therefore *E, HK, L, M,* and *FG* are continuously proportional in double proportion.
+But {M}, {L}, {HK}, and {E} are continuously double of each other, therefore {E}, {HK}, {L}, {M}, and {FG} are continuously proportional in double proportion.
 
-Subtract from the second *HK* and the last *FG* the numbers *HN* and *FO,* each equal to the first *E.* Therefore the excess of the second is to the first as the excess of the last is to the sum of those before it. Therefore *NK* is to *E* as *OG* is to the sum of *M, L, KH,* and *E.* [!just IX.35]
+Subtract from the second {HK} and the last {FG} the numbers {HN} and {FO}, each equal to the first {E}. Therefore the excess of the second is to the first as the excess of the last is to the sum of those before it. Therefore {NK} is to {E} as {OG} is to the sum of {M}, {L}, {KH}, and {E}. [!just IX.35]
 
-And *NK* equals *E,* therefore *OG* also equals *M, L, HK, E.* But *FO* also equals *E,* and *E* equals the sum of *A, B, C, D* and the unit. Therefore the whole *FG* equals the sum of *E, HK, L, M, A, B, C, D,* and the unit, and it is measured by them.
+And {NK} equals {E}, therefore {OG} also equals {M}, {L}, {HK}, {E}. But {FO} also equals {E}, and {E} equals the sum of {A}, {B}, {C}, {D} and the unit. Therefore the whole {FG} equals the sum of {E}, {HK}, {L}, {M}, {A}, {B}, {C}, {D}, and the unit, and it is measured by them.
 
 <hr width=50%>
 
-I say also that *FG* is not measured by any other number except *A, B, C, D, E, HK, L, M,* and the unit.
+I say also that {FG} is not measured by any other number except {A}, {B}, {C}, {D}, {E}, {HK}, {L}, {M}, and the unit.
 
-If possible, let some number *P* measure *FG,* and let *P* not be the same with any of the numbers *A, B, C, D, E, HK, L,* or *M.*
+If possible, let some number {P} measure {FG}, and let {P} not be the same with any of the numbers {A}, {B}, {C}, {D}, {E}, {HK}, {L}, or {M}.
 
-And, as many times as *P* measures *FG,* so many units let there be in *Q,* therefore *Q* multiplied by *P* makes *FG.*
+And, as many times as {P} measures {FG}, so many units let there be in {Q}, therefore {Q} multiplied by {P} makes {FG}.
 
-But, further, *E* multiplied by *D* makes *FG,* therefore *E* is to *Q* as *P* is to *D.* [!just VII.19]
+But, further, {E} multiplied by {D} makes {FG}, therefore {E} is to {Q} as {P} is to {D}. [!just VII.19]
 
-And, since *A, B, C,* and *D* are continuously proportional beginning from a unit, therefore *D* is not measured by any other number except *A, B,* or *C.* [!just IX.13]
+And, since {A}, {B}, {C}, and {D} are continuously proportional beginning from a unit, therefore {D} is not measured by any other number except {A}, {B}, or {C}. [!just IX.13]
 
-And, by hypothesis, *P* is not the same with any of the numbers *A, B,* or *C,* therefore *P* does not measure *D.* But *P* is to *D* as *E* is to *Q,* therefore neither does *E* measure *Q.* [!just VII.Def.20]
+And, by hypothesis, {P} is not the same with any of the numbers {A}, {B}, or {C}, therefore {P} does not measure {D}. But {P} is to {D} as {E} is to {Q}, therefore neither does {E} measure {Q}. [!just VII.Def.20]
 
-And *E* is prime, and any prime number is prime to any number which it does not measure. Therefore *E* and *Q* are relatively prime. [!just VII.29]
+And {E} is prime, and any prime number is prime to any number which it does not measure. Therefore {E} and {Q} are relatively prime. [!just VII.29]
 
-But primes are also least, and the least numbers measure those which have the same ratio the same number of times, the antecedent the antecedent and the consequent the consequent, and *E* is to *Q* as *P* is to *D,* therefore *E* measures *P* the same number of times that *Q* measures *D.* [!just VII.21; VII.20]
+But primes are also least, and the least numbers measure those which have the same ratio the same number of times, the antecedent the antecedent and the consequent the consequent, and {E} is to {Q} as {P} is to {D}, therefore {E} measures {P} the same number of times that {Q} measures {D}. [!just VII.21; VII.20]
 
-But *D* is not measured by any other number except *A, B,* or *C,* therefore *Q* is the same with one of the numbers *A, B,* or *C.* Let it be the same with *B.*
+But {D} is not measured by any other number except {A}, {B}, or {C}, therefore {Q} is the same with one of the numbers {A}, {B}, or {C}. Let it be the same with {B}.
 
-And, however many *B, C,* and *D* are in multitude, take so many *E, HK,* and *L* beginning from *E.*
+And, however many {B}, {C}, and {D} are in multitude, take so many {E}, {HK}, and {L} beginning from {E}.
 
-Now *E, HK,* and *L* are in the same ratio with *B, C,* and *D,* therefore, *ex aequali B* is to *D* as *E* is to *L.* [!just VII.14]
+Now {E}, {HK}, and {L} are in the same ratio with {B}, {C}, and {D}, therefore, *ex aequali* {B} is to {D} as {E} is to {L}. [!just VII.14]
 
-Therefore the product of *B* and *L* equals the product of *D* and *E.* But the product of *D* and *E* equals the product of *Q* and *P,* therefore the product of *Q* and *P* also equals the product of *B* and *L.* [!just VII.19]
+Therefore the product of {B} and {L} equals the product of {D} and {E}. But the product of {D} and {E} equals the product of {Q} and {P}, therefore the product of {Q} and {P} also equals the product of {B} and {L}. [!just VII.19]
 
-Therefore *Q* is to *B* as *L* is to *P.* And *Q* is the same with *B,* therefore *L* is also the same with *P,* which is impossible, for by hypothesis *P* is not the same with any of the numbers set out. [!just VII.19]
+Therefore {Q} is to {B} as {L} is to {P}. And {Q} is the same with {B}, therefore {L} is also the same with {P}, which is impossible, for by hypothesis {P} is not the same with any of the numbers set out. [!just VII.19]
 
-Therefore no number measures *FG* except *A, B, C, D, E, HK, L, M,* and the unit.
+Therefore no number measures {FG} except {A}, {B}, {C}, {D}, {E}, {HK}, {L}, {M}, and the unit.
 
-And *FG* was proved equal to the sum of *A, B, C, D, E, HK, L, M,* and the unit, and a perfect number is that which equals its own parts, therefore *FG* is perfect. [!just VII.Def.22]
+And {FG} was proved equal to the sum of {A}, {B}, {C}, {D}, {E}, {HK}, {L}, {M}, and the unit, and a perfect number is that which equals its own parts, therefore {FG} is perfect. [!just VII.Def.22]
 
 Therefore, *if as many numbers as we please beginning from a unit are set out continuously in double proportion until the sum of all becomes prime, and if the sum multiplied into the last makes some number, then the product is perfect.*
 
@@ -143,7 +411,7 @@ Euclid begins by assuming that the sum of a number of powers of 2 (the sum begin
 
 Note that the last power of 2 is 2<sup>*p*-1</sup> since the sum starts with 1, which is 2<sup>0</sup>.
 
-In Euclid's proof, *A* represents 2, *B* represents 2<sup>2</sup>, *C* represents 2<sup>3</sup>, and *D* is supposed to be the last power of 2, so it represents 2<sup>*p*-1</sup>. Also, *E* represents their sum *s,* and *FG* is the product of *E* and *D,* so it represents *s*2<sup>*p*-1</sup>. Let's denote that last by *n.*
+In Euclid's proof, {A} represents 2, {B} represents 2<sup>2</sup>, {C} represents 2<sup>3</sup>, and {D} is supposed to be the last power of 2, so it represents 2<sup>*p*-1</sup>. Also, {E} represents their sum *s,* and {FG} is the product of {E} and {D}, so it represents *s*2<sup>*p*-1</sup>. Let's denote that last by *n.*
 
 <center><i>n</i> = <i>s</i>2<sup><i>p</i>-1</sup></center>
 
@@ -157,7 +425,7 @@ and
 
 <center><i>s,</i> 2<i>s,</i> 2<sup>2</sup><i>s,</i> ..., 2<sup><i>p</i>-2</sup><i>s</i></center>
 
-In his proof, the latter are represented by *E, HK, L,* and finally *M.*
+In his proof, the latter are represented by {E}, {HK}, {L}, and finally {M}.
 
 It is clear that each of these is a proper divisor of *n,* and later in the proof Euclid shows that they are the only proper divisors of *n.*
 
@@ -181,7 +449,7 @@ Thus, *n* is a sum of these proper divisors.
 
 All that is left to do is to show that they are the only proper divisors of *n,* for then *n* will be the sum of all of its proper divisors, whence a perfect number.
 
-The remainder of the proof is detailed and difficult to follow. It hinges on @IX.13 which implies that the only factors of 2<sup>*p*-1</sup> are powers of 2, so all the factors of 2<sup>*p*-1</sup> have been found. Here's a not-too-faithful version of Euclid's argument. Suppose *n* factors as *ab* where *a* is not a proper divisor of *n* in the list above. In Euclid's proof, *P* represents *a* and *Q* represents *b.*
+The remainder of the proof is detailed and difficult to follow. It hinges on @IX.13 which implies that the only factors of 2<sup>*p*-1</sup> are powers of 2, so all the factors of 2<sup>*p*-1</sup> have been found. Here's a not-too-faithful version of Euclid's argument. Suppose *n* factors as *ab* where *a* is not a proper divisor of *n* in the list above. In Euclid's proof, {P} represents *a* and {Q} represents *b.*
 
 Since *ab* = *n* = 2<sup>*p*-1</sup>*s*, but *a* is not a power of 2, and *s* is prime, therefore *s* divides *a*. So *b* has to be a power of 2. But then *a* has to be a power of 2 times *s.* But all the powers of 2 times *s* are on the list of known proper divisors. Therefore, the list includes all the proper divisors.
 
