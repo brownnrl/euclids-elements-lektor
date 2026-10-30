@@ -15,14 +15,26 @@ statement: Numbers relatively prime are the least of those which have the same r
 ----
 proof:
 
-Let *A* and *B* be numbers relatively prime.
+Let {A} and {B} be numbers relatively prime.
 
-I say that *A* and *B* are the least of those which have the same ratio with them.
+I say that {A} and {B} are the least of those which have the same ratio with them.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="200" height="250" tabindex="0"></canvas>
 <noscript><img alt="VII.21 diagram" src="propVII21.gif"/></noscript>
 <script type="text/javascript">
+    // A and B are the given numbers relatively prime; C and D the supposed
+    // less numbers in the same ratio, and E the number of times C measures A.
+    // Line segments only, so the walk is highlight beats. The reductio's C, D
+    // and E are withdrawn once the contradiction is reached.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, D1, E1, E2 and the off-canvas, colourless rail ends. C1, D1,
+    // E1 and E2 arrive mid-walk, so they are deferred; C2 (cutoff) and D2
+    // (proportion) are derived and listed per slide.
+    var GIVEN   = ["A","B"];
+    var WITH_CD = GIVEN.concat(["C","C1","C2","D","D1","D2"]);
+    var WITH_E  = WITH_CD.concat(["E","E1","E2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -55,21 +67,97 @@ I say that *A* and *B* are the least of those which have the same ratio with the
             "E2;point;lineSlider;E0,E3,130,50;0;black",
             "E;line;connect;E1,E2;black"
         ],
+        deferDraggables: ["C1","D1","E1","E2"],
+        slides: [
+            { text: "“Numbers relatively prime are the least of those which have the same ratio with them.”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VII.21" }] },
+            { text: "Let {A} and {B} be numbers relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that {A} and {B} are the least of those which have the same ratio with them.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "If not, there are some numbers less than {A} and {B} in the same ratio with {A} and {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Let them be {C} and {D}.",
+              visible: WITH_CD,
+              highlighted: ["C","D"] },
+            { text: "Since, then, the least numbers of those which have the same ratio measure those which have the same ratio",
+              visible: WITH_CD,
+              highlighted: [] },
+            { text: "the same number of times, the greater the greater, and the less the less,",
+              visible: WITH_CD,
+              highlighted: [] },
+            { text: "that is, the antecedent the antecedent and the consequent the consequent,",
+              visible: WITH_CD,
+              highlighted: [] },
+            { text: "therefore {C} measures {A} the same number of times that {D} measures {B}.",
+              visible: WITH_CD,
+              highlighted: ["C","A","D","B"],
+              justifications: [{ ref: "VII.20" }] },
+            { text: "Let there be as many units in {E} as the times that {C} measures {A}.",
+              visible: WITH_E,
+              highlighted: ["E","C","A"] },
+            { text: "Then {D} also measures {B} according to the units in {E}.",
+              visible: WITH_E,
+              highlighted: ["D","B","E"] },
+            { text: "And, since {C} measures {A} according to the units in {E},",
+              visible: WITH_E,
+              highlighted: ["C","A","E"] },
+            { text: "therefore {E} also measures {A} according to the units in {C}.",
+              visible: WITH_E,
+              highlighted: ["E","A","C"],
+              justifications: [{ ref: "VII.16" }] },
+            { text: "For the same reason {E} also measures {B} according to the units in {D}.",
+              visible: WITH_E,
+              highlighted: ["E","B","D"],
+              justifications: [{ ref: "VII.16" }] },
+            { text: "Therefore {E} measures {A} and {B} which are relatively prime, which is impossible.",
+              visible: WITH_E,
+              highlighted: ["E","A","B"],
+              justifications: [{ ref: "VII.Def.12" }] },
+            // The reductio is closed: the supposed C, D and E are withdrawn.
+            { text: "Therefore there are no numbers less than {A} and {B} which are in the same ratio with {A} and {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Therefore {A} and {B} are the least of those which have the same ratio with them.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Therefore, numbers relatively prime are the least of those which have the same ratio with them.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.21") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.20":     "/elements/books/bookVII/propositions/propVII20/",
+        "VII.16":     "/elements/books/bookVII/propositions/propVII16/",
+        "VII.Def.12": "/elements/books/bookVII/definitions/defVII12/"
     });
 </script>
 </figure>
 
-If not, there are some numbers less than *A* and *B* in the same ratio with *A* and *B.* Let them be *C* and *D.*
+If not, there are some numbers less than {A} and {B} in the same ratio with {A} and {B}. Let them be {C} and {D}.
 
-Since, then, the least numbers of those which have the same ratio measure those which have the same ratio the same number of times, the greater the greater, and the less the less, that is, the antecedent the antecedent and the consequent the consequent, therefore *C* measures *A* the same number of times that *D* measures *B.* [!just VII.20]
+Since, then, the least numbers of those which have the same ratio measure those which have the same ratio the same number of times, the greater the greater, and the less the less, that is, the antecedent the antecedent and the consequent the consequent, therefore {C} measures {A} the same number of times that {D} measures {B}. [!just VII.20]
 
-Let there be as many units in *E* as the times that *C* measures *A.* Then *D* also measures *B* according to the units in *E.*
+Let there be as many units in {E} as the times that {C} measures {A}. Then {D} also measures {B} according to the units in {E}.
 
-And, since *C* measures *A* according to the units in *E,* therefore *E* also measures *A* according to the units in *C.* For the same reason *E* also measures *B* according to the units in *D.* [!just VII.16]
+And, since {C} measures {A} according to the units in {E}, therefore {E} also measures {A} according to the units in {C}. For the same reason {E} also measures {B} according to the units in {D}. [!just VII.16]
 
-Therefore *E* measures *A* and *B* which are relatively prime, which is impossible. [!just VII.Def.12]
+Therefore {E} measures {A} and {B} which are relatively prime, which is impossible. [!just VII.Def.12]
 
-Therefore there are no numbers less than *A* and *B* which are in the same ratio with *A* and *B.* Therefore *A* and *B* are the least of those which have the same ratio with them.
+Therefore there are no numbers less than {A} and {B} which are in the same ratio with {A} and {B}. Therefore {A} and {B} are the least of those which have the same ratio with them.
 
 Therefore, *numbers relatively prime are the least of those which have the same ratio with them.*
 

@@ -15,18 +15,31 @@ statement: The least numbers of those which have the same ratio with them are re
 ----
 proof:
 
-Let *A* and *B* be the least numbers of those which have the same ratio with them.
+Let {A} and {B} be the least numbers of those which have the same ratio with them.
 
-I say that *A* and *B* are relatively prime.
+I say that {A} and {B} are relatively prime.
 
-If they are not relatively prime, then some number *C* measures them.
+If they are not relatively prime, then some number {C} measures them.
 
-Let there be as many units in *D* as the times that *C* measures *A,* and as many units in *E* as the times that *C* measures *B.*
+Let there be as many units in {D} as the times that {C} measures {A}, and as many units in {E} as the times that {C} measures {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="250" tabindex="0"></canvas>
 <noscript><img alt="VII.22 diagram" src="propVII22.gif"/></noscript>
 <script type="text/javascript">
+    // A and B are the least numbers in their ratio; C the supposed common
+    // measure, and D, E the numbers of times C measures A and B. Line
+    // segments only, so the walk is highlight beats. The reductio's C, D and
+    // E are withdrawn once the contradiction is reached.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, D1, E1, E2 and the off-canvas, colourless rail ends. C1, D1,
+    // E1 and E2 arrive mid-walk, so they are deferred; C2 (cutoff) and D2
+    // (proportion) are derived and listed per slide.
+    var GIVEN  = ["A","B"];
+    var WITH_C = GIVEN.concat(["C","C1","C2"]);
+    var WITH_D = WITH_C.concat(["D","D1","D2"]);
+    var WITH_E = WITH_D.concat(["E","E1","E2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -59,19 +72,81 @@ Let there be as many units in *D* as the times that *C* measures *A,* and as man
             "D2;point;proportion;A1,A2,B1,B2,C1,C2,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        deferDraggables: ["C1","D1","E1","E2"],
+        slides: [
+            { text: "“The least numbers of those which have the same ratio with them are relatively prime.”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VII.22" }] },
+            { text: "Let {A} and {B} be the least numbers of those which have the same ratio with them.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that {A} and {B} are relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "If they are not relatively prime, then some number {C} measures them.",
+              visible: WITH_C,
+              highlighted: ["C","A","B"] },
+            { text: "Let there be as many units in {D} as the times that {C} measures {A},",
+              visible: WITH_D,
+              highlighted: ["D","C","A"] },
+            { text: "and as many units in {E} as the times that {C} measures {B}.",
+              visible: WITH_E,
+              highlighted: ["E","C","B"] },
+            { text: "Since {C} measures {A} according to the units in {D}, therefore {C} multiplied by {D} makes {A}.",
+              visible: WITH_E,
+              highlighted: ["C","A","D"],
+              justifications: [{ ref: "VII.Def.15" }] },
+            { text: "For the same reason {C} multiplied by {E} makes {B}.",
+              visible: WITH_E,
+              highlighted: ["C","E","B"],
+              justifications: [{ ref: "VII.Def.15" }] },
+            { text: "Thus the number {C} multiplied by the two numbers {D} and {E} makes {A} and {B},",
+              visible: WITH_E,
+              highlighted: ["C","D","E","A","B"] },
+            { text: "therefore {D} is to {E} as {A} is to {B}.",
+              visible: WITH_E,
+              highlighted: ["D","E","A","B"],
+              justifications: [{ ref: "VII.17" }] },
+            { text: "Therefore {D} and {E} are in the same ratio with {A} and {B}, being less than they, which is impossible.",
+              visible: WITH_E,
+              highlighted: ["D","E","A","B"] },
+            // The reductio is closed: the supposed C, D and E are withdrawn.
+            { text: "Therefore no number measures the numbers {A} and {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Therefore {A} and {B} are relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Therefore, the least numbers of those which have the same ratio with them are relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.22") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.15": "/elements/books/bookVII/definitions/defVII15/",
+        "VII.17":     "/elements/books/bookVII/propositions/propVII17/"
     });
 </script>
 </figure>
 
-Let there be as many units in *D* as the times that *C* measures *A,* and as many units in *E* as the times that *C* measures *B.*
+Let there be as many units in {D} as the times that {C} measures {A}, and as many units in {E} as the times that {C} measures {B}.
 
-Since *C* measures *A* according to the units in *D,* therefore *C* multiplied by *D* makes *A.* For the same reason *C* multiplied by *E* makes *B.* [!just VII.Def.15]
+Since {C} measures {A} according to the units in {D}, therefore {C} multiplied by {D} makes {A}. For the same reason {C} multiplied by {E} makes {B}. [!just VII.Def.15]
 
-Thus the number *C* multiplied by the two numbers *D* and *E* makes *A* and *B,* therefore *D* is to *E* as *A* is to *B.* [!just VII.17]
+Thus the number {C} multiplied by the two numbers {D} and {E} makes {A} and {B}, therefore {D} is to {E} as {A} is to {B}. [!just VII.17]
 
-Therefore *D* and *E* are in the same ratio with *A* and *B,* being less than they, which is impossible. Therefore no number measures the numbers *A* and *B.*
+Therefore {D} and {E} are in the same ratio with {A} and {B}, being less than they, which is impossible. Therefore no number measures the numbers {A} and {B}.
 
-Therefore *A* and *B* are relatively prime.
+Therefore {A} and {B} are relatively prime.
 
 Therefore, *the least numbers of those which have the same ratio with them are relatively prime.*
 
