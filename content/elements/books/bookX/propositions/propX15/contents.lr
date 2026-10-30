@@ -15,16 +15,28 @@ statement: If two commensurable magnitudes are added together, then the whole is
 ----
 proof:
 
-Let the two commensurable magnitudes *AB* and *BC* be added together.
+Let the two commensurable magnitudes {AB} and {BC} be added together.
 
-I say that the whole *AC* is also commensurable with each of the magnitudes *AB* and *BC*.
+I say that the whole {AC} is also commensurable with each of the magnitudes {AB} and {BC}.
 
-Since *AB* and *BC* are commensurable, some magnitude *D* measures them.
+Since {AB} and {BC} are commensurable, some magnitude {D} measures them.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="230" height="100" tabindex="0"></canvas>
 <noscript><img alt="X.15 diagram" src="propX15.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws AC (with B on it) and the measure D. The proof
+    // works with the parts AB and BC, so those are added as transparent
+    // highlight targets (;0;0;0); the resting figure is unchanged. The walk
+    // is highlight beats only: each "measures" step lights D and the
+    // magnitudes it measures.
+    //
+    // Draggables (checked against the bundle): A, B, C (given, standing from
+    // slide 1), D1, D2 (D's ends) and the offscreen frees. D enters with
+    // "some magnitude D measures them", so D1/D2 are deferred; D is taken
+    // afresh in the converse, so it leaves at "Next" and strokes in again.
+    var GIVEN = ["A","B","C","AC","AB","BC"];
+    var MEAS  = GIVEN.concat(["D","D1","D2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -40,23 +52,97 @@ Since *AB* and *BC* are commensurable, some magnitude *D* measures them.
             "B;point;lineSlider;A0,A3,140,0",
             "D1;point;lineSlider;D0,D3,30,0;0",
             "D2;point;lineSlider;D0,D3,60,0;0",
-            "D;line;connect;D1,D2;black"
+            "D;line;connect;D1,D2;black",
+            // Highlight targets only — AC already draws these.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0"
         ],
+        deferDraggables: ["D1","D2"],
+        aliases: { "CA": "AC", "BA": "AB", "CB": "BC" },
+        slides: [
+            { text: "“If two commensurable magnitudes are added together, then the whole is also commensurable with each of them;",
+              visible: GIVEN,
+              highlighted: ["AB","BC","AC"],
+              justifications: [{ ref: "X.15" }] },
+            { text: "and, if the whole is commensurable with one of them, then the original magnitudes are also commensurable.”",
+              visible: GIVEN,
+              highlighted: ["AC","AB","BC"] },
+            { text: "Let the two commensurable magnitudes {AB} and {BC} be added together.",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "I say that the whole {AC} is also commensurable with each of the magnitudes {AB} and {BC}.",
+              visible: GIVEN,
+              highlighted: ["AC","AB","BC"] },
+            { text: "Since {AB} and {BC} are commensurable, some magnitude {D} measures them.",
+              visible: MEAS,
+              highlighted: ["D","AB","BC"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since then {D} measures {AB} and {BC}, therefore it also measures the whole {AC}.",
+              visible: MEAS,
+              highlighted: ["D","AC"] },
+            { text: "But it measures {AB} and {BC} also, therefore {D} measures {AB}, {BC}, and {AC}.",
+              visible: MEAS,
+              highlighted: ["D","AB","BC","AC"] },
+            { text: "Therefore {AC} is commensurable with each of the magnitudes {AB} and {BC}.",
+              visible: MEAS,
+              highlighted: ["AC","AB","BC"],
+              justifications: [{ claim: "measured by the same measure D", ref: "X.Def.I.1" }] },
+            // The converse takes its own measure: D leaves and is taken again.
+            { text: "Next, let {AC} be commensurable with {AB}.",
+              visible: GIVEN,
+              highlighted: ["AC","AB"] },
+            { text: "I say that {AB} and {BC} are also commensurable.",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "Since {AC} and {AB} are commensurable, some magnitude {D} measures them.",
+              visible: MEAS,
+              highlighted: ["D","AC","AB"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since then {D} measures {CA} and {AB}, therefore it also measures the remainder {BC}.",
+              visible: MEAS,
+              highlighted: ["D","AC","AB","BC"] },
+            { text: "But it measures {AB} also, therefore {D} measures {AB} and {BC}.",
+              visible: MEAS,
+              highlighted: ["D","AB","BC"] },
+            { text: "Therefore {AB} and {BC} are commensurable.",
+              visible: MEAS,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "measured by the same measure D", ref: "X.Def.I.1" }] },
+            { text: "Therefore, if two commensurable magnitudes are added together, then the whole is also commensurable with each of them;",
+              visible: MEAS,
+              highlighted: ["AC","AB","BC"] },
+            { text: "and, if the whole is commensurable with one of them, then the original magnitudes are also commensurable.",
+              visible: MEAS,
+              highlighted: ["AC","AB","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.15") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.Def.I.1": "/elements/books/bookX/definitions/defX.I.1/"
     });
 </script>
 </figure>
 
-Since then *D* measures *AB* and *BC*, therefore it also measures the whole *AC*. But it measures *AB* and *BC* also, therefore *D* measures *AB*, *BC*, and *AC*. Therefore *AC* is commensurable with each of the magnitudes *AB* and *BC*. [!just X.Def.I.1]
+Since then {D} measures {AB} and {BC}, therefore it also measures the whole {AC}. But it measures {AB} and {BC} also, therefore {D} measures {AB}, {BC}, and {AC}. Therefore {AC} is commensurable with each of the magnitudes {AB} and {BC}. [!just X.Def.I.1]
 
-Next, let *AC* be commensurable with *AB*.
+Next, let {AC} be commensurable with {AB}.
 
-I say that *AB* and *BC* are also commensurable.
+I say that {AB} and {BC} are also commensurable.
 
-Since *AC* and *AB* are commensurable, some magnitude *D* measures them.
+Since {AC} and {AB} are commensurable, some magnitude {D} measures them.
 
-Since then *D* measures *CA* and *AB*, therefore it also measures the remainder *BC*.
+Since then {D} measures {CA} and {AB}, therefore it also measures the remainder {BC}.
 
-But it measures *AB* also, therefore *D* measures *AB* and *BC*. Therefore *AB* and *BC* are commensurable. [!just X.Def.I.1]
+But it measures {AB} also, therefore {D} measures {AB} and {BC}. Therefore {AB} and {BC} are commensurable. [!just X.Def.I.1]
 
 Therefore, *if two commensurable magnitudes are added together, then the whole is also commensurable with each of them; and, if the whole is commensurable with one of them, then the original magnitudes are also commensurable.*
 

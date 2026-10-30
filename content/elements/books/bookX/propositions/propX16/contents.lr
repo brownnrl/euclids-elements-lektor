@@ -15,16 +15,28 @@ statement: If two incommensurable magnitudes are added together, the sum is also
 ----
 proof:
 
-Let the two incommensurable magnitudes *AB* and *BC* be added together.
+Let the two incommensurable magnitudes {AB} and {BC} be added together.
 
-I say that the whole *AC* is also incommensurable with each of the magnitudes *AB* and *BC*.
+I say that the whole {AC} is also incommensurable with each of the magnitudes {AB} and {BC}.
 
-For, if *CA* and *AB* are not incommensurable, then some magnitude *D* measures them.
+For, if {CA} and {AB} are not incommensurable, then some magnitude {D} measures them.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="110" height="270" tabindex="0"></canvas>
 <noscript><img alt="X.16 diagram" src="propX16.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws AC (with B on it) and the measure D. The proof
+    // works with the parts AB and BC, so those are added as transparent
+    // highlight targets (;0;0;0); the resting figure is unchanged. The walk
+    // is highlight beats only.
+    //
+    // Draggables (checked against the bundle): A, B, C (given, standing from
+    // slide 1), D1, D2 (D's ends) and the offscreen frees. D exists only
+    // inside each reductio, so D1/D2 are deferred; D strokes in with "some
+    // magnitude D measures them" and is withdrawn at "no magnitude
+    // measures", in both halves.
+    var GIVEN = ["A","B","C","AC","AB","BC"];
+    var HYP   = GIVEN.concat(["D","D1","D2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -40,31 +52,133 @@ For, if *CA* and *AB* are not incommensurable, then some magnitude *D* measures 
             "AC;line;connect;A,C",
             "D1;point;lineSlider;D0,D3,0,40;0",
             "D2;point;lineSlider;D0,D3,0,70;0",
-            "D;line;connect;D1,D2;black"
+            "D;line;connect;D1,D2;black",
+            // Highlight targets only — AC already draws these.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0"
         ],
+        deferDraggables: ["D1","D2"],
+        aliases: { "CA": "AC", "BA": "AB", "CB": "BC" },
+        slides: [
+            { text: "“If two incommensurable magnitudes are added together, the sum is also incommensurable with each of them;",
+              visible: GIVEN,
+              highlighted: ["AB","BC","AC"],
+              justifications: [{ ref: "X.16" }] },
+            { text: "but, if the sum is incommensurable with one of them, then the original magnitudes are also incommensurable.”",
+              visible: GIVEN,
+              highlighted: ["AC","AB","BC"] },
+            { text: "Let the two incommensurable magnitudes {AB} and {BC} be added together.",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "I say that the whole {AC} is also incommensurable with each of the magnitudes {AB} and {BC}.",
+              visible: GIVEN,
+              highlighted: ["AC","AB","BC"] },
+            { text: "For, if {CA} and {AB} are not incommensurable, then some magnitude {D} measures them.",
+              visible: HYP,
+              highlighted: ["D","AC","AB"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since then {D} measures {CA} and {AB}, therefore it also measures the remainder {BC}.",
+              visible: HYP,
+              highlighted: ["D","AC","AB","BC"] },
+            { text: "But it also measures {AB}, therefore {D} measures {AB} and {BC}.",
+              visible: HYP,
+              highlighted: ["D","AB","BC"] },
+            { text: "Therefore {AB} and {BC} are commensurable,",
+              visible: HYP,
+              highlighted: ["AB","BC"] },
+            { text: "but they were also, by hypothesis, incommensurable, which is impossible.",
+              visible: HYP,
+              highlighted: ["AB","BC"] },
+            // The hypothesis is withdrawn: D leaves the figure.
+            { text: "Therefore no magnitude measures {CA} and {AB}.",
+              visible: GIVEN,
+              highlighted: ["AC","AB"] },
+            { text: "Therefore {CA} and {AB} are incommensurable.",
+              visible: GIVEN,
+              highlighted: ["AC","AB"],
+              justifications: [{ claim: "no common measure", ref: "X.Def.I.1" }] },
+            { text: "Similarly we can prove that {AC} and {CB} are also incommensurable.",
+              visible: GIVEN,
+              highlighted: ["AC","BC"] },
+            { text: "Therefore {AC} is incommensurable with each of the magnitudes {AB} and {BC}.",
+              visible: GIVEN,
+              highlighted: ["AC","AB","BC"] },
+            { text: "Next, let {AC} be incommensurable with one of the magnitudes {AB} or {BC}.",
+              visible: GIVEN,
+              highlighted: ["AC","AB","BC"] },
+            { text: "First, let it be incommensurable with {AB}.",
+              visible: GIVEN,
+              highlighted: ["AC","AB"] },
+            { text: "I say that {AB} and {BC} are also incommensurable.",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "For, if they are commensurable, then some magnitude {D} measures them.",
+              visible: HYP,
+              highlighted: ["D","AB","BC"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since, then, {D} measures {AB} and {BC}, therefore it also measures the whole {AC}.",
+              visible: HYP,
+              highlighted: ["D","AB","BC","AC"] },
+            { text: "But it also measures {AB}, therefore {D} measures {CA} and {AB}.",
+              visible: HYP,
+              highlighted: ["D","AC","AB"] },
+            { text: "Therefore {CA} and {AB} are commensurable,",
+              visible: HYP,
+              highlighted: ["AC","AB"] },
+            { text: "but they were also, by hypothesis, incommensurable, which is impossible.",
+              visible: HYP,
+              highlighted: ["AC","AB"] },
+            // The hypothesis is withdrawn again.
+            { text: "Therefore no magnitude measures {AB} and {BC}.",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "Therefore {AB} and {BC} are incommensurable.",
+              visible: GIVEN,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "no common measure", ref: "X.Def.I.1" }] },
+            { text: "Therefore, if two incommensurable magnitudes are added together, the sum is also incommensurable with each of them;",
+              visible: GIVEN,
+              highlighted: ["AC","AB","BC"] },
+            { text: "but, if the sum is incommensurable with one of them, then the original magnitudes are also incommensurable.",
+              visible: GIVEN,
+              highlighted: ["AC","AB","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.16") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.Def.I.1": "/elements/books/bookX/definitions/defX.I.1/"
     });
 </script>
 </figure>
 
-Since then *D* measures *CA* and *AB*, therefore it also measures the remainder *BC*. But it also measures *AB*, therefore *D* measures *AB* and *BC*. Therefore *AB* and *BC* are commensurable, but they were also, by hypothesis, incommensurable, which is impossible.
+Since then {D} measures {CA} and {AB}, therefore it also measures the remainder {BC}. But it also measures {AB}, therefore {D} measures {AB} and {BC}. Therefore {AB} and {BC} are commensurable, but they were also, by hypothesis, incommensurable, which is impossible.
 
-Therefore no magnitude measures *CA* and *AB*. Therefore *CA* and *AB* are incommensurable. [!just X.Def.I.1]
+Therefore no magnitude measures {CA} and {AB}. Therefore {CA} and {AB} are incommensurable. [!just X.Def.I.1]
 
-Similarly we can prove that *AC* and *CB* are also incommensurable. Therefore *AC* is incommensurable with each of the magnitudes *AB* and *BC*.
+Similarly we can prove that {AC} and {CB} are also incommensurable. Therefore {AC} is incommensurable with each of the magnitudes {AB} and {BC}.
 
 ***
 
-Next, let *AC* be incommensurable with one of the magnitudes *AB* or *BC*.
+Next, let {AC} be incommensurable with one of the magnitudes {AB} or {BC}.
 
-First, let it be incommensurable with *AB*.
+First, let it be incommensurable with {AB}.
 
-I say that *AB* and *BC* are also incommensurable.
+I say that {AB} and {BC} are also incommensurable.
 
-For, if they are commensurable, then some magnitude *D* measures them.
+For, if they are commensurable, then some magnitude {D} measures them.
 
-Since, then, *D* measures *AB* and *BC*, therefore it also measures the whole *AC*. But it also measures *AB*, therefore *D* measures *CA* and *AB*. Therefore *CA* and *AB* are commensurable, but they were also, by hypothesis, incommensurable, which is impossible.
+Since, then, {D} measures {AB} and {BC}, therefore it also measures the whole {AC}. But it also measures {AB}, therefore {D} measures {CA} and {AB}. Therefore {CA} and {AB} are commensurable, but they were also, by hypothesis, incommensurable, which is impossible.
 
-Therefore no magnitude measures *AB* and *BC*. Therefore *AB* and *BC* are incommensurable. [!just X.Def.I.1]
+Therefore no magnitude measures {AB} and {BC}. Therefore {AB} and {BC} are incommensurable. [!just X.Def.I.1]
 
 Therefore, *if two incommensurable magnitudes are added together, the sum is also incommensurable with each of them; but, if the sum is incommensurable with one of them, then the original magnitudes are also incommensurable.*
 
