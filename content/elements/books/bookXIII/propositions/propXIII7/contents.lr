@@ -15,14 +15,52 @@ statement: If three angles of an equilateral pentagon, taken either in order or 
 ----
 proof:
 
-First, let three angles *A, B,* and *C* taken in order in the equilateral pentagon *ABCDE* be equal to one another.
+First, let three angles {A|angA}, {B|angB}, and {C|angC} taken in order in the equilateral pentagon {ABCDE|pentT} be equal to one another.
 
-I say that the pentagon *ABCDE* is equiangular.
+I say that the pentagon {ABCDE|pentT} is equiangular.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="265" height="240" tabindex="0"></canvas>
 <noscript><img alt="XIII.7 diagram" src="propXIII7.gif"/></noscript>
 <script type="text/javascript">
+    // Two cases on one figure. The first (angles A, B, C equal) uses AC, BE
+    // and FD; the second (angles A, C, D equal) uses BE and BD, so its
+    // slides drop AC, FD and F and keep BE, which the first case joined.
+    //
+    // Joyce's element "FC" is the line from F to D (connect F,D): the prose
+    // calls it FD and reaches it as {FD|FC}. The segment FC of AC that the
+    // remainder step names is segFC, reached as {FC|segFC}.
+    //
+    // Joyce's pentagon ABCDE keeps its random face and is never highlighted
+    // (a highlighted face is raised over the markers, #140); "the pentagon
+    // ABCDE" reaches pentT, a faceless twin. Everything else added is
+    // transparent: the five sides, the segments AF, BF, segFC, FE, and the
+    // triangles ABC, ABE, BCD (explicit ;0 faces).
+    //
+    // Angle markers: whole angles purple at 30, the parts at 18 so the two
+    // parts at one vertex lie side by side inside the whole. Equal parts
+    // share a colour: BCA = BEA (= AEB = CDB) blue, ABE = CAB green,
+    // FCD = FED (= BED = BDE) orange. No angle is treated as right.
+    //
+    // Draggables (checked against the bundle): A and B, free — the given
+    // pentagon's side, standing from slide 1. C, D, E, F are derived and
+    // listed per slide; nothing to defer.
+    var GIVEN = ["ABCDE","pentT","A","B","C","D","E","AB","BC","CD","DE","EA"];
+    var WHOLE = ["angA","angB","angC","angD","angE"];
+    var HYP   = GIVEN.concat(["angA","angB","angC"]);
+    var JOIN  = HYP.concat(["AC","BE","F","FC","AF","BF","segFC","FE","ABC","ABE"]);
+    var BASE  = JOIN.concat(["angBCA","angBEA"]);
+    var OPP   = BASE.concat(["angABE","angCAB"]);
+    var FCD   = OPP.concat(["angFCD","angBED"]);
+    var AED   = FCD.concat(["angE"]);
+    var ALL   = AED.concat(["angD"]);
+    var NEXT  = GIVEN.concat(["BE"]);
+    var HYP2  = NEXT.concat(["angA","angC","angD"]);
+    var JOIN2 = HYP2.concat(["BD","ABE","BCD"]);
+    var BASE2 = JOIN2.concat(["angBEA","angCDB"]);
+    var ISO2  = BASE2.concat(["angBED","angBDE"]);
+    var AED2  = ISO2.concat(["angE"]);
+    var ALL2  = AED2.concat(["angB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -38,39 +76,273 @@ I say that the pentagon *ABCDE* is equiangular.
             "BE;line;connect;B,E",
             "F;point;intersection;AC,BE",
             "FC;line;connect;F,D",
-            "BD;line;connect;B,D"
+            "BD;line;connect;B,D",
+            // Faceless twin of the pentagon (see above).
+            "pentT;polygon;regularPolygon;A,B,5;0;0;0;0",
+            // Transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EA;line;connect;E,A;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            "BF;line;connect;B,F;0;0;0",
+            "segFC;line;connect;F,C;0;0;0",
+            "FE;line;connect;F,E;0;0;0",
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "ABE;polygon;triangle;A,B,E;0;0;0;0",
+            "BCD;polygon;triangle;B,C,D;0;0;0;0",
+            // Angle markers.
+            "angA;sector;angleMarker;A,B,E,30;0;0;7a4fa3;cdb8e6",
+            "angB;sector;angleMarker;B,A,C,30;0;0;7a4fa3;cdb8e6",
+            "angC;sector;angleMarker;C,B,D,30;0;0;7a4fa3;cdb8e6",
+            "angD;sector;angleMarker;D,C,E,30;0;0;7a4fa3;cdb8e6",
+            "angE;sector;angleMarker;E,D,A,30;0;0;7a4fa3;cdb8e6",
+            "angBCA;sector;angleMarker;C,B,A,18;0;0;3b6ea5;9ec5e8",
+            "angBEA;sector;angleMarker;E,B,A,18;0;0;3b6ea5;9ec5e8",
+            "angCDB;sector;angleMarker;D,C,B,18;0;0;3b6ea5;9ec5e8",
+            "angABE;sector;angleMarker;B,A,E,18;0;0;3f8e4f;a8dbb0",
+            "angCAB;sector;angleMarker;A,C,B,18;0;0;3f8e4f;a8dbb0",
+            "angFCD;sector;angleMarker;C,A,D,18;0;0;c06a1b;f3c590",
+            "angBED;sector;angleMarker;E,B,D,18;0;0;c06a1b;f3c590",
+            "angBDE;sector;angleMarker;D,B,E,18;0;0;c06a1b;f3c590"
         ],
+        aliases: { "CB": "BC", "BA": "AB", "AE": "EA", "ED": "DE", "DC": "CD",
+                   "EB": "BE", "CA": "AC", "DB": "BD", "FB": "BF", "EF": "FE" },
+        slides: [
+            { text: "“If three angles of an equilateral pentagon, taken either in order or not in order, are equal,”",
+              visible: GIVEN,
+              highlighted: ["pentT"],
+              justifications: [{ ref: "XIII.7" }] },
+            { text: "“then the pentagon is equiangular.”",
+              visible: GIVEN.concat(WHOLE),
+              highlighted: WHOLE,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angA", name: geomlib.A.Sector.sweep },
+                  { elem: "angB", name: geomlib.A.Sector.sweep },
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "angD", name: geomlib.A.Sector.sweep },
+                  { elem: "angE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "First, let three angles {A|angA}, {B|angB}, and {C|angC} taken in order in the equilateral pentagon {ABCDE|pentT} be equal to one another.",
+              visible: HYP,
+              highlighted: ["angA","angB","angC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angA", name: geomlib.A.Sector.sweep },
+                  { elem: "angB", name: geomlib.A.Sector.sweep },
+                  { elem: "angC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that the pentagon {ABCDE|pentT} is equiangular.",
+              visible: HYP,
+              highlighted: ["pentT"] },
+            { text: "Join {AC}, {BE}, and {FD|FC}.",
+              visible: JOIN,
+              highlighted: ["AC","BE","FC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F",  name: geomlib.A.Point.appear },
+                  { elem: "FC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Now, since the two sides {CB} and {BA} equal the two sides {BA} and {AE} respectively,",
+              visible: JOIN,
+              highlighted: ["BC","AB","EA"] },
+            { text: "and the angle {CBA|angB} equals the angle {BAE|angA},",
+              visible: JOIN,
+              highlighted: ["angB","angA"] },
+            { text: "therefore the base {AC} equals the base {BE}, the triangle {ABC} equals the triangle {ABE},",
+              visible: JOIN,
+              highlighted: ["AC","BE","ABC","ABE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ABC", name: geomlib.A.Polygon.outline },
+                  { elem: "ABE", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "two sides and the included angle", ref: "I.4" }] },
+            { text: "and the remaining angles equal the remaining angles, namely those opposite the equal sides,",
+              visible: JOIN,
+              highlighted: ["ABC","ABE"] },
+            { text: "that is, the angle {BCA|angBCA} equals the angle {BEA|angBEA},",
+              visible: BASE,
+              highlighted: ["angBCA","angBEA"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBCA", name: geomlib.A.Sector.sweep },
+                  { elem: "angBEA", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the angle {ABE|angABE} equals the angle {CAB|angCAB}.",
+              visible: OPP,
+              highlighted: ["angABE","angCAB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABE", name: geomlib.A.Sector.sweep },
+                  { elem: "angCAB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Hence the side {AF} also equals the side {BF}.",
+              visible: OPP,
+              highlighted: ["AF","BF"],
+              justifications: [{ claim: "angle FAB = angle FBA", ref: "I.6" }] },
+            { text: "But the whole {AC} equals the whole {BE},",
+              visible: OPP,
+              highlighted: ["AC","BE"] },
+            { text: "therefore the remainder {FC|segFC} equals the remainder {FE}.",
+              visible: OPP,
+              highlighted: ["segFC","FE"],
+              justifications: [{ ref: "C.N.3" }] },
+            { text: "But {CD} also equals {DE}.",
+              visible: OPP,
+              highlighted: ["CD","DE"] },
+            { text: "Therefore the two sides {FC|segFC} and {CD} equal the two sides {FE} and {ED},",
+              visible: OPP,
+              highlighted: ["segFC","CD","FE","DE"] },
+            { text: "and the base {FD|FC} is common to them,",
+              visible: OPP,
+              highlighted: ["FC"] },
+            { text: "therefore the angle {FCD|angFCD} equals the angle {FED|angBED}.",
+              visible: FCD,
+              highlighted: ["angFCD","angBED"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angFCD", name: geomlib.A.Sector.sweep },
+                  { elem: "angBED", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "three sides equal", ref: "I.8" }] },
+            { text: "But the angle {BCA|angBCA} was also proved equal to the angle {AEB|angBEA},",
+              visible: FCD,
+              highlighted: ["angBCA","angBEA"] },
+            { text: "therefore the whole angle {BCD|angC} equals the whole angle {AED|angE}.",
+              visible: AED,
+              highlighted: ["angC","angE"],
+              transition: { animations: [
+                  { elem: "angE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "And, by hypothesis, the angle {BCD|angC} equals the angles at {A|angA} and {B|angB},",
+              visible: AED,
+              highlighted: ["angC","angA","angB"] },
+            { text: "therefore the angle {AED|angE} also equals the angles at {A|angA} and {B|angB}.",
+              visible: AED,
+              highlighted: ["angE","angA","angB"] },
+            { text: "Similarly we can prove that the angle {CDE|angD} also equals the angles at {A|angA}, {B|angB}, and {C|angC}.",
+              visible: ALL,
+              highlighted: ["angD","angA","angB","angC"],
+              transition: { animations: [
+                  { elem: "angD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the pentagon {ABCDE|pentT} is equiangular.",
+              visible: ALL,
+              highlighted: ["pentT"].concat(WHOLE) },
+            { text: "Next, let the given equal angles not be angles taken in order,",
+              visible: NEXT,
+              highlighted: ["pentT"] },
+            { text: "but let the angles at the points {A|angA}, {C|angC}, and {D|angD} be equal.",
+              visible: HYP2,
+              highlighted: ["angA","angC","angD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angA", name: geomlib.A.Sector.sweep },
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "angD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that in this case too the pentagon {ABCDE|pentT} is equiangular.",
+              visible: HYP2,
+              highlighted: ["pentT"] },
+            { text: "Join {BD}.",
+              visible: JOIN2,
+              highlighted: ["BD"],
+              transition: { animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since the two sides {BA} and {AE} equal the two sides {BC} and {CD}, and they contain equal angles,",
+              visible: JOIN2,
+              highlighted: ["AB","EA","BC","CD","angA","angC"] },
+            { text: "therefore the base {BE} equals the base {BD}, the triangle {ABE} equals the triangle {BCD},",
+              visible: JOIN2,
+              highlighted: ["BE","BD","ABE","BCD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ABE", name: geomlib.A.Polygon.outline },
+                  { elem: "BCD", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "two sides and the included angle", ref: "I.4" }] },
+            { text: "and the remaining angles equal the remaining angles, namely those opposite the equal sides.",
+              visible: JOIN2,
+              highlighted: ["ABE","BCD"] },
+            { text: "Therefore the angle {AEB|angBEA} equals the angle {CDB|angCDB}.",
+              visible: BASE2,
+              highlighted: ["angBEA","angCDB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBEA", name: geomlib.A.Sector.sweep },
+                  { elem: "angCDB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But the angle {BED|angBED} also equals the angle {BDE|angBDE},",
+              visible: ISO2,
+              highlighted: ["angBED","angBDE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBED", name: geomlib.A.Sector.sweep },
+                  { elem: "angBDE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "since the side {BE} equals the side {BD}.",
+              visible: ISO2,
+              highlighted: ["BE","BD"],
+              justifications: [{ ref: "I.5" }] },
+            { text: "Therefore the whole angle {AED|angE} equals the whole angle {CDE|angD}.",
+              visible: AED2,
+              highlighted: ["angE","angD"],
+              transition: { animations: [
+                  { elem: "angE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "But the angle {CDE|angD} is, by hypothesis, equal to the angles at {A|angA} and {C|angC},",
+              visible: AED2,
+              highlighted: ["angD","angA","angC"] },
+            { text: "therefore the angle {AED|angE} also equals the angles at {A|angA} and {C|angC}.",
+              visible: AED2,
+              highlighted: ["angE","angA","angC"] },
+            { text: "For the same reason the angle {ABC|angB} also equals the angles at {A|angA}, {C|angC}, and {D|angD}.",
+              visible: ALL2,
+              highlighted: ["angB","angA","angC","angD"],
+              transition: { animations: [
+                  { elem: "angB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the pentagon {ABCDE|pentT} is equiangular.",
+              visible: ALL2,
+              highlighted: ["pentT"].concat(WHOLE) },
+            { text: "Therefore, if three angles of an equilateral pentagon, taken either in order or not in order, are equal,",
+              visible: GIVEN.concat(WHOLE),
+              highlighted: ["pentT"] },
+            { text: "then the pentagon is equiangular.",
+              visible: GIVEN.concat(WHOLE),
+              highlighted: WHOLE,
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.7") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/",
+        "C.N.3":    "/elements/books/bookI/commonnotions/cn3/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.5":      "/elements/books/bookI/propositions/propI5/",
+        "I.6":      "/elements/books/bookI/propositions/propI6/",
+        "I.8":      "/elements/books/bookI/propositions/propI8/"
     });
 </script>
 </figure>
 
-Join *AC, BE,* and *FD.*
+Join {AC}, {BE}, and {FD|FC}.
 
-Now, since the two sides *CB* and *BA* equal the two sides *BA* and *AE* respectively, and the angle *CBA* equals the angle *BAE,* therefore the base *AC* equals the base *BE,* the triangle *ABC* equals the triangle *ABE,* and the remaining angles equal the remaining angles, namely those opposite the equal sides, that is, the angle *BCA* equals the angle *BEA,* and the angle *ABE* equals the angle *CAB.* [!just I.4]
+Now, since the two sides {CB} and {BA} equal the two sides {BA} and {AE} respectively, and the angle {CBA|angB} equals the angle {BAE|angA}, therefore the base {AC} equals the base {BE}, the triangle {ABC} equals the triangle {ABE}, and the remaining angles equal the remaining angles, namely those opposite the equal sides, that is, the angle {BCA|angBCA} equals the angle {BEA|angBEA}, and the angle {ABE|angABE} equals the angle {CAB|angCAB}. [!just I.4]
 
-Hence the side *AF* also equals the side *BF.* [!just I.6]
+Hence the side {AF} also equals the side {BF}. [!just I.6]
 
-But the whole *AC* equals the whole *BE,* therefore the remainder *FC* equals the remainder *FE.* But *CD* also equals *DE.* Therefore the two sides *FC* and *CD* equal the two sides *FE* and *ED,* and the base *FD* is common to them, therefore the angle *FCD* equals the angle *FED.* [!just I.8]
+But the whole {AC} equals the whole {BE}, therefore the remainder {FC|segFC} equals the remainder {FE}. But {CD} also equals {DE}. Therefore the two sides {FC|segFC} and {CD} equal the two sides {FE} and {ED}, and the base {FD|FC} is common to them, therefore the angle {FCD|angFCD} equals the angle {FED|angBED}. [!just I.8]
 
-But the angle *BCA* was also proved equal to the angle *AEB,* therefore the whole angle *BCD* equals the whole angle *AED.* And, by hypothesis, the angle *BCD* equals the angles at *A* and *B,* therefore the angle *AED* also equals the angles at *A* and *B.* Similarly we can prove that the angle *CDE* also equals the angles at *A, B,* and *C.* Therefore the pentagon *ABCDE* is equiangular.
+But the angle {BCA|angBCA} was also proved equal to the angle {AEB|angBEA}, therefore the whole angle {BCD|angC} equals the whole angle {AED|angE}. And, by hypothesis, the angle {BCD|angC} equals the angles at {A|angA} and {B|angB}, therefore the angle {AED|angE} also equals the angles at {A|angA} and {B|angB}. Similarly we can prove that the angle {CDE|angD} also equals the angles at {A|angA}, {B|angB}, and {C|angC}. Therefore the pentagon {ABCDE|pentT} is equiangular.
 
 <hr width="40%">
 
-Next, let the given equal angles not be angles taken in order, but let the angles at the points *A, C,* and *D* be equal.
+Next, let the given equal angles not be angles taken in order, but let the angles at the points {A|angA}, {C|angC}, and {D|angD} be equal.
 
-I say that in this case too the pentagon *ABCDE* is equiangular.
+I say that in this case too the pentagon {ABCDE|pentT} is equiangular.
 
-Join *BD.*
+Join {BD}.
 
-Then, since the two sides *BA* and *AE* equal the two sides *BC* and *CD,* and they contain equal angles, therefore the base *BE* equals the base *BD,* the triangle *ABE* equals the triangle *BCD,* and the remaining angles equal the remaining angles, namely those opposite the equal sides. Therefore the angle *AEB* equals the angle *CDB.* [!just I.4]
+Then, since the two sides {BA} and {AE} equal the two sides {BC} and {CD}, and they contain equal angles, therefore the base {BE} equals the base {BD}, the triangle {ABE} equals the triangle {BCD}, and the remaining angles equal the remaining angles, namely those opposite the equal sides. Therefore the angle {AEB|angBEA} equals the angle {CDB|angCDB}. [!just I.4]
 
-But the angle *BED* also equals the angle *BDE,* since the side *BE* equals the side *BD.* [!just I.5]
+But the angle {BED|angBED} also equals the angle {BDE|angBDE}, since the side {BE} equals the side {BD}. [!just I.5]
 
-Therefore the whole angle *AED* equals the whole angle *CDE.*
+Therefore the whole angle {AED|angE} equals the whole angle {CDE|angD}.
 
-But the angle *CDE* is, by hypothesis, equal to the angles at *A* and *C,* therefore the angle *AED* also equals the angles at *A* and *C.*
+But the angle {CDE|angD} is, by hypothesis, equal to the angles at {A|angA} and {C|angC}, therefore the angle {AED|angE} also equals the angles at {A|angA} and {C|angC}.
 
-For the same reason the angle *ABC* also equals the angles at *A, C,* and *D.* Therefore the pentagon *ABCDE* is equiangular.
+For the same reason the angle {ABC|angB} also equals the angles at {A|angA}, {C|angC}, and {D|angD}. Therefore the pentagon {ABCDE|pentT} is equiangular.
 
 Therefore, *if three angles of an equilateral pentagon, taken either in order or not in order, are equal, then the pentagon is equiangular.*
 

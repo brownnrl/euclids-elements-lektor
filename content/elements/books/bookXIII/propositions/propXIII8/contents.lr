@@ -15,14 +15,43 @@ statement: If in an equilateral and equiangular pentagon straight lines subtend 
 ----
 proof:
 
-In the equilateral and equiangular pentagon *ABCDE* let the straight lines *AC* and *BE,* cutting one another at the point *H,* subtend two angles taken in order, the angles at *A* and *B.*
+In the equilateral and equiangular pentagon {ABCDE|pentT} let the straight lines {AC} and {BE}, cutting one another at the point {H}, subtend two angles taken in order, the angles at {A|angBAE} and {B|angABC}.
 
-I say that each of them has been cut in extreme and mean ratio at the point *H,* and their greater segments equal the side of the pentagon.
+I say that each of them has been cut in extreme and mean ratio at the point {H}, and their greater segments equal the side of the pentagon.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="240" tabindex="0"></canvas>
 <noscript><img alt="XIII.8 diagram" src="propXIII8.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's pentagon is declared BAEDC; the prose calls it ABCDE and
+    // reaches pentT, a faceless twin, since a highlighted random face is
+    // raised over the markers (#140). His circle circ (already faceless)
+    // is held back until "Circumscribe" and drawn with the compass; the
+    // prose reaches it as {ABCDE|circ}.
+    //
+    // Transparent targets: the five sides, the segments HE, HB, AH, CH of
+    // the two diagonals, the triangles ABE, ABC, ABH (explicit ;0 faces),
+    // and the circumferences EDC and CB as arcs. CB has no lettered point
+    // between its ends, so Xcb (uncoloured) is cut off on the ray from the
+    // centre Oc through the midpoint of BC at the radius.
+    //
+    // Angle markers: the wholes at A and B at 30, the rest at 18 (the two
+    // parts at A, and the two angles at H, lie side by side). Colour by
+    // size, since the proof shows them equal: BAC = ABE = AEB blue,
+    // AHE = EAC green, BAE = ABC = AHB purple. No angle is right.
+    //
+    // Draggables (checked against the bundle): A and B, free — the given
+    // pentagon's side, standing from slide 1. C, D, E, H are derived and
+    // listed per slide; nothing to defer.
+    var GIVEN = ["BAEDC","pentT","A","B","C","D","E","AB","BC","CD","DE","EA",
+                 "AC","BE","H","HE","HB","AH","CH"];
+    var ANG   = GIVEN.concat(["angBAE","angABC"]);
+    var CIRC  = ANG.concat(["circ","ABE","ABC","ABH"]);
+    var BAC   = CIRC.concat(["angBAC","angABE"]);
+    var AHE   = BAC.concat(["angAHE"]);
+    var EAC   = AHE.concat(["angEAC","arcEDC","arcCB"]);
+    var AEB   = EAC.concat(["angAEB"]);
+    var AHB   = AEB.concat(["angAHB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,37 +66,226 @@ I say that each of them has been cut in extreme and mean ratio at the point *H,*
             "circ;circle;circumcircle;A,B,D;0;0;black;0",
             "AC;line;connect;A,C",
             "BE;line;connect;B,E",
-            "H;point;intersection;AC,BE"
+            "H;point;intersection;AC,BE",
+            // Faceless twin of the pentagon (see above).
+            "pentT;polygon;regularPolygon;B,A,5;0;0;0;0",
+            // Transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EA;line;connect;E,A;0;0;0",
+            "HE;line;connect;H,E;0;0;0",
+            "HB;line;connect;H,B;0;0;0",
+            "AH;line;connect;A,H;0;0;0",
+            "CH;line;connect;C,H;0;0;0",
+            "ABE;polygon;triangle;A,B,E;0;0;0;0",
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "ABH;polygon;triangle;A,B,H;0;0;0;0",
+            "Oc;point;center;circ;0;0",
+            "Mbc;point;midpoint;B,C;0;0",
+            "Xcb;point;cutoff;Oc,Mbc,Oc,A;0;0",
+            "arcEDC;sector;arc;E,D,C;0;0;0;0",
+            "arcCB;sector;arc;C,Xcb,B;0;0;0;0",
+            // Angle markers.
+            "angBAE;sector;angleMarker;A,B,E,30;0;0;7a4fa3;cdb8e6",
+            "angABC;sector;angleMarker;B,A,C,30;0;0;7a4fa3;cdb8e6",
+            "angAHB;sector;angleMarker;H,A,B,18;0;0;7a4fa3;cdb8e6",
+            "angBAC;sector;angleMarker;A,B,C,18;0;0;3b6ea5;9ec5e8",
+            "angABE;sector;angleMarker;B,A,E,18;0;0;3b6ea5;9ec5e8",
+            "angAEB;sector;angleMarker;E,A,B,18;0;0;3b6ea5;9ec5e8",
+            "angEAC;sector;angleMarker;A,E,C,18;0;0;3f8e4f;a8dbb0",
+            "angAHE;sector;angleMarker;H,A,E,18;0;0;3f8e4f;a8dbb0"
         ],
+        aliases: { "BA": "AB", "CB": "BC", "AE": "EA", "EB": "BE", "CA": "AC",
+                   "EH": "HE", "BH": "HB", "HA": "AH", "HC": "CH" },
+        slides: [
+            { text: "“If in an equilateral and equiangular pentagon straight lines subtend two angles are taken in order,”",
+              visible: GIVEN,
+              highlighted: ["pentT","AC","BE"],
+              justifications: [{ ref: "XIII.8" }] },
+            { text: "“then they cut one another in extreme and mean ratio,”",
+              visible: GIVEN,
+              highlighted: ["AC","BE","H"] },
+            { text: "“and their greater segments equal the side of the pentagon.”",
+              visible: GIVEN,
+              highlighted: ["HE","CH","AB"] },
+            { text: "In the equilateral and equiangular pentagon {ABCDE|pentT} let the straight lines {AC} and {BE},",
+              visible: GIVEN,
+              highlighted: ["pentT","AC","BE"] },
+            { text: "cutting one another at the point {H}, subtend two angles taken in order, the angles at {A|angBAE} and {B|angABC}.",
+              visible: ANG,
+              highlighted: ["H","angBAE","angABC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAE", name: geomlib.A.Sector.sweep },
+                  { elem: "angABC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that each of them has been cut in extreme and mean ratio at the point {H},",
+              visible: ANG,
+              highlighted: ["AC","BE","H"] },
+            { text: "and their greater segments equal the side of the pentagon.",
+              visible: ANG,
+              highlighted: ["HE","CH","AB"] },
+            { text: "Circumscribe the circle {ABCDE|circ} about the pentagon {ABCDE|pentT}.",
+              visible: CIRC,
+              highlighted: ["circ"],
+              transition: { animations: [
+                  { elem: "circ", name: geomlib.A.Circle.compass } ] },
+              justifications: [{ ref: "IV.14" }] },
+            { text: "Then, since the two straight lines {EA} and {AB} equal the two lines {AB} and {BC},",
+              visible: CIRC,
+              highlighted: ["EA","AB","BC"] },
+            { text: "and they contain equal angles,",
+              visible: CIRC,
+              highlighted: ["angBAE","angABC"] },
+            { text: "therefore the base {BE} equals the base {AC}, the triangle {ABE} equals the triangle {ABC},",
+              visible: CIRC,
+              highlighted: ["BE","AC","ABE","ABC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ABE", name: geomlib.A.Polygon.outline },
+                  { elem: "ABC", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "two sides and the included angle", ref: "I.4" }] },
+            { text: "and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides.",
+              visible: CIRC,
+              highlighted: ["ABE","ABC"] },
+            { text: "Therefore the angle {BAC|angBAC} equals the angle {ABE|angABE}.",
+              visible: BAC,
+              highlighted: ["angBAC","angABE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "angABE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the angle {AHE|angAHE} is double the angle {BAH|angBAC}.",
+              visible: AHE,
+              highlighted: ["angAHE","angBAC"],
+              transition: { animations: [
+                  { elem: "angAHE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "exterior angle AHE = angle BAH + angle ABH", ref: "I.32" }] },
+            { text: "But the angle {EAC|angEAC} is also double the angle {BAC|angBAC},",
+              visible: EAC,
+              highlighted: ["angEAC","angBAC"],
+              transition: { animations: [
+                  { elem: "angEAC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "for the circumference {EDC|arcEDC} is also double the circumference {CB|arcCB}.",
+              visible: EAC,
+              highlighted: ["arcEDC","arcCB"],
+              justifications: [
+                  { claim: "equal sides cut off equal circumferences", ref: "III.28" },
+                  { claim: "angles at the circumference as the circumferences", ref: "VI.33" } ] },
+            { text: "Therefore the angle {HAE|angEAC} equals the angle {AHE|angAHE}.",
+              visible: EAC,
+              highlighted: ["angEAC","angAHE"] },
+            { text: "Hence the straight line {HE} also equals {EA}, that is, {AB}.",
+              visible: EAC,
+              highlighted: ["HE","EA","AB"],
+              justifications: [{ claim: "sides opposite equal angles", ref: "I.6" }] },
+            { text: "And, since the straight line {BA} equals {AE}, therefore the angle {ABE|angABE} also equals the angle {AEB|angAEB}.",
+              visible: AEB,
+              highlighted: ["AB","EA","angABE","angAEB"],
+              transition: { animations: [
+                  { elem: "angAEB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.5" }] },
+            { text: "But the angle {ABE|angABE} was proved equal to the angle {BAH|angBAC},",
+              visible: AEB,
+              highlighted: ["angABE","angBAC"] },
+            { text: "therefore the angle {BEA|angAEB} also equals the angle {BAH|angBAC}.",
+              visible: AEB,
+              highlighted: ["angAEB","angBAC"] },
+            { text: "And the angle {ABE|angABE} is common to the two triangles {ABE} and {ABH},",
+              visible: AEB,
+              highlighted: ["angABE","ABE","ABH"],
+              transition: { animations: [
+                  { elem: "ABH", name: geomlib.A.Polygon.outline } ] } },
+            { text: "therefore the remaining angle {BAE|angBAE} equals the remaining angle {AHB|angAHB}.",
+              visible: AHB,
+              highlighted: ["angBAE","angAHB"],
+              transition: { animations: [
+                  { elem: "angAHB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the triangle {ABE} is equiangular with the triangle {ABH}.",
+              visible: AHB,
+              highlighted: ["ABE","ABH"],
+              justifications: [{ ref: "I.32" }] },
+            { text: "Therefore, proportionally {EB} is to {BA} as {AB} is to {BH}.",
+              visible: AHB,
+              highlighted: ["BE","AB","HB"],
+              justifications: [{ claim: "sides about the equal angles proportional", ref: "VI.4" }] },
+            { text: "But {BA} equals {EH}, therefore {BE} is to {EH} as {EH} is to {HB}.",
+              visible: AHB,
+              highlighted: ["BE","HE","HB"] },
+            { text: "And {BE} is greater than {EH}, therefore {EH} is also greater than {HB}.",
+              visible: AHB,
+              highlighted: ["BE","HE","HB"],
+              justifications: [{ ref: "V.14" }] },
+            { text: "Therefore {BE} has been cut in extreme and mean ratio at {H},",
+              visible: AHB,
+              highlighted: ["BE","H"],
+              justifications: [{ ref: "VI.Def.3" }] },
+            { text: "and the greater segment {HE} equals the side of the pentagon.",
+              visible: AHB,
+              highlighted: ["HE","AB"] },
+            { text: "Similarly we can prove that {AC} has also been cut in extreme and mean ratio at {H},",
+              visible: AHB,
+              highlighted: ["AC","H"] },
+            { text: "and its greater segment {CH} equals the side of the pentagon.",
+              visible: AHB,
+              highlighted: ["CH","BC"] },
+            { text: "Therefore, if in an equilateral and equiangular pentagon straight lines subtend two angles are taken in order,",
+              visible: CIRC,
+              highlighted: ["pentT","AC","BE"] },
+            { text: "then they cut one another in extreme and mean ratio,",
+              visible: CIRC,
+              highlighted: ["AC","BE","H"] },
+            { text: "and their greater segments equal the side of the pentagon.",
+              visible: CIRC,
+              highlighted: ["HE","CH","AB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.8") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.5":      "/elements/books/bookI/propositions/propI5/",
+        "I.6":      "/elements/books/bookI/propositions/propI6/",
+        "I.32":     "/elements/books/bookI/propositions/propI32/",
+        "III.28":   "/elements/books/bookIII/propositions/propIII28/",
+        "IV.14":    "/elements/books/bookIV/propositions/propIV14/",
+        "V.14":     "/elements/books/bookV/propositions/propV14/",
+        "VI.Def.3": "/elements/books/bookVI/definitions/defVI3/",
+        "VI.4":     "/elements/books/bookVI/propositions/propVI4/",
+        "VI.33":    "/elements/books/bookVI/propositions/propVI33/"
     });
 </script>
 </figure>
 
-Circumscribe the circle *ABCDE* about the pentagon *ABCDE.* [!just IV.14]
+Circumscribe the circle {ABCDE|circ} about the pentagon {ABCDE|pentT}. [!just IV.14]
 
-Then, since the two straight lines *EA* and *AB* equal the two lines *AB* and *BC,* and they contain equal angles, therefore the base *BE* equals the base *AC,* the triangle *ABE* equals the triangle *ABC,* and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides. [!just I.4]
+Then, since the two straight lines {EA} and {AB} equal the two lines {AB} and {BC}, and they contain equal angles, therefore the base {BE} equals the base {AC}, the triangle {ABE} equals the triangle {ABC}, and the remaining angles equal the remaining angles respectively, namely those opposite the equal sides. [!just I.4]
 
-Therefore the angle *BAC* equals the angle *ABE.* Therefore the angle *AHE* is double the angle *BAH.* [!just I.32]
+Therefore the angle {BAC|angBAC} equals the angle {ABE|angABE}. Therefore the angle {AHE|angAHE} is double the angle {BAH|angBAC}. [!just I.32]
 
-But the angle *EAC* is also double the angle *BAC,* for the circumference *EDC* is also double the circumference *CB.* [!just III.28, VI.33]
+But the angle {EAC|angEAC} is also double the angle {BAC|angBAC}, for the circumference {EDC|arcEDC} is also double the circumference {CB|arcCB}. [!just III.28, VI.33]
 
-Therefore the angle *HAE* equals the angle *AHE.* Hence the straight line *HE* also equals *EA,* that is, *AB.* [!just I.6]
+Therefore the angle {HAE|angEAC} equals the angle {AHE|angAHE}. Hence the straight line {HE} also equals {EA}, that is, {AB}. [!just I.6]
 
-And, since the straight line *BA* equals *AE,* therefore the angle *ABE* also equals the angle *AEB.* [!just I.5]
+And, since the straight line {BA} equals {AE}, therefore the angle {ABE|angABE} also equals the angle {AEB|angAEB}. [!just I.5]
 
-But the angle *ABE* was proved equal to the angle *BAH,* therefore the angle *BEA* also equals the angle *BAH.*
+But the angle {ABE|angABE} was proved equal to the angle {BAH|angBAC}, therefore the angle {BEA|angAEB} also equals the angle {BAH|angBAC}.
 
-And the angle *ABE* is common to the two triangles *ABE* and *ABH,* therefore the remaining angle *BAE* equals the remaining angle *AHB.* Therefore the triangle *ABE* is equiangular with the triangle *ABH.* [!just I.32]
+And the angle {ABE|angABE} is common to the two triangles {ABE} and {ABH}, therefore the remaining angle {BAE|angBAE} equals the remaining angle {AHB|angAHB}. Therefore the triangle {ABE} is equiangular with the triangle {ABH}. [!just I.32]
 
-Therefore, proportionally *EB* is to *BA* as *AB* is to *BH.* [!just VI.4]
+Therefore, proportionally {EB} is to {BA} as {AB} is to {BH}. [!just VI.4]
 
-But *BA* equals *EH,* therefore *BE* is to *EH* as *EH* is to *HB.*
+But {BA} equals {EH}, therefore {BE} is to {EH} as {EH} is to {HB}.
 
-And *BE* is greater than *EH,* therefore *EH* is also greater than *HB.* [!just V.14]
+And {BE} is greater than {EH}, therefore {EH} is also greater than {HB}. [!just V.14]
 
-Therefore *BE* has been cut in extreme and mean ratio at *H,* and the greater segment *HE* equals the side of the pentagon.
+Therefore {BE} has been cut in extreme and mean ratio at {H}, and the greater segment {HE} equals the side of the pentagon.
 
-Similarly we can prove that *AC* has also been cut in extreme and mean ratio at *H,* and its greater segment *CH* equals the side of the pentagon.
+Similarly we can prove that {AC} has also been cut in extreme and mean ratio at {H}, and its greater segment {CH} equals the side of the pentagon.
 
 Therefore, *if in an equilateral and equiangular pentagon straight lines subtend two angles are taken in order, then they cut one another in extreme and mean ratio, and their greater segments equal the side of the pentagon.*
 
