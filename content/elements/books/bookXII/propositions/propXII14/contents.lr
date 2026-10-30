@@ -15,14 +15,42 @@ statement: Cones and cylinders on equal bases are to one another as their height
 ----
 proof:
 
-Let *EB* and *FD* be cylinders on equal bases, the circles *AB* and *CD.*
+Let {EB} and {FD} be cylinders on equal bases, the circles {AB} and {CD}.
 
-I say that the cylinder *EB* is to the cylinder *FD* as the axis *GH* is to the axis *KL.*
+I say that the cylinder {EB} is to the cylinder {FD} as the axis {GH} is to the axis {KL}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="310" height="300" tabindex="0"></canvas>
 <noscript><img alt="XII.14 diagram" src="propXII14.gif"/></noscript>
 <script type="text/javascript">
+    // Cylinders EB, FD on equal bases AB, CD. The cylinder CM on the base
+    // CD with axis LN equal to GH equals EB (XII.11); FM cut by the plane
+    // CD gives CM to FD as LN to KL (XII.13); substitute, and the cones,
+    // each a third of its cylinder (XII.10), follow.
+    //
+    // Joyce's figure draws the cylinders EB and FD with the cones ABG and
+    // CDK in them, and the cylinder CM below FD (Ncirc, LN, DM, CC'). All
+    // kept; the cylinder CM, N and M are held back until the proof
+    // constructs them. Everything added is transparent: faceless twins of
+    // the four drawn base circles (AB, cG, CD, cK — the originals have
+    // opaque faces, raised over the figure when lit, #140); the cylinders'
+    // axial sections EB, FD, CM, FM, standing for the cylinders (lit with
+    // their two base circles), with the hidden corners Dk, Cn of FM; and
+    // the cones' axial triangles coneABG, coneCDK, faceless twins of ABG,
+    // CDK. Draggables (checked against the bundle): G, H, E, L, K, givens.
+    // A, B, C, D, F, N, M are derived and listed per slide.
+    var GIVEN = ["Gcirc","EAB","Hcirc","ABG","AE","AG","GH","GB","BB'",
+                 "Kcirc","FCD","Lcirc","CDK","FC","CK","KL","KD","DD'",
+                 "A","B","C","D","E","F","G","H","K","L",
+                 "AB","cG","CD","cK","EB","FD","coneABG","coneCDK"];
+    var PROD  = GIVEN.concat(["LN","N"]);
+    var CYL   = PROD.concat(["Ncirc","CC'","DM","M","CM","FM"]);
+    var CYL_EB = ["cG","AB","EB"];
+    var CYL_FD = ["cK","CD","FD"];
+    var CYL_CM = ["CD","Ncirc","CM"];
+    var CYL_FM = ["cK","Ncirc","FM"];
+    var CONE_ABG = ["AB","coneABG"];
+    var CONE_CDK = ["CD","coneCDK"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -69,23 +97,101 @@ I say that the cylinder *EB* is to the cylinder *FD* as the axis *GH* is to the 
             "Ncirc;circle;radius;N,M,Hplane;0;0;black;0",
             "LN;line;connect;L,N",
             "DM;line;connect;D,M",
-            "CC';line;extend;F,C,L,N"
+            "CC';line;extend;F,C,L,N",
+            // Faceless twins of the base circles.
+            "AB;circle;radius;H,A,Hplane;0;0;0;0",
+            "cG;circle;radius;G,E,Gplane;0;0;0;0",
+            "CD;circle;radius;L,C,Gplane;0;0;0;0",
+            "cK;circle;radius;K,F,Kplane;0;0;0;0",
+            // The cylinders' axial sections and the cones' axial triangles.
+            "EB;polygon;parallelogram;E,A,B;0;0;0;0",
+            "FD;polygon;parallelogram;F,C,D;0;0;0;0",
+            "CM;polygon;parallelogram;C,D,M;0;0;0;0",
+            "Dk;point;parallelogram;F,C,D;0;0",
+            "Cn;point;parallelogram;C,D,M;0;0",
+            "FM;polygon;quadrilateral;F,Cn,M,Dk;0;0;0;0",
+            "coneABG;polygon;triangle;A,B,G;0;0;0;0",
+            "coneCDK;polygon;triangle;C,D,K;0;0;0;0"
         ],
+        slides: [
+            { text: "“Cones and cylinders on equal bases are to one another as their heights.”",
+              visible: GIVEN,
+              highlighted: CYL_EB.concat(CYL_FD).concat(["coneABG","coneCDK","GH","KL"]),
+              justifications: [{ ref: "XII.14" }] },
+            { text: "Let {EB} and {FD} be cylinders on equal bases, the circles {AB} and {CD}.",
+              highlighted: CYL_EB.concat(CYL_FD) },
+            { text: "I say that the cylinder {EB} is to the cylinder {FD} as the axis {GH} is to the axis {KL}.",
+              highlighted: CYL_EB.concat(CYL_FD).concat(["GH","KL"]) },
+            { text: "Produce the axis {KL} to the point {N}, make {LN} equal to the axis {GH},",
+              visible: PROD,
+              highlighted: ["LN","GH","N"],
+              transition: { animations: [
+                  { elem: "LN", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "N", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "LN equal to GH", ref: "I.3" }] },
+            { text: "and construct the cylinder {CM} about {LN} as the axis.",
+              visible: CYL,
+              highlighted: CYL_CM.concat(["LN"]),
+              transition: { animations: [
+                  { elem: "Ncirc", name: geomlib.A.Circle.compass },
+                  { elem: "CC'", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "DM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "M", name: geomlib.A.Point.appear } ] } },
+            { text: "Then, since the cylinders {EB} and {CM} are of the same height,",
+              highlighted: CYL_EB.concat(CYL_CM).concat(["GH","LN"]) },
+            { text: "therefore they are to one another as their bases.",
+              highlighted: CYL_EB.concat(CYL_CM),
+              justifications: [{ claim: "same height: as their bases", ref: "XII.11" }] },
+            { text: "But the bases equal one another, therefore the cylinders {EB} and {CM} are also equal.",
+              highlighted: CYL_EB.concat(CYL_CM) },
+            { text: "And, since the cylinder {FM} has been cut by the plane {CD} parallel to its opposite planes,",
+              highlighted: CYL_FM.concat(["CD"]) },
+            { text: "therefore the cylinder {CM} is to the cylinder {FD} as the axis {LN} is to the axis {KL}.",
+              highlighted: CYL_CM.concat(CYL_FD).concat(["LN","KL"]),
+              justifications: [{ claim: "cut parallel: as the axes", ref: "XII.13" }] },
+            { text: "But the cylinder {CM} equals the cylinder {EB}, and the axis {LN} equals the axis {GH},",
+              highlighted: CYL_CM.concat(CYL_EB).concat(["LN","GH"]) },
+            { text: "therefore the cylinder {EB} is to the cylinder {FD} as the axis {GH} is to the axis {KL}.",
+              highlighted: CYL_EB.concat(CYL_FD).concat(["GH","KL"]) },
+            { text: "But the cylinder {EB} is to the cylinder {FD} as the cone {ABG|coneABG} is to the cone {CDK|coneCDK}.",
+              highlighted: CYL_EB.concat(CYL_FD).concat(["coneABG","coneCDK"]),
+              justifications: [{ claim: "a cone is a third of its cylinder", ref: "XII.10" }] },
+            { text: "Therefore the axis {GH} is to the axis {KL} as the cone {ABG|coneABG} is to the cone {CDK|coneCDK}",
+              highlighted: CONE_ABG.concat(CONE_CDK).concat(["GH","KL"]) },
+            { text: "and as the cylinder {EB} is to the cylinder {FD}.",
+              highlighted: CYL_EB.concat(CYL_FD) },
+            { text: "Therefore, cones and cylinders on equal bases are to one another as their heights.",
+              highlighted: CYL_EB.concat(CYL_FD).concat(["coneABG","coneCDK","GH","KL"]),
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.14") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "XII.10":    "/elements/books/bookXII/propositions/propXII10/",
+        "XII.11":    "/elements/books/bookXII/propositions/propXII11/",
+        "XII.13":    "/elements/books/bookXII/propositions/propXII13/"
     });
 </script>
 </figure>
 
-Produce the axis *KL* to the point *N,* make *LN* equal to the axis *GH,* and construct the cylinder *CM* about *LN* as the axis. [!just I.3]
+Produce the axis {KL} to the point {N}, make {LN} equal to the axis {GH}, and construct the cylinder {CM} about {LN} as the axis. [!just I.3]
 
-Then, since the cylinders *EB* and *CM* are of the same height, therefore they are to one another as their bases. [!just XII.11]
+Then, since the cylinders {EB} and {CM} are of the same height, therefore they are to one another as their bases. [!just XII.11]
 
-But the bases equal one another, therefore the cylinders *EB* and *CM* are also equal.
+But the bases equal one another, therefore the cylinders {EB} and {CM} are also equal.
 
-And, since the cylinder *FM* has been cut by the plane *CD* parallel to its opposite planes, therefore the cylinder *CM* is to the cylinder *FD* as the axis *LN* is to the axis *KL.* [!just XII.13]
+And, since the cylinder {FM} has been cut by the plane {CD} parallel to its opposite planes, therefore the cylinder {CM} is to the cylinder {FD} as the axis {LN} is to the axis {KL}. [!just XII.13]
 
-But the cylinder *CM* equals the cylinder *EB,* and the axis *LN* equals the axis *GH,* therefore the cylinder *EB* is to the cylinder *FD* as the axis *GH* is to the axis *KL.*
+But the cylinder {CM} equals the cylinder {EB}, and the axis {LN} equals the axis {GH}, therefore the cylinder {EB} is to the cylinder {FD} as the axis {GH} is to the axis {KL}.
 
-But the cylinder *EB* is to the cylinder *FD* as the cone *ABG* is to the cone *CDK.* Therefore the axis *GH* is to the axis *KL* as the cone *ABG* is to the cone *CDK* and as the cylinder *EB* is to the cylinder *FD.* [!just XII.10]
+But the cylinder {EB} is to the cylinder {FD} as the cone {ABG|coneABG} is to the cone {CDK|coneCDK}. Therefore the axis {GH} is to the axis {KL} as the cone {ABG|coneABG} is to the cone {CDK|coneCDK} and as the cylinder {EB} is to the cylinder {FD}. [!just XII.10]
 
 Therefore, *cones and cylinders on equal bases are to one another as their heights.*
 

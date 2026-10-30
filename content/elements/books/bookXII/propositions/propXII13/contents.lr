@@ -15,16 +15,55 @@ statement: If a cylinder is cut by a plane parallel to its opposite planes, then
 ----
 proof:
 
-Let the cylinder *AD* be cut by the plane *GH* parallel to the opposite planes *AB* and *CD.* Let the plane *GH* meet the axis at the point *K.*
+Let the cylinder {AD} be cut by the plane {GH} parallel to the opposite planes {AB} and {CD}. Let the plane {GH} meet the axis at the point {K}.
 
-I say that the cylinder *BG* is to the cylinder *GD* as the axis *EK* is to the axis *KF.*
+I say that the cylinder {BG} is to the cylinder {GD} as the axis {EK} is to the axis {KF}.
 
-Produce the axis *EF* in both directions to the points *L* and *M.* Set out any number whatever of axes *EN* and *NL* equal to the axis *EK,* and any number whatever *FO* and *OM* equal to *FK.* Construct the cylinder *PW* on the axis *LM* with the circles *PQ* and *VW* as bases.
+Produce the axis {EF} in both directions to the points {L} and {M}. Set out any number whatever of axes {EN} and {NL} equal to the axis {EK}, and any number whatever {FO} and {OM} equal to {FK|KF}. Construct the cylinder {PW} on the axis {LM} with the circles {PQ|Lcirc} and {VW|Mcirc} as bases.
 
 <center>
 <canvas id="canvas_0" width="540" height="210" tabindex="0"></canvas>
 <noscript><img alt="XII.13 diagram" src="propXII13.gif"/></noscript>
 <script type="text/javascript">
+    // Equimultiples of the axis EK and the cylinder BG, of the axis KF and
+    // the cylinder GD: LK is as many times EK as QG is of BG, KM as many
+    // times KF as WG is of GD (XII.11, the bases being equal), and the
+    // comparison of LK with KM matches that of QG with GW, so V.Def.5.
+    //
+    // Joyce's figure draws the cylinder AD cut by GH (its circles and
+    // faces Ecirc, ABHG, Kcirc, GHDC, Fcirc), the axis LM, the circles at
+    // L, N, O, M, and the lines PV, QW. All kept. The construction (LM,
+    // the circles at L, N, O, M, PV, QW, and the points on them) is held
+    // back until the proof reaches it. Solid slide twins, hidden at rest
+    // (initiallyHidden): the axis EF and its productions EL, FM, which
+    // stroke outward from E and F; and the edges AC, BD of the cylinder AD
+    // before PV, QW are drawn. Everything else added is transparent:
+    // faceless twins of the circles AB, GH, CD (the originals have opaque
+    // faces, raised over the figure when lit, #140); the cylinders' axial
+    // sections AD, BG, GD, PW, QR, RB, QG, WG, standing for the cylinders
+    // (lit with their two base circles); and the axes EK, KF, EN, NL, FO,
+    // OM, KL, KM. Draggables (checked against the bundle): E, K, F, A,
+    // givens. L, M, N, O and B..W are derived and listed per slide.
+    var GIVEN = ["Ecirc","ABHG","Kcirc","GHDC","Fcirc","AB","GH","CD",
+                 "AD","BG","GD","A","B","C","D","E","F","G","H","K",
+                 "EF","AC","BD","EK","KF"];
+    var PROD  = GIVEN.concat(["EL","FM","L","M"]);
+    var SETN  = PROD.concat(["N","EN","NL"]);
+    var SETO  = SETN.concat(["O","FO","OM"]);
+    var CPW   = SETO.concat(["LM","Lcirc","Mcirc","PV","QW","P","Q","V","W","PW"]);
+    var CRT   = CPW.concat(["Ncirc","Ocirc","R","S","T","U","QR","RB","QG","WG",
+                 "KL","KM"]);
+    var CYL_AD = ["AB","CD","AD"];
+    var CYL_BG = ["AB","GH","BG"];
+    var CYL_GD = ["GH","CD","GD"];
+    var CYL_PW = ["Lcirc","Mcirc","PW"];
+    var CYL_QR = ["Lcirc","Ncirc","QR"];
+    var CYL_RB = ["Ncirc","AB","RB"];
+    var CYL_QG = ["Lcirc","GH","QG"];
+    var CYL_WG = ["GH","Mcirc","WG"];
+    var BASES3 = ["Lcirc","Ncirc","AB"];
+    var REST  = CRT.filter(function (n) {
+        return ["EF","EL","FM","AC","BD"].indexOf(n) < 0; });
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -73,23 +112,160 @@ Produce the axis *EF* in both directions to the points *L* and *M.* Set out any 
             "V;point;parallelogram;M,E,A",
             "W;point;parallelogram;M,E,B",
             "PV;line;connect;P,V",
-            "QW;line;connect;Q,W"
+            "QW;line;connect;Q,W",
+            // Solid slide twins, hidden at rest: the axis EF, its
+            // productions, and the edges of the cylinder AD.
+            "EF;line;connect;E,F",
+            "EL;line;connect;E,L",
+            "FM;line;connect;F,M",
+            "AC;line;connect;A,C",
+            "BD;line;connect;B,D",
+            // Faceless twins of the circles AB, GH, CD.
+            "AB;circle;radius;E,A,Eplane;0;0;0;0",
+            "GH;circle;radius;K,E,A,Kplane;0;0;0;0",
+            "CD;circle;radius;F,E,A,Fplane;0;0;0;0",
+            // The cylinders' axial sections.
+            "AD;polygon;quadrilateral;A,B,D,C;0;0;0;0",
+            "BG;polygon;quadrilateral;A,B,H,G;0;0;0;0",
+            "GD;polygon;quadrilateral;G,H,D,C;0;0;0;0",
+            "PW;polygon;quadrilateral;P,Q,W,V;0;0;0;0",
+            "QR;polygon;quadrilateral;P,Q,S,R;0;0;0;0",
+            "RB;polygon;quadrilateral;R,S,B,A;0;0;0;0",
+            "QG;polygon;quadrilateral;P,Q,H,G;0;0;0;0",
+            "WG;polygon;quadrilateral;G,H,W,V;0;0;0;0",
+            // The axes.
+            "EK;line;connect;E,K;0;0;0",
+            "KF;line;connect;K,F;0;0;0",
+            "EN;line;connect;E,N;0;0;0",
+            "NL;line;connect;N,L;0;0;0",
+            "FO;line;connect;F,O;0;0;0",
+            "OM;line;connect;O,M;0;0;0",
+            "KL;line;connect;K,L;0;0;0",
+            "KM;line;connect;K,M;0;0;0"
         ],
+        initiallyHidden: ["EF","EL","FM","AC","BD"],
+        slides: [
+            { text: "“If a cylinder is cut by a plane parallel to its opposite planes,",
+              visible: GIVEN,
+              highlighted: CYL_AD.concat(["GH"]),
+              justifications: [{ ref: "XII.13" }] },
+            { text: "then the cylinder is to the cylinder as the axis is to the axis.”",
+              highlighted: CYL_BG.concat(CYL_GD).concat(["EK","KF"]) },
+            { text: "Let the cylinder {AD} be cut by the plane {GH} parallel to the opposite planes {AB} and {CD}.",
+              highlighted: CYL_AD.concat(["GH"]) },
+            { text: "Let the plane {GH} meet the axis at the point {K}.",
+              highlighted: ["GH","EF","K"] },
+            { text: "I say that the cylinder {BG} is to the cylinder {GD} as the axis {EK} is to the axis {KF}.",
+              highlighted: CYL_BG.concat(CYL_GD).concat(["EK","KF"]) },
+            { text: "Produce the axis {EF} in both directions to the points {L} and {M}.",
+              visible: PROD,
+              highlighted: ["EF","L","M"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "EL", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "FM", name: geomlib.A.Line.straightEdgeExtend } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Set out any number whatever of axes {EN} and {NL} equal to the axis {EK},",
+              visible: SETN,
+              highlighted: ["EN","NL","EK"],
+              transition: { animations: [
+                  { elem: "N", name: geomlib.A.Point.appear } ] } },
+            { text: "and any number whatever {FO} and {OM} equal to {FK|KF}.",
+              visible: SETO,
+              highlighted: ["FO","OM","KF"],
+              transition: { animations: [
+                  { elem: "O", name: geomlib.A.Point.appear } ] } },
+            { text: "Construct the cylinder {PW} on the axis {LM} with the circles {PQ|Lcirc} and {VW|Mcirc} as bases.",
+              visible: CPW,
+              highlighted: CYL_PW.concat(["LM"]),
+              transition: { animations: [
+                  { elem: "Lcirc", name: geomlib.A.Circle.compass },
+                  { elem: "Mcirc", name: geomlib.A.Circle.compass },
+                  { elem: "PV", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "QW", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Carry the planes through the points {N} and {O} parallel to {AB} and {CD} and to the bases of the cylinder {PW},",
+              highlighted: ["N","O","AB","CD","Lcirc","Mcirc"] },
+            { text: "and let them produce the circles {RS|Ncirc} and {TU|Ocirc} about the centers {N}, {O}.",
+              visible: CRT,
+              highlighted: ["Ncirc","Ocirc","N","O"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "Ncirc", name: geomlib.A.Circle.compass },
+                  { elem: "Ocirc", name: geomlib.A.Circle.compass } ] } },
+            { text: "Then, since the axes {LN|NL}, {NE|EN}, and {EK} equal one another,",
+              highlighted: ["NL","EN","EK"] },
+            { text: "therefore the cylinders {QR}, {RB}, and {BG} are to one another as their bases.",
+              highlighted: CYL_QR.concat(CYL_RB).concat(CYL_BG),
+              justifications: [{ claim: "same height: as their bases", ref: "XII.11" }] },
+            { text: "But the bases are equal, therefore the cylinders {QR}, {RB}, and {BG} also equal one another.",
+              highlighted: CYL_QR.concat(CYL_RB).concat(CYL_BG) },
+            { text: "Since then the axes {LN|NL}, {NE|EN}, and {EK} equal one another,",
+              highlighted: ["NL","EN","EK"] },
+            { text: "and the cylinders {QR}, {RB}, and {BG} also equal one another,",
+              highlighted: CYL_QR.concat(CYL_RB).concat(CYL_BG) },
+            { text: "and the multitude of the former equals the multitude of the latter,",
+              highlighted: ["NL","EN","EK"].concat(BASES3).concat(["GH"]) },
+            { text: "therefore, the multiple the axis {KL} is of the axis {EK}",
+              highlighted: ["KL","EK"] },
+            { text: "is the same multiple the cylinder {QG} is of the cylinder {GB|BG}.",
+              highlighted: CYL_QG.concat(CYL_BG) },
+            { text: "For the same reason, the multiple the axis {MK|KM} is of the axis {KF}",
+              highlighted: ["KM","KF"] },
+            { text: "is the same multiple the cylinder {WG} is of the cylinder {GD}.",
+              highlighted: CYL_WG.concat(CYL_GD) },
+            { text: "And, if the axis {KL} equals the axis {KM}, then the cylinder {QG} also equals the cylinder {GW|WG};",
+              highlighted: ["KL","KM"].concat(CYL_QG).concat(CYL_WG) },
+            { text: "if the axis is greater than the axis, then the cylinder is also greater than the cylinder; and if less, less.",
+              highlighted: ["KL","KM"].concat(CYL_QG).concat(CYL_WG) },
+            { text: "Thus, there being four magnitudes, the axes {EK} and {KF} and the cylinders {BG} and {GD},",
+              highlighted: ["EK","KF"].concat(CYL_BG).concat(CYL_GD) },
+            { text: "there have been taken equimultiples of the axis {EK} and of the cylinder {BG},",
+              highlighted: ["EK"].concat(CYL_BG) },
+            { text: "namely the axis {LK|KL} and the cylinder {QG},",
+              highlighted: ["KL"].concat(CYL_QG) },
+            { text: "and equimultiples of the axis {KF} and of the cylinder {GD},",
+              highlighted: ["KF"].concat(CYL_GD) },
+            { text: "namely the axis {KM} and the cylinder {GW|WG},",
+              highlighted: ["KM"].concat(CYL_WG) },
+            { text: "and it has been proved that, if the axis {KL} is in excess of the axis {KM},",
+              highlighted: ["KL","KM"] },
+            { text: "the cylinder {QG} is also in excess of the cylinder {GW|WG}; if equal, equal; and if less, less.",
+              highlighted: CYL_QG.concat(CYL_WG) },
+            { text: "Therefore the axis {EK} is to the axis {KF} as the cylinder {BG} is to the cylinder {GD}.",
+              highlighted: ["EK","KF"].concat(CYL_BG).concat(CYL_GD),
+              justifications: [{ claim: "equimultiples", ref: "V.Def.5" }] },
+            { text: "Therefore, if a cylinder is cut by a plane parallel to its opposite planes,",
+              visible: REST,
+              highlighted: CYL_AD.concat(["GH"]) },
+            { text: "then the cylinder is to the cylinder as the axis is to the axis.",
+              highlighted: CYL_BG.concat(CYL_GD).concat(["EK","KF"]),
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.13") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.2":  "/elements/books/bookI/postulates/post2/",
+        "V.Def.5":   "/elements/books/bookV/definitions/defV5/",
+        "XII.11":    "/elements/books/bookXII/propositions/propXII11/"
     });
 </script>
 </center>
 
-Carry the planes through the points *N* and *O* parallel to *AB* and *CD* and to the bases of the cylinder *PW,* and let them produce the circles *RS* and *TU* about the centers *N, O.*
+Carry the planes through the points {N} and {O} parallel to {AB} and {CD} and to the bases of the cylinder {PW}, and let them produce the circles {RS|Ncirc} and {TU|Ocirc} about the centers {N}, {O}.
 
-Then, since the axes *LN, NE,* and *EK* equal one another, therefore the cylinders *QR, RB,* and *BG* are to one another as their bases. [!just XII.11]
+Then, since the axes {LN|NL}, {NE|EN}, and {EK} equal one another, therefore the cylinders {QR}, {RB}, and {BG} are to one another as their bases. [!just XII.11]
 
-But the bases are equal, therefore the cylinders *QR, RB,* and *BG* also equal one another.
+But the bases are equal, therefore the cylinders {QR}, {RB}, and {BG} also equal one another.
 
-Since then the axes *LN, NE,* and *EK* equal one another, and the cylinders *QR, RB,* and *BG* also equal one another, and the multitude of the former equals the multitude of the latter, therefore, the multiple the axis *KL* is of the axis *EK* is the same multiple the cylinder *QG* is of the cylinder *GB.*
+Since then the axes {LN|NL}, {NE|EN}, and {EK} equal one another, and the cylinders {QR}, {RB}, and {BG} also equal one another, and the multitude of the former equals the multitude of the latter, therefore, the multiple the axis {KL} is of the axis {EK} is the same multiple the cylinder {QG} is of the cylinder {GB|BG}.
 
-For the same reason, the multiple the axis *MK* is of the axis *KF* is the same multiple the cylinder *WG* is of the cylinder *GD.*
+For the same reason, the multiple the axis {MK|KM} is of the axis {KF} is the same multiple the cylinder {WG} is of the cylinder {GD}.
 
-And, if the axis *KL* equals the axis *KM,* then the cylinder *QG* also equals the cylinder *GW*; if the axis is greater than the axis, then the cylinder is also greater than the cylinder; and if less, less. Thus, there being four magnitudes, the axes *EK* and *KF* and the cylinders *BG* and *GD,* there have been taken equimultiples of the axis *EK* and of the cylinder *BG,* namely the axis *LK* and the cylinder *QG,* and equimultiples of the axis *KF* and of the cylinder *GD,* namely the axis *KM* and the cylinder *GW,* and it has been proved that, if the axis *KL* is in excess of the axis *KM,* the cylinder *QG* is also in excess of the cylinder *GW*; if equal, equal; and if less, less. Therefore the axis *EK* is to the axis *KF* as the cylinder *BG* is to the cylinder *GD.* [!just V.Def.5]
+And, if the axis {KL} equals the axis {KM}, then the cylinder {QG} also equals the cylinder {GW|WG}; if the axis is greater than the axis, then the cylinder is also greater than the cylinder; and if less, less. Thus, there being four magnitudes, the axes {EK} and {KF} and the cylinders {BG} and {GD}, there have been taken equimultiples of the axis {EK} and of the cylinder {BG}, namely the axis {LK|KL} and the cylinder {QG}, and equimultiples of the axis {KF} and of the cylinder {GD}, namely the axis {KM} and the cylinder {GW|WG}, and it has been proved that, if the axis {KL} is in excess of the axis {KM}, the cylinder {QG} is also in excess of the cylinder {GW|WG}; if equal, equal; and if less, less. Therefore the axis {EK} is to the axis {KF} as the cylinder {BG} is to the cylinder {GD}. [!just V.Def.5]
 
 Therefore, *if a cylinder is cut by a plane parallel to its opposite planes, then the cylinder is to the cylinder as the axis is to the axis.*
 
