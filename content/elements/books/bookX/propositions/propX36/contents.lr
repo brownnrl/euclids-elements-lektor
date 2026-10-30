@@ -15,14 +15,21 @@ statement: If two rational straight lines commensurable in square only are added
 ----
 proof:
 
-Let two rational straight lines *AB* and *BC* commensurable in square only be added together.
+Let two rational straight lines {AB} and {BC} commensurable in square only be added together.
 
-I say that the whole *AC* is irrational.
+I say that the whole {AC} is irrational.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="230" height="80" tabindex="0"></canvas>
 <noscript><img alt="X.36 diagram" src="propX36.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the line AC with B on it (X0, X1 are off-canvas
+    // anchors for the line sliders). Added, hidden at rest: transparent
+    // targets AB, BC (;0;0;0) so the two parts can light separately.
+    //
+    // Draggables (checked against the bundle): X0, X1 (free, off-canvas)
+    // and A, B, C (line sliders), all givens; nothing is deferred.
+    var ALL = ["A","B","C","AB","BC","AC"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -33,19 +40,99 @@ I say that the whole *AC* is irrational.
             "A;point;lineSlider;X0,X1,30,0",
             "B;point;lineSlider;X0,X1,100,0",
             "C;point;lineSlider;X0,X1,200,0",
-            "AC;line;connect;A,C"
+            "AC;line;connect;A,C",
+            // Slide-only highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0"
         ],
+        slides: [
+            { text: "“If two rational straight lines commensurable in square only are added together,",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "X.36" }] },
+            { text: "then the whole is irrational; let it be called binomial.”",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Let two rational straight lines {AB} and {BC} commensurable in square only be added together.",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "I say that the whole {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Since {AB} is incommensurable in length with {BC}, for they are commensurable in square only,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "and {AB} is to {BC} as the rectangle {AB} by {BC} is to the square on {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the rectangle {AB} by {BC} is incommensurable with the square on {BC}.",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "AB·BC, BC² incommensurable", ref: "X.11" }] },
+            { text: "But twice the rectangle {AB} by {BC} is commensurable with the rectangle {AB} by {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "2 AB·BC, AB·BC commensurable", ref: "X.6" }] },
+            { text: "and the sum of the squares on {AB} and {BC} is commensurable with the square on {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "AB² + BC², BC² commensurable", ref: "X.15" }] },
+            { text: "for {AB} and {BC} are rational straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore twice the rectangle {AB} by {BC} is incommensurable with the sum of the squares on {AB} and {BC}.",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "2 AB·BC, AB² + BC² incommensurable", ref: "X.13" }] },
+            { text: "And, taken jointly, twice the rectangle {AB} by {BC} together with the squares on {AB} and {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "that is, the square on {AC},",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ claim: "AC² = AB² + BC² + 2 AB·BC", ref: "II.4" }] },
+            { text: "is incommensurable with the sum of the squares on {AB} and {BC}.",
+              visible: ALL,
+              highlighted: ["AC","AB","BC"],
+              justifications: [{ claim: "AC², AB² + BC² incommensurable", ref: "X.16" }] },
+            { text: "But the sum of the squares on {AB} and {BC} is rational,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the square on {AC} is irrational, so that {AC} is also irrational.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Let it be called binomial.",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ ref: "X.Def.I.4" }, { ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.36") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.4":      "/elements/books/bookII/propositions/propII4/",
+        "X.6":       "/elements/books/bookX/propositions/propX6/",
+        "X.11":      "/elements/books/bookX/propositions/propX11/",
+        "X.13":      "/elements/books/bookX/propositions/propX13/",
+        "X.15":      "/elements/books/bookX/propositions/propX15/",
+        "X.16":      "/elements/books/bookX/propositions/propX16/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-Since *AB* is incommensurable in length with *BC,* for they are commensurable in square only, and *AB* is to *BC* as the rectangle *AB* by *BC* is to the square on *BC,* therefore the rectangle *AB* by *BC* is incommensurable with the square on *BC.* [!just X.11]
+Since {AB} is incommensurable in length with {BC}, for they are commensurable in square only, and {AB} is to {BC} as the rectangle {AB} by {BC} is to the square on {BC}, therefore the rectangle {AB} by {BC} is incommensurable with the square on {BC}. [!just X.11]
 
-But twice the rectangle *AB* by *BC* is commensurable with the rectangle *AB* by *BC,* and the sum of the squares on *AB* and *BC* is commensurable with the square on *BC,* for *AB* and *BC* are rational straight lines commensurable in square only, therefore twice the rectangle *AB* by *BC* is incommensurable with the sum of the squares on *AB* and *BC.* [!just X.6; X.15; X.13]
+But twice the rectangle {AB} by {BC} is commensurable with the rectangle {AB} by {BC}, and the sum of the squares on {AB} and {BC} is commensurable with the square on {BC}, for {AB} and {BC} are rational straight lines commensurable in square only, therefore twice the rectangle {AB} by {BC} is incommensurable with the sum of the squares on {AB} and {BC}. [!just X.6; X.15; X.13]
 
-And, taken jointly, twice the rectangle *AB* by *BC* together with the squares on *AB* and *BC,* that is, the square on *AC,* is incommensurable with the sum of the squares on *AB* and *BC.* [!just II.4; X.16]
+And, taken jointly, twice the rectangle {AB} by {BC} together with the squares on {AB} and {BC}, that is, the square on {AC}, is incommensurable with the sum of the squares on {AB} and {BC}. [!just II.4; X.16]
 
-But the sum of the squares on *AB* and *BC* is rational, therefore the square on *AC* is irrational, so that *AC* is also irrational. Let it be called *binomial.* [!just X.Def.I.4]
+But the sum of the squares on {AB} and {BC} is rational, therefore the square on {AC} is irrational, so that {AC} is also irrational. Let it be called *binomial.* [!just X.Def.I.4]
 
 <div class="qed">Q.E.D.</div>
 ----
