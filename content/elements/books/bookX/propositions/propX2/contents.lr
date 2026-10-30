@@ -15,16 +15,30 @@ statement: If, when the less of two unequal magnitudes is continually subtracted
 ----
 proof:
 
-There being two unequal magnitudes *AB* and *CD,* with *AB* being the less, when the less is continually subtracted in turn from the greater, let that which is left over never measure the one before it.
+There being two unequal magnitudes {AB} and {CD}, with {AB} being the less, when the less is continually subtracted in turn from the greater, let that which is left over never measure the one before it.
 
-I say that the magnitudes *AB* and *CD* are incommensurable.
+I say that the magnitudes {AB} and {CD} are incommensurable.
 
-If they are commensurable, then some magnitude *E* measures them.
+If they are commensurable, then some magnitude {E} measures them.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="100" tabindex="0"></canvas>
 <noscript><img alt="X.2 diagram" src="propX2.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws AB, CD and the supposed common measure E, with F
+    // and G marking where the alternate subtractions stop. The proof argues
+    // about FD, CF, BG and AG, added as transparent highlight targets
+    // (;0;0;0), so the resting figure is unchanged.
+    //
+    // E's endpoints E1/E2 are sliders, so they are deferred: E arrives with
+    // "some magnitude E measures them" and is withdrawn once the reductio
+    // closes ("no magnitude measures the magnitudes AB and CD").
+    var GIVEN = ["A","B","AB","C","D","CD"];
+    var ST_L  = GIVEN.concat(["F","G","FD","CF","BG","AG"]);
+    var MEAS  = GIVEN.concat(["E1","E2","E"]);
+    var STEP1 = MEAS.concat(["F","FD","CF"]);
+    var STEP2 = STEP1.concat(["G","BG","AG"]);
+    var NOE   = ST_L;
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -46,19 +60,119 @@ If they are commensurable, then some magnitude *E* measures them.
             "F1;point;cutoff;D,C,A,B;0;0",
             "F;point;cutoff;F1,C,A,B",
             "G1;point;cutoff;B,A,C,F;0;0",
-            "G;point;cutoff;G1,A,C,F"
+            "G;point;cutoff;G1,A,C,F",
+            // Highlight targets only — AB and CD already draw them.
+            "FD;line;connect;F,D;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "BG;line;connect;B,G;0;0;0",
+            "AG;line;connect;A,G;0;0;0"
         ],
+        deferDraggables: ["E1","E2"],
+        aliases: { "DF": "FD", "FC": "CF", "GB": "BG", "GA": "AG",
+                   "BA": "AB", "DC": "CD" },
+        slides: [
+            // The statement, split at its seams.
+            { text: "“If, when {the less|AB} of two unequal magnitudes is continually subtracted in turn from {the greater|CD}”",
+              visible: GIVEN,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "X.2" }] },
+            { text: "“{that which is left|CF} never measures the one before it,”",
+              visible: ST_L,
+              highlighted: ["CF","AG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F", name: geomlib.A.Point.appear },
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "“then the two magnitudes are incommensurable.”",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            // The proof.
+            { text: "There being two unequal magnitudes {AB} and {CD}, with {AB} being the less,",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "when the less is continually subtracted in turn from the greater,",
+              visible: GIVEN },
+            { text: "let that which is left over never measure the one before it.",
+              visible: GIVEN },
+            { text: "I say that the magnitudes {AB} and {CD} are incommensurable.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "If they are commensurable, then some magnitude {E} measures them.",
+              visible: MEAS,
+              highlighted: ["E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Let {AB}, measuring {FD}, leave {CF} less than itself,",
+              visible: STEP1,
+              highlighted: ["AB","FD"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "let {CF} measuring {BG}, leave {AG} less than itself,",
+              visible: STEP2,
+              highlighted: ["CF","BG"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "and let this process be repeated continually, until there is left some magnitude which is less than {E}.",
+              visible: STEP2,
+              highlighted: ["E"] },
+            { text: "Suppose this done, and let there be left {AG} less than {E}.",
+              visible: STEP2,
+              highlighted: ["AG","E"] },
+            { text: "Then, since {E} measures {AB}, while {AB} measures {DF}, therefore {E} also measures {FD}.",
+              visible: STEP2,
+              highlighted: ["E","FD"] },
+            { text: "But it measures the whole {CD} also, therefore it also measures the remainder {CF}.",
+              visible: STEP2,
+              highlighted: ["E","CF"] },
+            { text: "But {CF} measures {BG}, therefore {E} also measures {BG}.",
+              visible: STEP2,
+              highlighted: ["E","BG"] },
+            { text: "But it measures the whole {AB} also, therefore it also measures the remainder {AG},",
+              visible: STEP2,
+              highlighted: ["E","AG"] },
+            { text: "the greater the less, which is impossible.",
+              visible: STEP2,
+              highlighted: ["E","AG"] },
+            // Reductio closed: the supposed measure E is withdrawn.
+            { text: "Therefore no magnitude measures the magnitudes {AB} and {CD}.",
+              visible: NOE,
+              highlighted: ["AB","CD"] },
+            { text: "Therefore the magnitudes {AB} and {CD} are incommensurable.",
+              visible: NOE,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "X.Def.I.1" }] },
+            // Closing restatement, split as the statement was.
+            { text: "Therefore, if, when {the less|AB} of two unequal magnitudes is continually subtracted in turn from {the greater|CD}",
+              visible: NOE,
+              highlighted: ["AB","CD"] },
+            { text: "{that which is left|CF} never measures the one before it,",
+              visible: NOE,
+              highlighted: ["CF","AG"] },
+            { text: "then the two magnitudes are incommensurable.",
+              visible: NOE,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.2") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.Def.I.1": "/elements/books/bookX/definitions/defX.I.1/"
     });
 </script>
 </figure>
 
-Let *AB,* measuring *FD,* leave *CF* less than itself, let *CF* measuring *BG,* leave *AG* less than itself, and let this process be repeated continually, until there is left some magnitude which is less than *E.*
+Let {AB}, measuring {FD}, leave {CF} less than itself, let {CF} measuring {BG}, leave {AG} less than itself, and let this process be repeated continually, until there is left some magnitude which is less than {E}.
 
-Suppose this done, and let there be left *AG* less than *E.*
+Suppose this done, and let there be left {AG} less than {E}.
 
-Then, since *E* measures *AB,* while *AB* measures *DF,* therefore *E* also measures *FD.* But it measures the whole *CD* also, therefore it also measures the remainder *CF.* But *CF* measures *BG,* therefore *E* also measures *BG.* But it measures the whole *AB* also, therefore it also measures the remainder *AG,* the greater the less, which is impossible.
+Then, since {E} measures {AB}, while {AB} measures {DF}, therefore {E} also measures {FD}. But it measures the whole {CD} also, therefore it also measures the remainder {CF}. But {CF} measures {BG}, therefore {E} also measures {BG}. But it measures the whole {AB} also, therefore it also measures the remainder {AG}, the greater the less, which is impossible.
 
-Therefore no magnitude measures the magnitudes *AB* and *CD.* Therefore the magnitudes *AB* and *CD* are incommensurable. [!just X.Def.I.1]
+Therefore no magnitude measures the magnitudes {AB} and {CD}. Therefore the magnitudes {AB} and {CD} are incommensurable. [!just X.Def.I.1]
 
 Therefore, *if, when the less of two unequal magnitudes is continually subtracted in turn from the greater that which is left never measures the one before it, then the two magnitudes are incommensurable.*
 
@@ -68,7 +182,7 @@ guide:
 
 Antenaresis (also called the Euclidean algorithm), first used in proposition @VII.1, is again used in this proposition. Beginning with two magnitudes, the smaller, whichever it is, is repeated subtracted from the larger. Proposition VII.1 concerns relatively prime numbers. It is similar to this proposition, but its conclusion is different.
 
-Heath claims that Euclid uses @X.1 to prove this proposition, in particular, to show that antenaresis eventually leaves some magnitude which is less than *E.* It is hard to tell what Euclid thought his justification was. Since both magnitudes are multiples of *E,* whatever justification Euclid intended back in proposition @VII.2 works just as well here. Euclid did, however, put X.1 just before this proposition, perhaps for an intended logical connection. If so, there is a missing statement to the effect that *GB* is greater than half of *AB,* and so forth, so that X.1 might be invoked.
+Heath claims that Euclid uses @X.1 to prove this proposition, in particular, to show that antenaresis eventually leaves some magnitude which is less than *E.* It is hard to tell what Euclid thought his justification was. Since both magnitudes are multiples of {E}, whatever justification Euclid intended back in proposition @VII.2 works just as well here. Euclid did, however, put X.1 just before this proposition, perhaps for an intended logical connection. If so, there is a missing statement to the effect that {GB} is greater than half of {AB}, and so forth, so that X.1 might be invoked.
 
 #### An example of incommensurable magnitudes
 
@@ -95,19 +209,27 @@ Heath claims that Euclid uses @X.1 to prove this proposition, in particular, to 
             "G;point;similar;E,F,D,E,F",
             "EFG;polygon;triangle;E,F,G;0;0;black;random",
             "H;point;similar;F,G,E,F,G;0",
-            "FGH;polygon;triangle;F,G,H;0;0;black;random"
+            "FGH;polygon;triangle;F,G,H;0;0;black;random",
+            // Highlight targets for the guide prose (transparent).
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0"
         ],
     });
 </script>
 </figure>
 
-Consider the 36°-72°-72° triangle constructed *ABC* in proposition @IV.10. This triangle was used in the following proposition @IV.11 to construct regular pentagons. When its base *BC* is subtracted from a side *AC* then the remainder *CD* is the base of a similar triangle *BCD.* Likewise, when the base *CD* of this new triangle is subtracted from its side *BD* then the remainder *DE* is the base of yet another smaller similar triangle *CDE.* And so forth.
+Consider the 36°-72°-72° triangle constructed {ABC} in proposition @IV.10. This triangle was used in the following proposition @IV.11 to construct regular pentagons. When its base {BC} is subtracted from a side {AC} then the remainder {CD} is the base of a similar triangle {BCD}. Likewise, when the base {CD} of this new triangle is subtracted from its side {BD} then the remainder {DE} is the base of yet another smaller similar triangle {CDE}. And so forth.
 
-Thus, when we begin with the two lines *AB* and *BC* and apply the algorithm of antenaresis to them, we get a series of lines which never ends *AB, BC, CD, DE, EF,* and so forth, and these lines form a never-ending continued proportion.
+Thus, when we begin with the two lines {AB} and {BC} and apply the algorithm of antenaresis to them, we get a series of lines which never ends {AB}, {BC}, {CD}, {DE}, {EF}, and so forth, and these lines form a never-ending continued proportion.
 
-<center><i>AB</i> : <i>BC</i> = <i>BC</i> : <i>CD</i> = <i>CD</i> : <i>DE</i> = <i>DE</i> : <i>EF</i> = ...</center>
+<center><span class="elem-ref" data-elem="AB" data-canvas="canvas_1"><i>AB</i></span> : <span class="elem-ref" data-elem="BC" data-canvas="canvas_1"><i>BC</i></span> = <span class="elem-ref" data-elem="BC" data-canvas="canvas_1"><i>BC</i></span> : <span class="elem-ref" data-elem="CD" data-canvas="canvas_1"><i>CD</i></span> = <span class="elem-ref" data-elem="CD" data-canvas="canvas_1"><i>CD</i></span> : <span class="elem-ref" data-elem="DE" data-canvas="canvas_1"><i>DE</i></span> = <span class="elem-ref" data-elem="DE" data-canvas="canvas_1"><i>DE</i></span> : <span class="elem-ref" data-elem="EF" data-canvas="canvas_1"><i>EF</i></span> = ...</center>
 
-Thus, according to this proposition, the two quantities *AB* and *BC* are incommensurable.
+Thus, according to this proposition, the two quantities {AB} and {BC} are incommensurable.
 
 Cutting the line *AB* at *C* to make this ratio *AB* : *BC* is called in @VI.Def.3 cutting *AB* into extreme and mean ratio. A more recent name for this ratio is the "golden ratio."
 
