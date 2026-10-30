@@ -15,11 +15,11 @@ statement: Each of the numbers which are continually doubled beginning from a dy
 ----
 proof:
 
-Let as many numbers as we please, *B, C,* and *D,* be continually doubled beginning from the dyad *A.*
+Let as many numbers as we please, {B}, {C}, and {D}, be continually doubled beginning from the dyad {A}.
 
-I say that *B, C,* and *D* are even-times even only.
+I say that {B}, {C}, and {D} are even-times even only.
 
-Now that each of the numbers *B, C,* and *D* is even-times-even is manifest, for each is doubled from a dyad.
+Now that each of the numbers {B}, {C}, and {D} is even-times-even is manifest, for each is doubled from a dyad.
 
 I say that it is also even-times even only.
 
@@ -27,6 +27,10 @@ I say that it is also even-times even only.
 <canvas id="canvas_0" width="250" height="170" tabindex="0"></canvas>
 <noscript><img alt="IX.32 diagram" src="propIX32.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: the walk is highlight beats over Joyce's four lines,
+    // with no construction to animate. The unit (U1-U2) sits off-canvas in
+    // Joyce's figure and is not drawn.
+    var GIVEN = ["A1","A2","A","B1","B2","B","C1","C2","C","D1","D2","D"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -56,13 +60,77 @@ I say that it is also even-times even only.
             "D2;point;proportion;A1,A2,B1,B2,C1,C2,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        slides: [
+            { text: "“Each of the numbers which are continually doubled beginning from a dyad is even-times even only.”",
+              visible: GIVEN,
+              highlighted: ["B","C","D"],
+              justifications: [{ ref: "IX.32" }] },
+            { text: "Let as many numbers as we please, {B}, {C}, and {D},",
+              visible: GIVEN,
+              highlighted: ["B","C","D"] },
+            { text: "be continually doubled beginning from the dyad {A}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "I say that {B}, {C}, and {D} are even-times even only.",
+              visible: GIVEN,
+              highlighted: ["B","C","D"] },
+            { text: "Now that each of the numbers {B}, {C}, and {D} is even-times-even is manifest,",
+              visible: GIVEN,
+              highlighted: ["B","C","D"] },
+            { text: "for each is doubled from a dyad.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "I say that it is also even-times even only.",
+              visible: GIVEN,
+              highlighted: ["B","C","D"] },
+            { text: "Set out a unit.",
+              visible: GIVEN },
+            { text: "Since then as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "and the number {A} after the unit is prime,",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "therefore {D}, the greatest of the numbers {A}, {B}, {C}, and {D},",
+              visible: GIVEN,
+              highlighted: ["D"] },
+            { text: "is not measured by any other number except {A}, {B}, and {C}.",
+              visible: GIVEN,
+              highlighted: ["D","A","B","C"],
+              justifications: [{ claim: "D measured only by A, B, C", ref: "IX.13" }] },
+            { text: "And each of the numbers {A}, {B}, and {C} is even,",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "therefore {D} is even-times even only.",
+              visible: GIVEN,
+              highlighted: ["D"],
+              justifications: [{ claim: "D even-times even only", ref: "VII.Def.8" }] },
+            { text: "Similarly we can prove that each of the numbers {B} and {C} is even-times even only.",
+              visible: GIVEN,
+              highlighted: ["B","C"] },
+            { text: "Therefore, each of the numbers which are continually doubled beginning from a dyad is even-times even only.",
+              visible: GIVEN,
+              highlighted: ["B","C","D"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.32") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "IX.13":     "/elements/books/bookIX/propositions/propIX13/",
+        "VII.Def.8": "/elements/books/bookVII/definitions/defVII8/"
     });
 </script>
 </figure>
 
-Set out a unit. Since then as many numbers as we please beginning from a unit are in continued proportion, and the number *A* after the unit is prime, therefore *D,* the greatest of the numbers *A, B, C,* and *D,* is not measured by any other number except *A, B,* and *C.* And each of the numbers *A, B,* and *C* is even, therefore *D* is even-times even only. [!just IX.13; VII.Def.8]
+Set out a unit. Since then as many numbers as we please beginning from a unit are in continued proportion, and the number {A} after the unit is prime, therefore {D}, the greatest of the numbers {A}, {B}, {C}, and {D}, is not measured by any other number except {A}, {B}, and {C}. And each of the numbers {A}, {B}, and {C} is even, therefore {D} is even-times even only. [!just IX.13; VII.Def.8]
 
-Similarly we can prove that each of the numbers *B* and *C* is even-times even only.
+Similarly we can prove that each of the numbers {B} and {C} is even-times even only.
 
 Therefore, *each of the numbers which are continually doubled beginning from a dyad is even-times even only.*
 
@@ -72,4 +140,4 @@ guide:
 
 Numbers which are even-times even only are just the powers of 2: 4, 8, 16, 32, etc.
 
-An alternate proof of this proposition uses @IX.30 rather than @IX.13. If an odd number could divide *D,* then by IX.30, it would divide half of it, namely *C.* Then it would divide *B,* then *A,* the diad, which is absurd. Note that the reduction step mentioned in this alternate proof is much simpler than the reduction step used in the proof of IX.30.
+An alternate proof of this proposition uses @IX.30 rather than @IX.13. If an odd number could divide {D}, then by IX.30, it would divide half of it, namely {C}. Then it would divide {B}, then {A}, the diad, which is absurd. Note that the reduction step mentioned in this alternate proof is much simpler than the reduction step used in the proof of IX.30.

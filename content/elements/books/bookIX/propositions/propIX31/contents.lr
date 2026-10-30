@@ -15,14 +15,21 @@ statement: If an odd number is relatively prime to any number, then it is also r
 ----
 proof:
 
-Let the odd number *A* be relatively prime to any number *B,* and let *C* be double of *B.*
+Let the odd number {A} be relatively prime to any number {B}, and let {C} be double of {B}.
 
-I say that *A* is relatively prime to *C.*
+I say that {A} is relatively prime to {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="175" tabindex="0"></canvas>
 <noscript><img alt="IX.31 diagram" src="propIX31.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: the walk is highlight beats over Joyce's four lines.
+    // A reductio: D is supposed to measure A and C, so it is the only
+    // animation, its slider ends are deferred, and it is withdrawn at the
+    // close. Ch1/Ch2 are transparent halves of C (C1-C15 equals B), added so
+    // "the half of C" can light.
+    var GIVEN = ["A1","A2","A","B1","B2","B","C1","C15","C2","C","Ch1","Ch2"];
+    var WITHD = GIVEN.concat(["D1","D2","D"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -50,24 +57,91 @@ I say that *A* is relatively prime to *C.*
             "C;line;connect;C1,C2;black",
             "D1;point;lineSlider;D0,D3,30,0;0",
             "D2;point;lineSlider;D0,D3,60,0;0",
-            "D;line;connect;D1,D2;black"
+            "D;line;connect;D1,D2;black",
+            "Ch1;line;connect;C1,C15;0;0;0",
+            "Ch2;line;connect;C15,C2;0;0;0"
         ],
+        deferDraggables: ["D1","D2"],
+        slides: [
+            { text: "“If an odd number is relatively prime to any number, then it is also relatively prime to double it.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "IX.31" }] },
+            { text: "Let the odd number {A} be relatively prime to any number {B},",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and let {C} be double of {B}.",
+              visible: GIVEN,
+              highlighted: ["C","B"] },
+            { text: "I say that {A} is relatively prime to {C}.",
+              visible: GIVEN,
+              highlighted: ["A","C"] },
+            { text: "If they are not relatively prime, then some number will measure them.",
+              visible: GIVEN,
+              highlighted: ["A","C"] },
+            { text: "Let a number {D} measure them.",
+              visible: WITHD,
+              highlighted: ["D","A","C"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now {A} is odd, therefore {D} is also odd.",
+              visible: WITHD,
+              highlighted: ["A","D"],
+              justifications: [{ claim: "D is odd", ref: "IX.28" }] },
+            { text: "And since {D} which is odd measures {C}, and {C} is even,",
+              visible: WITHD,
+              highlighted: ["D","C"] },
+            { text: "therefore {D} measures {the half of C|Ch1} also.",
+              visible: WITHD,
+              highlighted: ["D","Ch1"],
+              justifications: [{ claim: "D measures half of C", ref: "IX.30" }] },
+            { text: "But {B} is half of {C}, therefore {D} measures {B}.",
+              visible: WITHD,
+              highlighted: ["B","Ch1","D"] },
+            { text: "But it also measures {A},",
+              visible: WITHD,
+              highlighted: ["D","A"] },
+            { text: "therefore {D} measures {A} and {B} which are relatively prime, which is impossible.",
+              visible: WITHD,
+              highlighted: ["D","A","B"] },
+            { text: "Therefore {A} cannot but be relatively prime to {C}.",
+              visible: GIVEN,
+              highlighted: ["A","C"] },
+            { text: "Therefore {A} and {C} are relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","C"] },
+            { text: "Therefore, if an odd number is relatively prime to any number, then it is also relatively prime to double it.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.31") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "IX.28": "/elements/books/bookIX/propositions/propIX28/",
+        "IX.30": "/elements/books/bookIX/propositions/propIX30/"
     });
 </script>
 </figure>
 
 If they are not relatively prime, then some number will measure them.
 
-Let a number *D* measure them.
+Let a number {D} measure them.
 
-Now *A* is odd, therefore *D* is also odd. And since *D* which is odd measures *C,* and *C* is even, therefore *D* measures the half of *C* also. [!just IX.28; IX.30]
+Now {A} is odd, therefore {D} is also odd. And since {D} which is odd measures {C}, and {C} is even, therefore {D} measures the half of {C} also. [!just IX.28; IX.30]
 
-But *B* is half of *C,* therefore *D* measures *B.* But it also measures *A,* therefore *D* measures *A* and *B* which are relatively prime, which is impossible.
+But {B} is half of {C}, therefore {D} measures {B}. But it also measures {A}, therefore {D} measures {A} and {B} which are relatively prime, which is impossible.
 
-Therefore *A* cannot but be relatively prime to *C.* Therefore *A* and *C* are relatively prime.
+Therefore {A} cannot but be relatively prime to {C}. Therefore {A} and {C} are relatively prime.
 
 Therefore, *if an odd number is relatively prime to any number, then it is also relatively prime to double it.*
 
 <div class="qed">Q.E.D.</div>
 ----
-guide: A generalization of this proposition would be "If two numbers (2 and *B* in this proposition) are relatively prime to any number (*A*), then their product (2*B*) is also relatively prime to it (*A*)." That is proposition @VII.24.
+guide: A generalization of this proposition would be "If two numbers (2 and {B} in this proposition) are relatively prime to any number ({A}), then their product (2*B*) is also relatively prime to it ({A})." That is proposition @VII.24.
