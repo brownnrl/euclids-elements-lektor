@@ -15,9 +15,9 @@ statement: The square on the major straight line applied to a rational straight 
 ----
 proof:
 
-Let *AB* be a major straight line divided at *C*, so that *AC* is greater than *CB*, let *DE* be a rational straight line, and to *DE* let there be applied the parallelogram *DF* equal to the square on *AB* and producing *DG* as its breadth.
+Let {AB} be a major straight line divided at {C}, so that {AC} is greater than {CB}, let {DE} be a rational straight line, and to {DE} let there be applied the parallelogram {DF|DFh} equal to the square on {AB} and producing {DG} as its breadth.
 
-I say that *DG* is a fourth binomial straight line.
+I say that {DG} is a fourth binomial straight line.
 
 Make the same construction as shown before.
 
@@ -25,6 +25,28 @@ Make the same construction as shown before.
 <canvas id="canvas_0" width="270" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.63 diagram" src="propX60.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure (X.60's): the major AB divided at C, the rational DE,
+    // and DF (EDGF) equal to the square on AB applied to DE with breadth DG;
+    // inside it DH (EDKH) equal to the square on AC, KL (HKML) equal to the
+    // square on CB, the remainder MF, and NO through the midpoint N of MG.
+    // "Make the same construction as shown before" is one slide that builds
+    // DH, KL, N and NO.
+    // Added, all hidden at rest: a solid twin DE (initiallyHidden) so the
+    // rational line strokes before DF is applied; transparent targets AC,
+    // CB, DG, DM, MG, DK, KM, MN, ML (;0;0;0); a faceless twin DFh of the
+    // random-faced EDGF, which would be raised over DH and KL when lit
+    // (#140), reached as {DF|DFh}; faceless targets DL (D,M,L,E) and MF
+    // (M,G,F,L). No angle is called right in the text, so no markers.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E (line sliders)
+    // and the offscreen frees. D and E arrive with "let DE be a rational
+    // straight line", so both are deferred. G, F, K, H, M, L, N, O are
+    // derived and listed per slide.
+    var GIVEN = ["A","B","C","AB","AC","CB"];
+    var RAT   = GIVEN.concat(["D","E","DE"]);
+    var APPL  = RAT.concat(["G","F","EDGF","DFh","DG"]);
+    var ALL   = APPL.concat(["K","H","EDKH","M","L","HKML","N","O","NO",
+                             "DM","MG","DK","KM","MN","ML","DL","MF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -52,31 +74,194 @@ Make the same construction as shown before.
             "L;point;vertex;HKML,4",
             "N;point;midpoint;M,G",
             "O;point;parallelogram;E,D,N",
-            "NO;line;connect;N,O"
+            "NO;line;connect;N,O",
+            // Slide-only twin and highlight targets.
+            "DE;line;connect;D,E",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "DG;line;connect;D,G;0;0;0",
+            "DM;line;connect;D,M;0;0;0",
+            "MG;line;connect;M,G;0;0;0",
+            "DK;line;connect;D,K;0;0;0",
+            "KM;line;connect;K,M;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "ML;line;connect;M,L;0;0;0",
+            "DFh;polygon;quadrilateral;E,D,G,F;0;0;0;0",
+            "DL;polygon;quadrilateral;D,M,L,E;0;0;0;0",
+            "MF;polygon;quadrilateral;M,G,F,L;0;0;0;0"
         ],
+        initiallyHidden: ["DE"],
+        deferDraggables: ["D","E"],
+        aliases: { "DF": "DFh", "DH": "EDKH", "KL": "HKML" },
+        slides: [
+            { text: "“The square on the major straight line applied to a rational straight line",
+              visible: ALL,
+              highlighted: ["AB","DE","DFh"],
+              justifications: [{ ref: "X.63" }] },
+            { text: "produces as breadth the fourth binomial.”",
+              visible: ALL,
+              highlighted: ["DG"] },
+            { text: "Let {AB} be a major straight line divided at {C}, so that {AC} is greater than {CB},",
+              visible: GIVEN,
+              highlighted: ["AB","C","AC","CB"] },
+            { text: "let {DE} be a rational straight line,",
+              visible: RAT,
+              highlighted: ["DE"],
+              transition: { animations: [
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and to {DE} let there be applied the parallelogram {DF|DFh} equal to the square on {AB}",
+              visible: APPL,
+              highlighted: ["DE","DFh","AB"],
+              transition: { animations: [
+                  { elem: "EDGF", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and producing {DG} as its breadth.",
+              visible: APPL,
+              highlighted: ["DG"] },
+            { text: "I say that {DG} is a fourth binomial straight line.",
+              visible: APPL,
+              highlighted: ["DG"] },
+            { text: "Make the same construction as shown before.",
+              visible: ALL,
+              transition: { mode: "cascade", animations: [
+                  { elem: "EDKH", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "HKML", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "N",    name: geomlib.A.Point.appear },
+                  { elem: "NO",   name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since {AB} is a major straight line divided at {C},",
+              visible: ALL,
+              highlighted: ["AB","C"] },
+            { text: "therefore {AC} and {CB} are straight lines incommensurable in square",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "which make the sum of the squares on them rational, but the rectangle contained by them medial.",
+              visible: ALL,
+              highlighted: ["AC","CB"],
+              justifications: [{ claim: "AB a major", ref: "X.39" }] },
+            { text: "Since the sum of the squares on {AC} and {CB} is rational, therefore {DL} is rational.",
+              visible: ALL,
+              highlighted: ["AC","CB","DL"] },
+            { text: "Therefore {DM} is also rational and commensurable in length with {DE}.",
+              visible: ALL,
+              highlighted: ["DM","DE"],
+              justifications: [{ claim: "DM rational, commensurable with DE", ref: "X.20" }] },
+            { text: "Again, since twice the rectangle {AC} by {CB}, that is, {MF}, is medial,",
+              visible: ALL,
+              highlighted: ["AC","CB","MF"] },
+            { text: "and it is applied to the rational straight line {ML},",
+              visible: ALL,
+              highlighted: ["MF","ML"] },
+            { text: "therefore {MG} is also rational and incommensurable in length with {DE}.",
+              visible: ALL,
+              highlighted: ["MG","DE"],
+              justifications: [{ claim: "MG rational, incommensurable with DE", ref: "X.22" }] },
+            { text: "Therefore {DM} is also incommensurable in length with {MG}.",
+              visible: ALL,
+              highlighted: ["DM","MG"],
+              justifications: [{ claim: "DM, MG incommensurable", ref: "X.13" }] },
+            { text: "Therefore {DM} and {MG} are rational straight lines commensurable in square only. Therefore {DG} is binomial.",
+              visible: ALL,
+              highlighted: ["DM","MG","DG"],
+              justifications: [{ claim: "DG binomial", ref: "X.36" }] },
+            { text: "It is to be proved that it is a fourth binomial straight line.",
+              visible: ALL,
+              highlighted: ["DG"] },
+            { text: "In manner similar to the foregoing we can prove that {DM} is greater than {MG},",
+              visible: ALL,
+              highlighted: ["DM","MG"] },
+            { text: "and that the rectangle {DK} by {KM} equals the square on {MN}.",
+              visible: ALL,
+              highlighted: ["DK","KM","MN"] },
+            { text: "Since the square on {AC} is incommensurable with the square on {CB},",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "therefore {DH|EDKH} is also incommensurable with {KL|HKML},",
+              visible: ALL,
+              highlighted: ["EDKH","HKML"] },
+            { text: "so that {DK} is also incommensurable with {KM}.",
+              visible: ALL,
+              highlighted: ["DK","KM"],
+              justifications: [{ claim: "DK, KM incommensurable", ref: "VI.1" }, { ref: "X.11" }] },
+            { text: "But, if there are two unequal straight lines, and to {the greater|DM} there is applied a parallelogram",
+              visible: ALL,
+              highlighted: ["DM"] },
+            { text: "equal to the fourth part of the square on {the less|MG} and deficient by a square figure,",
+              visible: ALL,
+              highlighted: ["MG","DK","KM"] },
+            { text: "and if it divides it into incommensurable parts,",
+              visible: ALL,
+              highlighted: ["DK","KM"] },
+            { text: "then the square on {the greater|DM} is greater than the square on {the less|MG}",
+              visible: ALL,
+              highlighted: ["DM","MG"] },
+            { text: "by the square on a straight line incommensurable in length with {the greater|DM},",
+              visible: ALL,
+              highlighted: ["DM"] },
+            { text: "therefore the square on {DM} is greater than the square on {MG}",
+              visible: ALL,
+              highlighted: ["DM","MG"] },
+            { text: "by the square on a straight line incommensurable with {DM}.",
+              visible: ALL,
+              highlighted: ["DM"],
+              justifications: [{ ref: "X.18" }] },
+            { text: "And {DM} and {MG} are rational straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["DM","MG"] },
+            { text: "and {DM} is commensurable with the rational straight line {DE} set out.",
+              visible: ALL,
+              highlighted: ["DM","DE"] },
+            { text: "Therefore {DG} is a fourth binomial straight line.",
+              visible: ALL,
+              highlighted: ["DG"],
+              justifications: [{ claim: "fourth binomial", ref: "X.Def.II.4" }] },
+            { text: "Therefore, the square on the major straight line applied to a rational straight line",
+              visible: ALL,
+              highlighted: ["AB","DE","DFh"] },
+            { text: "produces as breadth the fourth binomial.",
+              visible: ALL,
+              highlighted: ["DG"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.63") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VI.1":       "/elements/books/bookVI/propositions/propVI1/",
+        "X.11":       "/elements/books/bookX/propositions/propX11/",
+        "X.13":       "/elements/books/bookX/propositions/propX13/",
+        "X.18":       "/elements/books/bookX/propositions/propX18/",
+        "X.20":       "/elements/books/bookX/propositions/propX20/",
+        "X.22":       "/elements/books/bookX/propositions/propX22/",
+        "X.36":       "/elements/books/bookX/propositions/propX36/",
+        "X.39":       "/elements/books/bookX/propositions/propX39/",
+        "X.Def.II.4": "/elements/books/bookX/definitions/defX.II.4/"
     });
 </script>
 </figure>
 
-Since *AB* is a major straight line divided at *C*, therefore *AC* and *CB* are straight lines incommensurable in square which make the sum of the squares on them rational, but the rectangle contained by them medial. [!just X.39]
+Since {AB} is a major straight line divided at {C}, therefore {AC} and {CB} are straight lines incommensurable in square which make the sum of the squares on them rational, but the rectangle contained by them medial. [!just X.39]
 
-Since the sum of the squares on *AC* and *CB* is rational, therefore *DL* is rational. Therefore *DM* is also rational and commensurable in length with *DE*. [!just X.20]
+Since the sum of the squares on {AC} and {CB} is rational, therefore {DL} is rational. Therefore {DM} is also rational and commensurable in length with {DE}. [!just X.20]
 
-Again, since twice the rectangle *AC* by *CB*, that is, *MF*, is medial, and it is applied to the rational straight line *ML*, therefore *MG* is also rational and incommensurable in length with *DE*. [!just X.22]
+Again, since twice the rectangle {AC} by {CB}, that is, {MF}, is medial, and it is applied to the rational straight line {ML}, therefore {MG} is also rational and incommensurable in length with {DE}. [!just X.22]
 
-Therefore *DM* is also incommensurable in length with *MG*.  Therefore *DM* and *MG* are rational straight lines commensurable in square only. Therefore *DG* is binomial. [!just X.13; X.36]
+Therefore {DM} is also incommensurable in length with {MG}.  Therefore {DM} and {MG} are rational straight lines commensurable in square only. Therefore {DG} is binomial. [!just X.13; X.36]
 
 It is to be proved that it is a fourth binomial straight line.
 
-In manner similar to the foregoing we can prove that *DM* is greater than *MG*, and that the rectangle *DK* by *KM* equals the square on *MN*.
+In manner similar to the foregoing we can prove that {DM} is greater than {MG}, and that the rectangle {DK} by {KM} equals the square on {MN}.
 
-Since the square on *AC* is incommensurable with the square on *CB*, therefore *DH* is also incommensurable with *KL*, so that *DK* is also incommensurable with *KM*. [!just VI.1; X.11]
+Since the square on {AC} is incommensurable with the square on {CB}, therefore {DH|EDKH} is also incommensurable with {KL|HKML}, so that {DK} is also incommensurable with {KM}. [!just VI.1; X.11]
 
-But, if there are two unequal straight lines, and to the greater there is applied a parallelogram equal to the fourth part of the square on the less and deficient by a square figure, and if it divides it into incommensurable parts, then the square on the greater is greater than the square on the less by the square on a straight line incommensurable in length with the greater, therefore the square on *DM* is greater than the square on *MG* by the square on a straight line incommensurable with *DM*. [!just X.18]
+But, if there are two unequal straight lines, and to the greater there is applied a parallelogram equal to the fourth part of the square on the less and deficient by a square figure, and if it divides it into incommensurable parts, then the square on the greater is greater than the square on the less by the square on a straight line incommensurable in length with the greater, therefore the square on {DM} is greater than the square on {MG} by the square on a straight line incommensurable with {DM}. [!just X.18]
 
-And *DM* and *MG* are rational straight lines commensurable in square only, and *DM* is commensurable with the rational straight line *DE* set out.
+And {DM} and {MG} are rational straight lines commensurable in square only, and {DM} is commensurable with the rational straight line {DE} set out.
 
-Therefore *DG* is a fourth binomial straight line. [!just X.Def.II.4]
+Therefore {DG} is a fourth binomial straight line. [!just X.Def.II.4]
 
 Therefore, *the square on the major straight line applied to a rational straight line produces as breadth the fourth binomial.*
 
