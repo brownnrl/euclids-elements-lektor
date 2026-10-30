@@ -15,16 +15,44 @@ statement: The side of the sum of two medial areas is divided at one point only.
 ----
 proof:
 
-Let *AB* be divided at *C*, so that *AC* and *CB* are incommensurable in square and let the sum of the squares on *AC* and *CB* be medial, and the rectangle *AC* by *CB* medial and also incommensurable with the sum of the squares on them.
+Let {AB} be divided at {C}, so that {AC} and {CB} are incommensurable in square and let the sum of the squares on {AC} and {CB} be medial, and the rectangle {AC} by {CB} medial and also incommensurable with the sum of the squares on them.
 
-I say that *AB* is not divided at another point so as to fulfill the given conditions.
+I say that {AB} is not divided at another point so as to fulfill the given conditions.
 
-If possible, let it be divided at *D*, so that again *AC* is of course not the same as *BD*, but *AC* is supposed greater.
+If possible, let it be divided at {D}, so that again {AC} is of course not the same as {BD|DB}, but {AC} is supposed greater.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="360" height="210" tabindex="0"></canvas>
 <noscript><img alt="X.47 diagram" src="propX47.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: AB divided at C and, on the reductio's hypothesis, at
+    // D; the rational line EF with EK (= the square on AB) applied to it,
+    // and the strip GHML between the two applications EG and EL. Added, all
+    // invisible at rest: transparent highlight targets AC, CB, AD, DB and
+    // EH, HN, EN, EM, MN (;0;0;0); transparent faceless twins EK, EL, MK
+    // (;0;0;0;0) so a highlight never raises a face over the figure (#140);
+    // and initiallyHidden solid twins EF (the line set out, stroked from E)
+    // and the outlines EG, HK (;0 face), which draw the two applications
+    // before Joyce's EK and GHML stand. Prose and captions reach Joyce's
+    // spellings with the display override ({HE|EH}, {GN|HK}, {BD|DB}).
+    // Joyce's "to EP apply EL" (for EF) is left literal.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E, F (line
+    // sliders) and the offscreen frees. D arrives with "If possible, let it
+    // be divided at D", E and F with "Set out a rational straight line EF",
+    // so all three are deferred. N, K, H, G, M, L are derived and listed.
+    //
+    // A reductio: D and the application EL rest on the supposition, so the
+    // closing slides withdraw them and leave AB divided at C.
+    var GIVEN = ["A","B","C","AB","AC","CB"];
+    var WD    = GIVEN.concat(["D","AD","DB"]);
+    var EFS   = WD.concat(["E","F","EF"]);
+    var EGS   = EFS.concat(["H","G","EG","EH"]);
+    var HKS   = EGS.concat(["N","K","HK","HN","EN"]);
+    var EKS   = HKS.concat(["F,E,N,K","EK"]);
+    var ELS   = EKS.concat(["M","L","GHML","EL","MK","EM","MN"]);
+    var CLOSE = GIVEN.concat(["E","F","EF","H","G","EG","EH",
+                              "N","K","HK","HN","EN","F,E,N,K","EK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,25 +79,156 @@ If possible, let it be divided at *D*, so that again *AC* is of course not the s
             "M';point;proportion;E,F,A,D,A,D,E,N;0;0",
             "M;point;proportion;E,F,D,B,D,B,M',N",
             "L;point;parallelogram;F,E,M",
-            "GHML;polygon;quadrilateral;G,H,M,L;0;0;black;random"
+            "GHML;polygon;quadrilateral;G,H,M,L;0;0;black;random",
+            // Slide-only twins and highlight targets — invisible at rest.
+            "EF;line;connect;E,F",
+            "EG;polygon;quadrilateral;E,H,G,F;0;0;black;0",
+            "HK;polygon;quadrilateral;H,N,K,G;0;0;black;0",
+            "EK;polygon;quadrilateral;E,N,K,F;0;0;0;0",
+            "EL;polygon;quadrilateral;E,M,L,F;0;0;0;0",
+            "MK;polygon;quadrilateral;M,N,K,L;0;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "EH;line;connect;E,H;0;0;0",
+            "HN;line;connect;H,N;0;0;0",
+            "EN;line;connect;E,N;0;0;0",
+            "EM;line;connect;E,M;0;0;0",
+            "MN;line;connect;M,N;0;0;0"
         ],
+        initiallyHidden: ["EF","EG","HK"],
+        deferDraggables: ["D","E","F"],
+        slides: [
+            { text: "“The side of the sum of two medial areas is divided at one point only.”",
+              visible: GIVEN,
+              highlighted: ["AB","C"],
+              justifications: [{ ref: "X.47" }] },
+            { text: "Let {AB} be divided at {C}, so that {AC} and {CB} are incommensurable in square",
+              visible: GIVEN,
+              highlighted: ["AC","CB"] },
+            { text: "and let the sum of the squares on {AC} and {CB} be medial,",
+              visible: GIVEN,
+              highlighted: ["AC","CB"] },
+            { text: "and the rectangle {AC} by {CB} medial and also incommensurable with the sum of the squares on them.",
+              visible: GIVEN,
+              highlighted: ["AC","CB"] },
+            { text: "I say that {AB} is not divided at another point so as to fulfill the given conditions.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "If possible, let it be divided at {D},",
+              visible: WD,
+              highlighted: ["D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "so that again {AC} is of course not the same as {BD|DB}, but {AC} is supposed greater.",
+              visible: WD,
+              highlighted: ["AC","DB"] },
+            { text: "Set out a rational straight line {EF},",
+              visible: EFS,
+              highlighted: ["EF"],
+              transition: { animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and apply to {EF} the rectangle {EG} equal to the sum of the squares on {AC} and {CB},",
+              visible: EGS,
+              highlighted: ["EG","AC","CB"],
+              transition: { animations: [
+                  { elem: "EG", name: geomlib.A.Polygon.outline } ] } },
+            { text: "and the rectangle {HK} equal to twice the rectangle {AC} by {CB}.",
+              visible: HKS,
+              highlighted: ["HK","AC","CB"],
+              transition: { animations: [
+                  { elem: "HK", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Then the whole {EK} equals the square on {AB}.",
+              visible: EKS,
+              highlighted: ["EK","AB"],
+              justifications: [{ claim: "AB² = AC² + CB² + 2·AC·CB", ref: "II.4" }] },
+            { text: "Again, to EP apply {EL}, equal to the sum of the squares on {AD} and {DB}.",
+              visible: ELS,
+              highlighted: ["EL","AD","DB"],
+              transition: { animations: [
+                  { elem: "EL", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Then the remainder, twice the rectangle {AD} by {DB}, equals the remainder {MK}.",
+              visible: ELS,
+              highlighted: ["MK","AD","DB"] },
+            { text: "And since, by hypothesis, the sum of the squares on {AC} and {CB} is medial, therefore {EG} is also medial.",
+              visible: ELS,
+              highlighted: ["AC","CB","EG"] },
+            { text: "And it is applied to the rational straight line {EF},",
+              visible: ELS,
+              highlighted: ["EG","EF"] },
+            { text: "therefore {HE|EH} is rational and incommensurable in length with {EF}.",
+              visible: ELS,
+              highlighted: ["EH","EF"],
+              justifications: [{ claim: "EH rational, incommensurable in length with EF", ref: "X.22" }] },
+            { text: "For the same reason {HN} is also rational and incommensurable in length with {EF}.",
+              visible: ELS,
+              highlighted: ["HN","EF","HK"] },
+            { text: "And, since the sum of the squares on {AC} and {CB} is incommensurable with twice the rectangle {AC} by {CB},",
+              visible: ELS,
+              highlighted: ["AC","CB"] },
+            { text: "therefore {EG} is also incommensurable with {GN|HK}, so that {EH} is also incommensurable with {HN}.",
+              visible: ELS,
+              highlighted: ["EG","HK","EH","HN"],
+              justifications: [{ claim: "EG : GN = EH : HN", ref: "VI.1" },
+                               { claim: "EH, HN incommensurable", ref: "X.11" }] },
+            { text: "And they are rational, therefore {EH} and {HN} are rational straight lines commensurable in square only.",
+              visible: ELS,
+              highlighted: ["EH","HN"] },
+            { text: "Therefore {EN} is a binomial straight line divided at {H}.",
+              visible: ELS,
+              highlighted: ["EN","H"],
+              justifications: [{ claim: "EN binomial", ref: "X.36" }] },
+            { text: "Similarly we can prove that it is also divided at {M}.",
+              visible: ELS,
+              highlighted: ["EM","MN","M"] },
+            { text: "And {EH} is not the same with {MN}, therefore a binomial has been divided at different points, which is absurd.",
+              visible: ELS,
+              highlighted: ["EH","MN"],
+              justifications: [{ claim: "a binomial is divided at one point only", ref: "X.42" }] },
+            { text: "Therefore a side of the sum of two medial areas is not divided at different points.",
+              visible: ELS,
+              highlighted: ["C","D"] },
+            { text: "Therefore it is divided at one point only.",
+              visible: CLOSE,
+              highlighted: ["C"] },
+            { text: "Therefore, the side of the sum of two medial areas is divided at one point only.",
+              visible: CLOSE,
+              highlighted: ["AB","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.47") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.4": "/elements/books/bookII/propositions/propII4/",
+        "VI.1": "/elements/books/bookVI/propositions/propVI1/",
+        "X.11": "/elements/books/bookX/propositions/propX11/",
+        "X.22": "/elements/books/bookX/propositions/propX22/",
+        "X.36": "/elements/books/bookX/propositions/propX36/",
+        "X.42": "/elements/books/bookX/propositions/propX42/"
     });
 </script>
 </figure>
 
-Set out a rational straight line *EF*, and apply to *EF* the rectangle *EG* equal to the sum of the squares on *AC* and *CB*, and the rectangle *HK* equal to twice the rectangle *AC* by *CB*. Then the whole *EK* equals the square on *AB*. [!just II.4]
+Set out a rational straight line {EF}, and apply to {EF} the rectangle {EG} equal to the sum of the squares on {AC} and {CB}, and the rectangle {HK} equal to twice the rectangle {AC} by {CB}. Then the whole {EK} equals the square on {AB}. [!just II.4]
 
-Again, to *EP* apply *EL*, equal to the sum of the squares on *AD* and *DB*. Then the remainder, twice the rectangle *AD* by *DB*, equals the remainder *MK*.
+Again, to *EP* apply {EL}, equal to the sum of the squares on {AD} and {DB}. Then the remainder, twice the rectangle {AD} by {DB}, equals the remainder {MK}.
 
-And since, by hypothesis, the sum of the squares on *AC* and *CB* is medial, therefore *EG* is also medial.
+And since, by hypothesis, the sum of the squares on {AC} and {CB} is medial, therefore {EG} is also medial.
 
-And it is applied to the rational straight line *EF*, therefore *HE* is rational and incommensurable in length with *EF*. [!just X.22]
+And it is applied to the rational straight line {EF}, therefore {HE|EH} is rational and incommensurable in length with {EF}. [!just X.22]
 
-For the same reason *HN* is also rational and incommensurable in length with *EF*. And, since the sum of the squares on *AC* and *CB* is incommensurable with twice the rectangle *AC* by *CB*, therefore *EG* is also incommensurable with *GN*, so that *EH* is also incommensurable with *HN*. [!just VI.1; X.11]
+For the same reason {HN} is also rational and incommensurable in length with {EF}. And, since the sum of the squares on {AC} and {CB} is incommensurable with twice the rectangle {AC} by {CB}, therefore {EG} is also incommensurable with {GN|HK}, so that {EH} is also incommensurable with {HN}. [!just VI.1; X.11]
 
-And they are rational, therefore *EH* and *HN* are rational straight lines commensurable in square only. Therefore *EN* is a binomial straight line divided at *H*. [!just X.36]
+And they are rational, therefore {EH} and {HN} are rational straight lines commensurable in square only. Therefore {EN} is a binomial straight line divided at {H}. [!just X.36]
 
-Similarly we can prove that it is also divided at *M*. And *EH* is not the same with *MN*, therefore a binomial has been divided at different points, which is absurd. [!just X.42]
+Similarly we can prove that it is also divided at {M}. And {EH} is not the same with {MN}, therefore a binomial has been divided at different points, which is absurd. [!just X.42]
 
 Therefore a side of the sum of two medial areas is not divided at different points. Therefore it is divided at one point only.
 
