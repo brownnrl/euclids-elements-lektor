@@ -17,12 +17,34 @@ statement: To find a fourth proportional to three given straight lines.
 ----
 proof:
 
-Let *A* and *B* and *C* be the three given straight lines.
+Let {A} and {B} and {C} be the three given straight lines.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="320" height="250" tabindex="0"></canvas>
 <noscript><img alt="VI.12 diagram" src="propVI12.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the three given lines A, B, C (slider ends on
+    // long invisible tracks), the triangles DEF and DGH (random faces) and
+    // the overhangs EE', FF' of the two lines set out from D.
+    //
+    // The walk sets out the two lines first, before G, E, H, F exist, so
+    // they are solid slide twins DE' and DF' running D to E' / D to F' over
+    // Joyce's DE + EE' and DF + FF', hidden at rest (initiallyHidden); the
+    // join GH and the parallel EF are solid twins too, stroking from G and
+    // E. The triangles and overhangs come back on the closing slide.
+    // Everything else added is transparent: the segments DG, GE, DH, HF,
+    // the faceless twin DEFt ("the triangle DEF" — a highlighted filled
+    // triangle is raised over the figure, #140), and one transitory I.3
+    // circle per cut-off (fatigue rule), each dropped on the next slide.
+    // angEDF marks "any angle" on its slide only. None is a right angle.
+    var GIVEN = ["A","B","C"];
+    var SET   = GIVEN.concat(["D","E'","F'","DE'","DF'"]);
+    var CUTG  = SET.concat(["G","DG"]);
+    var CUTE  = CUTG.concat(["E","GE"]);
+    var CUTH  = CUTE.concat(["H","DH"]);
+    var JOIN  = CUTH.concat(["GH"]);
+    var PAR   = JOIN.concat(["EF","F","HF"]);
+    var DONE  = PAR.concat(["DEF","DGH","EE'","FF'"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -53,21 +75,129 @@ Let *A* and *B* and *C* be the three given straight lines.
             "DEF;polygon;triangle;D,E,F;0;0;black;random",
             "DGH;polygon;triangle;D,G,H;0;0;black;random",
             "EE';line;connect;E,E'",
-            "FF';line;connect;F,F'"
+            "FF';line;connect;F,F'",
+            // Slide twins, hidden at rest (see above).
+            "DE';line;connect;D,E'",
+            "DF';line;connect;D,F'",
+            "GH;line;connect;G,H",
+            "EF;line;connect;E,F",
+            // Transparent highlight targets.
+            "DG;line;connect;D,G;0;0;0",
+            "GE;line;connect;G,E;0;0;0",
+            "DH;line;connect;D,H;0;0;0",
+            "HF;line;connect;H,F;0;0;0",
+            "DEFt;polygon;triangle;D,E,F;0;0;0;0",
+            // The I.3 cut-offs, transitory.
+            "circG;circle;radius;D,A1,A2;0;0;0;0",
+            "circE;circle;radius;G,B1,B2;0;0;0;0",
+            "circH;circle;radius;D,C1,C2;0;0;0;0",
+            "angEDF;sector;angleMarker;D,E',F';0;0;7a4fa3;cdb8e6"
         ],
+        // Draggables (checked against the bundle): the track ends A0..C3
+        // (free, off-canvas) and the slider ends A1..C2 carry the givens
+        // from slide 1. D, E', F' are free but only arrive with "Set out",
+        // so they are deferred. G, E, H, F are derived, listed per slide.
+        deferDraggables: ["D","E'","F'"],
+        initiallyHidden: ["DE'","DF'","GH","EF"],
+        aliases: { "GD": "DG", "EG": "GE", "HD": "DH", "FH": "HF",
+                   "HG": "GH", "FE": "EF" },
+        slides: [
+            { text: "“To find a fourth proportional to three given straight lines.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "VI.12" }] },
+            { text: "Let {A} and {B} and {C} be the three given straight lines.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "It is required to find a fourth proportional to {A}, {B}, and {C}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "Set out two straight lines {DE|DE'} and {DF|DF'} containing any angle {EDF|angEDF}.",
+              visible: SET.concat(["angEDF"]),
+              highlighted: ["DE'","DF'","angEDF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "D",      name: geomlib.A.Point.appear },
+                  { elem: "DE'",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DF'",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angEDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Make {DG} equal to {A},",
+              visible: CUTG.concat(["circG"]),
+              highlighted: ["DG","A"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "circG", name: geomlib.A.Circle.compass },
+                  { elem: "G",     name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "DG equal to A", ref: "I.3" }] },
+            { text: "{GE} equal to {B},",
+              visible: CUTE.concat(["circE"]),
+              highlighted: ["GE","B"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "circE", name: geomlib.A.Circle.compass },
+                  { elem: "E",     name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "GE equal to B", ref: "I.3" }] },
+            { text: "and {DH} equal to {C}.",
+              visible: CUTH.concat(["circH"]),
+              highlighted: ["DH","C"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "circH", name: geomlib.A.Circle.compass },
+                  { elem: "H",     name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "DH equal to C", ref: "I.3" }] },
+            { text: "Join {GH},",
+              visible: JOIN,
+              highlighted: ["GH"],
+              transition: { animations: [
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and draw {EF} through {E} parallel to it.",
+              visible: PAR,
+              highlighted: ["EF","E","GH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "EF parallel to GH", ref: "I.31" }] },
+            { text: "Then since {GH} is parallel to a side {EF} of the triangle {DEF|DEFt},",
+              visible: PAR,
+              highlighted: ["GH","EF","DEFt"] },
+            { text: "therefore {DG} is to {GE} as {DH} is to {HF}.",
+              visible: PAR,
+              highlighted: ["DG","GE","DH","HF"],
+              justifications: [{ claim: "DG : GE = DH : HF", ref: "VI.2" }] },
+            { text: "But {DG} equals {A} and {GE} to {B}, and {DH} to {C},",
+              visible: PAR,
+              highlighted: ["DG","A","GE","B","DH","C"] },
+            { text: "therefore {A} is to {B} as {C} is to {HF}.",
+              visible: PAR,
+              highlighted: ["A","B","C","HF"],
+              justifications: [{ claim: "equals have the same ratio", ref: "V.7" }] },
+            { text: "Therefore a fourth proportional {HF} has been found to the three given straight lines {A}, {B}, and {C}.",
+              visible: DONE,
+              highlighted: ["HF","A","B","C"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.12") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":  "/elements/books/bookI/propositions/propI3/",
+        "I.31": "/elements/books/bookI/propositions/propI31/",
+        "V.7":  "/elements/books/bookV/propositions/propV7/",
+        "VI.2": "/elements/books/bookVI/propositions/propVI2/"
     });
 </script>
 </figure>
 
-It is required to find a fourth proportional to *A, B,* and *C.*
+It is required to find a fourth proportional to {A}, {B}, and {C}.
 
-Set out two straight lines *DE* and *DF* containing any angle *EDF.* Make *DG* equal to *A, GE* equal to *B,* and *DH* equal to *C.* Join *GH,* and draw *EF* through *E* parallel to it. [!just I.3; I.31]
+Set out two straight lines {DE|DE'} and {DF|DF'} containing any angle {EDF|angEDF}. Make {DG} equal to {A}, {GE} equal to {B}, and {DH} equal to {C}. Join {GH}, and draw {EF} through {E} parallel to it. [!just I.3; I.31]
 
-Then since *GH* is parallel to a side *EF* of the triangle *DEF,* therefore *DG* is to *GE* as *DH* is to *HF.* [!just VI.2]
+Then since {GH} is parallel to a side {EF} of the triangle {DEF|DEFt}, therefore {DG} is to {GE} as {DH} is to {HF}. [!just VI.2]
 
-But *DG* equals *A* and *GE* to *B,* and *DH* to *C,* therefore *A* is to *B* as *C* is to *HF.* [!just V.7]
+But {DG} equals {A} and {GE} to {B}, and {DH} to {C}, therefore {A} is to {B} as {C} is to {HF}. [!just V.7]
 
-Therefore a fourth proportional *HF* has been found to the three given straight lines *A, B,* and *C.*
+Therefore a fourth proportional {HF} has been found to the three given straight lines {A}, {B}, and {C}.
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
@@ -111,9 +241,9 @@ Descartes began by interpreting the algebraic operations of addition, subtractio
 </script>
 </figure>
 
-But Descartes took the product of two lines to be another line. That required selecting a unit line, that is, a line of length 1. Then to find the product *ab* of two quantities *a* and *b,* he only needed to find the fourth proportional of 1, *a,* and *b.* This proposition VI.10 does that.
+But Descartes took the product of two lines to be another line. That required selecting a unit line, that is, a line of length 1. Then to find the product {ab} of two quantities {a} and {b}, he only needed to find the fourth proportional of 1, {a}, and {b}. This proposition VI.10 does that.
 
-In the diagram to the right, *u* is the unit line, *a* and *b* are to be multiplied, and *ab* is their product, the fourth proportional.
+In the diagram to the right, {u} is the unit line, {a} and {b} are to be multiplied, and {ab} is their product, the fourth proportional.
 
 <figure class="diagram rdiagram">
 <canvas id="canvas_2" width="250" height="160" tabindex="0"></canvas>
@@ -140,7 +270,7 @@ In the diagram to the right, *u* is the unit line, *a* and *b* are to be multipl
 </script>
 </figure>
 
-This same proposition works to construct the quotient of two quantities. If *b* and *c* are two quantities, then the fourth proportional for *b, c,* and 1 is the quotient *c/b.*
+This same proposition works to construct the quotient of two quantities. If {b} and {c} are two quantities, then the fourth proportional for {b}, {c}, and 1 is the quotient *c/b.*
 
 Descartes achieved the fifth operation, extraction of square roots, by means of the semicircle and right angle construction described in the next proposition @VI.13.
 
