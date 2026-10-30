@@ -15,12 +15,29 @@ statement: A straight line commensurable with that which produces a medial area 
 ----
 proof:
 
-Let *AB* be a straight line which produces with a medial area a medial whole, and let *CD* be commensurable with *AB*.
+Let {AB} be a straight line which produces with a medial area a medial whole, and let {CD} be commensurable with {AB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="100" tabindex="0"></canvas>
 <noscript><img alt="X.107 diagram" src="propX107.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: AB, which produces with a medial area a medial whole,
+    // with its annex BE on the line AE, and CD commensurable with AB with
+    // DF on CF, cut in the same ratio. "Let BE be the annex to AB" brings E
+    // in; "make the same construction" (X.103's AB : CD = BE : DF) brings F.
+    // Added, all hidden at rest: solid twins AB, CD, BE, DF (initiallyHidden)
+    // so AB and CD stand alone first and the annexes stroke out from B and
+    // D. AE and CF join the slides once the terms are named. No angles, no
+    // markers.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E (line sliders)
+    // and the offscreen frees. E only arrives with the annex, so it is
+    // deferred. F is derived and listed per slide.
+    var GIVEN = ["A","B","AB","C","D","CD"];
+    var ANNEX = GIVEN.concat(["E","BE"]);
+    var BUILT = ANNEX.concat(["F","DF"]);
+    var TERMS = BUILT.concat(["AE"]);
+    var ALL   = TERMS.concat(["CF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,21 +54,108 @@ Let *AB* be a straight line which produces with a medial area a medial whole, an
             "E;point;lineSlider;A0,A3,170,0",
             "AE;line;connect;A,E",
             "F;point;proportion;A,B,C,D,B,E,D,C3",
-            "CF;line;connect;C,F"
+            "CF;line;connect;C,F",
+            // Slide-only twins, hidden at rest.
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "BE;line;connect;B,E",
+            "DF;line;connect;D,F"
         ],
+        initiallyHidden: ["AB","CD","BE","DF"],
+        deferDraggables: ["E"],
+        aliases: { "EB": "BE", "FD": "DF" },
+        slides: [
+            { text: "“A straight line commensurable with that which produces a medial area and a medial whole",
+              visible: GIVEN,
+              highlighted: ["CD","AB"],
+              justifications: [{ ref: "X.107" }] },
+            { text: "is itself also a straight line which produces with a medial area a medial whole.”",
+              visible: GIVEN,
+              highlighted: ["CD"] },
+            { text: "Let {AB} be a straight line which produces with a medial area a medial whole,",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "and let {CD} be commensurable with {AB}.",
+              visible: GIVEN,
+              highlighted: ["CD","AB"] },
+            { text: "I say that {CD} is also a straight line which produces with a medial area a medial whole.",
+              visible: GIVEN,
+              highlighted: ["CD"] },
+            { text: "Let {BE} be the annex to {AB},",
+              visible: ANNEX,
+              highlighted: ["BE","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "E",  name: geomlib.A.Point.appear } ] } },
+            { text: "and make the same construction.",
+              visible: BUILT,
+              highlighted: ["DF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "F",  name: geomlib.A.Point.appear } ] } },
+            { text: "Then {AE} and {EB} are straight lines incommensurable in square",
+              visible: TERMS,
+              highlighted: ["AE","BE"] },
+            { text: "which make the sum of the squares on them medial, the rectangle contained by them medial,",
+              visible: TERMS,
+              highlighted: ["AE","BE"] },
+            { text: "and further, the sum of the squares on them incommensurable with the rectangle contained by them.",
+              visible: TERMS,
+              highlighted: ["AE","BE"],
+              justifications: [{ claim: "AB produces with a medial area a medial whole", ref: "X.78" }] },
+            { text: "Now as was proved, {AE} and {EB} are commensurable with {CF} and {FD},",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"] },
+            { text: "the sum of the squares on {AE} and {EB} with the sum of the squares on {CF} and {FD},",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"] },
+            { text: "and the rectangle {AE} by {EB} with the rectangle {CF} by {FD},",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"] },
+            { text: "therefore {CF} and {FD} are straight lines incommensurable in square",
+              visible: ALL,
+              highlighted: ["CF","DF"] },
+            { text: "which make the sum of the squares on them medial, the rectangle contained by them medial,",
+              visible: ALL,
+              highlighted: ["CF","DF"] },
+            { text: "and further, the sum of the squares on them incommensurable with the rectangle contained by them.",
+              visible: ALL,
+              highlighted: ["CF","DF"] },
+            { text: "Therefore {CD} is a straight line which produces with a medial area a medial whole.",
+              visible: ALL,
+              highlighted: ["CD"],
+              justifications: [{ claim: "CD produces with a medial area a medial whole", ref: "X.78" }] },
+            { text: "Therefore, a straight line commensurable with that which produces a medial area and a medial whole",
+              visible: ALL,
+              highlighted: ["CD","AB"] },
+            { text: "is itself also a straight line which produces with a medial area a medial whole.",
+              visible: ALL,
+              highlighted: ["CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.107") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.78": "/elements/books/bookX/propositions/propX78/"
     });
 </script>
 </figure>
 
-I say that *CD* is also a straight line which produces with a medial area a medial whole.
+I say that {CD} is also a straight line which produces with a medial area a medial whole.
 
-Let *BE* be the annex to *AB*, and make the same construction.
+Let {BE} be the annex to {AB}, and make the same construction.
 
-Then *AE* and *EB* are straight lines incommensurable in square which make the sum of the squares on them medial, the rectangle contained by them medial, and further, the sum of the squares on them incommensurable with the rectangle contained by them. [!just X.78]
+Then {AE} and {EB} are straight lines incommensurable in square which make the sum of the squares on them medial, the rectangle contained by them medial, and further, the sum of the squares on them incommensurable with the rectangle contained by them. [!just X.78]
 
-Now as was proved, *AE* and *EB* are commensurable with *CF* and *FD*, the sum of the squares on *AE* and *EB* with the sum of the squares on *CF* and *FD*, and the rectangle *AE* by *EB* with the rectangle *CF* by *FD*, therefore *CF* and *FD* are straight lines incommensurable in square which make the sum of the squares on them medial, the rectangle contained by them medial, and further, the sum of the squares on them incommensurable with the rectangle contained by them.
+Now as was proved, {AE} and {EB} are commensurable with {CF} and {FD}, the sum of the squares on {AE} and {EB} with the sum of the squares on {CF} and {FD}, and the rectangle {AE} by {EB} with the rectangle {CF} by {FD}, therefore {CF} and {FD} are straight lines incommensurable in square which make the sum of the squares on them medial, the rectangle contained by them medial, and further, the sum of the squares on them incommensurable with the rectangle contained by them.
 
-Therefore *CD* is a straight line which produces with a medial area a medial whole. [!just X.78]
+Therefore {CD} is a straight line which produces with a medial area a medial whole. [!just X.78]
 
 Therefore, *a straight line commensurable with that which produces a medial area and a medial whole is itself also a straight line which produces with a medial area a medial whole.*
 
