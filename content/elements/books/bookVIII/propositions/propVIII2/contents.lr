@@ -19,11 +19,11 @@ statement: To find as many numbers as are prescribed in continued proportion, an
 ----
 proof:
 
-Let the ratio of *A* to *B* be the given ratio in least numbers.
+Let the ratio of {A} to {B} be the given ratio in least numbers.
 
-It is required to find numbers in continued proportion, as many as may be prescribed, the least that are in the ratio of *A* to *B.*
+It is required to find numbers in continued proportion, as many as may be prescribed, the least that are in the ratio of {A} to {B}.
 
-Let four be prescribed. Multiply *A* by itself to make *C,* and by *B* to make *D.* Multiply *B* by itself to make *E.* Also multiply *A* by *C, D,* and *E* to make *F, G,* and *H,* and multiply *B* by *E* to make *K.*
+Let four be prescribed. Multiply {A} by itself to make {C}, and by {B} to make {D}. Multiply {B} by itself to make {E}. Also multiply {A} by {C}, {D}, and {E} to make {F}, {G}, and {H}, and multiply {B} by {E} to make {K}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="350" height="180" tabindex="0"></canvas>
@@ -78,33 +78,193 @@ Let four be prescribed. Multiply *A* by itself to make *C,* and by *B* to make *
             "K2;point;proportion;U0,U1,B1,B2,E1,E2,K1,K3;0",
             "K;line;connect;K1,K2;black"
         ],
+        // Numbers are line segments here. The construction strokes in each
+        // product C, D, E, F, G, H, K as it is made; the rest of the walk is
+        // highlight beats. Nothing is added to the figure. Draggables
+        // (checked against the bundle): the lineSlider ends A1, A2, B1, B2
+        // of the given ratio and C1..K1 of the products (plus the off-canvas
+        // free rails). The products' C1..K1 are made mid-walk, so deferred.
+        deferDraggables: ["C1","D1","E1","F1","G1","H1","K1"],
+        slides: [
+            { text: "“To find as many numbers as are prescribed in continued proportion,”",
+              visible: ["A","B"],
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VIII.2" }] },
+            { text: "“and the least that are in a given ratio.”",
+              visible: ["A","B"],
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VIII.2" }] },
+            { text: "Let the ratio of {A} to {B} be the given ratio in least numbers.",
+              visible: ["A","B"],
+              highlighted: ["A","B"] },
+            { text: "It is required to find numbers in continued proportion, as many as may be prescribed,",
+              visible: ["A","B"],
+              highlighted: ["A","B"] },
+            { text: "the least that are in the ratio of {A} to {B}.",
+              visible: ["A","B"],
+              highlighted: ["A","B"] },
+            { text: "Let four be prescribed. Multiply {A} by itself to make {C},",
+              visible: ["A","B","C"],
+              highlighted: ["A","C"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and by {B} to make {D}.",
+              visible: ["A","B","C","D"],
+              highlighted: ["A","B","D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Multiply {B} by itself to make {E}.",
+              visible: ["A","B","C","D","E"],
+              highlighted: ["B","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Also multiply {A} by {C}, {D}, and {E} to make {F}, {G}, and {H},",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["A","C","D","E","F","G","H"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and multiply {B} by {E} to make {K}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["B","E","K"],
+              transition: { animations: [
+                  { elem: "K", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since {A} multiplied by itself makes {C}, and multiplied by {B} makes {D},",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","C","D"] },
+            { text: "therefore {A} is to {B} as {C} is to {D}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","C","D"],
+              justifications: [{ claim: "A : B = C : D", ref: "VII.17" }] },
+            { text: "Again, since {A} multiplied by {B} makes {D}, and {B} multiplied by itself makes {E},",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","D","E"] },
+            { text: "therefore the numbers {A} and {B} multiplied by {B} make the numbers {D} and {E} respectively.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","D","E"] },
+            { text: "Therefore {A} is to {B} as {D} is to {E}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","D","E"],
+              justifications: [{ claim: "A : B = D : E", ref: "VII.18" }] },
+            { text: "But {A} is to {B} as {C} is to {D}, therefore {C} is to {D} as {D} is to {E}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["C","D","E"] },
+            { text: "And, since {A} multiplied by {C} and {D} makes {F} and {G},",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","C","D","F","G"] },
+            { text: "therefore {C} is to {D} as {F} is to {G}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["C","D","F","G"],
+              justifications: [{ claim: "C : D = F : G", ref: "VII.17" }] },
+            { text: "But {C} is to {D} as {A} is to {B}, therefore {A} is to {B} as {F} is to {G}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","F","G"] },
+            { text: "Again, since {A} multiplied by {D} and {E} makes {G} and {H},",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","D","E","G","H"] },
+            { text: "therefore {D} is to {E} as {G} is to {H}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["D","E","G","H"],
+              justifications: [{ claim: "D : E = G : H", ref: "VII.17" }] },
+            { text: "But {D} is to {E} as {A} is to {B}. Therefore {A} is to {B} as {G} is to {H}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","G","H"] },
+            { text: "And, since {A} and {B} multiplied by {E} make {H} and {K},",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","E","H","K"] },
+            { text: "therefore {A} is to {B} as {H} is to {K}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","H","K"],
+              justifications: [{ claim: "A : B = H : K", ref: "VII.18" }] },
+            { text: "But {A} is to {B} as {F} is to {G}, and as {G} is to {H}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","F","G","H"] },
+            { text: "Therefore {F} is to {G} as {G} is to {H}, and as {H} is to {K}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["F","G","H","K"] },
+            { text: "Therefore {C}, {D}, and {E}, and {F}, {G}, {H}, and {K} are proportional in the ratio of {A} to {B}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","C","D","E","F","G","H","K"] },
+            { text: "I say next that they are the least numbers that are so.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["C","D","E","F","G","H","K"] },
+            { text: "Since {A} and {B} are the least of those which have the same ratio with them,",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B"] },
+            { text: "and the least of those which have the same ratio are relatively prime, therefore {A} and {B} are relatively prime.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B"],
+              justifications: [{ claim: "A and B are relatively prime", ref: "VII.22" }] },
+            { text: "And the numbers {A} and {B} multiplied by themselves respectively make the numbers {C} and {E},",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","C","E"] },
+            { text: "and multiplied by the numbers {C} and {E} respectively make the numbers {F} and {K},",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","C","E","F","K"] },
+            { text: "therefore {C} and {E} and {F} and {K} are relatively prime respectively.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["C","E","F","K"],
+              justifications: [{ claim: "C, E and F, K relatively prime", ref: "VII.27" }] },
+            { text: "But, if there are as many numbers as we please in continued proportion,",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["C","D","E","F","G","H","K"] },
+            { text: "and the extremes of them are relatively prime,",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["C","E","F","K"] },
+            { text: "then they are the least of those which have the same ratio with them.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["C","D","E","F","G","H","K"],
+              justifications: [{ claim: "extremes relatively prime, so least", ref: "VIII.1" }] },
+            { text: "Therefore {C}, {D}, and {E} and {F}, {G}, {H} and {K}",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["C","D","E","F","G","H","K"] },
+            { text: "are the least of those which have the same ratio with {A} and {B}.",
+              visible: ["A","B","C","D","E","F","G","H","K"],
+              highlighted: ["A","B","C","D","E","F","G","H","K"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.2") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.17": "/elements/books/bookVII/propositions/propVII17/",
+        "VII.18": "/elements/books/bookVII/propositions/propVII18/",
+        "VII.22": "/elements/books/bookVII/propositions/propVII22/",
+        "VII.27": "/elements/books/bookVII/propositions/propVII27/",
+        "VIII.1": "/elements/books/bookVIII/propositions/propVIII1/"
     });
 </script>
 </figure>
 
-Now, since *A* multiplied by itself makes *C,* and multiplied by *B* makes *D,* therefore *A* is to *B* as *C* is to *D.* [!just VII.17]
+Now, since {A} multiplied by itself makes {C}, and multiplied by {B} makes {D}, therefore {A} is to {B} as {C} is to {D}. [!just VII.17]
 
-Again, since *A* multiplied by *B* makes *D,* and *B* multiplied by itself makes *E,* therefore the numbers *A* and *B* multiplied by *B* make the numbers *D* and *E* respectively.
+Again, since {A} multiplied by {B} makes {D}, and {B} multiplied by itself makes {E}, therefore the numbers {A} and {B} multiplied by {B} make the numbers {D} and {E} respectively.
 
-Therefore *A* is to *B* as *D* is to *E.* But *A* is to *B* as *C* is to *D,* therefore *C* is to *D* as *D* is to *E.* [!just VII.18]
+Therefore {A} is to {B} as {D} is to {E}. But {A} is to {B} as {C} is to {D}, therefore {C} is to {D} as {D} is to {E}. [!just VII.18]
 
-And, since *A* multiplied by *C* and *D* makes *F* and *G,* therefore *C* is to *D* as *F* is to *G.* [!just VII.17]
+And, since {A} multiplied by {C} and {D} makes {F} and {G}, therefore {C} is to {D} as {F} is to {G}. [!just VII.17]
 
-But *C* is to *D* as *A* is to *B,* therefore *A* is to *B* as *F* is to *G.*
+But {C} is to {D} as {A} is to {B}, therefore {A} is to {B} as {F} is to {G}.
 
-Again, since *A* multiplied by *D* and *E* makes *G* and *H,* therefore *D* is to *E* as *G* is to *H.* But *D* is to *E* as *A* is to *B.* Therefore *A* is to *B* as *G* is to *H.* [!just VII.17]
+Again, since {A} multiplied by {D} and {E} makes {G} and {H}, therefore {D} is to {E} as {G} is to {H}. But {D} is to {E} as {A} is to {B}. Therefore {A} is to {B} as {G} is to {H}. [!just VII.17]
 
-And, since *A* and *B* multiplied by *E* make *H* and *K,* therefore *A* is to *B* as *H* is to *K.* But *A* is to *B* as *F* is to *G,* and as *G* is to *H.* Therefore *F* is to *G* as *G* is to *H,* and as *H* is to *K.* [!just VII.18]
+And, since {A} and {B} multiplied by {E} make {H} and {K}, therefore {A} is to {B} as {H} is to {K}. But {A} is to {B} as {F} is to {G}, and as {G} is to {H}. Therefore {F} is to {G} as {G} is to {H}, and as {H} is to {K}. [!just VII.18]
 
-Therefore *C, D,* and *E,* and *F, G, H,* and *K* are proportional in the ratio of *A* to *B.*
+Therefore {C}, {D}, and {E}, and {F}, {G}, {H}, and {K} are proportional in the ratio of {A} to {B}.
 
 I say next that they are the least numbers that are so.
 
-Since *A* and *B* are the least of those which have the same ratio with them, and the least of those which have the same ratio are relatively prime, therefore *A* and *B* are relatively prime. [!just VII.22]
+Since {A} and {B} are the least of those which have the same ratio with them, and the least of those which have the same ratio are relatively prime, therefore {A} and {B} are relatively prime. [!just VII.22]
 
-And the numbers *A* and *B* multiplied by themselves respectively make the numbers *C* and *E,* and multiplied by the numbers *C* and *E* respectively make the numbers *F* and *K,* therefore *C* and *E* and *F* and *K* are relatively prime respectively. [!just VII.27]
+And the numbers {A} and {B} multiplied by themselves respectively make the numbers {C} and {E}, and multiplied by the numbers {C} and {E} respectively make the numbers {F} and {K}, therefore {C} and {E} and {F} and {K} are relatively prime respectively. [!just VII.27]
 
-But, if there are as many numbers as we please in continued proportion, and the extremes of them are relatively prime, then they are the least of those which have the same ratio with them. Therefore *C, D,* and *E* and *F, G, H* and *K* are the least of those which have the same ratio with *A* and *B.* [!just VIII.1]
+But, if there are as many numbers as we please in continued proportion, and the extremes of them are relatively prime, then they are the least of those which have the same ratio with them. Therefore {C}, {D}, and {E} and {F}, {G}, {H} and {K} are the least of those which have the same ratio with {A} and {B}. [!just VIII.1]
 
 <div class="qed">Q.E.D.</div>
 ----

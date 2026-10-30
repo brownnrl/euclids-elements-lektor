@@ -15,11 +15,11 @@ statement: If there are as many numbers as we please in continued proportion, an
 ----
 proof:
 
-Let there be as many numbers as we please, *A, B, C,* and *D,* in continued proportion, and let the extremes of them, *A* and *D,* be relatively prime.
+Let there be as many numbers as we please, {A}, {B}, {C}, and {D}, in continued proportion, and let the extremes of them, {A} and {D}, be relatively prime.
 
-I say that *A, B, C,* and *D* are the least of those which have the same ratio with them.
+I say that {A}, {B}, {C}, and {D} are the least of those which have the same ratio with them.
 
-If not, let *E, F, G,* and *H* be less than *A, B, C,* and *D,* and in the same ratio with them.
+If not, let {E}, {F}, {G}, and {H} be less than {A}, {B}, {C}, and {D}, and in the same ratio with them.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="175" tabindex="0"></canvas>
@@ -64,15 +64,118 @@ If not, let *E, F, G,* and *H* be less than *A, B, C,* and *D,* and in the same 
             "H2;point;proportion;A1,A2,B1,B2,G1,G2,H1,D3;0",
             "H;line;connect;H1,H2;black"
         ],
+        // Numbers are line segments here, so the walk is highlight beats on
+        // the lines A..H; the only animation strokes in the supposed E..H.
+        // Nothing is added to the figure. Draggables (checked against the
+        // bundle): the lineSlider ends A1..H1, A2, B2 (plus the off-canvas
+        // free rails). E1..H1 belong to numbers the reductio supposes
+        // mid-walk, so they are deferred; E..H are withdrawn again once the
+        // supposition is refuted.
+        deferDraggables: ["E1","F1","G1","H1"],
+        slides: [
+            { text: "“If there are as many numbers as we please in continued proportion,”",
+              visible: ["A","B","C","D"],
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "VIII.1" }] },
+            { text: "“and the extremes of them are relatively prime,”",
+              visible: ["A","B","C","D"],
+              highlighted: ["A","D"],
+              justifications: [{ ref: "VIII.1" }] },
+            { text: "“then the numbers are the least of those which have the same ratio with them.”",
+              visible: ["A","B","C","D"],
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "VIII.1" }] },
+            { text: "Let there be as many numbers as we please, {A}, {B}, {C}, and {D}, in continued proportion,",
+              visible: ["A","B","C","D"],
+              highlighted: ["A","B","C","D"] },
+            { text: "and let the extremes of them, {A} and {D}, be relatively prime.",
+              visible: ["A","B","C","D"],
+              highlighted: ["A","D"] },
+            { text: "I say that {A}, {B}, {C}, and {D} are the least of those which have the same ratio with them.",
+              visible: ["A","B","C","D"],
+              highlighted: ["A","B","C","D"] },
+            { text: "If not, let {E}, {F}, {G}, and {H} be less than {A}, {B}, {C}, and {D},",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["E","F","G","H"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and in the same ratio with them.",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["A","B","C","D","E","F","G","H"] },
+            { text: "Now, since {A}, {B}, {C}, and {D} are in the same ratio with {E}, {F}, {G}, and {H},",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["A","B","C","D","E","F","G","H"] },
+            { text: "and the multitude of the numbers {A}, {B}, {C}, and {D} equals the multitude of the numbers {E}, {F}, {G}, and {H},",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["A","B","C","D","E","F","G","H"] },
+            { text: "therefore, ex aequali {A} is to {D} as {E} is to {H}.",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["A","D","E","H"],
+              justifications: [{ claim: "A : D = E : H", ref: "VII.14" }] },
+            { text: "But {A} and {D} are relatively prime,",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["A","D"] },
+            { text: "numbers which are relatively prime are also least,",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["A","D"],
+              justifications: [{ claim: "A and D are least in their ratio", ref: "VII.21" }] },
+            { text: "and the least numbers measure those which have the same ratio the same number of times,",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["A","D","E","H"],
+              justifications: [{ claim: "the least measure those in the same ratio", ref: "VII.20" }] },
+            { text: "the greater the greater and the less the less,",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["A","D","E","H"] },
+            { text: "that is, the antecedent the antecedent and the consequent the consequent.",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["A","D","E","H"] },
+            { text: "Therefore {A} measures {E}, the greater the less, which is impossible.",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["A","E"] },
+            { text: "Therefore {E}, {F}, {G}, and {H}, which are less than {A}, {B}, {C}, and {D},",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["E","F","G","H"] },
+            { text: "are not in the same ratio with them.",
+              visible: ["A","B","C","D","E","F","G","H"],
+              highlighted: ["E","F","G","H"] },
+            { text: "Therefore {A}, {B}, {C}, and {D} are the least of those which have the same ratio with them.",
+              visible: ["A","B","C","D"],
+              highlighted: ["A","B","C","D"] },
+            { text: "Therefore, if there are as many numbers as we please in continued proportion,",
+              visible: ["A","B","C","D"],
+              highlighted: ["A","B","C","D"] },
+            { text: "and the extremes of them are relatively prime,",
+              visible: ["A","B","C","D"],
+              highlighted: ["A","D"] },
+            { text: "then the numbers are the least of those which have the same ratio with them.",
+              visible: ["A","B","C","D"],
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.1") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.14": "/elements/books/bookVII/propositions/propVII14/",
+        "VII.20": "/elements/books/bookVII/propositions/propVII20/",
+        "VII.21": "/elements/books/bookVII/propositions/propVII21/"
     });
 </script>
 </figure>
 
-Now, since *A, B, C,* and *D* are in the same ratio with *E, F, G,* and *H,* and the multitude of the numbers *A, B, C,* and *D* equals the multitude of the numbers *E, F, G,* and *H,* therefore, *ex aequali A* is to *D* as *E* is to *H.* [!just VII.14]
+Now, since {A}, {B}, {C}, and {D} are in the same ratio with {E}, {F}, {G}, and {H}, and the multitude of the numbers {A}, {B}, {C}, and {D} equals the multitude of the numbers {E}, {F}, {G}, and {H}, therefore, *ex aequali* {A} is to {D} as {E} is to {H}. [!just VII.14]
 
-But *A* and *D* are relatively prime, numbers which are relatively prime are also least, and the least numbers measure those which have the same ratio the same number of times, the greater the greater and the less the less, that is, the antecedent the antecedent and the consequent the consequent. Therefore *A* measures *E,* the greater the less, which is impossible. [!just VII.21; VII.20]
+But {A} and {D} are relatively prime, numbers which are relatively prime are also least, and the least numbers measure those which have the same ratio the same number of times, the greater the greater and the less the less, that is, the antecedent the antecedent and the consequent the consequent. Therefore {A} measures {E}, the greater the less, which is impossible. [!just VII.21; VII.20]
 
-Therefore *E, F, G,* and *H,* which are less than *A, B, C,* and *D,* are not in the same ratio with them. Therefore *A, B, C,* and *D* are the least of those which have the same ratio with them.
+Therefore {E}, {F}, {G}, and {H}, which are less than {A}, {B}, {C}, and {D}, are not in the same ratio with them. Therefore {A}, {B}, {C}, and {D} are the least of those which have the same ratio with them.
 
 Therefore, *if there are as many numbers as we please in continued proportion, and the extremes of them are relatively prime, then the numbers are the least of those which have the same ratio with them.*
 
