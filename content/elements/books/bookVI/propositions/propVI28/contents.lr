@@ -19,14 +19,48 @@ proof:
 
 [!just VI.27]
 
-Let *C* be the given rectilinear figure, *AB* the given straight line,  and *D* the given parallelogram, and let *C* not be greater than the parallelogram described on the half of *AB* similar to the given parallelogram *D.*
+Let {C|Ct} be the given rectilinear figure, {AB} the given straight line,  and {D|Dt} the given parallelogram, and let {C|Ct} not be greater than the parallelogram described on the half of {AB} similar to the given parallelogram {D|Dt}.
 
-It is required to apply a parallelogram equal to the given rectilinear figure *C* to the given straight line *AB* but falling short by a parallelogram similar to *D.*
+It is required to apply a parallelogram equal to the given rectilinear figure {C|Ct} to the given straight line {AB} but falling short by a parallelogram similar to {D|Dt}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="540" height="280" tabindex="0"></canvas>
 <noscript><img alt="VI.28 diagram" src="propVI28.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the given figure C and parallelogram D (random
+    // faces), the whole ABFH on AB with GE cutting off EBFG, the
+    // parallelogram KNML (random face, constructed by VI.25 via hidden
+    // application helpers), the diameter BG, the lines QR and QP, and the
+    // sought parallelogram ASQT (random face); the arc VWU marks the gnomon.
+    //
+    // The walk builds the figure stroke by stroke, so AB, EBFG, OQ, PQ, the
+    // diameter GQB (drawn from G), OT and QS are solid slide twins over
+    // Joyce's edges and lines, hidden at rest (initiallyHidden); Joyce's
+    // own BG and QP are withheld, and ASQT returns, filled, on the closing
+    // slides. Everything else added is transparent: the segments AE, EB,
+    // GF, GO, GP, KL, LM, AS, SB, and faceless polygons for each
+    // parallelogram the proof names (AG, KM, GQ, PR, OS, QB, PB, OB, TE,
+    // ST), the givens Ct and Dt, and UWVg, the gnomon itself (the hexagon
+    // E-B-F-P-Q-O). A highlighted filled polygon is raised over the figure
+    // (#140), so prose and captions reach C, D and the gnomon as {C|Ct},
+    // {D|Dt} and {UWV|UWVg}; BG is Joyce's line, so the parallelogram BG is
+    // {BG|EBFG}. No angles are argued, so there are no markers.
+    //
+    // Draggables (checked against the bundle): the carriers Z0, Z1 (off
+    // canvas, hidden), A, B, C1..C4, D1..D3 — all givens — and K, a
+    // lineSlider for the constructed KLMN, so K is deferred. Every other
+    // point is derived and listed per slide.
+    var GIVEN = ["A","B","C","C1","C2","C3","C4","D","D1","D2","D3","D4","AB"];
+    var BIS   = GIVEN.concat(["E"]);
+    var GB    = BIS.concat(["F","G","EBFG","GE"]);
+    var AG    = GB.concat(["H","ABFH"]);
+    var KM    = AG.concat(["K","N","M","L","KNML"]);
+    var OP    = KM.concat(["O","P"]);
+    var GQ    = OP.concat(["Q","OQ","PQ"]);
+    var DIAM  = GQ.concat(["GQB"]);
+    var FIG   = DIAM.concat(["T","R","S","OT","QR","QS"]);
+    var GNO   = FIG.concat(["V","W","U","VWU"]);
+    var DONE  = GNO.concat(["ASQT"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -78,51 +112,248 @@ It is required to apply a parallelogram equal to the given rectilinear figure *C
             "V;point;cutoff;Q,T,Q,Y;black;0",
             "W;point;cutoff;Q,B,Q,Y;black;0",
             "U;point;cutoff;Q,P,Q,Y;black;0",
-            "VWU;sector;arc;V,W,U;0;0;darkGray;0"
+            "VWU;sector;arc;V,W,U;0;0;darkGray;0",
+            // ---- additions for the slideshow ----
+            // Solid slide twins, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            "EBFG;polygon;parallelogram;E,B,F;0;0;black;0",
+            "OQ;line;connect;O,Q",
+            "PQ;line;connect;P,Q",
+            "GQB;line;connect;G,B",
+            "OT;line;connect;O,T",
+            "QS;line;connect;Q,S",
+            // Transparent segments the proof and guide name.
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "GF;line;connect;G,F;0;0;0",
+            "GO;line;connect;G,O;0;0;0",
+            "GP;line;connect;G,P;0;0;0",
+            "KL;line;connect;K,L;0;0;0",
+            "LM;line;connect;L,M;0;0;0",
+            "AS;line;connect;A,S;0;0;0",
+            "SB;line;connect;S,B;0;0;0",
+            // Faceless twins of the givens, and the parallelograms the
+            // proof names by their diagonals. Explicit ;0 faces.
+            "Ct;polygon;quadrilateral;C1,C2,C3,C4;0;0;0;0",
+            "Dt;polygon;parallelogram;D1,D2,D3;0;0;0;0",
+            "AG;polygon;parallelogram;A,E,G;0;0;0;0",
+            "KM;polygon;parallelogram;K,N,M;0;0;0;0",
+            "GQ;polygon;parallelogram;O,G,P;0;0;0;0",
+            "PR;polygon;parallelogram;P,F,R;0;0;0;0",
+            "OS;polygon;parallelogram;O,Q,S;0;0;0;0",
+            "QB;polygon;parallelogram;Q,R,B;0;0;0;0",
+            "PB;polygon;parallelogram;P,F,B;0;0;0;0",
+            "OB;polygon;parallelogram;O,R,B;0;0;0;0",
+            "TE;polygon;parallelogram;A,E,O;0;0;0;0",
+            "ST;polygon;parallelogram;A,S,Q;0;0;0;0",
+            // The gnomon UWV: GB less GQ.
+            "UWVg;polygon;hexagon;E,B,F,P,Q,O;0;0;0;0"
         ],
+        initiallyHidden: ["AB","EBFG","OQ","PQ","GQB","OT","QS"],
+        deferDraggables: ["K"],
+        aliases: { "GB": "EBFG", "HE": "AG", "KLMN": "KM", "OGPQ": "GQ",
+                   "TS": "ST", "SA": "AS" },
+        slides: [
+            { text: "“To apply a parallelogram equal to a given rectilinear figure to a given straight line”",
+              visible: GIVEN,
+              highlighted: ["Ct","AB"],
+              justifications: [{ ref: "VI.28" }] },
+            { text: "“but falling short by a parallelogram similar to a given one;”",
+              visible: GIVEN,
+              highlighted: ["Dt"] },
+            { text: "“thus the given rectilinear figure must not be greater than the parallelogram described on the half of the straight line”",
+              visible: GIVEN,
+              highlighted: ["Ct","AB"] },
+            { text: "“and similar to the given parallelogram.”",
+              visible: GIVEN,
+              highlighted: ["Dt"] },
+            { text: "Let {C|Ct} be the given rectilinear figure, {AB} the given straight line, and {D|Dt} the given parallelogram,",
+              visible: GIVEN,
+              highlighted: ["Ct","AB","Dt"] },
+            { text: "and let {C|Ct} not be greater than the parallelogram described on the half of {AB} similar to the given parallelogram {D|Dt}.",
+              visible: GIVEN,
+              highlighted: ["Ct","AB","Dt"],
+              justifications: [{ claim: "C not greater than the figure on the half", ref: "VI.27" }] },
+            { text: "It is required to apply a parallelogram equal to the given rectilinear figure {C|Ct} to the given straight line {AB}",
+              visible: GIVEN,
+              highlighted: ["Ct","AB"] },
+            { text: "but falling short by a parallelogram similar to {D|Dt}.",
+              visible: GIVEN,
+              highlighted: ["Dt"] },
+            { text: "Bisect {AB} at the point {E}.",
+              visible: BIS,
+              highlighted: ["AB","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AB bisected at E", ref: "I.9" }] },
+            { text: "Describe {EBFG} similar and similarly situated to {D|Dt} on {EB},",
+              visible: GB,
+              highlighted: ["EBFG","Dt","EB"],
+              transition: { animations: [
+                  { elem: "EBFG", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "EBFG on EB similar to D", ref: "VI.18" }] },
+            { text: "and complete the parallelogram {AG}.",
+              visible: AG,
+              highlighted: ["AG"],
+              transition: { animations: [
+                  { elem: "AG", name: geomlib.A.Polygon.outline } ] } },
+            { text: "If then {AG} equals {C|Ct}, that which was proposed is done,",
+              visible: AG,
+              highlighted: ["AG","Ct"] },
+            { text: "for the parallelogram {AG} equal to the given rectilinear figure {C|Ct} has been applied to the given straight line {AB}",
+              visible: AG,
+              highlighted: ["AG","Ct","AB"] },
+            { text: "but falling short by a parallelogram {GB} similar to {D|Dt}.",
+              visible: AG,
+              highlighted: ["EBFG","Dt"] },
+            { text: "But, if not, let {HE} be greater than {C|Ct}.",
+              visible: AG,
+              highlighted: ["AG","Ct"] },
+            { text: "Now {HE} equals {GB}, therefore {GB} is also greater than {C|Ct}.",
+              visible: AG,
+              highlighted: ["AG","EBFG","Ct"] },
+            { text: "Construct {KLMN} equal to {GB} minus {C|Ct} and similar and similarly situated to {D|Dt}.",
+              visible: KM,
+              highlighted: ["KM","EBFG","Ct","Dt"],
+              transition: { animations: [
+                  { elem: "KNML", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "KLMN = GB − C, similar to D", ref: "VI.25" }] },
+            { text: "But {D|Dt} is similar to {GB}, therefore {KM} is also similar to {GB}.",
+              visible: KM,
+              highlighted: ["Dt","EBFG","KM"],
+              justifications: [{ claim: "KM similar to GB", ref: "VI.21" }] },
+            { text: "Let, then, {KL} correspond to {GE}, and {LM} to {GF}.",
+              visible: KM,
+              highlighted: ["KL","GE","LM","GF"] },
+            { text: "Now, since {GB} equals {C|Ct} and {KM}, therefore {GB} is greater than {KM},",
+              visible: KM,
+              highlighted: ["EBFG","Ct","KM"] },
+            { text: "therefore also {GE} is greater than {KL}, and {GF} than {LM}.",
+              visible: KM,
+              highlighted: ["GE","KL","GF","LM"] },
+            { text: "Make {GO} equal to {KL}, and {GP} equal to {LM},",
+              visible: OP,
+              highlighted: ["GO","KL","GP","LM"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "O", name: geomlib.A.Point.appear },
+                  { elem: "P", name: geomlib.A.Point.appear } ] } },
+            { text: "and let the parallelogram {OGPQ} be completed, therefore it is equal and similar to {KM}.",
+              visible: GQ,
+              highlighted: ["GQ","KM"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "OQ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "PQ", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore {GQ} is also similar to {GB}, therefore {GQ} is about the same diameter with {GB}.",
+              visible: GQ,
+              highlighted: ["GQ","EBFG"],
+              justifications: [
+                  { claim: "GQ similar to GB",                 ref: "VI.21" },
+                  { claim: "GQ about the same diameter as GB", ref: "VI.26" } ] },
+            { text: "Let {GQB} be their diameter, and describe the figure.",
+              visible: FIG,
+              highlighted: ["GQB"],
+              transition: { animations: [
+                  { elem: "GQB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "OT",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "QR",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "QS",  name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since {BG|EBFG} equals {C|Ct} and {KM}, and in them {GQ} equals {KM},",
+              visible: FIG,
+              highlighted: ["EBFG","Ct","KM","GQ"] },
+            { text: "therefore the remainder, the gnomon {UWV|UWVg}, equals the remainder {C|Ct}.",
+              visible: GNO,
+              highlighted: ["UWVg","Ct"],
+              transition: { animations: [
+                  { elem: "VWU",  name: geomlib.A.Sector.sweep },
+                  { elem: "UWVg", name: geomlib.A.Polygon.outline } ] } },
+            { text: "And, since {PR} equals {OS}, add {QB} to each,",
+              visible: GNO,
+              highlighted: ["PR","OS","QB"] },
+            { text: "therefore the whole {PB} equals the whole {OB}.",
+              visible: GNO,
+              highlighted: ["PB","OB"] },
+            { text: "But {OB} equals {TE}, since the side {AE} also equals the side {EB},",
+              visible: GNO,
+              highlighted: ["OB","TE","AE","EB"],
+              justifications: [{ claim: "OB = TE, on the equal bases EB and AE", ref: "I.36" }] },
+            { text: "therefore {TE} also equals {PB}.",
+              visible: GNO,
+              highlighted: ["TE","PB"] },
+            { text: "Add {OS} to each. Therefore the whole {TS} equals the whole, the gnomon {VWU|UWVg}.",
+              visible: GNO,
+              highlighted: ["OS","ST","UWVg"] },
+            { text: "But the gnomon {VWU|UWVg} was proved equal to {C|Ct}, therefore {TS} also equals {C|Ct}.",
+              visible: GNO,
+              highlighted: ["UWVg","Ct","ST"] },
+            { text: "Therefore there the parallelogram {ST} equal to the given rectilinear figure {C|Ct}",
+              visible: DONE,
+              highlighted: ["ST","Ct"],
+              transition: { animations: [
+                  { elem: "ASQT", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "has been applied to the given straight line {AB} but falling short by a parallelogram {QB} similar to {D|Dt}.",
+              visible: DONE,
+              highlighted: ["AB","QB","Dt"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.28") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.9":   "/elements/books/bookI/propositions/propI9/",
+        "I.36":  "/elements/books/bookI/propositions/propI36/",
+        "VI.18": "/elements/books/bookVI/propositions/propVI18/",
+        "VI.21": "/elements/books/bookVI/propositions/propVI21/",
+        "VI.25": "/elements/books/bookVI/propositions/propVI25/",
+        "VI.26": "/elements/books/bookVI/propositions/propVI26/",
+        "VI.27": "/elements/books/bookVI/propositions/propVI27/"
     });
 </script>
 </figure>
 
-Bisect *AB* at the point *E.*  Describe *EBFG* similar and similarly situated to *D* on *EB,* and complete the parallelogram *AG.* [!just I.9; VI.18]
+Bisect {AB} at the point {E}.  Describe {EBFG} similar and similarly situated to {D|Dt} on {EB}, and complete the parallelogram {AG}. [!just I.9; VI.18]
 
-If then *AG* equals *C,* that which was proposed is done, for the parallelogram *AG* equal to the given rectilinear figure *C* has been applied to the given straight line *AB* but falling short by a parallelogram *GB* similar to *D.*
+If then {AG} equals {C|Ct}, that which was proposed is done, for the parallelogram {AG} equal to the given rectilinear figure {C|Ct} has been applied to the given straight line {AB} but falling short by a parallelogram {GB} similar to {D|Dt}.
 
-But, if not, let *HE* be greater than *C.*
+But, if not, let {HE} be greater than {C|Ct}.
 
-Now *HE* equals *GB,* therefore *GB* is also greater than *C.*
+Now {HE} equals {GB}, therefore {GB} is also greater than {C|Ct}.
 
-Construct *KLMN* equal to *GB* minus *C* and similar and similarly situated to *D.* [!just VI.25]
+Construct {KLMN} equal to {GB} minus {C|Ct} and similar and similarly situated to {D|Dt}. [!just VI.25]
 
-But *D* is similar to *GB,* therefore *KM* is also similar to *GB.* [!just VI.21]
+But {D|Dt} is similar to {GB}, therefore {KM} is also similar to {GB}. [!just VI.21]
 
-Let, then, *KL* correspond to *GE,* and *LM* to *GF.*
+Let, then, {KL} correspond to {GE}, and {LM} to {GF}.
 
-Now, since *GB* equals *C* and *KM,* therefore *GB* is greater than *KM,* therefore also *GE* is greater than *KL,* and *GF* than *LM.*
+Now, since {GB} equals {C|Ct} and {KM}, therefore {GB} is greater than {KM}, therefore also {GE} is greater than {KL}, and {GF} than {LM}.
 
-Make *GO* equal to *KL,* and *GP* equal to *LM,* and let the parallelogram *OGPQ* be completed, therefore it is equal and similar to *KM.* [!just VI.21; VI.26]
+Make {GO} equal to {KL}, and {GP} equal to {LM}, and let the parallelogram {OGPQ} be completed, therefore it is equal and similar to {KM}. [!just VI.21; VI.26]
 
-Therefore *GQ* is also similar to *GB,*  therefore *GQ* is about the same diameter with *GB.*
+Therefore {GQ} is also similar to {GB},  therefore {GQ} is about the same diameter with {GB}.
 
-Let *GQB* be their diameter, and describe the figure.
+Let {GQB} be their diameter, and describe the figure.
 
-Then, since *BG* equals *C* and *KM,* and in them *GQ* equals *KM,* therefore the remainder, the gnomon *UWV,* equals the remainder *C.*
+Then, since {BG|EBFG} equals {C|Ct} and {KM}, and in them {GQ} equals {KM}, therefore the remainder, the gnomon {UWV|UWVg}, equals the remainder {C|Ct}.
 
-And, since *PR* equals *OS,* add *QB* to each, therefore the whole *PB* equals the whole *OB.*
+And, since {PR} equals {OS}, add {QB} to each, therefore the whole {PB} equals the whole {OB}.
 
-But *OB* equals *TE,* since the side *AE* also equals the side *EB,*  therefore *TE* also equals *PB.* [!just I.36]
+But {OB} equals {TE}, since the side {AE} also equals the side {EB},  therefore {TE} also equals {PB}. [!just I.36]
 
-Add *OS* to each.  Therefore the whole *TS* equals the whole, the gnomon *VWU.*
+Add {OS} to each.  Therefore the whole {TS} equals the whole, the gnomon {VWU|UWVg}.
 
-But the gnomon *VWU* was proved equal to *C,* therefore *TS* also equals *C.*
+But the gnomon {VWU|UWVg} was proved equal to {C|Ct}, therefore {TS} also equals {C|Ct}.
 
-Therefore there the parallelogram *ST* equal to the given rectilinear figure *C* has been applied to the given straight line *AB* but falling short by a parallelogram *QB* similar to *D.*
+Therefore there the parallelogram {ST} equal to the given rectilinear figure {C|Ct} has been applied to the given straight line {AB} but falling short by a parallelogram {QB} similar to {D|Dt}.
 
 <div class="qed">Q.E.F.</div>
 ----
 guide:
 
-When this proposition is used, the given parallelgram *D* usually is a square.  Then the problem is to cut the line *AB* at a point *S* so that the rectangle *AS* by *SB* equals the given rectilinear figure *C.*  This special case can be proved with the help of the propositions in Book II.  See the [Guide](/elements/books/bookII/propositions/propII5/#guide) to proposition II.5 for more details.
+When this proposition is used, the given parallelgram {D|Dt} usually is a square.  Then the problem is to cut the line {AB} at a point {S} so that the rectangle {AS} by {SB} equals the given rectilinear figure {C|Ct}.  This special case can be proved with the help of the propositions in Book II.  See the [Guide](/elements/books/bookII/propositions/propII5/#guide) to proposition II.5 for more details.
 
 #### The outline of a simplified proof for rectangles
 
@@ -161,21 +392,29 @@ When this proposition is used, the given parallelgram *D* usually is a square.  
             "S;point;intersection;P,Q,A,B",
             "ASQT;polygon;parallelogram;A,S,Q;0;0;black;145,50,100",
             "QP;line;connect;Q,P",
-            "BRQS;polygon;quadrilateral;B,R,Q,S;0;0;black;random"
+            "BRQS;polygon;quadrilateral;B,R,Q,S;0;0;black;random",
+            // Transparent hover targets for the guide's refs; explicit ;0
+            // faces (C is the faceless twin of Joyce's filled C).
+            "AB;line;connect;A,B;0;0;0",
+            "SB;line;connect;S,B;0;0;0",
+            "SA;line;connect;S,A;0;0;0",
+            "Ct;polygon;quadrilateral;C1,C2,C3,C4;0;0;0;0",
+            "GFBE;polygon;parallelogram;E,B,F;0;0;0;0",
+            "GPQO;polygon;parallelogram;O,G,P;0;0;0;0"
         ],
     });
 </script>
 </figure>
 
-The proof of the current proposition is difficult to follow.  It is simplified when we take the special case mentioned above, namely, when the given parallelogram *D* is a square.  The simplified proof is easier to follow since the rest of the parallelograms mentioned all become rectangles.
+The proof of the current proposition is difficult to follow.  It is simplified when we take the special case mentioned above, namely, when the given parallelogram {D|Dt:canvas_0} is a square.  The simplified proof is easier to follow since the rest of the parallelograms mentioned all become rectangles.
 
-The construction is as follows.  Bisect *AB* at *E,* construct a square *GFBE.*
+The construction is as follows.  Bisect {AB} at {E}, construct a square {GFBE}.
 
-The next stage is to construct a square *GPQO* equal to the square *GFBE* minus the figure *C.* For an alternate construction of *GPQO,* see the [lemma](/elements/books/bookX/propositions/propX14/#lemma) for X.14 which applies @I.47 to do that.)
+The next stage is to construct a square {GPQO} equal to the square {GFBE} minus the figure {C|Ct}. For an alternate construction of {GPQO}, see the [lemma](/elements/books/bookX/propositions/propX14/#lemma) for X.14 which applies @I.47 to do that.)
 
 Complete the figure.
 
-We can understand the meaning of this construction more easily if we interpret it algebraically.  Let *a* stand for the known quantity *AB,* and *c* the known quantity *C.* Then let *x* and *y* stand for the unknown quantities *SB* and *SA.* Then this construction finds *x* and *y* so that their sum is *a* and their product is *c.*
+We can understand the meaning of this construction more easily if we interpret it algebraically.  Let *a* stand for the known quantity {AB}, and *c* the known quantity {C|Ct}. Then let *x* and *y* stand for the unknown quantities {SB} and {SA}. Then this construction finds *x* and *y* so that their sum is *a* and their product is *c.*
 
 In terms of the single variable *x,* the construction solves the quadratic equation *ax* – *x*<sup>2</sup> = *C.*
 

@@ -15,14 +15,38 @@ statement: Of all the parallelograms applied to the same straight line falling s
 ----
 proof:
 
-Let *AB* be a straight line and let it be bisected at *C.*  Let there be applied to the straight line *AB* the parallelogram *AD* falling short by the parallelogrammic figure *DB* described on the half of *AB,* that is, *CB.*
+Let {AB} be a straight line and let it be bisected at {C}.  Let there be applied to the straight line {AB} the parallelogram {AD} falling short by the parallelogrammic figure {DB} described on the half of {AB}, that is, {CB}.
 
-I say that, of all the parallelograms applied to *AB* falling short by parallelogrammic figures similar and similarly situated to *DB, AD* is greatest.
+I say that, of all the parallelograms applied to {AB} falling short by parallelogrammic figures similar and similarly situated to {DB}, {AD} is greatest.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="350" height="250" tabindex="0"></canvas>
 <noscript><img alt="VI.27 diagram" src="propVI27.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the whole parallelogram AE (random face) with
+    // DC cutting it into AD and DB, the diameter BD, and the applied
+    // parallelogram AKFG (random face) with FH and FX completing the
+    // figure about the diameter; the arc LMN marks the gnomon.
+    //
+    // The walk shows AD and DB as given, then applies AF (AKFG with FB on
+    // FH), draws the diameter and FX, and argues by highlights. Everything
+    // added is transparent: the segments AB, AC, CB, and faceless polygons
+    // for every parallelogram the proof names (AD, DB, AF, FB, CF, FE, CH,
+    // KE, CG) plus LMNg, the gnomon itself (the hexagon C-B-E-X-F-Y, Y the
+    // hidden corner where FH meets DC). A highlighted filled polygon is
+    // raised over the figure (#140), so AKFG is reached through its twin
+    // AF, and Joyce's arc keeps its name; prose and captions reach the
+    // gnomon as {LMN|LMNg}. No angles are argued, so there are no markers.
+    //
+    // Draggables (checked against the bundle): A, B, D free and F a
+    // lineSlider on BD. F belongs to the parallelogram AF, which the proof
+    // applies after the setting-out, so F is deferred. C, E, K, G, H, X
+    // and L, M, N are derived and listed per slide.
+    var GIVEN = ["A","B","C","D","E","AE","DC"];
+    var AF    = GIVEN.concat(["F","K","G","AKFG"]);
+    var FB    = AF.concat(["H","FH"]);
+    var FIG   = FB.concat(["BD","X","FX"]);
+    var GNO   = FIG.concat(["L","M","N","LMN"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -48,27 +72,142 @@ I say that, of all the parallelograms applied to *AB* falling short by parallelo
             "N;point;midpoint;X,F;black;0",
             "M;point;cutoff;F,H,F,N;black;0",
             "L;point;cutoff;F,G,F,N;black;0",
-            "LMN;sector;arc;L,M,N;0;0;darkGray;0"
+            "LMN;sector;arc;L,M,N;0;0;darkGray;0",
+            // ---- transparent highlight targets for the slideshow ----
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            // Y: where FH (produced) meets DC, the corner shared by CG,
+            // CF and CH. Hidden.
+            "Y;point;intersection;D,C,F,H;0;0",
+            // Each parallelogram the proof names; explicit ;0 faces.
+            "AD;polygon;parallelogram;A,C,D;0;0;0;0",
+            "DB;polygon;parallelogram;C,B,E;0;0;0;0",
+            "AF;polygon;parallelogram;A,K,F;0;0;0;0",
+            "FB;polygon;parallelogram;K,B,H;0;0;0;0",
+            "CF;polygon;parallelogram;C,K,F;0;0;0;0",
+            "FE;polygon;parallelogram;F,H,E;0;0;0;0",
+            "CH;polygon;parallelogram;C,B,H;0;0;0;0",
+            "KE;polygon;parallelogram;K,B,E;0;0;0;0",
+            "CG;polygon;parallelogram;G,A,C;0;0;0;0",
+            // The gnomon LMN: DB less the parallelogram about D.
+            "LMNg;polygon;hexagon;C,B,E,X,F,Y;0;0;0;0"
         ],
+        deferDraggables: ["F"],
+        slides: [
+            { text: "“Of all the parallelograms applied to the same straight line falling short by parallelogrammic figures”",
+              visible: GIVEN,
+              highlighted: ["AB","AD"],
+              justifications: [{ ref: "VI.27" }] },
+            { text: "“similar and similarly situated to that described on the half of the straight line,”",
+              visible: GIVEN,
+              highlighted: ["DB","CB"] },
+            { text: "“that parallelogram is greatest which is applied to the half of the straight line and is similar to the difference.”",
+              visible: GIVEN,
+              highlighted: ["AD","AC","DB"] },
+            { text: "Let {AB} be a straight line and let it be bisected at {C}.",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "Let there be applied to the straight line {AB} the parallelogram {AD}",
+              visible: GIVEN,
+              highlighted: ["AB","AD"] },
+            { text: "falling short by the parallelogrammic figure {DB} described on the half of {AB}, that is, {CB}.",
+              visible: GIVEN,
+              highlighted: ["DB","CB"] },
+            { text: "I say that, of all the parallelograms applied to {AB}",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "falling short by parallelogrammic figures similar and similarly situated to {DB}, {AD} is greatest.",
+              visible: GIVEN,
+              highlighted: ["DB","AD"] },
+            { text: "Let there be applied to the straight line {AB} the parallelogram {AF}",
+              visible: AF,
+              highlighted: ["AB","AF"],
+              transition: { animations: [
+                  { elem: "AKFG", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "falling short by the parallelogrammic figure {FB} similar and similarly situated to {DB}.",
+              visible: FB,
+              highlighted: ["FB","DB"],
+              transition: { animations: [
+                  { elem: "FH", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that {AD} is greater than {AF}.",
+              visible: FB,
+              highlighted: ["AD","AF"] },
+            { text: "Since the parallelogram {DB} is similar to the parallelogram {FB}, therefore they are about the same diameter.",
+              visible: FB,
+              highlighted: ["DB","FB"],
+              justifications: [{ claim: "DB and FB about the same diameter", ref: "VI.26" }] },
+            { text: "Draw their diameter {DB|BD}, and describe the figure.",
+              visible: FIG,
+              highlighted: ["BD","FX"],
+              transition: { animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FX", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since {CF} equals {FE},",
+              visible: FIG,
+              highlighted: ["CF","FE"],
+              justifications: [{ claim: "the complements CF = FE", ref: "I.43" }] },
+            { text: "and {FB} is common, therefore the whole {CH} equals the whole {KE}.",
+              visible: FIG,
+              highlighted: ["CH","KE"] },
+            { text: "But {CH} equals {CG}, since {AC} also equals {CB}.",
+              visible: FIG,
+              highlighted: ["CH","CG","AC","CB"],
+              justifications: [{ claim: "CH = CG, on the equal bases CB and AC", ref: "I.36" }] },
+            { text: "Therefore {CG} also equals {KE}.",
+              visible: FIG,
+              highlighted: ["CG","KE"] },
+            { text: "Add {CF} to each. Therefore the whole {AF} equals the gnomon {LMN|LMNg},",
+              visible: GNO,
+              highlighted: ["CF","AF","LMNg"],
+              transition: { animations: [
+                  { elem: "LMN", name: geomlib.A.Sector.sweep },
+                  { elem: "LMNg", name: geomlib.A.Polygon.outline } ] } },
+            { text: "so that the parallelogram {DB}, that is, {AD}, is greater than the parallelogram {AF}.",
+              visible: GNO,
+              highlighted: ["DB","AD","AF"] },
+            { text: "Therefore, of all the parallelograms applied to the same straight line falling short by parallelogrammic figures",
+              visible: GNO,
+              highlighted: ["AB","AD","AF"] },
+            { text: "similar and similarly situated to that described on the half of the straight line,",
+              visible: GNO,
+              highlighted: ["DB","FB","CB"] },
+            { text: "that parallelogram is greatest which is applied to the half of the straight line and is similar to the difference.",
+              visible: GNO,
+              highlighted: ["AD","AC","DB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.27") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.36":  "/elements/books/bookI/propositions/propI36/",
+        "I.43":  "/elements/books/bookI/propositions/propI43/",
+        "VI.26": "/elements/books/bookVI/propositions/propVI26/"
     });
 </script>
 </figure>
 
-Let there be applied to the straight line *AB* the parallelogram *AF* falling short by the parallelogrammic figure *FB* similar and similarly situated to *DB.*
+Let there be applied to the straight line {AB} the parallelogram {AF} falling short by the parallelogrammic figure {FB} similar and similarly situated to {DB}.
 
-I say that *AD* is greater than *AF.*
+I say that {AD} is greater than {AF}.
 
-Since the parallelogram *DB* is similar to the parallelogram *FB,* therefore they are about the same diameter. [!just VI.26]
+Since the parallelogram {DB} is similar to the parallelogram {FB}, therefore they are about the same diameter. [!just VI.26]
 
-Draw their diameter *DB,* and describe the figure.
+Draw their diameter {DB|BD}, and describe the figure.
 
-Then, since *CF* equals *FE,*  and *FB* is common, therefore the whole *CH* equals the whole *KE.* [!just I.43]
+Then, since {CF} equals {FE},  and {FB} is common, therefore the whole {CH} equals the whole {KE}. [!just I.43]
 
-But *CH* equals *CG,* since *AC* also equals *CB.* [!just I.36]
+But {CH} equals {CG}, since {AC} also equals {CB}. [!just I.36]
 
-Therefore *CG* also equals *KE.*
+Therefore {CG} also equals {KE}.
 
-Add *CF* to each.  Therefore the whole *AF* equals the gnomon *LMN,* so that the parallelogram *DB,* that is, *AD,* is greater than the parallelogram *AF.*
+Add {CF} to each.  Therefore the whole {AF} equals the gnomon {LMN|LMNg}, so that the parallelogram {DB}, that is, {AD}, is greater than the parallelogram {AF}.
 
 Therefore, *of all the parallelograms applied to the same straight line falling short by parallelogrammic figures similar and similarly situated to that described on the half of the straight line, that parallelogram is greatest which is applied to the half of the straight line and is similar to the difference.*
 
