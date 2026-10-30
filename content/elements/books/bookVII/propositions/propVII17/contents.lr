@@ -15,14 +15,19 @@ statement: If a number multiplied by two numbers makes certain numbers, then the
 ----
 proof:
 
-Let the number *A* multiplied by the two numbers *B* and *C* make *D* and *E.*
+Let the number {A} multiplied by the two numbers {B} and {C} make {D} and {E}.
 
-I say that *B* is to *C* as *D* is to *E.*
+I say that {B} is to {C} as {D} is to {E}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="145" tabindex="0"></canvas>
 <noscript><img alt="VII.17 diagram" src="propVII17.gif"/></noscript>
 <script type="text/javascript">
+    // A multiplies B and C to make D and E; F is the unit. Line segments
+    // only, so the walk is highlight beats; the unit F joins the figure
+    // when the proof first names it.
+    var GIVEN = ["A","B","C","D","D2","E","E2"];
+    var UNIT  = GIVEN.concat(["F"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -55,17 +60,82 @@ I say that *B* is to *C* as *D* is to *E.*
             "E2;point;proportion;F1,F2,A1,A2,C1,C2,E1,C3;0",
             "E;line;connect;E1,E2;black"
         ],
+        // Draggables (checked against the bundle): the lineSlider ends A1,
+        // A2, B1, B2, C1, C2, F1, F2 and the left ends D1, E1, all
+        // zero-colour handles. D2 and E2 are derived. F's handles draw
+        // nothing, so the line F itself is what the visible sets withhold.
+        slides: [
+            { text: "“If a number multiplied by two numbers makes certain numbers,”",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E"] },
+            { text: "“then the numbers so produced have the same ratio as the numbers multiplied.”",
+              visible: GIVEN,
+              highlighted: ["D","E","B","C"],
+              justifications: [{ ref: "VII.17" }] },
+            { text: "Let the number {A} multiplied by the two numbers {B} and {C} make {D} and {E}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E"] },
+            { text: "I say that {B} is to {C} as {D} is to {E}.",
+              visible: GIVEN,
+              highlighted: ["B","C","D","E"] },
+            { text: "Since {A} multiplied by {B} makes {D}, therefore {B} measures {D} according to the units in {A}.",
+              visible: GIVEN,
+              highlighted: ["A","B","D"],
+              justifications: [{ ref: "VII.Def.15" }] },
+            { text: "But the unit {F} also measures the number {A} according to the units in it,",
+              visible: UNIT,
+              highlighted: ["F","A"] },
+            { text: "therefore the unit {F} measures the number {A} the same number of times that {B} measures {D}.",
+              visible: UNIT,
+              highlighted: ["F","A","B","D"] },
+            { text: "Therefore the unit {F} is to the number {A} as {B} is to {D}.",
+              visible: UNIT,
+              highlighted: ["F","A","B","D"],
+              justifications: [{ ref: "VII.Def.20" }] },
+            { text: "For the same reason the unit {F} is to the number {A} as {C} is to {E},",
+              visible: UNIT,
+              highlighted: ["F","A","C","E"],
+              justifications: [{ ref: "VII.Def.20" }] },
+            { text: "therefore {B} is to {D} as {C} is to {E}.",
+              visible: UNIT,
+              highlighted: ["B","D","C","E"],
+              justifications: [{ ref: "V.11" }] },
+            { text: "Therefore, alternately {B} is to {C} as {D} is to {E}.",
+              visible: UNIT,
+              highlighted: ["B","C","D","E"],
+              justifications: [{ ref: "VII.13" }] },
+            { text: "Therefore, if a number multiplied by two numbers makes certain numbers,",
+              visible: UNIT,
+              highlighted: ["A","B","C","D","E"] },
+            { text: "then the numbers so produced have the same ratio as the numbers multiplied.",
+              visible: UNIT,
+              highlighted: ["D","E","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.17") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.11": "/elements/books/bookV/propositions/propV11/",
+        "VII.13": "/elements/books/bookVII/propositions/propVII13/",
+        "VII.Def.15": "/elements/books/bookVII/definitions/defVII15/",
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/"
     });
 </script>
 </figure>
 
-Since *A* multiplied by *B* makes *D,* therefore *B* measures *D* according to the units in *A.* [!just VII.Def.15]
+Since {A} multiplied by {B} makes {D}, therefore {B} measures {D} according to the units in {A}. [!just VII.Def.15]
 
-But the unit *F* also measures the number *A* according to the units in it, therefore the unit *F* measures the number *A* the same number of times that *B* measures *D.* Therefore the unit *F* is to the number *A* as *B* is to *D.* [!just VII.Def.20]
+But the unit {F} also measures the number {A} according to the units in it, therefore the unit {F} measures the number {A} the same number of times that {B} measures {D}. Therefore the unit {F} is to the number {A} as {B} is to {D}. [!just VII.Def.20]
 
-For the same reason the unit *F* is to the number *A* as *C* is to *E,* therefore *B* is to *D* as *C* is to *E.* [!just VII.Def.20; V.11]
+For the same reason the unit {F} is to the number {A} as {C} is to {E}, therefore {B} is to {D} as {C} is to {E}. [!just VII.Def.20; V.11]
 
-Therefore, alternately *B* is to *C* as *D* is to *E.* [!just VII.13]
+Therefore, alternately {B} is to {C} as {D} is to {E}. [!just VII.13]
 
 Therefore, *if a number multiplied by two numbers makes certain numbers, then the numbers so produced have the same ratio as the numbers multiplied.*
 

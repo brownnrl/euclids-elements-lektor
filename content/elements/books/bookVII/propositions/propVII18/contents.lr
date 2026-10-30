@@ -15,12 +15,16 @@ statement: If two number multiplied by any number make certain numbers, then the
 ----
 proof:
 
-Let two numbers *A* and *B* multiplied by any number *C* make *D* and *E.*
+Let two numbers {A} and {B} multiplied by any number {C} make {D} and {E}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="175" tabindex="0"></canvas>
 <noscript><img alt="VII.18 diagram" src="propVII18.gif"/></noscript>
 <script type="text/javascript">
+    // A and B multiplied by C make D and E. U1, U2 bound an off-canvas
+    // unit that scales D and E; it is not part of Joyce's figure. Line
+    // segments only, so the walk is highlight beats.
+    var GIVEN = ["A","B","C","D","D2","E","E2"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -52,15 +56,66 @@ Let two numbers *A* and *B* multiplied by any number *C* make *D* and *E.*
             "E2;point;proportion;U1,U2,C1,C2,B1,B2,E1,E3;0",
             "E;line;connect;E1,E2;black"
         ],
+        // Draggables (checked against the bundle): the lineSlider ends A1,
+        // A2, B1, B2, C1, C2, U1, U2 and the left ends D1, E1, all
+        // zero-colour handles (U1, U2 off-canvas). D2 and E2 are derived.
+        slides: [
+            { text: "“If two number multiplied by any number make certain numbers,”",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E"] },
+            { text: "“then the numbers so produced have the same ratio as the multipliers.”",
+              visible: GIVEN,
+              highlighted: ["D","E","A","B"],
+              justifications: [{ ref: "VII.18" }] },
+            { text: "Let two numbers {A} and {B} multiplied by any number {C} make {D} and {E}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E"] },
+            { text: "I say that {A} is to {B} as {D} is to {E}.",
+              visible: GIVEN,
+              highlighted: ["A","B","D","E"] },
+            { text: "Since {A} multiplied by {C} makes {D}, therefore {C} multiplied by {A} makes {D}.",
+              visible: GIVEN,
+              highlighted: ["A","C","D"],
+              justifications: [{ ref: "VII.16" }] },
+            { text: "For the same reason also {C} multiplied by {B} makes {E}.",
+              visible: GIVEN,
+              highlighted: ["C","B","E"],
+              justifications: [{ ref: "VII.16" }] },
+            { text: "Therefore the number {C} multiplied by the two numbers {A} and {B} makes {D} and {E}.",
+              visible: GIVEN,
+              highlighted: ["C","A","B","D","E"] },
+            { text: "Therefore {A} is to {B} as {D} is to {E}.",
+              visible: GIVEN,
+              highlighted: ["A","B","D","E"],
+              justifications: [{ ref: "VII.17" }] },
+            { text: "Therefore, if two numbers multiplied by any number make certain numbers,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E"] },
+            { text: "then the numbers so produced have the same ratio as the multipliers.",
+              visible: GIVEN,
+              highlighted: ["D","E","A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.18") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.16": "/elements/books/bookVII/propositions/propVII16/",
+        "VII.17": "/elements/books/bookVII/propositions/propVII17/"
     });
 </script>
 </figure>
 
-I say that *A* is to *B* as *D* is to *E.*
+I say that {A} is to {B} as {D} is to {E}.
 
-Since *A* multiplied by *C* makes *D,* therefore *C* multiplied by *A* makes *D.* For the same reason also *C* multiplied by *B* makes *E.* [!just VII.16]
+Since {A} multiplied by {C} makes {D}, therefore {C} multiplied by {A} makes {D}. For the same reason also {C} multiplied by {B} makes {E}. [!just VII.16]
 
-Therefore the number *C* multiplied by the two numbers *A* and *B* makes *D* and *E.* Therefore *A* is to *B* as *D* is to *E.* [!just VII.17]
+Therefore the number {C} multiplied by the two numbers {A} and {B} makes {D} and {E}. Therefore {A} is to {B} as {D} is to {E}. [!just VII.17]
 
 Therefore, *if two numbers multiplied by any number make certain numbers, then the numbers so produced have the same ratio as the multipliers.*
 
