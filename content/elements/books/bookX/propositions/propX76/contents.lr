@@ -15,14 +15,24 @@ statement: If from a straight line there is subtracted a straight line which is 
 ----
 proof:
 
-From the straight line *AB* let there be subtracted the straight line *BC* which is incommensurable in square with the whole and fulfills the given conditions. [!just X.33]
+From the straight line {AB} let there be subtracted the straight line {BC} which is incommensurable in square with the whole and fulfills the given conditions. [!just X.33]
 
-I say that the remainder *AC* is the irrational straight line called minor.
+I say that the remainder {AC} is the irrational straight line called minor.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="240" height="65" tabindex="0"></canvas>
 <noscript><img alt="X.76 diagram" src="propX76.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure (as X.73): the line AB with C on it (A0, A3 are
+    // off-canvas anchors for the line sliders). Added, hidden at rest:
+    // transparent targets BC, AC (;0;0;0) so the subtracted line and the
+    // remainder can light separately; BC strokes gold from B when it is
+    // "subtracted". The proof's squares and rectangle are not drawn;
+    // captions light the lines that contain them. Resting figure unchanged.
+    //
+    // Draggables (checked against the bundle): A0, A3 (free, off-canvas)
+    // and A, B, C (line sliders), all givens; nothing is deferred.
+    var ALL = ["A","B","C","AB","BC","AC"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -33,15 +43,78 @@ I say that the remainder *AC* is the irrational straight line called minor.
             "A;point;lineSlider;A0,A3,30,0",
             "B;point;lineSlider;A0,A3,210,0",
             "C;point;lineSlider;A0,A3,100,0",
-            "AB;line;connect;A,B"
+            "AB;line;connect;A,B",
+            // Slide-only highlight targets.
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0"
         ],
+        slides: [
+            { text: "“If from a straight line there is subtracted a straight line which is incommensurable in square with the whole",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "X.76" }] },
+            { text: "and which with the whole makes the sum of the squares on them added together rational,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "but the rectangle contained by them medial,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "then the remainder is irrational; let it be called minor.”",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "From the straight line {AB} let there be subtracted the straight line {BC}",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              transition: { animations: [
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "which is incommensurable in square with the whole and fulfills the given conditions.",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "X.33" }] },
+            { text: "I say that the remainder {AC} is the irrational straight line called minor.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Since the sum of the squares on {AB} and {BC} is rational, while twice the rectangle {AB} by {BC} is medial,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "and, in conversion, the sum of the squares on {AB} and {BC} is incommensurable with the remainder, the square on {AC}.",
+              visible: ALL,
+              highlighted: ["AB","BC","AC"],
+              justifications: [{ claim: "AB² + BC² = 2 AB·BC + AC²", ref: "II.7" },
+                               { claim: "AB² + BC², AC² incommensurable", ref: "X.16" }] },
+            { text: "But the sum of the squares on {AB} and {BC} is rational, therefore the square on {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AB","BC","AC"] },
+            { text: "Therefore {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Let it be called minor.",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.76") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.7": "/elements/books/bookII/propositions/propII7/",
+        "X.16": "/elements/books/bookX/propositions/propX16/",
+        "X.33": "/elements/books/bookX/propositions/propX33/"
     });
 </script>
 </figure>
 
-Since the sum of the squares on *AB* and *BC* is rational, while twice the rectangle *AB* by *BC* is medial, therefore the sum of the squares on *AB* and *BC* is incommensurable with twice the rectangle *AB* by *BC*, and, in conversion, the sum of the squares on *AB* and *BC* is incommensurable with the remainder, the square on *AC*. [!just II.7; X.16]
+Since the sum of the squares on {AB} and {BC} is rational, while twice the rectangle {AB} by {BC} is medial, therefore the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC}, and, in conversion, the sum of the squares on {AB} and {BC} is incommensurable with the remainder, the square on {AC}. [!just II.7; X.16]
 
-But the sum of the squares on *AB* and *BC* is rational, therefore the square on *AC* is irrational. Therefore *AC* is irrational.
+But the sum of the squares on {AB} and {BC} is rational, therefore the square on {AC} is irrational. Therefore {AC} is irrational.
 
 Let it be called minor.
 
