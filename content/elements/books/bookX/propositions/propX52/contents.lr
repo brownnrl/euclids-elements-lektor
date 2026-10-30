@@ -17,12 +17,30 @@ statement: To find the fifth binomial line.
 ----
 proof:
 
-Set out two numbers *AC* and *CB* such that *AB* does not have to either of them the ratio which a square number has to a square number. Set out any rational straight line *D*, and let *EF* be commensurable with *D*. Then *EF* is rational.
+Set out two numbers {AC} and {CB} such that {AB} does not have to either of them the ratio which a square number has to a square number. Set out any rational straight line {D}, and let {EF} be commensurable with {D}. Then {EF} is rational.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="130" height="250" tabindex="0"></canvas>
 <noscript><img alt="X.52 diagram" src="propX52.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the number AB (with C on it) as a line, the rational
+    // line D, the binomial EG with F on it, and the line H whose square is
+    // the excess of the square on FG over the square on EF. Added, all
+    // hidden at rest: transparent targets AC, BC (;0;0;0) for the numbers;
+    // solid twins EF, FG (initiallyHidden) so EF stands before G is found
+    // and FG strokes from F. The walk is highlight beats plus the strokes
+    // of D, EF, FG and H as the text sets them out.
+    //
+    // Draggables (checked against the bundle): A, B, C (line sliders, the
+    // numbers set out) and the offscreen frees; D1, D2, E, F and H1 are
+    // line sliders the proof only reaches later, so they are deferred. G
+    // and H2 are derived and listed per slide.
+    var NUM  = ["A","B","C","AB","AC","BC"];
+    var RAT  = NUM.concat(["D1","D2","D"]);
+    var EFS  = RAT.concat(["E","F","EF"]);
+    var FGS  = EFS.concat(["G","FG"]);
+    var BIN  = FGS.concat(["EG"]);
+    var ALL  = BIN.concat(["H1","H2","H"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -53,31 +71,149 @@ Set out two numbers *AC* and *CB* such that *AB* does not have to either of them
             "H';point;first;bich;0;0",
             "H1;point;lineSlider;D0,D3,0,150;0",
             "H2;point;cutoff;H1,D3,G,H';0",
-            "H;line;connect;H1,H2;black"
+            "H;line;connect;H1,H2;black",
+            // Slide-only twins and highlight targets.
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "EF;line;connect;E,F",
+            "FG;line;connect;F,G"
         ],
+        initiallyHidden: ["EF","FG"],
+        deferDraggables: ["D1","D2","E","F","H1"],
+        aliases: { "BA": "AB", "CB": "BC", "CA": "AC", "GF": "FG", "FE": "EF" },
+        slides: [
+            { text: "“To find the fifth binomial line.”",
+              visible: ALL,
+              highlighted: ["EG"],
+              justifications: [{ ref: "X.52" }] },
+            { text: "Set out two numbers {AC} and {CB}",
+              visible: NUM,
+              highlighted: ["AC","BC"] },
+            { text: "such that {AB} does not have to either of them",
+              visible: NUM,
+              highlighted: ["AB","AC","BC"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: NUM,
+              highlighted: ["AB"] },
+            { text: "Set out any rational straight line {D},",
+              visible: RAT,
+              highlighted: ["D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and let {EF} be commensurable with {D}. Then {EF} is rational.",
+              visible: EFS,
+              highlighted: ["EF","D"],
+              transition: { animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Let it be contrived that {CA} is to {AB} as the square on {EF} is to the square on {FG}.",
+              visible: FGS,
+              highlighted: ["AC","AB","EF","FG"],
+              transition: { animations: [
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "CA : AB = EF² : FG²", ref: "X.6.Cor" }] },
+            { text: "But {CA} does not have to {AB} the ratio which a square number has to a square number,",
+              visible: FGS,
+              highlighted: ["AC","AB"] },
+            { text: "therefore neither does the square on {EF} have to the square on {FG}",
+              visible: FGS,
+              highlighted: ["EF","FG"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: FGS,
+              highlighted: ["EF","FG"] },
+            { text: "Therefore {EF} and {FG} are rational straight lines commensurable in square only, therefore {EG} is binomial.",
+              visible: BIN,
+              highlighted: ["EG"],
+              justifications: [{ claim: "EF, FG incommensurable in length", ref: "X.9" },
+                               { claim: "EG binomial", ref: "X.36" }] },
+            { text: "I say next that it is also a fifth binomial straight line.",
+              visible: BIN,
+              highlighted: ["EG"] },
+            { text: "Since {CA} is to {AB} as the square on {EF} is to the square on {FG},",
+              visible: BIN,
+              highlighted: ["AC","AB","EF","FG"] },
+            { text: "therefore, inversely, {BA} is to {AC} as the square on {FG} is to the square on {FE}.",
+              visible: BIN,
+              highlighted: ["AB","AC","FG","EF"],
+              justifications: [{ claim: "BA : AC = FG² : FE²", ref: "V.7.Cor" }] },
+            { text: "Therefore the square on {GF} is greater than the square on {FE}.",
+              visible: BIN,
+              highlighted: ["FG","EF"] },
+            { text: "Let then the sum of the squares on {EF} and {H} equal the square on {GF}.",
+              visible: ALL,
+              highlighted: ["EF","H","FG"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, in conversion, the number {AB} is to {BC} as the square on {GF} is to the square on {H}.",
+              visible: ALL,
+              highlighted: ["AB","BC","FG","H"],
+              justifications: [{ claim: "AB : BC = GF² : H²", ref: "V.19.Cor" }] },
+            { text: "But {AB} does not have to {BC} the ratio which a square number has to a square number,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore neither does the square on {FG} have to the square on {H}",
+              visible: ALL,
+              highlighted: ["FG","H"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: ALL,
+              highlighted: ["FG","H"] },
+            { text: "Therefore {FG} is incommensurable in length with {H},",
+              visible: ALL,
+              highlighted: ["FG","H"],
+              justifications: [{ claim: "FG, H incommensurable in length", ref: "X.9" }] },
+            { text: "so that the square on {FG} is greater than the square on {FE}",
+              visible: ALL,
+              highlighted: ["FG","EF"] },
+            { text: "by the square on a straight line incommensurable with {FG}.",
+              visible: ALL,
+              highlighted: ["H","FG"] },
+            { text: "And {GF} and {FE} are rational straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["FG","EF"] },
+            { text: "and the lesser term {EF} is commensurable in length with the rational straight line {D} set out.",
+              visible: ALL,
+              highlighted: ["EF","D"] },
+            { text: "Therefore {EG} is a fifth binomial straight line.",
+              visible: ALL,
+              highlighted: ["EG"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.52") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.7.Cor":  "/elements/books/bookV/propositions/propV7/#cor",
+        "V.19.Cor": "/elements/books/bookV/propositions/propV19/#cor",
+        "X.6.Cor":  "/elements/books/bookX/propositions/propX6/#cor",
+        "X.9":      "/elements/books/bookX/propositions/propX9/",
+        "X.36":     "/elements/books/bookX/propositions/propX36/"
     });
 </script>
 </figure>
 
-Let it be contrived that *CA* is to *AB* as the square on *EF* is to the square on *FG*. [!just X.6.Cor]
+Let it be contrived that {CA} is to {AB} as the square on {EF} is to the square on {FG}. [!just X.6.Cor]
 
-But *CA* does not have to *AB* the ratio which a square number has to a square number, therefore neither does the square on *EF* have to the square on *FG* the ratio which a square number has to a square number.
+But {CA} does not have to {AB} the ratio which a square number has to a square number, therefore neither does the square on {EF} have to the square on {FG} the ratio which a square number has to a square number.
 
-Therefore *EF* and *FG* are rational straight lines commensurable in square only, therefore *EG* is binomial. [!just X.36; X.9]
+Therefore {EF} and {FG} are rational straight lines commensurable in square only, therefore {EG} is binomial. [!just X.36; X.9]
 
 I say next that it is also a fifth binomial straight line.
 
-Since *CA* is to *AB* as the square on *EF* is to the square on *FG*, therefore, inversely, *BA* is to *AC* as the square on *FG* is to the square on *FE*. Therefore the square on *GF* is greater than the square on *FE*. [!just V.7.Cor]
+Since {CA} is to {AB} as the square on {EF} is to the square on {FG}, therefore, inversely, {BA} is to {AC} as the square on {FG} is to the square on {FE}. Therefore the square on {GF} is greater than the square on {FE}. [!just V.7.Cor]
 
-Let then the sum of the squares on *EF* and *H* equal the square on *GF*. Then, in conversion, the number *AB* is to *BC* as the square on *GF* is to the square on *H*. [!just V.19.Cor]
+Let then the sum of the squares on {EF} and {H} equal the square on {GF}. Then, in conversion, the number {AB} is to {BC} as the square on {GF} is to the square on {H}. [!just V.19.Cor]
 
-But *AB* does not have to *BC* the ratio which a square number has to a square number, therefore neither does the square on *FG* have to the square on *H* the ratio which a square number has to a square number.
+But {AB} does not have to {BC} the ratio which a square number has to a square number, therefore neither does the square on {FG} have to the square on {H} the ratio which a square number has to a square number.
 
-Therefore *FG* is incommensurable in length with *H*, so that the square on *FG* is greater than the square on *FE* by the square on a straight line incommensurable with *FG*. [!just X.9]
+Therefore {FG} is incommensurable in length with {H}, so that the square on {FG} is greater than the square on {FE} by the square on a straight line incommensurable with {FG}. [!just X.9]
 
-And *GF* and *FE* are rational straight lines commensurable in square only, and the lesser term *EF* is commensurable in length with the rational straight line *D* set out.
+And {GF} and {FE} are rational straight lines commensurable in square only, and the lesser term {EF} is commensurable in length with the rational straight line {D} set out.
 
-Therefore *EG* is a fifth binomial straight line.
+Therefore {EG} is a fifth binomial straight line.
 
 <div class="qed">Q.E.D.</div>
 ----

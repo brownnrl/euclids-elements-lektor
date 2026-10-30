@@ -17,14 +17,32 @@ statement: To find the fourth binomial straight line.
 ----
 proof:
 
-Set out two numbers *AC* and *CB* such that *AB* has neither to *BC* nor to *AC* the ratio which a square number has to a square number.
+Set out two numbers {AC} and {CB} such that {AB} has neither to {BC} nor to {AC} the ratio which a square number has to a square number.
 
-Set out a rational straight line *D*, and let *EF* be commensurable in length with *D*. Then *EF* is also rational.
+Set out a rational straight line {D}, and let {EF} be commensurable in length with {D}. Then {EF} is also rational.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="130" height="290" tabindex="0"></canvas>
 <noscript><img alt="X.51 diagram" src="propX51.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the number AB (with C on it) as a line, the rational
+    // line D, the binomial EG with F on it, and the line H whose square is
+    // the excess of the square on EF over the square on FG. Added, all
+    // hidden at rest: transparent targets AC, BC (;0;0;0) for the numbers;
+    // solid twins EF, FG (initiallyHidden) so EF stands before G is found
+    // and FG strokes from F. The walk is highlight beats plus the strokes
+    // of D, EF, FG and H as the text sets them out.
+    //
+    // Draggables (checked against the bundle): A, B, C (line sliders, the
+    // numbers set out) and the offscreen frees; D1, D2, E, F and H1 are
+    // line sliders the proof only reaches later, so they are deferred. G
+    // and H2 are derived and listed per slide.
+    var NUM  = ["A","B","C","AB","AC","BC"];
+    var RAT  = NUM.concat(["D1","D2","D"]);
+    var EFS  = RAT.concat(["E","F","EF"]);
+    var FGS  = EFS.concat(["G","FG"]);
+    var BIN  = FGS.concat(["EG"]);
+    var ALL  = BIN.concat(["H1","H2","H"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -55,29 +73,151 @@ Set out a rational straight line *D*, and let *EF* be commensurable in length wi
             "H';point;first;bich;0;0",
             "H1;point;lineSlider;D0,D3,0,150;0",
             "H2;point;cutoff;H1,D3,G,H';0",
-            "H;line;connect;H1,H2;black"
+            "H;line;connect;H1,H2;black",
+            // Slide-only twins and highlight targets.
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "EF;line;connect;E,F",
+            "FG;line;connect;F,G"
         ],
+        initiallyHidden: ["EF","FG"],
+        deferDraggables: ["D1","D2","E","F","H1"],
+        aliases: { "BA": "AB", "CB": "BC", "CA": "AC", "GF": "FG", "FE": "EF" },
+        slides: [
+            { text: "“To find the fourth binomial straight line.”",
+              visible: ALL,
+              highlighted: ["EG"],
+              justifications: [{ ref: "X.51" }] },
+            { text: "Set out two numbers {AC} and {CB}",
+              visible: NUM,
+              highlighted: ["AC","BC"] },
+            { text: "such that {AB} has neither to {BC} nor to {AC}",
+              visible: NUM,
+              highlighted: ["AB","BC","AC"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: NUM,
+              highlighted: ["AB"] },
+            { text: "Set out a rational straight line {D},",
+              visible: RAT,
+              highlighted: ["D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and let {EF} be commensurable in length with {D}. Then {EF} is also rational.",
+              visible: EFS,
+              highlighted: ["EF","D"],
+              transition: { animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Let it be contrived that the number {BA} is to {AC}",
+              visible: EFS,
+              highlighted: ["AB","AC"] },
+            { text: "as the square on {EF} is to the square on {FG}.",
+              visible: FGS,
+              highlighted: ["EF","FG"],
+              transition: { animations: [
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "BA : AC = EF² : FG²", ref: "X.6.Cor" }] },
+            { text: "Then the square on {EF} is commensurable with the square on {FG}. Therefore {FG} is also rational.",
+              visible: FGS,
+              highlighted: ["EF","FG"],
+              justifications: [{ claim: "EF², FG² commensurable", ref: "X.6" }] },
+            { text: "Now, since {BA} does not have to {AC} the ratio which a square number has to a square number,",
+              visible: FGS,
+              highlighted: ["AB","AC"] },
+            { text: "neither does the square on {EF} have to the square on {FG}",
+              visible: FGS,
+              highlighted: ["EF","FG"] },
+            { text: "the ratio which a square number has to a square number,",
+              visible: FGS,
+              highlighted: ["EF","FG"] },
+            { text: "therefore {EF} is incommensurable in length with {FG}.",
+              visible: FGS,
+              highlighted: ["EF","FG"],
+              justifications: [{ claim: "EF, FG incommensurable in length", ref: "X.9" }] },
+            { text: "Therefore {EF} and {FG} are rational straight lines commensurable in square only, so that {EG} is binomial.",
+              visible: BIN,
+              highlighted: ["EG"] },
+            { text: "I say next that it is also a fourth binomial straight line.",
+              visible: BIN,
+              highlighted: ["EG"] },
+            { text: "Since {BA} is to {AC} as the square on {EF} is to the square on {FG},",
+              visible: BIN,
+              highlighted: ["AB","AC","EF","FG"] },
+            { text: "therefore the square on {EF} is greater than the square on {FG}.",
+              visible: BIN,
+              highlighted: ["EF","FG"] },
+            { text: "Let then the sum of the squares on {FG} and {H} equal the square on {EF}.",
+              visible: ALL,
+              highlighted: ["FG","H","EF"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, in conversion, the number {AB} is to {BC} as the square on {EF} is to the square on {H}.",
+              visible: ALL,
+              highlighted: ["AB","BC","EF","H"],
+              justifications: [{ claim: "AB : BC = EF² : H²", ref: "V.19.Cor" }] },
+            { text: "But {AB} does not have to {BC} the ratio which a square number has to a square number,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore neither does the square on {EF} have to the square on {H}",
+              visible: ALL,
+              highlighted: ["EF","H"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: ALL,
+              highlighted: ["EF","H"] },
+            { text: "Therefore {EF} is incommensurable in length with {H}.",
+              visible: ALL,
+              highlighted: ["EF","H"],
+              justifications: [{ claim: "EF, H incommensurable in length", ref: "X.9" }] },
+            { text: "Therefore the square on {EF} is greater than the square on {GF}",
+              visible: ALL,
+              highlighted: ["EF","FG"] },
+            { text: "by the square on a straight line incommensurable with {EF}.",
+              visible: ALL,
+              highlighted: ["H","EF"] },
+            { text: "And {EF} and {FG} are rational straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["EF","FG"] },
+            { text: "and {EF} is commensurable in length with {D}.",
+              visible: ALL,
+              highlighted: ["EF","D"] },
+            { text: "Therefore {EG} is a fourth binomial straight line.",
+              visible: ALL,
+              highlighted: ["EG"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.51") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.19.Cor": "/elements/books/bookV/propositions/propV19/#cor",
+        "X.6":      "/elements/books/bookX/propositions/propX6/",
+        "X.6.Cor":  "/elements/books/bookX/propositions/propX6/#cor",
+        "X.9":      "/elements/books/bookX/propositions/propX9/"
     });
 </script>
 </figure>
 
-Let it be contrived that the number *BA* is to *AC* as the square on *EF* is to the square on *FG*. Then the square on *EF* is commensurable with the square on *FG*. Therefore *FG* is also rational. [!just X.6.Cor; X.6]
+Let it be contrived that the number {BA} is to {AC} as the square on {EF} is to the square on {FG}. Then the square on {EF} is commensurable with the square on {FG}. Therefore {FG} is also rational. [!just X.6.Cor; X.6]
 
-Now, since *BA* does not have to *AC* the ratio which a square number has to a square number, neither does the square on *EF* have to the square on *FG* the ratio which a square number has to a square number, therefore *EF* is incommensurable in length with *FG*. [!just X.9]
+Now, since {BA} does not have to {AC} the ratio which a square number has to a square number, neither does the square on {EF} have to the square on {FG} the ratio which a square number has to a square number, therefore {EF} is incommensurable in length with {FG}. [!just X.9]
 
-Therefore *EF* and *FG* are rational straight lines commensurable in square only, so that *EG* is binomial.
+Therefore {EF} and {FG} are rational straight lines commensurable in square only, so that {EG} is binomial.
 
 I say next that it is also a fourth binomial straight line.
 
-Since *BA* is to *AC* as the square on *EF* is to the square on *FG*, therefore the square on *EF* is greater than the square on *FG*.
+Since {BA} is to {AC} as the square on {EF} is to the square on {FG}, therefore the square on {EF} is greater than the square on {FG}.
 
-Let then the sum of the squares on *FG* and *H* equal the square on *EF*. Then, in conversion, the number *AB* is to *BC* as the square on *EF* is to the square on *H*. [!just V.19.Cor]
+Let then the sum of the squares on {FG} and {H} equal the square on {EF}. Then, in conversion, the number {AB} is to {BC} as the square on {EF} is to the square on {H}. [!just V.19.Cor]
 
-But *AB* does not have to *BC* the ratio which a square number has to a square number, therefore neither does the square on *EF* have to the square on *H* the ratio which a square number has to a square number.
+But {AB} does not have to {BC} the ratio which a square number has to a square number, therefore neither does the square on {EF} have to the square on {H} the ratio which a square number has to a square number.
 
-Therefore *EF* is incommensurable in length with *H*. Therefore the square on *EF* is greater than the square on *GF* by the square on a straight line incommensurable with *EF*. [!just X.9]
+Therefore {EF} is incommensurable in length with {H}. Therefore the square on {EF} is greater than the square on {GF} by the square on a straight line incommensurable with {EF}. [!just X.9]
 
-And *EF* and *FG* are rational straight lines commensurable in square only, and *EF* is commensurable in length with *D*. Therefore *EG* is a fourth binomial straight line.
+And {EF} and {FG} are rational straight lines commensurable in square only, and {EF} is commensurable in length with {D}. Therefore {EG} is a fourth binomial straight line.
 
 <div class="qed">Q.E.D.</div>
 ----
