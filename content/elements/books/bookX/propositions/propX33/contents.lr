@@ -15,14 +15,30 @@ kind: lemma
 ----
 proof:
 
-Let *ABC* be a right-angled triangle having the angle *A* right, and let the perpendicular *AD* be drawn.
+Let {ABC|ABCh} be a right-angled triangle having the angle {A|angA} right, and let the perpendicular {AD} be drawn.
 
-I say that the rectangle *CB* by *BD* equals the square on *BA,* the rectangle *BC* by *CD* equals the square on *CA,* the rectangle *BD* by *DC* equals the square on *AD,* and the rectangle *BC* by *AD* equals the rectangle *BA* by *AC,* and first that the rectangle *CB* by *BD* equals the square on *BA.*
+I say that the rectangle {CB} by {BD} equals the square on {BA}, the rectangle {BC} by {CD} equals the square on {CA}, the rectangle {BD} by {DC} equals the square on {AD}, and the rectangle {BC} by {AD} equals the rectangle {BA} by {AC}, and first that the rectangle {CB} by {BD} equals the square on {BA}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.33 Lemma diagram" src="propX33lemma.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's lemma figure: the right triangle ABC (A on the circle on BC,
+    // which Joyce names ABC) with the perpendicular AD, drawn as the two
+    // random-faced triangles ABD and ACD. Added, all hidden at rest: solid
+    // twins AB, AC, BC, AD (initiallyHidden) so the triangle stands before
+    // the perpendicular and AD strokes from A; transparent targets BD, DC
+    // (;0;0;0); faceless, strokeless triangle twins ABCh / ABDh / ADCh that
+    // carry the highlights (#140), reached with the display override
+    // ({ABC|ABCh} — the circle owns the name ABC); right-angle markers at A
+    // (by hypothesis) and at D (the perpendicular).
+    //
+    // Draggables (checked against the bundle): B, C (free) and A (circle
+    // slider), all givens. D is a derived foot and listed from "let the
+    // perpendicular AD be drawn".
+    var L_TRI  = ["A","B","C","AB","AC","BC","angA"];
+    var L_PERP = L_TRI.concat(["D","AD","BD","DC","angD"]);
+    var L_ALL  = L_PERP.concat(["ABD","ACD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -35,23 +51,130 @@ I say that the rectangle *CB* by *BD* equals the square on *BA,* the rectangle *
             "A;point;circleSlider;ABC,120,40",
             "D;point;foot;A,B,C",
             "ABD;polygon;triangle;A,B,D;0;0;black;random",
-            "ACD;polygon;triangle;A,C,D;0;0;black;random"
+            "ACD;polygon;triangle;A,C,D;0;0;black;random",
+            // Slide-only twins, highlight targets and markers.
+            "AB;line;connect;A,B",
+            "AC;line;connect;A,C",
+            "BC;line;connect;B,C",
+            "AD;line;connect;A,D",
+            "BD;line;connect;B,D;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "ABCh;polygon;triangle;A,B,C;0;0;0;0",
+            "ABDh;polygon;triangle;A,B,D;0;0;0;0",
+            "ADCh;polygon;triangle;A,D,C;0;0;0;0",
+            "angA;sector;angleMarkerRight;A,B,C",
+            "angD;sector;angleMarkerRight;D,A,B"
         ],
+        initiallyHidden: ["AB","AC","BC","AD"],
+        aliases: { "CB": "BC", "BA": "AB", "CA": "AC", "CD": "DC", "DA": "AD" },
+        slides: [
+            { text: "Let {ABC|ABCh} be a right-angled triangle having the angle {A|angA} right,",
+              visible: L_TRI,
+              highlighted: ["ABCh","angA"],
+              transition: { animations: [
+                  { elem: "angA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "Lemma" }] },
+            { text: "and let the perpendicular {AD} be drawn.",
+              visible: L_PERP,
+              highlighted: ["AD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that the rectangle {CB} by {BD} equals the square on {BA},",
+              visible: L_PERP,
+              highlighted: ["BC","BD","AB"] },
+            { text: "the rectangle {BC} by {CD} equals the square on {CA},",
+              visible: L_PERP,
+              highlighted: ["BC","DC","AC"] },
+            { text: "the rectangle {BD} by {DC} equals the square on {AD},",
+              visible: L_PERP,
+              highlighted: ["BD","DC","AD"] },
+            { text: "and the rectangle {BC} by {AD} equals the rectangle {BA} by {AC},",
+              visible: L_PERP,
+              highlighted: ["BC","AD","AB","AC"] },
+            { text: "and first that the rectangle {CB} by {BD} equals the square on {BA}.",
+              visible: L_PERP,
+              highlighted: ["BC","BD","AB"] },
+            { text: "Since in a right-angled triangle {AD} has been drawn from the right angle perpendicular to the base,",
+              visible: L_PERP,
+              highlighted: ["AD","angA","angD","BC"] },
+            { text: "therefore the triangles {ABD|ABDh} and {ADC|ADCh} are similar both to the whole {ABC|ABCh} and to one another.",
+              visible: L_ALL,
+              highlighted: ["ABDh","ADCh","ABCh"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ABD", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "ACD", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "ABD, ADC similar to ABC", ref: "VI.8" }] },
+            { text: "Since the triangle {ABC|ABCh} is similar to the triangle {ABD|ABDh},",
+              visible: L_ALL,
+              highlighted: ["ABCh","ABDh"] },
+            { text: "therefore {CB} is to {BA} as {BA} is to {BD}.",
+              visible: L_ALL,
+              highlighted: ["BC","AB","BD"],
+              justifications: [{ claim: "CB : BA = BA : BD", ref: "VI.4" }] },
+            { text: "Therefore the rectangle {CB} by {BD} equals the square on {AB}.",
+              visible: L_ALL,
+              highlighted: ["BC","BD","AB"],
+              justifications: [{ claim: "CB·BD = AB²", ref: "VI.17" }] },
+            { text: "For the same reason the rectangle {BC} by {CD} also equals the square on {AC}.",
+              visible: L_ALL,
+              highlighted: ["BC","DC","AC"],
+              justifications: [{ claim: "BC·CD = AC²", ref: "VI.17" }] },
+            { text: "Since, if in a right-angled triangle a perpendicular is drawn from the right angle to the base,",
+              visible: L_ALL,
+              highlighted: ["AD","angA","angD"] },
+            { text: "then the perpendicular so drawn is a mean proportional between the segments of the base,",
+              visible: L_ALL,
+              highlighted: ["AD","BD","DC"],
+              justifications: [{ claim: "the perpendicular is a mean proportional", ref: "VI.8.Cor" }] },
+            { text: "therefore {BD} is to {DA} as {AD} is to {DC}.",
+              visible: L_ALL,
+              highlighted: ["BD","AD","DC"] },
+            { text: "Therefore the rectangle {BD} by {DC} equals the square on {AD}.",
+              visible: L_ALL,
+              highlighted: ["BD","DC","AD"],
+              justifications: [{ claim: "BD·DC = AD²", ref: "VI.17" }] },
+            { text: "I say that the rectangle {BC} by {AD} also equals the rectangle {BA} by {AC}.",
+              visible: L_ALL,
+              highlighted: ["BC","AD","AB","AC"] },
+            { text: "Since we said, {ABC|ABCh} is similar to {ABD|ABDh}, therefore {BC} is to {CA} as {BA} is to {AD}.",
+              visible: L_ALL,
+              highlighted: ["ABCh","ABDh","BC","AC","AB","AD"],
+              justifications: [{ claim: "BC : CA = BA : AD", ref: "VI.4" }] },
+            { text: "Therefore the rectangle {BC} by {AD} equals the rectangle {BA} by {AC}.",
+              visible: L_ALL,
+              highlighted: ["BC","AD","AB","AC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // (shared by both canvases on this page).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VI.4":     "/elements/books/bookVI/propositions/propVI4/",
+        "VI.8":     "/elements/books/bookVI/propositions/propVI8/",
+        "VI.8.Cor": "/elements/books/bookVI/propositions/propVI8/#cor",
+        "VI.17":    "/elements/books/bookVI/propositions/propVI17/"
     });
 </script>
 </figure>
 
-Since in a right-angled triangle *AD* has been drawn from the right angle perpendicular to the base, therefore the triangles *ABD* and *ADC* are similar both to the whole *ABC* and to one another. [!just VI.8]
+Since in a right-angled triangle {AD} has been drawn from the right angle perpendicular to the base, therefore the triangles {ABD|ABDh} and {ADC|ADCh} are similar both to the whole {ABC|ABCh} and to one another. [!just VI.8]
 
-Since the triangle *ABC* is similar to the triangle *ABD,* therefore *CB* is to *BA* as *BA* is to *BD.* Therefore the rectangle *CB* by *BD* equals the square on *AB.* For the same reason the rectangle *BC* by *CD* also equals the square on *AC.* [!just VI.4; VI.17]
+Since the triangle {ABC|ABCh} is similar to the triangle {ABD|ABDh}, therefore {CB} is to {BA} as {BA} is to {BD}. Therefore the rectangle {CB} by {BD} equals the square on {AB}. For the same reason the rectangle {BC} by {CD} also equals the square on {AC}. [!just VI.4; VI.17]
 
-Since, if in a right-angled triangle a perpendicular is drawn from the right angle to the base, then the perpendicular so drawn is a mean proportional between the segments of the base, therefore *BD* is to *DA* as *AD* is to *DC.* Therefore the rectangle *BD* by *DC* equals the square on *AD.* [!just VI.8.Cor; VI.17]
+Since, if in a right-angled triangle a perpendicular is drawn from the right angle to the base, then the perpendicular so drawn is a mean proportional between the segments of the base, therefore {BD} is to {DA} as {AD} is to {DC}. Therefore the rectangle {BD} by {DC} equals the square on {AD}. [!just VI.8.Cor; VI.17]
 
-I say that the rectangle *BC* by *AD* also equals the rectangle *BA* by *AC.*
+I say that the rectangle {BC} by {AD} also equals the rectangle {BA} by {AC}.
 
-Since we said, *ABC* is similar to *ABD,* therefore *BC* is to *CA* as *BA* is to *AD.* [!just VI.4]
+Since we said, {ABC|ABCh} is similar to {ABD|ABDh}, therefore {BC} is to {CA} as {BA} is to {AD}. [!just VI.4]
 
-Therefore the rectangle *BC* by *AD* equals the rectangle *BA* by *AC.*
+Therefore the rectangle {BC} by {AD} equals the rectangle {BA} by {AC}.
 
 <div class="qed">Q.E.D.</div>
 #### prop_section ####
@@ -61,12 +184,33 @@ statement: To find two straight lines incommensurable in square which make the s
 ----
 proof:
 
-Set out two rational straight lines *AB* and *BC* commensurable in square only such that the square on the greater *AB* is greater than the square on the less *BC* by the square on a straight line incommensurable with *AB.* [!just X.30]
+Set out two rational straight lines {AB:canvas_1} and {BC:canvas_1} commensurable in square only such that the square on the greater {AB:canvas_1} is greater than the square on the less {BC:canvas_1} by the square on a straight line incommensurable with {AB:canvas_1}. [!just X.30]
 
 <figure class="diagram">
 <canvas id="canvas_1" width="330" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.33 diagram" src="propX33.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: AB with BC produced beyond B, D bisecting BC, E on AB,
+    // the semicircle AFB (random face), the triangle AFB (random face, named
+    // ABB) and the perpendicular EF. Added, all hidden at rest: solid twins
+    // AB, AF, FB (initiallyHidden) so AB stands before the semicircle and
+    // the joins stroke from A and F; transparent targets AE, EB, BD, DC
+    // (;0;0;0); a faceless, strokeless twin of the semicircle (semiT) to
+    // carry its highlight, since the filled one would be raised over the
+    // triangle (#140) and the circle that owns the name AFB is the whole
+    // circle; the right angle at E. ABEF is Joyce's slip for the rectangle
+    // AB by EF and is left literal.
+    //
+    // Draggables (checked against the bundle): A, B (free), C (line slider)
+    // — the givens — and E (line slider), which only arrives with "let it be
+    // the rectangle AE by EB", so it is deferred. D and F are derived and
+    // listed per slide.
+    var GIVEN = ["A","B","C","AB","BC"];
+    var BIS   = GIVEN.concat(["D","BD","DC"]);
+    var APPL  = BIS.concat(["E","AE","EB"]);
+    var SEMI  = APPL.concat(["semi"]);
+    var PERP  = SEMI.concat(["F","EF","angE"]);
+    var ALL   = PERP.concat(["AF","FB","ABB"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -85,32 +229,191 @@ Set out two rational straight lines *AB* and *BC* commensurable in square only s
             "F;point;last;FF'",
             "semi;sector;arc;B,F,A;0;0;black;random",
             "ABB;polygon;triangle;A,B,F;0;0;black;random",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // Slide-only twins, highlight targets and markers.
+            "AB;line;connect;A,B",
+            "AF;line;connect;A,F",
+            "FB;line;connect;F,B",
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "semiT;sector;arc;B,F,A;0;0;0;0",
+            "angE;sector;angleMarkerRight;E,A,F"
         ],
+        initiallyHidden: ["AB","AF","FB"],
+        deferDraggables: ["E"],
+        aliases: { "BA": "AB", "BE": "EB", "BF": "FB", "FE": "EF" },
+        slides: [
+            { text: "“To find two straight lines incommensurable in square",
+              visible: ALL,
+              highlighted: ["AF","FB"],
+              justifications: [{ ref: "X.33" }] },
+            { text: "which make the sum of the squares on them rational but the rectangle contained by them medial.”",
+              visible: ALL,
+              highlighted: ["AF","FB"] },
+            { text: "Set out two rational straight lines {AB} and {BC} commensurable in square only",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "such that the square on the greater {AB} is greater than the square on the less {BC}",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "by the square on a straight line incommensurable with {AB}.",
+              visible: GIVEN,
+              highlighted: ["AB"],
+              justifications: [{ claim: "AB, BC as required", ref: "X.30" }] },
+            { text: "Bisect {BC} at {D}.",
+              visible: BIS,
+              highlighted: ["BC","D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "Apply to {AB} a parallelogram equal to the square on either of the straight lines {BD} or {DC}",
+              visible: BIS,
+              highlighted: ["AB","BD","DC"] },
+            { text: "and deficient by a square figure, and let it be the rectangle {AE} by {EB}.",
+              visible: APPL,
+              highlighted: ["AE","EB"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AE·EB = BD²", ref: "VI.28" }] },
+            { text: "Describe the semicircle {AFB|semiT} on {AB},",
+              visible: SEMI,
+              highlighted: ["semiT","AB"],
+              transition: { animations: [
+                  { elem: "semi", name: geomlib.A.Sector.sweep } ] } },
+            { text: "draw {EF} at right angles to {AB},",
+              visible: PERP,
+              highlighted: ["EF","angE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EF",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and join {AF} and {FB}.",
+              visible: ALL,
+              highlighted: ["AF","FB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AF",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FB",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ABB", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Since {AB} and {BC} are unequal straight lines,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "and the square on {AB} is greater than the square on {BC}",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "by the square on a straight line incommensurable with {AB},",
+              visible: ALL,
+              highlighted: ["AB"] },
+            { text: "while there was applied to {AB} a parallelogram equal to the fourth part of the square on {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "that is, to the square on half of it, and deficient by a square figure, making the rectangle {AE} by {EB},",
+              visible: ALL,
+              highlighted: ["BD","AE","EB"] },
+            { text: "therefore {AE} is incommensurable with {EB}.",
+              visible: ALL,
+              highlighted: ["AE","EB"],
+              justifications: [{ claim: "AE, EB incommensurable", ref: "X.18" }] },
+            { text: "And {AE} is to {EB} as the rectangle {BA} by {AE} is to the rectangle {AB} by {BE},",
+              visible: ALL,
+              highlighted: ["AE","EB","AB"] },
+            { text: "while the rectangle {BA} by {AE} equals the square on {AF},",
+              visible: ALL,
+              highlighted: ["AB","AE","AF"] },
+            { text: "and the rectangle {AB} by {BE} is to the square on {BF},",
+              visible: ALL,
+              highlighted: ["AB","EB","FB"] },
+            { text: "therefore the square on {AF} is incommensurable with the square on {FB}.",
+              visible: ALL,
+              highlighted: ["AF","FB"] },
+            { text: "Therefore {AF} and {FB} are incommensurable in square.",
+              visible: ALL,
+              highlighted: ["AF","FB"] },
+            { text: "Since {AB} is rational, therefore the square on {AB} is also rational,",
+              visible: ALL,
+              highlighted: ["AB"] },
+            { text: "so that the sum of the squares on {AF} and {FB} is also rational.",
+              visible: ALL,
+              highlighted: ["AF","FB"],
+              justifications: [{ claim: "AF² + FB² = AB²", ref: "I.47" }] },
+            { text: "Since, again, the rectangle {AE} by {EB} equals the square on {EF},",
+              visible: ALL,
+              highlighted: ["AE","EB","EF"] },
+            { text: "and, by hypothesis, the rectangle {AE} by {EB} also equals the square on {BD},",
+              visible: ALL,
+              highlighted: ["AE","EB","BD"] },
+            { text: "therefore {FE} equals {BD}.",
+              visible: ALL,
+              highlighted: ["EF","BD"] },
+            { text: "Therefore {BC} is double {FE},",
+              visible: ALL,
+              highlighted: ["BC","EF"] },
+            { text: "so that the rectangle {AB} by {BC} is also commensurable with the rectangle ABEF.",
+              visible: ALL,
+              highlighted: ["AB","BC","EF"] },
+            { text: "But the rectangle {AB} by {BC} is medial,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the rectangle {AB} by {EF} is also medial.",
+              visible: ALL,
+              highlighted: ["AB","EF"],
+              justifications: [{ claim: "AB·BC medial", ref: "X.21" },
+                               { claim: "commensurable with a medial area", ref: "X.23.Cor" }] },
+            { text: "But the rectangle {AB} by {EF} equals the rectangle {AF} by {FB},",
+              visible: ALL,
+              highlighted: ["AB","EF","AF","FB"] },
+            { text: "therefore the rectangle {AF} by {FB} is also medial.",
+              visible: ALL,
+              highlighted: ["AF","FB"],
+              justifications: [{ claim: "AB·EF = AF·FB", ref: "Lemma" }] },
+            { text: "But it was also proved that the sum of the squares on these straight lines is rational.",
+              visible: ALL,
+              highlighted: ["AF","FB"] },
+            { text: "Therefore two straight lines {AF} and {FB} incommensurable in square have been found",
+              visible: ALL,
+              highlighted: ["AF","FB"] },
+            { text: "which make the sum of the squares on them rational, but the rectangle contained by them medial.",
+              visible: ALL,
+              highlighted: ["AF","FB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.33") return "#prop";
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    Object.assign(window.eucrefs, {
+        "I.47":     "/elements/books/bookI/propositions/propI47/",
+        "VI.28":    "/elements/books/bookVI/propositions/propVI28/",
+        "X.18":     "/elements/books/bookX/propositions/propX18/",
+        "X.21":     "/elements/books/bookX/propositions/propX21/",
+        "X.23.Cor": "/elements/books/bookX/propositions/propX23/#cor",
+        "X.30":     "/elements/books/bookX/propositions/propX30/"
     });
 </script>
 </figure>
 
-Bisect *BC* at *D.* Apply to *AB* a parallelogram equal to the square on either of the straight lines *BD* or *DC* and deficient by a square figure, and let it be the rectangle *AE* by *EB.* [!just VI.28]
+Bisect {BC} at {D}. Apply to {AB} a parallelogram equal to the square on either of the straight lines {BD} or {DC} and deficient by a square figure, and let it be the rectangle {AE} by {EB}. [!just VI.28]
 
-Describe the semicircle *AFB* on *AB,* draw *EF* at right angles to *AB,* and join *AF* and *FB.*
+Describe the semicircle {AFB|semiT} on {AB}, draw {EF} at right angles to {AB}, and join {AF} and {FB}.
 
-Since *AB* and *BC* are unequal straight lines, and the square on *AB* is greater than the square on *BC* by the square on a straight line incommensurable with *AB,* while there was applied to *AB* a parallelogram equal to the fourth part of the square on *BC,* that is, to the square on half of it, and deficient by a square figure, making the rectangle *AE* by *EB,* therefore *AE* is incommensurable with *EB.* [!just X.18]
+Since {AB} and {BC} are unequal straight lines, and the square on {AB} is greater than the square on {BC} by the square on a straight line incommensurable with {AB}, while there was applied to {AB} a parallelogram equal to the fourth part of the square on {BC}, that is, to the square on half of it, and deficient by a square figure, making the rectangle {AE} by {EB}, therefore {AE} is incommensurable with {EB}. [!just X.18]
 
-And *AE* is to *EB* as the rectangle *BA* by *AE* is to the rectangle *AB* by *BE,* while the rectangle *BA* by *AE* equals the square on *AF,* and the rectangle *AB* by *BE* is to the square on *BF,* therefore the square on *AF* is incommensurable with the square on *FB.* Therefore *AF* and *FB* are incommensurable in square.
+And {AE} is to {EB} as the rectangle {BA} by {AE} is to the rectangle {AB} by {BE}, while the rectangle {BA} by {AE} equals the square on {AF}, and the rectangle {AB} by {BE} is to the square on {BF}, therefore the square on {AF} is incommensurable with the square on {FB}. Therefore {AF} and {FB} are incommensurable in square.
 
-Since *AB* is rational, therefore the square on *AB* is also rational, so that the sum of the squares on *AF* and *FB* is also rational. [!just I.47]
+Since {AB} is rational, therefore the square on {AB} is also rational, so that the sum of the squares on {AF} and {FB} is also rational. [!just I.47]
 
-Since, again, the rectangle *AE* by *EB* equals the square on *EF,* and, by hypothesis, the rectangle *AE* by *EB* also equals the square on *BD,* therefore *FE* equals *BD.* Therefore *BC* is double *FE,* so that the rectangle *AB* by *BC* is also commensurable with the rectangle *ABEF.*
+Since, again, the rectangle {AE} by {EB} equals the square on {EF}, and, by hypothesis, the rectangle {AE} by {EB} also equals the square on {BD}, therefore {FE} equals {BD}. Therefore {BC} is double {FE}, so that the rectangle {AB} by {BC} is also commensurable with the rectangle *ABEF.*
 
-But the rectangle *AB* by *BC* is medial,
-therefore the rectangle *AB* by *EF* is also medial. [!just X.21, X.23.Cor]
+But the rectangle {AB} by {BC} is medial,
+therefore the rectangle {AB} by {EF} is also medial. [!just X.21, X.23.Cor]
 
-But the rectangle *AB* by *EF* equals the rectangle *AF* by *FB,* therefore the rectangle *AF* by *FB* is also medial. <div class="just"><a href="/elements/books/bookX/propositions/propX33/#lemma">Lemma</a></div>
+But the rectangle {AB} by {EF} equals the rectangle {AF} by {FB}, therefore the rectangle {AF} by {FB} is also medial. <div class="just"><a href="/elements/books/bookX/propositions/propX33/#lemma">Lemma</a></div>
 
 But it was also proved that the sum of the squares on these straight lines is rational.
 
-Therefore two straight lines *AF* and *FB* incommensurable in square have been found which make the sum of the squares on them rational, but the rectangle contained by them medial.
+Therefore two straight lines {AF} and {FB} incommensurable in square have been found which make the sum of the squares on them rational, but the rectangle contained by them medial.
 
 <div class="qed">Q.E.D.</div>
 ----

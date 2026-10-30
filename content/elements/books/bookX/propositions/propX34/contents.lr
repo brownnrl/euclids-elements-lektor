@@ -17,14 +17,35 @@ statement: To find two straight lines incommensurable in square which make the s
 ----
 proof:
 
-Set out two medial straight lines *AB* and *BC,* commensurable in square only, such that the rectangle which they contain is rational and the square on *AB* is greater than the square on *BC* by the square on a straight line incommensurable with *AB.* <div class="just"><a href="/elements/books/bookX/propositions/propX31/">X.31</a> ad fin.</div>
+Set out two medial straight lines {AB} and {BC}, commensurable in square only, such that the rectangle which they contain is rational and the square on {AB} is greater than the square on {BC} by the square on a straight line incommensurable with {AB}. <div class="just"><a href="/elements/books/bookX/propositions/propX31/">X.31</a> ad fin.</div>
 
-Describe the semicircle *ADB* on *AB.* Apply a parallelogram to *AB* equal to the square on *BE* and deficient by a square figure, namely the rectangle *AF* by *FB.* Then *AF* is incommensurable in length with *FB.* [!just VI.28; X.18]
+Describe the semicircle {ADB|semiT} on {AB}. Apply a parallelogram to {AB} equal to the square on {BE} and deficient by a square figure, namely the rectangle {AF} by {FB}. Then {AF} is incommensurable in length with {FB}. [!just VI.28; X.18]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="360" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.34 diagram" src="propX34.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: AB with BC produced beyond B, E bisecting BC, F on AB,
+    // the semicircle ADB (random face), the triangle ADB (random face, named
+    // tri) and the perpendicular FD. Added, all hidden at rest: solid twins
+    // AB, AD, DB (initiallyHidden) so AB stands before the semicircle and
+    // the joins stroke from A and D; transparent targets AF, FB, BE
+    // (;0;0;0); a faceless, strokeless twin of the semicircle (semiT) to
+    // carry its highlight, since the filled one would be raised over the
+    // triangle (#140) and the circle that owns the name ADB is the whole
+    // circle; right-angle markers at F (by construction) and at D (III.31).
+    //
+    // Draggables (checked against the bundle): A, B (free), C (line slider)
+    // — the givens — and F (line slider), which only arrives with "namely
+    // the rectangle AF by FB", so it is deferred. E and D are derived and
+    // listed per slide.
+    var GIVEN = ["A","B","C","AB","BC"];
+    var SEMI  = GIVEN.concat(["semi"]);
+    var BE    = SEMI.concat(["E","BE"]);
+    var APPL  = BE.concat(["F","AF","FB"]);
+    var PERP  = APPL.concat(["D","FD","angF"]);
+    var ALL   = PERP.concat(["AD","DB","tri"]);
+    var RT    = ALL.concat(["angD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -43,27 +64,160 @@ Describe the semicircle *ADB* on *AB.* Apply a parallelogram to *AB* equal to th
             "D;point;last;DD'",
             "semi;sector;arc;B,D,A;0;0;black;random",
             "tri;polygon;triangle;A,D,B;0;0;black;random",
-            "FD;line;connect;F,D"
+            "FD;line;connect;F,D",
+            // Slide-only twins, highlight targets and markers.
+            "AB;line;connect;A,B",
+            "AD;line;connect;A,D",
+            "DB;line;connect;D,B",
+            "AF;line;connect;A,F;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "BE;line;connect;B,E;0;0;0",
+            "semiT;sector;arc;B,D,A;0;0;0;0",
+            "angF;sector;angleMarkerRight;F,A,D",
+            "angD;sector;angleMarkerRight;D,A,B"
         ],
+        initiallyHidden: ["AB","AD","DB"],
+        deferDraggables: ["F"],
+        aliases: { "BA": "AB", "BF": "FB", "DF": "FD" },
+        slides: [
+            { text: "“To find two straight lines incommensurable in square",
+              visible: ALL,
+              highlighted: ["AD","DB"],
+              justifications: [{ ref: "X.34" }] },
+            { text: "which make the sum of the squares on them medial but the rectangle contained by them rational.”",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "Set out two medial straight lines {AB} and {BC}, commensurable in square only,",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "such that the rectangle which they contain is rational",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "and the square on {AB} is greater than the square on {BC}",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "by the square on a straight line incommensurable with {AB}.",
+              visible: GIVEN,
+              highlighted: ["AB"],
+              justifications: [{ ref: "X.31 ad fin." }] },
+            { text: "Describe the semicircle {ADB|semiT} on {AB}.",
+              visible: SEMI,
+              highlighted: ["semiT","AB"],
+              transition: { animations: [
+                  { elem: "semi", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Apply a parallelogram to {AB} equal to the square on {BE}",
+              visible: BE,
+              highlighted: ["AB","BE"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "and deficient by a square figure, namely the rectangle {AF} by {FB}.",
+              visible: APPL,
+              highlighted: ["AF","FB"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AF·FB = BE²", ref: "VI.28" }] },
+            { text: "Then {AF} is incommensurable in length with {FB}.",
+              visible: APPL,
+              highlighted: ["AF","FB"],
+              justifications: [{ claim: "AF, FB incommensurable in length", ref: "X.18" }] },
+            { text: "Draw {FD} from {F} at right angles to {AB},",
+              visible: PERP,
+              highlighted: ["FD","angF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FD",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and join {AD} and {DB}.",
+              visible: ALL,
+              highlighted: ["AD","DB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DB",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "tri", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Since {AF} is incommensurable in length with {FB},",
+              visible: ALL,
+              highlighted: ["AF","FB"] },
+            { text: "therefore the rectangle {BA} by {AF} is also incommensurable with the rectangle {AB} by {BF}.",
+              visible: ALL,
+              highlighted: ["AB","AF","FB"],
+              justifications: [{ claim: "BA·AF, AB·BF incommensurable", ref: "X.11" }] },
+            { text: "But the rectangle {BA} by {AF} equals the square on {AD},",
+              visible: ALL,
+              highlighted: ["AB","AF","AD"] },
+            { text: "and the rectangle {AB} by {BF} equals the square on {DB},",
+              visible: ALL,
+              highlighted: ["AB","FB","DB"] },
+            { text: "therefore the square on {AD} is also incommensurable with the square on {DB}.",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "And, since the square on {AB} is medial, therefore the sum of the squares on {AD} and {DB} is also medial.",
+              visible: RT,
+              highlighted: ["AB","AD","DB","angD"],
+              transition: { animations: [
+                  { elem: "angD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the angle in a semicircle is right", ref: "III.31" },
+                               { claim: "AD² + DB² = AB²", ref: "I.47" }] },
+            { text: "And, since {BC} is double {DF},",
+              visible: RT,
+              highlighted: ["BC","FD"] },
+            { text: "therefore the rectangle {AB} by {BC} is also double the rectangle {AB} by {FD}.",
+              visible: RT,
+              highlighted: ["AB","BC","FD"] },
+            { text: "But the rectangle {AB} by {BC} is rational, therefore the rectangle {AB} by {FD} is also rational.",
+              visible: RT,
+              highlighted: ["AB","BC","FD"],
+              justifications: [{ claim: "AB·FD rational", ref: "X.6" }] },
+            { text: "But the rectangle {AB} by {FD} equals the rectangle {AD} by {DB},",
+              visible: RT,
+              highlighted: ["AB","FD","AD","DB"] },
+            { text: "so that the rectangle {AD} by {DB} is also rational.",
+              visible: RT,
+              highlighted: ["AD","DB"],
+              justifications: [{ claim: "AB·FD = AD·DB", ref: "X.32.Lemma" }] },
+            { text: "Therefore two straight lines {AD} and {DB} incommensurable in square have been found",
+              visible: RT,
+              highlighted: ["AD","DB"] },
+            { text: "which make the sum of the squares on them medial, but the rectangle contained by them rational.",
+              visible: RT,
+              highlighted: ["AD","DB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.34") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    // Joyce's "X.32.Lemma" is the lemma published at the head of X.33.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.47":         "/elements/books/bookI/propositions/propI47/",
+        "III.31":       "/elements/books/bookIII/propositions/propIII31/",
+        "VI.28":        "/elements/books/bookVI/propositions/propVI28/",
+        "X.6":          "/elements/books/bookX/propositions/propX6/",
+        "X.11":         "/elements/books/bookX/propositions/propX11/",
+        "X.18":         "/elements/books/bookX/propositions/propX18/",
+        "X.31 ad fin.": "/elements/books/bookX/propositions/propX31/",
+        "X.32.Lemma":   "/elements/books/bookX/propositions/propX33/#lemma"
     });
 </script>
 </figure>
 
-Draw *FD* from *F* at right angles to *AB,* and join *AD* and *DB.*
+Draw {FD} from {F} at right angles to {AB}, and join {AD} and {DB}.
 
-Since *AF* is incommensurable in length with *FB,* therefore the rectangle *BA* by *AF* is also incommensurable with the rectangle *AB* by *BF.* [!just X.11]
+Since {AF} is incommensurable in length with {FB}, therefore the rectangle {BA} by {AF} is also incommensurable with the rectangle {AB} by {BF}. [!just X.11]
 
-But the rectangle *BA* by *AF* equals the square on *AD,* and the rectangle *AB* by *BF* equals the square on *DB,* therefore the square on *AD* is also incommensurable with the square on *DB.*
+But the rectangle {BA} by {AF} equals the square on {AD}, and the rectangle {AB} by {BF} equals the square on {DB}, therefore the square on {AD} is also incommensurable with the square on {DB}.
 
-And, since the square on *AB* is medial, therefore the sum of the squares on *AD* and *DB* is also medial. [!just III.31, I.47]
+And, since the square on {AB} is medial, therefore the sum of the squares on {AD} and {DB} is also medial. [!just III.31, I.47]
 
-And, since *BC* is double *DF,* therefore the rectangle *AB* by *BC* is also double the rectangle *AB* by *FD.*
+And, since {BC} is double {DF}, therefore the rectangle {AB} by {BC} is also double the rectangle {AB} by {FD}.
 
-But the rectangle *AB* by *BC* is rational, therefore the rectangle *AB* by *FD* is also rational. [!just X.6]
+But the rectangle {AB} by {BC} is rational, therefore the rectangle {AB} by {FD} is also rational. [!just X.6]
 
-But the rectangle *AB* by *FD* equals the rectangle *AD* by *DB,* so that the rectangle *AD* by *DB* is also rational. <div class="just"><a href="/elements/books/bookX/propositions/propX32/#lemma">X.32.Lemma</a></div>
+But the rectangle {AB} by {FD} equals the rectangle {AD} by {DB}, so that the rectangle {AD} by {DB} is also rational. <div class="just"><a href="/elements/books/bookX/propositions/propX32/#lemma">X.32.Lemma</a></div>
 
-Therefore two straight lines *AD* and *DB* incommensurable in square have been found which make the sum of the squares on them medial, but the rectangle contained by them rational.
+Therefore two straight lines {AD} and {DB} incommensurable in square have been found which make the sum of the squares on them medial, but the rectangle contained by them rational.
 
 <div class="qed">Q.E.D.</div>
 ----
