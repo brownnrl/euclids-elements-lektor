@@ -15,18 +15,40 @@ statement: If an area is contained by a rational straight line and the sixth bin
 ----
 proof:
 
-Let the area *ABCD* be contained by the rational straight line *AB* and the sixth binomial *AD*, divided into its terms at *E*, so that *AE* is the greater term.
+Let the area {ABCD|ABCDh} be contained by the rational straight line {AB} and the sixth binomial {AD}, divided into its terms at {E}, so that {AE} is the greater term.
 
-I say that the side of *AC* is the side of the sum of two medial areas.
+I say that the side of {AC} is the side of the sum of two medial areas.
 
 Make the same construction as shown before.
 
-It is then clear that *MO* is the side of *AC*, and that *MN* is incommensurable in square with *NO*.
+It is then clear that {MO} is the side of {AC}, and that {MN} is incommensurable in square with {NO}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="400" height="210" tabindex="0"></canvas>
 <noscript><img alt="X.59 diagram" src="propX54.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure (X.54's): the rectangle ABCD on the rational AB and the
+    // binomial AD, divided at E, with F bisecting ED, G applied on AE, the
+    // parallels GH, EK, FL, the rectangles AH and GK (HGEK), and the squares
+    // SN (SPNM) and NQ (NOQR) inside the completed square SQ. "Make the same
+    // construction as shown before" is one slide that rebuilds it.
+    // Added, all hidden at rest: solid twins GH, EK (initiallyHidden) so the
+    // parallels stroke from G and E before the rectangles fill; transparent
+    // targets AB, AD, AE, ED, EF, MN, NO, MO (;0;0;0); a
+    // faceless twin ABCDh of the random-faced rectangle, which would be
+    // raised over AH and GK when lit (#140), reached as {ABCD|ABCDh} and the
+    // alias AC; faceless targets AK (A,B,K,E), EL (E,F,L,K) and MR (M,N,R and
+    // SQ's fourth vertex SQ4). No angle is called right, so no markers.
+    //
+    // Draggables (checked against the bundle): A, D, B (the givens), E and S
+    // (line sliders), and the offscreen frees. E arrives with "divided into
+    // its terms at E" and S with the construction, so both are deferred.
+    // F, G, H, K, L, P, M, N, O, Q, R are derived and listed per slide.
+    var GIVEN = ["A","B","C","D","ABCD","AB","AD"];
+    var TERMS = GIVEN.concat(["E","AE","ED"]);
+    var ALL   = TERMS.concat(["F","EF","G","H","K","L","GH","EK","FL","AH","HGEK",
+                              "S","P","M","N","SPNM","O","Q","R","NOQR",
+                              "SQ","SQ4","MN","NO","MO","MR","EL","AK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -67,21 +89,146 @@ It is then clear that *MO* is the side of *AC*, and that *MN* is incommensurable
             "NOQR;polygon;square;N,O;0;0;black;190,80,100",
             "Q;point;vertex;NOQR,3",
             "R;point;vertex;NOQR,4",
-            "SQ;polygon;parallelogram;S,T,Q;0;0;black;0"
+            "SQ;polygon;parallelogram;S,T,Q;0;0;black;0",
+            // Slide-only twins and highlight targets.
+            "GH;line;connect;G,H",
+            "EK;line;connect;E,K",
+            "AB;line;connect;A,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "NO;line;connect;N,O;0;0;0",
+            "MO;line;connect;M,O;0;0;0",
+            "SQ4;point;vertex;SQ,4;0;0",
+            "ABCDh;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            "AK;polygon;quadrilateral;A,B,K,E;0;0;0;0",
+            "EL;polygon;quadrilateral;E,F,L,K;0;0;0;0",
+            "MR;polygon;quadrilateral;M,N,R,SQ4;0;0;0;0"
         ],
+        initiallyHidden: ["GH","EK"],
+        deferDraggables: ["E","S"],
+        aliases: { "AC": "ABCDh", "EA": "AE", "FE": "EF" },
+        slides: [
+            { text: "“If an area is contained by a rational straight line and the sixth binomial,",
+              visible: ALL,
+              highlighted: ["ABCDh","AB","AD"],
+              justifications: [{ ref: "X.59" }] },
+            { text: "then the side of the area is the irrational straight line called the side of the sum of two medial areas.”",
+              visible: ALL,
+              highlighted: ["MO"] },
+            { text: "Let the area {ABCD|ABCDh} be contained by the rational straight line {AB} and the sixth binomial {AD},",
+              visible: GIVEN,
+              highlighted: ["ABCDh","AB","AD"] },
+            { text: "divided into its terms at {E}, so that {AE} is the greater term.",
+              visible: TERMS,
+              highlighted: ["E","AE"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "I say that the side of {AC} is the side of the sum of two medial areas.",
+              visible: TERMS,
+              highlighted: ["ABCDh"] },
+            { text: "Make the same construction as shown before.",
+              visible: ALL,
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",    name: geomlib.A.Point.appear },
+                  { elem: "G",    name: geomlib.A.Point.appear },
+                  { elem: "GH",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EK",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FL",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AH",   name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "HGEK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "S",    name: geomlib.A.Point.appear },
+                  { elem: "SPNM", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "NOQR", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "SQ",   name: geomlib.A.Polygon.outline } ] } },
+            { text: "It is then clear that {MO} is the side of {AC},",
+              visible: ALL,
+              highlighted: ["MO","ABCDh"] },
+            { text: "and that {MN} is incommensurable in square with {NO}.",
+              visible: ALL,
+              highlighted: ["MN","NO"] },
+            { text: "Now, since {EA} is incommensurable in length with {AB},",
+              visible: ALL,
+              highlighted: ["AE","AB"] },
+            { text: "therefore {EA} and {AB} are rational straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["AE","AB"] },
+            { text: "therefore {AK}, that is, the sum of the squares on {MN} and {NO}, is medial.",
+              visible: ALL,
+              highlighted: ["AK","SPNM","NOQR"],
+              justifications: [{ claim: "AK medial", ref: "X.21" }] },
+            { text: "Again, since {ED} is incommensurable in length with {AB},",
+              visible: ALL,
+              highlighted: ["ED","AB"] },
+            { text: "therefore {FE} is also incommensurable with {EK}.",
+              visible: ALL,
+              highlighted: ["EF","EK"],
+              justifications: [{ claim: "FE, EK incommensurable", ref: "X.13" }] },
+            { text: "Therefore {FE} and {EK} are rational straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["EF","EK"] },
+            { text: "Therefore {EL}, that is, {MR}, that is, the rectangle {MN} by {NO}, is medial.",
+              visible: ALL,
+              highlighted: ["EL","MR","MN","NO"],
+              justifications: [{ claim: "EL medial", ref: "X.21" }] },
+            { text: "Since {AE} is incommensurable with {EF}, therefore {AK} is also incommensurable with {EL}.",
+              visible: ALL,
+              highlighted: ["AE","EF","AK","EL"],
+              justifications: [{ claim: "AE : EF = AK : EL", ref: "VI.1" },
+                               { claim: "AK, EL incommensurable", ref: "X.11" }] },
+            { text: "But {AK} is the sum of the squares on {MN} and {NO},",
+              visible: ALL,
+              highlighted: ["AK","SPNM","NOQR"] },
+            { text: "and {EL} is the rectangle {MN} by {NO},",
+              visible: ALL,
+              highlighted: ["EL","MR"] },
+            { text: "therefore the sum of the squares on {MN} and {NO} is incommensurable with the rectangle {MN} by {NO}.",
+              visible: ALL,
+              highlighted: ["SPNM","NOQR","MR"] },
+            { text: "And each of them is medial, and {MN} and {NO} are incommensurable in square.",
+              visible: ALL,
+              highlighted: ["MN","NO"] },
+            { text: "Therefore {MO} is the side of the sum of two medial areas, and is the side of {AC}.",
+              visible: ALL,
+              highlighted: ["MO","ABCDh"],
+              justifications: [{ claim: "side of the sum of two medial areas", ref: "X.41" }] },
+            { text: "Therefore, if an area is contained by a rational straight line and the sixth binomial,",
+              visible: ALL,
+              highlighted: ["ABCDh","AB","AD"] },
+            { text: "then the side of the area is the irrational straight line called the side of the sum of two medial areas.",
+              visible: ALL,
+              highlighted: ["MO"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.59") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VI.1": "/elements/books/bookVI/propositions/propVI1/",
+        "X.11": "/elements/books/bookX/propositions/propX11/",
+        "X.13": "/elements/books/bookX/propositions/propX13/",
+        "X.21": "/elements/books/bookX/propositions/propX21/",
+        "X.41": "/elements/books/bookX/propositions/propX41/"
     });
 </script>
 </figure>
 
-Now, since *EA* is incommensurable in length with *AB*, therefore *EA* and *AB* are rational straight lines commensurable in square only, therefore *AK*, that is, the sum of the squares on *MN* and *NO*, is medial. [!just X.21]
+Now, since {EA} is incommensurable in length with {AB}, therefore {EA} and {AB} are rational straight lines commensurable in square only, therefore {AK}, that is, the sum of the squares on {MN} and {NO}, is medial. [!just X.21]
 
-Again, since *ED* is incommensurable in length with *AB*, therefore *FE* is also incommensurable with *EK*.  Therefore *FE* and *EK* are rational straight lines commensurable in square only.  Therefore *EL*, that is, *MR*, that is, the rectangle *MN* by *NO*, is medial. [!just X.13; X.21]
+Again, since {ED} is incommensurable in length with {AB}, therefore {FE} is also incommensurable with {EK}.  Therefore {FE} and {EK} are rational straight lines commensurable in square only.  Therefore {EL}, that is, {MR}, that is, the rectangle {MN} by {NO}, is medial. [!just X.13; X.21]
 
-Since *AE* is incommensurable with *EF*, therefore *AK* is also incommensurable with *EL*. [!just VI.1, X.11]
+Since {AE} is incommensurable with {EF}, therefore {AK} is also incommensurable with {EL}. [!just VI.1, X.11]
 
-But *AK* is the sum of the squares on *MN* and *NO*, and *EL* is the rectangle *MN* by *NO*, therefore the sum of the squares on *MN* and *NO* is incommensurable with the rectangle *MN* by *NO*. And each of them is medial, and *MN* and *NO* are incommensurable in square.
+But {AK} is the sum of the squares on {MN} and {NO}, and {EL} is the rectangle {MN} by {NO}, therefore the sum of the squares on {MN} and {NO} is incommensurable with the rectangle {MN} by {NO}. And each of them is medial, and {MN} and {NO} are incommensurable in square.
 
-Therefore *MO* is the side of the sum of two medial areas, and is the side of *AC*. [!just X.41]
+Therefore {MO} is the side of the sum of two medial areas, and is the side of {AC}. [!just X.41]
 
 Therefore, *if an area is contained by a rational straight line and the sixth binomial, then the side of the area is the irrational straight line called the side of the sum of two medial areas.*
 

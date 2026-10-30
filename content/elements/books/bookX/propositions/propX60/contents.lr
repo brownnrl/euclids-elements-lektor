@@ -15,16 +15,26 @@ statement: If a straight line is cut into unequal parts, then the sum of the squ
 ----
 proof:
 
-Let *AB* be a straight line, and let it be cut into unequal parts at *C*, and let *AC* be the greater.
+Let {AB} be a straight line, and let it be cut into unequal parts at {C}, and let {AC} be the greater.
 
-I say that the sum of the squares on *AC* and *CB* is greater than twice the rectangle *AC* by *CB*.
+I say that the sum of the squares on {AC} and {CB} is greater than twice the rectangle {AC} by {CB}.
 
-Bisect *AB* at *D*.
+Bisect {AB} at {D}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="70" tabindex="0"></canvas>
 <noscript><img alt="X.60 Lemma diagram" src="propX60l.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's lemma figure: the line AB cut unequally at C and bisected at
+    // D. Added, all hidden at rest: transparent targets AC, CB, AD, DB, DC
+    // (;0;0;0) for the parts the text names.
+    //
+    // Draggables (checked against the bundle): A, B (the givens) and C (line
+    // slider), which arrives with "let it be cut into unequal parts at C",
+    // so it is deferred. D is a derived midpoint, listed from "Bisect AB".
+    var L_LINE = ["A","B","AB"];
+    var L_CUT  = L_LINE.concat(["C","AC","CB"]);
+    var L_ALL  = L_CUT.concat(["D","AD","DB","DC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -36,15 +46,81 @@ Bisect *AB* at *D*.
             "B;point;lineSlider;A0,A3,220,0",
             "AB;line;connect;A,B;0;0",
             "C;point;lineSlider;A0,A3,170,0",
-            "D;point;midpoint;A,B"
+            "D;point;midpoint;A,B",
+            // Slide-only highlight targets.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "DC;line;connect;D,C;0;0;0"
         ],
+        deferDraggables: ["C"],
+        aliases: { "CD": "DC" },
+        slides: [
+            { text: "“If a straight line is cut into unequal parts,",
+              visible: L_ALL,
+              highlighted: ["AB","C"],
+              justifications: [{ ref: "Lemma" }] },
+            { text: "then the sum of the squares on the unequal parts is greater than twice the rectangle contained by the unequal parts.”",
+              visible: L_ALL,
+              highlighted: ["AC","CB"] },
+            { text: "Let {AB} be a straight line,",
+              visible: L_LINE,
+              highlighted: ["AB"] },
+            { text: "and let it be cut into unequal parts at {C}, and let {AC} be the greater.",
+              visible: L_CUT,
+              highlighted: ["C","AC"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Point.appear } ] } },
+            { text: "I say that the sum of the squares on {AC} and {CB} is greater than twice the rectangle {AC} by {CB}.",
+              visible: L_CUT,
+              highlighted: ["AC","CB"] },
+            { text: "Bisect {AB} at {D}.",
+              visible: L_ALL,
+              highlighted: ["D","AD","DB"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "Since a straight line is cut into equal parts at {D} and into unequal parts at {C},",
+              visible: L_ALL,
+              highlighted: ["D","C"] },
+            { text: "therefore the rectangle {AC} by {CB} together with the square on {CD} equals the square on {AD},",
+              visible: L_ALL,
+              highlighted: ["AC","CB","DC","AD"],
+              justifications: [{ claim: "AC·CB + CD² = AD²", ref: "II.5" }] },
+            { text: "so that the rectangle {AC} by {CB} is less than the square on {AD}.",
+              visible: L_ALL,
+              highlighted: ["AC","CB","AD"] },
+            { text: "Therefore twice the rectangle {AC} by {CB} is less than double the square on {AD}.",
+              visible: L_ALL,
+              highlighted: ["AC","CB","AD"] },
+            { text: "But the sum of the squares on {AC} and {CB} is double the sum of the squares on {AD} and {DC},",
+              visible: L_ALL,
+              highlighted: ["AC","CB","AD","DC"],
+              justifications: [{ claim: "AC² + CB² = 2(AD² + DC²)", ref: "II.9" }] },
+            { text: "therefore the sum of the squares on {AC} and {CB} is greater than twice the rectangle {AC} by {CB}.",
+              visible: L_ALL,
+              highlighted: ["AC","CB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // (shared by both canvases on this page).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.5": "/elements/books/bookII/propositions/propII5/",
+        "II.9": "/elements/books/bookII/propositions/propII9/"
     });
 </script>
 </figure>
 
-Since a straight line is cut into equal parts at *D* and into unequal parts at *C*, therefore the rectangle *AC* by *CB* together with the square on *CD* equals the square on *AD*, so that the rectangle *AC* by *CB* is less than the square on *AD*.  Therefore twice the rectangle *AC* by *CB* is less than double the square on *AD*. [!just II.5]
+Since a straight line is cut into equal parts at {D} and into unequal parts at {C}, therefore the rectangle {AC} by {CB} together with the square on {CD} equals the square on {AD}, so that the rectangle {AC} by {CB} is less than the square on {AD}.  Therefore twice the rectangle {AC} by {CB} is less than double the square on {AD}. [!just II.5]
 
-But the sum of the squares on *AC* and *CB* is double the sum of the squares on *AD* and *DC*, therefore the sum of the squares on *AC* and *CB* is greater than twice the rectangle *AC* by *CB*. [!just II.9]
+But the sum of the squares on {AC} and {CB} is double the sum of the squares on {AD} and {DC}, therefore the sum of the squares on {AC} and {CB} is greater than twice the rectangle {AC} by {CB}. [!just II.9]
 
 <div class="qed">Q.E.D.</div>
 #### prop_section ####
@@ -54,14 +130,38 @@ statement: The square on the binomial straight line applied to a rational straig
 ----
 proof:
 
-Let *AB* be a binomial straight line divided into its terms at *C*, so that *AC* is the greater term, let a rational straight line *DE* be set out, and let *DEFG* equal the square on *AB* be applied to *DE* producing *DG* as its breadth.
+Let {AB:canvas_1} be a binomial straight line divided into its terms at {C:canvas_1}, so that {AC:canvas_1} is the greater term, let a rational straight line {DE:canvas_1} be set out, and let {DEFG|DEFGh:canvas_1} equal the square on {AB:canvas_1} be applied to {DE:canvas_1} producing {DG:canvas_1} as its breadth.
 
-I say that *DG* is a first binomial straight line.
+I say that {DG:canvas_1} is a first binomial straight line.
 
 <figure class="diagram">
 <canvas id="canvas_1" width="280" height="210" tabindex="0"></canvas>
 <noscript><img alt="X.60 diagram" src="propX60.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the binomial AB divided at C, the rational line DE
+    // (D above E), and on it the rectangle DF (EDGF) equal to the square on
+    // AB, overlaid by DH (EDKH) = square on AC and KL (HKML) = square on
+    // BC, all random-faced, with N bisecting MG and the parallel NO.
+    // Added, all hidden at rest: a solid twin DE (initiallyHidden) so the
+    // rational line is set out before DEFG is applied to it; transparent
+    // targets AC, CB, DG, GF, DK, KM, DM, MG, ML, MN (;0;0;0); faceless,
+    // strokeless twins DEFGh, DHh, KLh of the three random-faced rectangles,
+    // which would be raised over their neighbours when lit (#140), reached
+    // with the display override ({DH|DHh}); faceless targets MFh (M,G,F,L),
+    // MOh (M,N,O,L), NFh (N,G,F,O) and DLh (D,M,L,E) for the regions the
+    // text names but the figure does not draw as polygons. No angle is
+    // called right, so no markers. "one an other" is Joyce's and is left.
+    //
+    // Draggables (checked against the bundle): A, B, C (line sliders, the
+    // givens) and D, E (line sliders), which only arrive with "let a
+    // rational straight line DE be set out", so they are deferred. G, F, K,
+    // H, M, L, N, O are derived and listed per slide.
+    var GIVEN = ["A","B","C","AB","AC","CB"];
+    var RAT   = GIVEN.concat(["D","E","DE"]);
+    var APPL  = RAT.concat(["G","F","EDGF","DEFGh","DG","GF"]);
+    var SQS   = APPL.concat(["K","H","EDKH","DHh","M","L","HKML","KLh","DK","KM"]);
+    var REM   = SQS.concat(["MFh","MG","ML"]);
+    var ALL   = REM.concat(["N","O","NO","MOh","NFh","MN","DLh","DM"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -89,51 +189,267 @@ I say that *DG* is a first binomial straight line.
             "L;point;vertex;HKML,4",
             "N;point;midpoint;M,G",
             "O;point;parallelogram;E,D,N",
-            "NO;line;connect;N,O"
+            "NO;line;connect;N,O",
+            // Slide-only twins and highlight targets.
+            "DE;line;connect;D,E",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "DG;line;connect;D,G;0;0;0",
+            "GF;line;connect;G,F;0;0;0",
+            "DK;line;connect;D,K;0;0;0",
+            "KM;line;connect;K,M;0;0;0",
+            "DM;line;connect;D,M;0;0;0",
+            "MG;line;connect;M,G;0;0;0",
+            "ML;line;connect;M,L;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "DEFGh;polygon;quadrilateral;E,D,G,F;0;0;0;0",
+            "DHh;polygon;quadrilateral;E,D,K,H;0;0;0;0",
+            "KLh;polygon;quadrilateral;H,K,M,L;0;0;0;0",
+            "MFh;polygon;quadrilateral;M,G,F,L;0;0;0;0",
+            "MOh;polygon;quadrilateral;M,N,O,L;0;0;0;0",
+            "NFh;polygon;quadrilateral;N,G,F,O;0;0;0;0",
+            "DLh;polygon;quadrilateral;D,M,L,E;0;0;0;0"
         ],
+        initiallyHidden: ["DE"],
+        deferDraggables: ["D","E"],
+        aliases: { "BC": "CB", "MD": "DM", "MK": "KM" },
+        slides: [
+            { text: "“The square on the binomial straight line applied to a rational straight line produces as breadth the first binomial.”",
+              visible: ALL,
+              highlighted: ["AB","DE","DEFGh","DG"],
+              justifications: [{ ref: "X.60" }] },
+            { text: "Let {AB} be a binomial straight line divided into its terms at {C}, so that {AC} is the greater term,",
+              visible: GIVEN,
+              highlighted: ["AB","C","AC"] },
+            { text: "let a rational straight line {DE} be set out,",
+              visible: RAT,
+              highlighted: ["DE"],
+              transition: { animations: [
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and let {DEFG|DEFGh} equal the square on {AB} be applied to {DE} producing {DG} as its breadth.",
+              visible: APPL,
+              highlighted: ["AB","DE","DG"],
+              transition: { animations: [
+                  { elem: "EDGF", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "I say that {DG} is a first binomial straight line.",
+              visible: APPL,
+              highlighted: ["DG"] },
+            { text: "Apply to {DE} the rectangle {DH|DHh} equal to the square on {AC}, and {KL|KLh} equal to the square on {BC}.",
+              visible: SQS,
+              highlighted: ["DE","AC","CB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EDKH", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "HKML", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Then the remainder, twice the rectangle {AC} by {CB}, equals {MF|MFh}.",
+              visible: REM,
+              highlighted: ["MFh","AC","CB"] },
+            { text: "Bisect {MG} at {N}, and draw {NO} parallel to {ML} or {GF}.",
+              visible: ALL,
+              highlighted: ["MG","ML","GF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "N",  name: geomlib.A.Point.appear },
+                  { elem: "NO", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then each of the rectangles {MO|MOh} and {NF|NFh} equals once the rectangle {AC} by {CB}.",
+              visible: ALL,
+              highlighted: ["MOh","NFh","AC","CB"] },
+            { text: "Now, since {AB} is a binomial divided into its terms at {C},",
+              visible: ALL,
+              highlighted: ["AB","C"] },
+            { text: "therefore {AC} and {CB} are rational straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["AC","CB"],
+              justifications: [{ claim: "AB a binomial", ref: "X.36" }] },
+            { text: "Therefore the squares on {AC} and {CB} are rational and commensurable with one an other,",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "so that the sum of the squares on {AC} and {CB} is also rational.",
+              visible: ALL,
+              highlighted: ["AC","CB"],
+              justifications: [{ claim: "the sum rational", ref: "X.15" }] },
+            { text: "And it equals {DL|DLh}, therefore {DL|DLh} is rational.",
+              visible: ALL,
+              highlighted: ["DLh"] },
+            { text: "And it is applied to the rational straight line {DE},",
+              visible: ALL,
+              highlighted: ["DLh","DE"] },
+            { text: "therefore {DM} is rational and commensurable in length with {DE}.",
+              visible: ALL,
+              highlighted: ["DM","DE"],
+              justifications: [{ claim: "DM rational, commensurable with DE", ref: "X.20" }] },
+            { text: "Again, since {AC} and {CB} are rational straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "therefore twice the rectangle {AC} by {CB}, that is {MF|MFh}, is medial.",
+              visible: ALL,
+              highlighted: ["MFh"],
+              justifications: [{ claim: "MF medial", ref: "X.21" }] },
+            { text: "And it is applied to the rational straight line {ML},",
+              visible: ALL,
+              highlighted: ["MFh","ML"] },
+            { text: "therefore {MG} is also rational and incommensurable in length with {ML}, that is, {DE}.",
+              visible: ALL,
+              highlighted: ["MG","ML","DE"],
+              justifications: [{ claim: "MG rational, incommensurable with ML", ref: "X.22" }] },
+            { text: "But {MD} is also rational and is commensurable in length with {DE},",
+              visible: ALL,
+              highlighted: ["DM","DE"] },
+            { text: "therefore {DM} is incommensurable in length with {MG}.",
+              visible: ALL,
+              highlighted: ["DM","MG"],
+              justifications: [{ claim: "DM, MG incommensurable", ref: "X.13" }] },
+            { text: "And they are rational, therefore {DM} and {MG} are rational straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["DM","MG"] },
+            { text: "Therefore {DG} is binomial.",
+              visible: ALL,
+              highlighted: ["DG"],
+              justifications: [{ claim: "DG binomial", ref: "X.36" }] },
+            { text: "It is next to be proved that it is also a first binomial straight line.",
+              visible: ALL,
+              highlighted: ["DG"] },
+            { text: "Since the rectangle {AC} by {CB} is a mean proportional between the squares on {AC} and {CB},",
+              visible: ALL,
+              highlighted: ["AC","CB"],
+              justifications: [{ claim: "AC·CB mean proportional", ref: "X.54,Lemma" }] },
+            { text: "therefore {MO|MOh} is also a mean proportional between {DH|DHh} and {KL|KLh}.",
+              visible: ALL,
+              highlighted: ["MOh","DHh","KLh"] },
+            { text: "Therefore {DH|DHh} is to {MO|MOh} as {MO|MOh} is to {KL|KLh},",
+              visible: ALL,
+              highlighted: ["DHh","MOh","KLh"] },
+            { text: "that is {DK} is to {MN} as {MN} is to {MK}.",
+              visible: ALL,
+              highlighted: ["DK","MN","KM"],
+              justifications: [{ claim: "DK : MN = MN : MK", ref: "VI.1" }] },
+            { text: "Therefore the rectangle {DK} by {KM} equals the square on {MN}.",
+              visible: ALL,
+              highlighted: ["DK","KM","MN"],
+              justifications: [{ claim: "DK·KM = MN²", ref: "VI.17" }] },
+            { text: "Since the square on {AC} is commensurable with the square on {CB},",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "therefore {DH|DHh} is also commensurable with {KL|KLh}, so that {DK} is also commensurable with {KM}.",
+              visible: ALL,
+              highlighted: ["DHh","KLh","DK","KM"],
+              justifications: [{ claim: "DH : KL = DK : KM", ref: "VI.1" },
+                               { claim: "DK, KM commensurable", ref: "X.11" }] },
+            { text: "Since the sum of the squares on {AC} and {CB} is greater than twice the rectangle {AC} by {CB},",
+              visible: ALL,
+              highlighted: ["AC","CB"],
+              justifications: [{ claim: "AC² + CB² > 2 AC·CB", ref: "Lemma" }] },
+            { text: "therefore {DL|DLh} is also greater than {MF|MFh}, so that {DM} is also greater than {MG}.",
+              visible: ALL,
+              highlighted: ["DLh","MFh","DM","MG"],
+              justifications: [{ claim: "DL : MF = DM : MG", ref: "VI.1" }] },
+            { text: "And the rectangle {DK} by {KM} equals the square on {MN},",
+              visible: ALL,
+              highlighted: ["DK","KM","MN"] },
+            { text: "that is, to the fourth part of the square on {MG}, and {DK} is commensurable with {KM}.",
+              visible: ALL,
+              highlighted: ["MG","DK","KM"] },
+            { text: "But, if there are two unequal straight lines, and to the greater there is applied a parallelogram",
+              visible: ALL,
+              highlighted: ["DM","MG"] },
+            { text: "equal to the fourth part of the square on the less and deficient by a square figure,",
+              visible: ALL,
+              highlighted: ["MG","DK","KM"] },
+            { text: "and if it divides it into commensurable parts,",
+              visible: ALL,
+              highlighted: ["DK","KM"] },
+            { text: "then the square on the greater is greater than the square on the less",
+              visible: ALL,
+              highlighted: ["DM","MG"] },
+            { text: "by the square on a straight line commensurable with the greater.",
+              visible: ALL,
+              highlighted: ["DM"] },
+            { text: "Therefore the square on {DM} is greater than the square on {MG}",
+              visible: ALL,
+              highlighted: ["DM","MG"] },
+            { text: "by the square on a straight line commensurable with {DM}.",
+              visible: ALL,
+              highlighted: ["DM"],
+              justifications: [{ claim: "DM² − MG² commensurable with DM", ref: "X.17" }] },
+            { text: "And {DM} and {MG} are rational, and {DM}, which is the greater term,",
+              visible: ALL,
+              highlighted: ["DM","MG"] },
+            { text: "is commensurable in length with the rational straight line {DE} set out.",
+              visible: ALL,
+              highlighted: ["DM","DE"] },
+            { text: "Therefore {DG} is a first binomial straight line.",
+              visible: ALL,
+              highlighted: ["DG"],
+              justifications: [{ claim: "first binomial", ref: "X.Def.II.1" }] },
+            { text: "Therefore, the square on the binomial straight line applied to a rational straight line",
+              visible: ALL,
+              highlighted: ["AB","DE"] },
+            { text: "produces as breadth the first binomial.",
+              visible: ALL,
+              highlighted: ["DEFGh","DG"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.60") return "#prop";
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    Object.assign(window.eucrefs, {
+        "VI.1":       "/elements/books/bookVI/propositions/propVI1/",
+        "VI.17":      "/elements/books/bookVI/propositions/propVI17/",
+        "X.11":       "/elements/books/bookX/propositions/propX11/",
+        "X.13":       "/elements/books/bookX/propositions/propX13/",
+        "X.15":       "/elements/books/bookX/propositions/propX15/",
+        "X.17":       "/elements/books/bookX/propositions/propX17/",
+        "X.20":       "/elements/books/bookX/propositions/propX20/",
+        "X.21":       "/elements/books/bookX/propositions/propX21/",
+        "X.22":       "/elements/books/bookX/propositions/propX22/",
+        "X.36":       "/elements/books/bookX/propositions/propX36/",
+        "X.54,Lemma": "/elements/books/bookX/propositions/propX54/#lemma",
+        "X.Def.II.1": "/elements/books/bookX/definitions/defX.II.1/"
     });
 </script>
 </figure>
 
-Apply to *DE* the rectangle *DH* equal to the square on *AC*, and *KL* equal to the square on *BC*.  Then the remainder, twice the rectangle *AC* by *CB*, equals *MF*.
+Apply to {DE} the rectangle {DH|DHh} equal to the square on {AC}, and {KL|KLh} equal to the square on {BC}.  Then the remainder, twice the rectangle {AC} by {CB}, equals {MF|MFh}.
 
-Bisect *MG* at *N*, and draw *NO* parallel to *ML* or *GF*. Then each of the rectangles *MO* and *NF* equals once the rectangle *AC* by *CB*.
+Bisect {MG} at {N}, and draw {NO} parallel to {ML} or {GF}. Then each of the rectangles {MO|MOh} and {NF|NFh} equals once the rectangle {AC} by {CB}.
 
-Now, since *AB* is a binomial divided into its terms at *C*, therefore *AC* and *CB* are rational straight lines commensurable in square only. [!just X.36]
+Now, since {AB} is a binomial divided into its terms at {C}, therefore {AC} and {CB} are rational straight lines commensurable in square only. [!just X.36]
 
-Therefore the squares on *AC* and *CB* are rational and commensurable with one an other, so that the sum of the squares on *AC* and *CB* is also rational. And it equals *DL*, therefore *DL* is rational. [!just X.15]
+Therefore the squares on {AC} and {CB} are rational and commensurable with one an other, so that the sum of the squares on {AC} and {CB} is also rational. And it equals {DL|DLh}, therefore {DL|DLh} is rational. [!just X.15]
 
-And it is applied to the rational straight line *DE*, therefore *DM* is rational and commensurable in length with *DE*. [!just X.20]
+And it is applied to the rational straight line {DE}, therefore {DM} is rational and commensurable in length with {DE}. [!just X.20]
 
-Again, since *AC* and *CB* are rational straight lines commensurable in square only, therefore twice the rectangle *AC* by *CB*, that is *MF*, is medial. [!just X.21]
+Again, since {AC} and {CB} are rational straight lines commensurable in square only, therefore twice the rectangle {AC} by {CB}, that is {MF|MFh}, is medial. [!just X.21]
 
-And it is applied to the rational straight line *ML*, therefore *MG* is also rational and incommensurable in length with *ML*, that is, *DE*. [!just X.22]
+And it is applied to the rational straight line {ML}, therefore {MG} is also rational and incommensurable in length with {ML}, that is, {DE}. [!just X.22]
 
-But *MD* is also rational and is commensurable in length with *DE*, therefore *DM* is incommensurable in length with *MG*. [!just X.13]
+But {MD} is also rational and is commensurable in length with {DE}, therefore {DM} is incommensurable in length with {MG}. [!just X.13]
 
-And they are rational, therefore *DM* and *MG* are rational straight lines commensurable in square only.  Therefore *DG* is binomial. [!just X.36]
+And they are rational, therefore {DM} and {MG} are rational straight lines commensurable in square only.  Therefore {DG} is binomial. [!just X.36]
 
 It is next to be proved that it is also a first binomial straight line.
 
 <div class="just"><a href="/elements/books/bookX/propositions/propX54/#lemma">X.54,Lemma</a></div>
 
-Since the rectangle *AC* by *CB* is a mean proportional between the squares on *AC* and *CB*, therefore *MO* is also a mean proportional between *DH* and *KL*.
+Since the rectangle {AC} by {CB} is a mean proportional between the squares on {AC} and {CB}, therefore {MO|MOh} is also a mean proportional between {DH|DHh} and {KL|KLh}.
 
-Therefore *DH* is to *MO* as *MO* is to *KL*, that is *DK* is to *MN* as *MN* is to *MK*. Therefore the rectangle *DK* by *KM* equals the square on *MN*. [!just VI.1; VI.17]
+Therefore {DH|DHh} is to {MO|MOh} as {MO|MOh} is to {KL|KLh}, that is {DK} is to {MN} as {MN} is to {MK}. Therefore the rectangle {DK} by {KM} equals the square on {MN}. [!just VI.1; VI.17]
 
-Since the square on *AC* is commensurable with the square on *CB*, therefore *DH* is also commensurable with *KL*, so that *DK* is also commensurable with *KM*. [!just VI.1; X.11]
+Since the square on {AC} is commensurable with the square on {CB}, therefore {DH|DHh} is also commensurable with {KL|KLh}, so that {DK} is also commensurable with {KM}. [!just VI.1; X.11]
 
 <div class="just"><a href="/elements/books/bookVI/propositions/propVI1/">VI.1</a><br><a href="#lemma">Lemma</a></div>
 
-Since the sum of the squares on *AC* and *CB* is greater than twice the rectangle *AC* by *CB*,  therefore *DL* is also greater than *MF*, so that *DM* is also greater than *MG*.
+Since the sum of the squares on {AC} and {CB} is greater than twice the rectangle {AC} by {CB},  therefore {DL|DLh} is also greater than {MF|MFh}, so that {DM} is also greater than {MG}.
 
-And the rectangle *DK* by *KM* equals the square on *MN*, that is, to the fourth part of the square on *MG*, and *DK* is commensurable with *KM*.
+And the rectangle {DK} by {KM} equals the square on {MN}, that is, to the fourth part of the square on {MG}, and {DK} is commensurable with {KM}.
 
-But, if there are two unequal straight lines, and to the greater there is applied a parallelogram equal to the fourth part of the square on the less and deficient by a square figure, and if it divides it into commensurable parts, then the square on the greater is greater than the square on the less by the square on a straight line commensurable with the greater.  Therefore the square on *DM* is greater than the square on *MG* by the square on a straight line commensurable with *DM*. [!just X.17]
+But, if there are two unequal straight lines, and to the greater there is applied a parallelogram equal to the fourth part of the square on the less and deficient by a square figure, and if it divides it into commensurable parts, then the square on the greater is greater than the square on the less by the square on a straight line commensurable with the greater.  Therefore the square on {DM} is greater than the square on {MG} by the square on a straight line commensurable with {DM}. [!just X.17]
 
-And *DM* and *MG* are rational, and *DM*, which is the greater term, is commensurable in length with the rational straight line *DE* set out.
+And {DM} and {MG} are rational, and {DM}, which is the greater term, is commensurable in length with the rational straight line {DE} set out.
 
-Therefore *DG* is a first binomial straight line. [!just X.Def.II.1]
+Therefore {DG} is a first binomial straight line. [!just X.Def.II.1]
 
 Therefore, *the square on the binomial straight line applied to a rational straight line produces as breadth the first binomial.*
 
