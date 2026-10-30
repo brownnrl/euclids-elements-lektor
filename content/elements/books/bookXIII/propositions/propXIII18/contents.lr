@@ -17,14 +17,44 @@ statement: To set out the sides of the five figures and compare them with one an
 ----
 proof:
 
-Set out *AB* the diameter of the given sphere, and cut it  at *C* so that *AC* equals *CB,* and at *D* so that *AD* is double *DB.*  Describe the semicircle *AEB*  on *AB,* draw *CE* and *DF* from *C* and *D* at right angles to *AB,* and join *AF, FB,* and *EB.* [!just I.11]
+Set out {AB} the diameter of the given sphere, and cut it  at {C} so that {AC} equals {CB}, and at {D} so that {AD} is double {DB}.  Describe the semicircle {AEB|arcAEB}  on {AB}, draw {CE} and {DF} from {C} and {D} at right angles to {AB}, and join {AF}, {FB}, and {EB}. [!just I.11]
 
-Then, since *AD* is double *DB,* therefore *AB* is triple *BD.* In conversion, therefore, *BA* is one and a half times *AD.*
+Then, since {AD} is double {DB}, therefore {AB} is triple {BD}. In conversion, therefore, {BA} is one and a half times {AD}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="320" height="330" tabindex="0"></canvas>
 <noscript><img alt="XIII.18 diagram" src="propXIII18.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's semicircle BCA is a sector with a default (opaque) face, which
+    // a highlight would raise over the figure (#140), so the prose reaches it
+    // through arcAEB, a faceless arc, as {AEB|arcAEB}.
+    //
+    // His lines are held back until the proof draws them: CE, DF at "draw CE
+    // and DF", AF, FB, EB at their join, AG and CG at "draw AG ... join GC",
+    // HK, LM, MB and NB where they are drawn or cut. His AE (cyan) is not
+    // named in the text and stays out of the walk; the resting figure keeps
+    // it.
+    //
+    // Transparent targets: the segments AC, CB, AD, DB, DC, KC, HC, KL, AK,
+    // LB, AL, CL; the triangles AFB, AFD, FDB (explicit ;0 faces).
+    //
+    // Right angles (red squares): ECB, FDB (CE, DF at right angles to AB),
+    // AFB (the angle in the semicircle, which the VI.8 step rests on), GAB,
+    // HKB, MLB.
+    //
+    // Draggables (checked against the bundle): A and B, the lineSlider ends
+    // of the given diameter, standing from slide 1; A0, A3 (free,
+    // uncoloured, off-canvas) carry the line. Every other point is derived
+    // and listed per slide. Nothing to defer.
+    var GIVEN = ["A","B","AB"];
+    var CDv   = GIVEN.concat(["C","D","AC","CB","AD","DB","DC"]);
+    var SEMI  = CDv.concat(["BCA","arcAEB"]);
+    var PERP  = SEMI.concat(["CE","E","DF","F"]);
+    var JOIN  = PERP.concat(["AF","FB","EB","AFB","AFD","FDB"]);
+    var AGv   = JOIN.concat(["AG","G"]);
+    var HKv   = AGv.concat(["CG","H","HK","K","KC","HC"]);
+    var LMv   = HKv.concat(["L","LM","M","MB","KL","AK","LB","AL","CL"]);
+    var NBv   = LMv.concat(["N","NB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -62,47 +92,446 @@ Then, since *AD* is double *DB,* therefore *AB* is triple *BD.* In conversion, t
             "LM;line;connect;L,M",
             "MB;line;connect;M,B;0;0;blue",
             "N;point;intersection;EB,LM",
-            "NB;line;connect;N,B;0;0;magenta"
+            "NB;line;connect;N,B;0;0;magenta",
+            // Faceless arc for the semicircle (see above).
+            "arcAEB;sector;arc;B,E,A;0;0;0;0",
+            // Transparent highlight targets.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "KC;line;connect;K,C;0;0;0",
+            "HC;line;connect;H,C;0;0;0",
+            "KL;line;connect;K,L;0;0;0",
+            "AK;line;connect;A,K;0;0;0",
+            "LB;line;connect;L,B;0;0;0",
+            "AL;line;connect;A,L;0;0;0",
+            "CL;line;connect;C,L;0;0;0",
+            "AFB;polygon;triangle;A,F,B;0;0;0;0",
+            "AFD;polygon;triangle;A,F,D;0;0;0;0",
+            "FDB;polygon;triangle;F,D,B;0;0;0;0",
+            // Angle markers.
+            "rtECB;sector;angleMarkerRight;C,E,B,12;0;0;red;red",
+            "rtFDB;sector;angleMarkerRight;D,F,B,12;0;0;red;red",
+            "rtAFB;sector;angleMarkerRight;F,A,B,12;0;0;red;red",
+            "rtGAB;sector;angleMarkerRight;A,G,B,12;0;0;red;red",
+            "rtHKB;sector;angleMarkerRight;K,H,B,12;0;0;red;red",
+            "rtMLB;sector;angleMarkerRight;L,M,B,12;0;0;red;red"
         ],
+        aliases: { "BA": "AB", "BD": "DB", "BC": "CB", "BF": "FB", "BE": "EB",
+                   "GA": "AG", "GC": "CG", "CK": "KC", "CD": "DC", "LK": "KL",
+                   "KA": "AK", "ML": "LM", "FAB": "AFB" },
+        slides: [
+            { text: "“To set out the sides of the five figures and compare them with one another.”",
+              visible: GIVEN,
+              highlighted: ["AB"],
+              justifications: [{ ref: "XIII.18" }] },
+            { text: "Set out {AB} the diameter of the given sphere,",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "and cut it at {C} so that {AC} equals {CB}, and at {D} so that {AD} is double {DB}.",
+              visible: CDv,
+              highlighted: ["AC","CB","AD","DB"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Point.appear },
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "Describe the semicircle {AEB|arcAEB} on {AB},",
+              visible: SEMI,
+              highlighted: ["arcAEB","AB"],
+              transition: { animations: [
+                  { elem: "arcAEB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "draw {CE} and {DF} from {C} and {D} at right angles to {AB},",
+              visible: PERP.concat(["rtECB","rtFDB"]),
+              highlighted: ["CE","DF"],
+              transition: { animations: [
+                  { elem: "CE",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E",     name: geomlib.A.Point.appear },
+                  { elem: "rtECB", name: geomlib.A.Sector.sweep },
+                  { elem: "DF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F",     name: geomlib.A.Point.appear },
+                  { elem: "rtFDB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "CE, DF at right angles to AB", ref: "I.11" }] },
+            { text: "and join {AF}, {FB}, and {EB}.",
+              visible: JOIN,
+              highlighted: ["AF","FB","EB"],
+              transition: { animations: [
+                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EB", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since {AD} is double {DB}, therefore {AB} is triple {BD}.",
+              visible: JOIN,
+              highlighted: ["AD","DB","AB"] },
+            { text: "In conversion, therefore, {BA} is one and a half times {AD}.",
+              visible: JOIN,
+              highlighted: ["AB","AD"] },
+            { text: "But {BA} is to {AD} as the square on {BA} is to the square on {AF},",
+              visible: JOIN,
+              highlighted: ["AB","AD","AF"] },
+            { text: "for the triangle {AFB} is equiangular with the triangle {AFD}.",
+              visible: JOIN.concat(["rtAFB","rtFDB"]),
+              highlighted: ["AFB","AFD","rtAFB","rtFDB"],
+              transition: { animations: [
+                  { elem: "rtAFB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "duplicate ratio", ref: "V.Def.9" },
+                               { claim: "AFB equiangular with AFD", ref: "VI.8" }] },
+            { text: "Therefore the square on {BA} is one and a half times the square on {AF}.",
+              visible: JOIN,
+              highlighted: ["AB","AF"] },
+            { text: "But the square on the diameter of the sphere",
+              visible: JOIN,
+              highlighted: ["AB"] },
+            { text: "is also one and a half times the square on the side of the pyramid.",
+              visible: JOIN },
+            { text: "And {AB} is the diameter of the sphere, therefore {AF} equals the side of the pyramid.",
+              visible: JOIN,
+              highlighted: ["AB","AF"],
+              justifications: [{ claim: "the pyramid", ref: "XIII.13" }] },
+            { text: "Again, since {AD} is double {DB}, therefore {AB} is triple {BD}.",
+              visible: JOIN,
+              highlighted: ["AD","DB","AB"] },
+            { text: "But {AB} is to {BD} as the square on {AB} to the square on {BF},",
+              visible: JOIN.concat(["rtAFB","rtFDB"]),
+              highlighted: ["AB","DB","FB","AFB","FDB"],
+              justifications: [{ claim: "duplicate ratio", ref: "V.Def.9" },
+                               { claim: "FDB equiangular with AFB", ref: "VI.8" }] },
+            { text: "therefore the square on {AB} is triple the square on {BF}.",
+              visible: JOIN,
+              highlighted: ["AB","FB"] },
+            { text: "But the square on the diameter of the sphere is also triple the square on the side of the cube.",
+              visible: JOIN,
+              highlighted: ["AB"] },
+            { text: "And {AB} is the diameter of the sphere, therefore {BF} is the side of the cube.",
+              visible: JOIN,
+              highlighted: ["AB","FB"],
+              justifications: [{ claim: "the cube", ref: "XIII.15" }] },
+            { text: "And, since {AC} equals {CB}, therefore {AB} is double {BC}.",
+              visible: JOIN,
+              highlighted: ["AC","CB","AB"] },
+            { text: "But {AB} is to {BC} as the square on {AB} to the square on {BE},",
+              visible: JOIN.concat(["rtECB"]),
+              highlighted: ["AB","CB","EB","rtECB"] },
+            { text: "therefore the square on {AB} is double the square on {BE}.",
+              visible: JOIN,
+              highlighted: ["AB","EB"] },
+            { text: "But the square on the diameter of the sphere is also double the square on the side of the octahedron.",
+              visible: JOIN,
+              highlighted: ["AB"] },
+            { text: "And {AB} is the diameter of the given sphere, therefore {BE} is the side of the octahedron.",
+              visible: JOIN,
+              highlighted: ["AB","EB"],
+              justifications: [{ claim: "the octahedron", ref: "XIII.14" }] },
+            { text: "Next, draw {AG} from the point {A} at right angles to the straight line {AB},",
+              visible: AGv.concat(["rtGAB"]),
+              highlighted: ["AG","AB"],
+              transition: { animations: [
+                  { elem: "AG",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",     name: geomlib.A.Point.appear },
+                  { elem: "rtGAB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "AG at right angles to AB", ref: "I.11" }] },
+            { text: "make {AG} equal to {AB},",
+              visible: AGv.concat(["rtGAB"]),
+              highlighted: ["AG","AB"],
+              justifications: [{ claim: "AG = AB", ref: "I.3" }] },
+            { text: "join {GC}, and draw {HK} from {H} perpendicular to {AB}.",
+              visible: HKv.concat(["rtHKB"]),
+              highlighted: ["CG","HK"],
+              transition: { animations: [
+                  { elem: "CG",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",     name: geomlib.A.Point.appear },
+                  { elem: "HK",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",     name: geomlib.A.Point.appear },
+                  { elem: "rtHKB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "HK perpendicular to AB", ref: "I.12" }] },
+            { text: "Then, since {GA} is double {AC}, for {GA} equals {AB}",
+              visible: HKv,
+              highlighted: ["AG","AC","AB"] },
+            { text: "and {GA} is to {AC} as {HK} is to {KC},",
+              visible: HKv.concat(["rtGAB","rtHKB"]),
+              highlighted: ["AG","AC","HK","KC"] },
+            { text: "therefore {HK} is also double {KC}.",
+              visible: HKv,
+              highlighted: ["HK","KC"] },
+            { text: "Therefore the square on {HK} is quadruple the square on {KC},",
+              visible: HKv,
+              highlighted: ["HK","KC"] },
+            { text: "therefore the sum of the squares on {HK} and {KC}, that is, the square on {HC},",
+              visible: HKv.concat(["rtHKB"]),
+              highlighted: ["HK","KC","HC","rtHKB"] },
+            { text: "is five times the square on {KC}.",
+              visible: HKv,
+              highlighted: ["HC","KC"] },
+            { text: "But {HC} equals {CB}, therefore the square on {BC} is five times the square on {CK}.",
+              visible: HKv,
+              highlighted: ["HC","CB","KC"] },
+            { text: "And, since {AB} is double {CB}, and, in them, {AD} is double {DB},",
+              visible: HKv,
+              highlighted: ["AB","CB","AD","DB"] },
+            { text: "therefore the remainder {BD} is double the remainder {DC}.",
+              visible: HKv,
+              highlighted: ["DB","DC"] },
+            { text: "Therefore {BC} is triple {CD}, therefore the square on {BC} is nine times the square on {CD}.",
+              visible: HKv,
+              highlighted: ["CB","DC"] },
+            { text: "But the square on {BC} is five times the square on {CK},",
+              visible: HKv,
+              highlighted: ["CB","KC"] },
+            { text: "therefore the square on {CK} is greater than the square on {CD}. Therefore {CK} is greater than {CD}.",
+              visible: HKv,
+              highlighted: ["KC","DC"] },
+            { text: "Make {CL} equal to {CK}, draw {LM} from {L} at right angles to {AB}, and join {MB}.",
+              visible: LMv.concat(["rtMLB"]),
+              highlighted: ["CL","LM","MB"],
+              transition: { animations: [
+                  { elem: "L",     name: geomlib.A.Point.appear },
+                  { elem: "LM",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "M",     name: geomlib.A.Point.appear },
+                  { elem: "rtMLB", name: geomlib.A.Sector.sweep },
+                  { elem: "MB",    name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "CL = CK", ref: "I.3" },
+                               { claim: "LM at right angles to AB", ref: "I.11" }] },
+            { text: "Now, since the square on {BC} is five times the square on {CK},",
+              visible: LMv,
+              highlighted: ["CB","KC"] },
+            { text: "and {AB} is double {BC}, and {KL} is double {CK},",
+              visible: LMv,
+              highlighted: ["AB","CB","KL","KC"] },
+            { text: "therefore the square on {AB} is five times the square on {KL}.",
+              visible: LMv,
+              highlighted: ["AB","KL"] },
+            { text: "But the square on the diameter of the sphere is also five times",
+              visible: LMv,
+              highlighted: ["AB"] },
+            { text: "the square on the radius of the circle from which the icosahedron has been described.",
+              visible: LMv },
+            { text: "And {AB} is the diameter of the sphere,",
+              visible: LMv,
+              highlighted: ["AB"] },
+            { text: "therefore {KL} is the radius of the circle from which the icosahedron has been described.",
+              visible: LMv,
+              highlighted: ["KL"] },
+            { text: "Therefore {KL} is a side of the hexagon in the said circle.",
+              visible: LMv,
+              highlighted: ["KL"],
+              justifications: [{ claim: "square on the diameter = 5 square on the radius", ref: "XIII.16.Cor" },
+                               { claim: "side of the hexagon = radius", ref: "IV.15.Cor" }] },
+            { text: "And, since the diameter of the sphere is made up of the side of the hexagon",
+              visible: LMv,
+              highlighted: ["AB","KL"] },
+            { text: "and two of the sides of the decagon inscribed in the same circle,",
+              visible: LMv,
+              highlighted: ["AK","LB"] },
+            { text: "and {AB} is the diameter of the sphere, while {KL} is a side of the hexagon, and {AK} equals {LB},",
+              visible: LMv,
+              highlighted: ["AB","KL","AK","LB"] },
+            { text: "therefore each of the straight lines {AK} and {LB} is a side of the decagon",
+              visible: LMv,
+              highlighted: ["AK","LB"] },
+            { text: "inscribed in the circle from which the icosahedron has been described.",
+              visible: LMv,
+              highlighted: ["AK","LB"],
+              justifications: [{ claim: "hexagon and two decagon sides", ref: "XIII.16.Cor" }] },
+            { text: "And, since {LB} belongs to a decagon, and {ML} to a hexagon,",
+              visible: LMv,
+              highlighted: ["LB","LM"] },
+            { text: "for {ML} equals {KL}, since it also equals {HK} being the same distance from the center",
+              visible: LMv,
+              highlighted: ["LM","KL","HK"] },
+            { text: "and each of the straight lines {HK} and {KL} is double {KC},",
+              visible: LMv,
+              highlighted: ["HK","KL","KC"] },
+            { text: "therefore {MB} belongs to a pentagon.",
+              visible: LMv.concat(["rtMLB"]),
+              highlighted: ["MB","LM","LB","rtMLB"],
+              justifications: [{ claim: "pentagon side from hexagon and decagon", ref: "XIII.10" }] },
+            { text: "But the side of the pentagon is the side of the icosahedron, therefore {MB} belongs to the icosahedron.",
+              visible: LMv,
+              highlighted: ["MB"],
+              justifications: [{ claim: "the icosahedron", ref: "XIII.16" }] },
+            { text: "Now, since {FB} is a side of the cube, cut it in extreme and mean ratio at {N},",
+              visible: NBv,
+              highlighted: ["FB","N"],
+              transition: { animations: [
+                  { elem: "N", name: geomlib.A.Point.appear } ] } },
+            { text: "and let {NB} be the greater segment. Therefore {NB} is a side of the dodecahedron.",
+              visible: NBv,
+              highlighted: ["NB"],
+              transition: { animations: [
+                  { elem: "NB", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "greater segment of the cube's side", ref: "XIII.17.Cor" }] },
+            { text: "And, since the square on the diameter of the sphere was proved to be",
+              visible: NBv,
+              highlighted: ["AB"] },
+            { text: "one and a half times the square on the side {AF} of the pyramid,",
+              visible: NBv,
+              highlighted: ["AF"] },
+            { text: "double the square on the side {BE} of the octahedron and triple the side {FB} of the cube,",
+              visible: NBv,
+              highlighted: ["EB","FB"] },
+            { text: "therefore, of parts of which the square on the diameter of the sphere contains six,",
+              visible: NBv,
+              highlighted: ["AB"] },
+            { text: "the square on the side of the pyramid contains four,",
+              visible: NBv,
+              highlighted: ["AF"] },
+            { text: "the square on the side of the octahedron three, and the square on the side of the cube two.",
+              visible: NBv,
+              highlighted: ["EB","FB"] },
+            { text: "Therefore the square on the side of the pyramid is four-thirds of the square on the side of the octahedron,",
+              visible: NBv,
+              highlighted: ["AF","EB"] },
+            { text: "and double the square on the side of the cube,",
+              visible: NBv,
+              highlighted: ["AF","FB"] },
+            { text: "and the square on the side of the octahedron",
+              visible: NBv,
+              highlighted: ["EB"] },
+            { text: "is one and a half times the square on the side of the cube.",
+              visible: NBv,
+              highlighted: ["EB","FB"] },
+            { text: "The said sides, therefore, of the three figures, I mean the pyramid, the octahedron and the cube,",
+              visible: NBv,
+              highlighted: ["AF","EB","FB"] },
+            { text: "are to one another in rational ratios.",
+              visible: NBv,
+              highlighted: ["AF","EB","FB"] },
+            { text: "But the remaining two, I mean the side of the icosahedron and the side of the dodecahedron,",
+              visible: NBv,
+              highlighted: ["MB","NB"] },
+            { text: "are not in rational ratios either to one another or to the aforesaid sides,",
+              visible: NBv,
+              highlighted: ["MB","NB"] },
+            { text: "for they are irrational, the one being minor and the other an apotome.",
+              visible: NBv,
+              highlighted: ["MB","NB"],
+              justifications: [{ claim: "the icosahedron's side is minor", ref: "XIII.16" },
+                               { claim: "the dodecahedron's side is an apotome", ref: "XIII.17" }] },
+            { text: "That the side {MB} of the icosahedron is greater than the side {NB} of the dodecahedron we can prove thus.",
+              visible: NBv,
+              highlighted: ["MB","NB"] },
+            { text: "Since the triangle {FDB} is equiangular with the triangle {FAB},",
+              visible: NBv.concat(["rtAFB","rtFDB"]),
+              highlighted: ["FDB","AFB","rtAFB","rtFDB"] },
+            { text: "proportionally {DB} is to {BF} as {BF} is to {BA}.",
+              visible: NBv,
+              highlighted: ["DB","FB","AB"],
+              justifications: [{ claim: "FDB equiangular with FAB", ref: "VI.8" },
+                               { claim: "sides about equal angles proportional", ref: "VI.4" }] },
+            { text: "And, since the three straight lines are proportional,",
+              visible: NBv,
+              highlighted: ["DB","FB","AB"] },
+            { text: "the first is to the third as the square on the first is to the square on the second,",
+              visible: NBv,
+              highlighted: ["DB","AB","FB"] },
+            { text: "therefore {DB} is to {BA} as the square on {DB} is to the square on {BF}.",
+              visible: NBv,
+              highlighted: ["DB","AB","FB"] },
+            { text: "Therefore, inversely {AB} is to {BD} as the square on {FB} is to the square on {BD}.",
+              visible: NBv,
+              highlighted: ["AB","DB","FB"],
+              justifications: [{ claim: "duplicate ratio", ref: "V.Def.9" },
+                               { claim: "three proportionals", ref: "VI.20.Cor" }] },
+            { text: "But {AB} is triple {BD}, therefore the square on {FB} is triple the square on {BD}.",
+              visible: NBv,
+              highlighted: ["AB","DB","FB"] },
+            { text: "But the square on {AD} is also quadruple the square on {DB}, for {AD} is double {DB},",
+              visible: NBv,
+              highlighted: ["AD","DB"] },
+            { text: "therefore the square on {AD} is greater than the square on {FB}.",
+              visible: NBv,
+              highlighted: ["AD","FB"] },
+            { text: "Therefore {AD} is greater than {FB}. Therefore {AL} is by far greater than {FB}.",
+              visible: NBv,
+              highlighted: ["AD","AL","FB"] },
+            { text: "And, when {AL} is cut in extreme and mean ratio, {KL} is the greater segment,",
+              visible: NBv,
+              highlighted: ["AL","KL"] },
+            { text: "for {LK} belongs to a hexagon, and {KA} to a decagon,",
+              visible: NBv,
+              highlighted: ["KL","AK"] },
+            { text: "and, when {FB} is cut in extreme and mean ratio, {NB} is the greater segment,",
+              visible: NBv,
+              highlighted: ["FB","NB"] },
+            { text: "therefore {KL} is greater than {NB}.",
+              visible: NBv,
+              highlighted: ["KL","NB"],
+              justifications: [{ claim: "greater segments in the same ratio", ref: "XIII.9" }] },
+            { text: "But {KL} equals {LM}, therefore {LM} is greater than {NB}.",
+              visible: NBv,
+              highlighted: ["KL","LM","NB"] },
+            { text: "Therefore {MB}, which is a side of the icosahedron,",
+              visible: NBv,
+              highlighted: ["MB"] },
+            { text: "is by far greater than {NB} which is a side of the dodecahedron.",
+              visible: NBv,
+              highlighted: ["MB","NB"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.18") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":         "/elements/books/bookI/propositions/propI3/",
+        "I.11":        "/elements/books/bookI/propositions/propI11/",
+        "I.12":        "/elements/books/bookI/propositions/propI12/",
+        "IV.15.Cor":   "/elements/books/bookIV/propositions/propIV15/#cor",
+        "V.Def.9":     "/elements/books/bookV/definitions/defV9/",
+        "VI.4":        "/elements/books/bookVI/propositions/propVI4/",
+        "VI.8":        "/elements/books/bookVI/propositions/propVI8/",
+        "VI.20.Cor":   "/elements/books/bookVI/propositions/propVI20/#cor",
+        "XIII.9":      "/elements/books/bookXIII/propositions/propXIII9/",
+        "XIII.10":     "/elements/books/bookXIII/propositions/propXIII10/",
+        "XIII.13":     "/elements/books/bookXIII/propositions/propXIII13/",
+        "XIII.14":     "/elements/books/bookXIII/propositions/propXIII14/",
+        "XIII.15":     "/elements/books/bookXIII/propositions/propXIII15/",
+        "XIII.16":     "/elements/books/bookXIII/propositions/propXIII16/",
+        "XIII.16.Cor": "/elements/books/bookXIII/propositions/propXIII16/#cor",
+        "XIII.17":     "/elements/books/bookXIII/propositions/propXIII17/",
+        "XIII.17.Cor": "/elements/books/bookXIII/propositions/propXIII17/#cor"
     });
 </script>
 </figure>
 
-But *BA* is to *AD* as the square on *BA* is to the square on *AF,* for the triangle *AFB* is equiangular with the triangle *AFD.* Therefore the square on *BA* is one and a half times the square on *AF.* [!just V.Def.9; VI.8]
+But {BA} is to {AD} as the square on {BA} is to the square on {AF}, for the triangle {AFB} is equiangular with the triangle {AFD}. Therefore the square on {BA} is one and a half times the square on {AF}. [!just V.Def.9; VI.8]
 
-But the square on the diameter of the sphere is also one and a half times the square on the side of the pyramid. And *AB* is the diameter of the sphere, therefore *AF* equals the side of the pyramid. [!just XIII.13]
+But the square on the diameter of the sphere is also one and a half times the square on the side of the pyramid. And {AB} is the diameter of the sphere, therefore {AF} equals the side of the pyramid. [!just XIII.13]
 
-Again, since *AD* is double *DB,* therefore *AB* is triple *BD.*  But *AB* is to *BD* as the square on *AB* to the square on *BF,* therefore the square on *AB* is triple the square on *BF.* [!just V.Def.9; VI.8]
+Again, since {AD} is double {DB}, therefore {AB} is triple {BD}.  But {AB} is to {BD} as the square on {AB} to the square on {BF}, therefore the square on {AB} is triple the square on {BF}. [!just V.Def.9; VI.8]
 
-But the square on the diameter of the sphere is also triple the square on the side of the cube.  And *AB* is the diameter of the sphere, therefore *BF* is the side of the cube. [!just XIII.15]
+But the square on the diameter of the sphere is also triple the square on the side of the cube.  And {AB} is the diameter of the sphere, therefore {BF} is the side of the cube. [!just XIII.15]
 
-And, since *AC* equals *CB,* therefore *AB* is double *BC.*  But *AB* is to *BC* as the square on *AB* to the square on *BE,* therefore the square on *AB* is double the square on *BE.*
+And, since {AC} equals {CB}, therefore {AB} is double {BC}.  But {AB} is to {BC} as the square on {AB} to the square on {BE}, therefore the square on {AB} is double the square on {BE}.
 
-But the square on the diameter of the sphere is also double the square on the side of the octahedron. And *AB* is the diameter of the given sphere, therefore *BE* is the side of the octahedron. [!just XIII.14]
+But the square on the diameter of the sphere is also double the square on the side of the octahedron. And {AB} is the diameter of the given sphere, therefore {BE} is the side of the octahedron. [!just XIII.14]
 
-Next, draw *AG*  from the point *A* at right angles to the straight line *AB,* make *AG*  equal to *AB,* join *GC,* and draw *HK* from *H* perpendicular to *AB.* [!just I.11, I.3; I.12]
+Next, draw {AG}  from the point {A} at right angles to the straight line {AB}, make {AG}  equal to {AB}, join {GC}, and draw {HK} from {H} perpendicular to {AB}. [!just I.11, I.3; I.12]
 
-Then, since *GA* is double *AC,* for *GA* equals *AB* and *GA* is to *AC* as *HK* is to *KC,*  therefore *HK* is also double *KC.*
+Then, since {GA} is double {AC}, for {GA} equals {AB} and {GA} is to {AC} as {HK} is to {KC},  therefore {HK} is also double {KC}.
 
-Therefore the square on *HK* is quadruple the square on *KC,* therefore the sum of the  squares on *HK* and *KC,* that is, the square on *HC,* is five times the square on *KC.*
+Therefore the square on {HK} is quadruple the square on {KC}, therefore the sum of the  squares on {HK} and {KC}, that is, the square on {HC}, is five times the square on {KC}.
 
-But *HC* equals *CB,* therefore the square on *BC* is five times the square on *CK.* And, since *AB* is double *CB,* and, in them, *AD* is double *DB,* therefore the remainder *BD* is double the remainder *DC.*
+But {HC} equals {CB}, therefore the square on {BC} is five times the square on {CK}. And, since {AB} is double {CB}, and, in them, {AD} is double {DB}, therefore the remainder {BD} is double the remainder {DC}.
 
-Therefore *BC* is triple *CD,* therefore the square on *BC* is nine times the square on *CD.* But the square on *BC* is five times the square on *CK,* therefore the square on *CK* is greater than the square on *CD.* Therefore *CK* is greater than *CD.*
+Therefore {BC} is triple {CD}, therefore the square on {BC} is nine times the square on {CD}. But the square on {BC} is five times the square on {CK}, therefore the square on {CK} is greater than the square on {CD}. Therefore {CK} is greater than {CD}.
 
-Make *CL*  equal to *CK,* draw *LM* from *L* at right angles to *AB,* and join *MB.* [!just I.3, I.11]
+Make {CL}  equal to {CK}, draw {LM} from {L} at right angles to {AB}, and join {MB}. [!just I.3, I.11]
 
-Now, since the square on *BC* is five times the square on *CK,* and *AB* is double *BC,* and *KL* is double *CK,* therefore the square on *AB* is five times the square on *KL.* But the square on the diameter of the sphere is also five times the square on the radius of the circle from which the icosahedron has been described. And *AB* is the diameter of the sphere, therefore *KL* is the radius of the circle from which the icosahedron has been described. Therefore *KL* is a side of the hexagon in the said circle. [!just XIII.16.Cor; IV.15.Cor]
+Now, since the square on {BC} is five times the square on {CK}, and {AB} is double {BC}, and {KL} is double {CK}, therefore the square on {AB} is five times the square on {KL}. But the square on the diameter of the sphere is also five times the square on the radius of the circle from which the icosahedron has been described. And {AB} is the diameter of the sphere, therefore {KL} is the radius of the circle from which the icosahedron has been described. Therefore {KL} is a side of the hexagon in the said circle. [!just XIII.16.Cor; IV.15.Cor]
 
-And, since the diameter of the sphere is made up of the side of the hexagon and two of the sides of the decagon inscribed in the same circle, and *AB* is the diameter of the sphere, while *KL* is a side of the hexagon, and *AK* equals *LB,* therefore each of the straight lines *AK* and *LB* is a side of the decagon inscribed in the circle from which the icosahedron has been described. [!just XIII.16.Cor]
+And, since the diameter of the sphere is made up of the side of the hexagon and two of the sides of the decagon inscribed in the same circle, and {AB} is the diameter of the sphere, while {KL} is a side of the hexagon, and {AK} equals {LB}, therefore each of the straight lines {AK} and {LB} is a side of the decagon inscribed in the circle from which the icosahedron has been described. [!just XIII.16.Cor]
 
-And, since *LB* belongs to a decagon, and *ML* to a hexagon, for *ML* equals *KL,* since it also equals *HK* being the same distance from the center and each of the straight lines *HK* and *KL* is double *KC,* therefore *MB* belongs to a pentagon. [!just XIII.10]
+And, since {LB} belongs to a decagon, and {ML} to a hexagon, for {ML} equals {KL}, since it also equals {HK} being the same distance from the center and each of the straight lines {HK} and {KL} is double {KC}, therefore {MB} belongs to a pentagon. [!just XIII.10]
 
-But the side of the pentagon is the side of the icosahedron,  therefore *MB* belongs to the icosahedron. [!just XIII.16]
+But the side of the pentagon is the side of the icosahedron,  therefore {MB} belongs to the icosahedron. [!just XIII.16]
 
-Now, since *FB* is a side of the cube, cut it in extreme and mean ratio at *N,* and let *NB* be the greater segment. Therefore *NB* is a side of the dodecahedron. [!just XIII.17.Cor]
+Now, since {FB} is a side of the cube, cut it in extreme and mean ratio at {N}, and let {NB} be the greater segment. Therefore {NB} is a side of the dodecahedron. [!just XIII.17.Cor]
 
-And, since the square on the diameter of the sphere was proved to be one and a half times the square on the side *AF* of the pyramid, double the square on the side *BE* of the octahedron and triple the side *FB* of the cube, therefore, of parts of which the square on the diameter of the sphere contains six, the square on the side of the pyramid contains four, the square on the side of the octahedron three, and the square on the side of the cube two.
+And, since the square on the diameter of the sphere was proved to be one and a half times the square on the side {AF} of the pyramid, double the square on the side {BE} of the octahedron and triple the side {FB} of the cube, therefore, of parts of which the square on the diameter of the sphere contains six, the square on the side of the pyramid contains four, the square on the side of the octahedron three, and the square on the side of the cube two.
 
 Therefore the square on the side of the pyramid is four-thirds of the square on the side of the octahedron, and double the square on the side of the cube, and the square on the side of the octahedron is one and a half times the square on the side of the cube.
 
@@ -110,21 +539,21 @@ The said sides, therefore, of the three figures, I mean the pyramid, the octahed
 
 But the remaining two, I mean the side of the icosahedron and the side of the dodecahedron, are not in rational ratios either to one another or to the aforesaid sides, for they are irrational, the one being minor and the other an apotome. [!just XIII.16; XIII.17]
 
-That the side *MB* of the icosahedron is greater than the side *NB* of the dodecahedron we can prove thus.
+That the side {MB} of the icosahedron is greater than the side {NB} of the dodecahedron we can prove thus.
 
-Since the triangle *FDB* is equiangular with the triangle *FAB,*  proportionally *DB* is to *BF* as *BF* is to *BA.* [!just VI.8, VI.4]
+Since the triangle {FDB} is equiangular with the triangle {FAB},  proportionally {DB} is to {BF} as {BF} is to {BA}. [!just VI.8, VI.4]
 
-And, since the three straight lines are proportional, the first is to the third as the square on the first is to the square on the second, therefore *DB* is to *BA* as the square on *DB* is to the square on *BF.* Therefore, inversely *AB* is to *BD* as the square on *FB* is to the square on *BD.* [!just V.Def.9; VI.20.Cor]
+And, since the three straight lines are proportional, the first is to the third as the square on the first is to the square on the second, therefore {DB} is to {BA} as the square on {DB} is to the square on {BF}. Therefore, inversely {AB} is to {BD} as the square on {FB} is to the square on {BD}. [!just V.Def.9; VI.20.Cor]
 
-But *AB* is triple *BD,* therefore the square on *FB* is triple the square on *BD.*
+But {AB} is triple {BD}, therefore the square on {FB} is triple the square on {BD}.
 
-But the square on *AD* is also quadruple the square on *DB,* for *AD* is double *DB,* therefore the square on *AD* is greater than the square on *FB.*  Therefore *AD* is greater than *FB.* Therefore *AL* is by far greater than *FB.*
+But the square on {AD} is also quadruple the square on {DB}, for {AD} is double {DB}, therefore the square on {AD} is greater than the square on {FB}.  Therefore {AD} is greater than {FB}. Therefore {AL} is by far greater than {FB}.
 
-And, when *AL* is cut in extreme and mean ratio,  *KL* is the greater segment, for *LK* belongs to a hexagon, and *KA* to a decagon, and, when *FB* is cut in extreme and mean ratio, *NB* is the greater segment, therefore *KL* is greater than *NB.* [!just XIII.9]
+And, when {AL} is cut in extreme and mean ratio,  {KL} is the greater segment, for {LK} belongs to a hexagon, and {KA} to a decagon, and, when {FB} is cut in extreme and mean ratio, {NB} is the greater segment, therefore {KL} is greater than {NB}. [!just XIII.9]
 
-But *KL* equals *LM,* therefore *LM* is greater than *NB.*
+But {KL} equals {LM}, therefore {LM} is greater than {NB}.
 
-Therefore *MB,* which is a side of the icosahedron, is by far greater than *NB* which is a side of the dodecahedron.
+Therefore {MB}, which is a side of the icosahedron, is by far greater than {NB} which is a side of the dodecahedron.
 
 <div class="qed">Q.E.F.</div>
 
@@ -180,6 +609,21 @@ But that the angle of the equilateral and equiangular pentagon is a right angle 
 <canvas id="canvas_1" width="200" height="190" tabindex="0"></canvas>
 <noscript><img alt="XIII.18 lemma diagram" src="propXIII18l.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's pentagon has a random face, which a highlight would raise over
+    // the radii (#140), so the prose reaches it through pentT, a faceless
+    // twin, as {ABCDE|pentT}; his circle is already faceless and is reached
+    // as {ABCDE|circ}. The circle and the five radii are held back until the
+    // proof draws them.
+    //
+    // Angle markers: AFB at the centre; FAB, ABF, FBC at the base (FAB = FBC
+    // as halves of equal angles) and the whole angle ABC.
+    //
+    // Draggables (checked against the bundle): A and B, free — the given
+    // pentagon's side, standing from slide 1. C, D, E, F are derived and
+    // listed per slide; nothing to defer.
+    var GIVEN = ["pentagon","pentT","A","B","C","D","E"];
+    var CIRC  = GIVEN.concat(["circ","F"]);
+    var RAD   = CIRC.concat(["AF","BF","CF","DF","EF"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -197,16 +641,87 @@ But that the angle of the equilateral and equiangular pentagon is a right angle 
             "BF;line;connect;B,F",
             "CF;line;connect;C,F",
             "DF;line;connect;D,F",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // Faceless twin of the pentagon (see above).
+            "pentT;polygon;pentagon;A,B,C,D,E;0;0;0;0",
+            // Angle markers.
+            "angAFB;sector;angleMarker;F,A,B;0;0;3b6ea5;9ec5e8",
+            "angFAB;sector;angleMarker;A,F,B;0;0;3f8e4f;a8dbb0",
+            "angABF;sector;angleMarker;B,A,F;0;0;3f8e4f;a8dbb0",
+            "angFBC;sector;angleMarker;B,F,C;0;0;3f8e4f;a8dbb0",
+            "angABC;sector;angleMarker;B,A,C;0;0;b5651d;f0c08a"
         ],
+        aliases: { "FA": "AF", "FB": "BF", "FC": "CF", "FD": "DF", "FE": "EF" },
+        slides: [
+            { text: "But that the angle of the equilateral and equiangular pentagon is a right angle and a fifth",
+              visible: GIVEN.concat(["angABC"]),
+              highlighted: ["pentT","angABC"] },
+            { text: "we must prove thus.",
+              visible: GIVEN.concat(["angABC"]) },
+            { text: "Let {ABCDE|pentT} be an equilateral and equiangular pentagon.",
+              visible: GIVEN,
+              highlighted: ["pentT"] },
+            { text: "Circumscribe the circle {ABCDE|circ} about it, take its center {F},",
+              visible: CIRC,
+              highlighted: ["circ","F"],
+              transition: { animations: [
+                  { elem: "circ", name: geomlib.A.Circle.compass },
+                  { elem: "F",    name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "circle about the pentagon", ref: "IV.14" }] },
+            { text: "and join {FA}, {FB}, {FC}, {FD}, and {FE}.",
+              visible: RAD,
+              highlighted: ["AF","BF","CF","DF","EF"],
+              transition: { animations: [
+                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore they bisect the angles of the pentagon at {A}, {B}, {C}, {D}, and {E}.",
+              visible: RAD,
+              highlighted: ["AF","BF","CF","DF","EF"] },
+            { text: "And, since the angles at {F} equal four right angles and are equal,",
+              visible: RAD,
+              highlighted: ["F"] },
+            { text: "therefore one of them, as the angle {AFB|angAFB}, is one right angle less a fifth.",
+              visible: RAD.concat(["angAFB"]),
+              highlighted: ["angAFB"],
+              transition: { animations: [
+                  { elem: "angAFB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the remaining angles {FAB|angFAB} and {ABF|angABF} consist of one right angle and a fifth.",
+              visible: RAD.concat(["angAFB","angFAB","angABF"]),
+              highlighted: ["angFAB","angABF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angFAB", name: geomlib.A.Sector.sweep },
+                  { elem: "angABF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But the angle {FAB|angFAB} equals the angle {FBC|angFBC},",
+              visible: RAD.concat(["angFAB","angABF","angFBC"]),
+              highlighted: ["angFAB","angFBC"],
+              transition: { animations: [
+                  { elem: "angFBC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the whole angle {ABC|angABC} of the pentagon consists of one right angle and a fifth.",
+              visible: RAD.concat(["angABF","angFBC","angABC"]),
+              highlighted: ["angABC"],
+              transition: { animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "IV.14": "/elements/books/bookIV/propositions/propIV14/"
     });
 </script>
 </figure>
 
-Let *ABCDE* be an equilateral and equiangular pentagon.  Circumscribe the circle *ABCDE*  about it, take its center *F,* and join *FA, FB, FC, FD,* and *FE.* [!just IV.14]
+Let {ABCDE|pentT} be an equilateral and equiangular pentagon.  Circumscribe the circle {ABCDE|circ}  about it, take its center {F}, and join {FA}, {FB}, {FC}, {FD}, and {FE}. [!just IV.14]
 
-Therefore they bisect the angles of the pentagon at *A, B, C, D,* and *E.*  And, since the angles at *F* equal four right angles and are equal, therefore one of them, as the angle *AFB,* is one right angle less a fifth. Therefore the remaining angles *FAB* and *ABF* consist of one right angle and a fifth.
+Therefore they bisect the angles of the pentagon at {A}, {B}, {C}, {D}, and {E}.  And, since the angles at {F} equal four right angles and are equal, therefore one of them, as the angle {AFB|angAFB}, is one right angle less a fifth. Therefore the remaining angles {FAB|angFAB} and {ABF|angABF} consist of one right angle and a fifth.
 
-But the angle *FAB* equals the angle *FBC,* therefore the whole angle *ABC* of the pentagon consists of one right angle and a fifth.
+But the angle {FAB|angFAB} equals the angle {FBC|angFBC}, therefore the whole angle {ABC|angABC} of the pentagon consists of one right angle and a fifth.
 
 <div class="qed">Q.E.D.</div>
