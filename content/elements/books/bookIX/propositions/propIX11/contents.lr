@@ -17,12 +17,15 @@ statement: If as many numbers as we please beginning from a unit are in continue
 ----
 proof:
 
-Let there be as many numbers as we please, *B, C, D,* and *E,* beginning from the unit *A* and in continued proportion.
+Let there be as many numbers as we please, {B}, {C}, {D}, and {E}, beginning from the unit {A} and in continued proportion.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="200" tabindex="0"></canvas>
 <noscript><img alt="IX.11 diagram" src="propIX11.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines; A is the unit. Nothing is constructed, so the
+    // walk is highlight beats over Joyce's five lines.
+    var ALL = ["A","B","C","D","E"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -54,15 +57,75 @@ Let there be as many numbers as we please, *B, C, D,* and *E,* beginning from th
             "E2;point;proportion;A1,A2,B1,B2,D1,D2,E1,E3;0",
             "E;line;connect;E1,E2;black"
         ],
+        slides: [
+            { text: "“If as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E"],
+              justifications: [{ ref: "IX.11" }] },
+            { text: "then the less measures the greater according to some one of the numbers which appear among the proportional numbers.”",
+              visible: ALL,
+              highlighted: ["B","C","D","E"] },
+            { text: "Let there be as many numbers as we please, {B}, {C}, {D}, and {E},",
+              visible: ALL,
+              highlighted: ["B","C","D","E"] },
+            { text: "beginning from the unit {A} and in continued proportion.",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E"] },
+            { text: "I say that {B}, the least of the numbers {B}, {C}, {D}, and {E},",
+              visible: ALL,
+              highlighted: ["B"] },
+            { text: "measures {E} according to one of the numbers {C} or {D}.",
+              visible: ALL,
+              highlighted: ["B","E","C","D"] },
+            { text: "Since the unit {A} is to {B} as {D} is to {E},",
+              visible: ALL,
+              highlighted: ["A","B","D","E"] },
+            { text: "therefore the unit {A} measures the number {B} the same number of times as {D} measures {E}.",
+              visible: ALL,
+              highlighted: ["A","B","D","E"] },
+            { text: "Therefore, alternately, the unit {A} measures {D} the same number of times as {B} measures {E}.",
+              visible: ALL,
+              highlighted: ["A","D","B","E"],
+              justifications: [{ claim: "A measures D as B measures E", ref: "VII.15" }] },
+            { text: "But the unit {A} measures {D} according to the units in it,",
+              visible: ALL,
+              highlighted: ["A","D"] },
+            { text: "therefore {B} also measures {E} according to the units in {D},",
+              visible: ALL,
+              highlighted: ["B","E","D"] },
+            { text: "so that {B} the less measures {E} the greater",
+              visible: ALL,
+              highlighted: ["B","E"] },
+            { text: "according to some number of those which have place among the proportional numbers.",
+              visible: ALL,
+              highlighted: ["B","E","D"] },
+            { text: "Therefore, if as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E"] },
+            { text: "then the less measures the greater according to some one of the numbers which appear among the proportional numbers.",
+              visible: ALL,
+              highlighted: ["B","C","D","E"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.11") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.15": "/elements/books/bookVII/propositions/propVII15/"
     });
 </script>
 </figure>
 
-I say that *B,* the least of the numbers *B, C, D,* and *E,* measures *E* according to one of the numbers *C* or *D.*
+I say that {B}, the least of the numbers {B}, {C}, {D}, and {E}, measures {E} according to one of the numbers {C} or {D}.
 
-Since the unit *A* is to *B* as *D* is to *E,* therefore the unit *A* measures the number *B* the same number of times as *D* measures *E.* Therefore, alternately, the unit *A* measures *D* the same number of times as *B* measures *E.* [!just VII.15]
+Since the unit {A} is to {B} as {D} is to {E}, therefore the unit {A} measures the number {B} the same number of times as {D} measures {E}. Therefore, alternately, the unit {A} measures {D} the same number of times as {B} measures {E}. [!just VII.15]
 
-But the unit *A* measures *D* according to the units in it, therefore *B* also measures *E* according to the units in *D,* so that *B* the less measures *E* the greater according to some number of those which have place among the proportional numbers.
+But the unit {A} measures {D} according to the units in it, therefore {B} also measures {E} according to the units in {D}, so that {B} the less measures {E} the greater according to some number of those which have place among the proportional numbers.
 
 Therefore, *if as many numbers as we please beginning from a unit are in continued proportion, then the less measures the greater according to some one of the numbers which appear among the proportional numbers.*
 

@@ -15,13 +15,13 @@ statement: If as many numbers as we please beginning from a unit are in continue
 ----
 proof:
 
-Let *A, B, C,* and *D* be as many numbers as we please beginning from a unit in continued proportion.
+Let {A}, {B}, {C}, and {D} be as many numbers as we please beginning from a unit in continued proportion.
 
-I say that, by whatever prime numbers *D* is measured, *A* is also measured by the same.
+I say that, by whatever prime numbers {D} is measured, {A} is also measured by the same.
 
-Let *D* be measured by any prime number *E.*
+Let {D} be measured by any prime number {E}.
 
-I say that *E* measures *A.*
+I say that {E} measures {A}.
 
 Suppose it does not.
 
@@ -29,6 +29,16 @@ Suppose it does not.
 <canvas id="canvas_0" width="290" height="200" tabindex="0"></canvas>
 <noscript><img alt="IX.12 diagram" src="propIX12.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines; the unit (U1-U2) sits off-canvas and is not drawn.
+    // E arrives with "Let D be measured by any prime number E", and F, G, H
+    // as E measures D, C, B in turn, so their slider ends are deferred.
+    // G and H exist only under the reductio's hypothesis and F only feeds
+    // it, so all three are withdrawn once the contradiction is reached.
+    var GIVEN  = ["A","B","C","D"];
+    var WITH_E = GIVEN.concat(["E"]);
+    var WITH_F = WITH_E.concat(["F"]);
+    var WITH_G = WITH_F.concat(["G"]);
+    var ALL    = WITH_G.concat(["H"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -71,29 +81,202 @@ Suppose it does not.
             "H2;point;proportion;E1,E2,B1,B2,U1,U2,H1,C3;0",
             "H;line;connect;H1,H2;black"
         ],
+        deferDraggables: ["E1","E2","F1","G1","H1"],
+        slides: [
+            { text: "“If as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "IX.12" }] },
+            { text: "then by whatever prime numbers the last is measured, the next to the unit is also measured by the same.”",
+              visible: GIVEN,
+              highlighted: ["D","A"] },
+            { text: "Let {A}, {B}, {C}, and {D} be as many numbers as we please beginning from a unit in continued proportion.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "I say that, by whatever prime numbers {D} is measured, {A} is also measured by the same.",
+              visible: GIVEN,
+              highlighted: ["D","A"] },
+            { text: "Let {D} be measured by any prime number {E}.",
+              visible: WITH_E,
+              highlighted: ["D","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that {E} measures {A}.",
+              visible: WITH_E,
+              highlighted: ["E","A"] },
+            { text: "Suppose it does not.",
+              visible: WITH_E,
+              highlighted: ["E","A"] },
+            { text: "Now {E} is prime, and any prime number is relatively prime to any which it does not measure,",
+              visible: WITH_E,
+              highlighted: ["E"] },
+            { text: "therefore {E} and {A} are relatively prime.",
+              visible: WITH_E,
+              highlighted: ["E","A"],
+              justifications: [{ claim: "E and A relatively prime", ref: "VII.29" }] },
+            { text: "And, since {E} measures {D}, let it measure it according to {F},",
+              visible: WITH_F,
+              highlighted: ["E","D","F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "therefore {E} multiplied by {F} makes {D}.",
+              visible: WITH_F,
+              highlighted: ["E","F","D"] },
+            { text: "Again, since {A} measures {D} according to the units in {C},",
+              visible: WITH_F,
+              highlighted: ["A","D","C"],
+              justifications: [{ claim: "A measures D", ref: "IX.11" }, { claim: "according to the units in C", ref: "IX.11.Cor" }] },
+            { text: "therefore {A} multiplied by {C} makes {D}.",
+              visible: WITH_F,
+              highlighted: ["A","C","D"] },
+            { text: "But, further, {E} multiplied by {F} makes {D},",
+              visible: WITH_F,
+              highlighted: ["E","F","D"] },
+            { text: "therefore the product of {A} and {C} equals the product of {E} and {F}.",
+              visible: WITH_F,
+              highlighted: ["A","C","E","F"] },
+            { text: "Therefore {A} is to {E} as {F} is to {C}.",
+              visible: WITH_F,
+              highlighted: ["A","E","F","C"],
+              justifications: [{ claim: "A : E = F : C", ref: "VII.19" }] },
+            { text: "But {A} and {E} are relatively prime, primes are also least,",
+              visible: WITH_F,
+              highlighted: ["A","E"],
+              justifications: [{ claim: "A, E least in their ratio", ref: "VII.21" }] },
+            { text: "and the least measure those which have the same ratio the same number of times,",
+              visible: WITH_F,
+              highlighted: ["A","E","F","C"] },
+            { text: "the antecedent the antecedent and the consequent the consequent, therefore {E} measures {C}.",
+              visible: WITH_F,
+              highlighted: ["E","C"],
+              justifications: [{ claim: "E measures C", ref: "VII.20" }] },
+            { text: "Let it measure it according to {G}.",
+              visible: WITH_G,
+              highlighted: ["E","C","G"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore {E} multiplied by {G} makes {C}.",
+              visible: WITH_G,
+              highlighted: ["E","G","C"] },
+            { text: "But, further, by the previous theorem, {A} multiplied by {B} makes {C}.",
+              visible: WITH_G,
+              highlighted: ["A","B","C"],
+              justifications: [{ claim: "A measures C", ref: "IX.11" }, { claim: "according to the units in B", ref: "IX.11.Cor" }] },
+            { text: "Therefore the product of {A} and {B} equals the product of {E} and {G}.",
+              visible: WITH_G,
+              highlighted: ["A","B","E","G"] },
+            { text: "Therefore {A} is to {E} as {G} is to {B}.",
+              visible: WITH_G,
+              highlighted: ["A","E","G","B"],
+              justifications: [{ claim: "A : E = G : B", ref: "VII.19" }] },
+            { text: "But {A} and {E} are relatively prime, primes are also least,",
+              visible: WITH_G,
+              highlighted: ["A","E"],
+              justifications: [{ claim: "A, E least in their ratio", ref: "VII.21" }] },
+            { text: "and the least numbers measure those which have the same ratio with them the same number of times,",
+              visible: WITH_G,
+              highlighted: ["A","E","G","B"] },
+            { text: "the antecedent the antecedent and the consequent the consequent, therefore {E} measures {B}.",
+              visible: WITH_G,
+              highlighted: ["E","B"],
+              justifications: [{ claim: "E measures B", ref: "VII.20" }] },
+            { text: "Let it measure it according to {H}. Then {E} multiplied by {H} makes {B}.",
+              visible: ALL,
+              highlighted: ["E","H","B"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "But, further, {A} multiplied by itself makes {B},",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "B, the third from the unit, is A by itself", ref: "IX.8" }] },
+            { text: "therefore the product of {E} and {H} equals the square on {A}.",
+              visible: ALL,
+              highlighted: ["E","H","A"] },
+            { text: "Therefore {E} is to {A} as {A} is to {H}.",
+              visible: ALL,
+              highlighted: ["E","A","H"],
+              justifications: [{ claim: "E : A = A : H", ref: "VII.19" }] },
+            { text: "But {A} and {E} are relatively prime, primes are also least,",
+              visible: ALL,
+              highlighted: ["A","E"],
+              justifications: [{ claim: "A, E least in their ratio", ref: "VII.21" }] },
+            { text: "and the least measure those which have the same ratio the same number of times,",
+              visible: ALL,
+              highlighted: ["E","A","H"] },
+            { text: "the antecedent the antecedent and the consequent the consequent, therefore {E} measures {A} antecedent antecedent.",
+              visible: ALL,
+              highlighted: ["E","A"],
+              justifications: [{ claim: "E measures A", ref: "VII.20" }] },
+            { text: "But, again, it also does not measure it, which is impossible.",
+              visible: ALL,
+              highlighted: ["E","A"] },
+            { text: "Therefore {E} and {A} are not relatively prime. Therefore they are relatively composite.",
+              visible: WITH_E,
+              highlighted: ["E","A"] },
+            { text: "But numbers relatively composite are measured by some number.",
+              visible: WITH_E,
+              highlighted: ["E","A"],
+              justifications: [{ claim: "measured by some number", ref: "VII.Def.14" }] },
+            { text: "And, since {E} is by hypothesis prime, and a prime is not measured by any number other than itself,",
+              visible: WITH_E,
+              highlighted: ["E"] },
+            { text: "therefore {E} measures {A} and {E}, so that {E} measures {A}.",
+              visible: WITH_E,
+              highlighted: ["E","A"] },
+            { text: "But it also measures {D}, therefore {E} measures {A} and {D}.",
+              visible: WITH_E,
+              highlighted: ["E","A","D"] },
+            { text: "Similarly we can prove that, by whatever prime numbers {D} is measured, {A} also is measured by the same.",
+              visible: WITH_E,
+              highlighted: ["D","A"] },
+            { text: "Therefore, if as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: WITH_E,
+              highlighted: ["A","B","C","D"] },
+            { text: "then by whatever prime numbers the last is measured, the next to the unit is also measured by the same.",
+              visible: WITH_E,
+              highlighted: ["D","A"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.12") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.14": "/elements/books/bookVII/definitions/defVII14/",
+        "VII.19":     "/elements/books/bookVII/propositions/propVII19/",
+        "VII.20":     "/elements/books/bookVII/propositions/propVII20/",
+        "VII.21":     "/elements/books/bookVII/propositions/propVII21/",
+        "VII.29":     "/elements/books/bookVII/propositions/propVII29/",
+        "IX.8":       "/elements/books/bookIX/propositions/propIX8/",
+        "IX.11":      "/elements/books/bookIX/propositions/propIX11/",
+        "IX.11.Cor":  "/elements/books/bookIX/propositions/propIX11/#cor"
     });
 </script>
 </figure>
 
-Now *E* is prime, and any prime number is relatively prime to any which it does not measure, therefore *E* and *A* are relatively prime. And, since *E* measures *D,* let it measure it according to *F,* therefore *E* multiplied by *F* makes *D.* [!just VII.29]
+Now {E} is prime, and any prime number is relatively prime to any which it does not measure, therefore {E} and {A} are relatively prime. And, since {E} measures {D}, let it measure it according to {F}, therefore {E} multiplied by {F} makes {D}. [!just VII.29]
 
-Again, since *A* measures *D* according to the units in *C,* therefore *A* multiplied by *C* makes *D.* But, further, *E* multiplied by *F* makes *D,* therefore the product of *A* and *C* equals the product of *E* and *F.* [!just IX.11; IX.11.Cor]
+Again, since {A} measures {D} according to the units in {C}, therefore {A} multiplied by {C} makes {D}. But, further, {E} multiplied by {F} makes {D}, therefore the product of {A} and {C} equals the product of {E} and {F}. [!just IX.11; IX.11.Cor]
 
-Therefore *A* is to *E* as *F* is to *C.* But *A* and *E* are relatively prime, primes are also least, and the least measure those which have the same ratio the same number of times, the antecedent the antecedent and the consequent the consequent, therefore *E* measures *C.* Let it measure it according to *G.* [!just VII.19; VII.21; VII.20]
+Therefore {A} is to {E} as {F} is to {C}. But {A} and {E} are relatively prime, primes are also least, and the least measure those which have the same ratio the same number of times, the antecedent the antecedent and the consequent the consequent, therefore {E} measures {C}. Let it measure it according to {G}. [!just VII.19; VII.21; VII.20]
 
-Therefore *E* multiplied by *G* makes *C.* But, further, by the previous theorem, *A* multiplied by *B* makes *C.* Therefore the product of *A* and *B* equals the product of *E* and *G.* [!just IX.11; IX.11.Cor]
+Therefore {E} multiplied by {G} makes {C}. But, further, by the previous theorem, {A} multiplied by {B} makes {C}. Therefore the product of {A} and {B} equals the product of {E} and {G}. [!just IX.11; IX.11.Cor]
 
-Therefore *A* is to *E* as *G* is to *B.* But *A* and *E* are relatively prime, primes are also least, and the least numbers measure those which have the same ratio with them the same number of times, the antecedent the antecedent and the consequent the consequent, therefore *E* measures *B.* Let it measure it according to *H.* Then *E* multiplied by *H* makes *B.* [!just VII.19; VII.21; VII.20]
+Therefore {A} is to {E} as {G} is to {B}. But {A} and {E} are relatively prime, primes are also least, and the least numbers measure those which have the same ratio with them the same number of times, the antecedent the antecedent and the consequent the consequent, therefore {E} measures {B}. Let it measure it according to {H}. Then {E} multiplied by {H} makes {B}. [!just VII.19; VII.21; VII.20]
 
-But, further, *A* multiplied by itself makes *B,* therefore the product of *E* and *H* equals the square on *A.* Therefore *E* is to *A* as *A* is to *H.* [!just IX.8, VII.19]
+But, further, {A} multiplied by itself makes {B}, therefore the product of {E} and {H} equals the square on {A}. Therefore {E} is to {A} as {A} is to {H}. [!just IX.8, VII.19]
 
-But *A* and *E* are relatively prime, primes are also least, and the least measure those which have the same ratio the same number of times, the antecedent the antecedent and the consequent the consequent, therefore *E* measures *A* antecedent antecedent. But, again, it also does not measure it, which is impossible. [!just VII.21; VII.20]
+But {A} and {E} are relatively prime, primes are also least, and the least measure those which have the same ratio the same number of times, the antecedent the antecedent and the consequent the consequent, therefore {E} measures {A} antecedent antecedent. But, again, it also does not measure it, which is impossible. [!just VII.21; VII.20]
 
-Therefore *E* and *A* are not relatively prime. Therefore they are relatively composite. But numbers relatively composite are measured by some number. [!just VII.Def.14]
+Therefore {E} and {A} are not relatively prime. Therefore they are relatively composite. But numbers relatively composite are measured by some number. [!just VII.Def.14]
 
-And, since *E* is by hypothesis prime, and a prime is not measured by any number other than itself, therefore *E* measures *A* and *E,* so that *E* measures *A.*
+And, since {E} is by hypothesis prime, and a prime is not measured by any number other than itself, therefore {E} measures {A} and {E}, so that {E} measures {A}.
 
-But it also measures *D,* therefore *E* measures *A* and *D.* Similarly we can prove that, by whatever prime numbers *D* is measured, *A* also is measured by the same.
+But it also measures {D}, therefore {E} measures {A} and {D}. Similarly we can prove that, by whatever prime numbers {D} is measured, {A} also is measured by the same.
 
 Therefore, *if as many numbers as we please beginning from a unit are in continued proportion, then by whatever prime numbers the last is measured, the next to the unit is also measured by the same.*
 
