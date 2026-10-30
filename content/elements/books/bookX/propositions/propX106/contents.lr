@@ -15,14 +15,30 @@ statement: A straight line commensurable with that which produces with a rationa
 ----
 proof:
 
-Let *AB* be a straight line which produces with a rational area a medial whole, and *CD* commensurable with *AB*.
+Let {AB} be a straight line which produces with a rational area a medial whole, and {CD} commensurable with {AB}.
 
-I say that *CD* is also a straight line which produces with a rational area a medial whole.
+I say that {CD} is also a straight line which produces with a rational area a medial whole.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="100" tabindex="0"></canvas>
 <noscript><img alt="X.106 diagram" src="propX106.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: AB, which produces with a rational area a medial
+    // whole, with its annex BE on the line AE, and CD commensurable with AB
+    // with its annex DF on CF, cut in the same ratio. "Make the same
+    // construction" (X.103's AB : CD = BE : DF) brings F in. Added, all
+    // hidden at rest: solid twins AB, CD, BE, DF (initiallyHidden) so AB and
+    // CD stand alone first and each annex strokes out from B or D. AE joins
+    // the slides once BE is drawn, CF once DF is. No angles, no markers.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E (line sliders)
+    // and the offscreen frees. E only arrives with "Let BE be the annex to
+    // AB", so it is deferred. F is derived and listed per slide.
+    var GIVEN = ["A","B","AB","C","D","CD"];
+    var ANNEX = GIVEN.concat(["E","BE"]);
+    var TERMS = ANNEX.concat(["AE"]);
+    var BUILT = TERMS.concat(["F","DF"]);
+    var ALL   = BUILT.concat(["CF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -39,19 +55,103 @@ I say that *CD* is also a straight line which produces with a rational area a me
             "E;point;lineSlider;A0,A3,170,0",
             "AE;line;connect;A,E",
             "F;point;proportion;A,B,C,D,B,E,D,C3",
-            "CF;line;connect;C,F"
+            "CF;line;connect;C,F",
+            // Slide-only twins, hidden at rest.
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "BE;line;connect;B,E",
+            "DF;line;connect;D,F"
         ],
+        initiallyHidden: ["AB","CD","BE","DF"],
+        deferDraggables: ["E"],
+        aliases: { "EB": "BE", "FD": "DF" },
+        slides: [
+            { text: "“A straight line commensurable with that which produces with a rational area a medial whole",
+              visible: GIVEN,
+              highlighted: ["CD","AB"],
+              justifications: [{ ref: "X.106" }] },
+            { text: "is a straight line which produces with a rational area a medial whole.”",
+              visible: GIVEN,
+              highlighted: ["CD"] },
+            { text: "Let {AB} be a straight line which produces with a rational area a medial whole,",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "and {CD} commensurable with {AB}.",
+              visible: GIVEN,
+              highlighted: ["CD","AB"] },
+            { text: "I say that {CD} is also a straight line which produces with a rational area a medial whole.",
+              visible: GIVEN,
+              highlighted: ["CD"] },
+            { text: "Let {BE} be the annex to {AB},",
+              visible: ANNEX,
+              highlighted: ["BE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "E",  name: geomlib.A.Point.appear } ] } },
+            { text: "therefore {AE} and {EB} are straight lines incommensurable in square",
+              visible: TERMS,
+              highlighted: ["AE","BE"] },
+            { text: "which make the sum of the squares on {AE} and {EB} medial but the rectangle contained by them rational.",
+              visible: TERMS,
+              highlighted: ["AE","BE"],
+              justifications: [{ claim: "AB produces with a rational area a medial whole", ref: "X.77" }] },
+            { text: "Make the same construction.",
+              visible: BUILT,
+              highlighted: ["DF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "F",  name: geomlib.A.Point.appear } ] } },
+            { text: "Then we can prove, in manner similar to the foregoing,",
+              visible: ALL,
+              highlighted: [] },
+            { text: "that {CF} and {FD} are in the same ratio as {AE} and {EB},",
+              visible: ALL,
+              highlighted: ["CF","DF","AE","BE"] },
+            { text: "the sum of the squares on {AE} and {EB} is commensurable with the sum of the squares on {CF} and {FD},",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"] },
+            { text: "and the rectangle {AE} by {EB} is commensurable with the rectangle {CF} by {FD},",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"] },
+            { text: "so that {CF} and {FD} are also straight lines incommensurable in square",
+              visible: ALL,
+              highlighted: ["CF","DF"] },
+            { text: "which make the sum of the squares on {CF} and {FD} medial but the rectangle contained by them rational.",
+              visible: ALL,
+              highlighted: ["CF","DF"] },
+            { text: "Therefore {CD} is a straight line which produces with a rational area a medial whole.",
+              visible: ALL,
+              highlighted: ["CD"],
+              justifications: [{ claim: "CD produces with a rational area a medial whole", ref: "X.77" }] },
+            { text: "Therefore, a straight line commensurable with that which produces with a rational area a medial whole",
+              visible: ALL,
+              highlighted: ["CD","AB"] },
+            { text: "is a straight line which produces with a rational area a medial whole.",
+              visible: ALL,
+              highlighted: ["CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.106") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.77": "/elements/books/bookX/propositions/propX77/"
     });
 </script>
 </figure>
 
-Let *BE* be the annex to *AB*, therefore *AE* and *EB* are straight lines incommensurable in square which make the sum of the squares on *AE* and *EB* medial but the rectangle contained by them rational. [!just X.77]
+Let {BE} be the annex to {AB}, therefore {AE} and {EB} are straight lines incommensurable in square which make the sum of the squares on {AE} and {EB} medial but the rectangle contained by them rational. [!just X.77]
 
 Make the same construction.
 
-Then we can prove, in manner similar to the foregoing, that *CF* and *FD* are in the same ratio as *AE* and *EB*, the sum of the squares on *AE* and *EB* is commensurable with the sum of the squares on *CF* and *FD*, and the rectangle *AE* by *EB* is commensurable with the rectangle *CF* by *FD*, so that *CF* and *FD* are also straight lines incommensurable in square which make the sum of the squares on *CF* and *FD* medial but the rectangle contained by them rational.
+Then we can prove, in manner similar to the foregoing, that {CF} and {FD} are in the same ratio as {AE} and {EB}, the sum of the squares on {AE} and {EB} is commensurable with the sum of the squares on {CF} and {FD}, and the rectangle {AE} by {EB} is commensurable with the rectangle {CF} by {FD}, so that {CF} and {FD} are also straight lines incommensurable in square which make the sum of the squares on {CF} and {FD} medial but the rectangle contained by them rational.
 
-Therefore *CD* is a straight line which produces with a rational area a medial whole. [!just X.77]
+Therefore {CD} is a straight line which produces with a rational area a medial whole. [!just X.77]
 
 Therefore, *a straight line commensurable with that which produces with a rational area a medial whole is a straight line which produces with a rational area a medial whole.*
 

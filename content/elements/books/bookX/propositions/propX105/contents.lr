@@ -15,14 +15,28 @@ statement: A straight line commensurable with a minor straight line is minor.
 ----
 proof:
 
-Let *AB* be a minor straight line, and *CD* commensurable with *AB*.
+Let {AB} be a minor straight line, and {CD} commensurable with {AB}.
 
-I say that *CD* is also minor.
+I say that {CD} is also minor.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="100" tabindex="0"></canvas>
 <noscript><img alt="X.105 diagram" src="propX105.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the minor straight line AB with its annex BE on the
+    // line AE, and CD commensurable with AB with its annex DF on CF, cut in
+    // the same ratio. "Make the same construction as before" (X.103's
+    // AB : CD = BE : DF) is the one slide that brings E and F in. Added, all
+    // hidden at rest: solid twins AB, CD, BE, DF (initiallyHidden) so AB and
+    // CD stand alone first and the annexes stroke out from B and D. AE and
+    // CF join the slides once both annexes are drawn. No angles, no markers.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E (line sliders)
+    // and the offscreen frees. E only arrives with the construction, so it
+    // is deferred. F is derived and listed per slide.
+    var GIVEN = ["A","B","AB","C","D","CD"];
+    var BUILT = GIVEN.concat(["E","BE","F","DF"]);
+    var ALL   = BUILT.concat(["AE","CF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -39,29 +53,159 @@ I say that *CD* is also minor.
             "E;point;lineSlider;A0,A3,170,0",
             "AE;line;connect;A,E",
             "F;point;proportion;A,B,C,D,B,E,D,C3",
-            "CF;line;connect;C,F"
+            "CF;line;connect;C,F",
+            // Slide-only twins, hidden at rest.
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "BE;line;connect;B,E",
+            "DF;line;connect;D,F"
         ],
+        initiallyHidden: ["AB","CD","BE","DF"],
+        deferDraggables: ["E"],
+        aliases: { "EB": "BE", "FD": "DF" },
+        slides: [
+            { text: "“A straight line commensurable with a minor straight line is minor.”",
+              visible: GIVEN,
+              highlighted: ["CD","AB"],
+              justifications: [{ ref: "X.105" }] },
+            { text: "Let {AB} be a minor straight line, and {CD} commensurable with {AB}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "I say that {CD} is also minor.",
+              visible: GIVEN,
+              highlighted: ["CD"] },
+            { text: "Make the same construction as before.",
+              visible: BUILT,
+              highlighted: ["BE","DF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "E",  name: geomlib.A.Point.appear },
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "F",  name: geomlib.A.Point.appear } ] } },
+            { text: "Then, since {AE} and {EB} are incommensurable in square,",
+              visible: ALL,
+              highlighted: ["AE","BE"],
+              justifications: [{ claim: "AB minor", ref: "X.76" }] },
+            { text: "therefore {CF} and {FD} are also incommensurable in square.",
+              visible: ALL,
+              highlighted: ["CF","DF"],
+              justifications: [{ claim: "CF, FD incommensurable in square", ref: "X.13" }] },
+            { text: "Now since {AE} is to {EB} as {CF} is to {FD},",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"] },
+            { text: "therefore the square on {AE} is to the square on {EB}",
+              visible: ALL,
+              highlighted: ["AE","BE"] },
+            { text: "as the square on {CF} is to the square on {FD}.",
+              visible: ALL,
+              highlighted: ["CF","DF"],
+              justifications: [
+                  { claim: "AE : EB = CF : FD", ref: "V.12" },
+                  { claim: "alternately", ref: "V.16" },
+                  { claim: "the squares proportional", ref: "VI.22" } ] },
+            { text: "Therefore, taken jointly, the sum of the squares on {AE} and {EB} is to the square on {EB}",
+              visible: ALL,
+              highlighted: ["AE","BE"] },
+            { text: "as the sum of the squares on {CF} and {FD} is to the square on {FD}.",
+              visible: ALL,
+              highlighted: ["CF","DF"],
+              justifications: [{ claim: "taken jointly", ref: "V.18" }] },
+            { text: "But the square on {BE} is commensurable with the square on {DF},",
+              visible: ALL,
+              highlighted: ["BE","DF"] },
+            { text: "therefore the sum of the squares on {AE} and {EB} is also commensurable",
+              visible: ALL,
+              highlighted: ["AE","BE"] },
+            { text: "with the sum of the squares on {CF} and {FD}.",
+              visible: ALL,
+              highlighted: ["CF","DF"],
+              justifications: [
+                  { claim: "alternately", ref: "V.16" },
+                  { claim: "sums of squares commensurable", ref: "X.11" } ] },
+            { text: "But the sum of the squares on {AE} and {EB} is rational,",
+              visible: ALL,
+              highlighted: ["AE","BE"] },
+            { text: "therefore the sum of the squares on {CF} and {FD} is also rational.",
+              visible: ALL,
+              highlighted: ["CF","DF"],
+              justifications: [
+                  { claim: "AB minor", ref: "X.76" },
+                  { claim: "rational", ref: "X.Def.I.4" } ] },
+            { text: "Again, since the square on {AE} is to the rectangle {AE} by {EB}",
+              visible: ALL,
+              highlighted: ["AE","BE"] },
+            { text: "as the square on {CF} is to the rectangle {CF} by {FD},",
+              visible: ALL,
+              highlighted: ["CF","DF"] },
+            { text: "while the square on {AE} is commensurable with the square on {CF},",
+              visible: ALL,
+              highlighted: ["AE","CF"] },
+            { text: "therefore the rectangle {AE} by {EB} is also commensurable with the rectangle {CF} by {FD}.",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"] },
+            { text: "But the rectangle {AE} by {EB} is medial,",
+              visible: ALL,
+              highlighted: ["AE","BE"] },
+            { text: "therefore the rectangle {CF} by {FD} is also medial.",
+              visible: ALL,
+              highlighted: ["CF","DF"],
+              justifications: [
+                  { claim: "AB minor", ref: "X.76" },
+                  { claim: "commensurable with a medial area", ref: "X.23.Cor" } ] },
+            { text: "Therefore {CF} and {FD} are straight lines incommensurable in square",
+              visible: ALL,
+              highlighted: ["CF","DF"] },
+            { text: "which make the sum of the squares on them rational, but the rectangle contained by them medial.",
+              visible: ALL,
+              highlighted: ["CF","DF"] },
+            { text: "Therefore {CD} is minor.",
+              visible: ALL,
+              highlighted: ["CD"],
+              justifications: [{ claim: "CD minor", ref: "X.76" }] },
+            { text: "Therefore, a straight line commensurable with a minor straight line is minor.",
+              visible: ALL,
+              highlighted: ["CD","AB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.105") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.76": "/elements/books/bookX/propositions/propX76/",
+        "X.13": "/elements/books/bookX/propositions/propX13/",
+        "V.12": "/elements/books/bookV/propositions/propV12/",
+        "V.16": "/elements/books/bookV/propositions/propV16/",
+        "VI.22": "/elements/books/bookVI/propositions/propVI22/",
+        "V.18": "/elements/books/bookV/propositions/propV18/",
+        "X.11": "/elements/books/bookX/propositions/propX11/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/",
+        "X.23.Cor": "/elements/books/bookX/propositions/propX23/#cor"
     });
 </script>
 </figure>
 
-Make the same construction as before. Then, since *AE* and *EB* are incommensurable in square, therefore *CF* and *FD* are also incommensurable in square. [!just X.76, X.13]
+Make the same construction as before. Then, since {AE} and {EB} are incommensurable in square, therefore {CF} and {FD} are also incommensurable in square. [!just X.76, X.13]
 
-Now since *AE* is to *EB* as *CF* is to *FD*, therefore the square on *AE* is to the square on *EB* as the square on *CF* is to the square on *FD*. [!just V.12; V.16, VI.22]
+Now since {AE} is to {EB} as {CF} is to {FD}, therefore the square on {AE} is to the square on {EB} as the square on {CF} is to the square on {FD}. [!just V.12; V.16, VI.22]
 
-Therefore, taken jointly, the sum of the squares on *AE* and *EB* is to the square on *EB* as the sum of the squares on *CF* and *FD* is to the square on *FD*. [!just V.18]
+Therefore, taken jointly, the sum of the squares on {AE} and {EB} is to the square on {EB} as the sum of the squares on {CF} and {FD} is to the square on {FD}. [!just V.18]
 
-But the square on *BE* is commensurable with the square on *DF*, therefore the sum of the squares on *AE* and *EB* is also commensurable with the sum of the squares on *CF* and *FD*. [!just V.16, X.11]
+But the square on {BE} is commensurable with the square on {DF}, therefore the sum of the squares on {AE} and {EB} is also commensurable with the sum of the squares on {CF} and {FD}. [!just V.16, X.11]
 
-But the sum of the squares on *AE* and *EB* is rational, therefore the sum of the squares on *CF* and *FD* is also rational. [!just X.76, X.Def.I.4]
+But the sum of the squares on {AE} and {EB} is rational, therefore the sum of the squares on {CF} and {FD} is also rational. [!just X.76, X.Def.I.4]
 
-Again, since the square on *AE* is to the rectangle *AE* by *EB* as the square on *CF* is to the rectangle *CF* by *FD*, while the square on *AE* is commensurable with the square on *CF*, therefore the rectangle *AE* by *EB* is also commensurable with the rectangle *CF* by *FD*.
+Again, since the square on {AE} is to the rectangle {AE} by {EB} as the square on {CF} is to the rectangle {CF} by {FD}, while the square on {AE} is commensurable with the square on {CF}, therefore the rectangle {AE} by {EB} is also commensurable with the rectangle {CF} by {FD}.
 
-But the rectangle *AE* by *EB* is medial, therefore the rectangle *CF* by *FD* is also medial. [!just X.76, X.23.Cor]
+But the rectangle {AE} by {EB} is medial, therefore the rectangle {CF} by {FD} is also medial. [!just X.76, X.23.Cor]
 
-Therefore *CF* and *FD* are straight lines incommensurable in square which make the sum of the squares on them rational, but the rectangle contained by them medial.
+Therefore {CF} and {FD} are straight lines incommensurable in square which make the sum of the squares on them rational, but the rectangle contained by them medial.
 
-Therefore *CD* is minor. [!just X.76]
+Therefore {CD} is minor. [!just X.76]
 
 Therefore, *a straight line commensurable with a minor straight line is minor.*
 
