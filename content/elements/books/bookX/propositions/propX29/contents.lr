@@ -21,14 +21,27 @@ statement: To find two square numbers such that their sum is also square.
 ----
 proof:
 
-Set out two numbers *AB* and *BC,* and let them be either both even or both odd. Then since, whether an even number is subtracted from an even number, or an odd number from an odd number, the remainder is even, therefore the remainder *AC* is even. [!just IX.24; IX.26]
+Set out two numbers {AB} and {BC}, and let them be either both even or both odd. Then since, whether an even number is subtracted from an even number, or an odd number from an odd number, the remainder is even, therefore the remainder {AC} is even. [!just IX.24; IX.26]
 
-Bisect *AC* at *D.* Let *AB* and *BC* also be either similar plane numbers, or square numbers, which are themselves also similar plane numbers.
+Bisect {AC} at {D}. Let {AB} and {BC} also be either similar plane numbers, or square numbers, which are themselves also similar plane numbers.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="60" tabindex="0"></canvas>
 <noscript><img alt="X.29 diagram" src="propX29l1.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's lemma figure: the number AB laid out as a line, with C and the
+    // midpoint D of AC on it. The numbers the proof names (BC, AC, CD, BD)
+    // are added as transparent highlight targets (;0;0;0), so the resting
+    // figure is unchanged. The walk is highlight beats; D appears with
+    // "Bisect AC at D".
+    //
+    // Draggables (checked against the bundle): A, B, C (lineSliders, the
+    // numbers set out) and the offscreen frees. D is derived (midpoint) and
+    // listed per slide.
+    var L1_GIVEN = ["A","B","C","AB","BC"];
+    var L1_EVEN  = L1_GIVEN.concat(["AC"]);
+    var L1_BIS   = L1_EVEN.concat(["D","CD"]);
+    var L1_ALL   = L1_BIS.concat(["BD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -40,15 +53,96 @@ Bisect *AC* at *D.* Let *AB* and *BC* also be either similar plane numbers, or s
             "B;point;lineSlider;A0,A3,230,0",
             "AB;line;connect;A,B;0;0;blue",
             "C;point;lineSlider;A0,A3,180,0",
-            "D;point;midpoint;A,C"
+            "D;point;midpoint;A,C",
+            // Highlight targets only — AB already draws these.
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "BD;line;connect;B,D;0;0;0"
         ],
+        slides: [
+            { text: "“To find two square numbers such that their sum is also square.”",
+              visible: L1_ALL,
+              highlighted: ["CD","BD"],
+              justifications: [{ ref: "Lemma 1" }] },
+            { text: "Set out two numbers {AB} and {BC}, and let them be either both even or both odd.",
+              visible: L1_GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "Then since, whether an even number is subtracted from an even number, or an odd number from an odd number,",
+              visible: L1_GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "the remainder is even, therefore the remainder {AC} is even.",
+              visible: L1_EVEN,
+              highlighted: ["AC"],
+              justifications: [{ claim: "even from even leaves even", ref: "IX.24" },
+                               { claim: "odd from odd leaves even", ref: "IX.26" }] },
+            { text: "Bisect {AC} at {D}.",
+              visible: L1_BIS,
+              highlighted: ["AC"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "Let {AB} and {BC} also be either similar plane numbers, or square numbers, which are themselves also similar plane numbers.",
+              visible: L1_BIS,
+              highlighted: ["AB","BC"] },
+            { text: "Now the product of {AB} and {BC} together with the square on {CD} equals the square on {BD}.",
+              visible: L1_ALL,
+              highlighted: ["AB","BC","CD","BD"],
+              justifications: [{ claim: "AB·BC + CD² = BD²", ref: "II.6" }] },
+            { text: "And the product of {AB} and {BC} is square,",
+              visible: L1_ALL,
+              highlighted: ["AB","BC"] },
+            { text: "inasmuch as it was proved that, if two similar plane numbers multiplied by one another make some number, the product is square.",
+              visible: L1_ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "AB·BC square", ref: "IX.1" }] },
+            { text: "Therefore two square numbers, the product of {AB} and {BC}, and the square on {CD},",
+              visible: L1_ALL,
+              highlighted: ["AB","BC","CD"] },
+            { text: "have been found which, when added together, make the square on {BD}.",
+              visible: L1_ALL,
+              highlighted: ["BD"] },
+            { text: "And it is clear that two square numbers, the square on {BD} and the square on {CD}, have again been found",
+              visible: L1_ALL,
+              highlighted: ["BD","CD"] },
+            { text: "such that their difference, the product of {AB} and {BC}, is a square, whenever {AB} and {BC} are similar plane numbers.",
+              visible: L1_ALL,
+              highlighted: ["AB","BC"] },
+            { text: "But when they are not similar plane numbers, two square numbers, the square on {BD} and the square on {DC|CD}, have been found",
+              visible: L1_ALL,
+              highlighted: ["BD","CD"] },
+            { text: "such that their difference, the product of {AB} and {BC}, is not square.",
+              visible: L1_ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "Lemma 1") return "#lemma1";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // (shared by the three canvases on this page).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.47":      "/elements/books/bookI/propositions/propI47/",
+        "II.6":      "/elements/books/bookII/propositions/propII6/",
+        "III.31":    "/elements/books/bookIII/propositions/propIII31/",
+        "V.19.Cor":  "/elements/books/bookV/propositions/propV19/#cor",
+        "IX.1":      "/elements/books/bookIX/propositions/propIX1/",
+        "IX.24":     "/elements/books/bookIX/propositions/propIX24/",
+        "IX.26":     "/elements/books/bookIX/propositions/propIX26/",
+        "X.6":       "/elements/books/bookX/propositions/propX6/",
+        "X.6.Cor":   "/elements/books/bookX/propositions/propX6/#cor",
+        "X.9":       "/elements/books/bookX/propositions/propX9/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-Now the product of *AB* and *BC* together with the square on *CD* equals the square on *BD.* And the product of *AB* and *BC* is square, inasmuch as it was proved that, if two similar plane numbers multiplied by one another make some number, the product is square. Therefore two square numbers, the product of *AB* and *BC,* and the square on *CD,* have been found which, when added together, make the square on *BD.* [!just II.6; IX.1]
+Now the product of {AB} and {BC} together with the square on {CD} equals the square on {BD}. And the product of {AB} and {BC} is square, inasmuch as it was proved that, if two similar plane numbers multiplied by one another make some number, the product is square. Therefore two square numbers, the product of {AB} and {BC}, and the square on {CD}, have been found which, when added together, make the square on {BD}. [!just II.6; IX.1]
 
-And it is clear that two square numbers, the square on *BD* and the square on *CD,* have again been found such that their difference, the product of *AB* and *BC,* is a square, whenever *AB* and *BC* are similar plane numbers. But when they are not similar plane numbers, two square numbers, the square on *BD* and the square on *DC,* have been found such that their difference, the product of *AB* and *BC,* is not square.
+And it is clear that two square numbers, the square on {BD} and the square on {CD}, have again been found such that their difference, the product of {AB} and {BC}, is a square, whenever {AB} and {BC} are similar plane numbers. But when they are not similar plane numbers, two square numbers, the square on {BD} and the square on {DC|CD}, have been found such that their difference, the product of {AB} and {BC}, is not square.
 
 <div class="qed">Q.E.D.</div>
 #### prop_section ####
@@ -64,16 +158,38 @@ statement: To find two square numbers such that their sum is not square.
 ----
 proof:
 
-Let the product of *AB* and *BC* we said, be square, and *CA* even. Bisect *CA* by *D.*
+Let the product of {AB:canvas_1} and {BC:canvas_1} we said, be square, and {CA|AC:canvas_1} even. Bisect {CA|AC:canvas_1} by {D:canvas_1}.
 
-It is then clear that the square product of *AB* and *BC* together with the square on *CD* equals the square on *BD.* <div class="just"><a href="/elements/books/bookX/propositions/propX29/#lemma1">Lemma 1</a></div>
+It is then clear that the square product of {AB:canvas_1} and {BC:canvas_1} together with the square on {CD:canvas_1} equals the square on {BD:canvas_1}. <div class="just"><a href="/elements/books/bookX/propositions/propX29/#lemma1">Lemma 1</a></div>
 
-Subtract the unit *DE.* Therefore the product of *AB* and *BC* together with the square on *CE* is less than the square on *BD.*
+Subtract the unit {DE:canvas_1}. Therefore the product of {AB:canvas_1} and {BC:canvas_1} together with the square on {CE:canvas_1} is less than the square on {BD:canvas_1}.
 
 <figure class="diagram">
 <canvas id="canvas_1" width="350" height="60" tabindex="0"></canvas>
 <noscript><img alt="X.29 Lemma 2 diagram" src="propX29l2.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's lemma figure: AB as a line with C, the midpoint D of AC, the
+    // unit DE (and DF, two units) cut off toward B, and G, H for the two
+    // reductios (AG double DE, AH double DF). U1-U2 is the unit, offscreen.
+    // Every number the proof names is added as a transparent highlight
+    // target (;0;0;0); the resting figure is unchanged. The walk is
+    // highlight beats with point-appears; each reductio's points and
+    // segments are withdrawn once its absurdity is reached.
+    //
+    // Draggables (checked against the bundle): A, B, C (lineSliders, the
+    // givens) and the offscreen frees U1, U2 (and A0, A3). D, E, F, G, H
+    // are derived (midpoint / cutoff) and listed per slide.
+    var L2_GIVEN = ["A","B","C","AB","BC","AC"];
+    var L2_BIS   = L2_GIVEN.concat(["D","CD","BD"]);
+    var L2_UNIT  = L2_BIS.concat(["E","DE","CE"]);
+    var L2_BE    = L2_UNIT.concat(["BE"]);
+    var L2_G     = L2_BE.concat(["G","AG"]);
+    var L2_GC    = L2_G.concat(["GC"]);
+    var L2_GB    = L2_GC.concat(["GB"]);
+    var L2_F     = L2_BE.concat(["F","BF"]);
+    var L2_H     = L2_F.concat(["H","AH","DF"]);
+    var L2_HC    = L2_H.concat(["HC","CF"]);
+    var L2_HB    = L2_HC.concat(["HB"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -93,43 +209,175 @@ Subtract the unit *DE.* Therefore the product of *AB* and *BC* together with the
             "G';point;cutoff;A,B,U1,U2;0;0",
             "G;point;cutoff;G',B,U1,U2",
             "H';point;cutoff;A,B,D,F;0;0",
-            "H;point;cutoff;H',B,D,F"
+            "H;point;cutoff;H',B,D,F",
+            // Highlight targets only — AB already draws these.
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "BE;line;connect;B,E;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "GC;line;connect;G,C;0;0;0",
+            "GB;line;connect;G,B;0;0;0",
+            "BF;line;connect;B,F;0;0;0",
+            "DF;line;connect;D,F;0;0;0",
+            "AH;line;connect;A,H;0;0;0",
+            "HC;line;connect;H,C;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "HB;line;connect;H,B;0;0;0"
         ],
+        slides: [
+            { text: "“To find two square numbers such that their sum is not square.”",
+              visible: L2_UNIT,
+              highlighted: ["AB","BC","CE"],
+              justifications: [{ ref: "Lemma 2" }] },
+            { text: "Let the product of {AB} and {BC} we said, be square, and {CA|AC} even.",
+              visible: L2_GIVEN,
+              highlighted: ["AB","BC","AC"] },
+            { text: "Bisect {CA|AC} by {D}.",
+              visible: L2_BIS,
+              highlighted: ["AC"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "It is then clear that the square product of {AB} and {BC} together with the square on {CD}",
+              visible: L2_BIS,
+              highlighted: ["AB","BC","CD"] },
+            { text: "equals the square on {BD}.",
+              visible: L2_BIS,
+              highlighted: ["BD"],
+              justifications: [{ claim: "AB·BC + CD² = BD²", ref: "Lemma 1" }] },
+            { text: "Subtract the unit {DE}.",
+              visible: L2_UNIT,
+              highlighted: ["DE"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "Therefore the product of {AB} and {BC} together with the square on {CE} is less than the square on {BD}.",
+              visible: L2_UNIT,
+              highlighted: ["AB","BC","CE","BD"] },
+            { text: "I say then that the product of {AB} and {BC} together with the square on {CE} is not square.",
+              visible: L2_UNIT,
+              highlighted: ["AB","BC","CE"] },
+            { text: "If it is square, then it either equals the square on {BE}, or is less than the square on {BE},",
+              visible: L2_BE,
+              highlighted: ["BE"] },
+            { text: "but cannot be greater lest {the unit|DE} be divided.",
+              visible: L2_BE,
+              highlighted: ["DE"] },
+            { text: "First, if possible, let the product of {AB} and {BC} together with the square on {CE} equal the square on {BE},",
+              visible: L2_BE,
+              highlighted: ["AB","BC","CE","BE"] },
+            { text: "and let {GA|AG} be double the unit {DE}.",
+              visible: L2_G,
+              highlighted: ["AG","DE"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "Since the whole {AC} is double the whole {CD}, and in them {AG} is double {DE},",
+              visible: L2_G,
+              highlighted: ["AC","CD","AG","DE"] },
+            { text: "therefore the remainder {GC} is also double the remainder {EC|CE}. Therefore {GC} is bisected by {E}.",
+              visible: L2_GC,
+              highlighted: ["GC","CE","E"] },
+            { text: "Therefore the product of {GB} and {BC} together with the square on {CE} equals the square on {BE}.",
+              visible: L2_GB,
+              highlighted: ["GB","BC","CE","BE"],
+              justifications: [{ claim: "GB·BC + CE² = BE²", ref: "II.6" }] },
+            { text: "But the product of {AB} and {BC} together with the square on {CE} also, by hypothesis, equals the square on {BE},",
+              visible: L2_GB,
+              highlighted: ["AB","BC","CE","BE"] },
+            { text: "therefore the product of {GB} and {BC} together with the square on {CE}",
+              visible: L2_GB,
+              highlighted: ["GB","BC","CE"] },
+            { text: "equals the product of {AB} and {BC} together with the square on {CE}.",
+              visible: L2_GB,
+              highlighted: ["AB","BC","CE"] },
+            { text: "And, if the common square on {CE} is subtracted, then it follows that {AB} equals {GB}, which is absurd.",
+              visible: L2_GB,
+              highlighted: ["AB","GB"] },
+            { text: "Therefore the product of {AB} and {BC} together with the square on {CE} does not equal the square on {BE}.",
+              visible: L2_BE,
+              highlighted: ["AB","BC","CE","BE"] },
+            { text: "I say next that neither is it less than the square on {BE}.",
+              visible: L2_BE,
+              highlighted: ["BE"] },
+            { text: "For, if possible, let it equal the square on {BF},",
+              visible: L2_F,
+              highlighted: ["BF"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "and let {HA|AH} be double {DF}.",
+              visible: L2_H,
+              highlighted: ["AH","DF"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Point.appear } ] } },
+            { text: "Now it will again follow that {HC} is double {CF}, so that {CH|HC} is bisected at {F},",
+              visible: L2_HC,
+              highlighted: ["HC","CF","F"] },
+            { text: "and for this reason the product of {HB} and {BC} together with the square on {FC|CF} equals the square on {BF}.",
+              visible: L2_HB,
+              highlighted: ["HB","BC","CF","BF"],
+              justifications: [{ claim: "HB·BC + FC² = BF²", ref: "II.6" }] },
+            { text: "But, by hypothesis, the product of {AB} and {BC} together with the square on {CE} also equals the square on {BF}.",
+              visible: L2_HB,
+              highlighted: ["AB","BC","CE","BF"] },
+            { text: "Thus the product of {HB} and {BC} together with the square on {CF} also equals",
+              visible: L2_HB,
+              highlighted: ["HB","BC","CF"] },
+            { text: "the product of {AB} and {BC} together with the square on {CE}, which is absurd.",
+              visible: L2_HB,
+              highlighted: ["AB","BC","CE"] },
+            { text: "Therefore the product of {AB} and {BC} together with the square on {CE} is not less than the square on {BE}.",
+              visible: L2_BE,
+              highlighted: ["AB","BC","CE","BE"] },
+            { text: "And it was proved that neither does it equal the square on {BE}.",
+              visible: L2_BE,
+              highlighted: ["BE"] },
+            { text: "Therefore the product of {AB} and {BC} together with the square on {CE} is not square.",
+              visible: L2_BE,
+              highlighted: ["AB","BC","CE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "Lemma 1") return "#lemma1";
+            if (ref === "Lemma 2") return "#lemma2";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-I say then that the product of *AB* and *BC* together with the square on *CE* is not square.
+I say then that the product of {AB} and {BC} together with the square on {CE} is not square.
 
-If it is square, then it either equals the square on *BE,* or is less than the square on *BE,* but cannot be greater lest the unit be divided.
+If it is square, then it either equals the square on {BE}, or is less than the square on {BE}, but cannot be greater lest the unit be divided.
 
-First, if possible, let the product of *AB* and *BC* together with the square on *CE* equal the square on *BE,* and let *GA* be double the unit *DE.*
+First, if possible, let the product of {AB} and {BC} together with the square on {CE} equal the square on {BE}, and let {GA|AG} be double the unit {DE}.
 
-Since the whole *AC* is double the whole *CD,* and in them *AG* is double *DE,* therefore the remainder *GC* is also double the remainder *EC.* Therefore *GC* is bisected by *E.*
+Since the whole {AC} is double the whole {CD}, and in them {AG} is double {DE}, therefore the remainder {GC} is also double the remainder {EC|CE}. Therefore {GC} is bisected by {E}.
 
-Therefore the product of *GB* and *BC* together with the square on *CE* equals the square on *BE.* [!just II.6]
+Therefore the product of {GB} and {BC} together with the square on {CE} equals the square on {BE}. [!just II.6]
 
-But the product of *AB* and *BC* together with the square on *CE* also, by hypothesis, equals the square on *BE,* therefore the product of *GB* and *BC* together with the square on *CE* equals the product of *AB* and *BC* together with the square on *CE.*
+But the product of {AB} and {BC} together with the square on {CE} also, by hypothesis, equals the square on {BE}, therefore the product of {GB} and {BC} together with the square on {CE} equals the product of {AB} and {BC} together with the square on {CE}.
 
-And, if the common square on *CE* is subtracted, then it follows that *AB* equals *GB,* which is absurd.
+And, if the common square on {CE} is subtracted, then it follows that {AB} equals {GB}, which is absurd.
 
-Therefore the product of *AB* and *BC* together with the square on *CE* does not equal the square on *BE.*
+Therefore the product of {AB} and {BC} together with the square on {CE} does not equal the square on {BE}.
 
-I say next that neither is it less than the square on *BE.*
+I say next that neither is it less than the square on {BE}.
 
-For, if possible, let it equal the square on *BF,* and let *HA* be double *DF.*
+For, if possible, let it equal the square on {BF}, and let {HA|AH} be double {DF}.
 
-Now it will again follow that *HC* is double *CF,* so that *CH* is bisected at *F,* and for this reason the product of *HB* and *BC* together with the square on *FC* equals the square on *BF.* [!just II.6]
+Now it will again follow that {HC} is double {CF}, so that {CH|HC} is bisected at {F}, and for this reason the product of {HB} and {BC} together with the square on {FC|CF} equals the square on {BF}. [!just II.6]
 
-But, by hypothesis, the product of *AB* and *BC* together with the square on *CE* also equals the square on *BF.*
+But, by hypothesis, the product of {AB} and {BC} together with the square on {CE} also equals the square on {BF}.
 
-Thus the product of *HB* and *BC* together with the square on *CF* also equals the product of *AB* and *BC* together with the square on *CE,* which is absurd.
+Thus the product of {HB} and {BC} together with the square on {CF} also equals the product of {AB} and {BC} together with the square on {CE}, which is absurd.
 
-Therefore the product of *AB* and *BC* together with the square on *CE* is not less than the square on *BE.*
+Therefore the product of {AB} and {BC} together with the square on {CE} is not less than the square on {BE}.
 
-And it was proved that neither does it equal the square on *BE.*
+And it was proved that neither does it equal the square on {BE}.
 
-Therefore the product of *AB* and *BC* together with the square on *CE* is not square.
+Therefore the product of {AB} and {BC} together with the square on {CE} is not square.
 
 <div class="qed">Q.E.D.</div>
 #### prop_section ####
@@ -139,12 +387,33 @@ statement: To find two rational straight lines commensurable in square only such
 ----
 proof:
 
-Set out any rational straight line *AB,* and two square numbers *CD* and *DE* such that their difference *CE* is not square.
+Set out any rational straight line {AB:canvas_2}, and two square numbers {CD:canvas_2} and {DE:canvas_2} such that their difference {CE:canvas_2} is not square.
 
 <figure class="diagram">
 <canvas id="canvas_2" width="260" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.29 diagram" src="propX29.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the rational line AB, the numbers CD (with E on it),
+    // the semicircle AFB (semi) and the triangle ABF (tri), F placed so that
+    // DC : CE = BA² : AF². Added, all invisible at rest: transparent
+    // highlight targets AF, FB, DE, CE (;0;0;0); faceless, strokeless twins
+    // semih / trih that carry the highlights of the filled semicircle and
+    // triangle so a raised random face never covers the figure (#140); the
+    // right angle at F (III.31), hidden at rest (showAngles is off).
+    //
+    // Statement slides stand over the full resting figure, lighting the
+    // lines found. The walk then builds it: the semicircle sweeps, F
+    // appears with the contrivance (AF lit), and the triangle outlines and
+    // fills with "Join FB".
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E (lineSliders,
+    // all set out in the first sentence) and the offscreen frees. F is
+    // derived (first of a bichord) and listed per slide.
+    var SET  = ["A","B","AB","C","D","E","CD","DE","CE"];
+    var SEMI = SET.concat(["semi","semih"]);
+    var CONT = SEMI.concat(["F","AF"]);
+    var JOIN = CONT.concat(["FB","tri","trih"]);
+    var RT   = JOIN.concat(["angF"]);
     geomlib.init({
         canvasid: "canvas_2",
         background: "35,19,100",
@@ -169,29 +438,142 @@ Set out any rational straight line *AB,* and two square numbers *CD* and *DE* su
             "FF'';line;bichord;ABF,AFcirc;0;0;0",
             "F;point;first;FF''",
             "semi;sector;arc;B,F,A;0;0;black;random",
-            "tri;polygon;triangle;A,B,F;0;0;black;random"
+            "tri;polygon;triangle;A,B,F;0;0;black;random",
+            // Highlight targets and the marker only — invisible at rest.
+            "AF;line;connect;A,F;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "semih;sector;arc;B,F,A;0;0;0;0",
+            "trih;polygon;triangle;A,B,F;0;0;0;0",
+            "angF;sector;angleMarkerRight;F,A,B"
         ],
+        slides: [
+            { text: "“To find two rational straight lines commensurable in square only",
+              visible: JOIN,
+              highlighted: ["AB","AF"],
+              justifications: [{ ref: "X.29" }] },
+            { text: "such that the square on {the greater|AB} is greater than the square on {the less|AF}",
+              visible: JOIN,
+              highlighted: ["AB","AF"] },
+            { text: "by the square on {a straight line|FB} commensurable in length with {the greater|AB}.”",
+              visible: JOIN,
+              highlighted: ["FB","AB"] },
+            { text: "Set out any rational straight line {AB},",
+              visible: SET,
+              highlighted: ["AB"] },
+            { text: "and two square numbers {CD} and {DE}",
+              visible: SET,
+              highlighted: ["CD","DE"] },
+            { text: "such that their difference {CE} is not square.",
+              visible: SET,
+              highlighted: ["CE"] },
+            { text: "Describe the semicircle {AFB|semih} on {AB},",
+              visible: SEMI,
+              highlighted: ["AB"],
+              transition: { animations: [
+                  { elem: "semi", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and let it be contrived that {DC|CD} is to {CE} as the square on {BA|AB} is to the square on {AF}.",
+              visible: CONT,
+              highlighted: ["CD","CE","AB","AF"],
+              justifications: [{ claim: "DC : CE = BA² : AF²", ref: "X.6.Cor" }],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "Join {FB}.",
+              visible: JOIN,
+              highlighted: ["FB"],
+              transition: { animations: [
+                  { elem: "tri", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Since the square on {BA|AB} is to the square on {AF} as {DC|CD} is to {CE},",
+              visible: JOIN,
+              highlighted: ["AB","AF","CD","CE"] },
+            { text: "therefore the square on {BA|AB} has to the square on {AF} the ratio which the number {DC|CD} has to the number {CE}.",
+              visible: JOIN,
+              highlighted: ["AB","AF","CD","CE"] },
+            { text: "Therefore the square on {BA|AB} is commensurable with the square on {AF}.",
+              visible: JOIN,
+              highlighted: ["AB","AF"],
+              justifications: [{ claim: "BA², AF² commensurable", ref: "X.6" }] },
+            { text: "But the square on {AB} is rational, therefore the square on {AF} is also rational. Therefore {AF} is also rational.",
+              visible: JOIN,
+              highlighted: ["AB","AF"],
+              justifications: [{ claim: "AF rational", ref: "X.Def.I.4" }] },
+            { text: "And, since {DC|CD} does not have to {CE} the ratio which a square number has to a square number,",
+              visible: JOIN,
+              highlighted: ["CD","CE"] },
+            { text: "neither does the square on {BA|AB} have to the square on {AF} the ratio which a square number has to a square number,",
+              visible: JOIN,
+              highlighted: ["AB","AF"] },
+            { text: "therefore {AB} is incommensurable in length with {AF}.",
+              visible: JOIN,
+              highlighted: ["AB","AF"],
+              justifications: [{ claim: "AB, AF incommensurable in length", ref: "X.9" }] },
+            { text: "Therefore {BA|AB} and {AF} are rational straight lines commensurable in square only.",
+              visible: JOIN,
+              highlighted: ["AB","AF"] },
+            { text: "And since {DC|CD} is to {CE} as the square on {BA|AB} is to the square on {AF},",
+              visible: JOIN,
+              highlighted: ["CD","CE","AB","AF"] },
+            { text: "therefore, in conversion, {CD} is to {DE} as the square on {AB} is to the square on {BF|FB}.",
+              visible: RT,
+              highlighted: ["CD","DE","AB","FB"],
+              justifications: [{ claim: "CD : DE = AB² : BF²", ref: "V.19.Cor" },
+                               { claim: "angle AFB right", ref: "III.31" },
+                               { claim: "AB² = AF² + FB²", ref: "I.47" }],
+              transition: { animations: [
+                  { elem: "angF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But {CD} has to {DE} the ratio which a square number has to a square number,",
+              visible: RT,
+              highlighted: ["CD","DE"] },
+            { text: "therefore the square on {AB} has to the square on {BF|FB} the ratio which a square number has to a square number.",
+              visible: RT,
+              highlighted: ["AB","FB"] },
+            { text: "Therefore {AB} is commensurable in length with {BF|FB}.",
+              visible: RT,
+              highlighted: ["AB","FB"],
+              justifications: [{ claim: "AB, BF commensurable in length", ref: "X.9" }] },
+            { text: "And the square on {AB} equals the sum of the squares on {AF} and {FB},",
+              visible: RT,
+              highlighted: ["AB","AF","FB","angF"] },
+            { text: "therefore the square on {AB} is greater than the square on {AF} by the square on {BF|FB} commensurable with {AB}.",
+              visible: RT,
+              highlighted: ["AB","AF","FB"] },
+            { text: "Therefore there have been found two rational straight lines {BA|AB} and {AF} commensurable in square only",
+              visible: RT,
+              highlighted: ["AB","AF"] },
+            { text: "such that the square on the greater {AB} is greater than the square on the less {AF}",
+              visible: RT,
+              highlighted: ["AB","AF"] },
+            { text: "by the square on {BF|FB} commensurable in length with {AB}.",
+              visible: RT,
+              highlighted: ["FB","AB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.29") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-Describe the semicircle *AFB* on *AB,* and let it be contrived that *DC* is to *CE* as the square on *BA* is to the square on *AF.* Join *FB.* [!just X.6.Cor]
+Describe the semicircle {AFB|semih} on {AB}, and let it be contrived that {DC|CD} is to {CE} as the square on {BA|AB} is to the square on {AF}. Join {FB}. [!just X.6.Cor]
 
-Since the square on *BA* is to the square on *AF* as *DC* is to *CE,* therefore the square on *BA* has to the square on *AF* the ratio which the number *DC* has to the number *CE.* Therefore the square on *BA* is commensurable with the square on *AF.* [!just X.6]
+Since the square on {BA|AB} is to the square on {AF} as {DC|CD} is to {CE}, therefore the square on {BA|AB} has to the square on {AF} the ratio which the number {DC|CD} has to the number {CE}. Therefore the square on {BA|AB} is commensurable with the square on {AF}. [!just X.6]
 
-But the square on *AB* is rational, therefore the square on *AF* is also rational. Therefore *AF* is also rational. [!just X.Def.I.4]
+But the square on {AB} is rational, therefore the square on {AF} is also rational. Therefore {AF} is also rational. [!just X.Def.I.4]
 
-And, since *DC* does not have to *CE* the ratio which a square number has to a square number, neither does the square on *BA* have to the square on *AF* the ratio which a square number has to a square number, therefore *AB* is incommensurable in length with *AF.* [!just X.9]
+And, since {DC|CD} does not have to {CE} the ratio which a square number has to a square number, neither does the square on {BA|AB} have to the square on {AF} the ratio which a square number has to a square number, therefore {AB} is incommensurable in length with {AF}. [!just X.9]
 
-Therefore *BA* and *AF* are rational straight lines commensurable in square only.
+Therefore {BA|AB} and {AF} are rational straight lines commensurable in square only.
 
-And since *DC* is to *CE* as the square on *BA* is to the square on *AF,* therefore, in conversion, *CD* is to *DE* as the square on *AB* is to the square on *BF.* [!just V.19.Cor; III.31, I.47]
+And since {DC|CD} is to {CE} as the square on {BA|AB} is to the square on {AF}, therefore, in conversion, {CD} is to {DE} as the square on {AB} is to the square on {BF|FB}. [!just V.19.Cor; III.31, I.47]
 
-But *CD* has to *DE* the ratio which a square number has to a square number, therefore the square on *AB* has to the square on *BF* the ratio which a square number has to a square number. Therefore *AB* is commensurable in length with *BF.* [!just X.9]
+But {CD} has to {DE} the ratio which a square number has to a square number, therefore the square on {AB} has to the square on {BF|FB} the ratio which a square number has to a square number. Therefore {AB} is commensurable in length with {BF|FB}. [!just X.9]
 
-And the square on *AB* equals the sum of the squares on *AF* and *FB,* therefore the square on *AB* is greater than the square on *AF* by the square on *BF* commensurable with *AB.*
+And the square on {AB} equals the sum of the squares on {AF} and {FB}, therefore the square on {AB} is greater than the square on {AF} by the square on {BF|FB} commensurable with {AB}.
 
-Therefore there have been found two rational straight lines *BA* and *AF* commensurable in square only such that the square on the greater *AB* is greater than the square on the less *AF* by the square on *BF* commensurable in length with *AB.*
+Therefore there have been found two rational straight lines {BA|AB} and {AF} commensurable in square only such that the square on the greater {AB} is greater than the square on the less {AF} by the square on {BF|FB} commensurable in length with {AB}.
 
 <div class="qed">Q.E.D.</div>
 </div>
@@ -202,7 +584,7 @@ guide:
 
 Euclid records in Lemma 1 a method to generate Pythagorean triples. As it depends only on the material in Book IX, logically, it could have appeared there rather than here in Book X. It appears here since it is needed in the proof of the proposition. It is likely much older than the rest of Book X.
 
-Here is a paraphrase of the method of lemma 1, written in a modern algebraic notation. Let *n*<sup>2</sup> (= *AB*) and *m*<sup>2</sup> (= *BC*) be two numbers of the same parity with *n*<sup>2</sup> larger. Then *n*<sup>2</sup> – *m*<sup>2</sup> is an even number, so let *k* (= *CD*) be its half. Then
+Here is a paraphrase of the method of lemma 1, written in a modern algebraic notation. Let *n*<sup>2</sup> (= {AB:canvas_0}) and *m*<sup>2</sup> (= {BC:canvas_0}) be two numbers of the same parity with *n*<sup>2</sup> larger. Then *n*<sup>2</sup> – *m*<sup>2</sup> is an even number, so let *k* (= {CD:canvas_0}) be its half. Then
 
 <center>
 <i>n</i><sup>2</sup><i>m</i><sup>2</sup> + <i>k</i><sup>2</sup> = (<i>m</i><sup>2</sup> + <i>k</i> )<sup>2</sup>.
@@ -281,11 +663,11 @@ Here's a table of a few small Pythagorean triples, indexed by *n* and *m.* Those
 
 #### About Proposition 29
 
-This proposition constructs a right triangle *ABF* with right angle at *F* so that sides *AB* and *AF* are rational lines commensurable in square only so that *BF* is commensurable to *AB.*
+This proposition constructs a right triangle {ABF|trih} with right angle at {F} so that sides {AB} and {AF} are rational lines commensurable in square only so that {BF|FB} is commensurable to {AB}.
 
 If we let *a,* *b,* and *f* be the lengths of the sides opposite the angles *A,* *B,* and *F,* respectively, that means that *f*<sup> 2</sup> = *a*<sup>2</sup> + *b*<sup>2</sup>; *a*<sup>2</sup>, *b*<sup>2</sup>, and *c*<sup>2</sup> are all rational numbers; *f*/*b* is irrational; and *f*/*a* is rational. That can be accomplished by making the proportion *a* : *b* : *f* = *d* : √(*c*<sup>2</sup> – *d*<sup>2</sup>) : *c,* where *c* and *d* are (whole) numbers such that *c*<sup>2</sup> – *d*<sup>2</sup> is not a square.
 
-That's what's done here, where *c*<sup>2</sup> is *CD,* and *d*<sup>2</sup> is *DE.*
+That's what's done here, where *c*<sup>2</sup> is {CD}, and *d*<sup>2</sup> is {DE}.
 
 #### Use of this proposition
 

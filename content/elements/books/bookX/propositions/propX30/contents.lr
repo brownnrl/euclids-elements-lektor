@@ -17,14 +17,31 @@ statement: To find two rational straight lines commensurable in square only such
 ----
 proof:
 
-Set out a rational straight line *AB,* and two square numbers *CE* and *ED* such that their sum *CD* is not square. Describe the semicircle *AFB* on *AB.* Let it be contrived that *DC* is to *CE* as the square on *BA* is to the square on *AF,* and join *FB.* <div class="just"><a href="/elements/books/bookX/propositions/propX29/#lemma2">X.29.Lem.2</a><br><a href="/elements/books/bookX/propositions/propX6/#cor">X.6,Cor.</a></div>
+Set out a rational straight line {AB}, and two square numbers {CE} and {ED|DE} such that their sum {CD} is not square. Describe the semicircle {AFB|semih} on {AB}. Let it be contrived that {DC|CD} is to {CE} as the square on {BA|AB} is to the square on {AF}, and join {FB}. <div class="just"><a href="/elements/books/bookX/propositions/propX29/#lemma2">X.29.Lem.2</a><br><a href="/elements/books/bookX/propositions/propX6/#cor">X.6,Cor.</a></div>
 
-Then, in a similar manner to the preceding, we can prove that *BA* and *AF* are rational straight lines commensurable in square only.
+Then, in a similar manner to the preceding, we can prove that {BA|AB} and {AF} are rational straight lines commensurable in square only.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.30 diagram" src="propX30.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure, the same construction as X.29: the rational line AB,
+    // the numbers CD (with E on it, CE and ED the two squares), the
+    // semicircle AFB (semi) and the triangle ABF (tri). Added, all invisible
+    // at rest: transparent highlight targets AF, FB, DE, CE (;0;0;0);
+    // faceless, strokeless twins semih / trih that carry the highlights of
+    // the filled semicircle and triangle (#140); the right angle at F
+    // (III.31), hidden at rest (showAngles is off). Statement slides stand
+    // over the full resting figure, as on X.29.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E (lineSliders,
+    // all set out in the first sentence) and the offscreen frees. F is
+    // derived (first of a bichord) and listed per slide.
+    var SET  = ["A","B","AB","C","D","E","CD","DE","CE"];
+    var SEMI = SET.concat(["semi","semih"]);
+    var CONT = SEMI.concat(["F","AF"]);
+    var JOIN = CONT.concat(["FB","tri","trih"]);
+    var RT   = JOIN.concat(["angF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,19 +66,120 @@ Then, in a similar manner to the preceding, we can prove that *BA* and *AF* are 
             "FF'';line;bichord;ABF,AFcirc;0;0;0",
             "F;point;first;FF''",
             "semi;sector;arc;B,F,A;0;0;black;random",
-            "tri;polygon;triangle;A,B,F;0;0;black;random"
+            "tri;polygon;triangle;A,B,F;0;0;black;random",
+            // Highlight targets and the marker only — invisible at rest.
+            "AF;line;connect;A,F;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "semih;sector;arc;B,F,A;0;0;0;0",
+            "trih;polygon;triangle;A,B,F;0;0;0;0",
+            "angF;sector;angleMarkerRight;F,A,B"
         ],
+        slides: [
+            { text: "“To find two rational straight lines commensurable in square only",
+              visible: JOIN,
+              highlighted: ["AB","AF"],
+              justifications: [{ ref: "X.30" }] },
+            { text: "such that the square on {the greater|AB} is greater than the square on {the less|AF}",
+              visible: JOIN,
+              highlighted: ["AB","AF"] },
+            { text: "by the square on {a straight line|FB} incommensurable in length with {the greater|AB}.”",
+              visible: JOIN,
+              highlighted: ["FB","AB"] },
+            { text: "Set out a rational straight line {AB},",
+              visible: SET,
+              highlighted: ["AB"] },
+            { text: "and two square numbers {CE} and {ED|DE} such that their sum {CD} is not square.",
+              visible: SET,
+              highlighted: ["CE","DE"],
+              justifications: [{ claim: "CE + ED not square", ref: "X.29.Lem.2" }] },
+            { text: "Describe the semicircle {AFB|semih} on {AB}.",
+              visible: SEMI,
+              highlighted: ["AB"],
+              transition: { animations: [
+                  { elem: "semi", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Let it be contrived that {DC|CD} is to {CE} as the square on {BA|AB} is to the square on {AF},",
+              visible: CONT,
+              highlighted: ["CD","CE","AB","AF"],
+              justifications: [{ claim: "DC : CE = BA² : AF²", ref: "X.6.Cor" }],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "and join {FB}.",
+              visible: JOIN,
+              highlighted: ["FB"],
+              transition: { animations: [
+                  { elem: "tri", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Then, in a similar manner to the preceding,",
+              visible: JOIN,
+              highlighted: ["AB","AF"],
+              justifications: [{ ref: "X.29" }] },
+            { text: "we can prove that {BA|AB} and {AF} are rational straight lines commensurable in square only.",
+              visible: JOIN,
+              highlighted: ["AB","AF"] },
+            { text: "Since {DC|CD} is to {CE} as the square on {BA|AB} is to the square on {AF},",
+              visible: JOIN,
+              highlighted: ["CD","CE","AB","AF"] },
+            { text: "therefore, in conversion, {CD} is to {DE} as the square on {AB} is to the square on {BF|FB}.",
+              visible: RT,
+              highlighted: ["CD","DE","AB","FB"],
+              justifications: [{ claim: "CD : DE = AB² : BF²", ref: "V.19.Cor" },
+                               { claim: "angle AFB right", ref: "III.31" },
+                               { claim: "AB² = AF² + FB²", ref: "I.47" }],
+              transition: { animations: [
+                  { elem: "angF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But {CD} does not have to {DE} the ratio which a square number has to a square number,",
+              visible: RT,
+              highlighted: ["CD","DE"] },
+            { text: "therefore neither has the square on {AB} to the square on {BF|FB} the ratio which a square number has to a square number.",
+              visible: RT,
+              highlighted: ["AB","FB"] },
+            { text: "Therefore {AB} is incommensurable in length with {BF|FB}.",
+              visible: RT,
+              highlighted: ["AB","FB"],
+              justifications: [{ claim: "AB, BF incommensurable in length", ref: "X.9" }] },
+            { text: "And the square on {AB} is greater than the square on {AF} by the square on {FB} incommensurable with {AB}.",
+              visible: RT,
+              highlighted: ["AB","AF","FB","angF"],
+              justifications: [{ claim: "AB² = AF² + FB²", ref: "I.47" }] },
+            { text: "Therefore {AB} and {AF} are rational straight lines commensurable in square only,",
+              visible: RT,
+              highlighted: ["AB","AF"] },
+            { text: "and the square on {AB} is greater than the square on {AF}",
+              visible: RT,
+              highlighted: ["AB","AF"] },
+            { text: "by the square on {FB} incommensurable in length with {AB}.",
+              visible: RT,
+              highlighted: ["FB","AB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.30") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.47":       "/elements/books/bookI/propositions/propI47/",
+        "III.31":     "/elements/books/bookIII/propositions/propIII31/",
+        "V.19.Cor":   "/elements/books/bookV/propositions/propV19/#cor",
+        "X.6.Cor":    "/elements/books/bookX/propositions/propX6/#cor",
+        "X.9":        "/elements/books/bookX/propositions/propX9/",
+        "X.29":       "/elements/books/bookX/propositions/propX29/",
+        "X.29.Lem.2": "/elements/books/bookX/propositions/propX29/#lemma2"
     });
 </script>
 </figure>
 
-Since *DC* is to *CE* as the square on *BA* is to the square on *AF,* therefore, in conversion, *CD* is to *DE* as the square on *AB* is to the square on *BF.* [!just V.19.Cor; III.31, I.47]
+Since {DC|CD} is to {CE} as the square on {BA|AB} is to the square on {AF}, therefore, in conversion, {CD} is to {DE} as the square on {AB} is to the square on {BF|FB}. [!just V.19.Cor; III.31, I.47]
 
-But *CD* does not have to *DE* the ratio which a square number has to a square number, therefore neither has the square on *AB* to the square on *BF* the ratio which a square number has to a square number. Therefore *AB* is incommensurable in length with *BF.* [!just X.9]
+But {CD} does not have to {DE} the ratio which a square number has to a square number, therefore neither has the square on {AB} to the square on {BF|FB} the ratio which a square number has to a square number. Therefore {AB} is incommensurable in length with {BF|FB}. [!just X.9]
 
-And the square on *AB* is greater than the square on *AF* by the square on *FB* incommensurable with *AB.* [!just I.47]
+And the square on {AB} is greater than the square on {AF} by the square on {FB} incommensurable with {AB}. [!just I.47]
 
-Therefore *AB* and *AF* are rational straight lines commensurable in square only, and the square on *AB* is greater than the square on *AF* by the square on *FB* incommensurable in length with *AB.*
+Therefore {AB} and {AF} are rational straight lines commensurable in square only, and the square on {AB} is greater than the square on {AF} by the square on {FB} incommensurable in length with {AB}.
 
 <div class="qed">Q.E.D.</div>
 ----
