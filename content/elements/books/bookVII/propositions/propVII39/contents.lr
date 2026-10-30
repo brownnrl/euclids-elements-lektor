@@ -17,14 +17,29 @@ statement: To find the number which is the least that has given parts.
 ----
 proof:
 
-Let *A, B,* and *C* be the given parts.
+Let {A}, {B}, and {C} be the given parts.
 
-It is required to find the number which is the least that will have the parts *A, B,* and *C.*
+It is required to find the number which is the least that will have the parts {A}, {B}, and {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="205" tabindex="0"></canvas>
 <noscript><img alt="VII.39 diagram" src="propVII39.gif"/></noscript>
 <script type="text/javascript">
+    // A, B, C the given parts; D, E, F the numbers called by the same name;
+    // G the least number they measure; H the supposed lesser number of the
+    // reductio. Line segments only, so the walk is highlight beats. H is
+    // withdrawn on the closing slide once the supposition is refuted.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2, D1, D2, E1, F1, G1, H1, H2 (zero-colour handles) and
+    // the off-canvas, colourless rail and unit ends. D, E, F arrive with
+    // "Let D, E, and F be numbers", G with "Take G", and H with "there is
+    // some number H", so D1, D2, E1, F1, G1, H1 and H2 are deferred; E2, F2
+    // and G2 (proportion) are derived and listed per slide.
+    var GIVEN  = ["A","B","C"];
+    var WITH_D = GIVEN.concat(["D","E","E2","F","F2"]);
+    var WITH_G = WITH_D.concat(["G","G2"]);
+    var WITH_H = WITH_G.concat(["H"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -68,23 +83,92 @@ It is required to find the number which is the least that will have the parts *A
             "H2;point;lineSlider;H0,H3,200,0;0",
             "H;line;connect;H1,H2;black"
         ],
+        deferDraggables: ["D1","D2","E1","F1","G1","H1","H2"],
+        slides: [
+            { text: "“To find the number which is the least that has given parts.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "VII.39" }] },
+            { text: "Let {A}, {B}, and {C} be the given parts.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "It is required to find the number which is the least that will have the parts {A}, {B}, and {C}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "Let {D}, {E}, and {F} be numbers called by the same name as the parts {A}, {B}, and {C}.",
+              visible: WITH_D,
+              highlighted: ["D","E","F","A","B","C"] },
+            { text: "Take {G}, the least number measured by {D}, {E}, and {F}.",
+              visible: WITH_G,
+              highlighted: ["G","D","E","F"],
+              justifications: [{ ref: "VII.36" }] },
+            { text: "Therefore {G} has parts called by the same name as {D}, {E}, and {F}.",
+              visible: WITH_G,
+              highlighted: ["G","D","E","F"],
+              justifications: [{ ref: "VII.37" }] },
+            { text: "But {A}, {B}, and {C} are parts called by the same name as {D}, {E}, and {F},",
+              visible: WITH_G,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "therefore {G} has the parts {A}, {B}, and {C}.",
+              visible: WITH_G,
+              highlighted: ["G","A","B","C"] },
+            { text: "I say next that it is also the least number that has.",
+              visible: WITH_G,
+              highlighted: ["G"] },
+            { text: "If not, there is some number {H} less than {G} which has the parts {A}, {B}, and {C}.",
+              visible: WITH_H,
+              highlighted: ["H","G","A","B","C"] },
+            { text: "Since {H} has the parts {A}, {B}, and {C},",
+              visible: WITH_H,
+              highlighted: ["H","A","B","C"] },
+            { text: "therefore {H} is measured by numbers called by the same name as the parts {A}, {B}, and {C}.",
+              visible: WITH_H,
+              highlighted: ["H","A","B","C"] },
+            { text: "But {D}, {E}, and {F} are numbers called by the same name as the parts {A}, {B}, and {C},",
+              visible: WITH_H,
+              highlighted: ["D","E","F","A","B","C"] },
+            { text: "therefore {H} is measured by {D}, {E}, and {F}.",
+              visible: WITH_H,
+              highlighted: ["H","D","E","F"],
+              justifications: [{ ref: "VII.38" }] },
+            { text: "And it is less than {G}, which is impossible.",
+              visible: WITH_H,
+              highlighted: ["H","G"] },
+            // The supposition is refuted: H is withdrawn.
+            { text: "Therefore there is no number less than {G} that has the parts {A}, {B}, and {C}.",
+              visible: WITH_G,
+              highlighted: ["G","A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.39") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.36": "/elements/books/bookVII/propositions/propVII36/",
+        "VII.37": "/elements/books/bookVII/propositions/propVII37/",
+        "VII.38": "/elements/books/bookVII/propositions/propVII38/"
     });
 </script>
 </figure>
 
-Let *D, E,* and *F* be numbers called by the same name as the parts *A, B,* and *C.* Take *G,* the least number measured by *D, E,* and *F.* [!just VII.36]
+Let {D}, {E}, and {F} be numbers called by the same name as the parts {A}, {B}, and {C}. Take {G}, the least number measured by {D}, {E}, and {F}. [!just VII.36]
 
-Therefore *G* has parts called by the same name as *D, E,* and *F.* [!just VII.37]
+Therefore {G} has parts called by the same name as {D}, {E}, and {F}. [!just VII.37]
 
-But *A, B,* and *C* are parts called by the same name as *D, E,* and *F,* therefore *G* has the parts *A, B,* and *C.*
+But {A}, {B}, and {C} are parts called by the same name as {D}, {E}, and {F}, therefore {G} has the parts {A}, {B}, and {C}.
 
 I say next that it is also the least number that has.
 
-If not, there is some number *H* less than *G* which has the parts *A, B,* and *C.*
+If not, there is some number {H} less than {G} which has the parts {A}, {B}, and {C}.
 
-Since *H* has the parts *A, B,* and *C,* therefore *H* is measured by numbers called by the same name as the parts *A, B,* and *C.* But *D, E,* and *F* are numbers called by the same name as the parts *A, B,* and *C,* therefore *H* is measured by *D, E,* and *F.* [!just VII.38]
+Since {H} has the parts {A}, {B}, and {C}, therefore {H} is measured by numbers called by the same name as the parts {A}, {B}, and {C}. But {D}, {E}, and {F} are numbers called by the same name as the parts {A}, {B}, and {C}, therefore {H} is measured by {D}, {E}, and {F}. [!just VII.38]
 
-And it is less than *G,* which is impossible. Therefore there is no number less than *G* that has the parts *A, B,* and *C.*
+And it is less than {G}, which is impossible. Therefore there is no number less than {G} that has the parts {A}, {B}, and {C}.
 
 <div class="qed">Q.E.D.</div>
 ----

@@ -15,14 +15,25 @@ statement: If a number is measured by any number, then the number which is measu
 ----
 proof:
 
-Let the number *A* be measured by any number *B.*
+Let the number {A} be measured by any number {B}.
 
-I say that *A* has a part called by the same name as *B.*
+I say that {A} has a part called by the same name as {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="170" tabindex="0"></canvas>
 <noscript><img alt="VII.37 diagram" src="propVII37.gif"/></noscript>
 <script type="text/javascript">
+    // A measured by B; C as many units as the times B measures A; D the
+    // unit. Line segments only, so the walk is highlight beats.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2, D1 (zero-colour handles) and the off-canvas,
+    // colourless rail ends. C arrives with "Let there be as many units in C"
+    // and the unit D with "the unit D also measures", so C1, C2 and D1 are
+    // deferred; D2 (proportion) is derived and listed per slide.
+    var GIVEN  = ["A","B"];
+    var WITH_C = GIVEN.concat(["C"]);
+    var WITH_D = WITH_C.concat(["D","D2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,15 +60,76 @@ I say that *A* has a part called by the same name as *B.*
             "D2;point;proportion;A1,A2,B1,B2,C1,C2,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        deferDraggables: ["C1","C2","D1"],
+        slides: [
+            { text: "“If a number is measured by any number,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "then the number which is measured has a part called by the same name as the measuring number.”",
+              visible: WITH_C,
+              highlighted: ["A","C","B"],
+              justifications: [{ ref: "VII.37" }] },
+            { text: "Let the number {A} be measured by any number {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that {A} has a part called by the same name as {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Let there be as many units in {C} as the times that {B} measures {A}.",
+              visible: WITH_C,
+              highlighted: ["C","B","A"] },
+            { text: "Since {B} measures {A} according to the units in {C},",
+              visible: WITH_C,
+              highlighted: ["B","A","C"] },
+            { text: "and the unit {D} also measures the number {C} according to the units in it,",
+              visible: WITH_D,
+              highlighted: ["D","C"] },
+            { text: "therefore the unit {D} measures the number {C} the same number of times as {B} measures {A}.",
+              visible: WITH_D,
+              highlighted: ["D","C","B","A"] },
+            { text: "Therefore, alternately, the unit {D} measures the number {B} the same number of times as {C} measures {A}.",
+              visible: WITH_D,
+              highlighted: ["D","B","C","A"],
+              justifications: [{ ref: "VII.15" }] },
+            { text: "Therefore, whatever part the unit {D} is of the number {B}, the same part is {C} of {A} also.",
+              visible: WITH_D,
+              highlighted: ["D","B","C","A"] },
+            { text: "But the unit {D} is a part of the number {B} called by the same name as it,",
+              visible: WITH_D,
+              highlighted: ["D","B"] },
+            { text: "therefore {C} is also a part of {A} called by the same name as {B},",
+              visible: WITH_D,
+              highlighted: ["C","A","B"] },
+            { text: "so that {A} has a part {C} which is called by the same name as {B}.",
+              visible: WITH_D,
+              highlighted: ["A","C","B"] },
+            { text: "Therefore, if a number is measured by any number,",
+              visible: WITH_D,
+              highlighted: ["A","B"] },
+            { text: "then the number which is measured has a part called by the same name as the measuring number.",
+              visible: WITH_D,
+              highlighted: ["A","C","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.37") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.15": "/elements/books/bookVII/propositions/propVII15/"
     });
 </script>
 </figure>
 
-Let there be as many units in *C* as the times that *B* measures *A.*
+Let there be as many units in {C} as the times that {B} measures {A}.
 
-Since *B* measures *A* according to the units in *C,* and the unit *D* also measures the number *C* according to the units in it, therefore the unit *D* measures the number *C* the same number of times as *B* measures *A.*
+Since {B} measures {A} according to the units in {C}, and the unit {D} also measures the number {C} according to the units in it, therefore the unit {D} measures the number {C} the same number of times as {B} measures {A}.
 
-Therefore, alternately, the unit *D* measures the number *B* the same number of times as *C* measures *A.* Therefore, whatever part the unit *D* is of the number *B,* the same part is *C* of *A* also. But the unit *D* is a part of the number *B* called by the same name as it, therefore *C* is also a part of *A* called by the same name as *B,* so that *A* has a part *C* which is called by the same name as *B.* [!just VII.15]
+Therefore, alternately, the unit {D} measures the number {B} the same number of times as {C} measures {A}. Therefore, whatever part the unit {D} is of the number {B}, the same part is {C} of {A} also. But the unit {D} is a part of the number {B} called by the same name as it, therefore {C} is also a part of {A} called by the same name as {B}, so that {A} has a part {C} which is called by the same name as {B}. [!just VII.15]
 
 Therefore, *if a number is measured by any number, then the number which is measured has a part called by the same name as the measuring number.*
 

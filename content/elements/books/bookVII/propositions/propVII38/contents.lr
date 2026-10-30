@@ -15,12 +15,24 @@ statement: If a number has any part whatever, then it is measured by a number ca
 ----
 proof:
 
-Let the number *A* have any part whatever, *B,* and let *C* be a number called by the same name as the part *B.*
+Let the number {A} have any part whatever, {B}, and let {C} be a number called by the same name as the part {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="170" tabindex="0"></canvas>
 <noscript><img alt="VII.38 diagram" src="propVII38.gif"/></noscript>
 <script type="text/javascript">
+    // A has the part B; C is called by the same name as B; D the unit.
+    // Line segments only, so the walk is highlight beats.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, D1, D2, C1 (zero-colour handles) and the off-canvas,
+    // colourless rail ends. C arrives with "let C be a number called by the
+    // same name" and the unit D with "the unit D is also a part of C", so
+    // C1, D1 and D2 are deferred; C2 (proportion) is derived and listed per
+    // slide.
+    var GIVEN  = ["A","B"];
+    var WITH_C = GIVEN.concat(["C","C2"]);
+    var WITH_D = WITH_C.concat(["D"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,15 +59,70 @@ Let the number *A* have any part whatever, *B,* and let *C* be a number called b
             "C2;point;proportion;B1,B2,A1,A2,D1,D2,C1,C3;0",
             "C;line;connect;C1,C2;black"
         ],
+        deferDraggables: ["C1","D1","D2"],
+        slides: [
+            { text: "“If a number has any part whatever,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "then it is measured by a number called by the same name as the part.”",
+              visible: WITH_C,
+              highlighted: ["C","A","B"],
+              justifications: [{ ref: "VII.38" }] },
+            { text: "Let the number {A} have any part whatever, {B},",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and let {C} be a number called by the same name as the part {B}.",
+              visible: WITH_C,
+              highlighted: ["C","B"] },
+            { text: "I say that {C} measures {A}.",
+              visible: WITH_C,
+              highlighted: ["C","A"] },
+            { text: "Since {B} is a part of {A} called by the same name as {C},",
+              visible: WITH_C,
+              highlighted: ["B","A","C"] },
+            { text: "and the unit {D} is also a part of {C} called by the same name as it,",
+              visible: WITH_D,
+              highlighted: ["D","C"] },
+            { text: "therefore the part {B} of {A} is the same part of the unit {D} of the number {C}.",
+              visible: WITH_D,
+              highlighted: ["B","A","D","C"] },
+            { text: "Therefore the unit {D} measures the number {C} the same number of times that {B} measures {A}.",
+              visible: WITH_D,
+              highlighted: ["D","C","B","A"] },
+            { text: "Therefore, alternately, the unit {D} measures the number {B} the same number of times that {C} measures {A}.",
+              visible: WITH_D,
+              highlighted: ["D","B","C","A"],
+              justifications: [{ ref: "VII.15" }] },
+            { text: "Therefore {C} measures {A}.",
+              visible: WITH_D,
+              highlighted: ["C","A"] },
+            { text: "Therefore, if a number has any part whatever,",
+              visible: WITH_D,
+              highlighted: ["A","B"] },
+            { text: "then it is measured by a number called by the same name as the part.",
+              visible: WITH_D,
+              highlighted: ["C","A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.38") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.15": "/elements/books/bookVII/propositions/propVII15/"
     });
 </script>
 </figure>
 
-I say that *C* measures *A.*
+I say that {C} measures {A}.
 
-Since *B* is a part of *A* called by the same name as *C,* and the unit *D* is also a part of *C* called by the same name as it, therefore the part *B* of *A* is the same part of the unit *D* of the number *C.* Therefore the unit *D* measures the number *C* the same number of times that *B* measures *A.*
+Since {B} is a part of {A} called by the same name as {C}, and the unit {D} is also a part of {C} called by the same name as it, therefore the part {B} of {A} is the same part of the unit {D} of the number {C}. Therefore the unit {D} measures the number {C} the same number of times that {B} measures {A}.
 
-Therefore, alternately, the unit *D* measures the number *B* the same number of times that *C* measures *A.* Therefore *C* measures *A.* [!just VII.15]
+Therefore, alternately, the unit {D} measures the number {B} the same number of times that {C} measures {A}. Therefore {C} measures {A}. [!just VII.15]
 
 Therefore, *if a number has any part whatever, then it is measured by a number called by the same name as the part.*
 
