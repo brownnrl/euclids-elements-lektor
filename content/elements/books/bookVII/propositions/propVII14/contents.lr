@@ -15,14 +15,15 @@ statement: If there are any number of numbers, and others equal to them in multi
 ----
 proof:
 
-Let there be as many numbers as we please *A, B,* and *C,* and others equal to them in multitude *D, E,* and *F,* which taken two and two are in the same ratio, so that *A* is to *B* as *D* is to *E,* and *B* is to *C* as *E* is to *F.*
+Let there be as many numbers as we please {A}, {B}, and {C}, and others equal to them in multitude {D}, {E}, and {F}, which taken two and two are in the same ratio, so that {A} is to {B} as {D} is to {E}, and {B} is to {C} as {E} is to {F}.
 
-I say that, *ex aequali A* is to *C* as *D* is to *F.*
+I say that, *ex aequali* {A} is to {C} as {D} is to {F}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="140" tabindex="0"></canvas>
 <noscript><img alt="VII.14 diagram" src="propVII14.gif"/></noscript>
 <script type="text/javascript">
+    var GIVEN = ["A","B","C","D","E","F","E2","F2"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -53,13 +54,94 @@ I say that, *ex aequali A* is to *C* as *D* is to *F.*
             "F2;point;proportion;A1,A2,C1,C2,D1,D2,F1,C3;0",
             "F;line;connect;F1,F2;black"
         ],
+        // Draggables (checked against the bundle): the lineSlider ends of
+        // A, B, C, D and the left ends of E, F — all givens, standing from
+        // slide 1. E2 and F2 are derived (fourth proportionals) and are
+        // listed so the right ends of E and F follow the visible sets.
+        // Line segments only: highlight beats.
+        slides: [
+            { text: "“If there are any number of numbers,”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "“and others equal to them in multitude,”",
+              visible: GIVEN,
+              highlighted: ["D","E","F"] },
+            { text: "“which taken two and two together are in the same ratio,”",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "“then they are also in the same ratio ex aequali.”",
+              visible: GIVEN,
+              highlighted: ["A","C","D","F"],
+              justifications: [{ ref: "VII.14" }] },
+            { text: "Let there be as many numbers as we please {A}, {B}, and {C},",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "and others equal to them in multitude {D}, {E}, and {F},",
+              visible: GIVEN,
+              highlighted: ["D","E","F"] },
+            { text: "which taken two and two are in the same ratio,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "so that {A} is to {B} as {D} is to {E},",
+              visible: GIVEN,
+              highlighted: ["A","B","D","E"] },
+            { text: "and {B} is to {C} as {E} is to {F}.",
+              visible: GIVEN,
+              highlighted: ["B","C","E","F"] },
+            { text: "I say that, ex aequali {A} is to {C} as {D} is to {F}.",
+              visible: GIVEN,
+              highlighted: ["A","C","D","F"] },
+            { text: "Since {A} is to {B} as {D} is to {E}, therefore, alternately {A} is to {D} as {B} is to {E}.",
+              visible: GIVEN,
+              highlighted: ["A","D","B","E"],
+              justifications: [{ ref: "VII.13" }] },
+            { text: "Again, since {B} is to {C} as {E} is to {F},",
+              visible: GIVEN,
+              highlighted: ["B","C","E","F"] },
+            { text: "therefore, alternately {B} is to {E} as {C} is to {F}.",
+              visible: GIVEN,
+              highlighted: ["B","E","C","F"],
+              justifications: [{ ref: "VII.13" }] },
+            { text: "But {B} is to {E} as {A} is to {D},",
+              visible: GIVEN,
+              highlighted: ["B","E","A","D"] },
+            { text: "therefore {A} is to {D} as {C} is to {F}.",
+              visible: GIVEN,
+              highlighted: ["A","D","C","F"],
+              justifications: [{ ref: "V.11" }] },
+            { text: "Therefore, alternately {A} is to {C} as {D} is to {F}.",
+              visible: GIVEN,
+              highlighted: ["A","C","D","F"],
+              justifications: [{ ref: "VII.13" }] },
+            { text: "Therefore, if there are any number of numbers, and others equal to them in multitude,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "which taken two and two together are in the same ratio,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "then they are also in the same ratio ex aequali.",
+              visible: GIVEN,
+              highlighted: ["A","C","D","F"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.14") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.13": "/elements/books/bookVII/propositions/propVII13/",
+        "V.11": "/elements/books/bookV/propositions/propV11/"
     });
 </script>
 </figure>
 
-Since *A* is to *B* as *D* is to *E,* therefore, alternately *A* is to *D* as *B* is to *E.* [!just VII.13]
+Since {A} is to {B} as {D} is to {E}, therefore, alternately {A} is to {D} as {B} is to {E}. [!just VII.13]
 
-Again, since *B* is to *C* as *E* is to *F,* therefore, alternately *B* is to *E* as *C* is to *F.* But *B* is to *E* as *A* is to *D,* therefore *A* is to *D* as *C* is to *F.* Therefore, alternately *A* is to *C* as *D* is to *F.* [!just VII.13; V.11]
+Again, since {B} is to {C} as {E} is to {F}, therefore, alternately {B} is to {E} as {C} is to {F}. But {B} is to {E} as {A} is to {D}, therefore {A} is to {D} as {C} is to {F}. Therefore, alternately {A} is to {C} as {D} is to {F}. [!just VII.13; V.11]
 
 Therefore, *if there are any number of numbers, and others equal to them in multitude, which taken two and two together are in the same ratio, then they are also in the same ratio* ex aequali.
 
@@ -91,7 +173,7 @@ Euclid takes *n* to be 3 in his proof.
 
 The proof is straightforward, and a simpler proof than the one given in V.22 for magnitudes.
 
-Note that at one point, the missing analogue of proposition @V.11 is used: from the two proportions *B* : *E* = *C* : *F* and *B* : *E* = *A* : *D,* the conclusion *A* : *D* = *C* : *F* is drawn. Similar missing analogues of propositions from Book V are used in other proofs in book VII. See, for instance, @VII.19 where V.7 and V.9 are used. That could mean that when Eudoxus developed the material for Book V he was more careful than his predecessors who created Book VII.
+Note that at one point, the missing analogue of proposition @V.11 is used: from the two proportions {B} : {E} = {C} : {F} and {B} : {E} = {A} : {D}, the conclusion {A} : {D} = {C} : {F} is drawn. Similar missing analogues of propositions from Book V are used in other proofs in book VII. See, for instance, @VII.19 where V.7 and V.9 are used. That could mean that when Eudoxus developed the material for Book V he was more careful than his predecessors who created Book VII.
 
 This proposition allows the use of extended proportions such as
 
