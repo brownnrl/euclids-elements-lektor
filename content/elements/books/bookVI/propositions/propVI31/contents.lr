@@ -15,16 +15,39 @@ statement: In right-angled triangles the figure on the side opposite the right a
 ----
 proof:
 
-Let *ABC* be a right-angled triangle having the angle *BAC* right.
+Let {ABC|ABCt} be a right-angled triangle having the angle {BAC|rtA} right.
 
-I say that the figure on *BC* equals the sum of the similar and similarly described figures on *BA* and *AC.*
+I say that the figure on {BC} equals the sum of the similar and similarly described figures on {BA} and {AC}.
 
-Draw the perpendicular *AD.* [!just I.12]
+Draw the perpendicular {AD}. [!just I.12]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="380" height="280" tabindex="0"></canvas>
 <noscript><img alt="VI.31 diagram" src="propVI31.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the right-angled triangle ABC (A on the circle on
+    // BC), the perpendicular AD, and the similar and similarly described
+    // figures BCFE on BC, ABHG on BA and CANK on AC.
+    //
+    // AD is Joyce's own line, declared A to D, so it strokes from A when it
+    // is drawn and is withheld until then. Everything else added is
+    // transparent (;0;0;0 lines, ;0;0;0;0 polygons), so the resting figure
+    // is unchanged: the sides BC, BA, AC, BD, DC, the triangles DBA and DAC,
+    // and ABCt, a faceless twin of the filled ABC (a highlighted filled
+    // polygon is raised over the markers and AD inside it, #140), reached
+    // as {ABC|ABCt}. The three outer figures overlap nothing, so they are
+    // highlighted as they are.
+    //
+    // Right angles: BAC by hypothesis and ADB / ADC by the perpendicular
+    // (I.12), so both are angleMarkerRight.
+    //
+    // Draggables (checked against the bundle): B, C, E, F free and the
+    // circleSlider A — the triangle and the figure on BC, all givens of
+    // slide 1. D, G, H, K, N are derived and listed per slide.
+    var GIVEN = ["A","B","C","E","F","G","H","K","N","ABC","ABCt","BCFE","ABHG","CANK",
+                 "BC","BA","AC","rtA"];
+    var PERP  = GIVEN.concat(["D","AD","rtD"]);
+    var TRI   = PERP.concat(["BD","DC","DBA","DAC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,23 +70,122 @@ Draw the perpendicular *AD.* [!just I.12]
             "ABHG;polygon;quadrilateral;A,B,H,G;0;0;black;random",
             "K;point;similar;C,A,B,C,E;0",
             "N;point;similar;C,A,B,C,F;0",
-            "CANK;polygon;quadrilateral;C,A,N,K;0;0;black;random"
+            "CANK;polygon;quadrilateral;C,A,N,K;0;0;black;random",
+            // Transparent highlight targets; explicit ;0 faces.
+            "BC;line;connect;B,C;0;0;0",
+            "BA;line;connect;B,A;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "ABCt;polygon;triangle;A,B,C;0;0;0;0",
+            "DBA;polygon;triangle;D,B,A;0;0;0;0",
+            "DAC;polygon;triangle;D,A,C;0;0;0;0",
+            // Right angles at A (hypothesis) and D (the perpendicular).
+            "rtA;sector;angleMarkerRight;A,B,C",
+            "rtD;sector;angleMarkerRight;D,A,C"
         ],
+        aliases: { "CA": "AC", "CD": "DC", "AB": "BA" },
+        slides: [
+            { text: "“In right-angled triangles the figure on the side opposite the right angle equals”",
+              visible: GIVEN,
+              highlighted: ["ABCt","rtA","BCFE"],
+              transition: { animations: [
+                  { elem: "rtA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "VI.31" }] },
+            { text: "“the sum of the similar and similarly described figures on the sides containing the right angle.”",
+              visible: GIVEN,
+              highlighted: ["ABHG","CANK","BA","AC"] },
+            { text: "Let {ABC|ABCt} be a right-angled triangle having the angle {BAC|rtA} right.",
+              visible: GIVEN,
+              highlighted: ["ABCt","rtA"] },
+            { text: "I say that the figure on {BC} equals the sum of the similar and similarly described figures on {BA} and {AC}.",
+              visible: GIVEN,
+              highlighted: ["BCFE","ABHG","CANK"] },
+            { text: "Draw the perpendicular {AD}.",
+              visible: PERP,
+              highlighted: ["AD","rtD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",   name: geomlib.A.Point.appear },
+                  { elem: "rtD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.12" }] },
+            { text: "Then, since in the right-angled triangle {ABC|ABCt}, {AD} has been drawn from the right angle at {A|rtA} perpendicular to the base {BC},",
+              visible: PERP,
+              highlighted: ["ABCt","AD","rtA","rtD","BC"] },
+            { text: "therefore the triangles {DBA} and {DAC} adjoining the perpendicular are similar both to the whole {ABC|ABCt} and to one another.",
+              visible: TRI,
+              highlighted: ["DBA","DAC","ABCt"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "DBA", name: geomlib.A.Polygon.outline },
+                  { elem: "DAC", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "DBA, DAC similar to ABC and to one another", ref: "VI.8" }] },
+            { text: "And, since {ABC|ABCt} is similar to {DBA}, therefore {BC} is to {BA} as {BA} is to {BD}.",
+              visible: TRI,
+              highlighted: ["ABCt","DBA","BC","BA","BD"],
+              justifications: [{ claim: "BC : BA = BA : BD", ref: "VI.Def.1" }] },
+            { text: "And, since three straight lines are proportional, the first is to the third",
+              visible: TRI,
+              highlighted: ["BC","BD"] },
+            { text: "as the figure on the first is to the similar and similarly described figure on the second.",
+              visible: TRI,
+              highlighted: ["BCFE","ABHG"],
+              justifications: [{ claim: "first : third = figure on first : figure on second", ref: "VI.19.Cor" }] },
+            { text: "Therefore {BC} is to {BD} as the figure on {BC} is to the similar and similarly described figure on {BA}.",
+              visible: TRI,
+              highlighted: ["BC","BD","BCFE","ABHG"] },
+            { text: "For the same reason also, {BC} is to {CD} as the figure on {BC} is to that on {CA},",
+              visible: TRI,
+              highlighted: ["BC","DC","BCFE","CANK"] },
+            { text: "so that, in addition, {BC} is to the sum of {BD} and {DC}",
+              visible: TRI,
+              highlighted: ["BC","BD","DC"] },
+            { text: "as the figure on {BC} is to the sum of the similar and similarly described figures on {BA} and {AC}.",
+              visible: TRI,
+              highlighted: ["BCFE","ABHG","CANK"],
+              justifications: [{ claim: "BC : BD + DC = figure on BC : figures on BA, AC", ref: "V.24" }] },
+            { text: "But {BC} equals the sum of {BD} and {DC},",
+              visible: TRI,
+              highlighted: ["BC","BD","DC"] },
+            { text: "therefore the figure on {BC} equals the sum of the similar and similarly described figures on {BA} and {AC}.",
+              visible: TRI,
+              highlighted: ["BCFE","ABHG","CANK"] },
+            { text: "Therefore, in right-angled triangles the figure on the side opposite the right angle equals",
+              visible: TRI,
+              highlighted: ["ABCt","rtA","BCFE"] },
+            { text: "the sum of the similar and similarly described figures on the sides containing the right angle.",
+              visible: TRI,
+              highlighted: ["ABHG","CANK"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.31") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.12":      "/elements/books/bookI/propositions/propI12/",
+        "V.24":      "/elements/books/bookV/propositions/propV24/",
+        "VI.8":      "/elements/books/bookVI/propositions/propVI8/",
+        "VI.19.Cor": "/elements/books/bookVI/propositions/propVI19/#cor",
+        "VI.Def.1":  "/elements/books/bookVI/definitions/defVI1/"
     });
 </script>
 </figure>
 
-Then, since in the right-angled triangle *ABC, AD* has been drawn from the right angle at *A* perpendicular to the base *BC,* therefore the triangles *DBA* and *DAC* adjoining the perpendicular are similar both to the whole *ABC* and to one another. [!just VI.8]
+Then, since in the right-angled triangle {ABC|ABCt}, {AD} has been drawn from the right angle at {A|rtA} perpendicular to the base {BC}, therefore the triangles {DBA} and {DAC} adjoining the perpendicular are similar both to the whole {ABC|ABCt} and to one another. [!just VI.8]
 
-And, since *ABC* is similar to *DBA,* therefore *BC* is to *BA* as *BA* is to *BD.* [!just VI.Def.1]
+And, since {ABC|ABCt} is similar to {DBA}, therefore {BC} is to {BA} as {BA} is to {BD}. [!just VI.Def.1]
 
 And, since three straight lines are proportional, the first is to the third as the figure on the first is to the similar and similarly described figure on the second. [!just VI.19.Cor]
 
-Therefore *BC* is to *BD* as the figure on *BC* is to the similar and similarly described figure on *BA.*
+Therefore {BC} is to {BD} as the figure on {BC} is to the similar and similarly described figure on {BA}.
 
-For the same reason also, *BC* is to *CD* as the figure on *BC* is to that on *CA,* so that, in addition, *BC* is to the sum of *BD* and *DC* as the figure on *BC* is to the sum of the similar and similarly described figures on *BA* and *AC.* [!just V.24]
+For the same reason also, {BC} is to {CD} as the figure on {BC} is to that on {CA}, so that, in addition, {BC} is to the sum of {BD} and {DC} as the figure on {BC} is to the sum of the similar and similarly described figures on {BA} and {AC}. [!just V.24]
 
-But *BC* equals the sum of *BD* and *DC,* therefore the figure on *BC* equals the sum of the similar and similarly described figures on *BA* and *AC.*
+But {BC} equals the sum of {BD} and {DC}, therefore the figure on {BC} equals the sum of the similar and similarly described figures on {BA} and {AC}.
 
 Therefore, *in right-angled triangles the figure on the side opposite the right angle equals the sum of the similar and similarly described figures on the sides containing the right angle.*
 
@@ -108,24 +230,36 @@ The broad problem Hippocrates was investigating was that of quadrature of a circ
             "ACsemi;sector;sector;E,C,A;0;0;black;random",
             "ABC;polygon;triangle;A,B,C;0;0;black;0",
             "ACsector;sector;sector;D,C,A;0;0;black;35,19,100",
-            "ACD;polygon;triangle;A,C,D;0;0;black;35,19,100"
+            "ACD;polygon;triangle;A,C,D;0;0;black;35,19,100",
+            // Transparent hover targets; explicit ;0 faces. AGBHC is a
+            // faceless twin of the filled semicircle ACsemi (raised over the
+            // arc AFC when highlighted, #140); AFC, AGB, BHC are the three
+            // arcs of the three segments (C,F,A order draws the minor arc).
+            "ABCD;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            "AGBHC;sector;sector;E,C,A;0;0;0;0",
+            "AFC;sector;arc;C,F,A;0;0;0;0",
+            "AGB;sector;arc;B,G,A;0;0;0;0",
+            "BHC;sector;arc;C,H,B;0;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DA;line;connect;D,A;0;0;0"
         ],
     });
 </script>
 </figure>
 
-Draw a square *ABCD* with diameters *AC* and *BD* meeting at *E.* Circumscribe a semicircle *AGBHC* about the right isosceles triangle *ABC.*  Draw the arc
- *AFC* from *A* to *C* of a circle with center *D* and radius *DA.*
+Draw a square {ABCD} with diameters {AC} and {BD} meeting at {E}. Circumscribe a semicircle {AGBHC} about the right isosceles triangle {ABC}.  Draw the arc
+ {AFC} from {A} to {C} of a circle with center {D} and radius {DA}.
 
-Hippocrates finds the area of the lune formed between the semicircle *AGBHC* and the arc *AF* as follows.
+Hippocrates finds the area of the lune formed between the semicircle {AGBHC} and the arc *AF* as follows.
 
 Note that there are three segments of circles in the diagram; two of them are small, namely,
-*AGB* with base *AB,* and *BHC* with base *BC,* and one is large, namely, *AFC* with base *AC.*  The first two are congruent, and the third is similar to them since all
+{AGB} with base {AB}, and {BHC} with base {BC}, and one is large, namely, {AFC} with base {AC}.  The first two are congruent, and the third is similar to them since all
  three are segments in quarters of circles.
 
-Hippocrates then uses a version of this proposition VI.31—generalized so the figures don't have to be rectilinear but may have curved sides— to conclude that the sum of the two small segments, *AGB* + *BHC,* equals the large segment *AFC,* since the bases of the small segments are sides of a right triangle while the base of the large segment is the triangle's hypotenuse.
+Hippocrates then uses a version of this proposition VI.31—generalized so the figures don't have to be rectilinear but may have curved sides— to conclude that the sum of the two small segments, {AGB} + {BHC}, equals the large segment {AFC}, since the bases of the small segments are sides of a right triangle while the base of the large segment is the triangle's hypotenuse.
 
-Therefore, the lune, which is the semicircle minus the large segment, equals the semicircle minus the sum of the small segments.  But the semicircle minus the sum of the small segments is just the right triangle *ABC.*  Thus, a rectilinear figure (the triangle) has been found equal to the lune, as required.
+Therefore, the lune, which is the semicircle minus the large segment, equals the semicircle minus the sum of the small segments.  But the semicircle minus the sum of the small segments is just the right triangle {ABC}.  Thus, a rectilinear figure (the triangle) has been found equal to the lune, as required.
 
 Note that at Hippocrates' time, Eudoxus' theory of proportion had not been developed, so the understanding of the theory of similar figures (Book V) was not as
  complete as it was after Eudoxus.  Also, Eudoxus' principle of exhaustion (see Book XI and proposition @X.1) for finding areas

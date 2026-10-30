@@ -15,14 +15,46 @@ statement: Angles in equal circles have the same ratio as the circumferences on 
 ----
 proof:
 
-Let *ABC* and *DEF* be equal circles, and let the angles *BGC* and *EHF* be angles at their centers *G* and *H,* and the angles *BAC* and *EDF* angles at the circumferences.
+Let {ABC|ABCc} and {DEF|DEFc} be equal circles, and let the angles {BGC|angBGC} and {EHF|angEHF} be angles at their centers {G} and {H}, and the angles {BAC|angBAC} and {EDF|angEDF} angles at the circumferences.
 
-I say that the circumference *BC* is to the circumference *EF* as the angle *BGC* is to the angle *EHF,* and as the angle *BAC* is to the angle *EDF.*
+I say that the circumference {BC} is to the circumference {EF} as the angle {BGC|angBGC} is to the angle {EHF|angEHF}, and as the angle {BAC|angBAC} is to the angle {EDF|angEDF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="500" height="300" tabindex="0"></canvas>
 <noscript><img alt="VI.33 diagram" src="propVI33.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the equal circles ABC and DEF, the angles BAC and
+    // EDF as joined lines, the central angles as filled sectors GBC and HEF,
+    // and the consecutive equal sectors GCK, GKL and HFM, HMN with their
+    // radii GK, GL, HM, HN. K, L, M, N and that construction are withheld
+    // until the proof makes them.
+    //
+    // The two circles are 4-field elements as converted (an opaque
+    // near-white face), so they are never highlighted: a highlighted element
+    // is raised (#140) and the disc would cover the sectors. The faceless
+    // twins ABCc / DEFc carry the name, reached as {ABC|ABCc}. Everything
+    // else added is transparent (;0;0;0;0) or an angle marker (hidden at
+    // rest): the circumferences BC, CK, KL, BL and EF, FM, MN, EN as
+    // faceless sectors (the III.26 convention), and markers for the angles,
+    // since the filled sectors would be raised over the joins.
+    //
+    // Markers: BGC = CGK = KGL share a colour, as do EHF = FHM = MHN; BGL and
+    // EHN are the multiples. None is right.
+    //
+    // Draggables (checked against the bundle): A, B, C, H free and the
+    // circleSliders D, E, F — the circles and angles of slide 3. G and
+    // K, L, M, N are derived and listed per slide.
+    var GIVEN0 = ["A","B","C","G","H","D","E","F","ABC","DEF","ABCc","DEFc",
+                  "AB","AC","DE","DF","GB","GC","HE","HF","GBC","HEF","BC","EF",
+                  "angBGC","angEHF"];
+    var GIVEN  = GIVEN0.concat(["angBAC","angEDF"]);
+    var ARCS1  = GIVEN.concat(["K","L","CK","KL"]);
+    var ARCS2  = ARCS1.concat(["M","N","FM","MN"]);
+    var JOIN   = ARCS2.concat(["GK","GL","HM","HN","GCK","GKL","HFM","HMN"]);
+    var EQ     = JOIN.concat(["angCGK","angKGL"]);
+    var MULT   = EQ.concat(["BL","angBGL"]);
+    var HEQ    = MULT.concat(["EN","angFHM","angMHN"]);
+    var ALL    = HEQ.concat(["angEHN"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -60,29 +92,205 @@ I say that the circumference *BC* is to the circumference *EF* as the angle *BGC
             "GK;line;connect;G,K",
             "GL;line;connect;G,L",
             "HM;line;connect;H,M",
-            "HN;line;connect;H,N"
+            "HN;line;connect;H,N",
+            // Faceless twins of the two 4-field circles (see above).
+            "ABCc;circle;circumcircle;A,B,C;0;0;0;0",
+            "DEFc;circle;radius;H,G,A;0;0;0;0",
+            // The circumferences, as faceless sectors.
+            "BC;sector;sector;G,B,C;0;0;0;0",
+            "CK;sector;sector;G,C,K;0;0;0;0",
+            "KL;sector;sector;G,K,L;0;0;0;0",
+            "BL;sector;sector;G,B,L;0;0;0;0",
+            "EF;sector;sector;H,E,F;0;0;0;0",
+            "FM;sector;sector;H,F,M;0;0;0;0",
+            "MN;sector;sector;H,M,N;0;0;0;0",
+            "EN;sector;sector;H,E,N;0;0;0;0",
+            // Angle markers; the equal angles share a colour.
+            "angBGC;sector;angleMarker;G,B,C;0;0;3b6ea5;9ec5e8",
+            "angCGK;sector;angleMarker;G,C,K;0;0;3b6ea5;9ec5e8",
+            "angKGL;sector;angleMarker;G,K,L;0;0;3b6ea5;9ec5e8",
+            "angBGL;sector;angleMarker;G,B,L",
+            "angEHF;sector;angleMarker;H,E,F;0;0;3b8a4f;9ed8ae",
+            "angFHM;sector;angleMarker;H,F,M;0;0;3b8a4f;9ed8ae",
+            "angMHN;sector;angleMarker;H,M,N;0;0;3b8a4f;9ed8ae",
+            "angEHN;sector;angleMarker;H,E,N",
+            "angBAC;sector;angleMarker;A,B,C",
+            "angEDF;sector;angleMarker;D,E,F"
         ],
+        aliases: { "NE": "EN" },
+        slides: [
+            { text: "“Angles in equal circles have the same ratio as the circumferences on which they stand”",
+              visible: GIVEN0,
+              highlighted: ["ABCc","DEFc","angBGC","angEHF","BC","EF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBGC", name: geomlib.A.Sector.sweep },
+                  { elem: "angEHF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "VI.33" }] },
+            { text: "“whether they stand at the centers or at the circumferences.”",
+              visible: GIVEN,
+              highlighted: ["angBGC","angEHF","angBAC","angEDF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "angEDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Let {ABC|ABCc} and {DEF|DEFc} be equal circles,",
+              visible: GIVEN,
+              highlighted: ["ABCc","DEFc"] },
+            { text: "and let the angles {BGC|angBGC} and {EHF|angEHF} be angles at their centers {G} and {H},",
+              visible: GIVEN,
+              highlighted: ["angBGC","angEHF","G","H"] },
+            { text: "and the angles {BAC|angBAC} and {EDF|angEDF} angles at the circumferences.",
+              visible: GIVEN,
+              highlighted: ["angBAC","angEDF"] },
+            { text: "I say that the circumference {BC} is to the circumference {EF} as the angle {BGC|angBGC} is to the angle {EHF|angEHF},",
+              visible: GIVEN,
+              highlighted: ["BC","EF","angBGC","angEHF"] },
+            { text: "and as the angle {BAC|angBAC} is to the angle {EDF|angEDF}.",
+              visible: GIVEN,
+              highlighted: ["angBAC","angEDF"] },
+            { text: "Make any number of consecutive circumferences {CK} and {KL} equal to the circumference {BC},",
+              visible: ARCS1,
+              highlighted: ["CK","KL","BC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "L", name: geomlib.A.Point.appear } ] } },
+            { text: "and any number of consecutive circumferences {FM}, {MN} equal to the circumference {EF},",
+              visible: ARCS2,
+              highlighted: ["FM","MN","EF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "M", name: geomlib.A.Point.appear },
+                  { elem: "N", name: geomlib.A.Point.appear } ] } },
+            { text: "and join {GK} and {GL} and {HM} and {HN}.",
+              visible: JOIN,
+              highlighted: ["GK","GL","HM","HN"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "GK",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GL",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HM",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HN",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GCK", name: geomlib.A.Sector.sweep },
+                  { elem: "GKL", name: geomlib.A.Sector.sweep },
+                  { elem: "HFM", name: geomlib.A.Sector.sweep },
+                  { elem: "HMN", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since the circumferences {BC}, {CK}, and {KL} equal one another,",
+              visible: JOIN,
+              highlighted: ["BC","CK","KL"] },
+            { text: "the angles {BGC|angBGC}, {CGK|angCGK}, and {KGL|angKGL} also equal one another.",
+              visible: EQ,
+              highlighted: ["angBGC","angCGK","angKGL"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCGK", name: geomlib.A.Sector.sweep },
+                  { elem: "angKGL", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "equal circumferences, equal angles", ref: "III.27" }] },
+            { text: "Therefore, whatever multiple the circumference {BL} is of {BC},",
+              visible: MULT,
+              highlighted: ["BL","BC"] },
+            { text: "the angle {BGL|angBGL} is also that multiple of the angle {BGC|angBGC}.",
+              visible: MULT,
+              highlighted: ["angBGL","angBGC"],
+              transition: { animations: [
+                  { elem: "angBGL", name: geomlib.A.Sector.sweep } ] } },
+            { text: "For the same reason, whatever multiple the circumference {NE} is of {EF},",
+              visible: HEQ,
+              highlighted: ["EN","EF","angEHF","angFHM","angMHN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angFHM", name: geomlib.A.Sector.sweep },
+                  { elem: "angMHN", name: geomlib.A.Sector.sweep } ] } },
+            { text: "the angle {NHE|angEHN} is also that multiple of the angle {EHF|angEHF}.",
+              visible: ALL,
+              highlighted: ["angEHN","angEHF"],
+              transition: { animations: [
+                  { elem: "angEHN", name: geomlib.A.Sector.sweep } ] } },
+            { text: "If the circumference {BL} equals the circumference {EN}, then the angle {BGL|angBGL} also equals the angle {EHN|angEHN};",
+              visible: ALL,
+              highlighted: ["BL","EN","angBGL","angEHN"] },
+            { text: "if the circumference {BL} is greater than the circumference {EN}, then the angle {BGL|angBGL} is also greater than the angle {EHN|angEHN};",
+              visible: ALL,
+              highlighted: ["BL","EN","angBGL","angEHN"] },
+            { text: "and, if less, less.",
+              visible: ALL,
+              highlighted: ["BL","EN","angBGL","angEHN"],
+              justifications: [{ claim: "circumferences and angles equal, greater, or less together", ref: "III.27" }] },
+            { text: "There being then four magnitudes, two circumferences {BC} and {EF}, and two angles {BGC|angBGC} and {EHF|angEHF},",
+              visible: ALL,
+              highlighted: ["BC","EF","angBGC","angEHF"] },
+            { text: "there have been taken, of the circumference {BC} and the angle {BGC|angBGC} equimultiples,",
+              visible: ALL,
+              highlighted: ["BC","angBGC"] },
+            { text: "namely the circumference {BL} and the angle {BGL|angBGL},",
+              visible: ALL,
+              highlighted: ["BL","angBGL"] },
+            { text: "and of the circumference {EF} and the angle {EHF|angEHF} equimultiples, namely the circumference {EN} and the angle {EHN|angEHN}.",
+              visible: ALL,
+              highlighted: ["EF","angEHF","EN","angEHN"] },
+            { text: "And it has been proved that, if the circumference {BL} is in excess of the circumference {EN},",
+              visible: ALL,
+              highlighted: ["BL","EN"] },
+            { text: "the angle {BGL|angBGL} is also in excess of the angle {EHN|angEHN}; if equal, equal; and if less, less.",
+              visible: ALL,
+              highlighted: ["angBGL","angEHN"] },
+            { text: "Therefore the circumference {BC} is to {EF} as the angle {BGC|angBGC} is to the angle {EHF|angEHF}.",
+              visible: ALL,
+              highlighted: ["BC","EF","angBGC","angEHF"],
+              justifications: [{ claim: "BC : EF = angle BGC : angle EHF", ref: "V.Def.5" }] },
+            { text: "But the angle {BGC|angBGC} is to the angle {EHF|angEHF} as the angle {BAC|angBAC} is to the angle {EDF|angEDF},",
+              visible: ALL,
+              highlighted: ["angBGC","angEHF","angBAC","angEDF"] },
+            { text: "for they are doubles respectively.",
+              visible: ALL,
+              highlighted: ["angBGC","angEHF","angBAC","angEDF"],
+              justifications: [
+                  { claim: "angle at the center double the angle at the circumference", ref: "III.20" },
+                  { claim: "parts have the same ratio as their equimultiples", ref: "V.15" } ] },
+            { text: "Therefore also the circumference {BC} is to the circumference {EF} as the angle {BGC|angBGC} is to the angle {EHF|angEHF},",
+              visible: ALL,
+              highlighted: ["BC","EF","angBGC","angEHF"] },
+            { text: "and the angle {BAC|angBAC} to the angle {EDF|angEDF}.",
+              visible: ALL,
+              highlighted: ["angBAC","angEDF"] },
+            { text: "Therefore, angles in equal circles have the same ratio as the circumferences on which they stand",
+              visible: ALL,
+              highlighted: ["ABCc","DEFc","BC","EF"] },
+            { text: "whether they stand at the centers or at the circumferences.",
+              visible: ALL,
+              highlighted: ["angBGC","angEHF","angBAC","angEDF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.33") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "III.20":   "/elements/books/bookIII/propositions/propIII20/",
+        "III.27":   "/elements/books/bookIII/propositions/propIII27/",
+        "V.15":     "/elements/books/bookV/propositions/propV15/",
+        "V.Def.5":  "/elements/books/bookV/definitions/defV5/"
     });
 </script>
 </figure>
 
-Make any number of consecutive circumferences *CK* and *KL* equal to the circumference *BC,* and any number of consecutive circumferences *FM, MN* equal to the circumference *EF,* and join *GK* and *GL* and *HM* and *HN.*
+Make any number of consecutive circumferences {CK} and {KL} equal to the circumference {BC}, and any number of consecutive circumferences {FM}, {MN} equal to the circumference {EF}, and join {GK} and {GL} and {HM} and {HN}.
 
-Then, since the circumferences *BC, CK,* and *KL* equal one another, the angles *BGC, CGK,* and *KGL* also equal one another.  Therefore, whatever multiple the circumference *BL* is of *BC,* the angle *BGL* is also that multiple of the angle *BGC.* [!just III.27]
+Then, since the circumferences {BC}, {CK}, and {KL} equal one another, the angles {BGC|angBGC}, {CGK|angCGK}, and {KGL|angKGL} also equal one another.  Therefore, whatever multiple the circumference {BL} is of {BC}, the angle {BGL|angBGL} is also that multiple of the angle {BGC|angBGC}. [!just III.27]
 
-For the same reason, whatever multiple the circumference *NE* is of *EF,* the angle *NHE* is also that multiple of the angle *EHF.*
+For the same reason, whatever multiple the circumference {NE} is of {EF}, the angle {NHE|angEHN} is also that multiple of the angle {EHF|angEHF}.
 
-If the circumference *BL* equals the circumference *EN,* then the angle *BGL* also equals the angle *EHN*;  if the circumference *BL* is greater than the circumference *EN,* then the angle *BGL* is also greater than the angle *EHN*; and, if less, less. [!just III.27]
+If the circumference {BL} equals the circumference {EN}, then the angle {BGL|angBGL} also equals the angle {EHN|angEHN};  if the circumference {BL} is greater than the circumference {EN}, then the angle {BGL|angBGL} is also greater than the angle {EHN|angEHN}; and, if less, less. [!just III.27]
 
-There being then four magnitudes, two circumferences *BC* and *EF,* and two angles *BGC* and *EHF,* there have been taken, of the circumference *BC* and the angle *BGC* equimultiples, namely the circumference *BL* and the angle *BGL,* and of the circumference *EF* and the angle *EHF* equimultiples, namely the circumference *EN* and the angle *EHN.*
+There being then four magnitudes, two circumferences {BC} and {EF}, and two angles {BGC|angBGC} and {EHF|angEHF}, there have been taken, of the circumference {BC} and the angle {BGC|angBGC} equimultiples, namely the circumference {BL} and the angle {BGL|angBGL}, and of the circumference {EF} and the angle {EHF|angEHF} equimultiples, namely the circumference {EN} and the angle {EHN|angEHN}.
 
-And it has been proved that, if the circumference *BL* is in excess of the circumference *EN,* the angle *BGL* is also in excess of the angle *EHN*; if equal, equal; and if less, less.
+And it has been proved that, if the circumference {BL} is in excess of the circumference {EN}, the angle {BGL|angBGL} is also in excess of the angle {EHN|angEHN}; if equal, equal; and if less, less.
 
-Therefore the circumference *BC* is to *EF* as the angle *BGC* is to the angle *EHF.* [!just V.Def.5]
+Therefore the circumference {BC} is to {EF} as the angle {BGC|angBGC} is to the angle {EHF|angEHF}. [!just V.Def.5]
 
-But the angle *BGC* is to the angle *EHF* as the angle *BAC* is to the angle *EDF,* for they are doubles respectively. [!just V.15, III.20]
+But the angle {BGC|angBGC} is to the angle {EHF|angEHF} as the angle {BAC|angBAC} is to the angle {EDF|angEDF}, for they are doubles respectively. [!just V.15, III.20]
 
-Therefore also the circumference *BC* is to the circumference *EF* as the angle *BGC* is to the angle *EHF,* and the angle *BAC* to the angle *EDF.*
+Therefore also the circumference {BC} is to the circumference {EF} as the angle {BGC|angBGC} is to the angle {EHF|angEHF}, and the angle {BAC|angBAC} to the angle {EDF|angEDF}.
 
 Therefore, *angles in equal circles have the same ratio as the circumferences on which they stand whether they stand at the centers or at the circumferences.*
 

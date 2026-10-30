@@ -15,14 +15,40 @@ statement: If two triangles having two sides proportional to two sides are place
 ----
 proof:
 
-Let *ABC* and *DCE* be two triangles having the two sides *AB* and *AC* proportional to the two sides *DC* and *DE,* so that *AB* is to *AC* as *DC* is to *DE,* and *AB* parallel to *DC,* and *AC* parallel to *DE.*
+Let {ABC|ABCt} and {DCE|DCEt} be two triangles having the two sides {AB} and {AC} proportional to the two sides {DC} and {DE}, so that {AB} is to {AC} as {DC} is to {DE}, and {AB} parallel to {DC}, and {AC} parallel to {DE}.
 
-I say that *BC* is in a straight line with *CE.*
+I say that {BC} is in a straight line with {CE}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="370" height="250" tabindex="0"></canvas>
 <noscript><img alt="VI.32 diagram" src="propVI32.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the two filled triangles ABC and CDE, placed
+    // together at C with AB parallel to DC and AC parallel to DE (D slides
+    // on the parallel to AB through C; E is set by the similarity).
+    //
+    // Everything added is transparent (;0;0;0 lines, ;0;0;0;0 polygons) or
+    // an angle marker (hidden at rest), so the resting figure is unchanged:
+    // the sides AB, AC, BC, DC, DE, CE, and faceless twins ABCt / DCEt of
+    // the filled triangles (a highlighted filled polygon is raised over the
+    // markers inside it, #140), reached as {ABC|ABCt} and {DCE|DCEt}. The
+    // angle names collide with the triangles, so every angle ref uses a
+    // display override onto its marker.
+    //
+    // Markers: BAC = ACD = CDE share one colour, ABC = DCE another. ACE is
+    // the whole angle ACD + DCE; ACB and ACE together make two right angles
+    // (a sum, so no right-angle marks).
+    //
+    // Draggables (checked against the bundle): A, B, C free and the
+    // lineSlider D — the two triangles, givens of slide 1. E is derived and
+    // listed per slide.
+    var GIVEN = ["A","B","C","D","E","ABC","CDE","ABCt","DCEt",
+                 "AB","AC","BC","DC","DE","CE"];
+    var ALT   = GIVEN.concat(["angBAC","angACD"]);
+    var CDE3  = ALT.concat(["angCDE"]);
+    var EQ    = CDE3.concat(["angABC","angDCE"]);
+    var WHOLE = EQ.concat(["angACE"]);
+    var ALL   = WHOLE.concat(["angACB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -35,25 +61,164 @@ I say that *BC* is in a straight line with *CE.*
             "D';point;parallelogram;A,B,C;0;0",
             "D;point;lineSlider;C,D',250,40",
             "E;point;similar;C,D,B,A,C",
-            "CDE;polygon;triangle;C,D,E;0;0;black;random"
+            "CDE;polygon;triangle;C,D,E;0;0;black;random",
+            // Transparent highlight targets; explicit ;0 faces.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "ABCt;polygon;triangle;A,B,C;0;0;0;0",
+            "DCEt;polygon;triangle;D,C,E;0;0;0;0",
+            // Angle markers; the equal angles share a colour.
+            "angBAC;sector;angleMarker;A,B,C;0;0;3b6ea5;9ec5e8",
+            "angACD;sector;angleMarker;C,A,D;0;0;3b6ea5;9ec5e8",
+            "angCDE;sector;angleMarker;D,C,E;0;0;3b6ea5;9ec5e8",
+            "angABC;sector;angleMarker;B,A,C;0;0;3b8a4f;9ed8ae",
+            "angDCE;sector;angleMarker;C,D,E;0;0;3b8a4f;9ed8ae",
+            "angACE;sector;angleMarker;C,A,E",
+            "angACB;sector;angleMarker;C,A,B"
         ],
+        aliases: { "BA": "AB", "CA": "AC", "CB": "BC", "CD": "DC", "ED": "DE", "EC": "CE" },
+        slides: [
+            { text: "“If two triangles having two sides proportional to two sides are placed together at one angle”",
+              visible: GIVEN,
+              highlighted: ["ABCt","DCEt"],
+              justifications: [{ ref: "VI.32" }] },
+            { text: "“so that their corresponding sides are also parallel,”",
+              visible: GIVEN,
+              highlighted: ["AB","DC","AC","DE"] },
+            { text: "“then the remaining sides of the triangles are in a straight line.”",
+              visible: GIVEN,
+              highlighted: ["BC","CE"] },
+            { text: "Let {ABC|ABCt} and {DCE|DCEt} be two triangles having the two sides {AB} and {AC} proportional to the two sides {DC} and {DE},",
+              visible: GIVEN,
+              highlighted: ["ABCt","DCEt","AB","AC","DC","DE"] },
+            { text: "so that {AB} is to {AC} as {DC} is to {DE},",
+              visible: GIVEN,
+              highlighted: ["AB","AC","DC","DE"] },
+            { text: "and {AB} parallel to {DC}, and {AC} parallel to {DE}.",
+              visible: GIVEN,
+              highlighted: ["AB","DC","AC","DE"] },
+            { text: "I say that {BC} is in a straight line with {CE}.",
+              visible: GIVEN,
+              highlighted: ["BC","CE"] },
+            { text: "Since {AB} is parallel to {DC}, and the straight line {AC} falls upon them,",
+              visible: GIVEN,
+              highlighted: ["AB","DC","AC"] },
+            { text: "therefore the alternate angles {BAC|angBAC} and {ACD|angACD} equal one another.",
+              visible: ALT,
+              highlighted: ["angBAC","angACD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "angACD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle BAC = angle ACD", ref: "I.29" }] },
+            { text: "For the same reason the angle {CDE|angCDE} also equals the angle {ACD|angACD},",
+              visible: CDE3,
+              highlighted: ["angCDE","angACD","AC","DE","DC"],
+              transition: { animations: [
+                  { elem: "angCDE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle CDE = angle ACD", ref: "I.29" }] },
+            { text: "so that the angle {BAC|angBAC} equals the angle {CDE|angCDE}.",
+              visible: CDE3,
+              highlighted: ["angBAC","angCDE"],
+              justifications: [{ claim: "angle BAC = angle CDE", ref: "C.N.1" }] },
+            { text: "And, since {ABC|ABCt} and {DCE|DCEt} are two triangles having one angle, the angle at {A|angBAC}, equal to one angle, the angle at {D|angCDE},",
+              visible: CDE3,
+              highlighted: ["ABCt","DCEt","angBAC","angCDE"] },
+            { text: "and the sides about the equal angles proportional, so that {AB} is to {AC} as {DC} is to {DE},",
+              visible: CDE3,
+              highlighted: ["AB","AC","DC","DE"] },
+            { text: "therefore the triangle {ABC|ABCt} is equiangular with the triangle {DCE|DCEt}.",
+              visible: CDE3,
+              highlighted: ["ABCt","DCEt"],
+              justifications: [{ claim: "ABC equiangular with DCE", ref: "VI.6" }] },
+            { text: "Therefore the angle {ABC|angABC} equals the angle {DCE|angDCE}.",
+              visible: EQ,
+              highlighted: ["angABC","angDCE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep },
+                  { elem: "angDCE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But the angle {ACD|angACD} was also proved equal to the angle {BAC|angBAC},",
+              visible: EQ,
+              highlighted: ["angACD","angBAC"] },
+            { text: "therefore the whole angle {ACE|angACE} equals the sum of the two angles {ABC|angABC} and {BAC|angBAC}.",
+              visible: WHOLE,
+              highlighted: ["angACE","angABC","angBAC"],
+              transition: { animations: [
+                  { elem: "angACE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle ACE = angle ABC + angle BAC", ref: "C.N.2" }] },
+            { text: "Add the angle {ACB|angACB} to each.",
+              visible: ALL,
+              highlighted: ["angACB"],
+              transition: { animations: [
+                  { elem: "angACB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the sum of the angles {ACE|angACE} and {ACB|angACB} equals the sum of the angles {BAC|angBAC}, {ACB|angACB}, and {CBA|angABC}.",
+              visible: ALL,
+              highlighted: ["angACE","angACB","angBAC","angABC"],
+              justifications: [{ claim: "add angle ACB to each", ref: "C.N.2" }] },
+            { text: "But the sum of the angles {BAC|angBAC}, {ABC|angABC}, and {ACB|angACB} equals two right angles,",
+              visible: ALL,
+              highlighted: ["angBAC","angABC","angACB"],
+              justifications: [{ claim: "angles of triangle ABC = two right angles", ref: "I.32" }] },
+            { text: "therefore the sum of the angles {ACE|angACE} and {ACB|angACB} also equals two right angles.",
+              visible: ALL,
+              highlighted: ["angACE","angACB"],
+              justifications: [{ claim: "angle ACE + angle ACB = two right angles", ref: "C.N.1" }] },
+            { text: "Therefore with a straight line {AC}, and at the point {C} on it,",
+              visible: ALL,
+              highlighted: ["AC","C"] },
+            { text: "the two straight lines {BC} and {CE} not lying on the same side",
+              visible: ALL,
+              highlighted: ["BC","CE"] },
+            { text: "make the sum of the adjacent angles {ACE|angACE} and {ACB|angACB} equal to two right angles.",
+              visible: ALL,
+              highlighted: ["angACE","angACB"] },
+            { text: "Therefore {BC} is in a straight line with {CE}.",
+              visible: ALL,
+              highlighted: ["BC","CE"],
+              justifications: [{ claim: "BC in a straight line with CE", ref: "I.14" }] },
+            { text: "Therefore, if two triangles having two sides proportional to two sides are placed together at one angle",
+              visible: ALL,
+              highlighted: ["ABCt","DCEt"] },
+            { text: "so that their corresponding sides are also parallel, then the remaining sides of the triangles are in a straight line.",
+              visible: ALL,
+              highlighted: ["AB","DC","AC","DE","BC","CE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.32") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "C.N.1": "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2": "/elements/books/bookI/commonnotions/cn2/",
+        "I.14":  "/elements/books/bookI/propositions/propI14/",
+        "I.29":  "/elements/books/bookI/propositions/propI29/",
+        "I.32":  "/elements/books/bookI/propositions/propI32/",
+        "VI.6":  "/elements/books/bookVI/propositions/propVI6/"
     });
 </script>
 </figure>
 
-Since *AB* is parallel to *DC,* and the straight line *AC* falls upon them, therefore the alternate angles *BAC* and *ACD* equal one another. [!just I.29]
+Since {AB} is parallel to {DC}, and the straight line {AC} falls upon them, therefore the alternate angles {BAC|angBAC} and {ACD|angACD} equal one another. [!just I.29]
 
-For the same reason the angle *CDE* also equals the angle *ACD,* so that the angle *BAC* equals the angle *CDE.*
+For the same reason the angle {CDE|angCDE} also equals the angle {ACD|angACD}, so that the angle {BAC|angBAC} equals the angle {CDE|angCDE}.
 
-And, since *ABC* and *DCE* are two triangles having one angle, the angle at *A,* equal to one angle, the angle at *D,* and the sides about the equal angles proportional, so that *AB* is to *AC* as *DC* is to *DE,* therefore the triangle *ABC* is equiangular with the triangle *DCE.*  Therefore the angle *ABC* equals the angle *DCE.* [!just VI.6]
+And, since {ABC|ABCt} and {DCE|DCEt} are two triangles having one angle, the angle at {A|angBAC}, equal to one angle, the angle at {D|angCDE}, and the sides about the equal angles proportional, so that {AB} is to {AC} as {DC} is to {DE}, therefore the triangle {ABC|ABCt} is equiangular with the triangle {DCE|DCEt}.  Therefore the angle {ABC|angABC} equals the angle {DCE|angDCE}. [!just VI.6]
 
-But the angle *ACD* was also proved equal to the angle *BAC,* therefore the whole angle *ACE* equals the sum of the two angles *ABC* and *BAC.*
+But the angle {ACD|angACD} was also proved equal to the angle {BAC|angBAC}, therefore the whole angle {ACE|angACE} equals the sum of the two angles {ABC|angABC} and {BAC|angBAC}.
 
-Add the angle *ACB* to each.  Therefore the sum of the angles *ACE* and *ACB* equals the sum of the angles *BAC, ACB,* and *CBA.*
+Add the angle {ACB|angACB} to each.  Therefore the sum of the angles {ACE|angACE} and {ACB|angACB} equals the sum of the angles {BAC|angBAC}, {ACB|angACB}, and {CBA|angABC}.
 
-But the sum of the angles *BAC, ABC,* and *ACB* equals two right angles, therefore the sum of the angles *ACE* and *ACB* also equals two right angles. [!just I.32]
+But the sum of the angles {BAC|angBAC}, {ABC|angABC}, and {ACB|angACB} equals two right angles, therefore the sum of the angles {ACE|angACE} and {ACB|angACB} also equals two right angles. [!just I.32]
 
-Therefore with a straight line *AC,* and at the point *C* on it, the two straight lines *BC* and *CE* not lying on the same side make the sum of the adjacent angles *ACE* and *ACB* equal to two right angles.  Therefore *BC* is in a straight line with *CE.* [!just I.14]
+Therefore with a straight line {AC}, and at the point {C} on it, the two straight lines {BC} and {CE} not lying on the same side make the sum of the adjacent angles {ACE|angACE} and {ACB|angACB} equal to two right angles.  Therefore {BC} is in a straight line with {CE}. [!just I.14]
 
 Therefore, *if two triangles having two sides proportional to two sides are placed together at one angle so that their corresponding sides are also parallel, then the remaining sides of the triangles are in a straight line.*
 
