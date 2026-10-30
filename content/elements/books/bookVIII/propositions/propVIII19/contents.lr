@@ -15,18 +15,26 @@ statement: Between two similar solid numbers there fall two mean proportional nu
 ----
 proof:
 
-Let *A* and *B* be two similar solid numbers, and let *C, D,* and *E* be the sides of *A,* and let *F, G,* and *H* be the sides of *B.*
+Let {A} and {B} be two similar solid numbers, and let {C}, {D}, and {E} be the sides of {A}, and let {F}, {G}, and {H} be the sides of {B}.
 
-Now, since similar solid numbers are those which have their sides proportional, therefore *C* is to *D* as *F* is to *G,* and *D* is to *E* as *G* is to *H.* [!just VII.Def.21]
+Now, since similar solid numbers are those which have their sides proportional, therefore {C} is to {D} as {F} is to {G}, and {D} is to {E} as {G} is to {H}. [!just VII.Def.21]
 
-I say that between *A* and *B* there fall two mean proportional numbers, and *A* has to *B* the ratio triplicate of that which *C* has to *F, D* has to *G,* and *E* has to *H.*
+I say that between {A} and {B} there fall two mean proportional numbers, and {A} has to {B} the ratio triplicate of that which {C} has to {F}, {D} has to {G}, and {E} has to {H}.
 
-Multiply *C* by *D* to make *K,* and multiply *F* by *G* to make *L.*
+Multiply {C} by {D} to make {K}, and multiply {F} by {G} to make {L}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="500" height="170" tabindex="0"></canvas>
 <noscript><img alt="VIII.19 diagram" src="propVIII19.gif"/></noscript>
 <script type="text/javascript">
+    // A, B and their sides C, D, E and F, G, H stand from the start; K, L,
+    // then M, then N, O are stroked in as they are made. The rest is
+    // highlight beats. The derived right ends carry the resting dots.
+    var GIVEN = ["A","B","C","D","E","F","G","H","A2","B2","G2","H2"];
+    var K_    = GIVEN.concat(["K","K1","K2"]);
+    var KL    = K_.concat(["L","L1","L2"]);
+    var KLM   = KL.concat(["M","M1","M2"]);
+    var ALL   = KLM.concat(["N","N1","N2","O","O1","O2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -88,41 +96,271 @@ Multiply *C* by *D* to make *K,* and multiply *F* by *G* to make *L.*
             "O2;point;proportion;C,F,N,O1,O3;0",
             "O;line;connect;O1,O2;black"
         ],
+        // Draggables (checked against the bundle): the free starts of every
+        // row and C2, D2, E2, F2, plus the invisible unit ends U1, U2. K, L,
+        // M, N, O are made mid-walk, so their starts are deferred.
+        deferDraggables: ["K1","L1","M1","N1","O1"],
+        slides: [
+            { text: "“Between two similar solid numbers there fall two mean proportional numbers,”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VIII.19" }] },
+            { text: "“and the solid number has to the solid number the ratio triplicate",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "of that which the corresponding side has to the corresponding side.”",
+              visible: GIVEN,
+              highlighted: ["C","D","E","F","G","H"] },
+            { text: "Let {A} and {B} be two similar solid numbers,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and let {C}, {D}, and {E} be the sides of {A},",
+              visible: GIVEN,
+              highlighted: ["C","D","E","A"] },
+            { text: "and let {F}, {G}, and {H} be the sides of {B}.",
+              visible: GIVEN,
+              highlighted: ["F","G","H","B"] },
+            { text: "Now, since similar solid numbers are those which have their sides proportional,",
+              visible: GIVEN,
+              highlighted: ["C","D","E","F","G","H"],
+              justifications: [{ ref: "VII.Def.21" }] },
+            { text: "therefore {C} is to {D} as {F} is to {G}, and {D} is to {E} as {G} is to {H}.",
+              visible: GIVEN,
+              highlighted: ["C","D","E","F","G","H"],
+              justifications: [{ claim: "C : D = F : G, D : E = G : H", ref: "VII.Def.21" }] },
+            { text: "I say that between {A} and {B} there fall two mean proportional numbers,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and {A} has to {B} the ratio triplicate of that which {C} has to {F},",
+              visible: GIVEN,
+              highlighted: ["A","B","C","F"] },
+            { text: "{D} has to {G}, and {E} has to {H}.",
+              visible: GIVEN,
+              highlighted: ["D","G","E","H"] },
+            { text: "Multiply {C} by {D} to make {K},",
+              visible: K_,
+              highlighted: ["C","D","K"],
+              transition: { animations: [
+                  { elem: "K", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and multiply {F} by {G} to make {L}.",
+              visible: KL,
+              highlighted: ["F","G","L"],
+              transition: { animations: [
+                  { elem: "L", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since {C} and {D} are in the same ratio with {F} and {G},",
+              visible: KL,
+              highlighted: ["C","D","F","G"] },
+            { text: "and {K} is the product of {C} and {D}, and {L} the product of {F} and {G},",
+              visible: KL,
+              highlighted: ["K","C","D","L","F","G"] },
+            { text: "{K} and {L} are similar plane numbers,",
+              visible: KL,
+              highlighted: ["K","L"],
+              justifications: [{ ref: "VII.Def.21" }] },
+            { text: "therefore between {K} and {L} there is one mean proportional number {M}.",
+              visible: KLM,
+              highlighted: ["K","L","M"],
+              justifications: [{ claim: "K : M = M : L", ref: "VIII.18" }],
+              transition: { animations: [
+                  { elem: "M", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore {M} is the product of {D} and {F} was proved in the theorem preceding.",
+              visible: KLM,
+              highlighted: ["M","D","F"],
+              justifications: [{ ref: "VIII.18" }] },
+            { text: "Now, since {D} multiplied by {C} makes {K}, and multiplied by {F} makes {M},",
+              visible: KLM,
+              highlighted: ["D","C","K","F","M"] },
+            { text: "therefore {C} is to {F} as {K} is to {M}.",
+              visible: KLM,
+              highlighted: ["C","F","K","M"],
+              justifications: [{ claim: "C : F = K : M", ref: "VII.17" }] },
+            { text: "But {K} is to {M} as {M} is to {L}.",
+              visible: KLM,
+              highlighted: ["K","M","L"] },
+            { text: "Therefore {K}, {M}, and {L} are continuously proportional in the ratio of {C} to {F}.",
+              visible: KLM,
+              highlighted: ["K","M","L","C","F"] },
+            { text: "And since {C} is to {D} as {F} is to {G},",
+              visible: KLM,
+              highlighted: ["C","D","F","G"] },
+            { text: "alternately therefore {C} is to {F} as {D} is to {G}.",
+              visible: KLM,
+              highlighted: ["C","F","D","G"],
+              justifications: [{ claim: "C : F = D : G", ref: "VII.13" }] },
+            { text: "For the same reason also {D} is to {G} as {E} is to {H}.",
+              visible: KLM,
+              highlighted: ["D","G","E","H"],
+              justifications: [{ claim: "D : G = E : H", ref: "VII.13" }] },
+            { text: "Therefore {K}, {M}, and {L} are continuously proportional in the ratio of {C} to {F},",
+              visible: KLM,
+              highlighted: ["K","M","L","C","F"] },
+            { text: "in the ratio of {D} to {G}, and also in the ratio of {E} to {H}.",
+              visible: KLM,
+              highlighted: ["K","M","L","D","G","E","H"] },
+            { text: "Next, multiply {E} and {H} by {M} to make {N} and {O} respectively.",
+              visible: ALL,
+              highlighted: ["E","H","M","N","O"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "N", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "O", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since {A} is a solid number, and {C}, {D}, and {E} are its sides,",
+              visible: ALL,
+              highlighted: ["A","C","D","E"] },
+            { text: "therefore {E} multiplied by the product of {C} and {D} makes {A}.",
+              visible: ALL,
+              highlighted: ["E","C","D","A"] },
+            { text: "But the product of {C} and {D} is {K}, therefore {E} multiplied by {K} makes {A}.",
+              visible: ALL,
+              highlighted: ["C","D","K","E","A"] },
+            { text: "For the same reason also {H} multiplied by {L} makes {B}.",
+              visible: ALL,
+              highlighted: ["H","L","B"] },
+            { text: "Now, since {E} multiplied by {K} makes {A}, and further also multiplied by {M} makes {N},",
+              visible: ALL,
+              highlighted: ["E","K","A","M","N"] },
+            { text: "therefore {K} is to {M} as {A} is to {N}.",
+              visible: ALL,
+              highlighted: ["K","M","A","N"],
+              justifications: [{ claim: "K : M = A : N", ref: "VII.17" }] },
+            { text: "But {K} is to {M} as {C} is to {F}, as {D} is to {G}, and as {E} is to {H},",
+              visible: ALL,
+              highlighted: ["K","M","C","F","D","G","E","H"] },
+            { text: "therefore {C} is to {F} as {D} is to {G}, as {E} is to {H}, and as {A} is to {N}.",
+              visible: ALL,
+              highlighted: ["C","F","D","G","E","H","A","N"] },
+            { text: "Again, since {E} and {H} multiplied by {M} make {N} and {O} respectively,",
+              visible: ALL,
+              highlighted: ["E","H","M","N","O"] },
+            { text: "therefore {E} is to {H} as {N} is to {O}.",
+              visible: ALL,
+              highlighted: ["E","H","N","O"],
+              justifications: [{ claim: "E : H = N : O", ref: "VII.18" }] },
+            { text: "But {E} is to {H} as {C} is to {F} and as {D} is to {G},",
+              visible: ALL,
+              highlighted: ["E","H","C","F","D","G"] },
+            { text: "therefore {C} is to {F} as {D} is to {G}, as {E} is to {H},",
+              visible: ALL,
+              highlighted: ["C","F","D","G","E","H"] },
+            { text: "as {A} is to {N}, and as {N} is to {O}.",
+              visible: ALL,
+              highlighted: ["A","N","O"] },
+            { text: "Again, since {H} multiplied by {M} makes {O}, and further also multiplied by {L} makes {B},",
+              visible: ALL,
+              highlighted: ["H","M","O","L","B"] },
+            { text: "therefore {M} is to {L} as {O} is to {B}.",
+              visible: ALL,
+              highlighted: ["M","L","O","B"],
+              justifications: [{ claim: "M : L = O : B", ref: "VII.17" }] },
+            { text: "But {M} is to {L} as {C} is to {F}, a {D} is to {G}, and as {E} is to {H}.",
+              visible: ALL,
+              highlighted: ["M","L","C","F","D","G","E","H"] },
+            { text: "Therefore {C} is to {F} as {D} is to {G}, and as {E} is to {H},",
+              visible: ALL,
+              highlighted: ["C","F","D","G","E","H"] },
+            { text: "as are {O} to {B}, {A} to {N}, and {N} to {O}.",
+              visible: ALL,
+              highlighted: ["O","B","A","N"] },
+            { text: "Therefore {A}, {N}, {O}, and {B} are continuously proportional in the aforesaid ratios of the sides.",
+              visible: ALL,
+              highlighted: ["A","N","O","B"] },
+            { text: "I say that {A} also has to {B} the ratio triplicate",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "of that which the corresponding side has to the corresponding side,",
+              visible: ALL,
+              highlighted: ["C","D","E","F","G","H"] },
+            { text: "that is, of the ratio which the number {C} has to {F},",
+              visible: ALL,
+              highlighted: ["C","F"] },
+            { text: "or {D} has to {G}, and also {E} has to {H}.",
+              visible: ALL,
+              highlighted: ["D","G","E","H"] },
+            { text: "Since {A}, {N}, {O}, and {B} are four numbers in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","N","O","B"] },
+            { text: "therefore {A} has to {B} the ratio triplicate of that which {A} has to {N}.",
+              visible: ALL,
+              highlighted: ["A","B","N"],
+              justifications: [{ claim: "A : B triplicate of A : N", ref: "V.Def.10" }] },
+            { text: "But it was proved that {A} is to {N} as {C} is to {F},",
+              visible: ALL,
+              highlighted: ["A","N","C","F"] },
+            { text: "as {D} is to {G}, and as {E} is to {H}.",
+              visible: ALL,
+              highlighted: ["D","G","E","H"] },
+            { text: "Therefore {A} also has to {B} the ratio triplicate",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "of that which the corresponding side has to the corresponding side,",
+              visible: ALL,
+              highlighted: ["C","D","E","F","G","H"] },
+            { text: "that is, of the ratio which the number {C} has to {F},",
+              visible: ALL,
+              highlighted: ["C","F"] },
+            { text: "{D} has to {G}, and also {E} has to {H}.",
+              visible: ALL,
+              highlighted: ["D","G","E","H"] },
+            { text: "Therefore, between two similar solid numbers there fall two mean proportional numbers,",
+              visible: ALL,
+              highlighted: ["A","N","O","B"] },
+            { text: "and the solid number has to the solid number the ratio triplicate",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "of that which the corresponding side has to the corresponding side.",
+              visible: ALL,
+              highlighted: ["C","D","E","F","G","H"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.19") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.Def.10":   "/elements/books/bookV/definitions/defV10/",
+        "VII.Def.21": "/elements/books/bookVII/definitions/defVII21/",
+        "VII.13":     "/elements/books/bookVII/propositions/propVII13/",
+        "VII.17":     "/elements/books/bookVII/propositions/propVII17/",
+        "VII.18":     "/elements/books/bookVII/propositions/propVII18/",
+        "VIII.18":    "/elements/books/bookVIII/propositions/propVIII18/"
     });
 </script>
 </figure>
 
-Now, since *C* and *D* are in the same ratio with *F* and *G,* and *K* is the product of *C* and *D,* and *L* the product of *F* and *G, K* and *L* are similar plane numbers, therefore between *K* and *L* there is one mean proportional number *M.* [!just VII.Def.21; VIII.18]
+Now, since {C} and {D} are in the same ratio with {F} and {G}, and {K} is the product of {C} and {D}, and {L} the product of {F} and {G}, {K} and {L} are similar plane numbers, therefore between {K} and {L} there is one mean proportional number {M}. [!just VII.Def.21; VIII.18]
 
-Therefore *M* is the product of *D* and *F* was proved in the theorem preceding. [!just VIII.18]
+Therefore {M} is the product of {D} and {F} was proved in the theorem preceding. [!just VIII.18]
 
-Now, since *D* multiplied by *C* makes *K,* and multiplied by *F* makes *M,* therefore *C* is to *F* as *K* is to *M.* But *K* is to *M* as *M* is to *L.* Therefore *K, M,* and *L* are continuously proportional in the ratio of *C* to *F.* [!just VII.17]
+Now, since {D} multiplied by {C} makes {K}, and multiplied by {F} makes {M}, therefore {C} is to {F} as {K} is to {M}. But {K} is to {M} as {M} is to {L}. Therefore {K}, {M}, and {L} are continuously proportional in the ratio of {C} to {F}. [!just VII.17]
 
-And since *C* is to *D* as *F* is to *G,* alternately therefore *C* is to *F* as *D* is to *G.* For the same reason also *D* is to *G* as *E* is to *H.* [!just VII.13]
+And since {C} is to {D} as {F} is to {G}, alternately therefore {C} is to {F} as {D} is to {G}. For the same reason also {D} is to {G} as {E} is to {H}. [!just VII.13]
 
-Therefore *K, M,* and *L* are continuously proportional in the ratio of *C* to *F,* in the ratio of *D* to *G,* and also in the ratio of *E* to *H.*
+Therefore {K}, {M}, and {L} are continuously proportional in the ratio of {C} to {F}, in the ratio of {D} to {G}, and also in the ratio of {E} to {H}.
 
-Next, multiply *E* and *H* by *M* to make *N* and *O* respectively.
+Next, multiply {E} and {H} by {M} to make {N} and {O} respectively.
 
-Now, since *A* is a solid number, and *C, D,* and *E* are its sides, therefore *E* multiplied by the product of *C* and *D* makes *A.* But the product of *C* and *D* is *K,* therefore *E* multiplied by *K* makes *A.* For the same reason also *H* multiplied by *L* makes *B.*
+Now, since {A} is a solid number, and {C}, {D}, and {E} are its sides, therefore {E} multiplied by the product of {C} and {D} makes {A}. But the product of {C} and {D} is {K}, therefore {E} multiplied by {K} makes {A}. For the same reason also {H} multiplied by {L} makes {B}.
 
-Now, since *E* multiplied by *K* makes *A,* and further also multiplied by *M* makes *N,* therefore *K* is to *M* as *A* is to *N.* [!just VII.17]
+Now, since {E} multiplied by {K} makes {A}, and further also multiplied by {M} makes {N}, therefore {K} is to {M} as {A} is to {N}. [!just VII.17]
 
-But *K* is to *M* as *C* is to *F,* as *D* is to *G,* and as *E* is to *H,* therefore *C* is to *F* as *D* is to *G,* as *E* is to *H,* and as *A* is to *N.*
+But {K} is to {M} as {C} is to {F}, as {D} is to {G}, and as {E} is to {H}, therefore {C} is to {F} as {D} is to {G}, as {E} is to {H}, and as {A} is to {N}.
 
-Again, since *E* and *H* multiplied by *M* make *N* and *O* respectively, therefore *E* is to *H* as *N* is to *O.* [!just VII.18]
+Again, since {E} and {H} multiplied by {M} make {N} and {O} respectively, therefore {E} is to {H} as {N} is to {O}. [!just VII.18]
 
-But *E* is to *H* as *C* is to *F* and as *D* is to *G,* therefore *C* is to *F* as *D* is to *G,* as *E* is to *H,* as *A* is to *N,* and as *N* is to *O.*
+But {E} is to {H} as {C} is to {F} and as {D} is to {G}, therefore {C} is to {F} as {D} is to {G}, as {E} is to {H}, as {A} is to {N}, and as {N} is to {O}.
 
-Again, since *H* multiplied by *M* makes *O,* and further also multiplied by *L* makes *B,* therefore *M* is to *L* as *O* is to *B.* But *M* is to *L* as *C* is to *F,* a *D* is to *G,* and as *E* is to *H.* Therefore *C* is to *F* as *D* is to *G,* and as *E* is to *H,* as are *O* to *B, A* to *N,* and *N* to *O.* [!just VII.17]
+Again, since {H} multiplied by {M} makes {O}, and further also multiplied by {L} makes {B}, therefore {M} is to {L} as {O} is to {B}. But {M} is to {L} as {C} is to {F}, a {D} is to {G}, and as {E} is to {H}. Therefore {C} is to {F} as {D} is to {G}, and as {E} is to {H}, as are {O} to {B}, {A} to {N}, and {N} to {O}. [!just VII.17]
 
-Therefore *A, N, O,* and *B* are continuously proportional in the aforesaid ratios of the sides.
+Therefore {A}, {N}, {O}, and {B} are continuously proportional in the aforesaid ratios of the sides.
 
-I say that *A* also has to *B* the ratio triplicate of that which the corresponding side has to the corresponding side, that is, of the ratio which the number *C* has to *F,* or *D* has to *G,* and also *E* has to *H.*
+I say that {A} also has to {B} the ratio triplicate of that which the corresponding side has to the corresponding side, that is, of the ratio which the number {C} has to {F}, or {D} has to {G}, and also {E} has to {H}.
 
-Since *A, N, O,* and *B* are four numbers in continued proportion, therefore *A* has to *B* the ratio triplicate of that which *A* has to *N.* But it was proved that *A* is to *N* as *C* is to *F,* as *D* is to *G,* and as *E* is to *H.* [!just V.Def.10]
+Since {A}, {N}, {O}, and {B} are four numbers in continued proportion, therefore {A} has to {B} the ratio triplicate of that which {A} has to {N}. But it was proved that {A} is to {N} as {C} is to {F}, as {D} is to {G}, and as {E} is to {H}. [!just V.Def.10]
 
-Therefore *A* also has to *B* the ratio triplicate of that which the corresponding side has to the corresponding side, that is, of the ratio which the number *C* has to *F, D* has to *G,* and also *E* has to *H.*
+Therefore {A} also has to {B} the ratio triplicate of that which the corresponding side has to the corresponding side, that is, of the ratio which the number {C} has to {F}, {D} has to {G}, and also {E} has to {H}.
 
 Therefore, *between two similar solid numbers there fall two mean proportional numbers, and the solid number has to the solid number the ratio triplicate of that which the corresponding side has to the corresponding side.*
 
