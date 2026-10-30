@@ -15,16 +15,43 @@ statement: If two straight lines are at right angles to the same plane, then the
 ----
 proof:
 
-Let the two straight lines *AB* and *CD* be at right angles to the plane of reference.
+Let the two straight lines {AB} and {CD} be at right angles to the plane of reference.
 
-I say that *AB* is parallel to *CD.*
+I say that {AB} is parallel to {CD}.
 
-Let them meet the plane of reference at the points *B* and *D.*
+Let them meet the plane of reference at the points {B} and {D}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="260" tabindex="0"></canvas>
 <noscript><img alt="XI.6 diagram" src="propXI6.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the plane of reference P, the perpendiculars AB and CD,
+    // and the shaded triangle BDE in the plane, with AD and AE joined. DE is
+    // drawn in depth (E extends ZD by AM, half AB, in the oblique view).
+    //
+    // BD and DE are solid slide twins over the triangle's edges, hidden at
+    // rest (initiallyHidden) so they stroke from B and from D as joined and
+    // drawn; the triangle BDE itself traces and fills when BE first comes up.
+    // Everything else added is transparent: PT, a faceless twin of P (the
+    // filled plane would be raised over the figure if highlighted, #140);
+    // BE, the triangle's third edge; planeABDC, the plane in which AB, BD,
+    // DA, and DC are proved to lie; and ABDt, the triangle "every triangle
+    // lies in one plane" refers to. The right angles (ABD, ABE, CDB, CDE by
+    // XI.Def.3, BDE by construction, EDA as proved) are angleMarkerRight
+    // squares, shown only on the slides that talk about them so the four at
+    // D are not stacked at once.
+    //
+    // Draggables (checked against the bundle): X, Y, Z (far-off direction
+    // points), P0, A, C free; P1, P2, B sliders. All are givens, so none is
+    // deferred. D, E, P3, M are derived and listed per slide.
+    var GIVEN = ["P","PT","P3","A","B","C","D","AB","CD"];
+    var BDv   = GIVEN.concat(["BD"]);
+    var DEv   = BDv.concat(["M","E","DE"]);
+    var TRI   = DEv.concat(["BDE","BE"]);
+    var BASE  = TRI.concat(["AD"]);
+    var ALL   = BASE.concat(["AE"]);
+    var PLN   = ALL.concat(["planeABDC"]);
+    var TRP   = PLN.concat(["ABDt"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -48,29 +75,195 @@ Let them meet the plane of reference at the points *B* and *D.*
             "M;point;midpoint;A,B;0;0",
             "E;point;extend;Z,D,A,M",
             "BDE;polygon;triangle;B,D,E;0;0;black;random",
-            "AE;line;connect;A,E"
+            "AE;line;connect;A,E",
+            // Slide twins, hidden at rest (see above).
+            "BD;line;connect;B,D",
+            "DE;line;connect;D,E",
+            // Transparent highlight targets.
+            "BE;line;connect;B,E;0;0;0",
+            "PT;polygon;quadrilateral;P0,P1,P3,P2;0;0;0;0",
+            "planeABDC;polygon;quadrilateral;A,C,D,B;0;0;0;0",
+            "ABDt;polygon;triangle;A,B,D;0;0;0;0",
+            "angABD;sector;angleMarkerRight;B,A,D",
+            "angABE;sector;angleMarkerRight;B,A,E",
+            "angCDB;sector;angleMarkerRight;D,C,B",
+            "angCDE;sector;angleMarkerRight;D,C,E",
+            "angBDE;sector;angleMarkerRight;D,B,E",
+            "angEDA;sector;angleMarkerRight;D,E,A"
         ],
+        initiallyHidden: ["BD","DE"],
+        aliases: { "DB": "BD", "ED": "DE", "DA": "AD", "DC": "CD",
+                   "ABD": "angABD", "DBA": "angABD",
+                   "ABE": "angABE", "EBA": "angABE",
+                   "CDB": "angCDB", "BDC": "angCDB",
+                   "CDE": "angCDE", "EDC": "angCDE",
+                   "EDA": "angEDA", "ADE": "angEDA" },
+        slides: [
+            { text: "“If two straight lines are at right angles to the same plane, then the straight lines are parallel.”",
+              visible: GIVEN,
+              highlighted: ["AB","CD","PT"],
+              justifications: [{ ref: "XI.6" }] },
+            { text: "Let the two straight lines {AB} and {CD} be at right angles to the {plane of reference|PT}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD","PT"] },
+            { text: "I say that {AB} is parallel to {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "Let them meet the {plane of reference|PT} at the points {B} and {D}.",
+              visible: GIVEN,
+              highlighted: ["PT","B","D"] },
+            { text: "Join the straight line {BD}.",
+              visible: BDv,
+              highlighted: ["BD"],
+              transition: { animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Draw {DE} in the {plane of reference|PT} at right angles to {BD},",
+              visible: DEv.concat(["angBDE"]),
+              highlighted: ["DE","PT","BD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E",      name: geomlib.A.Point.appear },
+                  { elem: "angBDE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "DE at right angles to BD", ref: "I.11" }] },
+            { text: "and make {DE} equal to {AB}.",
+              visible: DEv,
+              highlighted: ["DE","AB"],
+              justifications: [{ claim: "DE cut off equal to AB", ref: "I.3" }] },
+            { text: "Now, since {AB} is at right angles to the {plane of reference|PT},",
+              visible: DEv,
+              highlighted: ["AB","PT"] },
+            { text: "it also makes right angles with all the straight lines which meet it and lie in the {plane of reference|PT}.",
+              visible: DEv,
+              highlighted: ["AB","PT"],
+              justifications: [{ claim: "a line at right angles to a plane", ref: "XI.Def.3" }] },
+            { text: "But each of the straight lines {BD} and {BE} lies in the {plane of reference|PT} and meets {AB},",
+              visible: TRI,
+              highlighted: ["BD","BE","AB"],
+              transition: { animations: [
+                  { elem: "BDE", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "therefore each of the angles {ABD} and {ABE} is right.",
+              visible: TRI.concat(["angABD","angABE"]),
+              highlighted: ["angABD","angABE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABD", name: geomlib.A.Sector.sweep },
+                  { elem: "angABE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "For the same reason each of the angles {CDB} and {CDE} is also right.",
+              visible: TRI.concat(["angCDB","angCDE"]),
+              highlighted: ["angCDB","angCDE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCDB", name: geomlib.A.Sector.sweep },
+                  { elem: "angCDE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "And since {AB} equals {DE}, and {BD} is common,",
+              visible: TRI,
+              highlighted: ["AB","DE","BD"] },
+            { text: "therefore the two sides {AB} and {BD} equal the two sides {ED} and {DB}.",
+              visible: TRI,
+              highlighted: ["AB","BD","DE"] },
+            { text: "And they include right angles, therefore the base {AD} equals the base {BE}",
+              visible: BASE.concat(["angABD","angBDE"]),
+              highlighted: ["angABD","angBDE","AD","BE"],
+              transition: { animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "two sides and the included angle", ref: "I.4" }] },
+            { text: "And, since {AB} equals {DE} while {AD} equals {BE},",
+              visible: BASE,
+              highlighted: ["AB","DE","AD","BE"] },
+            { text: "the two sides {AB} and {BE} equal the two sides {ED} and {DA},",
+              visible: BASE,
+              highlighted: ["AB","BE","DE","AD"] },
+            { text: "and {AE} is their common base,",
+              visible: ALL,
+              highlighted: ["AE"],
+              transition: { animations: [
+                  { elem: "AE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "therefore the angle {ABE} equals the angle {EDA}.",
+              visible: ALL.concat(["angABE","angEDA"]),
+              highlighted: ["angABE","angEDA"],
+              transition: { animations: [
+                  { elem: "angEDA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "three sides equal", ref: "I.8" }] },
+            { text: "But the angle {ABE} is right, therefore the angle {EDA} is also right.",
+              visible: ALL.concat(["angABE","angEDA"]),
+              highlighted: ["angABE","angEDA"] },
+            { text: "Therefore {ED} is at right angles to {DA}.",
+              visible: ALL.concat(["angEDA"]),
+              highlighted: ["DE","AD","angEDA"] },
+            { text: "But it is also at right angles to each of the straight lines {BD} and {DC},",
+              visible: ALL.concat(["angBDE","angCDE"]),
+              highlighted: ["DE","BD","CD","angBDE","angCDE"] },
+            { text: "therefore {ED} is set up at right angles to the three straight lines {BD}, {DA}, and {DC} at their intersection.",
+              visible: ALL.concat(["angBDE","angCDE","angEDA"]),
+              highlighted: ["DE","BD","AD","CD"] },
+            { text: "Therefore the three straight lines {BD}, {DA}, and {DC} lie in one plane.",
+              visible: PLN,
+              highlighted: ["BD","AD","CD","planeABDC"],
+              transition: { animations: [
+                  { elem: "planeABDC", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "at right angles to three lines at their section", ref: "XI.5" }] },
+            { text: "But in whatever plane {DB} and {DA} lie, {AB} also lies,",
+              visible: PLN,
+              highlighted: ["BD","AD","AB","planeABDC"] },
+            { text: "for every triangle lies in one plane.",
+              visible: TRP,
+              highlighted: ["ABDt"],
+              transition: { animations: [
+                  { elem: "ABDt", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "a triangle lies in one plane", ref: "XI.2" }] },
+            { text: "Therefore the straight lines {AB}, {BD}, and {DC} lie in one plane.",
+              visible: PLN,
+              highlighted: ["AB","BD","CD","planeABDC"] },
+            { text: "And each of the angles {ABD} and {BDC} is right,",
+              visible: PLN.concat(["angABD","angCDB"]),
+              highlighted: ["angABD","angCDB"] },
+            { text: "therefore {AB} is parallel to {CD}.",
+              visible: PLN.concat(["angABD","angCDB"]),
+              highlighted: ["AB","CD"],
+              justifications: [{ claim: "interior angles on the same side sum to two right angles", ref: "I.28" }] },
+            { text: "Therefore, if two straight lines are at right angles to the same plane, then the straight lines are parallel.",
+              visible: ALL,
+              highlighted: ["AB","CD","PT"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.6") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.8":      "/elements/books/bookI/propositions/propI8/",
+        "I.11":     "/elements/books/bookI/propositions/propI11/",
+        "I.28":     "/elements/books/bookI/propositions/propI28/",
+        "XI.Def.3": "/elements/books/bookXI/definitions/defXI3/",
+        "XI.2":     "/elements/books/bookXI/propositions/propXI2/",
+        "XI.5":     "/elements/books/bookXI/propositions/propXI5/"
     });
 </script>
 </figure>
 
-Join the straight line *BD.* Draw *DE* in the plane of reference at right angles to *BD,* and make *DE* equal to *AB.* [!just I.11, I.3]
+Join the straight line {BD}. Draw {DE} in the plane of reference at right angles to {BD}, and make {DE} equal to {AB}. [!just I.11, I.3]
 
-Now, since *AB* is at right angles to the plane of reference, it also makes right angles with all the straight lines which meet it and lie in the plane of reference. [!just XI.Def.3]
+Now, since {AB} is at right angles to the plane of reference, it also makes right angles with all the straight lines which meet it and lie in the plane of reference. [!just XI.Def.3]
 
-But each of the straight lines *BD* and *BE* lies in the plane of reference and meets *AB,* therefore each of the angles *ABD* and *ABE* is right. For the same reason each of the angles *CDB* and *CDE* is also right.
+But each of the straight lines {BD} and {BE} lies in the plane of reference and meets {AB}, therefore each of the angles {ABD} and {ABE} is right. For the same reason each of the angles {CDB} and {CDE} is also right.
 
-And since *AB* equals *DE,* and *BD* is common, therefore the two sides *AB* and *BD* equal the two sides *ED* and *DB.* And they include right angles, therefore the base *AD* equals the base *BE* [!just I.4]
+And since {AB} equals {DE}, and {BD} is common, therefore the two sides {AB} and {BD} equal the two sides {ED} and {DB}. And they include right angles, therefore the base {AD} equals the base {BE} [!just I.4]
 
-And, since *AB* equals *DE* while *AD* equals *BE,* the two sides *AB* and *BE* equal the two sides *ED* and *DA,* and *AE* is their common base, therefore the angle *ABE* equals the angle *EDA.* [!just I.8]
+And, since {AB} equals {DE} while {AD} equals {BE}, the two sides {AB} and {BE} equal the two sides {ED} and {DA}, and {AE} is their common base, therefore the angle {ABE} equals the angle {EDA}. [!just I.8]
 
-But the angle *ABE* is right, therefore the angle *EDA* is also right. Therefore *ED* is at right angles to *DA.*
+But the angle {ABE} is right, therefore the angle {EDA} is also right. Therefore {ED} is at right angles to {DA}.
 
-But it is also at right angles to each of the straight lines *BD* and *DC,* therefore *ED* is set up at right angles to the three straight lines *BD, DA,* and *DC* at their intersection. Therefore the three straight lines *BD, DA,* and *DC* lie in one plane. [!just XI.5]
+But it is also at right angles to each of the straight lines {BD} and {DC}, therefore {ED} is set up at right angles to the three straight lines {BD}, {DA}, and {DC} at their intersection. Therefore the three straight lines {BD}, {DA}, and {DC} lie in one plane. [!just XI.5]
 
-But in whatever plane *DB* and *DA* lie, *AB* also lies, for every triangle lies in one plane. [!just XI.2]
+But in whatever plane {DB} and {DA} lie, {AB} also lies, for every triangle lies in one plane. [!just XI.2]
 
-Therefore the straight lines *AB, BD,* and *DC* lie in one plane. And each of the angles *ABD* and *BDC* is right, therefore *AB* is parallel to *CD.* [!just I.28]
+Therefore the straight lines {AB}, {BD}, and {DC} lie in one plane. And each of the angles {ABD} and {BDC} is right, therefore {AB} is parallel to {CD}. [!just I.28]
 
 Therefore, *if two straight lines are at right angles to the same plane, then the straight lines are parallel.*
 

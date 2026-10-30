@@ -15,14 +15,37 @@ statement: If a straight line is set up at right angles to three straight lines 
 ----
 proof:
 
-Let a straight line *AB* be set up at right angles to the three straight lines *BC, BD,* and *BE* at their intersection *B.*
+Let a straight line {AB} be set up at right angles to the three straight lines {BC}, {BD}, and {BE} at their intersection {B}.
 
-I say that *BC, BD,* and *BE* lie in one plane.
+I say that {BC}, {BD}, and {BE} lie in one plane.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="230" tabindex="0"></canvas>
 <noscript><img alt="XI.5 diagram" src="propXI5.gif"/></noscript>
 <script type="text/javascript">
+    // A reductio. Joyce's figure already draws the supposed position: BD and
+    // BE in the plane of reference, BC raised above it, and BF the section of
+    // the plane through AB and BC with the plane of reference.
+    //
+    // Everything added is transparent: planeT, a faceless twin of the plane
+    // of reference (the filled "plane" would be raised over the figure if
+    // highlighted, #140), and planeABC, the plane through AB and BC, drawn
+    // as the quadrilateral A, C, F, B. The four right angles at B (ABC, ABD,
+    // ABE by hypothesis, ABF by XI.Def.3) are angleMarkerRight squares; in
+    // this oblique view they draw as rhombi, as the text asserts them right.
+    //
+    // Draggables (checked against the bundle): P1, P2, P3 and A..F are all
+    // free. F is the section the proof introduces mid-walk, so it is
+    // deferred; BF is derived and follows the visible sets. The four
+    // markers share vertex B and arm BA, so each shows only on the slides
+    // that talk about its angle.
+    var GIVEN = ["plane","planeT","A","B","C","D","E","AB","BC","BD","BE"];
+    var RT    = GIVEN.concat(["angABC","angABD","angABE"]);
+    var PL    = GIVEN.concat(["planeABC"]);
+    var SEC   = PL.concat(["F","BF"]);
+    var ABF   = SEC.concat(["angABF"]);
+    var ABC2  = ABF.concat(["angABC"]);
+    var DONE  = GIVEN.concat(["F","BF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,25 +65,146 @@ I say that *BC, BD,* and *BE* lie in one plane.
             "BD;line;connect;B,D",
             "BE;line;connect;B,E",
             "F;point;free;200,110",
-            "BF;line;connect;B,F"
+            "BF;line;connect;B,F",
+            // Transparent highlight targets (see above).
+            "planeT;polygon;parallelogram;P3,P1,P2;0;0;0;0",
+            "planeABC;polygon;quadrilateral;A,C,F,B;0;0;0;0",
+            "angABC;sector;angleMarkerRight;B,A,C",
+            "angABD;sector;angleMarkerRight;B,A,D",
+            "angABE;sector;angleMarkerRight;B,A,E",
+            "angABF;sector;angleMarkerRight;B,A,F"
         ],
+        deferDraggables: ["F"],
+        aliases: { "ABC": "angABC", "CBA": "angABC",
+                   "ABD": "angABD", "DBA": "angABD",
+                   "ABE": "angABE", "EBA": "angABE",
+                   "ABF": "angABF", "FBA": "angABF" },
+        slides: [
+            { text: "“If a straight line is set up at right angles to three straight lines”",
+              visible: GIVEN,
+              highlighted: ["AB","BC","BD","BE"] },
+            { text: "“which meet one another at their common point of section,”",
+              visible: GIVEN,
+              highlighted: ["BC","BD","BE","B"] },
+            { text: "“then the three straight lines lie in one plane.”",
+              visible: GIVEN,
+              highlighted: ["BC","BD","BE"],
+              justifications: [{ ref: "XI.5" }] },
+            { text: "Let a straight line {AB} be set up at right angles",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "to the three straight lines {BC}, {BD}, and {BE} at their intersection {B}.",
+              visible: RT,
+              highlighted: ["BC","BD","BE","B"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep },
+                  { elem: "angABD", name: geomlib.A.Sector.sweep },
+                  { elem: "angABE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that {BC}, {BD}, and {BE} lie in one plane.",
+              visible: GIVEN,
+              highlighted: ["BC","BD","BE"] },
+            { text: "For suppose that they do not,",
+              visible: GIVEN,
+              highlighted: ["BC","BD","BE"] },
+            { text: "but, if possible, let {BD} and {BE} lie in the {plane of reference|planeT} and {BC} in one more elevated.",
+              visible: GIVEN,
+              highlighted: ["BD","BE","planeT","BC"] },
+            { text: "Produce the {plane|planeABC} through {AB} and {BC}.",
+              visible: PL,
+              highlighted: ["planeABC","AB","BC"],
+              transition: { animations: [
+                  { elem: "planeABC", name: geomlib.A.Polygon.outline } ] } },
+            { text: "It intersects the {plane of reference|planeT} in a straight line.",
+              visible: PL,
+              highlighted: ["planeABC","planeT"],
+              justifications: [{ claim: "the common section of two planes is a straight line", ref: "XI.3" }] },
+            { text: "Let the intersection be {BF}.",
+              visible: SEC,
+              highlighted: ["BF","F"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",  name: geomlib.A.Point.appear },
+                  { elem: "BF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore the three straight lines {AB}, {BC}, and {BF} lie in one plane, namely that drawn through {AB} and {BC}.",
+              visible: SEC,
+              highlighted: ["AB","BC","BF","planeABC"] },
+            { text: "Now, since {AB} is at right angles to each of the straight lines {BD} and {BE},",
+              visible: SEC.concat(["angABD","angABE"]),
+              highlighted: ["AB","BD","BE","angABD","angABE"] },
+            { text: "therefore {AB} is also at right angles to the {plane|planeT} through {BD} and {BE}.",
+              visible: SEC,
+              highlighted: ["AB","planeT","BD","BE"],
+              justifications: [{ claim: "at right angles to two lines at their section, so to their plane", ref: "XI.4" }] },
+            { text: "But the {plane|planeT} through {BD} and {BE} is the {plane of reference|planeT},",
+              visible: SEC,
+              highlighted: ["planeT","BD","BE"] },
+            { text: "therefore {AB} is at right angles to the {plane of reference|planeT}.",
+              visible: SEC,
+              highlighted: ["AB","planeT"] },
+            { text: "Thus {AB} also makes right angles with all the straight lines which meet it and lie in the {plane of reference|planeT}.",
+              visible: SEC,
+              highlighted: ["AB","planeT"],
+              justifications: [{ claim: "a line at right angles to a plane", ref: "XI.Def.3" }] },
+            { text: "But {BF}, which is the plane of reference, meets it, therefore the angle {ABF} is right.",
+              visible: ABF,
+              highlighted: ["BF","angABF"],
+              transition: { animations: [
+                  { elem: "angABF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "And, by hypothesis, the angle {ABC} is also right,",
+              visible: ABC2,
+              highlighted: ["angABC"] },
+            { text: "therefore the angle {ABF} equals the angle {ABC}, and they lie in one plane, which is impossible.",
+              visible: ABC2,
+              highlighted: ["angABF","angABC","planeABC"] },
+            // The supposition is withdrawn: the plane through AB and BC and
+            // the angle markers go; Joyce's figure stands.
+            { text: "Therefore the straight line {BC} is not in a more elevated plane.",
+              visible: DONE,
+              highlighted: ["BC"] },
+            // Joyce's "BC, BC" (for BC, BD) is left literal; the slide
+            // lights the three lines the sentence is about.
+            { text: "Therefore the three straight lines {BC}, BC, and {BE} lie in one plane.",
+              visible: DONE,
+              highlighted: ["BC","BD","BE"] },
+            { text: "Therefore, if a straight line is set up at right angles to three straight lines",
+              visible: DONE,
+              highlighted: ["AB","BC","BD","BE"] },
+            { text: "which meet one another at their common point of section,",
+              visible: DONE,
+              highlighted: ["BC","BD","BE","B"] },
+            { text: "then the three straight lines lie in one plane.",
+              visible: DONE,
+              highlighted: ["BC","BD","BE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.5") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "XI.Def.3": "/elements/books/bookXI/definitions/defXI3/",
+        "XI.3":     "/elements/books/bookXI/propositions/propXI3/",
+        "XI.4":     "/elements/books/bookXI/propositions/propXI4/"
     });
 </script>
 </figure>
 
-For suppose that they do not, but, if possible, let *BD* and *BE* lie in the plane of reference and *BC* in one more elevated. Produce the plane through *AB* and *BC.* [!just XI.3]
+For suppose that they do not, but, if possible, let {BD} and {BE} lie in the plane of reference and {BC} in one more elevated. Produce the plane through {AB} and {BC}. [!just XI.3]
 
-It intersects the plane of reference in a straight line. Let the intersection be *BF.* Therefore the three straight lines *AB, BC,* and *BF* lie in one plane, namely that drawn through *AB* and *BC.*
+It intersects the plane of reference in a straight line. Let the intersection be {BF}. Therefore the three straight lines {AB}, {BC}, and {BF} lie in one plane, namely that drawn through {AB} and {BC}.
 
-Now, since *AB* is at right angles to each of the straight lines *BD* and *BE,* therefore *AB* is also at right angles to the plane through *BD* and *BE.* [!just XI.4]
+Now, since {AB} is at right angles to each of the straight lines {BD} and {BE}, therefore {AB} is also at right angles to the plane through {BD} and {BE}. [!just XI.4]
 
-But the plane through *BD* and *BE* is the plane of reference, therefore *AB* is at right angles to the plane of reference.
+But the plane through {BD} and {BE} is the plane of reference, therefore {AB} is at right angles to the plane of reference.
 
-Thus *AB* also makes right angles with all the straight lines which meet it and lie in the plane of reference. [!just XI.Def.3]
+Thus {AB} also makes right angles with all the straight lines which meet it and lie in the plane of reference. [!just XI.Def.3]
 
-But *BF,* which is the plane of reference, meets it, therefore the angle *ABF* is right. And, by hypothesis, the angle *ABC* is also right, therefore the angle *ABF* equals the angle *ABC,* and they lie in one plane, which is impossible.
+But {BF}, which is the plane of reference, meets it, therefore the angle {ABF} is right. And, by hypothesis, the angle {ABC} is also right, therefore the angle {ABF} equals the angle {ABC}, and they lie in one plane, which is impossible.
 
-Therefore the straight line *BC* is not in a more elevated plane. Therefore the three straight lines *BC, BC,* and *BE* lie in one plane.
+Therefore the straight line {BC} is not in a more elevated plane. Therefore the three straight lines {BC}, *BC,* and {BE} lie in one plane.
 
 Therefore, *if a straight line is set up at right angles to three straight lines which meet one another at their common point of section, then the three straight lines lie in one plane.*
 
