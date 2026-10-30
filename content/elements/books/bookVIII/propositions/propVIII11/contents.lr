@@ -15,18 +15,21 @@ statement: Between two square numbers there is one mean proportional number, and
 ----
 proof:
 
-Let *A* and *B* be square numbers, and let *C* be the side of *A,* and *D* of *B.*
+Let {A} and {B} be square numbers, and let {C} be the side of {A}, and {D} of {B}.
 
-I say that between *A* and *B* there is one mean proportional number, and *A* has to *B* the ratio duplicate of that which *C* has to *D.*
+I say that between {A} and {B} there is one mean proportional number, and {A} has to {B} the ratio duplicate of that which {C} has to {D}.
 
-Multiply *C* by *D* to make *E.*
+Multiply {C} by {D} to make {E}.
 
-Now, since *A* is a square and *C* is its side, therefore *C* multiplied by itself makes *A.* For the same reason also, *D* multiplied by itself makes *B.*
+Now, since {A} is a square and {C} is its side, therefore {C} multiplied by itself makes {A}. For the same reason also, {D} multiplied by itself makes {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="200" tabindex="0"></canvas>
 <noscript><img alt="VIII.11 diagram" src="propVIII11.gif"/></noscript>
 <script type="text/javascript">
+    // The derived right ends carry the dots of the resting figure.
+    var GIVEN = ["A","B","C","D","A2","B2"];
+    var ALL   = GIVEN.concat(["E","E1","E2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -58,19 +61,108 @@ Now, since *A* is a square and *C* is its side, therefore *C* multiplied by itse
             "E2;point;proportion;U1,U2,C1,C2,D1,D2,E1,E3;0",
             "E;line;connect;E1,E2;black"
         ],
+        // A, B and their sides C, D stand from the start; E is stroked in when
+        // it is made. The rest is highlight beats. Draggables (checked against
+        // the bundle): C1, C2, D1, D2, A1, B1, E1 (rails and U1, U2 sit
+        // off-canvas). E is made mid-walk, so E1 is deferred.
+        deferDraggables: ["E1"],
+        slides: [
+            { text: "“Between two square numbers there is one mean proportional number,”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VIII.11" }] },
+            { text: "“and the square has to the square the duplicate ratio of that which the side has to the side.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "Let {A} and {B} be square numbers,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and let {C} be the side of {A}, and {D} of {B}.",
+              visible: GIVEN,
+              highlighted: ["C","A","D","B"] },
+            { text: "I say that between {A} and {B} there is one mean proportional number,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and {A} has to {B} the ratio duplicate of that which {C} has to {D}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "Multiply {C} by {D} to make {E}.",
+              visible: ALL,
+              highlighted: ["C","D","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since {A} is a square and {C} is its side, therefore {C} multiplied by itself makes {A}.",
+              visible: ALL,
+              highlighted: ["A","C"] },
+            { text: "For the same reason also, {D} multiplied by itself makes {B}.",
+              visible: ALL,
+              highlighted: ["D","B"] },
+            { text: "Since, then, {C} multiplied by the numbers {C} and {D} makes {A} and {E} respectively,",
+              visible: ALL,
+              highlighted: ["C","D","A","E"] },
+            { text: "therefore {C} is to {D} as {A} is to {E}.",
+              visible: ALL,
+              highlighted: ["C","D","A","E"],
+              justifications: [{ claim: "C : D = A : E", ref: "VII.17" }] },
+            { text: "For the same reason also {C} is to {D} as {E} is to {B}.",
+              visible: ALL,
+              highlighted: ["C","D","E","B"],
+              justifications: [{ claim: "C : D = E : B", ref: "VII.18" }] },
+            { text: "Therefore {A} is to {E} as {E} is to {B}.",
+              visible: ALL,
+              highlighted: ["A","E","B"] },
+            { text: "Therefore between {A} and {B} there is one mean proportional number.",
+              visible: ALL,
+              highlighted: ["A","E","B"] },
+            { text: "I say next that {A} also has to {B} the ratio duplicate of that which {C} has to {D}.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "Since {A}, {E}, and {B} are three numbers in proportion,",
+              visible: ALL,
+              highlighted: ["A","E","B"] },
+            { text: "therefore {A} has to {B} the ratio duplicate of that which {A} has to {E}.",
+              visible: ALL,
+              highlighted: ["A","B","E"],
+              justifications: [{ claim: "A : B duplicate of A : E", ref: "V.Def.9" }] },
+            { text: "But {A} is to {E} as {C} is to {D},",
+              visible: ALL,
+              highlighted: ["A","E","C","D"] },
+            { text: "therefore {A} has to {B} the ratio duplicate of that which the side {C} has to {D}.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "Therefore, between two square numbers there is one mean proportional number,",
+              visible: ALL,
+              highlighted: ["A","E","B"] },
+            { text: "and the square has to the square the duplicate ratio of that which the side has to the side.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.11") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.Def.9": "/elements/books/bookV/definitions/defV9/",
+        "VII.17":  "/elements/books/bookVII/propositions/propVII17/",
+        "VII.18":  "/elements/books/bookVII/propositions/propVII18/"
     });
 </script>
 </figure>
 
-Since, then, *C* multiplied by the numbers *C* and *D* makes *A* and *E* respectively, therefore *C* is to *D* as *A* is to *E.* [!just VII.17]
+Since, then, {C} multiplied by the numbers {C} and {D} makes {A} and {E} respectively, therefore {C} is to {D} as {A} is to {E}. [!just VII.17]
 
-For the same reason also *C* is to *D* as *E* is to *B.* Therefore *A* is to *E* as *E* is to *B.* Therefore between *A* and *B* there is one mean proportional number. [!just VII.18]
+For the same reason also {C} is to {D} as {E} is to {B}. Therefore {A} is to {E} as {E} is to {B}. Therefore between {A} and {B} there is one mean proportional number. [!just VII.18]
 
-I say next that *A* also has to *B* the ratio duplicate of that which *C* has to *D.*
+I say next that {A} also has to {B} the ratio duplicate of that which {C} has to {D}.
 
-Since *A, E,* and *B* are three numbers in proportion, therefore *A* has to *B* the ratio duplicate of that which *A* has to *E.* [!just V.Def.9]
+Since {A}, {E}, and {B} are three numbers in proportion, therefore {A} has to {B} the ratio duplicate of that which {A} has to {E}. [!just V.Def.9]
 
-But *A* is to *E* as *C* is to *D,* therefore *A* has to *B* the ratio duplicate of that which the side *C* has to *D.*
+But {A} is to {E} as {C} is to {D}, therefore {A} has to {B} the ratio duplicate of that which the side {C} has to {D}.
 
 Therefore, *between two square numbers there is one mean proportional number, and the square has to the square the duplicate ratio of that which the side has to the side.*
 
