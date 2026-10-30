@@ -15,14 +15,37 @@ statement: The square on a minor straight line applied to a rational straight li
 ----
 proof:
 
-Let *AB* be a minor and *CD* a rational straight line, and to the rational straight line *CD* let *CE* be applied equal to the square on *AB* and producing *CF* as breadth.
+Let {AB} be a minor and {CD} a rational straight line, and to the rational straight line {CD} let {CE} be applied equal to the square on {AB} and producing {CF} as breadth.
 
-I say that *CF* is a fourth apotome.
+I say that {CF} is a fourth apotome.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="370" height="180" tabindex="0"></canvas>
 <noscript><img alt="X.100 diagram" src="propX100.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure (X.99's): the minor AB with its annex BG on the line
+    // AG, the rational CD, CE (DCFE) equal to the square on AB applied to CD
+    // with breadth CF, CH equal to the square on AG (DCFE with FKHE), KL
+    // (HKML) equal to the square on BG, FM bisected at N and the parallel NO.
+    // Added, all hidden at rest: solid twins AB and BG (initiallyHidden) so
+    // AB stands alone and the annex is produced from B to G; transparent
+    // targets CF, CK, KH, KM, CM, FM, MN, EF, ML (;0;0;0); faceless
+    // rectangles CE, CH, KL, CL, FL, FO, NL (;0;0;0;0) for the areas the
+    // text names, since the random-faced originals would be raised over the
+    // figure when lit (#140). No angle is called right.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, G (line sliders)
+    // and the offscreen frees. C and D arrive with "CD a rational straight
+    // line", G with the annex, so all three are deferred. F, E, K, H, M, L,
+    // N, O are derived and listed per slide.
+    var GIVEN = ["A","B","AB"];
+    var RAT   = GIVEN.concat(["C","D","CD"]);
+    var APPL  = RAT.concat(["F","E","DCFE","CE","CF"]);
+    var ANNEX = APPL.concat(["G","BG"]);
+    var GA    = ANNEX.concat(["AG"]);
+    var CHS   = GA.concat(["K","H","FKHE","CH","CK"]);
+    var KLS   = CHS.concat(["M","L","HKML","KL","KM","KH","CL","CM","FL","FM","ML"]);
+    var ALL   = KLS.concat(["N","O","NO","FO","NL","MN","EF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,51 +74,310 @@ I say that *CF* is a fourth apotome.
             "HKML;polygon;quadrilateral;H,K,M,L;0;0;black;random",
             "N;point;midpoint;F,M",
             "O;point;parallelogram;D,C,N",
-            "NO;line;connect;N,O"
+            "NO;line;connect;N,O",
+            // Slide-only twins and highlight targets.
+            "AB;line;connect;A,B",
+            "BG;line;connect;B,G",
+            "CF;line;connect;C,F;0;0;0",
+            "CK;line;connect;C,K;0;0;0",
+            "KH;line;connect;K,H;0;0;0",
+            "KM;line;connect;K,M;0;0;0",
+            "CM;line;connect;C,M;0;0;0",
+            "FM;line;connect;F,M;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "ML;line;connect;M,L;0;0;0",
+            "CE;polygon;quadrilateral;C,F,E,D;0;0;0;0",
+            "CH;polygon;quadrilateral;C,K,H,D;0;0;0;0",
+            "KL;polygon;quadrilateral;K,M,L,H;0;0;0;0",
+            "CL;polygon;quadrilateral;C,M,L,D;0;0;0;0",
+            "FL;polygon;quadrilateral;F,M,L,E;0;0;0;0",
+            "FO;polygon;quadrilateral;F,N,O,E;0;0;0;0",
+            "NL;polygon;quadrilateral;N,M,L,O;0;0;0;0"
         ],
+        initiallyHidden: ["AB","BG"],
+        deferDraggables: ["C","D","G"],
+        aliases: { "GB": "BG", "LF": "FL", "MF": "FM", "NM": "MN", "FE": "EF" },
+        slides: [
+            { text: "“The square on a minor straight line applied to a rational straight line",
+              visible: ALL,
+              highlighted: ["AB", "CD", "CE"],
+              justifications: [{ ref: "X.100" }] },
+            { text: "produces as breadth a fourth apotome.”",
+              visible: ALL,
+              highlighted: ["CF"] },
+            { text: "Let {AB} be a minor",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "and {CD} a rational straight line,",
+              visible: RAT,
+              highlighted: ["CD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "C", name: geomlib.A.Point.appear },
+                  { elem: "D", name: geomlib.A.Point.appear },
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and to the rational straight line {CD} let {CE} be applied equal to the square on {AB}",
+              visible: APPL,
+              highlighted: ["CD", "AB"],
+              transition: { animations: [
+                  { elem: "DCFE", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and producing {CF} as breadth.",
+              visible: APPL,
+              highlighted: ["CF"] },
+            { text: "I say that {CF} is a fourth apotome.",
+              visible: APPL,
+              highlighted: ["CF"] },
+            { text: "Let {BG} be the annex to {AB}.",
+              visible: ANNEX,
+              highlighted: ["BG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BG", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "Then {AG} and {GB} are straight lines incommensurable in square",
+              visible: GA,
+              highlighted: ["AG", "BG"] },
+            { text: "which make the sum of the squares on {AG} and {GB} rational,",
+              visible: GA,
+              highlighted: ["AG", "BG"] },
+            { text: "but twice the rectangle {AG} by {GB} medial.",
+              visible: GA,
+              highlighted: ["AG", "BG"],
+              justifications: [{ claim: "AB a minor", ref: "X.76" }] },
+            { text: "To {CD} apply {CH}, equal to the square on {AG}, producing {CK} as breadth,",
+              visible: CHS,
+              highlighted: ["CD", "AG", "CK"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "FKHE", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and {KL}, equal to the square on {BG}, producing {KM} as breadth.",
+              visible: KLS,
+              highlighted: ["BG", "KM"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "M", name: geomlib.A.Point.appear },
+                  { elem: "HKML", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Then the whole {CL} equals the sum of the squares on {AG} and {GB}.",
+              visible: KLS,
+              highlighted: ["CL", "AG", "BG"] },
+            { text: "And the sum of the squares on {AG} and {GB} is rational, therefore {CL} is also rational.",
+              visible: KLS,
+              highlighted: ["AG", "BG", "CL"] },
+            { text: "And it is applied to the rational straight line {CD} producing {CM} as breadth,",
+              visible: KLS,
+              highlighted: ["CL", "CD", "CM"] },
+            { text: "therefore {CM} is also rational and commensurable in length with {CD}.",
+              visible: KLS,
+              highlighted: ["CM", "CD"],
+              justifications: [{ claim: "CM rational, commensurable with CD", ref: "X.20" }] },
+            { text: "Since the whole {CL} equals the sum of the squares on {AG} and {GB},",
+              visible: KLS,
+              highlighted: ["CL", "AG", "BG"] },
+            { text: "and, in these, {CE} equals the square on {AB},",
+              visible: KLS,
+              highlighted: ["CE", "AB"] },
+            { text: "therefore the remainder {FL} equals twice the rectangle {AG} by {GB}.",
+              visible: KLS,
+              highlighted: ["FL", "AG", "BG"],
+              justifications: [{ claim: "FL = twice AG by GB", ref: "II.7" }] },
+            { text: "Bisect {FM} at the point {N},",
+              visible: ALL,
+              highlighted: ["FM", "N"],
+              transition: { animations: [
+                  { elem: "N", name: geomlib.A.Point.appear } ] } },
+            { text: "and draw {NO} through {N} parallel to either of the straight lines {CD} or {ML}.",
+              visible: ALL,
+              highlighted: ["NO", "CD", "ML"],
+              transition: { animations: [
+                  { elem: "NO", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then each of the rectangles {FO} and {NL} equals the rectangle {AG} by {GB}.",
+              visible: ALL,
+              highlighted: ["FO", "NL", "AG", "BG"] },
+            { text: "And, since twice the rectangle {AG} by {GB} is medial and equals {FL}, therefore {FL} is also medial.",
+              visible: ALL,
+              highlighted: ["AG", "BG", "FL"] },
+            { text: "And it is applied to the rational straight line {FE} producing {FM} as breadth,",
+              visible: ALL,
+              highlighted: ["FL", "EF", "FM"] },
+            { text: "therefore {FM} is rational and incommensurable in length with {CD}.",
+              visible: ALL,
+              highlighted: ["FM", "CD"],
+              justifications: [{ claim: "FM rational, incommensurable with CD", ref: "X.22" }] },
+            { text: "Since the sum of the squares on {AG} and {GB} is rational,",
+              visible: ALL,
+              highlighted: ["AG", "BG"] },
+            { text: "while twice the rectangle {AG} by {GB} is medial,",
+              visible: ALL,
+              highlighted: ["AG", "BG"] },
+            { text: "therefore the sum of the squares on {AG} and {GB} is incommensurable with twice the rectangle {AG} by {GB}.",
+              visible: ALL,
+              highlighted: ["AG", "BG"] },
+            { text: "But {CL} equals the sum of the squares on {AG} and {GB},",
+              visible: ALL,
+              highlighted: ["CL"] },
+            { text: "and {FL} equals twice the rectangle {AG} by {GB},",
+              visible: ALL,
+              highlighted: ["FL"] },
+            { text: "therefore {CL} is incommensurable with {FL}.",
+              visible: ALL,
+              highlighted: ["CL", "FL"] },
+            { text: "But {CL} is to {FL} as {CM} is to {MF}, therefore {CM} is incommensurable in length with {MF}.",
+              visible: ALL,
+              highlighted: ["CL", "FL", "CM", "FM"],
+              justifications: [{ claim: "CL : FL = CM : MF", ref: "VI.1" }, { ref: "X.11" }] },
+            { text: "And both are rational, therefore {CM} and {MF} are rational straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["CM", "FM"] },
+            { text: "Therefore {CF} is an apotome.",
+              visible: ALL,
+              highlighted: ["CF"],
+              justifications: [{ claim: "CF an apotome", ref: "X.73" }] },
+            { text: "I say that it is also a fourth apotome.",
+              visible: ALL,
+              highlighted: ["CF"] },
+            { text: "Since {AG} and {GB} are incommensurable in square,",
+              visible: ALL,
+              highlighted: ["AG", "BG"] },
+            { text: "therefore the square on {AG} is also incommensurable with the square on {GB}.",
+              visible: ALL,
+              highlighted: ["AG", "BG"] },
+            { text: "And {CH} equals the square on {AG}, and {KL} equal to the square on {GB},",
+              visible: ALL,
+              highlighted: ["CH", "KL"] },
+            { text: "therefore {CH} is incommensurable with {KL}.",
+              visible: ALL,
+              highlighted: ["CH", "KL"] },
+            { text: "But {CH} is to {KL} as {CK} is to {KM}, therefore {CK} is incommensurable in length with {KM}.",
+              visible: ALL,
+              highlighted: ["CH", "KL", "CK", "KM"],
+              justifications: [{ claim: "CH : KL = CK : KM", ref: "VI.1" }, { ref: "X.11" }] },
+            { text: "Since the rectangle {AG} by {GB} is a mean proportional between the squares on {AG} and {GB}",
+              visible: ALL,
+              highlighted: ["AG", "BG"] },
+            { text: "the square on {AG} equals {CH}, the square on {GB} equals {KL},",
+              visible: ALL,
+              highlighted: ["CH", "KL"] },
+            { text: "and the rectangle {AG} by {GB} equals {NL},",
+              visible: ALL,
+              highlighted: ["NL"] },
+            { text: "therefore {NL} is a mean proportional between {CH} and {KL}.",
+              visible: ALL,
+              highlighted: ["NL", "CH", "KL"] },
+            { text: "Therefore {CH} is to {NL} as {NL} is to {KL}.",
+              visible: ALL,
+              highlighted: ["CH", "NL", "KL"] },
+            { text: "But {CH} is to {NL} as {CK} is to {NM},",
+              visible: ALL,
+              highlighted: ["CK", "MN"] },
+            { text: "and {NL} is to {KL} as {NM} is to {KM},",
+              visible: ALL,
+              highlighted: ["MN", "KM"] },
+            { text: "therefore {CK} is to {MN} as {MN} is to {KM}.",
+              visible: ALL,
+              highlighted: ["CK", "MN", "KM"],
+              justifications: [{ ref: "VI.1" }, { ref: "V.11" }] },
+            { text: "Therefore the rectangle {CK} by {KM} equals the square on {MN},",
+              visible: ALL,
+              highlighted: ["CK", "KM", "MN"] },
+            { text: "that is, to the fourth part of the square on {FM}.",
+              visible: ALL,
+              highlighted: ["FM"],
+              justifications: [{ ref: "VI.17" }] },
+            { text: "Since {CM} and {MF} are two unequal straight lines,",
+              visible: ALL,
+              highlighted: ["CM", "FM"] },
+            { text: "and the rectangle {CK} by {KM}, equal to the fourth part of the square on {MF}",
+              visible: ALL,
+              highlighted: ["CK", "KM", "FM"] },
+            { text: "and deficient by a square figure,",
+              visible: ALL,
+              highlighted: ["CK", "KM"] },
+            { text: "has been applied to {CM} and divides it into incommensurable parts,",
+              visible: ALL,
+              highlighted: ["CK", "KM"] },
+            { text: "therefore the square on {CM} is greater than the square on {MF}",
+              visible: ALL,
+              highlighted: ["CM", "FM"] },
+            { text: "by the square on a straight line incommensurable with {CM}.",
+              visible: ALL,
+              highlighted: ["CM"],
+              justifications: [{ ref: "X.18" }] },
+            { text: "And the whole {CM} is commensurable in length with the rational straight line {CD} set out,",
+              visible: ALL,
+              highlighted: ["CM", "CD"] },
+            { text: "therefore {CF} is a fourth apotome.",
+              visible: ALL,
+              highlighted: ["CF"],
+              justifications: [{ claim: "fourth apotome", ref: "X.Def.III.4" }] },
+            { text: "Therefore, the square on a minor straight line applied to a rational straight line",
+              visible: ALL,
+              highlighted: ["AB", "CD", "CE"] },
+            { text: "produces as breadth a fourth apotome.",
+              visible: ALL,
+              highlighted: ["CF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.100") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.7":        "/elements/books/bookII/propositions/propII7/",
+        "V.11":        "/elements/books/bookV/propositions/propV11/",
+        "VI.1":        "/elements/books/bookVI/propositions/propVI1/",
+        "VI.17":       "/elements/books/bookVI/propositions/propVI17/",
+        "X.11":        "/elements/books/bookX/propositions/propX11/",
+        "X.18":        "/elements/books/bookX/propositions/propX18/",
+        "X.20":        "/elements/books/bookX/propositions/propX20/",
+        "X.22":        "/elements/books/bookX/propositions/propX22/",
+        "X.73":        "/elements/books/bookX/propositions/propX73/",
+        "X.76":        "/elements/books/bookX/propositions/propX76/",
+        "X.Def.III.4": "/elements/books/bookX/definitions/defX.III.4/"
     });
 </script>
 </figure>
 
-Let *BG* be the annex to *AB*. Then *AG* and *GB* are straight lines incommensurable in square which make the sum of the squares on *AG* and *GB* rational, but twice the rectangle *AG* by *GB* medial. [!just X.76]
+Let {BG} be the annex to {AB}. Then {AG} and {GB} are straight lines incommensurable in square which make the sum of the squares on {AG} and {GB} rational, but twice the rectangle {AG} by {GB} medial. [!just X.76]
 
-To *CD* apply *CH*, equal to the square on *AG*, producing *CK* as breadth, and *KL*, equal to the square on *BG*, producing *KM* as breadth. Then the whole *CL* equals the sum of the squares on *AG* and *GB*.
+To {CD} apply {CH}, equal to the square on {AG}, producing {CK} as breadth, and {KL}, equal to the square on {BG}, producing {KM} as breadth. Then the whole {CL} equals the sum of the squares on {AG} and {GB}.
 
-And the sum of the squares on *AG* and *GB* is rational, therefore *CL* is also rational.
+And the sum of the squares on {AG} and {GB} is rational, therefore {CL} is also rational.
 
-And it is applied to the rational straight line *CD* producing *CM* as breadth, therefore *CM* is also rational and commensurable in length with *CD*. [!just X.20]
+And it is applied to the rational straight line {CD} producing {CM} as breadth, therefore {CM} is also rational and commensurable in length with {CD}. [!just X.20]
 
-Since the whole *CL* equals the sum of the squares on *AG* and *GB*, and, in these, *CE* equals the square on *AB*, therefore the remainder *FL* equals twice the rectangle *AG* by *GB*. [!just II.7]
+Since the whole {CL} equals the sum of the squares on {AG} and {GB}, and, in these, {CE} equals the square on {AB}, therefore the remainder {FL} equals twice the rectangle {AG} by {GB}. [!just II.7]
 
-Bisect *FM* at the point *N*, and draw *NO* through *N* parallel to either of the straight lines *CD* or *ML*. Then each of the rectangles *FO* and *NL* equals the rectangle *AG* by *GB*.
+Bisect {FM} at the point {N}, and draw {NO} through {N} parallel to either of the straight lines {CD} or {ML}. Then each of the rectangles {FO} and {NL} equals the rectangle {AG} by {GB}.
 
-And, since twice the rectangle *AG* by *GB* is medial and equals *FL*, therefore *FL* is also medial.
+And, since twice the rectangle {AG} by {GB} is medial and equals {FL}, therefore {FL} is also medial.
 
-And it is applied to the rational straight line *FE* producing *FM* as breadth, therefore *FM* is rational and incommensurable in length with *CD*. [!just X.22]
+And it is applied to the rational straight line {FE} producing {FM} as breadth, therefore {FM} is rational and incommensurable in length with {CD}. [!just X.22]
 
-Since the sum of the squares on *AG* and *GB* is rational, while twice the rectangle *AG* by *GB* is medial, therefore the sum of the squares on *AG* and *GB* is incommensurable with twice the rectangle *AG* by *GB*.
+Since the sum of the squares on {AG} and {GB} is rational, while twice the rectangle {AG} by {GB} is medial, therefore the sum of the squares on {AG} and {GB} is incommensurable with twice the rectangle {AG} by {GB}.
 
-But *CL* equals the sum of the squares on *AG* and *GB*, and *FL* equals twice the rectangle *AG* by *GB*, therefore *CL* is incommensurable with *FL*.
+But {CL} equals the sum of the squares on {AG} and {GB}, and {FL} equals twice the rectangle {AG} by {GB}, therefore {CL} is incommensurable with {FL}.
 
-But *CL* is to *FL* as *CM* is to *MF*, therefore *CM* is incommensurable in length with *MF*. [!just VI.1, X.11]
+But {CL} is to {FL} as {CM} is to {MF}, therefore {CM} is incommensurable in length with {MF}. [!just VI.1, X.11]
 
-And both are rational, therefore *CM* and *MF* are rational straight lines commensurable in square only. Therefore *CF* is an apotome. [!just X.73]
+And both are rational, therefore {CM} and {MF} are rational straight lines commensurable in square only. Therefore {CF} is an apotome. [!just X.73]
 
 I say that it is also a fourth apotome.
 
-Since *AG* and *GB* are incommensurable in square, therefore the square on *AG* is also incommensurable with the square on *GB*. And *CH* equals the square on *AG*, and *KL* equal to the square on *GB*, therefore *CH* is incommensurable with *KL*.
+Since {AG} and {GB} are incommensurable in square, therefore the square on {AG} is also incommensurable with the square on {GB}. And {CH} equals the square on {AG}, and {KL} equal to the square on {GB}, therefore {CH} is incommensurable with {KL}.
 
-But *CH* is to *KL* as *CK* is to *KM*, therefore *CK* is incommensurable in length with *KM*. [!just VI.1, X.11]
+But {CH} is to {KL} as {CK} is to {KM}, therefore {CK} is incommensurable in length with {KM}. [!just VI.1, X.11]
 
-Since the rectangle *AG* by *GB* is a mean proportional between the squares on *AG* and *GB* the square on *AG* equals *CH*, the square on *GB* equals *KL*, and the rectangle *AG* by *GB* equals *NL*, therefore *NL* is a mean proportional between *CH* and *KL*. Therefore *CH* is to *NL* as *NL* is to *KL*.
+Since the rectangle {AG} by {GB} is a mean proportional between the squares on {AG} and {GB} the square on {AG} equals {CH}, the square on {GB} equals {KL}, and the rectangle {AG} by {GB} equals {NL}, therefore {NL} is a mean proportional between {CH} and {KL}. Therefore {CH} is to {NL} as {NL} is to {KL}.
 
-But *CH* is to *NL* as *CK* is to *NM*, and *NL* is to *KL* as *NM* is to *KM*, therefore *CK* is to *MN* as *MN* is to *KM*. [!just VI.1, V.11]
+But {CH} is to {NL} as {CK} is to {NM}, and {NL} is to {KL} as {NM} is to {KM}, therefore {CK} is to {MN} as {MN} is to {KM}. [!just VI.1, V.11]
 
-Therefore the rectangle *CK* by *KM* equals the square on *MN*, that is, to the fourth part of the square on *FM*. [!just VI.17]
+Therefore the rectangle {CK} by {KM} equals the square on {MN}, that is, to the fourth part of the square on {FM}. [!just VI.17]
 
-Since *CM* and *MF* are two unequal straight lines, and the rectangle *CK* by *KM*, equal to the fourth part of the square on *MF* and deficient by a square figure, has been applied to *CM* and divides it into incommensurable parts, therefore the square on *CM* is greater than the square on *MF* by the square on a straight line incommensurable with *CM*. [!just X.18]
+Since {CM} and {MF} are two unequal straight lines, and the rectangle {CK} by {KM}, equal to the fourth part of the square on {MF} and deficient by a square figure, has been applied to {CM} and divides it into incommensurable parts, therefore the square on {CM} is greater than the square on {MF} by the square on a straight line incommensurable with {CM}. [!just X.18]
 
-And the whole *CM* is commensurable in length with the rational straight line *CD* set out, therefore *CF* is a fourth apotome. [!just X.Def.III.4]
+And the whole {CM} is commensurable in length with the rational straight line {CD} set out, therefore {CF} is a fourth apotome. [!just X.Def.III.4]
 
 Therefore, *the square on a minor straight line applied to a rational straight line produces as breadth a fourth apotome.*
 
