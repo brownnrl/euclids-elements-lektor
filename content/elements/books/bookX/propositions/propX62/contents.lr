@@ -15,9 +15,9 @@ statement: The square on the second bimedial straight line applied to a rational
 ----
 proof:
 
-Let *AB* be a second bimedial straight line divided into its medials at *C*, so that *AC* is the greater segment, let *DE* be any rational straight line, and to *DE* let there be applied the parallelogram *DF* equal to the square on *AB* and producing *DG* as its breadth.
+Let {AB} be a second bimedial straight line divided into its medials at {C}, so that {AC} is the greater segment, let {DE} be any rational straight line, and to {DE} let there be applied the parallelogram {DF} equal to the square on {AB} and producing {DG} as its breadth.
 
-I say that *DG* is a third binomial straight line.
+I say that {DG} is a third binomial straight line.
 
 Make the same construction as shown before.
 
@@ -25,6 +25,28 @@ Make the same construction as shown before.
 <canvas id="canvas_0" width="280" height="210" tabindex="0"></canvas>
 <noscript><img alt="X.62 diagram" src="propX60.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure (X.60's): the second bimedial AB divided at C, the
+    // rational DE, the rectangle DF (EDGF) applied to DE with breadth DG,
+    // and inside it DH (EDKH) equal to the square on AC, KL (HKML) equal to
+    // the square on CB, MG bisected at N and the parallel NO. "Make the same
+    // construction as shown before" is one slide that rebuilds it.
+    // Added, all hidden at rest: a solid twin DE (initiallyHidden) so the
+    // rational line stands when set out, before DF is applied; transparent
+    // targets AC, CB, DG, DM, MG, ML, DK, KM, MN (;0;0;0); faceless twins
+    // DFh, DHh, KLh, DLh (E,D,M,L) and MFh (L,M,G,F), since the random-faced
+    // rectangles would be raised over the figure when lit (#140), reached
+    // through the aliases DF, DH, KL, DL, MF. No angle is called right.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E (line sliders)
+    // and the offscreen frees. C arrives with "divided into its medials at
+    // C", D and E with "let DE be any rational straight line", so all three
+    // are deferred. G, F, K, H, M, L, N, O are derived and listed per slide.
+    var GIVEN = ["A","B","AB"];
+    var MEDS  = GIVEN.concat(["C","AC","CB"]);
+    var RAT   = MEDS.concat(["D","E","DE"]);
+    var APP   = RAT.concat(["G","F","EDGF","DFh","DG"]);
+    var ALL   = APP.concat(["K","H","EDKH","M","L","HKML","N","O","NO",
+                            "DHh","KLh","DLh","MFh","DM","MG","ML","DK","KM","MN"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -52,31 +74,195 @@ Make the same construction as shown before.
             "L;point;vertex;HKML,4",
             "N;point;midpoint;M,G",
             "O;point;parallelogram;E,D,N",
-            "NO;line;connect;N,O"
+            "NO;line;connect;N,O",
+            // Slide-only twins and highlight targets.
+            "DE;line;connect;D,E",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "DG;line;connect;D,G;0;0;0",
+            "DM;line;connect;D,M;0;0;0",
+            "MG;line;connect;M,G;0;0;0",
+            "ML;line;connect;M,L;0;0;0",
+            "DK;line;connect;D,K;0;0;0",
+            "KM;line;connect;K,M;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "DFh;polygon;quadrilateral;E,D,G,F;0;0;0;0",
+            "DHh;polygon;quadrilateral;E,D,K,H;0;0;0;0",
+            "KLh;polygon;quadrilateral;H,K,M,L;0;0;0;0",
+            "DLh;polygon;quadrilateral;E,D,M,L;0;0;0;0",
+            "MFh;polygon;quadrilateral;L,M,G,F;0;0;0;0"
         ],
+        initiallyHidden: ["DE"],
+        deferDraggables: ["C","D","E"],
+        aliases: { "DF": "DFh", "DH": "DHh", "KL": "KLh", "DL": "DLh",
+                   "MF": "MFh", "MD": "DM" },
+        slides: [
+            { text: "“The square on the second bimedial straight line applied to a rational straight line",
+              visible: ALL,
+              highlighted: ["AB","DE","DFh"],
+              justifications: [{ ref: "X.62" }] },
+            { text: "produces as breadth the third binomial.”",
+              visible: ALL,
+              highlighted: ["DG"] },
+            { text: "Let {AB} be a second bimedial straight line",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "divided into its medials at {C}, so that {AC} is the greater segment,",
+              visible: MEDS,
+              highlighted: ["C","AC"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Point.appear } ] } },
+            { text: "let {DE} be any rational straight line,",
+              visible: RAT,
+              highlighted: ["DE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "D",  name: geomlib.A.Point.appear },
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and to {DE} let there be applied the parallelogram {DF} equal to the square on {AB}",
+              visible: APP,
+              highlighted: ["DE","AB"],
+              transition: { animations: [
+                  { elem: "EDGF", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and producing {DG} as its breadth.",
+              visible: APP,
+              highlighted: ["DG"] },
+            { text: "I say that {DG} is a third binomial straight line.",
+              visible: APP,
+              highlighted: ["DG"] },
+            { text: "Make the same construction as shown before.",
+              visible: ALL,
+              transition: { mode: "cascade", animations: [
+                  { elem: "K",    name: geomlib.A.Point.appear },
+                  { elem: "EDKH", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "M",    name: geomlib.A.Point.appear },
+                  { elem: "HKML", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "N",    name: geomlib.A.Point.appear },
+                  { elem: "NO",   name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since {AB} is a second bimedial divided at {C},",
+              visible: ALL,
+              highlighted: ["AB","C"] },
+            { text: "therefore {AC} and {CB} are medial straight lines commensurable in square only and containing a medial rectangle,",
+              visible: ALL,
+              highlighted: ["AC","CB"],
+              justifications: [{ claim: "AB a second bimedial", ref: "X.38" }] },
+            { text: "so that the sum of the squares on {AC} and {CB} is also medial.",
+              visible: ALL,
+              highlighted: ["AC","CB"],
+              justifications: [{ ref: "X.15" }, { ref: "X.23.Cor" }] },
+            { text: "And it equals {DL}, therefore {DL} is also medial.",
+              visible: ALL,
+              highlighted: ["DLh"] },
+            { text: "And it is applied to the rational straight line {DE},",
+              visible: ALL,
+              highlighted: ["DLh","DE"] },
+            { text: "therefore {MD} is also rational and incommensurable in length with {DE}.",
+              visible: ALL,
+              highlighted: ["DM","DE"],
+              justifications: [{ claim: "DM rational, incommensurable with DE", ref: "X.22" }] },
+            { text: "For the same reason, {MG} is also rational and incommensurable in length with {ML}, that is, with {DE},",
+              visible: ALL,
+              highlighted: ["MFh","MG","ML","DE"] },
+            { text: "therefore each of the straight lines {DM} and {MG} is rational and incommensurable in length with {DE}.",
+              visible: ALL,
+              highlighted: ["DM","MG","DE"] },
+            { text: "Since {AC} is incommensurable in length with {CB},",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "and {AC} is to {CB} as the square on {AC} is to the rectangle {AC} by {CB},",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "therefore the square on {AC} is also incommensurable with the rectangle {AC} by {CB}.",
+              visible: ALL,
+              highlighted: ["AC","CB"],
+              justifications: [{ claim: "square incommensurable with rectangle", ref: "X.11" }] },
+            { text: "Hence the sum of the squares on {AC} and {CB} is incommensurable with twice the rectangle {AC} by {CB},",
+              visible: ALL,
+              highlighted: ["AC","CB"],
+              justifications: [{ ref: "X.12" }, { ref: "X.13" }] },
+            { text: "that is, {DL} is incommensurable with {MF}, so that {DM} is also incommensurable with {MG}.",
+              visible: ALL,
+              highlighted: ["DLh","MFh","DM","MG"],
+              justifications: [{ claim: "DL : MF = DM : MG", ref: "VI.1" },
+                               { claim: "DM, MG incommensurable", ref: "X.11" }] },
+            { text: "And they are rational, therefore {DG} is binomial.",
+              visible: ALL,
+              highlighted: ["DM","MG","DG"],
+              justifications: [{ claim: "DG binomial", ref: "X.36" }] },
+            { text: "It is to be proved that it is a third binomial straight line.",
+              visible: ALL,
+              highlighted: ["DG"] },
+            { text: "In manner similar to the foregoing we may conclude that {DM} is greater than {MG},",
+              visible: ALL,
+              highlighted: ["DM","MG"] },
+            { text: "and that {DK} is commensurable with {KM}.",
+              visible: ALL,
+              highlighted: ["DK","KM"] },
+            { text: "And the rectangle {DK} by {KM} equals the square on {MN},",
+              visible: ALL,
+              highlighted: ["DK","KM","MN"] },
+            { text: "therefore the square on {DM} is greater than the square on {MG}",
+              visible: ALL,
+              highlighted: ["DM","MG"] },
+            { text: "by the square on a straight line commensurable with {DM}.",
+              visible: ALL,
+              highlighted: ["DM"] },
+            { text: "And neither of the straight lines {DM} nor {MG} is commensurable in length with {DE}.",
+              visible: ALL,
+              highlighted: ["DM","MG","DE"] },
+            { text: "Therefore {DG} is a third binomial straight line.",
+              visible: ALL,
+              highlighted: ["DG"],
+              justifications: [{ claim: "third binomial", ref: "X.Def.II.3" }] },
+            { text: "Therefore, the square on the second bimedial straight line applied to a rational straight line",
+              visible: ALL,
+              highlighted: ["AB","DE","DFh"] },
+            { text: "produces as breadth the third binomial.",
+              visible: ALL,
+              highlighted: ["DG"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.62") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VI.1":       "/elements/books/bookVI/propositions/propVI1/",
+        "X.11":       "/elements/books/bookX/propositions/propX11/",
+        "X.12":       "/elements/books/bookX/propositions/propX12/",
+        "X.13":       "/elements/books/bookX/propositions/propX13/",
+        "X.15":       "/elements/books/bookX/propositions/propX15/",
+        "X.22":       "/elements/books/bookX/propositions/propX22/",
+        "X.23.Cor":   "/elements/books/bookX/propositions/propX23/#cor",
+        "X.36":       "/elements/books/bookX/propositions/propX36/",
+        "X.38":       "/elements/books/bookX/propositions/propX38/",
+        "X.Def.II.3": "/elements/books/bookX/definitions/defX.II.3/"
     });
 </script>
 </figure>
 
-Then, since *AB* is a second bimedial divided at *C*, therefore *AC* and *CB* are medial straight lines commensurable in square only and containing a medial rectangle, so that the sum of the squares on *AC* and *CB* is also medial. [!just X.38; X.15; X.23.Cor]
+Then, since {AB} is a second bimedial divided at {C}, therefore {AC} and {CB} are medial straight lines commensurable in square only and containing a medial rectangle, so that the sum of the squares on {AC} and {CB} is also medial. [!just X.38; X.15; X.23.Cor]
 
-And it equals *DL*, therefore *DL* is also medial. And it is applied to the rational straight line *DE*, therefore *MD* is also rational and incommensurable in length with *DE*. [!just X.22]
+And it equals {DL}, therefore {DL} is also medial. And it is applied to the rational straight line {DE}, therefore {MD} is also rational and incommensurable in length with {DE}. [!just X.22]
 
-For the same reason, *MG* is also rational and incommensurable in length with *ML*, that is, with *DE*, therefore each of the straight lines *DM* and *MG* is rational and incommensurable in length with *DE*.
+For the same reason, {MG} is also rational and incommensurable in length with {ML}, that is, with {DE}, therefore each of the straight lines {DM} and {MG} is rational and incommensurable in length with {DE}.
 
-Since *AC* is incommensurable in length with *CB*, and *AC* is to *CB* as the square on *AC* is to the rectangle *AC* by *CB*, therefore the square on *AC* is also incommensurable with the rectangle *AC* by *CB*. [!just X.11]
+Since {AC} is incommensurable in length with {CB}, and {AC} is to {CB} as the square on {AC} is to the rectangle {AC} by {CB}, therefore the square on {AC} is also incommensurable with the rectangle {AC} by {CB}. [!just X.11]
 
-Hence the sum of the squares on *AC* and *CB* is incommensurable with twice the rectangle *AC* by *CB*, that is, *DL* is incommensurable with *MF*, so that *DM* is also incommensurable with *MG*. [!just X.12, X.13; VI.1, X.11]
+Hence the sum of the squares on {AC} and {CB} is incommensurable with twice the rectangle {AC} by {CB}, that is, {DL} is incommensurable with {MF}, so that {DM} is also incommensurable with {MG}. [!just X.12, X.13; VI.1, X.11]
 
-And they are rational, therefore *DG* is binomial. [!just X.36]
+And they are rational, therefore {DG} is binomial. [!just X.36]
 
 It is to be proved that it is a third binomial straight line.
 
-In manner similar to the foregoing we may conclude that *DM* is greater than *MG*, and that *DK* is commensurable with *KM*.
+In manner similar to the foregoing we may conclude that {DM} is greater than {MG}, and that {DK} is commensurable with {KM}.
 
-And the rectangle *DK* by *KM* equals the square on *MN*, therefore the square on *DM* is greater than the square on *MG* by the square on a straight line commensurable with *DM*. And neither of the straight lines *DM* nor *MG* is commensurable in length with *DE*.
+And the rectangle {DK} by {KM} equals the square on {MN}, therefore the square on {DM} is greater than the square on {MG} by the square on a straight line commensurable with {DM}. And neither of the straight lines {DM} nor {MG} is commensurable in length with {DE}.
 
-Therefore *DG* is a third binomial straight line. [!just X.Def.II.3]
+Therefore {DG} is a third binomial straight line. [!just X.Def.II.3]
 
 Therefore, *the square on the second bimedial straight line applied to a rational straight line produces as breadth the third binomial.*
 
