@@ -15,12 +15,31 @@ statement: Figures which are similar to the same rectilinear figure are also sim
 ----
 proof:
 
-Let each of the rectilinear figures *A* and *B* be similar to *C.*
+Let each of the rectilinear figures {A|At} and {B|Bt} be similar to {C|Ct}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="450" height="250" tabindex="0"></canvas>
 <noscript><img alt="VI.21 diagram" src="propVI21.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the three quadrilaterals A, B, C with random
+    // faces; B and C are built similar to A on their bases (B1, B4, C1, C4
+    // derived), so all three are similar to one another as drawn.
+    //
+    // Added, all hidden at rest: the four angles of each figure, coloured
+    // by correspondence (the angle at A1, B1, C1 share a colour, and so
+    // on), swept as each figure is shown equiangular with C; and the
+    // faceless twins At, Bt, Ct, which carry the caption and prose refs
+    // ({A|At}), since a highlighted filled polygon is raised over its
+    // markers (#140). None of the angles is a right angle.
+    //
+    // Draggables (checked against the bundle): A1-A4, B2, B3, C2, C3, all
+    // free and all givens on slide 1; nothing to defer.
+    var FIG  = ["A","B","C","At","Bt","Ct"];
+    var ANGA = ["angA1","angA2","angA3","angA4"];
+    var ANGB = ["angB1","angB2","angB3","angB4"];
+    var ANGC = ["angC1","angC2","angC3","angC4"];
+    var AC   = FIG.concat(ANGA, ANGC);
+    var ALL  = AC.concat(ANGB);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -40,19 +59,101 @@ Let each of the rectilinear figures *A* and *B* be similar to *C.*
             "C3;point;free;400,210;0",
             "C1;point;similar;C2,C3,A2,A3,A1;0",
             "C4;point;similar;C2,C3,A2,A3,A4;0",
-            "C;polygon;quadrilateral;C1,C2,C3,C4;black;0;black;random"
+            "C;polygon;quadrilateral;C1,C2,C3,C4;black;0;black;random",
+            // Faceless twins of the three figures (see above).
+            "At;polygon;quadrilateral;A1,A2,A3,A4;0;0;0;0",
+            "Bt;polygon;quadrilateral;B1,B2,B3,B4;0;0;0;0",
+            "Ct;polygon;quadrilateral;C1,C2,C3,C4;0;0;0;0",
+            // The angles, by correspondence.
+            "angA1;sector;angleMarker;A1,A2,A4;0;0;7a4fa3;cdb8e6",
+            "angB1;sector;angleMarker;B1,B2,B4;0;0;7a4fa3;cdb8e6",
+            "angC1;sector;angleMarker;C1,C2,C4;0;0;7a4fa3;cdb8e6",
+            "angA2;sector;angleMarker;A2,A1,A3;0;0;3b6ea5;9ec5e8",
+            "angB2;sector;angleMarker;B2,B1,B3;0;0;3b6ea5;9ec5e8",
+            "angC2;sector;angleMarker;C2,C1,C3;0;0;3b6ea5;9ec5e8",
+            "angA3;sector;angleMarker;A3,A2,A4;0;0;3f8e4f;a8dbb0",
+            "angB3;sector;angleMarker;B3,B2,B4;0;0;3f8e4f;a8dbb0",
+            "angC3;sector;angleMarker;C3,C2,C4;0;0;3f8e4f;a8dbb0",
+            "angA4;sector;angleMarker;A4,A3,A1;0;0;c06a1b;f3c590",
+            "angB4;sector;angleMarker;B4,B3,B1;0;0;c06a1b;f3c590",
+            "angC4;sector;angleMarker;C4,C3,C1;0;0;c06a1b;f3c590"
         ],
+        slides: [
+            { text: "“Figures which are similar to the same rectilinear figure are also similar to one another.”",
+              visible: FIG,
+              highlighted: ["At","Bt","Ct"],
+              justifications: [{ ref: "VI.21" }] },
+            { text: "Let each of the rectilinear figures {A|At} and {B|Bt} be similar to {C|Ct}.",
+              visible: FIG,
+              highlighted: ["At","Bt","Ct"] },
+            { text: "I say that {A|At} is also similar to {B|Bt}.",
+              visible: FIG,
+              highlighted: ["At","Bt"] },
+            { text: "Since {A|At} is similar to {C|Ct},",
+              visible: FIG,
+              highlighted: ["At","Ct"] },
+            { text: "it is equiangular with it and has the sides about the equal angles proportional.",
+              visible: AC,
+              highlighted: ["At","Ct"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angA1", name: geomlib.A.Sector.sweep },
+                  { elem: "angA2", name: geomlib.A.Sector.sweep },
+                  { elem: "angA3", name: geomlib.A.Sector.sweep },
+                  { elem: "angA4", name: geomlib.A.Sector.sweep },
+                  { elem: "angC1", name: geomlib.A.Sector.sweep },
+                  { elem: "angC2", name: geomlib.A.Sector.sweep },
+                  { elem: "angC3", name: geomlib.A.Sector.sweep },
+                  { elem: "angC4", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "similar: equiangular, sides proportional", ref: "VI.Def.1" }] },
+            { text: "Again, since {B|Bt} is similar to {C|Ct},",
+              visible: AC,
+              highlighted: ["Bt","Ct"] },
+            { text: "it is equiangular with it and has the sides about the equal angles proportional.",
+              visible: ALL,
+              highlighted: ["Bt","Ct"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angB1", name: geomlib.A.Sector.sweep },
+                  { elem: "angB2", name: geomlib.A.Sector.sweep },
+                  { elem: "angB3", name: geomlib.A.Sector.sweep },
+                  { elem: "angB4", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "similar: equiangular, sides proportional", ref: "VI.Def.1" }] },
+            { text: "Therefore each of the figures {A|At} and {B|Bt} is equiangular with {C|Ct}",
+              visible: ALL,
+              highlighted: ["At","Bt","Ct"] },
+            { text: "and with {C|Ct} has the sides about the equal angles proportional,",
+              visible: ALL,
+              highlighted: ["At","Bt","Ct"] },
+            { text: "therefore {A|At} is similar to {B|Bt}.",
+              visible: ALL,
+              highlighted: ["At","Bt"],
+              justifications: [{ claim: "ratios the same with the same ratio", ref: "V.11" }] },
+            { text: "Therefore, figures which are similar to the same rectilinear figure are also similar to one another.",
+              visible: FIG,
+              highlighted: ["At","Bt","Ct"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.21") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.11":     "/elements/books/bookV/propositions/propV11/",
+        "VI.Def.1": "/elements/books/bookVI/definitions/defVI1/"
     });
 </script>
 </figure>
 
-I say that *A* is also similar to *B.*
+I say that {A|At} is also similar to {B|Bt}.
 
-Since *A* is similar to *C,* it is equiangular with it and has the sides about the equal angles proportional. [!just VI.Def.1]
+Since {A|At} is similar to {C|Ct}, it is equiangular with it and has the sides about the equal angles proportional. [!just VI.Def.1]
 
-Again, since *B* is similar to *C,* it is equiangular with it and has the sides about the equal angles proportional.
+Again, since {B|Bt} is similar to {C|Ct}, it is equiangular with it and has the sides about the equal angles proportional.
 
-Therefore each of the figures *A* and *B* is equiangular with *C* and with *C* has the sides about the equal angles proportional, therefore *A* is similar to *B.* [!just V.11]
+Therefore each of the figures {A|At} and {B|Bt} is equiangular with {C|Ct} and with {C|Ct} has the sides about the equal angles proportional, therefore {A|At} is similar to {B|Bt}. [!just V.11]
 
 Therefore, *figures which are similar to the same rectilinear figure are also similar to one another.*
 
