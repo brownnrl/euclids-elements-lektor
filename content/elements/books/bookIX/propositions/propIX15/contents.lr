@@ -15,14 +15,19 @@ statement: If three numbers in continued proportion are the least of those which
 ----
 proof:
 
-Let *A, B,* and *C,* three numbers in continued proportion, be the least of those which have the same ratio with them.
+Let {A}, {B}, and {C}, three numbers in continued proportion, be the least of those which have the same ratio with them.
 
-I say that the sum of any two of the numbers *A, B,* and *C* is relatively prime to the remaining number, that is, *A* plus *B* is relatively prime to *C, B* plus *C* is relatively prime to *A,* and *A* plus *C* is relatively prime to *B.*
+I say that the sum of any two of the numbers {A}, {B}, and {C} is relatively prime to the remaining number, that is, {A} plus {B} is relatively prime to {C}, {B} plus {C} is relatively prime to {A}, and {A} plus {C} is relatively prime to {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="130" tabindex="0"></canvas>
 <noscript><img alt="IX.15 diagram" src="propIX15.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines; U1-U2 sits off-canvas and is not drawn. DE and EF
+    // arrive with "Take two numbers DE and EF", so the sliders D and E are
+    // deferred; DE and EF are transparent highlight targets on Joyce's DF.
+    var GIVEN = ["A","B","C"];
+    var ALL   = GIVEN.concat(["D","E","F","DF","DE","EF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -48,39 +53,192 @@ I say that the sum of any two of the numbers *A, B,* and *C* is relatively prime
             "E;point;lineSlider;D0,D3,110,0",
             "D;point;lineSlider;D0,D3,75,0",
             "F;point;proportion;A1,A2,B1,B2,D,E,E,D3",
-            "DF;line;connect;D,F"
+            "DF;line;connect;D,F",
+            "DE;line;connect;D,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0"
         ],
+        deferDraggables: ["D","E"],
+        slides: [
+            { text: "“If three numbers in continued proportion are the least of those which have the same ratio with them,",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "IX.15" }] },
+            { text: "then the sum of any two is relatively prime to the remaining number.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "Let {A}, {B}, and {C}, three numbers in continued proportion, be the least of those which have the same ratio with them.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "I say that the sum of any two of the numbers {A}, {B}, and {C} is relatively prime to the remaining number,",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "that is, {A} plus {B} is relatively prime to {C},",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "{B} plus {C} is relatively prime to {A},",
+              visible: GIVEN,
+              highlighted: ["B","C","A"] },
+            { text: "and {A} plus {C} is relatively prime to {B}.",
+              visible: GIVEN,
+              highlighted: ["A","C","B"] },
+            { text: "Take two numbers {DE} and {EF} to be the least of those which have the same ratio with {A}, {B}, and {C}.",
+              visible: ALL,
+              highlighted: ["DE","EF"],
+              justifications: [{ claim: "DE, EF least in the ratio of A, B, C", ref: "VIII.2" }],
+              transition: { animations: [
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "It is then manifest that {DE} multiplied by itself makes {A},",
+              visible: ALL,
+              highlighted: ["DE","A"],
+              justifications: [{ claim: "A = DE², B = DE·EF, C = EF²", ref: "VIII.2.Cor" }] },
+            { text: "and multiplied by {EF} makes {B},",
+              visible: ALL,
+              highlighted: ["DE","EF","B"] },
+            { text: "and that {EF} multiplied by itself makes {C}.",
+              visible: ALL,
+              highlighted: ["EF","C"] },
+            { text: "Now, since {DE} and {EF} are least, therefore they are relatively prime.",
+              visible: ALL,
+              highlighted: ["DE","EF"],
+              justifications: [{ claim: "DE, EF relatively prime", ref: "VII.22" }] },
+            { text: "But, if two numbers are relatively prime, then their sum is also relatively prime to each,",
+              visible: ALL,
+              highlighted: ["DE","EF"] },
+            { text: "therefore {DF} is relatively prime to each of the numbers {DE} and {EF}.",
+              visible: ALL,
+              highlighted: ["DF"],
+              justifications: [{ claim: "DF prime to DE and to EF", ref: "VII.28" }] },
+            { text: "But, further, {DE} is also relatively prime to {EF}, therefore {DF} and {DE} are relatively prime to {EF}.",
+              visible: ALL,
+              highlighted: ["DF","DE","EF"] },
+            { text: "But, if two numbers are relatively prime to any number, then their product is also relatively prime to the other,",
+              visible: ALL,
+              highlighted: ["DF","DE","EF"] },
+            { text: "so that the product of {FD|DF} and {DE} is relatively prime to {EF},",
+              visible: ALL,
+              highlighted: ["DF","DE","EF"],
+              justifications: [{ claim: "FD · DE prime to EF", ref: "VII.24" }] },
+            { text: "hence the product of {FD|DF} and {DE} is also relatively prime to the square on {EF}.",
+              visible: ALL,
+              highlighted: ["DF","DE","EF"],
+              justifications: [{ claim: "FD · DE prime to EF²", ref: "VII.25" }] },
+            { text: "But the product of {FD|DF} and {DE} is the square on {DE} together with the product of {DE} and {EF},",
+              visible: ALL,
+              highlighted: ["DF","DE","EF"],
+              justifications: [{ claim: "FD · DE = DE² + DE · EF", ref: "II.3" }] },
+            { text: "therefore the sum of the square on {DE} and the product of {DE} and {EF}",
+              visible: ALL,
+              highlighted: ["DE","EF"] },
+            { text: "is relatively prime to the square on {EF}.",
+              visible: ALL,
+              highlighted: ["EF"] },
+            { text: "And the square on {DE} is {A}, the product of {DE} and {EF} is {B}, and the square on {EF} is {C},",
+              visible: ALL,
+              highlighted: ["DE","EF","A","B","C"] },
+            { text: "therefore the sum of {A} and {B} is prime to {C}.",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "Similarly we can prove that the sum of {B} and {C} is relatively prime to {A}.",
+              visible: ALL,
+              highlighted: ["B","C","A"] },
+            { text: "I say next that the sum of {A} and {C} is also relatively prime to {B}.",
+              visible: ALL,
+              highlighted: ["A","C","B"] },
+            { text: "Since {DF} is relatively prime to each of the numbers {DE} and {EF},",
+              visible: ALL,
+              highlighted: ["DF","DE","EF"] },
+            { text: "therefore the square on {DF} is also relatively prime to the product of {DE} and {EF}.",
+              visible: ALL,
+              highlighted: ["DF","DE","EF"],
+              justifications: [{ claim: "DF prime to DE · EF", ref: "VII.24" },
+                               { claim: "DF² prime to DE · EF", ref: "VII.25" }] },
+            { text: "But the sum of the squares on {DE} and {EF} together with twice the product of {DE} and {EF}",
+              visible: ALL,
+              highlighted: ["DE","EF"] },
+            { text: "equals the square on {DF},",
+              visible: ALL,
+              highlighted: ["DF"],
+              justifications: [{ claim: "DE² + EF² + 2 DE · EF = DF²", ref: "II.4" }] },
+            { text: "therefore the sum of the squares on {DE} and {EF} together with twice the product of {DE} and {EF}",
+              visible: ALL,
+              highlighted: ["DE","EF"] },
+            { text: "is relatively prime to the product of {DE} and {EF}.",
+              visible: ALL,
+              highlighted: ["DE","EF"] },
+            { text: "Taken separately, the sum of the squares on {DE} and {EF} together with the product of {DE} and {EF}",
+              visible: ALL,
+              highlighted: ["DE","EF"] },
+            { text: "is relatively prime to the product of {DE} and {EF}.",
+              visible: ALL,
+              highlighted: ["DE","EF"] },
+            { text: "Therefore, taken separately again, the sum of the squares on {DE} and {EF}",
+              visible: ALL,
+              highlighted: ["DE","EF"] },
+            { text: "is relatively prime to the product of {DE} and {EF}.",
+              visible: ALL,
+              highlighted: ["DE","EF"] },
+            { text: "And the square on {DE} is {A}, the product of {DE} and {EF} is {B}, and the square on {EF} is {C}.",
+              visible: ALL,
+              highlighted: ["DE","EF","A","B","C"] },
+            { text: "Therefore the sum of {A} and {C} is relatively prime to {B}.",
+              visible: ALL,
+              highlighted: ["A","C","B"] },
+            { text: "Therefore, if three numbers in continued proportion are the least of those which have the same ratio with them,",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "then the sum of any two is relatively prime to the remaining number.",
+              visible: ALL,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.15") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.3":       "/elements/books/bookII/propositions/propII3/",
+        "II.4":       "/elements/books/bookII/propositions/propII4/",
+        "VII.22":     "/elements/books/bookVII/propositions/propVII22/",
+        "VII.24":     "/elements/books/bookVII/propositions/propVII24/",
+        "VII.25":     "/elements/books/bookVII/propositions/propVII25/",
+        "VII.28":     "/elements/books/bookVII/propositions/propVII28/",
+        "VIII.2":     "/elements/books/bookVIII/propositions/propVIII2/",
+        "VIII.2.Cor": "/elements/books/bookVIII/propositions/propVIII2/#cor"
     });
 </script>
 </figure>
 
-Take two numbers *DE* and *EF* to be the least of those which have the same ratio with *A, B,* and *C.* [!just VIII.2]
+Take two numbers {DE} and {EF} to be the least of those which have the same ratio with {A}, {B}, and {C}. [!just VIII.2]
 
-It is then manifest that *DE* multiplied by itself makes *A,* and multiplied by *EF* makes *B,* and that *EF* multiplied by itself makes *C.* [!just VIII.2.Cor]
+It is then manifest that {DE} multiplied by itself makes {A}, and multiplied by {EF} makes {B}, and that {EF} multiplied by itself makes {C}. [!just VIII.2.Cor]
 
-Now, since *DE* and *EF* are least, therefore they are relatively prime. But, if two numbers are relatively prime, then their sum is also relatively prime to each, therefore *DF* is relatively prime to each of the numbers *DE* and *EF.* [!just VII.22; VII.28]
+Now, since {DE} and {EF} are least, therefore they are relatively prime. But, if two numbers are relatively prime, then their sum is also relatively prime to each, therefore {DF} is relatively prime to each of the numbers {DE} and {EF}. [!just VII.22; VII.28]
 
-But, further, *DE* is also relatively prime to *EF,* therefore *DF* and *DE* are relatively prime to *EF.* But, if two numbers are relatively prime to any number, then their product is also relatively prime to the other, so that the product of *FD* and *DE* is relatively prime to *EF,* hence the product of *FD* and *DE* is also relatively prime to the square on *EF.* [!just VII.24; VII.25]
+But, further, {DE} is also relatively prime to {EF}, therefore {DF} and {DE} are relatively prime to {EF}. But, if two numbers are relatively prime to any number, then their product is also relatively prime to the other, so that the product of {FD|DF} and {DE} is relatively prime to {EF}, hence the product of {FD|DF} and {DE} is also relatively prime to the square on {EF}. [!just VII.24; VII.25]
 
-But the product of *FD* and *DE* is the square on *DE* together with the product of *DE* and *EF,* therefore the sum of the square on *DE* and the product of *DE* and *EF* is relatively prime to the square on *EF.* [!just II.3]
+But the product of {FD|DF} and {DE} is the square on {DE} together with the product of {DE} and {EF}, therefore the sum of the square on {DE} and the product of {DE} and {EF} is relatively prime to the square on {EF}. [!just II.3]
 
-And the square on *DE* is *A,* the product of *DE* and *EF* is *B,* and the square on *EF* is *C,* therefore the sum of *A* and *B* is prime to *C.*
+And the square on {DE} is {A}, the product of {DE} and {EF} is {B}, and the square on {EF} is {C}, therefore the sum of {A} and {B} is prime to {C}.
 
-Similarly we can prove that the sum of *B* and *C* is relatively prime to *A.*
+Similarly we can prove that the sum of {B} and {C} is relatively prime to {A}.
 
-I say next that the sum of *A* and *C* is also relatively prime to *B.*
+I say next that the sum of {A} and {C} is also relatively prime to {B}.
 
-Since *DF* is relatively prime to each of the numbers *DE* and *EF,* therefore the square on *DF* is also relatively prime to the product of *DE* and *EF.* [!just VII.24; VII.25]
+Since {DF} is relatively prime to each of the numbers {DE} and {EF}, therefore the square on {DF} is also relatively prime to the product of {DE} and {EF}. [!just VII.24; VII.25]
 
-But the sum of the squares on *DE* and *EF* together with twice the product of *DE* and *EF* equals the square on *DF,* therefore the sum of the squares on *DE* and *EF* together with twice the product of *DE* and *EF* is relatively prime to the product of *DE* and *EF.* [!just II.4]
+But the sum of the squares on {DE} and {EF} together with twice the product of {DE} and {EF} equals the square on {DF}, therefore the sum of the squares on {DE} and {EF} together with twice the product of {DE} and {EF} is relatively prime to the product of {DE} and {EF}. [!just II.4]
 
-Taken separately, the sum of the squares on *DE* and *EF* together with the product of *DE* and *EF* is relatively prime to the product of *DE* and *EF.*
+Taken separately, the sum of the squares on {DE} and {EF} together with the product of {DE} and {EF} is relatively prime to the product of {DE} and {EF}.
 
-Therefore, taken separately again, the sum of the squares on *DE* and *EF* is relatively prime to the product of *DE* and *EF.*
+Therefore, taken separately again, the sum of the squares on {DE} and {EF} is relatively prime to the product of {DE} and {EF}.
 
-And the square on *DE* is *A,* the product of *DE* and *EF* is *B,* and the square on *EF* is *C.*
+And the square on {DE} is {A}, the product of {DE} and {EF} is {B}, and the square on {EF} is {C}.
 
-Therefore the sum of *A* and *C* is relatively prime to *B.*
+Therefore the sum of {A} and {C} is relatively prime to {B}.
 
 Therefore, *if three numbers in continued proportion are the least of those which have the same ratio with them, then the sum of any two is relatively prime to the remaining number.*
 

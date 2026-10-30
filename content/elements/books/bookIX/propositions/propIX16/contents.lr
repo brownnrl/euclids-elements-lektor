@@ -15,16 +15,21 @@ statement: If two numbers are relatively prime, then the second is not to any ot
 ----
 proof:
 
-Let the two numbers *A* and *B* be relatively prime.
+Let the two numbers {A} and {B} be relatively prime.
 
-I say that *B* is not to any other number as *A* is to *B.*
+I say that {B} is not to any other number as {A} is to {B}.
 
-If possible as *A* is to *B,* let *B* be to *C.*
+If possible as {A} is to {B}, let {B} be to {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="130" tabindex="0"></canvas>
 <noscript><img alt="IX.16 diagram" src="propIX16.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines. C exists only under the reductio's hypothesis
+    // ("If possible ... let B be to C"), so its slider end is deferred and
+    // it is withdrawn for the closing restatement.
+    var GIVEN  = ["A","B"];
+    var WITH_C = GIVEN.concat(["C"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -46,15 +51,74 @@ If possible as *A* is to *B,* let *B* be to *C.*
             "C2;point;proportion;A1,A2,B1,B2,B1,B2,C1,C3;0",
             "C;line;connect;C1,C2;black"
         ],
+        deferDraggables: ["C1"],
+        slides: [
+            { text: "“If two numbers are relatively prime,",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "IX.16" }] },
+            { text: "then the second is not to any other number as the first is to the second.”",
+              visible: GIVEN,
+              highlighted: ["B","A"] },
+            { text: "Let the two numbers {A} and {B} be relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that {B} is not to any other number as {A} is to {B}.",
+              visible: GIVEN,
+              highlighted: ["B","A"] },
+            { text: "If possible as {A} is to {B}, let {B} be to {C}.",
+              visible: WITH_C,
+              highlighted: ["A","B","C"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now {A} and {B} are relatively prime, numbers which are relatively prime are also least,",
+              visible: WITH_C,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "A, B least in their ratio", ref: "VII.21" }] },
+            { text: "and the least numbers measure those which have the same ratio the same number of times,",
+              visible: WITH_C,
+              highlighted: ["A","B","C"] },
+            { text: "the antecedent the antecedent and the consequent the consequent, therefore {A} measures {B} as antecedent antecedent.",
+              visible: WITH_C,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "A measures B", ref: "VII.20" }] },
+            { text: "But it also measures itself,",
+              visible: WITH_C,
+              highlighted: ["A"] },
+            { text: "therefore {A} measures {A} and {B} which are relatively prime, which is absurd.",
+              visible: WITH_C,
+              highlighted: ["A","B"] },
+            { text: "Therefore {B} is not to {C} as {A} is to {B}.",
+              visible: WITH_C,
+              highlighted: ["B","C","A"] },
+            { text: "Therefore, if two numbers are relatively prime,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "then the second is not to any other number as the first is to the second.",
+              visible: GIVEN,
+              highlighted: ["B","A"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.16") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.20": "/elements/books/bookVII/propositions/propVII20/",
+        "VII.21": "/elements/books/bookVII/propositions/propVII21/"
     });
 </script>
 </figure>
 
-Now *A* and *B* are relatively prime, numbers which are relatively prime are also least, and the least numbers measure those which have the same ratio the same number of times, the antecedent the antecedent and the consequent the consequent, therefore *A* measures *B* as antecedent antecedent. [!just VII.21; VII.20]
+Now {A} and {B} are relatively prime, numbers which are relatively prime are also least, and the least numbers measure those which have the same ratio the same number of times, the antecedent the antecedent and the consequent the consequent, therefore {A} measures {B} as antecedent antecedent. [!just VII.21; VII.20]
 
-But it also measures itself, therefore *A* measures *A* and *B* which are relatively prime, which is absurd.
+But it also measures itself, therefore {A} measures {A} and {B} which are relatively prime, which is absurd.
 
-Therefore *B* is not to *C* as *A* is to *B.*
+Therefore {B} is not to {C} as {A} is to {B}.
 
 Therefore, *if two numbers are relatively prime, then the second is not to any other number as the first is to the second.*
 
