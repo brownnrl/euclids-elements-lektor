@@ -15,14 +15,52 @@ statement: Circles are to one another as the squares on their diameters.
 ----
 proof:
 
-Let *ABCD* and *EFGH* be circles, and let *BD* and *FH* be their diameters.
+Let {ABCD|circABCD} and {EFGH|circEFGH} be circles, and let {BD} and {FH} be their diameters.
 
-I say that the circle *ABCD* is to the circle *EFGH* as the square on *BD* is to the square on *FH.*
+I say that the circle {ABCD|circABCD} is to the circle {EFGH|circEFGH} as the square on {BD} is to the square on {FH}.
 
 <center>
 <canvas id="canvas_0" width="550" height="250" tabindex="0"></canvas>
 <noscript><img alt="XII.2 diagram" src="propXII2.gif"/></noscript>
 <script type="text/javascript">
+    // A double reductio. Case 1 (the bulk): the square, then the octagon,
+    // inscribed in EFGH, each step taking more than half of what is left
+    // (III.17 tangents, the X.1 principle), until the octagon exceeds the
+    // area S; the similar octagon in ABCD then gives S greater than it
+    // (XII.1, V.11, V.16) — impossible. Case 2 inverts to case 1 through
+    // the lemma, which brings in the area T.
+    //
+    // Joyce's figure draws the two circles, the diameters, the square EFGH,
+    // the two octagons, the parallelogram on EF through the tangent at K,
+    // and the areas S and T. All kept. Everything added is transparent: the
+    // sides EF, FG, GH, HE and the chords EK..NE, the arcs EF..HE (the
+    // circumferences bisected), the triangles EKF..HNE (explicit ;0 faces),
+    // the circumscribed square through E, F, G, H, the parallelograms on
+    // FG, GH, HE built as Joyce's KEFrect is, and faceless twins of the
+    // two circles (circABCD, circEFGH) — the originals have opaque faces
+    // and a highlighted face is raised (#140) over the square and octagon,
+    // so every circle highlight, in slides and prose, goes to a twin. The
+    // squares on BD and FH are not drawn; the diameters stand for them.
+    //
+    // The figure is built for the first case. Case 2 and the lemma argue
+    // about areas only, so the walk withdraws to the circles, diameters and
+    // S (and T for the lemma); the closing slide restores Joyce's figure.
+    var GIVEN = ["ABCD","EFGH","BD","FH","A","C","E","G"];
+    var SA    = GIVEN.concat(["S","S0"]);
+    var SQ    = SA.concat(["EFGHsquare"]);
+    var TAN   = SQ.concat(["circSq"]);
+    var BIS   = SQ.concat(["K","L","M","N"]);
+    var OCT   = BIS.concat(["EKFLGMHN"]);
+    var TRI   = OCT.concat(["EKF","FLG","GMH","HNE"]);
+    var PAR   = TRI.concat(["KEFrect","FGrect","GHrect","HErect"]);
+    var OCTK  = OCT.concat(["KEFrect"]);
+    var POLY2 = OCTK.concat(["O","P","Q","R","AOBPCQDR"]);
+    var LEM   = SA.concat(["T","T0"]);
+    var REST  = POLY2.concat(["T","T0"]);
+    var TRIS  = ["EKF","FLG","GMH","HNE"];
+    var ARCS  = ["arcEF","arcFG","arcGH","arcHE"];
+    var CHORDS = ["EK","KF","FL","LG","GM","MH","HN","NE"];
+    var SIDES = ["EF","FG","GH","HE"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -78,49 +116,375 @@ I say that the circle *ABCD* is to the circle *EFGH* as the square on *BD* is to
             "T2;point;perpendicular;T1,T0;0;0",
             "T3;point;parallelogram;T2,T1,T0;0;0",
             "T4;point;extend;T3,T0,B,D;0;0",
-            "T;polygon;parallelogram;T2,T3,T4;black;0;black;random"
+            "T;polygon;parallelogram;T2,T3,T4;black;0;black;random",
+            // Faceless twins of the circles (see above).
+            "circABCD;circle;radius;BDcenter,B;0;0;0;0",
+            "circEFGH;circle;radius;FHcenter,F;0;0;0;0",
+            // The sides of the square and the chords of the octagon.
+            "EF;line;connect;E,F;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "HE;line;connect;H,E;0;0;0",
+            "EK;line;connect;E,K;0;0;0",
+            "KF;line;connect;K,F;0;0;0",
+            "FL;line;connect;F,L;0;0;0",
+            "LG;line;connect;L,G;0;0;0",
+            "GM;line;connect;G,M;0;0;0",
+            "MH;line;connect;M,H;0;0;0",
+            "HN;line;connect;H,N;0;0;0",
+            "NE;line;connect;N,E;0;0;0",
+            // The circumferences EF, FG, GH, HE, each through its midpoint.
+            "arcEF;sector;arc;E,K,F;0;0;0;0",
+            "arcFG;sector;arc;F,L,G;0;0;0;0",
+            "arcGH;sector;arc;G,M,H;0;0;0;0",
+            "arcHE;sector;arc;H,N,E;0;0;0;0",
+            // The four triangles on the square's sides. Explicit ;0 faces.
+            "EKF;polygon;triangle;E,K,F;0;0;0;0",
+            "FLG;polygon;triangle;F,L,G;0;0;0;0",
+            "GMH;polygon;triangle;G,M,H;0;0;0;0",
+            "HNE;polygon;triangle;H,N,E;0;0;0;0",
+            // The square circumscribed about EFGH: tangents at E, F, G, H,
+            // its corners E+F, F+G, G+H, H+E less the centre.
+            "Z1;point;parallelogram;E,FHcenter,F;0;0",
+            "Z2;point;parallelogram;F,FHcenter,G;0;0",
+            "Z3;point;parallelogram;G,FHcenter,H;0;0",
+            "Z4;point;parallelogram;H,FHcenter,E;0;0",
+            "circSq;polygon;quadrilateral;Z1,Z2,Z3,Z4;0;0;0;0",
+            // Parallelograms on FG, GH, HE through the tangents at L, M, N,
+            // built as KEFrect is on EF.
+            "L2;point;parallelogram;L,F,G;0;0",
+            "G2;point;intersection;L,L2,H,G;0;0",
+            "FGrect;polygon;parallelogram;F,G,G2;0;0;0;0",
+            "M2;point;parallelogram;M,G,H;0;0",
+            "H2;point;intersection;M,M2,E,H;0;0",
+            "GHrect;polygon;parallelogram;G,H,H2;0;0;0;0",
+            "N2;point;parallelogram;N,H,E;0;0",
+            "E2;point;intersection;N,N2,F,E;0;0",
+            "HErect;polygon;parallelogram;H,E,E2;0;0;0;0"
         ],
+        // Draggables (checked against the bundle): B, D, F, H, S0, T0
+        // lineSliders; X0, X1 free (invisible, off-canvas). B, D, F, H are
+        // the diameters' ends and stand from slide 1. S0 and T0 are the
+        // handles of the areas S and T, which the proof does not name until
+        // "a less area S" and the lemma's "the area T", so both are deferred
+        // and follow `visible`. A, C, E, G, K..N, O..R are derived and listed
+        // per slide. The resting figure is unaffected.
+        deferDraggables: ["S0","T0"],
+        aliases: { "DB": "BD" },
+        slides: [
+            { text: "“Circles are to one another as the squares on their diameters.”",
+              visible: GIVEN,
+              highlighted: ["circABCD","circEFGH","BD","FH"],
+              justifications: [{ ref: "XII.2" }] },
+            { text: "Let {ABCD|circABCD} and {EFGH|circEFGH} be circles, and let {BD} and {FH} be their diameters.",
+              visible: GIVEN,
+              highlighted: ["circABCD","circEFGH","BD","FH"] },
+            { text: "I say that the circle {ABCD|circABCD} is to the circle {EFGH|circEFGH}",
+              visible: GIVEN,
+              highlighted: ["circABCD","circEFGH"] },
+            { text: "as the square on {BD} is to the square on {FH}.",
+              visible: GIVEN,
+              highlighted: ["BD","FH"] },
+            { text: "For, if the square on {BD} is not to the square on {FH} as the circle {ABCD|circABCD} is to the circle {EFGH|circEFGH},",
+              visible: GIVEN,
+              highlighted: ["BD","FH","circABCD","circEFGH"] },
+            { text: "then as the square on {BD} is to the square on {FH},",
+              visible: GIVEN,
+              highlighted: ["BD","FH"] },
+            { text: "the circle {ABCD|circABCD} is either to some less area than the circle {EFGH|circEFGH}, or to a greater area.",
+              visible: GIVEN,
+              highlighted: ["circABCD","circEFGH"] },
+            { text: "First, let it be in that ratio to a less area {S}.",
+              visible: SA,
+              highlighted: ["S"],
+              transition: { animations: [
+                  { elem: "S", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Inscribe the square {EFGH|EFGHsquare} in the circle {EFGH|circEFGH}.",
+              visible: SQ,
+              highlighted: ["EFGHsquare"],
+              transition: { animations: [
+                  { elem: "EFGHsquare", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "square inscribed in a circle", ref: "IV.6" }] },
+            { text: "Then the inscribed square is greater than the half of the circle {EFGH|circEFGH},",
+              visible: SQ,
+              highlighted: ["EFGHsquare","circEFGH"] },
+            { text: "for if through the points {E}, {F}, {G}, and {H} we draw tangents to the circle,",
+              visible: TAN,
+              highlighted: ["E","F","G","H","circSq"],
+              transition: { animations: [
+                  { elem: "circSq", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "tangents at E, F, G, H", ref: "III.17" }] },
+            { text: "then the square {EFGH|EFGHsquare} is half {the square circumscribed about the circle|circSq},",
+              visible: TAN,
+              highlighted: ["EFGHsquare","circSq"] },
+            { text: "and the circle is less than {the circumscribed square|circSq},",
+              visible: TAN,
+              highlighted: ["circEFGH","circSq"] },
+            { text: "hence the inscribed square {EFGH|EFGHsquare} is greater than the half of the circle {EFGH|circEFGH}.",
+              visible: SQ,
+              highlighted: ["EFGHsquare","circEFGH"] },
+            { text: "Bisect the circumferences {EF|arcEF}, {FG|arcFG}, {GH|arcGH}, and {HE|arcHE} at the points {K}, {L}, {M}, and {N}.",
+              visible: BIS,
+              highlighted: ARCS.concat(["K","L","M","N"]),
+              transition: { mode: "parallel", animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "L", name: geomlib.A.Point.appear },
+                  { elem: "M", name: geomlib.A.Point.appear },
+                  { elem: "N", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "bisect the circumferences", ref: "III.30" }] },
+            { text: "Join {EK}, {KF}, {FL}, {LG}, {GM}, {MH}, {HN}, and {NE}.",
+              visible: OCT,
+              highlighted: CHORDS,
+              transition: { animations: [
+                  { elem: "EKFLGMHN", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Therefore each of the triangles {EKF}, {FLG}, {GMH}, and {HNE}",
+              visible: TRI,
+              highlighted: TRIS },
+            { text: "is also greater than the half of the segment of the circle about it,",
+              visible: TRI,
+              highlighted: TRIS.concat(ARCS) },
+            { text: "for if through the points {K}, {L}, {M}, and {N} we draw tangents to the circle",
+              visible: TRI,
+              highlighted: ["K","L","M","N"] },
+            { text: "and complete the parallelograms on the straight lines {EF}, {FG}, {GH}, and {HE},",
+              visible: PAR,
+              highlighted: SIDES.concat(["KEFrect","FGrect","GHrect","HErect"]),
+              transition: { mode: "parallel", animations: [
+                  { elem: "KEFrect", name: geomlib.A.Polygon.outline },
+                  { elem: "FGrect", name: geomlib.A.Polygon.outline },
+                  { elem: "GHrect", name: geomlib.A.Polygon.outline },
+                  { elem: "HErect", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "tangents at K, L, M, N", ref: "III.17" }] },
+            { text: "then each of the triangles {EKF}, {FLG}, {GMH}, and {HNE} is half of the parallelogram about it,",
+              visible: PAR,
+              highlighted: TRIS.concat(["KEFrect","FGrect","GHrect","HErect"]) },
+            { text: "while the segment about it is less than the parallelogram,",
+              visible: PAR,
+              highlighted: ARCS.concat(["KEFrect","FGrect","GHrect","HErect"]) },
+            { text: "hence each of the triangles {EKF}, {FLG}, {GMH}, and {HNE}",
+              visible: TRI,
+              highlighted: TRIS },
+            { text: "is greater than the half of the segment of the circle about it.",
+              visible: TRI,
+              highlighted: TRIS.concat(ARCS) },
+            { text: "Thus, by bisecting the remaining circumferences and joining straight lines, and by doing this repeatedly,",
+              visible: OCTK,
+              highlighted: ["EKFLGMHN"] },
+            { text: "we shall leave some segments of the circle",
+              visible: OCTK,
+              highlighted: ["circEFGH","EKFLGMHN"] },
+            { text: "which will be less than the excess by which the circle {EFGH|circEFGH} exceeds the area {S}.",
+              visible: OCTK,
+              highlighted: ["circEFGH","S"] },
+            { text: "For it was proved in the first theorem of the tenth book that if two unequal magnitudes are set out,",
+              visible: OCTK,
+              justifications: [{ ref: "X.1" }] },
+            { text: "and if from the greater there is subtracted a magnitude greater than the half,",
+              visible: OCTK },
+            { text: "and from that which is left a greater than the half, and if this is done repeatedly,",
+              visible: OCTK },
+            { text: "then there will be left some magnitude which is less than the lesser magnitude set out.",
+              visible: OCTK,
+              justifications: [{ ref: "X.1" }] },
+            { text: "Let segments be left such as described,",
+              visible: OCTK,
+              highlighted: ["EKFLGMHN"] },
+            { text: "and let the segments of the circle {EFGH|circEFGH} on {EK}, {KF}, {FL}, {LG}, {GM}, {MH}, {HN}, and {NE}",
+              visible: OCTK,
+              highlighted: ["circEFGH"].concat(CHORDS) },
+            { text: "be less than the excess by which the circle {EFGH|circEFGH} exceeds the area {S}.",
+              visible: OCTK,
+              highlighted: ["circEFGH","S"] },
+            { text: "Therefore the remainder, the polygon {EKFLGMHN}, is greater than the area {S}.",
+              visible: OCTK,
+              highlighted: ["EKFLGMHN","S"] },
+            { text: "Now inscribe in the circle {ABCD|circABCD} the polygon {AOBPCQDR} similar to the polygon {EKFLGMHN}.",
+              visible: POLY2,
+              highlighted: ["AOBPCQDR","EKFLGMHN"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "O", name: geomlib.A.Point.appear },
+                  { elem: "P", name: geomlib.A.Point.appear },
+                  { elem: "Q", name: geomlib.A.Point.appear },
+                  { elem: "R", name: geomlib.A.Point.appear },
+                  { elem: "AOBPCQDR", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Therefore the square on {BD} is to the square on {FH}",
+              visible: POLY2,
+              highlighted: ["BD","FH"] },
+            { text: "as the polygon {AOBPCQDR} is to the polygon {EKFLGMHN}.",
+              visible: POLY2,
+              highlighted: ["AOBPCQDR","EKFLGMHN"],
+              justifications: [{ claim: "similar polygons inscribed in circles", ref: "XII.1" }] },
+            { text: "But the square on {BD} is to the square on {FH} as the circle {ABCD|circABCD} to the area {S},",
+              visible: POLY2,
+              highlighted: ["BD","FH","circABCD","S"] },
+            { text: "therefore the circle {ABCD|circABCD} is to the area {S} as the polygon {AOBPCQDR} is to the polygon {EKFLGMHN}.",
+              visible: POLY2,
+              highlighted: ["circABCD","S","AOBPCQDR","EKFLGMHN"],
+              justifications: [{ claim: "ratios the same with the same ratio", ref: "V.11" }] },
+            { text: "Therefore, alternately the circle {ABCD|circABCD} is to the polygon inscribed in it",
+              visible: POLY2,
+              highlighted: ["circABCD","AOBPCQDR"] },
+            { text: "as the area {S} is to the polygon {EKFLGMHN}.",
+              visible: POLY2,
+              highlighted: ["S","EKFLGMHN"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "But the circle {ABCD|circABCD} is greater than the polygon inscribed in it,",
+              visible: POLY2,
+              highlighted: ["circABCD","AOBPCQDR"] },
+            { text: "therefore the area {S} is also greater than the polygon {EKFLGMHN}.",
+              visible: POLY2,
+              highlighted: ["S","EKFLGMHN"] },
+            { text: "But it is also less, which is impossible.",
+              visible: POLY2,
+              highlighted: ["S","EKFLGMHN"] },
+            { text: "Therefore the square on {BD} is to the square on {FH}",
+              visible: POLY2,
+              highlighted: ["BD","FH"] },
+            { text: "not as the circle {ABCD|circABCD} is to any area less than the circle {EFGH|circEFGH}.",
+              visible: POLY2,
+              highlighted: ["circABCD","circEFGH"] },
+            // Case 2 argues about areas only: the construction is withdrawn.
+            { text: "Similarly we can prove that the circle {EFGH|circEFGH} is to any area less than the circle {ABCD|circABCD}",
+              visible: SA,
+              highlighted: ["circEFGH","circABCD"] },
+            { text: "not as the square on {FH} is to the square on {BD}.",
+              visible: SA,
+              highlighted: ["FH","BD"] },
+            { text: "I say next that neither is the circle {ABCD|circABCD} to any area greater than the circle {EFGH|circEFGH}",
+              visible: SA,
+              highlighted: ["circABCD","circEFGH"] },
+            { text: "as the square on {BD} is to the square on {FH}.",
+              visible: SA,
+              highlighted: ["BD","FH"] },
+            { text: "For, if possible, let it be in that ratio to a greater area {S}.",
+              visible: SA,
+              highlighted: ["S"] },
+            { text: "Therefore, inversely the square on {FH} is to the square on {DB} as the area {S} is to the circle {ABCD|circABCD}.",
+              visible: SA,
+              highlighted: ["FH","BD","S","circABCD"] },
+            { text: "But the area {S} is to the circle {ABCD|circABCD} as the circle {EFGH|circEFGH} is to some area less than the circle {ABCD|circABCD},",
+              visible: SA,
+              highlighted: ["S","circABCD","circEFGH"],
+              justifications: [{ ref: "Lemma" }] },
+            { text: "therefore the square on {FH} is to the square on {BD}",
+              visible: SA,
+              highlighted: ["FH","BD"] },
+            { text: "as the circle {EFGH|circEFGH} is to some area less than the circle {ABCD|circABCD}, which was proved impossible.",
+              visible: SA,
+              highlighted: ["circEFGH","circABCD"],
+              justifications: [{ claim: "ratios the same with the same ratio", ref: "V.11" }] },
+            { text: "Therefore the square on {BD} is to the square on {FH}",
+              visible: SA,
+              highlighted: ["BD","FH"] },
+            { text: "not as the circle {ABCD|circABCD} to any area greater than the circle {EFGH|circEFGH}.",
+              visible: SA,
+              highlighted: ["circABCD","circEFGH"] },
+            { text: "And it was proved that neither is it in that ratio to any area less than the circle {EFGH|circEFGH},",
+              visible: SA,
+              highlighted: ["circEFGH"] },
+            { text: "therefore the square on {BD} is to the square on {FH} as the circle {ABCD|circABCD} is to the circle {EFGH|circEFGH}.",
+              visible: GIVEN,
+              highlighted: ["BD","FH","circABCD","circEFGH"],
+              justifications: [{ ref: "Q.E.D." }] },
+            // The lemma.
+            { text: "I say that, the area {S} being greater than the circle {EFGH|circEFGH}",
+              visible: SA,
+              highlighted: ["S","circEFGH"] },
+            { text: "the area {S} is to the circle {ABCD|circABCD} as the circle {EFGH|circEFGH} is to some area less than the circle {ABCD|circABCD}.",
+              visible: SA,
+              highlighted: ["S","circABCD","circEFGH"] },
+            { text: "For let it be contrived that the area {S} is to the circle {ABCD|circABCD}",
+              visible: SA,
+              highlighted: ["S","circABCD"] },
+            { text: "as the circle {EFGH|circEFGH} to the area {T}.",
+              visible: LEM,
+              highlighted: ["circEFGH","T"],
+              transition: { animations: [
+                  { elem: "T", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "I say that the area {T} is less than the circle {ABCD|circABCD}.",
+              visible: LEM,
+              highlighted: ["T","circABCD"] },
+            { text: "Since the area {S} is to the circle {ABCD|circABCD} as the circle {EFGH|circEFGH} is to the area {T},",
+              visible: LEM,
+              highlighted: ["S","circABCD","circEFGH","T"] },
+            { text: "therefore, alternately the area {S} is to the circle {EFGH|circEFGH} as the circle {ABCD|circABCD} is to the area {T}.",
+              visible: LEM,
+              highlighted: ["S","circEFGH","circABCD","T"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "But the area {S} is greater than the circle {EFGH|circEFGH},",
+              visible: LEM,
+              highlighted: ["S","circEFGH"] },
+            { text: "therefore the circle {ABCD|circABCD} is also greater than the area {T}.",
+              visible: LEM,
+              highlighted: ["circABCD","T"] },
+            { text: "Hence the area {S} is to the circle {ABCD|circABCD} as the circle {EFGH|circEFGH} is to some area less than the circle {ABCD|circABCD}.",
+              visible: LEM,
+              highlighted: ["S","circABCD","circEFGH"] },
+            { text: "Therefore, circles are to one another as the squares on their diameters.",
+              visible: REST,
+              highlighted: ["circABCD","circEFGH","BD","FH"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.2") return "#prop";
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "III.17":   "/elements/books/bookIII/propositions/propIII17/",
+        "III.30":   "/elements/books/bookIII/propositions/propIII30/",
+        "IV.6":     "/elements/books/bookIV/propositions/propIV6/",
+        "V.11":     "/elements/books/bookV/propositions/propV11/",
+        "V.16":     "/elements/books/bookV/propositions/propV16/",
+        "X.1":      "/elements/books/bookX/propositions/propX1/",
+        "XII.1":    "/elements/books/bookXII/propositions/propXII1/"
     });
 </script>
 </center>
 
-For, if the square on *BD* is not to the square on *FH* as the circle *ABCD* is to the circle *EFGH,* then as the square on *BD* is to the square on *FH,* the circle *ABCD* is either to some less area than the circle *EFGH,* or to a greater area.
+For, if the square on {BD} is not to the square on {FH} as the circle {ABCD|circABCD} is to the circle {EFGH|circEFGH}, then as the square on {BD} is to the square on {FH}, the circle {ABCD|circABCD} is either to some less area than the circle {EFGH|circEFGH}, or to a greater area.
 
-First, let it be in that ratio to a less area *S.*
+First, let it be in that ratio to a less area {S}.
 
-Inscribe the square *EFGH* in the circle *EFGH.* Then the inscribed square is greater than the half of the circle *EFGH,* for if through the points *E, F, G,* and *H* we draw tangents to the circle, then the square *EFGH* is half the square circumscribed about the circle, and the circle is less than the circumscribed square, hence the inscribed square *EFGH* is greater than the half of the circle *EFGH.* [!just IV.6; III.17]
+Inscribe the square {EFGH|EFGHsquare} in the circle {EFGH|circEFGH}. Then the inscribed square is greater than the half of the circle {EFGH|circEFGH}, for if through the points {E}, {F}, {G}, and {H} we draw tangents to the circle, then the square {EFGH|EFGHsquare} is half the square circumscribed about the circle, and the circle is less than the circumscribed square, hence the inscribed square {EFGH|EFGHsquare} is greater than the half of the circle {EFGH|circEFGH}. [!just IV.6; III.17]
 
-Bisect the circumferences *EF, FG, GH,* and *HE* at the points *K, L, M,* and *N.* Join *EK, KF, FL, LG, GM, MH, HN,* and *NE.*
+Bisect the circumferences {EF|arcEF}, {FG|arcFG}, {GH|arcGH}, and {HE|arcHE} at the points {K}, {L}, {M}, and {N}. Join {EK}, {KF}, {FL}, {LG}, {GM}, {MH}, {HN}, and {NE}.
 
-Therefore each of the triangles *EKF, FLG, GMH,* and *HNE* is also greater than the half of the segment of the circle about it, for if through the points *K, L, M,* and *N* we draw tangents to the circle and complete the parallelograms on the straight lines *EF, FG, GH,* and *HE,* then each of the triangles *EKF, FLG, GMH,* and *HNE* is half of the parallelogram about it, while the segment about it is less than the parallelogram, hence each of the triangles *EKF, FLG, GMH,* and *HNE* is greater than the half of the segment of the circle about it. [!just III.17]
+Therefore each of the triangles {EKF}, {FLG}, {GMH}, and {HNE} is also greater than the half of the segment of the circle about it, for if through the points {K}, {L}, {M}, and {N} we draw tangents to the circle and complete the parallelograms on the straight lines {EF}, {FG}, {GH}, and {HE}, then each of the triangles {EKF}, {FLG}, {GMH}, and {HNE} is half of the parallelogram about it, while the segment about it is less than the parallelogram, hence each of the triangles {EKF}, {FLG}, {GMH}, and {HNE} is greater than the half of the segment of the circle about it. [!just III.17]
 
-Thus, by bisecting the remaining circumferences and joining straight lines, and by doing this repeatedly, we shall leave some segments of the circle which will be less than the excess by which the circle *EFGH* exceeds the area *S.*
+Thus, by bisecting the remaining circumferences and joining straight lines, and by doing this repeatedly, we shall leave some segments of the circle which will be less than the excess by which the circle {EFGH|circEFGH} exceeds the area {S}.
 
 For it was proved in the first theorem of the tenth book that if two unequal magnitudes are set out, and if from the greater there is subtracted a magnitude greater than the half, and from that which is left a greater than the half, and if this is done repeatedly, then there will be left some magnitude which is less than the lesser magnitude set out. [!just X.1]
 
-Let segments be left such as described, and let the segments of the circle *EFGH* on *EK, KF, FL, LG, GM, MH, HN,* and *NE* be less than the excess by which the circle *EFGH* exceeds the area *S.*
+Let segments be left such as described, and let the segments of the circle {EFGH|circEFGH} on {EK}, {KF}, {FL}, {LG}, {GM}, {MH}, {HN}, and {NE} be less than the excess by which the circle {EFGH|circEFGH} exceeds the area {S}.
 
-Therefore the remainder, the polygon *EKFLGMHN,* is greater than the area *S.*
+Therefore the remainder, the polygon {EKFLGMHN}, is greater than the area {S}.
 
-Now inscribe in the circle *ABCD* the polygon *AOBPCQDR* similar to the polygon *EKFLGMHN.*
+Now inscribe in the circle {ABCD|circABCD} the polygon {AOBPCQDR} similar to the polygon {EKFLGMHN}.
 
-Therefore the square on *BD* is to the square on *FH* as the polygon *AOBPCQDR* is to the polygon *EKFLGMHN.* [!just XII.1]
+Therefore the square on {BD} is to the square on {FH} as the polygon {AOBPCQDR} is to the polygon {EKFLGMHN}. [!just XII.1]
 
-But the square on *BD* is to the square on *FH* as the circle *ABCD* to the area *S,* therefore the circle *ABCD* is to the area *S* as the polygon *AOBPCQDR* is to the polygon *EKFLGMHN.* Therefore, alternately the circle *ABCD* is to the polygon inscribed in it as the area *S* is to the polygon *EKFLGMHN.* [!just V.11; V.16]
+But the square on {BD} is to the square on {FH} as the circle {ABCD|circABCD} to the area {S}, therefore the circle {ABCD|circABCD} is to the area {S} as the polygon {AOBPCQDR} is to the polygon {EKFLGMHN}. Therefore, alternately the circle {ABCD|circABCD} is to the polygon inscribed in it as the area {S} is to the polygon {EKFLGMHN}. [!just V.11; V.16]
 
-But the circle *ABCD* is greater than the polygon inscribed in it, therefore the area *S* is also greater than the polygon *EKFLGMHN.* But it is also less, which is impossible.
+But the circle {ABCD|circABCD} is greater than the polygon inscribed in it, therefore the area {S} is also greater than the polygon {EKFLGMHN}. But it is also less, which is impossible.
 
-Therefore the square on *BD* is to the square on *FH* not as the circle *ABCD* is to any area less than the circle *EFGH.*
+Therefore the square on {BD} is to the square on {FH} not as the circle {ABCD|circABCD} is to any area less than the circle {EFGH|circEFGH}.
 
-Similarly we can prove that the circle *EFGH* is to any area less than the circle *ABCD* not as the square on *FH* is to the square on *BD.*
+Similarly we can prove that the circle {EFGH|circEFGH} is to any area less than the circle {ABCD|circABCD} not as the square on {FH} is to the square on {BD}.
 
-I say next that neither is the circle *ABCD* to any area greater than the circle *EFGH* as the square on *BD* is to the square on *FH.*
+I say next that neither is the circle {ABCD|circABCD} to any area greater than the circle {EFGH|circEFGH} as the square on {BD} is to the square on {FH}.
 
-For, if possible, let it be in that ratio to a greater area *S.* Therefore, inversely the square on *FH* is to the square on *DB* as the area *S* is to the circle *ABCD.*
+For, if possible, let it be in that ratio to a greater area {S}. Therefore, inversely the square on {FH} is to the square on {DB} as the area {S} is to the circle {ABCD|circABCD}.
 
-But the area *S* is to the circle *ABCD* as the circle *EFGH* is to some area less than the circle *ABCD,* therefore the square on *FH* is to the square on *BD* as the circle *EFGH* is to some area less than the circle *ABCD,* which was proved impossible. Therefore the square on *BD* is to the square on *FH* not as the circle *ABCD* to any area greater than the circle *EFGH.* <div class="just"><a href="/elements/books/bookXII/propositions/propXII2/#lemma">Lemma</a><br><a href="/elements/books/bookV/propositions/propV11/">V.11</a></div>
+But the area {S} is to the circle {ABCD|circABCD} as the circle {EFGH|circEFGH} is to some area less than the circle {ABCD|circABCD}, therefore the square on {FH} is to the square on {BD} as the circle {EFGH|circEFGH} is to some area less than the circle {ABCD|circABCD}, which was proved impossible. Therefore the square on {BD} is to the square on {FH} not as the circle {ABCD|circABCD} to any area greater than the circle {EFGH|circEFGH}. <div class="just"><a href="/elements/books/bookXII/propositions/propXII2/#lemma">Lemma</a><br><a href="/elements/books/bookV/propositions/propV11/">V.11</a></div>
 
-And it was proved that neither is it in that ratio to any area less than the circle *EFGH,* therefore the square on *BD* is to the square on *FH* as the circle *ABCD* is to the circle *EFGH.*
+And it was proved that neither is it in that ratio to any area less than the circle {EFGH|circEFGH}, therefore the square on {BD} is to the square on {FH} as the circle {ABCD|circABCD} is to the circle {EFGH|circEFGH}.
 
 <div class="qed">Q.E.D.</div>
 <br clear="all">
@@ -131,17 +495,17 @@ And it was proved that neither is it in that ratio to any area less than the cir
 
 ### Lemma
 
-I say that, the area *S* being greater than the circle *EFGH* the area *S* is to the circle *ABCD* as the circle *EFGH* is to some area less than the circle *ABCD.*
+I say that, the area {S} being greater than the circle {EFGH|circEFGH} the area {S} is to the circle {ABCD|circABCD} as the circle {EFGH|circEFGH} is to some area less than the circle {ABCD|circABCD}.
 
-For let it be contrived that the area *S* is to the circle *ABCD* as the circle *EFGH* to the area *T.*
+For let it be contrived that the area {S} is to the circle {ABCD|circABCD} as the circle {EFGH|circEFGH} to the area {T}.
 
-I say that the area *T* is less than the circle *ABCD.*
+I say that the area {T} is less than the circle {ABCD|circABCD}.
 
-Since the area *S* is to the circle *ABCD* as the circle *EFGH* is to the area *T,* therefore, alternately the area *S* is to the circle *EFGH* as the circle *ABCD* is to the area *T.* [!just V.16]
+Since the area {S} is to the circle {ABCD|circABCD} as the circle {EFGH|circEFGH} is to the area {T}, therefore, alternately the area {S} is to the circle {EFGH|circEFGH} as the circle {ABCD|circABCD} is to the area {T}. [!just V.16]
 
-But the area *S* is greater than the circle *EFGH,* therefore the circle *ABCD* is also greater than the area *T.*
+But the area {S} is greater than the circle {EFGH|circEFGH}, therefore the circle {ABCD|circABCD} is also greater than the area {T}.
 
-Hence the area *S* is to the circle *ABCD* as the circle *EFGH* is to some area less than the circle *ABCD.*
+Hence the area {S} is to the circle {ABCD|circABCD} as the circle {EFGH|circEFGH} is to some area less than the circle {ABCD|circABCD}.
 
 Therefore, *circles are to one another as the squares on their diameters.*
 
@@ -152,23 +516,23 @@ guide:
 
 In the last proposition it was shown that similar polygons inscribed in circles are proportional to the squares on the diameters of the circles. By approximating circles closely by similar polygons, the proportion is carried over to the circles.
 
-The form of the proof is a double proof by contradiction. There are three cases when comparing the ratio of the squares *BD* : *FH* to the ratio of the circles *ABCD* : *EFGH.* One case is that the ratio of the squares *BD* : *FH* equals *ABCD* : *S* where *S* is some area less than circle *EFGH.* Most of the proof is spent refuting this case. The second case is that the ratio of the squares *BD* : *FH* equals *ABCD* : *S* where this time *S* is some area greater than circle *EFGH.* This is inverted to a statement that the ratio of the squares *FH* : *BD* equals *EFGH* to some area less than circle *ABCD,* which is the first case already already shown not to occur. That leaves only the third case that the ratio of the squares *BD* : *FH* equals the ratio of the circles *ABCD* : *EFGH.* (Actually, there is a gap in the proof at this last step; it was never shown that these are the only three cases. It may be true that there are three cases, that the ratio of the squares is greater, less, or equal to the ratio of the circles, but the three cases of in the proof are one step removed from these three cases.)
+The form of the proof is a double proof by contradiction. There are three cases when comparing the ratio of the squares {BD} : {FH} to the ratio of the circles {ABCD|circABCD} : {EFGH|circEFGH}. One case is that the ratio of the squares {BD} : {FH} equals {ABCD|circABCD} : {S} where {S} is some area less than circle {EFGH|circEFGH}. Most of the proof is spent refuting this case. The second case is that the ratio of the squares {BD} : {FH} equals {ABCD|circABCD} : {S} where this time {S} is some area greater than circle {EFGH|circEFGH}. This is inverted to a statement that the ratio of the squares {FH} : {BD} equals {EFGH|circEFGH} to some area less than circle {ABCD|circABCD}, which is the first case already already shown not to occur. That leaves only the third case that the ratio of the squares {BD} : {FH} equals the ratio of the circles {ABCD|circABCD} : {EFGH|circEFGH}. (Actually, there is a gap in the proof at this last step; it was never shown that these are the only three cases. It may be true that there are three cases, that the ratio of the squares is greater, less, or equal to the ratio of the circles, but the three cases of in the proof are one step removed from these three cases.)
 
 #### Approximation by polygons
 
-The first case is disposed of by approximating the circles by very close polygons. To begin with a square *EFGH* is inscribed in the circle *EFGH,* and it is shown that the remainder is less than half the circle. Next the circumferences are bisected to construct an octagon *EKFLGMHN,* and the remainder of the circle is shown to be less than half the old remainder. Continuing, polygons of 16, 32, 64, etc., sides are constructed and each one leaves a remainder less than half the previous remainder.
+The first case is disposed of by approximating the circles by very close polygons. To begin with a square {EFGH|EFGHsquare} is inscribed in the circle {EFGH|circEFGH}, and it is shown that the remainder is less than half the circle. Next the circumferences are bisected to construct an octagon {EKFLGMHN}, and the remainder of the circle is shown to be less than half the old remainder. Continuing, polygons of 16, 32, 64, etc., sides are constructed and each one leaves a remainder less than half the previous remainder.
 
-Now the circle *EFGH* exceeds the area *S* by some finite amount, and by the principle of proposition @X.1, at some stage mentioned above, the remainder will be less than the excess of circle *EFGH* over *S.* For the rest of the proof, that stage is taken as that of the polygon *EKFLGMHN,* that is, circle
+Now the circle {EFGH|circEFGH} exceeds the area {S} by some finite amount, and by the principle of proposition @X.1, at some stage mentioned above, the remainder will be less than the excess of circle {EFGH|circEFGH} over {S}. For the rest of the proof, that stage is taken as that of the polygon {EKFLGMHN}, that is, circle
 
 <center><i>EFGH</i> – polygon <i>EKFLGMHN</i> < circle <i>EFGH</i> – area <i>S,</i></center>
 
-and so area *S* < polygon *EKFLGMHN.*
+and so area {S} < polygon {EKFLGMHN}.
 
-The similar polygon *AOBPCQDR* is inscribed in the other circle *ABCD.* Then
+The similar polygon {AOBPCQDR} is inscribed in the other circle {ABCD|circABCD}. Then
 
 <center>circle <i>ABCD</i> : area <i>S</i> = <i>BC</i><sup>2</sup> : <i>FH</i><sup>2</sup> = polygon <i>AOBPCQDR</i> : polygon <i>EKFLGMHN.</i></center>
 
-Alternately, circle *ABCD* : polygon *AOBPCQDR* = area *S* : polygon *EKFLGMHN.* But circle *ABCD* > polygon *AOBPCQDR,* so area *S* > polygon *EKFLGMHN,* contradicting the statement above that the area *S* is less than the polygon.
+Alternately, circle {ABCD|circABCD} : polygon {AOBPCQDR} = area {S} : polygon {EKFLGMHN}. But circle {ABCD|circABCD} > polygon {AOBPCQDR}, so area {S} > polygon {EKFLGMHN}, contradicting the statement above that the area {S} is less than the polygon.
 
 #### Principle of exhaustion
 

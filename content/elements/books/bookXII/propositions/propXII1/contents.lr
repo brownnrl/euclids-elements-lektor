@@ -15,16 +15,49 @@ statement: Similar polygons inscribed in circles are to one another as the squar
 ----
 proof:
 
-Let *ABC* and *FGH* be circles, let *ABCDE* and *FGHKL* be similar polygons inscribed in them, and let *BM* and *GN* be diameters of the circles.
+Let {ABC|cABC} and {FGH|cFGH} be circles, let {ABCDE|pABCDE} and {FGHKL|pFGHKL} be similar polygons inscribed in them, and let {BM} and {GN} be diameters of the circles.
 
-I say that the square on *BM* is to the square on *GN* as the polygon *ABCDE* is to the polygon *FGHKL.*
+I say that the square on {BM} is to the square on {GN} as the polygon {ABCDE|pABCDE} is to the polygon {FGHKL|pFGHKL}.
 
-Join *BE, AM, GL,* and *FN.*
+Join {BE}, {AM}, {GL}, and {FN}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="440" height="250" tabindex="0"></canvas>
 <noscript><img alt="XII.1 diagram" src="propXII1.gif"/></noscript>
 <script type="text/javascript">
+    // The similar pentagons, their diameters BM / GN, and the two pairs of
+    // equiangular triangles: ABE / FGL by VI.6, then ABM / FGN through the
+    // III.27 angles at M and N and the III.31 right angles at A and F; VI.4
+    // makes the diameters proportional to the sides, and VI.20 squares both.
+    //
+    // Joyce's figure draws the two circles, the two pentagons, the diameters
+    // and the four joins, all kept as they are. The joins BE, AM, GL, FN and
+    // the diameters are declared from the letter Joyce names first, so their
+    // own strokes run the right way and need no twins. Everything added is
+    // transparent: the sides BA, AE, GF, FL, the four triangles (explicit ;0
+    // faces), the arcs AB / FG the angles at E, M and L, N stand on, and
+    // faceless twins of both circles and both pentagons (cABC, cFGH,
+    // pABCDE, pFGHKL). The originals have opaque faces and a highlighted
+    // face is raised (#140) over the angle markers inside it, so every
+    // circle or polygon highlight, here and in the prose, goes to a twin.
+    //
+    // Markers: equal angles share a colour — BAE / GFL blue; AEB, AMB, FLG,
+    // FNG green (one chain of equalities); the right angles BAM / GFN red
+    // squares (III.31); the remaining angles ABM / FGN orange. At A and F the
+    // right angle nests inside the pentagon's angle (auto-stepped rings).
+    var GIVEN = ["ABC","FGH","A","B","C","D","E","F","G","H"];
+    var POLY  = GIVEN.concat(["ABCDE","FGHKL","K","L"]);
+    var DIAM  = POLY.concat(["BM","GN","M","N"]);
+    var JOIN  = DIAM.concat(["BE","AM","GL","FN"]);
+    var SIDES = JOIN.concat(["AB","AE","FG","FL"]);
+    var ANG1  = SIDES.concat(["angBAE","angGFL"]);
+    var TRI1  = ANG1.concat(["ABE","FGL"]);
+    var ANG2  = TRI1.concat(["angAEB","angFLG"]);
+    var ARC   = ANG2.concat(["angAMB","arcAB"]);
+    var ARC2  = ARC.concat(["angFNG","arcFG"]);
+    var RT    = ANG2.concat(["angAMB","angFNG","rtBAM","rtGFN"]);
+    var REM   = RT.concat(["angABM","angFGN"]);
+    var TRI2  = REM.concat(["ABM","FGN"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -53,25 +86,206 @@ Join *BE, AM, GL,* and *FN.*
             "AM;line;connect;A,M",
             "FN;line;connect;F,N",
             "BE;line;connect;B,E",
-            "GL;line;connect;G,L"
+            "GL;line;connect;G,L",
+            // Faceless twins of the circles and pentagons (see above).
+            "cABC;circle;circumcircle;A,B,C;0;0;0;0",
+            "cFGH;circle;circumcircle;F,G,H;0;0;0;0",
+            "pABCDE;polygon;pentagon;A,B,C,D,E;0;0;0;0",
+            "pFGHKL;polygon;pentagon;F,G,H,K,L;0;0;0;0",
+            // The sides about the equal angles at A and F.
+            "AB;line;connect;A,B;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "FL;line;connect;F,L;0;0;0",
+            // The two pairs of equiangular triangles. Explicit ;0 faces.
+            "ABE;polygon;triangle;A,B,E;0;0;0;0",
+            "FGL;polygon;triangle;F,G,L;0;0;0;0",
+            "ABM;polygon;triangle;A,B,M;0;0;0;0",
+            "FGN;polygon;triangle;F,G,N;0;0;0;0",
+            // "the same circumference": the arcs AB and FG cut off by the
+            // angles at E, M and at L, N, each through its midpoint.
+            "Wab;point;midpoint;A,B;0;0",
+            "Xab;point;cutoff;ABCcenter,Wab,ABCcenter,B;0;0",
+            "arcAB;sector;arc;A,Xab,B;0;0;0;0",
+            "Wfg;point;midpoint;F,G;0;0",
+            "Xfg;point;cutoff;FGHcenter,Wfg,FGHcenter,G;0;0",
+            "arcFG;sector;arc;F,Xfg,G;0;0;0;0",
+            // Angle markers (see above).
+            "angBAE;sector;angleMarker;A,B,E;0;0;3b6ea5;9ec5e8",
+            "angGFL;sector;angleMarker;F,G,L;0;0;3b6ea5;9ec5e8",
+            "angAEB;sector;angleMarker;E,A,B;0;0;3f8e4f;a8dbb0",
+            "angFLG;sector;angleMarker;L,F,G;0;0;3f8e4f;a8dbb0",
+            "angAMB;sector;angleMarker;M,A,B;0;0;3f8e4f;a8dbb0",
+            "angFNG;sector;angleMarker;N,F,G;0;0;3f8e4f;a8dbb0",
+            "rtBAM;sector;angleMarkerRight;A,B,M;0;0;red;red",
+            "rtGFN;sector;angleMarkerRight;F,G,N;0;0;red;red",
+            "angABM;sector;angleMarker;B,A,M;0;0;c06a1b;f3c590",
+            "angFGN;sector;angleMarker;G,F,N;0;0;c06a1b;f3c590"
         ],
+        // Draggables (checked against the bundle): A, B, C, F, G free; D, E
+        // circleSliders. All are vertices of the given figure and stand from
+        // slide 1, so none is deferred. H, K, L (similar), M, N (extend) are
+        // derived and listed per slide.
+        aliases: { "BA": "AB", "EA": "AE", "GF": "FG", "LF": "FL",
+                   "BAE": "angBAE", "EAB": "angBAE",
+                   "GFL": "angGFL", "LFG": "angGFL",
+                   "AEB": "angAEB", "BEA": "angAEB",
+                   "FLG": "angFLG", "GLF": "angFLG",
+                   "AMB": "angAMB", "BMA": "angAMB",
+                   "FNG": "angFNG", "GNF": "angFNG",
+                   "BAM": "rtBAM", "MAB": "rtBAM",
+                   "GFN": "rtGFN", "NFG": "rtGFN" },
+        slides: [
+            { text: "“Similar polygons inscribed in circles are to one another as the squares on their diameters.”",
+              visible: DIAM,
+              highlighted: ["pABCDE","pFGHKL","BM","GN"],
+              justifications: [{ ref: "XII.1" }] },
+            { text: "Let {ABC|cABC} and {FGH|cFGH} be circles,",
+              visible: GIVEN,
+              highlighted: ["cABC","cFGH"] },
+            { text: "let {ABCDE|pABCDE} and {FGHKL|pFGHKL} be similar polygons inscribed in them,",
+              visible: POLY,
+              highlighted: ["pABCDE","pFGHKL"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ABCDE", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "FGHKL", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and let {BM} and {GN} be diameters of the circles.",
+              visible: DIAM,
+              highlighted: ["BM","GN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GN", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that the square on {BM} is to the square on {GN}",
+              visible: DIAM,
+              highlighted: ["BM","GN"] },
+            { text: "as the polygon {ABCDE|pABCDE} is to the polygon {FGHKL|pFGHKL}.",
+              visible: DIAM,
+              highlighted: ["pABCDE","pFGHKL"] },
+            { text: "Join {BE}, {AM}, {GL}, and {FN}.",
+              visible: JOIN,
+              highlighted: ["BE","AM","GL","FN"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FN", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Now, since the polygon {ABCDE|pABCDE} is similar to the polygon {FGHKL|pFGHKL},",
+              visible: SIDES,
+              highlighted: ["pABCDE","pFGHKL"] },
+            { text: "therefore the angle {BAE} equals the angle {GFL},",
+              visible: ANG1,
+              highlighted: ["angBAE","angGFL"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAE", name: geomlib.A.Sector.sweep },
+                  { elem: "angGFL", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "similar figures are equiangular", ref: "VI.Def.1" }] },
+            { text: "and {BA} is to {AE} as {GF} is to {FL}.",
+              visible: ANG1,
+              highlighted: ["AB","AE","FG","FL"],
+              justifications: [{ claim: "and have the sides about the equal angles proportional", ref: "VI.Def.1" }] },
+            { text: "Thus {BAE|ABE} and {GFL|FGL} are two triangles which have one angle equal to one angle,",
+              visible: TRI1,
+              highlighted: ["ABE","FGL","angBAE","angGFL"] },
+            { text: "namely the angle {BAE} equal to the angle {GFL}, and the sides about the equal angles proportional,",
+              visible: TRI1,
+              highlighted: ["angBAE","angGFL","AB","AE","FG","FL"] },
+            { text: "therefore the triangle {ABE} is equiangular with the triangle {FGL}.",
+              visible: TRI1,
+              highlighted: ["ABE","FGL"],
+              justifications: [{ claim: "triangles ABE and FGL equiangular", ref: "VI.6" }] },
+            { text: "Therefore the angle {AEB} equals the angle {FLG}.",
+              visible: ANG2,
+              highlighted: ["angAEB","angFLG"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angAEB", name: geomlib.A.Sector.sweep },
+                  { elem: "angFLG", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But the angle {AEB} equals the angle {AMB}, for they stand on {the same circumference|arcAB},",
+              visible: ARC,
+              highlighted: ["angAEB","angAMB","arcAB"],
+              transition: { animations: [
+                  { elem: "angAMB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angles on the same circumference AB", ref: "III.27" }] },
+            { text: "and the angle {FLG} equals the angle {FNG},",
+              visible: ARC2,
+              highlighted: ["angFLG","angFNG","arcFG"],
+              transition: { animations: [
+                  { elem: "angFNG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angles on the same circumference FG", ref: "III.27" }] },
+            { text: "therefore the angle {AMB} also equals the angle {FNG}.",
+              visible: RT.filter(function(n) { return n !== "rtBAM" && n !== "rtGFN"; }),
+              highlighted: ["angAMB","angFNG"] },
+            { text: "But the right angle {BAM} also equals the right angle {GFN},",
+              visible: RT,
+              highlighted: ["rtBAM","rtGFN","BM","GN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtBAM", name: geomlib.A.Sector.sweep },
+                  { elem: "rtGFN", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angles in the semicircles on BM and GN are right", ref: "III.31" }] },
+            { text: "therefore {the remaining angle|angABM} equals {the remaining angle|angFGN}.",
+              visible: REM,
+              highlighted: ["angABM","angFGN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABM", name: geomlib.A.Sector.sweep },
+                  { elem: "angFGN", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the three angles of a triangle equal two right angles", ref: "I.32" }] },
+            { text: "Therefore the triangle {ABM} is equiangular with the triangle {FGN}.",
+              visible: TRI2,
+              highlighted: ["ABM","FGN"] },
+            { text: "Therefore, proportionally {BM} is to {GN} as {BA} is to {GF}.",
+              visible: TRI2,
+              highlighted: ["BM","GN","AB","FG"],
+              justifications: [{ claim: "sides of equiangular triangles ABM, FGN proportional", ref: "VI.4" }] },
+            { text: "But the ratio of the square on {BM} to the square on {GN} is duplicate of the ratio of {BM} to {GN},",
+              visible: JOIN.concat(["AB","FG"]),
+              highlighted: ["BM","GN"],
+              justifications: [{ claim: "squares on BM and GN", ref: "VI.20" }] },
+            { text: "and the ratio of the polygon {ABCDE|pABCDE} to the polygon {FGHKL|pFGHKL} is duplicate of the ratio of {BA} to {GF}.",
+              visible: JOIN.concat(["AB","FG"]),
+              highlighted: ["pABCDE","pFGHKL","AB","FG"],
+              justifications: [{ claim: "similar polygons ABCDE and FGHKL", ref: "VI.20" }] },
+            { text: "Therefore the square on {BM} is to the square on {GN} as the polygon {ABCDE|pABCDE} is to the polygon {FGHKL|pFGHKL}.",
+              visible: JOIN,
+              highlighted: ["BM","GN","pABCDE","pFGHKL"] },
+            { text: "Therefore, similar polygons inscribed in circles are to one another as the squares on their diameters.",
+              visible: JOIN,
+              highlighted: ["pABCDE","pFGHKL","BM","GN"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.1") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.32":     "/elements/books/bookI/propositions/propI32/",
+        "III.27":   "/elements/books/bookIII/propositions/propIII27/",
+        "III.31":   "/elements/books/bookIII/propositions/propIII31/",
+        "VI.Def.1": "/elements/books/bookVI/definitions/defVI1/",
+        "VI.4":     "/elements/books/bookVI/propositions/propVI4/",
+        "VI.6":     "/elements/books/bookVI/propositions/propVI6/",
+        "VI.20":    "/elements/books/bookVI/propositions/propVI20/"
     });
 </script>
 </figure>
 
-Now, since the polygon *ABCDE* is similar to the polygon *FGHKL,* therefore the angle *BAE* equals the angle *GFL,* and *BA* is to *AE* as *GF* is to *FL.* [!just VI.Def.1]
+Now, since the polygon {ABCDE|pABCDE} is similar to the polygon {FGHKL|pFGHKL}, therefore the angle {BAE} equals the angle {GFL}, and {BA} is to {AE} as {GF} is to {FL}. [!just VI.Def.1]
 
-Thus *BAE* and *GFL* are two triangles which have one angle equal to one angle, namely the angle *BAE* equal to the angle *GFL,* and the sides about the equal angles proportional, therefore the triangle *ABE* is equiangular with the triangle *FGL.* Therefore the angle *AEB* equals the angle *FLG.* [!just VI.6]
+Thus {BAE|ABE} and {GFL|FGL} are two triangles which have one angle equal to one angle, namely the angle {BAE} equal to the angle {GFL}, and the sides about the equal angles proportional, therefore the triangle {ABE} is equiangular with the triangle {FGL}. Therefore the angle {AEB} equals the angle {FLG}. [!just VI.6]
 
-But the angle *AEB* equals the angle *AMB,* for they stand on the same circumference, and the angle *FLG* equals the angle *FNG,* therefore the angle *AMB* also equals the angle *FNG.* [!just III.27]
+But the angle {AEB} equals the angle {AMB}, for they stand on the same circumference, and the angle {FLG} equals the angle {FNG}, therefore the angle {AMB} also equals the angle {FNG}. [!just III.27]
 
-But the right angle *BAM* also equals the right angle *GFN,* therefore the remaining angle equals the remaining angle. Therefore the triangle *ABM* is equiangular with the triangle *FGN.* [!just III.31; I.32]
+But the right angle {BAM} also equals the right angle {GFN}, therefore the remaining angle equals the remaining angle. Therefore the triangle {ABM} is equiangular with the triangle {FGN}. [!just III.31; I.32]
 
-Therefore, proportionally *BM* is to *GN* as *BA* is to *GF.* [!just VI.4]
+Therefore, proportionally {BM} is to {GN} as {BA} is to {GF}. [!just VI.4]
 
-But the ratio of the square on *BM* to the square on *GN* is duplicate of the ratio of *BM* to *GN,* and the ratio of the polygon *ABCDE* to the polygon *FGHKL* is duplicate of the ratio of *BA* to *GF.* [!just VI.20]
+But the ratio of the square on {BM} to the square on {GN} is duplicate of the ratio of {BM} to {GN}, and the ratio of the polygon {ABCDE|pABCDE} to the polygon {FGHKL|pFGHKL} is duplicate of the ratio of {BA} to {GF}. [!just VI.20]
 
-Therefore the square on *BM* is to the square on *GN* as the polygon *ABCDE* is to the polygon *FGHKL.*
+Therefore the square on {BM} is to the square on {GN} as the polygon {ABCDE|pABCDE} is to the polygon {FGHKL|pFGHKL}.
 
 Therefore, *similar polygons inscribed in circles are to one another as the squares on their diameters.*
 
