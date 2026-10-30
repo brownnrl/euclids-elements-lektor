@@ -17,14 +17,29 @@ statement: To find the greatest common measure of three given numbers not relati
 ----
 proof:
 
-Let *A, B,* and *C* be the three given numbers not relatively prime.
+Let {A}, {B}, and {C} be the three given numbers not relatively prime.
 
-It is required to find the greatest common measure of *A, B,* and *C.*
+It is required to find the greatest common measure of {A}, {B}, and {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="210" height="250" tabindex="0"></canvas>
 <noscript><img alt="VII.3 diagram" src="propVII3.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as vertical segments: A = 6, B = 4, C = 3, D = 2, E = F = 1
+    // in units of E, all built by cutoffs from E's length. Nothing is added
+    // to the figure; the walk brings D, E and F on with the sentences that
+    // introduce them and otherwise lights the numbers each step names.
+    //
+    // Joyce's figure is drawn for the second case (D does not measure C).
+    // In the first case "some number E, greater than D" is a hypothetical
+    // number, not the figure's E (the greatest common measure of D and C,
+    // and less than D), so that E is left untokenized in the case-one
+    // captions and prose, and the figure's E stays off until slide 25.
+    // F in the second case is the figure's F, drawn by Joyce equal to E.
+    var GIVEN = ["A","B","C"];
+    var WITHD = GIVEN.concat(["D","D1"]);
+    var WITHE = WITHD.concat(["E","E1","E2"]);
+    var WITHF = WITHE.concat(["F","F1"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -65,53 +80,207 @@ It is required to find the greatest common measure of *A, B,* and *C.*
             "F2;point;cutoff;F1,F3,E1,E2;0",
             "F;line;connect;F1,F2;black"
         ],
+        // Every lower endpoint-slider A1..F1, and E2, is draggable (an
+        // invisible lineSlider, checked against the bundle). A1, B1, C1 carry
+        // the givens; D1, E1, E2 and F1 belong to numbers the proof takes
+        // mid-walk, so they are deferred and follow `visible`.
+        deferDraggables: ["D1","E1","E2","F1"],
+        slides: [
+            { text: "“To find the greatest common measure of three given numbers not relatively prime.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "VII.3" }] },
+            { text: "Let {A}, {B}, and {C} be the three given numbers not relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "It is required to find the greatest common measure of {A}, {B}, and {C}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "Take the greatest common measure, {D}, of the two numbers {A} and {B}.",
+              visible: WITHD,
+              highlighted: ["A","B","D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "D = GCM of A and B", ref: "VII.2" }] },
+            { text: "Then either {D} measures, or does not measure, {C}.",
+              visible: WITHD,
+              highlighted: ["D","C"] },
+            // Case one: D measures C.
+            { text: "First, let {D} measure {C}.",
+              visible: WITHD,
+              highlighted: ["D","C"] },
+            { text: "But it measures {A} and {B} also, therefore {D} measures {A}, {B}, and {C}.",
+              visible: WITHD,
+              highlighted: ["D","A","B","C"] },
+            { text: "Therefore {D} is a common measure of {A}, {B}, and {C}.",
+              visible: WITHD,
+              highlighted: ["D"] },
+            { text: "I say that it is also the greatest.",
+              visible: WITHD,
+              highlighted: ["D"] },
+            { text: "If {D} is not the greatest common measure of {A}, {B}, and {C},",
+              visible: WITHD,
+              highlighted: ["D","A","B","C"] },
+            { text: "then some number E, greater than {D}, measures the numbers {A}, {B}, and {C}.",
+              visible: WITHD,
+              highlighted: ["A","B","C"] },
+            { text: "Since then E measures {A}, {B}, and {C}, therefore it measures {A} and {B}.",
+              visible: WITHD,
+              highlighted: ["A","B"] },
+            { text: "Therefore it also measures the greatest common measure of {A} and {B}.",
+              visible: WITHD,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "a common measure measures the GCM", ref: "VII.2,Cor." }] },
+            { text: "But the greatest common measure of {A} and {B} is {D},",
+              visible: WITHD,
+              highlighted: ["A","B","D"] },
+            { text: "therefore E measures {D}, the greater the less, which is impossible.",
+              visible: WITHD,
+              highlighted: ["D"] },
+            { text: "Therefore no number which is greater than {D} measures the numbers {A}, {B}, and {C}.",
+              visible: WITHD,
+              highlighted: ["D","A","B","C"] },
+            { text: "Therefore {D} is the greatest common measure of {A}, {B}, and {C}.",
+              visible: WITHD,
+              highlighted: ["D"] },
+            // Case two: D does not measure C — the case Joyce's figure draws.
+            { text: "Next, let {D} not measure {C}.",
+              visible: WITHD,
+              highlighted: ["D","C"] },
+            { text: "I say first that {C} and {D} are not relatively prime.",
+              visible: WITHD,
+              highlighted: ["C","D"] },
+            { text: "Since {A}, {B}, and {C} are not relatively prime, therefore some number measures them.",
+              visible: WITHD,
+              highlighted: ["A","B","C"] },
+            { text: "Now that which measures {A}, {B}, and {C} also measures {A} and {B},",
+              visible: WITHD,
+              highlighted: ["A","B"] },
+            { text: "and therefore measures {D}, the greatest common measure of {A} and {B}.",
+              visible: WITHD,
+              highlighted: ["D"],
+              justifications: [{ claim: "a common measure measures the GCM", ref: "VII.2,Cor." }] },
+            { text: "But it measures {C} also, therefore some number measures the numbers {D} and {C}.",
+              visible: WITHD,
+              highlighted: ["D","C"] },
+            { text: "Therefore {D} and {C} are not relatively prime.",
+              visible: WITHD,
+              highlighted: ["D","C"] },
+            { text: "Take their greatest common measure {E}.",
+              visible: WITHE,
+              highlighted: ["D","C","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "E = GCM of D and C", ref: "VII.2" }] },
+            { text: "Then, since {E} measures {D}, and {D} measures {A} and {B}, therefore {E} also measures {A} and {B}.",
+              visible: WITHE,
+              highlighted: ["E","D","A","B"] },
+            { text: "But it measures {C} also, therefore {E} measures {A}, {B}, and {C}.",
+              visible: WITHE,
+              highlighted: ["E","A","B","C"] },
+            { text: "Therefore {E} is a common measure of {A}, {B}, and {C}.",
+              visible: WITHE,
+              highlighted: ["E"] },
+            { text: "I say next that it is also the greatest.",
+              visible: WITHE,
+              highlighted: ["E"] },
+            { text: "If {E} is not the greatest common measure of {A}, {B}, and {C},",
+              visible: WITHE,
+              highlighted: ["E","A","B","C"] },
+            { text: "then some number {F}, greater than {E}, measures the numbers {A}, {B}, and {C}.",
+              visible: WITHF,
+              highlighted: ["F","A","B","C"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since {F} measures {A}, {B}, and {C}, it also measures {A} and {B},",
+              visible: WITHF,
+              highlighted: ["F","A","B"] },
+            { text: "therefore it measures the greatest common measure of {A} and {B}.",
+              visible: WITHF,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "a common measure measures the GCM", ref: "VII.2,Cor." }] },
+            { text: "But the greatest common measure of {A} and {B} is {D}, therefore {F} measures {D}.",
+              visible: WITHF,
+              highlighted: ["D","F"] },
+            { text: "And it measures {C} also, therefore {F} measures {D} and {C}.",
+              visible: WITHF,
+              highlighted: ["F","D","C"] },
+            { text: "Therefore it also measures the greatest common measure of {D} and {C}.",
+              visible: WITHF,
+              highlighted: ["D","C"],
+              justifications: [{ claim: "a common measure measures the GCM", ref: "VII.2,Cor." }] },
+            { text: "But the greatest common measure of {D} and {C} is {E}, therefore {F} measures {E},",
+              visible: WITHF,
+              highlighted: ["E","F"] },
+            { text: "the greater the less, which is impossible.",
+              visible: WITHF,
+              highlighted: ["F","E"] },
+            { text: "Therefore no number which is greater than {E} measures the numbers {A}, {B}, and {C}.",
+              visible: WITHF,
+              highlighted: ["E","A","B","C"] },
+            { text: "Therefore {E} is the greatest common measure of {A}, {B}, and {C}.",
+              visible: WITHF,
+              highlighted: ["E","A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.3") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.2":      "/elements/books/bookVII/propositions/propVII2/",
+        "VII.2,Cor.": "/elements/books/bookVII/propositions/propVII2/#cor"
     });
 </script>
 </figure>
 
-Take the greatest common measure, *D,* of the two numbers *A* and *B.* Then either *D* measures, or does not measure, *C.* [!just VII.2]
+Take the greatest common measure, {D}, of the two numbers {A} and {B}. Then either {D} measures, or does not measure, {C}. [!just VII.2]
 
-First, let *D* measure *C.*
+First, let {D} measure {C}.
 
-But it measures *A* and *B* also, therefore *D* measures *A, B,* and *C.* Therefore *D* is a common measure of *A, B,* and *C.*
+But it measures {A} and {B} also, therefore {D} measures {A}, {B}, and {C}. Therefore {D} is a common measure of {A}, {B}, and {C}.
 
 I say that it is also the greatest.
 
-If *D* is not the greatest common measure of *A, B,* and *C,* then some number *E,* greater than *D,* measures the numbers *A, B,* and *C.*
+If {D} is not the greatest common measure of {A}, {B}, and {C}, then some number *E,* greater than {D}, measures the numbers {A}, {B}, and {C}.
 
 <div class="just"><a href="/elements/books/bookVII/propositions/propVII2/#cor">VII.2,Cor.</a></div>
 
-Since then *E* measures *A, B,* and *C,* therefore it measures *A* and *B.* Therefore it also measures the greatest common measure of *A* and *B.* But the greatest common measure of *A* and *B* is *D,* therefore *E* measures *D,* the greater the less, which is impossible.
+Since then *E* measures {A}, {B}, and {C}, therefore it measures {A} and {B}. Therefore it also measures the greatest common measure of {A} and {B}. But the greatest common measure of {A} and {B} is {D}, therefore *E* measures {D}, the greater the less, which is impossible.
 
-Therefore no number which is greater than *D* measures the numbers *A, B,* and *C.* Therefore *D* is the greatest common measure of *A, B,* and *C.*
+Therefore no number which is greater than {D} measures the numbers {A}, {B}, and {C}. Therefore {D} is the greatest common measure of {A}, {B}, and {C}.
 
-Next, let *D* not measure *C.*
+Next, let {D} not measure {C}.
 
-I say first that *C* and *D* are not relatively prime.
+I say first that {C} and {D} are not relatively prime.
 
-Since *A, B,* and *C* are not relatively prime, therefore some number measures them.
+Since {A}, {B}, and {C} are not relatively prime, therefore some number measures them.
 
 <div class="just"><a href="/elements/books/bookVII/propositions/propVII2/#cor">VII.2,Cor.</a></div>
 
-Now that which measures *A, B,* and *C* also measures *A* and *B,* and therefore measures *D,* the greatest common measure of *A* and *B.* But it measures *C* also, therefore some number measures the numbers *D* and *C.* Therefore *D* and *C* are not relatively prime.
+Now that which measures {A}, {B}, and {C} also measures {A} and {B}, and therefore measures {D}, the greatest common measure of {A} and {B}. But it measures {C} also, therefore some number measures the numbers {D} and {C}. Therefore {D} and {C} are not relatively prime.
 
-Take their greatest common measure *E.* [!just VII.2]
+Take their greatest common measure {E}. [!just VII.2]
 
-Then, since *E* measures *D,* and *D* measures *A* and *B,* therefore *E* also measures *A* and *B.* But it measures *C* also, therefore *E* measures *A, B,* and *C.* Therefore *E* is a common measure of *A, B,* and *C.*
+Then, since {E} measures {D}, and {D} measures {A} and {B}, therefore {E} also measures {A} and {B}. But it measures {C} also, therefore {E} measures {A}, {B}, and {C}. Therefore {E} is a common measure of {A}, {B}, and {C}.
 
 I say next that it is also the greatest.
 
-If *E* is not the greatest common measure of *A, B,* and *C,* then some number *F,* greater than *E,* measures the numbers *A, B,* and *C.*
+If {E} is not the greatest common measure of {A}, {B}, and {C}, then some number {F}, greater than {E}, measures the numbers {A}, {B}, and {C}.
 
 <div class="just"><a href="/elements/books/bookVII/propositions/propVII2/#cor">VII.2,Cor.</a></div>
 
-Now, since *F* measures *A, B,* and *C,* it also measures *A* and *B,* therefore it measures the greatest common measure of *A* and *B.* But the greatest common measure of *A* and *B* is *D,* therefore *F* measures *D.*
+Now, since {F} measures {A}, {B}, and {C}, it also measures {A} and {B}, therefore it measures the greatest common measure of {A} and {B}. But the greatest common measure of {A} and {B} is {D}, therefore {F} measures {D}.
 
 <div class="just"><a href="/elements/books/bookVII/propositions/propVII2/#cor">VII.2,Cor.</a></div>
 
-And it measures *C* also, therefore *F* measures *D* and *C.* Therefore it also measures the greatest common measure of *D* and *C.* But the greatest common measure of *D* and *C* is *E,* therefore *F* measures *E,* the greater the less, which is impossible.
+And it measures {C} also, therefore {F} measures {D} and {C}. Therefore it also measures the greatest common measure of {D} and {C}. But the greatest common measure of {D} and {C} is {E}, therefore {F} measures {E}, the greater the less, which is impossible.
 
-Therefore no number which is greater than *E* measures the numbers *A, B,* and *C.* Therefore *E* is the greatest common measure of *A, B,* and *C.*
+Therefore no number which is greater than {E} measures the numbers {A}, {B}, and {C}. Therefore {E} is the greatest common measure of {A}, {B}, and {C}.
 
 <div class="qed">Q.E.D.</div>
 ----

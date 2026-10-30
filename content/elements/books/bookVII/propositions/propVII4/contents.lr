@@ -15,14 +15,23 @@ statement: Any number is either a part or parts of any number, the less of the g
 ----
 proof:
 
-Let *A* and *BC* be two numbers, and let *BC* be the less.
+Let {A} and {BC} be two numbers, and let {BC} be the less.
 
-I say that *BC* is either a part, or parts, of *A.*
+I say that {BC} is either a part, or parts, of {A}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="120" height="220" tabindex="0"></canvas>
 <noscript><img alt="VII.4 diagram" src="propVII4.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as vertical segments: BC = 3D and A = 4D, built by cutoffs
+    // from D's length, with E and F the points that divide BC into numbers
+    // equal to D. BE, EF and FC are transparent highlight targets (;0;0;0)
+    // so the resting figure is unchanged. Joyce's figure is drawn for the
+    // third case (not relatively prime, BC does not measure A); the first
+    // two cases are walked over it with highlights only.
+    var GIVEN = ["A","BC","B","C"];
+    var WITHD = GIVEN.concat(["D","D1","D2"]);
+    var PARTS = WITHD.concat(["E","F","BE","EF","FC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -45,23 +54,104 @@ I say that *BC* is either a part, or parts, of *A.*
             "BC;line;connect;B,C",
             "A';point;cutoff;A1,A3,B,C;0;0",
             "A2;point;cutoff;A',A3,D1,D2;0",
-            "A;line;connect;A1,A2;black"
+            "A;line;connect;A1,A2;black",
+            "BE;line;connect;B,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "FC;line;connect;F,C;0;0;0"
         ],
+        // Draggables (checked against the bundle): A1, B, D1, D2 (lineSliders)
+        // and the off-canvas anchors. D1 and D2 carry the number D, which the
+        // proof takes mid-walk, so they are deferred and follow `visible`.
+        // E, F and C are cutoffs (derived), listed per slide.
+        deferDraggables: ["D1","D2"],
+        aliases: { "CB": "BC", "EB": "BE", "FE": "EF", "CF": "FC" },
+        slides: [
+            { text: "“Any number is either a part or parts of any number, the less of the greater.”",
+              visible: GIVEN,
+              highlighted: ["A","BC"],
+              justifications: [{ ref: "VII.4" }] },
+            { text: "Let {A} and {BC} be two numbers, and let {BC} be the less.",
+              visible: GIVEN,
+              highlighted: ["A","BC"] },
+            { text: "I say that {BC} is either a part, or parts, of {A}.",
+              visible: GIVEN,
+              highlighted: ["BC","A"] },
+            { text: "Either {A} and {BC} are relatively prime or they are not.",
+              visible: GIVEN,
+              highlighted: ["A","BC"] },
+            { text: "First, let {A} and {BC} be relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","BC"] },
+            { text: "Then, if {BC} is divided into the units in it,",
+              visible: GIVEN,
+              highlighted: ["BC"] },
+            { text: "then each unit of those in {BC} is some part of {A}, so that {BC} is parts of {A}.",
+              visible: GIVEN,
+              highlighted: ["BC","A"],
+              justifications: [{ claim: "parts", ref: "VII.Def.4" }] },
+            { text: "Next let {A} and {BC} not be relatively prime, then {BC} either measures, or does not measure, {A}.",
+              visible: GIVEN,
+              highlighted: ["A","BC"] },
+            { text: "Now if {BC} measures {A}, then {BC} is a part of {A}.",
+              visible: GIVEN,
+              highlighted: ["BC","A"],
+              justifications: [{ claim: "a part", ref: "VII.Def.3" }] },
+            { text: "But, if not, take the greatest common measure {D} of {A} and {BC},",
+              visible: WITHD,
+              highlighted: ["A","BC","D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "D = GCM of A and BC", ref: "VII.2" }] },
+            { text: "and divide {BC} into the numbers equal to {D}, namely {BE}, {EF}, and {FC}.",
+              visible: PARTS,
+              highlighted: ["D","BE","EF","FC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E", name: geomlib.A.Point.appear },
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "Now, since {D} measures {A}, therefore {D} is a part of {A}.",
+              visible: PARTS,
+              highlighted: ["D","A"] },
+            { text: "But {D} equals each of the numbers {BE}, {EF}, and {FC},",
+              visible: PARTS,
+              highlighted: ["D","BE","EF","FC"] },
+            { text: "therefore each of the numbers {BE}, {EF}, and {FC} is also a part of {A},",
+              visible: PARTS,
+              highlighted: ["BE","EF","FC","A"] },
+            { text: "so that {BC} is parts of {A}.",
+              visible: PARTS,
+              highlighted: ["BC","A"] },
+            { text: "Therefore, any number is either a part or parts of any number, the less of the greater.",
+              visible: PARTS,
+              highlighted: ["BC","A"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.4") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.3": "/elements/books/bookVII/definitions/defVII3/",
+        "VII.Def.4": "/elements/books/bookVII/definitions/defVII4/",
+        "VII.2":     "/elements/books/bookVII/propositions/propVII2/"
     });
 </script>
 </figure>
 
-Either *A* and *BC* are relatively prime or they are not.
+Either {A} and {BC} are relatively prime or they are not.
 
-First, let *A* and *BC* be relatively prime.
+First, let {A} and {BC} be relatively prime.
 
-Then, if *BC* is divided into the units in it, then each unit of those in *BC* is some part of *A,* so that *BC* is parts of *A.* [!just VII.Def.4]
+Then, if {BC} is divided into the units in it, then each unit of those in {BC} is some part of {A}, so that {BC} is parts of {A}. [!just VII.Def.4]
 
-Next let *A* and *BC* not be relatively prime, then *BC* either measures, or does not measure, *A.*
+Next let {A} and {BC} not be relatively prime, then {BC} either measures, or does not measure, {A}.
 
-Now if *BC* measures *A,* then *BC* is a part of *A.* But, if not, take the greatest common measure *D* of *A* and *BC,* and divide *BC* into the numbers equal to *D,* namely *BE, EF,* and *FC.* [!just VII.Def.3; VII.2]
+Now if {BC} measures {A}, then {BC} is a part of {A}. But, if not, take the greatest common measure {D} of {A} and {BC}, and divide {BC} into the numbers equal to {D}, namely {BE}, {EF}, and {FC}. [!just VII.Def.3; VII.2]
 
-Now, since *D* measures *A,* therefore *D* is a part of *A.* But *D* equals each of the numbers *BE, EF,* and *FC,* therefore each of the numbers *BE, EF,* and *FC* is also a part of *A,* so that *BC* is parts of *A.*
+Now, since {D} measures {A}, therefore {D} is a part of {A}. But {D} equals each of the numbers {BE}, {EF}, and {FC}, therefore each of the numbers {BE}, {EF}, and {FC} is also a part of {A}, so that {BC} is parts of {A}.
 
 Therefore, *any number is either a part or parts of any number, the less of the greater.*
 
