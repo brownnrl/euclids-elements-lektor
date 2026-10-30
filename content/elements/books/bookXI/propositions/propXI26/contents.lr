@@ -17,16 +17,56 @@ statement: To construct a solid angle equal to a given solid angle on a given st
 ----
 proof:
 
-Let *A* be the given point on the given straight line *AB,* and let the angle at *D* be the given solid angle contained by the angles *EDC, EDF,* and *FDC.*
+Let {A} be the given point on the given straight line {AB}, and let the angle at {D} be the given solid angle contained by the angles {EDC|angEDC}, {EDF|angEDF}, and {FDC|angFDC}.
 
-It is required to construct at the point *A* on the straight line *AB* a solid angle equal to the solid angle at *D.*
+It is required to construct at the point {A} on the straight line {AB} a solid angle equal to the solid angle at {D}.
 
-Take a point *F* at random on *DF,* draw *FG* from *F* perpendicular to the plane through *ED* and *DC,* and let it meet the plane at *G.* Join *DG.* [!just XI.11]
+Take a point {F} at random on {DF}, draw {FG} from {F} perpendicular to the plane through {ED} and {DC}, and let it meet the plane at {G}. Join {DG}. [!just XI.11]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="360" height="320" tabindex="0"></canvas>
 <noscript><img alt="XI.26 diagram" src="propXI26.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: a 3-D scene (pivot on the plane of reference,
+    // xyplane). At D the solid angle as the filled faces DCF, DEF over the
+    // plane triangles DCG, DGE, with F above and G its foot; at A the copy,
+    // ABK, AKL in the plane and the faces ALH, ABH, with KH perpendicular.
+    //
+    // Joyce draws DE, DC, DF, DG, AL, AK, HA and the joins HB, KB, FE, GE
+    // only as triangle edges. The walk constructs them in order, so they
+    // are solid slide twins, hidden at rest (initiallyHidden), stroked from
+    // the end they are drawn from. The triangles trace and fill as the
+    // proof reaches them: ABK, DGE at the first I.4, ABH, DEF and ALH, DCF
+    // at the I.8 steps, AKL, DCG at the close.
+    //
+    // Added, all transparent: PT, a faceless quadrilateral over xyplane's
+    // corners (a plane element draws no highlight); tEDC and tBAL, faceless
+    // triangles for "the plane through ED and DC" / "through BA and AL"
+    // (both lie in the plane of reference). Angle markers: the plane
+    // angles at D and A, equal pairs sharing a colour (EDC/BAL blue,
+    // EDG/BAK green, EDF/BAH purple, FDC/HAL orange); the right angles
+    // FGD, FGE, HKA, HKB, which the text proves right, are angleMarkerRight.
+    // Joyce's letter permutations are aliases.
+    //
+    // Draggables (checked against the bundle): origin, y, z (the scene's
+    // frame), A, B, C, D, E, F, all named by the setting-out, so none is
+    // deferred. G, K, L, H are derived and listed per slide.
+    var GIVEN = ["xyplane","PT","Oz","tEDC","tBAL","A","B","AB",
+                 "C","D","E","F","DE","DC","DF"];
+    var DANG  = ["angEDC","angEDF","angFDC"];
+    var FGv   = GIVEN.concat(["G","FG"]);
+    var DGv   = FGv.concat(["DG"]);
+    var ALv   = DGv.concat(["L","AL"]);
+    var AKv   = ALv.concat(["K","AK"]);
+    var KHv   = AKv.concat(["H","KH"]);
+    var HAv   = KHv.concat(["HA"]);
+    var JOIN  = HAv.concat(["HB","KB","FE","GE"]);
+    var RT    = ["angFGD","angFGE","angHKA","angHKB"];
+    var T1    = JOIN.concat(["ABK","DGE"]);
+    var T2    = T1.concat(["ABH","DEF"]);
+    var T3    = T2.concat(["ALH","DCF"]);
+    var ALL   = T3.concat(["AKL","DCG"]);
+    var AANG  = ["angBAL","angBAH","angHAL"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -63,27 +103,241 @@ Take a point *F* at random on *DF,* draw *FG* from *F* perpendicular to the plan
             "KH;line;perpendicular;K,xyplane,F,G",
             "H;point;last;KH",
             "ALH;polygon;triangle;A,L,H;0;0;black;random",
-            "ABH;polygon;triangle;A,B,H;0;0;black;random"
+            "ABH;polygon;triangle;A,B,H;0;0;black;random",
+            // Slide twins, hidden at rest (see above).
+            "DE;line;connect;D,E",
+            "DC;line;connect;D,C",
+            "DF;line;connect;D,F",
+            "DG;line;connect;D,G",
+            "AL;line;connect;A,L",
+            "AK;line;connect;A,K",
+            "HA;line;connect;H,A",
+            "HB;line;connect;H,B",
+            "KB;line;connect;K,B",
+            "FE;line;connect;F,E",
+            "GE;line;connect;G,E",
+            // Transparent highlight targets. Explicit ;0 faces.
+            "xyD;point;parallelogram;x,origin,y;0;0",
+            "PT;polygon;quadrilateral;origin,x,xyD,y;0;0;0;0",
+            "tEDC;polygon;triangle;D,E,C;0;0;0;0",
+            "tBAL;polygon;triangle;A,B,L;0;0;0;0",
+            "angEDC;sector;angleMarker;D,E,C;0;0;3b6ea5;9ec5e8",
+            "angBAL;sector;angleMarker;A,B,L;0;0;3b6ea5;9ec5e8",
+            "angEDG;sector;angleMarker;D,E,G;0;0;3f8e4f;a8dbb0",
+            "angBAK;sector;angleMarker;A,B,K;0;0;3f8e4f;a8dbb0",
+            "angEDF;sector;angleMarker;D,E,F;0;0;7a4fa3;cdb8e6",
+            "angBAH;sector;angleMarker;A,B,H;0;0;7a4fa3;cdb8e6",
+            "angFDC;sector;angleMarker;D,F,C;0;0;c06a1b;f3c590",
+            "angHAL;sector;angleMarker;A,H,L;0;0;c06a1b;f3c590",
+            "angFGD;sector;angleMarkerRight;G,F,D",
+            "angFGE;sector;angleMarkerRight;G,F,E",
+            "angHKA;sector;angleMarkerRight;K,H,A",
+            "angHKB;sector;angleMarkerRight;K,H,B"
         ],
+        initiallyHidden: ["DE","DC","DF","DG","AL","AK","HA","HB","KB","FE","GE"],
+        aliases: { "ED": "DE", "GD": "DG", "FD": "DF", "KA": "AK", "BA": "AB",
+                   "GF": "FG", "AH": "HA" },
+        slides: [
+            { text: "“To construct a solid angle equal to a given solid angle on a given straight line at a given point on it.”",
+              visible: GIVEN.concat(DANG),
+              highlighted: DANG.concat(["AB","A"]),
+              justifications: [{ ref: "XI.26" }] },
+            { text: "Let {A} be the given point on the given straight line {AB},",
+              visible: GIVEN,
+              highlighted: ["A","AB"] },
+            { text: "and let the angle at {D} be the given solid angle contained by the angles {EDC|angEDC}, {EDF|angEDF}, and {FDC|angFDC}.",
+              visible: GIVEN.concat(DANG),
+              highlighted: DANG,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angEDC", name: geomlib.A.Sector.sweep },
+                  { elem: "angEDF", name: geomlib.A.Sector.sweep },
+                  { elem: "angFDC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "It is required to construct at the point {A} on the straight line {AB}",
+              visible: GIVEN.concat(DANG),
+              highlighted: ["A","AB"] },
+            { text: "a solid angle equal to the solid angle at {D}.",
+              visible: GIVEN.concat(DANG),
+              highlighted: DANG },
+            { text: "Take a point {F} at random on {DF},",
+              visible: GIVEN,
+              highlighted: ["F","DF"] },
+            { text: "draw {FG} from {F} perpendicular to the plane through {ED} and {DC}, and let it meet the plane at {G}.",
+              visible: FGv,
+              highlighted: ["FG","tEDC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "FG perpendicular to the plane", ref: "XI.11" }] },
+            { text: "Join {DG}.",
+              visible: DGv,
+              highlighted: ["DG"],
+              transition: { animations: [
+                  { elem: "DG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "At the point {A} on the straight line {AB} construct the angle {BAL|angBAL} equal to the angle {EDC|angEDC},",
+              visible: ALv.concat(["angEDC","angBAL"]),
+              highlighted: ["angBAL","angEDC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AL",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "L",      name: geomlib.A.Point.appear },
+                  { elem: "angBAL", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle BAL = angle EDC", ref: "I.23" }] },
+            { text: "and construct the angle {BAK|angBAK} equal to the angle {EDG|angEDG}.",
+              visible: AKv.concat(["angEDG","angBAK"]),
+              highlighted: ["angBAK","angEDG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angEDG", name: geomlib.A.Sector.sweep },
+                  { elem: "AK",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",      name: geomlib.A.Point.appear },
+                  { elem: "angBAK", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle BAK = angle EDG", ref: "I.23" }] },
+            { text: "Make {AK} equal to {DG}.",
+              visible: AKv,
+              highlighted: ["AK","DG"],
+              justifications: [{ claim: "AK = DG", ref: "I.3" }] },
+            { text: "Set {KH} up from the point {K} at right angles to the plane through {BA} and {AL}.",
+              visible: KHv,
+              highlighted: ["KH","tBAL"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "KH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "KH at right angles to the plane", ref: "XI.12" }] },
+            { text: "Make {KH} equal to {GF}, and join {HA}.",
+              visible: HAv,
+              highlighted: ["KH","FG","HA"],
+              transition: { animations: [
+                  { elem: "HA", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "KH = GF", ref: "I.3" }, { ref: "I.Post.1" }] },
+            { text: "I say that the solid angle at {A} contained by the angles {BAL|angBAL}, {BAH|angBAH}, and {HAL|angHAL}",
+              visible: HAv.concat(AANG),
+              highlighted: AANG,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAH", name: geomlib.A.Sector.sweep },
+                  { elem: "angHAL", name: geomlib.A.Sector.sweep } ] } },
+            { text: "equals the solid angle at {D} contained by the angles {EDC|angEDC}, {EDF|angEDF}, and {FDC|angFDC}.",
+              visible: HAv.concat(AANG, DANG),
+              highlighted: DANG },
+            { text: "Cut {AB} and {DE} off equal to one another,",
+              visible: HAv,
+              highlighted: ["AB","DE"],
+              justifications: [{ claim: "AB = DE", ref: "I.3" }] },
+            { text: "and join {HB}, {KB}, {FE}, and {GE}.",
+              visible: JOIN,
+              highlighted: ["HB","KB","FE","GE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "HB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GE", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since {FG} is at right angles to the {plane of reference|PT},",
+              visible: JOIN,
+              highlighted: ["FG","PT"] },
+            { text: "therefore it is also at right angles with all the straight lines which meet it and are in the {plane of reference|PT}.",
+              visible: JOIN,
+              highlighted: ["FG","DG","GE","PT"],
+              justifications: [{ claim: "a line at right angles to a plane", ref: "XI.Def.3" }] },
+            { text: "Therefore each of the angles {FGD|angFGD} and {FGE|angFGE} is right.",
+              visible: JOIN.concat(["angFGD","angFGE"]),
+              highlighted: ["angFGD","angFGE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angFGD", name: geomlib.A.Sector.sweep },
+                  { elem: "angFGE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "For the same reason each of the angles {HKA|angHKA} and {HKB|angHKB} is also right.",
+              visible: JOIN.concat(RT),
+              highlighted: ["angHKA","angHKB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angHKA", name: geomlib.A.Sector.sweep },
+                  { elem: "angHKB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "a line at right angles to a plane", ref: "XI.Def.3" }] },
+            { text: "And, since the two sides {KA} and {AB} equal the two sides {GD} and {DE} respectively,",
+              visible: T1.concat(RT),
+              highlighted: ["AK","AB","DG","DE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ABK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DGE", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and they contain equal angles, therefore the base {KB} equals the base {GE}.",
+              visible: T1.concat(RT, ["angBAK","angEDG"]),
+              highlighted: ["angBAK","angEDG","KB","GE"],
+              justifications: [{ claim: "KB = GE", ref: "I.4" }] },
+            { text: "But {KH} also equals {GF}, and they contain right angles, therefore {HB} also equals {FE}.",
+              visible: T1.concat(RT),
+              highlighted: ["KH","FG","angHKB","angFGE","HB","FE"],
+              justifications: [{ claim: "HB = FE", ref: "I.4" }] },
+            { text: "Again, since the two sides {AK} and {KH} equal the two sides {DG} and {GF},",
+              visible: T1.concat(RT),
+              highlighted: ["AK","KH","DG","FG"] },
+            { text: "and they contain right angles, therefore the base {AH} equals the base {FD}.",
+              visible: T1.concat(RT),
+              highlighted: ["angHKA","angFGD","HA","DF"],
+              justifications: [{ claim: "AH = FD", ref: "I.4" }] },
+            { text: "But {AB} also equals {DE}, therefore the two sides {HA} and {AB} are equal to the two sides {DF} and {DE}.",
+              visible: T2,
+              highlighted: ["AB","DE","HA","DF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ABH", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DEF", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "And the base {HB} is equal to the base {FE}, therefore the angle {BAH|angBAH} equals the angle {EDF|angEDF}.",
+              visible: T2.concat(["angBAH","angEDF"]),
+              highlighted: ["HB","FE","angBAH","angEDF"],
+              justifications: [{ claim: "angle BAH = angle EDF", ref: "I.8" }] },
+            { text: "For the same reason the angle {HAL|angHAL} also equals the angle {FDC|angFDC}.",
+              visible: T3.concat(["angHAL","angFDC"]),
+              highlighted: ["angHAL","angFDC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ALH", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DCF", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "angle HAL = angle FDC", ref: "I.8" }] },
+            { text: "And the angle {BAL|angBAL} also equals the angle {EDC|angEDC}.",
+              visible: ALL.concat(["angBAL","angEDC"]),
+              highlighted: ["angBAL","angEDC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "AKL", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DCG", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Therefore at the point {A} on the straight line {AB}",
+              visible: ALL.concat(AANG, DANG),
+              highlighted: ["A","AB"].concat(AANG) },
+            { text: "a solid angle has been constructed equal to the given solid angle at {D}.",
+              visible: ALL.concat(AANG, DANG),
+              highlighted: AANG.concat(DANG),
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.26") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.8":      "/elements/books/bookI/propositions/propI8/",
+        "I.23":     "/elements/books/bookI/propositions/propI23/",
+        "XI.Def.3": "/elements/books/bookXI/definitions/defXI3/",
+        "XI.11":    "/elements/books/bookXI/propositions/propXI11/",
+        "XI.12":    "/elements/books/bookXI/propositions/propXI12/"
     });
 </script>
 </figure>
 
-At the point *A* on the straight line *AB* construct the angle *BAL* equal to the angle *EDC,* and construct the angle *BAK* equal to the angle *EDG.* [!just I.23]
+At the point {A} on the straight line {AB} construct the angle {BAL|angBAL} equal to the angle {EDC|angEDC}, and construct the angle {BAK|angBAK} equal to the angle {EDG|angEDG}. [!just I.23]
 
-Make *AK* equal to *DG.* Set *KH* up from the point *K* at right angles to the plane through *BA* and *AL.* Make *KH* equal to *GF,* and join *HA.* [!just XI.12]
+Make {AK} equal to {DG}. Set {KH} up from the point {K} at right angles to the plane through {BA} and {AL}. Make {KH} equal to {GF}, and join {HA}. [!just XI.12]
 
-I say that the solid angle at *A* contained by the angles *BAL, BAH,* and *HAL* equals the solid angle at *D* contained by the angles *EDC, EDF,* and *FDC.*
+I say that the solid angle at {A} contained by the angles {BAL|angBAL}, {BAH|angBAH}, and {HAL|angHAL} equals the solid angle at {D} contained by the angles {EDC|angEDC}, {EDF|angEDF}, and {FDC|angFDC}.
 
-Cut *AB* and *DE* off equal to one another, and join *HB, KB, FE,* and *GE.*
+Cut {AB} and {DE} off equal to one another, and join {HB}, {KB}, {FE}, and {GE}.
 
-Then, since *FG* is at right angles to the plane of reference, therefore it is also at right angles with all the straight lines which meet it and are in the plane of reference. Therefore each of the angles *FGD* and *FGE* is right. For the same reason each of the angles *HKA* and *HKB* is also right. [!just XI.Def.3]
+Then, since {FG} is at right angles to the plane of reference, therefore it is also at right angles with all the straight lines which meet it and are in the plane of reference. Therefore each of the angles {FGD|angFGD} and {FGE|angFGE} is right. For the same reason each of the angles {HKA|angHKA} and {HKB|angHKB} is also right. [!just XI.Def.3]
 
-And, since the two sides *KA* and *AB* equal the two sides *GD* and *DE* respectively, and they contain equal angles, therefore the base *KB* equals the base *GE.* But *KH* also equals *GF,* and they contain right angles, therefore *HB* also equals *FE.* Again, since the two sides *AK* and *KH* equal the two sides *DG* and *GF,* and they contain right angles, therefore the base *AH* equals the base *FD.* [!just I.4]
+And, since the two sides {KA} and {AB} equal the two sides {GD} and {DE} respectively, and they contain equal angles, therefore the base {KB} equals the base {GE}. But {KH} also equals {GF}, and they contain right angles, therefore {HB} also equals {FE}. Again, since the two sides {AK} and {KH} equal the two sides {DG} and {GF}, and they contain right angles, therefore the base {AH} equals the base {FD}. [!just I.4]
 
-But *AB* also equals *DE,* therefore the two sides *HA* and *AB* are equal to the two sides *DF* and *DE.* And the base *HB* is equal to the base *FE,* therefore the angle *BAH* equals the angle *EDF.* For the same reason the angle *HAL* also equals the angle *FDC.* [!just I.8]
+But {AB} also equals {DE}, therefore the two sides {HA} and {AB} are equal to the two sides {DF} and {DE}. And the base {HB} is equal to the base {FE}, therefore the angle {BAH|angBAH} equals the angle {EDF|angEDF}. For the same reason the angle {HAL|angHAL} also equals the angle {FDC|angFDC}. [!just I.8]
 
-And the angle *BAL* also equals the angle *EDC.* Therefore at the point *A* on the straight line *AB* a solid angle has been constructed equal to the given solid angle at *D.*
+And the angle {BAL|angBAL} also equals the angle {EDC|angEDC}. Therefore at the point {A} on the straight line {AB} a solid angle has been constructed equal to the given solid angle at {D}.
 
 <div class="qed">Q.E.F.</div>
 ----

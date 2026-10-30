@@ -15,16 +15,51 @@ statement: If a parallelepipedal solid is cut by a plane parallel to the opposit
 ----
 proof:
 
-Let the parallelepipedal solid *ABCD* be cut by the plane *FG* which is parallel to the opposite planes *RA* and *DH.*
+Let the parallelepipedal solid {ABCD} be cut by the plane {FG} which is parallel to the opposite planes {RA} and {DH}.
 
-I say that the base *AEFV* is to the base *FHCF* as the solid *ABFU* is to the solid *EGCD.*
+I say that the base {AEFV} is to the base *FHCF* as the solid {ABFU} is to the solid {EGCD}.
 
-Produce *AH* in each direction. Make any number of straight lines *AK* and *KL* equal to *AE,* and any number *HM* and *MN* equal to *EH.* Complete the parallelograms *LP, KV, HW,* and *MS* and the solids *LQ, KR, DM,* and *MT.* [!just I.3; I.31]
+Produce {AH} in each direction. Make any number of straight lines {AK} and {KL} equal to {AE}, and any number {HM} and {MN} equal to {EH}. Complete the parallelograms {LP}, {KV}, {HW}, and {MS} and the solids {LQ}, {KR}, {DM}, and {MT}. [!just I.3; I.31]
 
 <center>
 <canvas id="canvas_0" width="600" height="220" tabindex="0"></canvas>
 <noscript><img alt="XI.25 diagram" src="propXI25.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the parallelepiped ABCD (front edge AH, base AHCV)
+    // cut by the plane FG (EFUG), its faces filled, with AH produced both
+    // ways and the solids LQ, KR (left) and DM, MT (right) drawn in outline.
+    //
+    // Added, all transparent (explicit ;0 faces): faceless twins of the
+    // filled faces the proof names (ABRVt = RA/AR, DCHHt = DH, VFEAt =
+    // AEFV/AF, EFCHt = EC/FH), since a highlighted face would be raised
+    // over the figure (#140); planeFG, the cutting plane; quadrilaterals
+    // for the parallelograms the figure draws only as edges (KOp, KBp, AGp,
+    // LXp, HGp, INp, MYp, NTp) and the bases LFp, NFp; and a hexagonal
+    // silhouette for each solid (sABCD, sAU, sED, sLQ, sKR, sDM, sMT, sLU,
+    // sNU). KQ4 is the unlettered fourth corner of KQ. AH, AE, AK, KL,
+    // EH, HM, MN are transparent lines; prodL, prodR are the transitory
+    // productions of AH. The existing outline polygons PL, VK, CM, WN, KQ,
+    // HI (face 0) carry their own highlight. Joyce's names are aliases.
+    //
+    // Joyce's slips left literal: "the base FHCF" (for EHCF), and
+    // "DH, MY, NT and equal one another".
+    //
+    // Draggables (checked against the bundle): A, B, C, H, E free / slider,
+    // all givens, so none is deferred. Every other point is derived and
+    // listed per slide.
+    var BASE  = ["A","B","C","D","H","V","R","H'","E","F","G","U",
+                 "RUFV","VFEA","ABRV","UDCF","EFCH","DCHH'","BH'","GE","GU",
+                 "AH","planeFG","ABRVt","DCHHt","VFEAt","EFCHt",
+                 "sABCD","sAU","sED"];
+    var CUTL  = BASE.concat(["K","L","AK","KL","AE"]);
+    var CUT   = CUTL.concat(["M","N","HM","MN","EH"]);
+    var PAR   = CUT.concat(["P","X'","W","S","PL","VK","CM","WN"]);
+    var SOL   = PAR.concat(["Q","KQ4","O","X","Y","T","I","N'",
+                 "KQ","BQ","BL","XO","XQ","XX'","DW","SY","HI","IT","NN'",
+                 "KOp","KBp","AGp","LXp","HGp","INp","MYp","NTp","LFp","NFp",
+                 "sLQ","sKR","sDM","sMT","sLU","sNU"]);
+    var STMT1 = ["sABCD","planeFG","ABRVt","DCHHt"];
+    var STMT2 = ["VFEAt","EFCHt","sAU","sED"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -80,19 +115,233 @@ Produce *AH* in each direction. Make any number of straight lines *AK* and *KL* 
             "I;point;vertex;HI,4",
             "IT;polygon;parallelogram;I,Y,T;0;0;black;0",
             "N';point;vertex;IT,4",
-            "NN';line;connect;N,N'"
+            "NN';line;connect;N,N'",
+            // Transparent highlight targets (see above).
+            "KQ4;point;vertex;KQ,4;0;0",
+            "AH;line;connect;A,H;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "AK;line;connect;A,K;0;0;0",
+            "KL;line;connect;K,L;0;0;0",
+            "EH;line;connect;E,H;0;0;0",
+            "HM;line;connect;H,M;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "prodL;line;connect;A,L;0;0;0",
+            "prodR;line;connect;H,N;0;0;0",
+            "planeFG;polygon;quadrilateral;E,F,U,G;0;0;0;0",
+            "ABRVt;polygon;quadrilateral;A,B,R,V;0;0;0;0",
+            "DCHHt;polygon;quadrilateral;D,C,H,H';0;0;0;0",
+            "VFEAt;polygon;quadrilateral;V,F,E,A;0;0;0;0",
+            "EFCHt;polygon;quadrilateral;E,F,C,H;0;0;0;0",
+            "KOp;polygon;quadrilateral;K,L,O,KQ4;0;0;0;0",
+            "KBp;polygon;quadrilateral;K,A,B,KQ4;0;0;0;0",
+            "AGp;polygon;quadrilateral;A,E,G,B;0;0;0;0",
+            "LXp;polygon;quadrilateral;L,X',X,O;0;0;0;0",
+            "HGp;polygon;quadrilateral;E,H,H',G;0;0;0;0",
+            "INp;polygon;quadrilateral;M,N,N',I;0;0;0;0",
+            "MYp;polygon;quadrilateral;M,W,Y,I;0;0;0;0",
+            "NTp;polygon;quadrilateral;N,S,T,N';0;0;0;0",
+            "LFp;polygon;quadrilateral;L,E,F,X';0;0;0;0",
+            "NFp;polygon;quadrilateral;E,N,S,F;0;0;0;0",
+            "sABCD;polygon;hexagon;A,H,C,D,R,B;0;0;0;0",
+            "sAU;polygon;hexagon;A,E,F,U,R,B;0;0;0;0",
+            "sED;polygon;hexagon;E,H,C,D,U,G;0;0;0;0",
+            "sLQ;polygon;hexagon;L,K,P,Q,X,O;0;0;0;0",
+            "sKR;polygon;hexagon;K,A,V,R,Q,KQ4;0;0;0;0",
+            "sDM;polygon;hexagon;H,M,W,Y,D,H';0;0;0;0",
+            "sMT;polygon;hexagon;M,N,S,T,Y,I;0;0;0;0",
+            "sLU;polygon;hexagon;L,E,F,U,X,O;0;0;0;0",
+            "sNU;polygon;hexagon;E,N,S,T,U,G;0;0;0;0"
         ],
+        aliases: {
+            "ABCD": "sABCD", "FG": "planeFG", "RA": "ABRVt", "AR": "ABRVt",
+            "DH": "DCHHt", "AEFV": "VFEAt", "AF": "VFEAt", "ABFU": "sAU",
+            "AU": "sAU", "EGCD": "sED", "ED": "sED", "HU": "sED", "UH": "sED",
+            "LP": "PL", "KV": "VK", "HW": "CM", "MS": "WN",
+            "LQ": "sLQ", "KR": "sKR", "DM": "sDM", "MT": "sMT",
+            "LU": "sLU", "NU": "sNU", "LF": "LFp", "NF": "NFp", "FN": "NFp",
+            "EC": "EFCHt", "FH": "EFCHt", "HF": "EFCHt",
+            "KO": "KOp", "KB": "KBp", "AG": "AGp", "LX": "LXp",
+            "HG": "HGp", "IN": "INp", "MY": "MYp", "NT": "NTp",
+            "LK": "KL", "KA": "AK"
+        },
+        slides: [
+            { text: "“If a parallelepipedal solid is cut by a plane parallel to the opposite planes,”",
+              visible: BASE,
+              highlighted: STMT1,
+              justifications: [{ ref: "XI.25" }] },
+            { text: "“then the base is to the base as the solid is to the solid.”",
+              visible: BASE,
+              highlighted: STMT2 },
+            { text: "Let the parallelepipedal solid {ABCD} be cut by the plane {FG}",
+              visible: BASE,
+              highlighted: ["sABCD","planeFG"] },
+            { text: "which is parallel to the opposite planes {RA} and {DH}.",
+              visible: BASE,
+              highlighted: ["planeFG","ABRVt","DCHHt"] },
+            { text: "I say that the base {AEFV} is to the base FHCF as the solid {ABFU} is to the solid {EGCD}.",
+              visible: BASE,
+              highlighted: STMT2 },
+            { text: "Produce {AH} in each direction.",
+              visible: BASE.concat(["prodL","prodR"]),
+              highlighted: ["AH"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "prodL", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "prodR", name: geomlib.A.Line.straightEdgeExtend } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Make any number of straight lines {AK} and {KL} equal to {AE},",
+              visible: CUTL,
+              highlighted: ["AK","KL","AE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "L", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AK = KL = AE", ref: "I.3" }] },
+            { text: "and any number {HM} and {MN} equal to {EH}.",
+              visible: CUT,
+              highlighted: ["HM","MN","EH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "M", name: geomlib.A.Point.appear },
+                  { elem: "N", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "HM = MN = EH", ref: "I.3" }] },
+            { text: "Complete the parallelograms {LP}, {KV}, {HW}, and {MS}",
+              visible: PAR,
+              highlighted: ["PL","VK","CM","WN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "VK", name: geomlib.A.Polygon.outline },
+                  { elem: "PL", name: geomlib.A.Polygon.outline },
+                  { elem: "CM", name: geomlib.A.Polygon.outline },
+                  { elem: "WN", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "parallels", ref: "I.31" }] },
+            { text: "and the solids {LQ}, {KR}, {DM}, and {MT}.",
+              visible: SOL,
+              highlighted: ["sLQ","sKR","sDM","sMT"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BL",  name: geomlib.A.Polygon.outline },
+                  { elem: "BQ",  name: geomlib.A.Polygon.outline },
+                  { elem: "KQ",  name: geomlib.A.Polygon.outline },
+                  { elem: "XO",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "XQ",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "XX'", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HI",  name: geomlib.A.Polygon.outline },
+                  { elem: "DW",  name: geomlib.A.Polygon.outline },
+                  { elem: "IT",  name: geomlib.A.Polygon.outline },
+                  { elem: "SY",  name: geomlib.A.Polygon.outline },
+                  { elem: "NN'", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "parallels", ref: "I.31" }] },
+            { text: "Then, since the straight lines {LK}, {KA}, and {AE} equal one another,",
+              visible: SOL,
+              highlighted: ["KL","AK","AE"] },
+            { text: "therefore the parallelograms {LP}, {KV}, and {AF} equal one another,",
+              visible: SOL,
+              highlighted: ["PL","VK","VFEAt"] },
+            { text: "{KO}, {KB}, and {AG} equal one another,",
+              visible: SOL,
+              highlighted: ["KOp","KBp","AGp"] },
+            { text: "and further {LX}, {KQ}, and {AR} equal one another, for they are opposite.",
+              visible: SOL,
+              highlighted: ["LXp","KQ","ABRVt"],
+              justifications: [{ claim: "opposite planes equal", ref: "XI.24" }] },
+            { text: "For the same reason the parallelograms {EC}, {HW}, and {MS} are equal one another,",
+              visible: SOL,
+              highlighted: ["EFCHt","CM","WN"] },
+            { text: "{HG}, {HI}, and {IN} equal one another,",
+              visible: SOL,
+              highlighted: ["HGp","HI","INp"] },
+            { text: "and further, {DH}, {MY}, {NT} and equal one another.",
+              visible: SOL,
+              highlighted: ["DCHHt","MYp","NTp"],
+              justifications: [{ claim: "opposite planes equal", ref: "XI.24" }] },
+            { text: "Therefore in the solids {LQ}, {KR}, and {AU} three planes equal three planes.",
+              visible: SOL,
+              highlighted: ["sLQ","sKR","sAU"] },
+            { text: "But the three planes equal the three opposite,",
+              visible: SOL,
+              highlighted: ["sLQ","sKR","sAU"],
+              justifications: [{ claim: "opposite planes equal", ref: "XI.24" }] },
+            { text: "therefore the three solids {LQ}, {KR}, and {AU} equal one another.",
+              visible: SOL,
+              highlighted: ["sLQ","sKR","sAU"],
+              justifications: [{ claim: "solids in equal planes are equal", ref: "XI.Def.10" }] },
+            { text: "For the same reason the three solids {ED}, {DM}, and {MT} also equal one another.",
+              visible: SOL,
+              highlighted: ["sED","sDM","sMT"],
+              justifications: [{ claim: "solids in equal planes are equal", ref: "XI.Def.10" }] },
+            { text: "Therefore, the solid {LU} is the same multiple of the solid {AU}",
+              visible: SOL,
+              highlighted: ["sLU","sAU"] },
+            { text: "that the base {LF} is of the base {AF}.",
+              visible: SOL,
+              highlighted: ["LFp","VFEAt"] },
+            { text: "For the same reason, the solid {NU} is the same multiple of the solid {HU}",
+              visible: SOL,
+              highlighted: ["sNU","sED"] },
+            { text: "that the base {NF} is of the base {FH}.",
+              visible: SOL,
+              highlighted: ["NFp","EFCHt"] },
+            { text: "And, if the base {LF} equals the base {NF}, then the solid {LU} also equals the solid {NU};",
+              visible: SOL,
+              highlighted: ["LFp","NFp","sLU","sNU"] },
+            { text: "if the base {LF} exceeds the base {NF}, then the solid {LU} also exceeds the solid {NU};",
+              visible: SOL,
+              highlighted: ["LFp","NFp","sLU","sNU"] },
+            { text: "and, if one falls short, then the other falls short.",
+              visible: SOL,
+              highlighted: ["LFp","NFp","sLU","sNU"] },
+            { text: "Therefore, there being four magnitudes, the two bases {AF} and {FH}, and the two solids {AU} and {UH},",
+              visible: SOL,
+              highlighted: ["VFEAt","EFCHt","sAU","sED"] },
+            { text: "equimultiples have been taken of the base {AF} and the solid {AU},",
+              visible: SOL,
+              highlighted: ["VFEAt","sAU"] },
+            { text: "namely the base {LF} and the solid {LU},",
+              visible: SOL,
+              highlighted: ["LFp","sLU"] },
+            { text: "and equimultiples of the base {HF} and the solid {HU}, namely the base {NF} and the solid {NU},",
+              visible: SOL,
+              highlighted: ["EFCHt","sED","NFp","sNU"] },
+            { text: "and it has been proved that, if the base {LF} exceeds the base {FN}, then the solid {LU} also exceeds the solid {NU};",
+              visible: SOL,
+              highlighted: ["LFp","NFp","sLU","sNU"] },
+            { text: "if the bases are equal, then the solids are equal; and if the base falls short, then the solid falls short.",
+              visible: SOL,
+              highlighted: ["LFp","NFp","sLU","sNU"] },
+            { text: "Therefore, the base {AF} is to the base {FH} as the solid {AU} is to the solid {UH}.",
+              visible: SOL,
+              highlighted: ["VFEAt","EFCHt","sAU","sED"],
+              justifications: [{ claim: "equimultiples alike exceed, equal, fall short", ref: "V.Def.5" }] },
+            { text: "Therefore if a parallelepipedal solid is cut by a plane parallel to the opposite planes,",
+              visible: SOL,
+              highlighted: STMT1 },
+            { text: "then the base is to the base as the solid is to the solid.",
+              visible: SOL,
+              highlighted: STMT2,
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.25") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.2":  "/elements/books/bookI/postulates/post2/",
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "V.Def.5":   "/elements/books/bookV/definitions/defV5/",
+        "XI.Def.10": "/elements/books/bookXI/definitions/defXI10/",
+        "XI.24":     "/elements/books/bookXI/propositions/propXI24/"
     });
 </script>
 </center>
 
-Then, since the straight lines *LK, KA,* and *AE* equal one another, therefore the parallelograms *LP, KV,* and *AF* equal one another, *KO, KB,* and *AG* equal one another, and further *LX, KQ,* and *AR* equal one another, for they are opposite. For the same reason the parallelograms *EC, HW,* and *MS* are equal one another, *HG, HI,* and *IN* equal one another, and further, *DH, MY, NT* and equal one another. [!just XI.24]
+Then, since the straight lines {LK}, {KA}, and {AE} equal one another, therefore the parallelograms {LP}, {KV}, and {AF} equal one another, {KO}, {KB}, and {AG} equal one another, and further {LX}, {KQ}, and {AR} equal one another, for they are opposite. For the same reason the parallelograms {EC}, {HW}, and {MS} are equal one another, {HG}, {HI}, and {IN} equal one another, and further, {DH}, {MY}, {NT} and equal one another. [!just XI.24]
 
-Therefore in the solids *LQ, KR,* and *AU* three planes equal three planes. But the three planes equal the three opposite, therefore the three solids *LQ, KR,* and *AU* equal one another. For the same reason the three solids *ED, DM,* and *MT* also equal one another. Therefore, the solid *LU* is the same multiple of the solid *AU* that the base *LF* is of the base *AF.* For the same reason, the solid *NU* is the same multiple of the solid *HU* that the base *NF* is of the base *FH.* [!just XI.Def.10]
+Therefore in the solids {LQ}, {KR}, and {AU} three planes equal three planes. But the three planes equal the three opposite, therefore the three solids {LQ}, {KR}, and {AU} equal one another. For the same reason the three solids {ED}, {DM}, and {MT} also equal one another. Therefore, the solid {LU} is the same multiple of the solid {AU} that the base {LF} is of the base {AF}. For the same reason, the solid {NU} is the same multiple of the solid {HU} that the base {NF} is of the base {FH}. [!just XI.Def.10]
 
-And, if the base *LF* equals the base *NF,* then the solid *LU* also equals the solid *NU*; if the base *LF* exceeds the base *NF,* then the solid *LU* also exceeds the solid *NU*; and, if one falls short, then the other falls short.
+And, if the base {LF} equals the base {NF}, then the solid {LU} also equals the solid {NU}; if the base {LF} exceeds the base {NF}, then the solid {LU} also exceeds the solid {NU}; and, if one falls short, then the other falls short.
 
-Therefore, there being four magnitudes, the two bases *AF* and *FH,* and the two solids *AU* and *UH,* equimultiples have been taken of the base *AF* and the solid *AU,* namely the base *LF* and the solid *LU,* and equimultiples of the base *HF* and the solid *HU,* namely the base *NF* and the solid *NU,* and it has been proved that, if the base *LF* exceeds the base *FN,* then the solid *LU* also exceeds the solid *NU*; if the bases are equal, then the solids are equal; and if the base falls short, then the solid falls short. Therefore, the base *AF* is to the base *FH* as the solid *AU* is to the solid *UH.* [!just V.Def.5]
+Therefore, there being four magnitudes, the two bases {AF} and {FH}, and the two solids {AU} and {UH}, equimultiples have been taken of the base {AF} and the solid {AU}, namely the base {LF} and the solid {LU}, and equimultiples of the base {HF} and the solid {HU}, namely the base {NF} and the solid {NU}, and it has been proved that, if the base {LF} exceeds the base {FN}, then the solid {LU} also exceeds the solid {NU}; if the bases are equal, then the solids are equal; and if the base falls short, then the solid falls short. Therefore, the base {AF} is to the base {FH} as the solid {AU} is to the solid {UH}. [!just V.Def.5]
 
 Therefore *If a parallelepipedal solid is cut by a plane parallel to the opposite planes, then the base is to the base as the solid is to the solid.*
 
@@ -108,7 +357,7 @@ Euclid's foundations for volume are (1) his definition @XI.Def.10 which says tha
 
 The analogous proposition for two dimensions is proposition @VI.1. In both propositions the ratio of two figures in one dimension is shown to be equal to the ratio of two figures in another dimension. In this proposition, the dimensions are 2 and 3, while in VI.1, the dimensions are 1 and 2. Eudoxus' definition of proportion, @V.Def.5, allows these ratios of different kinds to be compared.
 
-The goal of this proof is to show that the ratio of the bases of the two parallelepipeds is the same as the ratio of the two parallelepipeds themselves. The parallelepiped *AU* has the parallelogram *AF* as its base, while the parallelepiped *HU* has the parallelogram *HF* as its base. Thus, the goal is to derive the proportion
+The goal of this proof is to show that the ratio of the bases of the two parallelepipeds is the same as the ratio of the two parallelepipeds themselves. The parallelepiped {AU} has the parallelogram {AF} as its base, while the parallelepiped {HU} has the parallelogram {HF} as its base. Thus, the goal is to derive the proportion
 
 <center>*AU* : *HU* = *AF* : *HF.*</center>
 
@@ -116,13 +365,13 @@ By the definition of proportion, @V.Def.5, that means for any number *m* and any
 
 <center><i>m AF</i> ><=< <i>n HF</i> when <i>m AU</i> ><=< <i>n HU.</i></center>
 
-Note that Euclid takes both *m* and *n* to be 3 in his proof, just as he did in VI.1. Now *m AU* equals the parallelepiped *LU, n HU* equals the parallelepiped *NU, m AF* equals the parallelogram *LF,* and *n HF* equals the parallelogram *NF.* So what has to be shown is that
+Note that Euclid takes both *m* and *n* to be 3 in his proof, just as he did in VI.1. Now *m* {AU} equals the parallelepiped {LU}, *n* {HU} equals the parallelepiped {NU}, *m* {AF} equals the parallelogram {LF}, and *n* {HF} equals the parallelogram {NF}. So what has to be shown is that
 
 <center><i>LF</i> ><=< <i>NF</i> when <i>LU</i> ><=< <i>NU.</i></center>
 
 Euclid makes no attempt to show that; he just states it as fact:
 
-> And, if the base *LF* equals the base *NF,* then the solid *LU* also equals the solid *NU*; if the base *LF* exceeds the base *NF,* then the solid *LU* also exceeds the solid *NU*; and, if one falls short, then the other falls short.
+> And, if the base {LF} equals the base {NF}, then the solid {LU} also equals the solid {NU}; if the base {LF} exceeds the base {NF}, then the solid {LU} also exceeds the solid {NU}; and, if one falls short, then the other falls short.
 
 The case of equality is based directly on definition @XI.Def.10, for if the bases are equal, then all the planes bounding the solids are equal, which is the definition of the solids being equal. The two cases when one base exceeds or falls short of the other implicitly depend on finding a part of one solid equal to the whole of the other solid, equality again using XI.Def.10, then concluding that one whole solid is greater than the other whole solid (@C.N.5).
 
