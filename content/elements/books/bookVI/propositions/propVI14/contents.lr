@@ -15,14 +15,31 @@ statement: In equal and equiangular parallelograms the sides about the equal ang
 ----
 proof:
 
-Let *AB* and *BC* be equal and equiangular parallelograms having the angles at *B* equal, and let *DB* and *BE* be placed in a straight line. Therefore *FB* and *BG* are also in a straight line. [!just I.14]
+Let {AB} and {BC} be equal and equiangular parallelograms having the angles at {B} equal, and let {DB} and {BE} be placed in a straight line. Therefore {FB} and {BG} are also in a straight line. [!just I.14]
 
-I say that, in *AB* and *BC,* the sides about the equal angles are reciprocally proportional, that is to say, *DB* is to *BE* as *BG* is to *BF.*
+I say that, in {AB} and {BC}, the sides about the equal angles are reciprocally proportional, that is to say, {DB} is to {BE} as {BG} is to {BF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="270" tabindex="0"></canvas>
 <noscript><img alt="VI.14 diagram" src="propVI14.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the parallelograms ADBF and CGBE (random faces),
+    // named AB and BC by their diagonals, with DBE and FBG straight through
+    // B, and the two sides FX, EX that complete the parallelogram FE (X is
+    // his unlabelled corner). FX and EX are his own lines, stroking from F
+    // and E, and stay off the slides until "Complete the parallelogram FE".
+    //
+    // Everything added is transparent: the faceless parallelograms AB, BC,
+    // FE (explicit ;0 faces — a highlighted filled polygon is raised over
+    // the figure, #140) and the sides DB, BE, FB, BG. The equal angles at B,
+    // DBF and GBE, share a colour and are pinned to one radius so the ring
+    // stepping at B leaves them alike. None is a right angle.
+    //
+    // Draggables (checked against the bundle): A, C and the hidden X free,
+    // B a lineSlider — they fix the given parallelograms, so nothing is
+    // deferred. D, E, F, G are derived and listed per slide.
+    var GIVEN = ["A","B","C","D","E","F","G","ADBF","CGBE","angDBF","angGBE"];
+    var DONE  = GIVEN.concat(["FX","EX"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,29 +59,141 @@ I say that, in *AB* and *BC,* the sides about the equal angles are reciprocally 
             "ADBF;polygon;quadrilateral;A,D,B,F;0;0;black;random",
             "CGBE;polygon;quadrilateral;C,G,B,E;0;0;black;random",
             "FX;line;connect;F,X",
-            "EX;line;connect;E,X"
+            "EX;line;connect;E,X",
+            // Transparent highlight targets; explicit ;0 faces.
+            "AB;polygon;quadrilateral;A,D,B,F;0;0;0;0",
+            "BC;polygon;quadrilateral;C,G,B,E;0;0;0;0",
+            "FE;polygon;quadrilateral;F,B,E,X;0;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "BE;line;connect;B,E;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "BG;line;connect;B,G;0;0;0",
+            "angDBF;sector;angleMarker;B,D,F,20;0;0;3b6ea5;9ec5e8",
+            "angGBE;sector;angleMarker;B,G,E,20;0;0;3b6ea5;9ec5e8"
         ],
+        aliases: { "BD": "DB", "EB": "BE", "BF": "FB", "GB": "BG" },
+        slides: [
+            { text: "“In equal and equiangular parallelograms the sides about the equal angles are reciprocally proportional;”",
+              visible: GIVEN,
+              highlighted: ["AB","BC","angDBF","angGBE"],
+              justifications: [{ ref: "VI.14" }] },
+            { text: "“and equiangular parallelograms in which the sides about the equal angles are reciprocally proportional are equal.”",
+              visible: GIVEN,
+              highlighted: ["DB","BE","BG","FB"] },
+            { text: "Let {AB} and {BC} be equal and equiangular parallelograms having the angles at {B} equal,",
+              visible: GIVEN,
+              highlighted: ["AB","BC","angDBF","angGBE"] },
+            { text: "and let {DB} and {BE} be placed in a straight line.",
+              visible: GIVEN,
+              highlighted: ["DB","BE"] },
+            { text: "Therefore {FB} and {BG} are also in a straight line.",
+              visible: GIVEN,
+              highlighted: ["FB","BG"],
+              justifications: [{ claim: "FB, BG in a straight line", ref: "I.14" }] },
+            { text: "I say that, in {AB} and {BC}, the sides about the equal angles are reciprocally proportional,",
+              visible: GIVEN,
+              highlighted: ["AB","BC","angDBF","angGBE"] },
+            { text: "that is to say, {DB} is to {BE} as {BG} is to {BF}.",
+              visible: GIVEN,
+              highlighted: ["DB","BE","BG","FB"] },
+            { text: "Complete the parallelogram {FE}.",
+              visible: DONE,
+              highlighted: ["FE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FX", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EX", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "the parallelogram FE", ref: "I.31" }] },
+            { text: "Then since the parallelogram {AB} equals the parallelogram {BC}, and {FE} is another parallelogram,",
+              visible: DONE,
+              highlighted: ["AB","BC","FE"] },
+            { text: "therefore {AB} is to {FE} as {BC} is to {FE}.",
+              visible: DONE,
+              highlighted: ["AB","BC","FE"],
+              justifications: [{ claim: "AB : FE = BC : FE", ref: "V.7" }] },
+            { text: "But {AB} is to {FE} as {DB} is to {BE},",
+              visible: DONE,
+              highlighted: ["AB","FE","DB","BE"],
+              justifications: [{ claim: "AB : FE = DB : BE", ref: "VI.1" }] },
+            { text: "and {BC} is to {FE} as {BG} is to {BF}.",
+              visible: DONE,
+              highlighted: ["BC","FE","BG","FB"],
+              justifications: [{ claim: "BC : FE = BG : BF", ref: "VI.1" }] },
+            { text: "Therefore {DB} is to {BE} as {BG} is to {BF}.",
+              visible: DONE,
+              highlighted: ["DB","BE","BG","FB"],
+              justifications: [{ claim: "DB : BE = BG : BF", ref: "V.11" }] },
+            { text: "Therefore in the parallelograms {AB} and {BC} the sides about the equal angles are reciprocally proportional.",
+              visible: DONE,
+              highlighted: ["AB","BC","angDBF","angGBE"] },
+            { text: "Next, let {DB} be to {BE} as {BG} is to {BF}.",
+              visible: DONE,
+              highlighted: ["DB","BE","BG","FB"] },
+            { text: "I say that the parallelogram {AB} equals the parallelogram {BC}.",
+              visible: DONE,
+              highlighted: ["AB","BC"] },
+            { text: "Since {DB} is to {BE} as {BG} is to {BF},",
+              visible: DONE,
+              highlighted: ["DB","BE","BG","FB"] },
+            { text: "while {DB} is to {BE} as the parallelogram {AB} is to the parallelogram {FE},",
+              visible: DONE,
+              highlighted: ["DB","BE","AB","FE"],
+              justifications: [{ claim: "DB : BE = AB : FE", ref: "VI.1" }] },
+            { text: "and {BG} is to {BF} as the parallelogram {BC} is to the parallelogram {FE},",
+              visible: DONE,
+              highlighted: ["BG","FB","BC","FE"],
+              justifications: [{ claim: "BG : BF = BC : FE", ref: "VI.1" }] },
+            { text: "therefore also {AB} is to {FE} as {BC} is to {FE}.",
+              visible: DONE,
+              highlighted: ["AB","BC","FE"],
+              justifications: [{ claim: "AB : FE = BC : FE", ref: "V.11" }] },
+            { text: "Therefore the parallelogram {AB} equals the parallelogram {BC}.",
+              visible: DONE,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "same ratio to FE, so equal", ref: "V.9" }] },
+            { text: "Therefore, in equal and equiangular parallelograms the sides about the equal angles are reciprocally proportional;",
+              visible: DONE,
+              highlighted: ["AB","BC","angDBF","angGBE"] },
+            { text: "and equiangular parallelograms in which the sides about the equal angles are reciprocally proportional are equal.",
+              visible: DONE,
+              highlighted: ["DB","BE","BG","FB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.14") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.14": "/elements/books/bookI/propositions/propI14/",
+        "I.31": "/elements/books/bookI/propositions/propI31/",
+        "V.7":  "/elements/books/bookV/propositions/propV7/",
+        "V.9":  "/elements/books/bookV/propositions/propV9/",
+        "V.11": "/elements/books/bookV/propositions/propV11/",
+        "VI.1": "/elements/books/bookVI/propositions/propVI1/"
     });
 </script>
 </figure>
 
-Complete the parallelogram *FE.* [!just I.31]
+Complete the parallelogram {FE}. [!just I.31]
 
-Then since the parallelogram *AB* equals the parallelogram *BC,* and *FE* is another parallelogram, therefore *AB* is to *FE* as *BC* is to *FE.* [!just V.7]
+Then since the parallelogram {AB} equals the parallelogram {BC}, and {FE} is another parallelogram, therefore {AB} is to {FE} as {BC} is to {FE}. [!just V.7]
 
-But *AB* is to *FE* as *DB* is to *BE,* and *BC* is to *FE* as *BG* is to *BF.* Therefore *DB* is to *BE* as *BG* is to *BF.* [!just VI.1; V.11]
+But {AB} is to {FE} as {DB} is to {BE}, and {BC} is to {FE} as {BG} is to {BF}. Therefore {DB} is to {BE} as {BG} is to {BF}. [!just VI.1; V.11]
 
-Therefore in the parallelograms *AB* and *BC* the sides about the equal angles are reciprocally proportional.
+Therefore in the parallelograms {AB} and {BC} the sides about the equal angles are reciprocally proportional.
 
 <hr width="50%">
 
-Next, let *DB* be to *BE* as *BG* is to *BF.*
+Next, let {DB} be to {BE} as {BG} is to {BF}.
 
-I say that the parallelogram *AB* equals the parallelogram *BC.*
+I say that the parallelogram {AB} equals the parallelogram {BC}.
 
-Since *DB* is to *BE* as *BG* is to *BF,* while *DB* is to *BE* as the parallelogram *AB* is to the parallelogram *FE,* and *BG* is to *BF* as the parallelogram *BC* is to the parallelogram *FE,* therefore also *AB* is to *FE* as *BC* is to *FE.* [!just VI.1; V.11]
+Since {DB} is to {BE} as {BG} is to {BF}, while {DB} is to {BE} as the parallelogram {AB} is to the parallelogram {FE}, and {BG} is to {BF} as the parallelogram {BC} is to the parallelogram {FE}, therefore also {AB} is to {FE} as {BC} is to {FE}. [!just VI.1; V.11]
 
-Therefore the parallelogram *AB* equals the parallelogram *BC.* [!just V.9]
+Therefore the parallelogram {AB} equals the parallelogram {BC}. [!just V.9]
 
 Therefore, *in equal and equiangular parallelograms the sides about the equal angles are reciprocally proportional; and equiangular parallelograms in which the sides about the equal angles are reciprocally proportional are equal.*
 
