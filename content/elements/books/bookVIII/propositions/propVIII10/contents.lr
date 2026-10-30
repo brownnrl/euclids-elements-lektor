@@ -15,16 +15,23 @@ statement: If numbers fall between two numbers and a unit in continued proportio
 ----
 proof:
 
-Let the numbers *D* and *E* and the numbers *F* and *G* respectively fall between the two numbers *A* and *B* and the unit *C* in continued proportion.
+Let the numbers {D} and {E} and the numbers {F} and {G} respectively fall between the two numbers {A} and {B} and the unit {C} in continued proportion.
 
-I say that, as many numbers have fallen between each of the numbers *A* and *B* and the unit *C* in continued proportion as fall between *A* and *B* in continued proportion.
+I say that, as many numbers have fallen between each of the numbers {A} and {B} and the unit {C} in continued proportion as fall between {A} and {B} in continued proportion.
 
-Multiply *D* by *F* to make *H,* and multiply the numbers *D* and *F* by *H* to make *K* and *L* respectively.
+Multiply {D} by {F} to make {H}, and multiply the numbers {D} and {F} by {H} to make {K} and {L} respectively.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="450" height="170" tabindex="0"></canvas>
 <noscript><img alt="VIII.10 diagram" src="propVIII10.gif"/></noscript>
 <script type="text/javascript">
+    // A walk of the proof over Joyce's lines. The givens stand from the
+    // start; H, then K and L, are stroked from their left ends as the proof
+    // makes them. The rest is highlight beats.
+    // The derived right-end points carry the dots of the resting figure.
+    var GIVEN = ["A","B","C","D","E","F","G","A2","B2","E2","G2"];
+    var Hv    = GIVEN.concat(["H","H1","H2"]);
+    var ALL   = Hv.concat(["K","L","K1","L1","K2","L2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -75,27 +82,186 @@ Multiply *D* by *F* to make *H,* and multiply the numbers *D* and *F* by *H* to 
             "L2;point;proportion;C1,C2,F1,F2,H1,H2,L1,F3;0",
             "L;line;connect;L1,L2;black"
         ],
+        // Draggables (checked against the bundle): every lineSlider end is
+        // draggable, all colourless. The givens' ends C1, C2, D1, D2, F1, F2,
+        // E1, G1, A1, B1 stand from slide 1; H, K and L are made mid-walk, so
+        // H1, K1, L1 are deferred and listed in the slides that introduce
+        // them. No elements added: every caption names one of Joyce's lines.
+        deferDraggables: ["H1","K1","L1"],
+        slides: [
+            { text: "If numbers fall between two numbers and a unit in continued proportion,",
+              visible: GIVEN,
+              highlighted: ["C","D","E","F","G","A","B"],
+              justifications: [{ ref: "VIII.10" }] },
+            { text: "then however many numbers fall between each of them and a unit in continued proportion,",
+              visible: GIVEN,
+              highlighted: ["D","E","F","G"] },
+            { text: "so many also fall between the numbers themselves in continued proportion.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Let the numbers {D} and {E} and the numbers {F} and {G} respectively",
+              visible: GIVEN,
+              highlighted: ["D","E","F","G"] },
+            { text: "fall between the two numbers {A} and {B} and the unit {C} in continued proportion.",
+              visible: GIVEN,
+              highlighted: ["C","D","E","A","F","G","B"] },
+            { text: "I say that, as many numbers have fallen between each of the numbers {A} and {B}",
+              visible: GIVEN,
+              highlighted: ["A","B","D","E","F","G"] },
+            { text: "and the unit {C} in continued proportion as fall between {A} and {B} in continued proportion.",
+              visible: GIVEN,
+              highlighted: ["C","A","B"] },
+            { text: "Multiply {D} by {F} to make {H},",
+              visible: Hv,
+              highlighted: ["D","F","H"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and multiply the numbers {D} and {F} by {H} to make {K} and {L} respectively.",
+              visible: ALL,
+              highlighted: ["D","F","H","K","L"],
+              transition: { animations: [
+                  { elem: "K", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "L", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since the unit {C} is to the number {D} as {D} is to {E},",
+              visible: ALL,
+              highlighted: ["C","D","E"] },
+            { text: "therefore the unit {C} measures the number {D} the same number of times as {D} measures {E}.",
+              visible: ALL,
+              highlighted: ["C","D","E"],
+              justifications: [{ claim: "C measures D as D measures E", ref: "VII.Def.20" }] },
+            { text: "But the unit {C} measures the number {D} according to the units in {D},",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "therefore the number {D} also measures {E} according to the units in {D}.",
+              visible: ALL,
+              highlighted: ["D","E"] },
+            { text: "Therefore {D} multiplied by itself makes {E}.",
+              visible: ALL,
+              highlighted: ["D","E"] },
+            { text: "Again, since {C} is to the number {D} as {E} is to {A},",
+              visible: ALL,
+              highlighted: ["C","D","E","A"] },
+            { text: "therefore the unit {C} measures the number {D} the same number of times as {E} measures {A}.",
+              visible: ALL,
+              highlighted: ["C","D","E","A"] },
+            { text: "But the unit {C} measures the number {D} according to the units in {D},",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "therefore {E} also measures {A} according to the units in {D}.",
+              visible: ALL,
+              highlighted: ["E","A","D"] },
+            { text: "Therefore {D} multiplied by {E} makes {A}.",
+              visible: ALL,
+              highlighted: ["D","E","A"] },
+            { text: "For the same reason also {F} multiplied by itself makes {G}, and multiplied by {G} makes {B}.",
+              visible: ALL,
+              highlighted: ["F","G","B"] },
+            { text: "And, since {D} multiplied by itself makes {E} and multiplied by {F} makes {H},",
+              visible: ALL,
+              highlighted: ["D","E","F","H"] },
+            { text: "therefore {D} is to {F} as {E} is to {H}.",
+              visible: ALL,
+              highlighted: ["D","F","E","H"],
+              justifications: [{ claim: "D : F = E : H", ref: "VII.17" }] },
+            { text: "For the same reason also {D} is to {F} as {H} is to {G}.",
+              visible: ALL,
+              highlighted: ["D","F","H","G"],
+              justifications: [{ claim: "D : F = H : G", ref: "VII.18" }] },
+            { text: "Therefore {E} is to {H} as {H} is to {G}.",
+              visible: ALL,
+              highlighted: ["E","H","G"] },
+            { text: "Again, since {D} multiplied by the numbers {E} and {H} makes {A} and {K} respectively,",
+              visible: ALL,
+              highlighted: ["D","E","H","A","K"] },
+            { text: "therefore {E} is to {H} as {A} is to {K}.",
+              visible: ALL,
+              highlighted: ["E","H","A","K"],
+              justifications: [{ claim: "E : H = A : K", ref: "VII.17" }] },
+            { text: "But {E} is to {H} as {D} is to {F}, therefore {D} is to {F} as {A} is to {K}.",
+              visible: ALL,
+              highlighted: ["D","F","A","K"] },
+            { text: "Again, since the numbers {D} and {F} multiplied by {H} make {K} and {L} respectively,",
+              visible: ALL,
+              highlighted: ["D","F","H","K","L"] },
+            { text: "therefore {D} is to {F} as {K} is to {L}.",
+              visible: ALL,
+              highlighted: ["D","F","K","L"],
+              justifications: [{ claim: "D : F = K : L", ref: "VII.18" }] },
+            { text: "But {D} is to {F} as {A} is to {K}, therefore {A} is to {K} as {K} is to {L}.",
+              visible: ALL,
+              highlighted: ["A","K","L"] },
+            { text: "Further, since {F} multiplied by the numbers {H} and {G} makes {L} and {B} respectively,",
+              visible: ALL,
+              highlighted: ["F","H","G","L","B"] },
+            { text: "therefore {H} is to {G} as {L} is to {B}.",
+              visible: ALL,
+              highlighted: ["H","G","L","B"],
+              justifications: [{ claim: "H : G = L : B", ref: "VII.17" }] },
+            { text: "But {H} is to {G} as {D} is to {F}, therefore {D} is to {F} as {L} is to {B}.",
+              visible: ALL,
+              highlighted: ["D","F","L","B"] },
+            { text: "But it was also proved that {D} is to {F} as {A} is to {K} and as {K} is to {L},",
+              visible: ALL,
+              highlighted: ["D","F","A","K","L"] },
+            { text: "therefore {A} is to {K} as {K} is to {L} and as {L} is to {B}.",
+              visible: ALL,
+              highlighted: ["A","K","L","B"] },
+            { text: "Therefore {A}, {K}, {L}, and {B} are in continued proportion.",
+              visible: ALL,
+              highlighted: ["A","K","L","B"] },
+            { text: "Therefore, as many numbers as fall between each of the numbers {A} and {B}",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "and the unit {C} in continued proportion,",
+              visible: ALL,
+              highlighted: ["C","D","E","A","F","G","B"] },
+            { text: "so many also fall between {A} and {B} in continued proportion.",
+              visible: ALL,
+              highlighted: ["A","K","L","B"] },
+            { text: "Therefore, if numbers fall between two numbers and a unit in continued proportion,",
+              visible: ALL,
+              highlighted: ["C","D","E","F","G","A","B"] },
+            { text: "then however many numbers fall between each of them and a unit in continued proportion,",
+              visible: ALL,
+              highlighted: ["D","E","F","G"] },
+            { text: "so many also fall between the numbers themselves in continued proportion.",
+              visible: ALL,
+              highlighted: ["A","K","L","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.10") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "VII.17":     "/elements/books/bookVII/propositions/propVII17/",
+        "VII.18":     "/elements/books/bookVII/propositions/propVII18/"
     });
 </script>
 </figure>
 
-Now, since the unit *C* is to the number *D* as *D* is to *E,* therefore the unit *C* measures the number *D* the same number of times as *D* measures *E.* But the unit *C* measures the number *D* according to the units in *D,* therefore the number *D* also measures *E* according to the units in *D.* Therefore *D* multiplied by itself makes *E.* [!just VII.Def.20]
+Now, since the unit {C} is to the number {D} as {D} is to {E}, therefore the unit {C} measures the number {D} the same number of times as {D} measures {E}. But the unit {C} measures the number {D} according to the units in {D}, therefore the number {D} also measures {E} according to the units in {D}. Therefore {D} multiplied by itself makes {E}. [!just VII.Def.20]
 
-Again, since *C* is to the number *D* as *E* is to *A,* therefore the unit *C* measures the number *D* the same number of times as *E* measures *A.* But the unit *C* measures the number *D* according to the units in *D,* therefore *E* also measures *A* according to the units in *D.* Therefore *D* multiplied by *E* makes *A.*
+Again, since {C} is to the number {D} as {E} is to {A}, therefore the unit {C} measures the number {D} the same number of times as {E} measures {A}. But the unit {C} measures the number {D} according to the units in {D}, therefore {E} also measures {A} according to the units in {D}. Therefore {D} multiplied by {E} makes {A}.
 
-For the same reason also *F* multiplied by itself makes *G,* and multiplied by *G* makes *B.*
+For the same reason also {F} multiplied by itself makes {G}, and multiplied by {G} makes {B}.
 
-And, since *D* multiplied by itself makes *E* and multiplied by *F* makes *H,* therefore *D* is to *F* as *E* is to *H.* [!just VII.17]
+And, since {D} multiplied by itself makes {E} and multiplied by {F} makes {H}, therefore {D} is to {F} as {E} is to {H}. [!just VII.17]
 
-For the same reason also *D* is to *F* as *H* is to *G.* Therefore *E* is to *H* as *H* is to *G.* [!just VII.18]
+For the same reason also {D} is to {F} as {H} is to {G}. Therefore {E} is to {H} as {H} is to {G}. [!just VII.18]
 
-Again, since *D* multiplied by the numbers *E* and *H* makes *A* and *K* respectively, therefore *E* is to *H* as *A* is to *K.* But *E* is to *H* as *D* is to *F,* therefore *D* is to *F* as *A* is to *K.* [!just VII.17]
+Again, since {D} multiplied by the numbers {E} and {H} makes {A} and {K} respectively, therefore {E} is to {H} as {A} is to {K}. But {E} is to {H} as {D} is to {F}, therefore {D} is to {F} as {A} is to {K}. [!just VII.17]
 
-Again, since the numbers *D* and *F* multiplied by *H* make *K* and *L* respectively, therefore *D* is to *F* as *K* is to *L.* But *D* is to *F* as *A* is to *K,* therefore *A* is to *K* as *K* is to *L.* Further, since *F* multiplied by the numbers *H* and *G* makes *L* and *B* respectively, therefore *H* is to *G* as *L* is to *B.* [!just VII.18; VII.17]
+Again, since the numbers {D} and {F} multiplied by {H} make {K} and {L} respectively, therefore {D} is to {F} as {K} is to {L}. But {D} is to {F} as {A} is to {K}, therefore {A} is to {K} as {K} is to {L}. Further, since {F} multiplied by the numbers {H} and {G} makes {L} and {B} respectively, therefore {H} is to {G} as {L} is to {B}. [!just VII.18; VII.17]
 
-But *H* is to *G* as *D* is to *F,* therefore *D* is to *F* as *L* is to *B.* But it was also proved that *D* is to *F* as *A* is to *K* and as *K* is to *L,* therefore *A* is to *K* as *K* is to *L* and as *L* is to *B.* Therefore *A, K, L,* and *B* are in continued proportion.
+But {H} is to {G} as {D} is to {F}, therefore {D} is to {F} as {L} is to {B}. But it was also proved that {D} is to {F} as {A} is to {K} and as {K} is to {L}, therefore {A} is to {K} as {K} is to {L} and as {L} is to {B}. Therefore {A}, {K}, {L}, and {B} are in continued proportion.
 
-Therefore, as many numbers as fall between each of the numbers *A* and *B* and the unit *C* in continued proportion, so many also fall between *A* and *B* in continued proportion.
+Therefore, as many numbers as fall between each of the numbers {A} and {B} and the unit {C} in continued proportion, so many also fall between {A} and {B} in continued proportion.
 
 Therefore, *if numbers fall between two numbers and a unit in continued proportion, then however many numbers fall between each of them and a unit in continued proportion, so many also fall between the numbers themselves in continued proportion.*
 
