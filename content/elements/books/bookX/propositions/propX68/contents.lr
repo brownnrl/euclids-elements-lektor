@@ -15,14 +15,28 @@ statement: A straight line commensurable with a major straight line is itself al
 ----
 proof:
 
-Let *AB* be major, and let *CD* be commensurable with *AB*.
+Let {AB} be major, and let {CD} be commensurable with {AB}.
 
-I say that *CD* is major.
+I say that {CD} is major.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="95" tabindex="0"></canvas>
 <noscript><img alt="X.68 diagram" src="propX68.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure (X.67's): the major AB divided at E, and the
+    // commensurable CD divided at F in the same ratio ("Make the same
+    // construction as before"). The proof talks about the pieces AE, EB,
+    // CF, FD, so those are transparent highlight targets (;0;0;0); the
+    // squares and rectangles on them are not drawn, and their slides light
+    // the sides. Joyce's BE and DF reach EB and FD by display override.
+    // Resting figure unchanged. No angles.
+    //
+    // Draggables (checked against the bundle): A, B, C, D (the givens), E
+    // (line slider) and the offscreen frees. E arrives with "Divide AB at
+    // E", so it is deferred; F is derived and follows the visible sets.
+    var GIVEN = ["A","B","AB","C","D","CD"];
+    var DIV   = GIVEN.concat(["E","AE","EB"]);
+    var ALL   = DIV.concat(["F","CF","FD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -39,35 +53,179 @@ I say that *CD* is major.
             "D;point;lineSlider;C0,C3,210,0",
             "CD;line;connect;C,D",
             "E;point;lineSlider;A0,A3,130,0",
-            "F;point;proportion;A,B,C,D,A,E,C,C3"
+            "F;point;proportion;A,B,C,D,A,E,C,C3",
+            // Highlight targets only — the figure already draws these.
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "FD;line;connect;F,D;0;0;0"
         ],
+        deferDraggables: ["E"],
+        slides: [
+            { text: "“A straight line commensurable with a major straight line is itself also major.”",
+              visible: ALL,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "X.68" }] },
+            { text: "Let {AB} be major, and let {CD} be commensurable with {AB}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "I say that {CD} is major.",
+              visible: GIVEN,
+              highlighted: ["CD"] },
+            { text: "Divide {AB} at {E}.",
+              visible: DIV,
+              highlighted: ["E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "Then {AE} and {EB} are straight lines incommensurable in square",
+              visible: DIV,
+              highlighted: ["AE","EB"] },
+            { text: "which make the sum of the squares on them rational but the rectangle contained by them medial.",
+              visible: DIV,
+              highlighted: ["AE","EB"],
+              justifications: [{ claim: "AB major", ref: "X.39" }] },
+            { text: "Make the same construction as before.",
+              visible: ALL,
+              highlighted: ["CF","FD"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "Since {AB} is to {CD} as {AE} is to {CF}, and {EB} is to {FD},",
+              visible: ALL,
+              highlighted: ["AB","CD","AE","CF","EB","FD"] },
+            { text: "therefore {AE} is to {CF} as {EB} is to {FD}.",
+              visible: ALL,
+              highlighted: ["AE","CF","EB","FD"],
+              justifications: [{ claim: "AE : CF = EB : FD", ref: "V.11" }] },
+            { text: "But {AB} is commensurable with {CD},",
+              visible: ALL,
+              highlighted: ["AB","CD"] },
+            { text: "therefore {AE} and {EB} are commensurable with {CF} and {FD} respectively.",
+              visible: ALL,
+              highlighted: ["AE","EB","CF","FD"],
+              justifications: [{ claim: "AE, CF and EB, FD commensurable", ref: "X.11" }] },
+            { text: "Since {AE} is to {CF} as {EB} is to {FD},",
+              visible: ALL,
+              highlighted: ["AE","CF","EB","FD"] },
+            { text: "alternately, also {AE} is to {EB} as {CF} is to {FD},",
+              visible: ALL,
+              highlighted: ["AE","EB","CF","FD"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "therefore, taken jointly, {AB} is to {BE|EB} as {CD} is to {DF|FD}.",
+              visible: ALL,
+              highlighted: ["AB","EB","CD","FD"],
+              justifications: [{ claim: "taken jointly", ref: "V.18" }] },
+            { text: "Therefore the square on {AB} is to the square on {BE|EB}",
+              visible: ALL,
+              highlighted: ["AB","EB"] },
+            { text: "as the square on {CD} is to the square on {DF|FD}.",
+              visible: ALL,
+              highlighted: ["CD","FD"],
+              justifications: [{ claim: "duplicate ratio of the sides", ref: "VI.20" }] },
+            { text: "Similarly we can prove that the square on {AB} is to the square on {AE}",
+              visible: ALL,
+              highlighted: ["AB","AE"] },
+            { text: "as the square on {CD} is to the square on {CF}.",
+              visible: ALL,
+              highlighted: ["CD","CF"] },
+            { text: "Therefore the square on {AB} is to the squares on {AE} and {EB}",
+              visible: ALL,
+              highlighted: ["AB","AE","EB"] },
+            { text: "as the square on {CD} is to the squares on {CF} and {FD},",
+              visible: ALL,
+              highlighted: ["CD","CF","FD"] },
+            { text: "therefore, alternately, the square on {AB} is to the square on {CD},",
+              visible: ALL,
+              highlighted: ["AB","CD"] },
+            { text: "so are the squares on {AE} and {EB} to the squares on {CF} and {FD}.",
+              visible: ALL,
+              highlighted: ["AE","EB","CF","FD"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "But the square on {AB} is commensurable with the square on {CD},",
+              visible: ALL,
+              highlighted: ["AB","CD"] },
+            { text: "therefore the squares on {AE} and {EB} are also commensurable with the squares on {CF} and {FD}.",
+              visible: ALL,
+              highlighted: ["AE","EB","CF","FD"] },
+            { text: "And the squares on {AE} and {EB} together are rational,",
+              visible: ALL,
+              highlighted: ["AE","EB"] },
+            { text: "therefore the squares on {CF} and {FD} together are rational.",
+              visible: ALL,
+              highlighted: ["CF","FD"] },
+            { text: "Similarly also twice the rectangle {AE} by {EB} is commensurable with twice the rectangle {CF} by {FD}.",
+              visible: ALL,
+              highlighted: ["AE","EB","CF","FD"] },
+            { text: "And twice the rectangle {AE} by {EB} is medial,",
+              visible: ALL,
+              highlighted: ["AE","EB"] },
+            { text: "therefore twice the rectangle {CF} by {FD} is also medial.",
+              visible: ALL,
+              highlighted: ["CF","FD"],
+              justifications: [{ claim: "commensurable with a medial area", ref: "X.23.Cor" }] },
+            { text: "Therefore {CF} and {FD} are straight lines incommensurable in square",
+              visible: ALL,
+              highlighted: ["CF","FD"] },
+            { text: "which make, at the same time, the sum of the squares on them rational,",
+              visible: ALL,
+              highlighted: ["CF","FD"] },
+            { text: "but the rectangle contained by them medial,",
+              visible: ALL,
+              highlighted: ["CF","FD"] },
+            { text: "therefore the whole {CD} is the irrational straight line called major.",
+              visible: ALL,
+              highlighted: ["CD"],
+              justifications: [{ claim: "CD major", ref: "X.39" }] },
+            { text: "Therefore a straight line commensurable with the major straight line is major.",
+              visible: ALL,
+              highlighted: ["AB","CD"] },
+            { text: "Therefore, a straight line commensurable with a major straight line is itself also major.",
+              visible: ALL,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.68") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.11":     "/elements/books/bookV/propositions/propV11/",
+        "V.16":     "/elements/books/bookV/propositions/propV16/",
+        "V.18":     "/elements/books/bookV/propositions/propV18/",
+        "VI.20":    "/elements/books/bookVI/propositions/propVI20/",
+        "X.11":     "/elements/books/bookX/propositions/propX11/",
+        "X.23.Cor": "/elements/books/bookX/propositions/propX23/#cor",
+        "X.39":     "/elements/books/bookX/propositions/propX39/"
     });
 </script>
 </figure>
 
-Divide *AB* at *E*. Then *AE* and *EB* are straight lines incommensurable in square which make the sum of the squares on them rational but the rectangle contained by them medial. [!just X.39]
+Divide {AB} at {E}. Then {AE} and {EB} are straight lines incommensurable in square which make the sum of the squares on them rational but the rectangle contained by them medial. [!just X.39]
 
 Make the same construction as before.
 
-Since *AB* is to *CD* as *AE* is to *CF*, and *EB* is to *FD*, therefore *AE* is to *CF* as *EB* is to *FD*. [!just V.11]
+Since {AB} is to {CD} as {AE} is to {CF}, and {EB} is to {FD}, therefore {AE} is to {CF} as {EB} is to {FD}. [!just V.11]
 
-But *AB* is commensurable with *CD*, therefore *AE* and *EB* are commensurable with *CF* and *FD* respectively. [!just X.11]
+But {AB} is commensurable with {CD}, therefore {AE} and {EB} are commensurable with {CF} and {FD} respectively. [!just X.11]
 
-Since *AE* is to *CF* as *EB* is to *FD*, alternately, also *AE* is to *EB* as *CF* is to *FD*, therefore, taken jointly, *AB* is to *BE* as *CD* is to *DF*. [!just V.16; V.18]
+Since {AE} is to {CF} as {EB} is to {FD}, alternately, also {AE} is to {EB} as {CF} is to {FD}, therefore, taken jointly, {AB} is to {BE|EB} as {CD} is to {DF|FD}. [!just V.16; V.18]
 
-Therefore the square on *AB* is to the square on *BE* as the square on *CD* is to the square on *DF*. [!just VI.20]
+Therefore the square on {AB} is to the square on {BE|EB} as the square on {CD} is to the square on {DF|FD}. [!just VI.20]
 
-Similarly we can prove that the square on *AB* is to the square on *AE* as the square on *CD* is to the square on *CF*. Therefore the square on *AB* is to the squares on *AE* and *EB* as the square on *CD* is to the squares on *CF* and *FD*, therefore, alternately, the square on *AB* is to the square on *CD*, so are the squares on *AE* and *EB* to the squares on *CF* and *FD*. [!just V.16]
+Similarly we can prove that the square on {AB} is to the square on {AE} as the square on {CD} is to the square on {CF}. Therefore the square on {AB} is to the squares on {AE} and {EB} as the square on {CD} is to the squares on {CF} and {FD}, therefore, alternately, the square on {AB} is to the square on {CD}, so are the squares on {AE} and {EB} to the squares on {CF} and {FD}. [!just V.16]
 
-But the square on *AB* is commensurable with the square on *CD*, therefore the squares on *AE* and *EB* are also commensurable with the squares on *CF* and *FD*.
+But the square on {AB} is commensurable with the square on {CD}, therefore the squares on {AE} and {EB} are also commensurable with the squares on {CF} and {FD}.
 
-And the squares on *AE* and *EB* together are rational, therefore the squares on *CF* and *FD* together are rational.
+And the squares on {AE} and {EB} together are rational, therefore the squares on {CF} and {FD} together are rational.
 
-Similarly also twice the rectangle *AE* by *EB* is commensurable with twice the rectangle *CF* by *FD*.
+Similarly also twice the rectangle {AE} by {EB} is commensurable with twice the rectangle {CF} by {FD}.
 
-And twice the rectangle *AE* by *EB* is medial, therefore twice the rectangle *CF* by *FD* is also medial. [!just X.23.Cor]
+And twice the rectangle {AE} by {EB} is medial, therefore twice the rectangle {CF} by {FD} is also medial. [!just X.23.Cor]
 
-Therefore *CF* and *FD* are straight lines incommensurable in square which make, at the same time, the sum of the squares on them rational, but the rectangle contained by them medial, therefore the whole *CD* is the irrational straight line called major. [!just X.39]
+Therefore {CF} and {FD} are straight lines incommensurable in square which make, at the same time, the sum of the squares on them rational, but the rectangle contained by them medial, therefore the whole {CD} is the irrational straight line called major. [!just X.39]
 
 Therefore a straight line commensurable with the major straight line is major.
 
