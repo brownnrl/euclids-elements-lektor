@@ -17,13 +17,13 @@ statement: To find the least number which three given numbers measure.
 ----
 proof:
 
-Let *A, B,* and *C* be the three given numbers.
+Let {A}, {B}, and {C} be the three given numbers.
 
 It is required to find the least number which they measure.
 
-Take *D* the least number measured by the two numbers *A* and *B.* [!just VII.34]
+Take {D} the least number measured by the two numbers {A} and {B}. [!just VII.34]
 
-Then *C* either measures, or does not measure, *D.*
+Then {C} either measures, or does not measure, {D}.
 
 First, let it measure it.
 
@@ -31,6 +31,19 @@ First, let it measure it.
 <canvas id="canvas_0" width="250" height="205" tabindex="0"></canvas>
 <noscript><img alt="VII.36 diagram" src="propVII36a.gif"/></noscript>
 <script type="text/javascript">
+    // First case: C measures D, the least number A and B measure; E the
+    // supposed lesser number A, B and C measure. Line segments only, so the
+    // walk is highlight beats plus one stroke for D, the number the proof
+    // takes. E is withdrawn once the reductio closes. Nothing is added to
+    // the figure.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2, D1, E1, E2 (zero-colour handles) and the off-canvas,
+    // colourless rail and unit ends. D1, E1 and E2 arrive mid-walk, so they
+    // are deferred; D2 (proportion) is derived and listed per slide.
+    var GIVEN  = ["A","B","C"];
+    var WITH_D = GIVEN.concat(["D","D1","D2"]);
+    var WITH_E = WITH_D.concat(["E","E1","E2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -64,27 +77,96 @@ First, let it measure it.
             "E2;point;lineSlider;E0,E3,110,0;0",
             "E;line;connect;E1,E2;black"
         ],
+        deferDraggables: ["D1","E1","E2"],
+        slides: [
+            { text: "“To find the least number which three given numbers measure.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "VII.36" }] },
+            { text: "Let {A}, {B}, and {C} be the three given numbers.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "It is required to find the least number which they measure.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "Take {D} the least number measured by the two numbers {A} and {B}.",
+              visible: WITH_D,
+              highlighted: ["D","A","B"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "VII.34" }] },
+            { text: "Then {C} either measures, or does not measure, {D}.",
+              visible: WITH_D,
+              highlighted: ["C","D"] },
+            // First case — this figure. The second has its own figure below.
+            { text: "First, let it measure it.",
+              visible: WITH_D,
+              highlighted: ["C","D"] },
+            { text: "But {A} and {B} also measure {D},",
+              visible: WITH_D,
+              highlighted: ["A","B","D"] },
+            { text: "therefore {A}, {B}, and {C} measure {D}.",
+              visible: WITH_D,
+              highlighted: ["A","B","C","D"] },
+            { text: "I say next that it is also the least that they measure.",
+              visible: WITH_D,
+              highlighted: ["D"] },
+            { text: "If not, {A}, {B}, and {C} measure some number {E} less than {D}.",
+              visible: WITH_E,
+              highlighted: ["A","B","C","E","D"] },
+            { text: "Since {A}, {B}, and {C} measure {E}, therefore {A} and {B} measure {E}.",
+              visible: WITH_E,
+              highlighted: ["A","B","C","E"] },
+            { text: "Therefore the least number measured by {A} and {B} also measures {E}.",
+              visible: WITH_E,
+              highlighted: ["A","B","E"],
+              justifications: [{ ref: "VII.35" }] },
+            { text: "But {D} is the least number measured by {A} and {B},",
+              visible: WITH_E,
+              highlighted: ["D","A","B"] },
+            { text: "therefore {D} measures {E}, the greater the less, which is impossible.",
+              visible: WITH_E,
+              highlighted: ["D","E"] },
+            // The reductio is closed: the supposed E is withdrawn.
+            { text: "Therefore {A}, {B}, and {C} do not measure any number less than {D}.",
+              visible: WITH_D,
+              highlighted: ["A","B","C","D"] },
+            { text: "Therefore {D} is the least that {A}, {B}, and {C} measure.",
+              visible: WITH_D,
+              highlighted: ["D","A","B","C"] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.36") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.34": "/elements/books/bookVII/propositions/propVII34/",
+        "VII.35": "/elements/books/bookVII/propositions/propVII35/"
     });
 </script>
 </figure>
 
-But *A* and *B* also measure *D,* therefore *A, B,* and *C* measure *D.*
+But {A} and {B} also measure {D}, therefore {A}, {B}, and {C} measure {D}.
 
 I say next that it is also the least that they measure.
 
-If not, *A, B,* and *C* measure some number *E* less than *D.*
+If not, {A}, {B}, and {C} measure some number {E} less than {D}.
 
-Since *A, B,* and *C* measure *E,* therefore *A* and *B* measure *E.* Therefore the least number measured by *A* and *B* also measures *E.* [!just VII.35]
+Since {A}, {B}, and {C} measure {E}, therefore {A} and {B} measure {E}. Therefore the least number measured by {A} and {B} also measures {E}. [!just VII.35]
 
-But *D* is the least number measured by *A* and *B,* therefore *D* measures *E,* the greater the less, which is impossible.
+But {D} is the least number measured by {A} and {B}, therefore {D} measures {E}, the greater the less, which is impossible.
 
-Therefore *A, B,* and *C* do not measure any number less than *D.* Therefore *D* is the least that *A, B,* and *C* measure.
+Therefore {A}, {B}, and {C} do not measure any number less than {D}. Therefore {D} is the least that {A}, {B}, and {C} measure.
 
-Next, let *C* not measure *D.*
+Next, let {C:canvas_1} not measure {D:canvas_1}.
 
-Take *E,* the least number measured by *C* and *D.* [!just VII.34]
+Take {E:canvas_1}, the least number measured by {C:canvas_1} and {D:canvas_1}. [!just VII.34]
 
-Since *A* and *B* measure *D,* and *D* measures *E,* therefore *A* and *B* also measure *E.* But *C* also measures *E,* therefore *A, B,* and *C* also measure *E.*
+Since {A:canvas_1} and {B:canvas_1} measure {D:canvas_1}, and {D:canvas_1} measures {E:canvas_1}, therefore {A:canvas_1} and {B:canvas_1} also measure {E:canvas_1}. But {C:canvas_1} also measures {E:canvas_1}, therefore {A:canvas_1}, {B:canvas_1}, and {C:canvas_1} also measure {E:canvas_1}.
 
 <hr width="40%">
 
@@ -92,6 +174,20 @@ Since *A* and *B* measure *D,* and *D* measures *E,* therefore *A* and *B* also 
 <canvas id="canvas_1" width="250" height="240" tabindex="0"></canvas>
 <noscript><img alt="VII.36 diagram" src="propVII36b.gif"/></noscript>
 <script type="text/javascript">
+    // Second case: C does not measure D; E the least number C and D
+    // measure, F the supposed lesser number A, B and C measure. Line
+    // segments only, so the walk is highlight beats plus one stroke for E,
+    // the number the proof takes. F is withdrawn once the reductio closes.
+    // Nothing is added to the figure.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2, D1, E1, F1, F2 (zero-colour handles) and the
+    // off-canvas, colourless rail and unit ends. E1, F1 and F2 arrive
+    // mid-walk, so they are deferred; D2 and E2 (proportion) are derived
+    // and listed per slide.
+    var GIVEN  = ["A","B","C","D","D1","D2"];
+    var WITH_E = GIVEN.concat(["E","E1","E2"]);
+    var WITH_F = WITH_E.concat(["F","F1","F2"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -130,19 +226,86 @@ Since *A* and *B* measure *D,* and *D* measures *E,* therefore *A* and *B* also 
             "F2;point;lineSlider;F0,F3,150,0;0",
             "F;line;connect;F1,F2;black"
         ],
+        deferDraggables: ["E1","F1","F2"],
+        slides: [
+            { text: "Next, let {C} not measure {D}.",
+              visible: GIVEN,
+              highlighted: ["C","D"] },
+            { text: "Take {E}, the least number measured by {C} and {D}.",
+              visible: WITH_E,
+              highlighted: ["E","C","D"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "VII.34" }] },
+            { text: "Since {A} and {B} measure {D}, and {D} measures {E},",
+              visible: WITH_E,
+              highlighted: ["A","B","D","E"] },
+            { text: "therefore {A} and {B} also measure {E}.",
+              visible: WITH_E,
+              highlighted: ["A","B","E"] },
+            { text: "But {C} also measures {E},",
+              visible: WITH_E,
+              highlighted: ["C","E"] },
+            { text: "therefore {A}, {B}, and {C} also measure {E}.",
+              visible: WITH_E,
+              highlighted: ["A","B","C","E"] },
+            { text: "I say next that it is also the least that they measure.",
+              visible: WITH_E,
+              highlighted: ["E"] },
+            { text: "If not, {A}, {B}, and {C} measure some number {F} less than {E}.",
+              visible: WITH_F,
+              highlighted: ["A","B","C","F","E"] },
+            { text: "Since {A}, {B}, and {C} measure {F}, therefore {A} and {B} measure {F}.",
+              visible: WITH_F,
+              highlighted: ["A","B","C","F"] },
+            { text: "Therefore the least number measured by {A} and {B} also measures {F}.",
+              visible: WITH_F,
+              highlighted: ["A","B","F"],
+              justifications: [{ ref: "VII.35" }] },
+            { text: "But {D} is the least number measured by {A} and {B},",
+              visible: WITH_F,
+              highlighted: ["D","A","B"] },
+            { text: "therefore {D} measures {F}.",
+              visible: WITH_F,
+              highlighted: ["D","F"] },
+            { text: "But {C} also measures {F}, therefore {D} and {C} measure {F},",
+              visible: WITH_F,
+              highlighted: ["C","F","D"] },
+            { text: "so that the least number measured by {D} and {C} also measures {F}.",
+              visible: WITH_F,
+              highlighted: ["D","C","F"],
+              justifications: [{ ref: "VII.35" }] },
+            { text: "But {E} is the least number measured by {C} and {D},",
+              visible: WITH_F,
+              highlighted: ["E","C","D"] },
+            { text: "therefore {E} measures {F}, the greater the less, which is impossible.",
+              visible: WITH_F,
+              highlighted: ["E","F"] },
+            // The reductio is closed: the supposed F is withdrawn.
+            { text: "Therefore {A}, {B}, and {C} do not measure any number which is less than {E}.",
+              visible: WITH_E,
+              highlighted: ["A","B","C","E"] },
+            { text: "Therefore {E} is the least that is measured by {A}, {B}, and {C}.",
+              visible: WITH_E,
+              highlighted: ["E","A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
 I say next that it is also the least that they measure.
 
-If not, *A, B,* and *C* measure some number *F* less than *E.*
+If not, {A}, {B}, and {C} measure some number {F} less than {E}.
 
-Since *A, B,* and *C* measure *F,* therefore *A* and *B* measure *F.* Therefore the least number measured by *A* and *B* also measures *F.* But *D* is the least number measured by *A* and *B,* therefore *D* measures *F.* But *C* also measures *F,* therefore *D* and *C* measure *F,* so that the least number measured by *D* and *C* also measures *F.* [!just VII.35]
+Since {A}, {B}, and {C} measure {F}, therefore {A} and {B} measure {F}. Therefore the least number measured by {A} and {B} also measures {F}. But {D} is the least number measured by {A} and {B}, therefore {D} measures {F}. But {C} also measures {F}, therefore {D} and {C} measure {F}, so that the least number measured by {D} and {C} also measures {F}. [!just VII.35]
 
-But *E* is the least number measured by *C* and *D,* therefore *E* measures *F,* the greater the less, which is impossible.
+But {E} is the least number measured by {C} and {D}, therefore {E} measures {F}, the greater the less, which is impossible.
 
-Therefore *A, B,* and *C* do not measure any number which is less than *E.* Therefore *E* is the least that is measured by *A, B,* and *C.*
+Therefore {A}, {B}, and {C} do not measure any number which is less than {E}. Therefore {E} is the least that is measured by {A}, {B}, and {C}.
 
 <div class="qed">Q.E.D.</div>
 <br clear="all">

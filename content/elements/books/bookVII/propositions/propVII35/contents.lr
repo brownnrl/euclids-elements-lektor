@@ -15,14 +15,27 @@ statement: If two numbers measure any number, then the least number measured by 
 ----
 proof:
 
-Let the two numbers *A* and *B* measure any number *CD,* and let *E* be the least that they measure.
+Let the two numbers {A} and {B} measure any number {CD}, and let {E} be the least that they measure.
 
-I say that *E* also measures *CD.*
+I say that {E} also measures {CD}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="140" tabindex="0"></canvas>
 <noscript><img alt="VII.35 diagram" src="propVII35.gif"/></noscript>
 <script type="text/javascript">
+    // A and B measure CD; E is the least number they measure. F is the
+    // point of the reductio: E measuring DF leaves CF less than itself.
+    // Line segments only, so the walk is highlight beats. F, DF and CF are
+    // withdrawn once the reductio closes. Added: transparent highlight
+    // targets DF and CF (;0;0;0), so the resting figure is unchanged.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, E1, E2 (zero-colour handles), the lettered points C, D, F,
+    // and the off-canvas, colourless rail ends. E1, E2 arrive with E and F
+    // with the reductio, so they are deferred.
+    var GIVEN  = ["A","B","CD","C","D"];
+    var WITH_E = GIVEN.concat(["E","E1","E2"]);
+    var WITH_F = WITH_E.concat(["F","DF","CF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -46,17 +59,76 @@ I say that *E* also measures *CD.*
             "F;point;lineSlider;C0,C3,90,0",
             "E1;point;lineSlider;E0,E3,30,0;0",
             "E2;point;lineSlider;E0,E3,80,0;0",
-            "E;line;connect;E1,E2;black"
+            "E;line;connect;E1,E2;black",
+            "DF;line;connect;D,F;0;0;0",
+            "CF;line;connect;C,F;0;0;0"
         ],
+        deferDraggables: ["E1","E2","F"],
+        slides: [
+            { text: "“If two numbers measure any number,",
+              visible: GIVEN,
+              highlighted: ["A","B","CD"],
+              justifications: [{ ref: "VII.35" }] },
+            { text: "then the least number measured by them also measures the same.”",
+              visible: WITH_E,
+              highlighted: ["E","CD"] },
+            { text: "Let the two numbers {A} and {B} measure any number {CD},",
+              visible: GIVEN,
+              highlighted: ["A","B","CD"] },
+            { text: "and let {E} be the least that they measure.",
+              visible: WITH_E,
+              highlighted: ["E","A","B"] },
+            { text: "I say that {E} also measures {CD}.",
+              visible: WITH_E,
+              highlighted: ["E","CD"] },
+            { text: "If {E} does not measure {CD},",
+              visible: WITH_E,
+              highlighted: ["E","CD"] },
+            { text: "let {E}, measuring {DF}, leave {CF} less than itself.",
+              visible: WITH_F,
+              highlighted: ["E","DF","CF"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "Now, since {A} and {B} measure {E}, and {E} measures {DF},",
+              visible: WITH_F,
+              highlighted: ["A","B","E","DF"] },
+            { text: "therefore {A} and {B} also measure {DF}.",
+              visible: WITH_F,
+              highlighted: ["A","B","DF"] },
+            { text: "But they also measure the whole {CD},",
+              visible: WITH_F,
+              highlighted: ["A","B","CD"] },
+            { text: "therefore they measure the remainder {CF} which is less than {E}, which is impossible.",
+              visible: WITH_F,
+              highlighted: ["A","B","CF","E"] },
+            // The reductio is closed: the supposed F, DF and CF are withdrawn.
+            { text: "Therefore {E} cannot fail to measure {CD}.",
+              visible: WITH_E,
+              highlighted: ["E","CD"] },
+            { text: "Therefore it measures it.",
+              visible: WITH_E,
+              highlighted: ["E","CD"] },
+            { text: "Therefore, if two numbers measure any number,",
+              visible: WITH_E,
+              highlighted: ["A","B","CD"] },
+            { text: "then the least number measured by them also measures the same.",
+              visible: WITH_E,
+              highlighted: ["E","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.35") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-If *E* does not measure *CD,* let *E,* measuring *DF,* leave *CF* less than itself.
+If {E} does not measure {CD}, let {E}, measuring {DF}, leave {CF} less than itself.
 
-Now, since *A* and *B* measure *E,* and *E* measures *DF,* therefore *A* and *B* also measure *DF.* But they also measure the whole *CD,* therefore they measure the remainder *CF* which is less than *E,* which is impossible.
+Now, since {A} and {B} measure {E}, and {E} measures {DF}, therefore {A} and {B} also measure {DF}. But they also measure the whole {CD}, therefore they measure the remainder {CF} which is less than {E}, which is impossible.
 
-Therefore *E* cannot fail to measure *CD.* Therefore it measures it.
+Therefore {E} cannot fail to measure {CD}. Therefore it measures it.
 
 Therefore, *if two numbers measure any number, then the least number measured by them also measures the same.*
 
