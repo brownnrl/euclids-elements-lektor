@@ -15,14 +15,17 @@ statement: If a square does not measure a square, then neither does the side mea
 ----
 proof:
 
-Let *A* and *B* be square numbers, and let *C* and *D* be their sides, and let *A* not measure *B.*
+Let {A} and {B} be square numbers, and let {C} and {D} be their sides, and let {A} not measure {B}.
 
-I say that neither does *C* measure *D.*
+I say that neither does {C} measure {D}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="170" tabindex="0"></canvas>
 <noscript><img alt="VIII.16 diagram" src="propVIII16.gif"/></noscript>
 <script type="text/javascript">
+    // A walk of the proof over Joyce's lines: all four numbers are givens,
+    // nothing is constructed, so every beat is a highlight.
+    var GIVEN = ["A","B","C","D","A2","B2"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,19 +54,77 @@ I say that neither does *C* measure *D.*
             "B2;point;proportion;U1,U2,D1,D2,D1,D2,B1,B3;0",
             "B;line;connect;B1,B2;black"
         ],
+        // Draggables (checked against the bundle): the lineSlider ends and
+        // the unit U1, U2, all colourless; every one belongs to a given, so
+        // nothing is deferred. No elements added.
+        slides: [
+            { text: "If a square does not measure a square, then neither does the side measure the side;",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "VIII.16" }] },
+            { text: "and, if the side does not measure the side, then neither does the square measure the square.",
+              visible: GIVEN,
+              highlighted: ["C","D","A","B"] },
+            { text: "Let {A} and {B} be square numbers, and let {C} and {D} be their sides,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "and let {A} not measure {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that neither does {C} measure {D}.",
+              visible: GIVEN,
+              highlighted: ["C","D"] },
+            { text: "If {C} measures {D}, {A} also measures {B}.",
+              visible: GIVEN,
+              highlighted: ["C","D","A","B"],
+              justifications: [{ claim: "C measures D implies A measures B", ref: "VIII.14" }] },
+            { text: "But {A} does not measure {B}, therefore neither does {C} measure {D}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "Next, let {C} not measure {D}.",
+              visible: GIVEN,
+              highlighted: ["C","D"] },
+            { text: "I say that neither does {A} measure {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "If {A} measures {B}, then {C} also measures {D}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ claim: "A measures B implies C measures D", ref: "VIII.14" }] },
+            { text: "But {C} does not measure {D}, therefore neither does {A} measure {B}.",
+              visible: GIVEN,
+              highlighted: ["C","D","A","B"] },
+            { text: "Therefore, if a square does not measure a square, then neither does the side measure the side;",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "and, if the side does not measure the side, then neither does the square measure the square.",
+              visible: GIVEN,
+              highlighted: ["C","D","A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.16") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VIII.14": "/elements/books/bookVIII/propositions/propVIII14/"
     });
 </script>
 </figure>
 
-If *C* measures *D, A* also measures *B.* But *A* does not measure *B,* therefore neither does *C* measure *D.* [!just VIII.14]
+If {C} measures {D}, {A} also measures {B}. But {A} does not measure {B}, therefore neither does {C} measure {D}. [!just VIII.14]
 
 * * *
 
-Next, let *C* not measure *D.*
+Next, let {C} not measure {D}.
 
-I say that neither does *A* measure *B.*
+I say that neither does {A} measure {B}.
 
-If *A* measures *B,* then *C* also measures *D.* But *C* does not measure *D,* therefore neither does *A* measure *B.* [!just VIII.14]
+If {A} measures {B}, then {C} also measures {D}. But {C} does not measure {D}, therefore neither does {A} measure {B}. [!just VIII.14]
 
 Therefore, *if a square does not measure a square, then neither does the side measure the side; and, if the side does not measure the side, then neither does the square measure the square.*
 

@@ -15,16 +15,24 @@ statement: If a cubic number measures a cubic number, then the side also measure
 ----
 proof:
 
-Let the cubic number *A* measure the cube *B,* and let *C* be the side of *A* and *D* the side of *B.*
+Let the cubic number {A} measure the cube {B}, and let {C} be the side of {A} and {D} the side of {B}.
 
-I say that *C* measures *D.*
+I say that {C} measures {D}.
 
-Multiply *C* by itself to make *E,* multiply *D* by itself to make *G,* multiply *C* by *D* to make *F,* and multiply *C* and *D* by *F* to make *H* and *K* respectively.
+Multiply {C} by itself to make {E}, multiply {D} by itself to make {G}, multiply {C} by {D} to make {F}, and multiply {C} and {D} by {F} to make {H} and {K} respectively.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="410" height="170" tabindex="0"></canvas>
 <noscript><img alt="VIII.15 diagram" src="propVIII15.gif"/></noscript>
 <script type="text/javascript">
+    // A walk of the proof over Joyce's lines. The givens A, B, C, D stand
+    // from the start; E, G, F, then H and K, are stroked from their left ends
+    // as the proof makes them. The rest is highlight beats.
+    var GIVEN = ["A","B","C","D","A2","B2"];
+    var Ev    = GIVEN.concat(["E","E1","E2"]);
+    var Gv    = Ev.concat(["G","G1","G2"]);
+    var Fv    = Gv.concat(["F","F1","F2"]);
+    var ALL   = Fv.concat(["H","K","H1","K1","H2","K2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -75,21 +83,127 @@ Multiply *C* by itself to make *E,* multiply *D* by itself to make *G,* multiply
             "K2;point;proportion;U1,U2,D1,D2,F1,F2,K1,D3;0",
             "K;line;connect;K1,K2;black"
         ],
+        // Draggables (checked against the bundle): every lineSlider end and
+        // the unit U1, U2, all colourless. E, G, F, H and K are made mid-walk,
+        // so E1, G1, F1, H1, K1 are deferred and listed in the slides that
+        // introduce them. No elements added.
+        deferDraggables: ["E1","G1","F1","H1","K1"],
+        slides: [
+            { text: "If a cubic number measures a cubic number, then the side also measures the side;",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "VIII.15" }] },
+            { text: "and, if the side measures the side, then the cube also measures the cube.",
+              visible: GIVEN,
+              highlighted: ["C","D","A","B"] },
+            { text: "Let the cubic number {A} measure the cube {B},",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and let {C} be the side of {A} and {D} the side of {B}.",
+              visible: GIVEN,
+              highlighted: ["C","A","D","B"] },
+            { text: "I say that {C} measures {D}.",
+              visible: GIVEN,
+              highlighted: ["C","D"] },
+            { text: "Multiply {C} by itself to make {E},",
+              visible: Ev,
+              highlighted: ["C","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "multiply {D} by itself to make {G},",
+              visible: Gv,
+              highlighted: ["D","G"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "multiply {C} by {D} to make {F},",
+              visible: Fv,
+              highlighted: ["C","D","F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and multiply {C} and {D} by {F} to make {H} and {K} respectively.",
+              visible: ALL,
+              highlighted: ["C","D","F","H","K"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now it is clear that {E}, {F}, and {G} and {A}, {H}, {K}, and {B}",
+              visible: ALL,
+              highlighted: ["E","F","G","A","H","K","B"] },
+            { text: "are continuously proportional in the ratio of {C} to {D}.",
+              visible: ALL,
+              highlighted: ["C","D","E","F","G","A","H","K","B"],
+              justifications: [
+                  { claim: "E, F, G in the ratio of C to D", ref: "VIII.11" },
+                  { claim: "A, H, K, B in the ratio of C to D", ref: "VIII.12" } ] },
+            { text: "And, since {A}, {H}, {K}, and {B} are continuously proportional,",
+              visible: ALL,
+              highlighted: ["A","H","K","B"] },
+            { text: "and {A} measures {B} and G therefore it also measures {H}.",
+              visible: ALL,
+              highlighted: ["A","B","H"],
+              justifications: [{ claim: "A measures H", ref: "VIII.7" }] },
+            { text: "And {A} is to {H} as {C} is to {D},",
+              visible: ALL,
+              highlighted: ["A","H","C","D"] },
+            { text: "therefore {C} also measures {D}.",
+              visible: ALL,
+              highlighted: ["C","D"],
+              justifications: [{ claim: "C measures D", ref: "VII.Def.20" }] },
+            { text: "Next, let {C} measure {D}.",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "I say that {A} also measures {B}.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "With the same construction, we can prove in a similar manner",
+              visible: ALL,
+              highlighted: ["E","G","F","H","K"] },
+            { text: "that {A}, {H}, {K}, and {B} are continuously proportional in the ratio of {C} to {D}.",
+              visible: ALL,
+              highlighted: ["A","H","K","B","C","D"] },
+            { text: "And, since {C} measures {D}, and {C} is to {D} as {A} is to {H},",
+              visible: ALL,
+              highlighted: ["C","D","A","H"] },
+            { text: "therefore {A} also measures {H}, so that {A} measures {B} also.",
+              visible: ALL,
+              highlighted: ["A","H","B"],
+              justifications: [{ claim: "A measures H", ref: "VII.Def.20" }] },
+            { text: "Therefore, if a cubic number measures a cubic number, then the side also measures the side;",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "and, if the side measures the side, then the cube also measures the cube.",
+              visible: ALL,
+              highlighted: ["C","D","A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.15") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "VIII.7":     "/elements/books/bookVIII/propositions/propVIII7/",
+        "VIII.11":    "/elements/books/bookVIII/propositions/propVIII11/",
+        "VIII.12":    "/elements/books/bookVIII/propositions/propVIII12/"
     });
 </script>
 </figure>
 
-Now it is clear that *E, F,* and *G* and *A, H, K,* and *B* are continuously proportional in the ratio of *C* to *D.* And, since *A, H, K,* and *B* are continuously proportional, and *A* measures *B* and *G* therefore it also measures *H.* [!just VIII.11; VIII.12; VIII.7]
+Now it is clear that {E}, {F}, and {G} and {A}, {H}, {K}, and {B} are continuously proportional in the ratio of {C} to {D}. And, since {A}, {H}, {K}, and {B} are continuously proportional, and {A} measures {B} and *G* therefore it also measures {H}. [!just VIII.11; VIII.12; VIII.7]
 
-And *A* is to *H* as *C* is to *D,* therefore *C* also measures *D.* [!just VII.Def.20]
+And {A} is to {H} as {C} is to {D}, therefore {C} also measures {D}. [!just VII.Def.20]
 
 * * *
 
-Next, let *C* measure *D.*
+Next, let {C} measure {D}.
 
-I say that *A* also measures *B.*
+I say that {A} also measures {B}.
 
-With the same construction, we can prove in a similar manner that *A, H, K,* and *B* are continuously proportional in the ratio of *C* to *D.* And, since *C* measures *D,* and *C* is to *D* as *A* is to *H,* therefore *A* also measures *H,* so that *A* measures *B* also. [!just VII.Def.20]
+With the same construction, we can prove in a similar manner that {A}, {H}, {K}, and {B} are continuously proportional in the ratio of {C} to {D}. And, since {C} measures {D}, and {C} is to {D} as {A} is to {H}, therefore {A} also measures {H}, so that {A} measures {B} also. [!just VII.Def.20]
 
 Therefore, *if a cubic number measures a cubic number, then the side also measures the side; and, if the side measures the side, then the cube also measures the cube.*
 
