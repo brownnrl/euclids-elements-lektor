@@ -15,12 +15,29 @@ statement: If two straight lines are cut by parallel planes, then they are cut i
 ----
 proof:
 
-Let the two straight lines *AB* and *CD* be cut by the parallel planes *GH, KL,* and *MN* at the points *A, E,* and *B,* and at the points *C, F,* and *D,* respectively.
+Let the two straight lines {AB} and {CD} be cut by the parallel planes {GH|GHT}, {KL|KLT}, and {MN|MNT} at the points {A}, {E}, and {B}, and at the points {C}, {F}, and {D}, respectively.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="310" height="320" tabindex="0"></canvas>
 <noscript><img alt="XI.17 diagram" src="propXI17.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the parallel planes GH, KL, MN in oblique view, the
+    // lines AB and CD cutting them at A, E, B and C, F, D, and the joins
+    // AC, BD, AD, EO, FO, with O where AD meets the plane KL.
+    //
+    // Added, all transparent: GHT, KLT, MNT, faceless twins of the filled
+    // planes (raised over the figure if highlighted, #140); the cutting
+    // planes EBDO and AOFC; the triangles ABD and ADC; and the segments
+    // AE, EB, CF, FD, AO, OD the ratios name. The joins are Joyce's own
+    // lines, declared from the end they are drawn from.
+    //
+    // Draggables (checked against the bundle): X, Y, Z, G, H, K, L, M, N,
+    // A, B, C, D free; E a slider. All are givens. F and O are derived and
+    // listed per slide; O arrives with "Let AD meet the plane KL".
+    var GIVEN = ["GH","GHT","G'","H'","KL","KLT","K'","L'","MN","MNT","M'","N'",
+                 "A","B","C","D","E","F","AB","CD"];
+    var JOIN  = GIVEN.concat(["AC","BD","AD"]);
+    var ALL   = JOIN.concat(["O","EO","FO"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -59,21 +76,125 @@ Let the two straight lines *AB* and *CD* be cut by the parallel planes *GH, KL,*
             "BD;line;connect;B,D",
             "AD;line;connect;A,D",
             "EO;line;connect;E,O",
-            "FO;line;connect;F,O"
+            "FO;line;connect;F,O",
+            // Transparent highlight targets.
+            "GHT;polygon;quadrilateral;G,G',H,H';0;0;0;0",
+            "KLT;polygon;quadrilateral;K,K',L,L';0;0;0;0",
+            "MNT;polygon;quadrilateral;M,M',N,N';0;0;0;0",
+            "planeEBDO;polygon;quadrilateral;E,B,D,O;0;0;0;0",
+            "planeAOFC;polygon;quadrilateral;A,O,F,C;0;0;0;0",
+            "ABD;polygon;triangle;A,B,D;0;0;0;0",
+            "ADC;polygon;triangle;A,D,C;0;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "FD;line;connect;F,D;0;0;0",
+            "AO;line;connect;A,O;0;0;0",
+            "OD;line;connect;O,D;0;0;0"
         ],
+        aliases: { "EBDO": "planeEBDO", "AOFC": "planeAOFC",
+                   "OF": "FO", "CA": "AC" },
+        slides: [
+            { text: "“If two straight lines are cut by parallel planes, then they are cut in the same ratios.”",
+              visible: GIVEN,
+              highlighted: ["AB","CD","GHT","KLT","MNT"],
+              justifications: [{ ref: "XI.17" }] },
+            { text: "Let the two straight lines {AB} and {CD} be cut by the parallel planes {GH|GHT}, {KL|KLT}, and {MN|MNT}",
+              visible: GIVEN,
+              highlighted: ["AB","CD","GHT","KLT","MNT"] },
+            { text: "at the points {A}, {E}, and {B}, and at the points {C}, {F}, and {D}, respectively.",
+              visible: GIVEN,
+              highlighted: ["A","E","B","C","F","D"] },
+            { text: "I say that the straight line {AE} is to {EB} as {CF} is to {FD}.",
+              visible: GIVEN,
+              highlighted: ["AE","EB","CF","FD"] },
+            { text: "Join {AC}, {BD}, and {AD}.",
+              visible: JOIN,
+              highlighted: ["AC","BD","AD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Let {AD} meet the plane {KL|KLT} at the point {O}.",
+              visible: JOIN.concat(["O"]),
+              highlighted: ["AD","KLT","O"],
+              transition: { animations: [
+                  { elem: "O", name: geomlib.A.Point.appear } ] } },
+            { text: "Join {EO} and {FO}.",
+              visible: ALL,
+              highlighted: ["EO","FO"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EO", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FO", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since the two parallel planes {KL|KLT} and {MN|MNT} are cut by the plane {EBDO|planeEBDO},",
+              visible: ALL,
+              highlighted: ["KLT","MNT","planeEBDO"],
+              transition: { animations: [
+                  { elem: "planeEBDO", name: geomlib.A.Polygon.outline } ] } },
+            { text: "therefore their intersections {EO} and {BD} are parallel.",
+              visible: ALL,
+              highlighted: ["EO","BD"],
+              justifications: [{ claim: "EO parallel to BD", ref: "XI.16" }] },
+            { text: "For the same reason, since the two parallel planes {GH|GHT} and {KL|KLT} are cut by the plane {AOFC|planeAOFC},",
+              visible: ALL,
+              highlighted: ["GHT","KLT","planeAOFC"],
+              transition: { animations: [
+                  { elem: "planeAOFC", name: geomlib.A.Polygon.outline } ] } },
+            { text: "their intersections {AC} and {OF|FO} are parallel.",
+              visible: ALL,
+              highlighted: ["AC","FO"],
+              justifications: [{ claim: "AC parallel to OF", ref: "XI.16" }] },
+            { text: "And, since the straight line {EO} is parallel to BC, one of the sides of the triangle {ABD},",
+              visible: ALL,
+              highlighted: ["EO","ABD"] },
+            { text: "therefore proportionally {AE} is to {EB} as {AO} is to {OD}.",
+              visible: ALL,
+              highlighted: ["AE","EB","AO","OD"],
+              justifications: [{ claim: "AE : EB = AO : OD", ref: "VI.2" }] },
+            { text: "Again, since the straight line {FO} is parallel to {CA|AC}, one of the sides of the triangle {ADC},",
+              visible: ALL,
+              highlighted: ["FO","ADC"] },
+            { text: "therefore proportionally {AO} is to {OD} as {CF} is to {FD}.",
+              visible: ALL,
+              highlighted: ["AO","OD","CF","FD"],
+              justifications: [{ claim: "AO : OD = CF : FD", ref: "VI.2" }] },
+            { text: "But it was prove that {AO} is to {OD} as {AE} is to {EB},",
+              visible: ALL,
+              highlighted: ["AO","OD","AE","EB"] },
+            { text: "therefore {AE} is to {EB} as {CF} is to {FD}.",
+              visible: ALL,
+              highlighted: ["AE","EB","CF","FD"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Therefore, if two straight lines are cut by parallel planes, then they are cut in the same ratios.",
+              visible: ALL,
+              highlighted: ["AB","CD","GHT","KLT","MNT"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.17") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.11":  "/elements/books/bookV/propositions/propV11/",
+        "VI.2":  "/elements/books/bookVI/propositions/propVI2/",
+        "XI.16": "/elements/books/bookXI/propositions/propXI16/"
     });
 </script>
 </figure>
 
-I say that the straight line *AE* is to *EB* as *CF* is to *FD.*
+I say that the straight line {AE} is to {EB} as {CF} is to {FD}.
 
-Join *AC, BD,* and *AD.* Let *AD* meet the plane *KL* at the point *O.* Join *EO* and *FO.*
+Join {AC}, {BD}, and {AD}. Let {AD} meet the plane {KL|KLT} at the point {O}. Join {EO} and {FO}.
 
-Now, since the two parallel planes *KL* and *MN* are cut by the plane *EBDO,* therefore their intersections *EO* and *BD* are parallel. For the same reason, since the two parallel planes *GH* and *KL* are cut by the plane *AOFC,* their intersections *AC* and *OF* are parallel. [!just XI.16]
+Now, since the two parallel planes {KL|KLT} and {MN|MNT} are cut by the plane {EBDO}, therefore their intersections {EO} and {BD} are parallel. For the same reason, since the two parallel planes {GH|GHT} and {KL|KLT} are cut by the plane {AOFC}, their intersections {AC} and {OF} are parallel. [!just XI.16]
 
-And, since the straight line *EO* is parallel to *BC,* one of the sides of the triangle *ABD,* therefore proportionally *AE* is to *EB* as *AO* is to *OD.* Again, since the straight line *FO* is parallel to *CA,* one of the sides of the triangle *ADC,* therefore proportionally *AO* is to *OD* as *CF* is to *FD.* [!just VI.2]
+And, since the straight line {EO} is parallel to *BC,* one of the sides of the triangle {ABD}, therefore proportionally {AE} is to {EB} as {AO} is to {OD}. Again, since the straight line {FO} is parallel to {CA}, one of the sides of the triangle {ADC}, therefore proportionally {AO} is to {OD} as {CF} is to {FD}. [!just VI.2]
 
-But it was prove that *AO* is to *OD* as *AE* is to *EB,* therefore *AE* is to *EB* as *CF* is to *FD.* [!just V.11]
+But it was prove that {AO} is to {OD} as {AE} is to {EB}, therefore {AE} is to {EB} as {CF} is to {FD}. [!just V.11]
 
 Therefore, *if two straight lines are cut by parallel planes, then they are cut in the same ratios.*
 

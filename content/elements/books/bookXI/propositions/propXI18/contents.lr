@@ -15,14 +15,33 @@ statement: If a straight line is at right angles to any plane, then all the plan
 ----
 proof:
 
-Let any straight line *AB* be at right angles to the plane of reference.
+Let any straight line {AB} be at right angles to the plane of reference.
 
-I say that all the planes through *AB* are also at right angles to the plane of reference.
+I say that all the planes through {AB} are also at right angles to the plane of reference.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="220" tabindex="0"></canvas>
 <noscript><img alt="XI.18 diagram" src="propXI18.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the plane of reference P in oblique view, AB at right
+    // angles to it, the plane DE through AB cutting it in CE, and FG drawn
+    // in DE at right angles to CE.
+    //
+    // Added, all transparent: PT and DET, faceless twins of the filled
+    // planes P and DE (raised over the figure if highlighted, #140); CE,
+    // the intersection, which Joyce's figure draws only as the plane's
+    // edge; and the right-angle squares at B (ABF, by XI.Def.3) and at F
+    // (GFB, by construction).
+    //
+    // Draggables (checked against the bundle): X, Y, Z, P0, P2, A free;
+    // B, E, F sliders. E arrives with the plane DE and F is "taken at
+    // random on CE", so both are deferred. P1, P3, C, D, G are derived
+    // and listed per slide.
+    var GIVEN = ["P","PT","P1","P3","A","B","AB"];
+    var PLANE = GIVEN.concat(["C","D","E","DE","DET"]);
+    var SEC   = PLANE.concat(["CE"]);
+    var FGv   = SEC.concat(["F","G","FG","angGFB"]);
+    var ALL   = FGv.concat(["angABF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -45,25 +64,136 @@ I say that all the planes through *AB* are also at right angles to the plane of 
             "DE;polygon;parallelogram;D,C,E;0;0;black;random",
             "F;point;lineSlider;C,E,100,150",
             "G;point;intersection;A,D,F,Y",
-            "FG;line;connect;F,G"
+            "FG;line;connect;F,G",
+            // Transparent highlight targets.
+            "PT;polygon;quadrilateral;P0,P1,P2,P3;0;0;0;0",
+            "DET;polygon;parallelogram;D,C,E;0;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "angABF;sector;angleMarkerRight;B,A,F",
+            "angGFB;sector;angleMarkerRight;F,G,B"
         ],
+        deferDraggables: ["E","F"],
+        aliases: { "ABF": "angABF", "FBA": "angABF",
+                   "GFB": "angGFB", "BFG": "angGFB" },
+        slides: [
+            { text: "“If a straight line is at right angles to any plane,”",
+              visible: GIVEN,
+              highlighted: ["AB","PT"],
+              justifications: [{ ref: "XI.18" }] },
+            { text: "“then all the planes through it are also at right angles to the same plane.”",
+              visible: PLANE,
+              highlighted: ["AB","DET","PT"] },
+            { text: "Let any straight line {AB} be at right angles to the {plane of reference|PT}.",
+              visible: GIVEN,
+              highlighted: ["AB","PT"] },
+            { text: "I say that all the planes through {AB} are also at right angles to the {plane of reference|PT}.",
+              visible: GIVEN,
+              highlighted: ["AB","PT"] },
+            { text: "Let the plane {DE|DET} be drawn through {AB}.",
+              visible: PLANE,
+              highlighted: ["DET","AB"],
+              transition: { animations: [
+                  { elem: "DE", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Let {CE} be the intersection of the plane {DE|DET} and the {plane of reference|PT}.",
+              visible: SEC,
+              highlighted: ["CE","DET","PT"],
+              transition: { animations: [
+                  { elem: "CE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Take a point {F} at random on {CE},",
+              visible: SEC.concat(["F"]),
+              highlighted: ["F","CE"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "and draw {FG} from {F} at right angles to {CE} in the plane {DE|DET}.",
+              visible: FGv,
+              highlighted: ["FG","CE","angGFB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FG",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",      name: geomlib.A.Point.appear },
+                  { elem: "angGFB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "FG at right angles to CE", ref: "I.11" }] },
+            { text: "Now, since {AB} is at right angles to the {plane of reference|PT},",
+              visible: FGv,
+              highlighted: ["AB","PT"] },
+            { text: "therefore {AB} is also at right angles to all the straight lines which meet it and lie in the {plane of reference|PT},",
+              visible: FGv,
+              highlighted: ["AB","PT"],
+              justifications: [{ claim: "a line at right angles to a plane", ref: "XI.Def.3" }] },
+            { text: "so that it is also at right angles to {CE}. Therefore the angle {ABF|angABF} is right.",
+              visible: ALL,
+              highlighted: ["AB","CE","angABF"],
+              transition: { animations: [
+                  { elem: "angABF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But the angle {GFB|angGFB} is also right, therefore {AB} is parallel to {FG}.",
+              visible: ALL,
+              highlighted: ["angGFB","angABF","AB","FG"],
+              justifications: [{ claim: "AB parallel to FG", ref: "I.28" }] },
+            { text: "But {AB} is at right angles to the {plane of reference|PT},",
+              visible: ALL,
+              highlighted: ["AB","PT"] },
+            { text: "therefore {FG} is also at right angles to the {plane of reference|PT}.",
+              visible: ALL,
+              highlighted: ["FG","PT"],
+              justifications: [{ claim: "parallel to a line at right angles to a plane", ref: "XI.8" }] },
+            { text: "Now a plane is at right angles to a plane when the straight lines drawn in one of the planes",
+              visible: ALL,
+              highlighted: ["DET","PT"] },
+            { text: "at right angles to the intersection of the planes are at right angles to the remaining plane.",
+              visible: ALL,
+              highlighted: ["CE","FG","PT"],
+              justifications: [{ claim: "planes at right angles", ref: "XI.Def.4" }] },
+            { text: "And {FG}, drawn in one of the planes {DE|DET} at right angles to {CE}, the intersection of the planes,",
+              visible: ALL,
+              highlighted: ["FG","DET","CE","angGFB"] },
+            { text: "was proved to be at right angles to the {plane of reference|PT}.",
+              visible: ALL,
+              highlighted: ["FG","PT"] },
+            { text: "Therefore the plane {DE|DET} is at right angles to the {plane of reference|PT}.",
+              visible: ALL,
+              highlighted: ["DET","PT"],
+              justifications: [{ claim: "DE at right angles to the plane", ref: "XI.Def.4" }] },
+            { text: "Similarly it can also be proved that all the planes through {AB} are at right angles to the {plane of reference|PT}.",
+              visible: ALL,
+              highlighted: ["AB","PT"] },
+            { text: "Therefore, if a straight line is at right angles to any plane,",
+              visible: ALL,
+              highlighted: ["AB","PT"] },
+            { text: "then all the planes through it are also at right angles to the same plane.",
+              visible: ALL,
+              highlighted: ["AB","DET","PT"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.18") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.11":     "/elements/books/bookI/propositions/propI11/",
+        "I.28":     "/elements/books/bookI/propositions/propI28/",
+        "XI.Def.3": "/elements/books/bookXI/definitions/defXI3/",
+        "XI.Def.4": "/elements/books/bookXI/definitions/defXI4/",
+        "XI.8":     "/elements/books/bookXI/propositions/propXI8/"
     });
 </script>
 </figure>
 
-Let the plane *DE* be drawn through *AB.* Let *CE* be the intersection of the plane *DE* and the plane of reference.
+Let the plane {DE|DET} be drawn through {AB}. Let {CE} be the intersection of the plane {DE|DET} and the plane of reference.
 
-Take a point *F* at random on *CE,* and draw *FG* from *F* at right angles to *CE* in the plane *DE.* [!just I.11]
+Take a point {F} at random on {CE}, and draw {FG} from {F} at right angles to {CE} in the plane {DE|DET}. [!just I.11]
 
-Now, since *AB* is at right angles to the plane of reference, therefore *AB* is also at right angles to all the straight lines which meet it and lie in the plane of reference, so that it is also at right angles to *CE.* Therefore the angle *ABF* is right. [!just XI.Def.3]
+Now, since {AB} is at right angles to the plane of reference, therefore {AB} is also at right angles to all the straight lines which meet it and lie in the plane of reference, so that it is also at right angles to {CE}. Therefore the angle {ABF} is right. [!just XI.Def.3]
 
-But the angle *GFB* is also right, therefore *AB* is parallel to *FG.* [!just I.28]
+But the angle {GFB} is also right, therefore {AB} is parallel to {FG}. [!just I.28]
 
-But *AB* is at right angles to the plane of reference, therefore *FG* is also at right angles to the plane of reference. [!just XI.8]
+But {AB} is at right angles to the plane of reference, therefore {FG} is also at right angles to the plane of reference. [!just XI.8]
 
-Now a plane is at right angles to a plane when the straight lines drawn in one of the planes at right angles to the intersection of the planes are at right angles to the remaining plane. And *FG,* drawn in one of the planes *DE* at right angles to *CE,* the intersection of the planes, was proved to be at right angles to the plane of reference. Therefore the plane *DE* is at right angles to the plane of reference. [!just XI.Def.4]
+Now a plane is at right angles to a plane when the straight lines drawn in one of the planes at right angles to the intersection of the planes are at right angles to the remaining plane. And {FG}, drawn in one of the planes {DE|DET} at right angles to {CE}, the intersection of the planes, was proved to be at right angles to the plane of reference. Therefore the plane {DE|DET} is at right angles to the plane of reference. [!just XI.Def.4]
 
-Similarly it can also be proved that all the planes through *AB* are at right angles to the plane of reference.
+Similarly it can also be proved that all the planes through {AB} are at right angles to the plane of reference.
 
 Therefore, *if a straight line is at right angles to any plane, then all the planes through it are also at right angles to the same plane.*
 
