@@ -15,14 +15,35 @@ statement: If two planes which cut one another are at right angles to any plane,
 ----
 proof:
 
-Let the two planes *AB* and *BC* be at right angles to the plane of reference, and let *BC* be their intersection.
+Let the two planes {AB|planeAB} and {BC|planeBC} be at right angles to the plane of reference, and let *BC* be their intersection.
 
-I say that *BD* is at right angles to the plane of reference.
+I say that {BD|DB} is at right angles to the plane of reference.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="270" tabindex="0"></canvas>
 <noscript><img alt="XI.19 diagram" src="propXI19.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the plane of reference P in oblique view, the planes
+    // AB (pink) and BC (yellow) standing on it, each drawn as a front and a
+    // back half meeting in DB, and DE, DF drawn from D in the two planes.
+    //
+    // Added, all transparent: PT, planeAB, planeBC, faceless twins of the
+    // filled planes (raised over the figure if highlighted, #140); AD and
+    // CD, the sections of the two planes with the plane of reference, which
+    // Joyce's figure draws only as plane edges; and the right-angle squares
+    // at D for EDA and FDC, right by construction (I.11).
+    //
+    // Draggables (checked against the bundle): X, Y, Z, P0, P2, B free;
+    // A, C, D, E, F sliders. E and F arrive with DE and DF, so both are
+    // deferred. P1, P3, A1, C1, A3, C3 are derived and listed per slide.
+    //
+    // Joyce writes "let BC be their intersection"; the intersection is DB.
+    // The slip is left literal in prose and caption; the slide lights DB.
+    var GIVEN = ["P","PT","P1","P3","A","B","C","D","A1","C1","A3","C3",
+                 "Aback","Cback","Afront","Cfront","planeAB","planeBC",
+                 "DB","AD","CD"];
+    var DEv   = GIVEN.concat(["E","DE","angEDA"]);
+    var ALL   = DEv.concat(["F","DF","angFDC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -52,19 +73,110 @@ I say that *BD* is at right angles to the plane of reference.
             "C3;point;vertex;Cfront,4;0;0",
             "F;point;lineSlider;B,C3,160,80",
             "DF;line;connect;D,F",
-            "DB;line;connect;D,B"
+            "DB;line;connect;D,B",
+            // Transparent highlight targets.
+            "PT;polygon;quadrilateral;P0,P1,P2,P3;0;0;0;0",
+            "planeAB;polygon;parallelogram;A3,A,A1;0;0;0;0",
+            "planeBC;polygon;parallelogram;C3,C,C1;0;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "angEDA;sector;angleMarkerRight;D,E,A",
+            "angFDC;sector;angleMarkerRight;D,F,C"
         ],
+        deferDraggables: ["E","F"],
+        slides: [
+            { text: "“If two planes which cut one another are at right angles to any plane,”",
+              visible: GIVEN,
+              highlighted: ["planeAB","planeBC","PT"],
+              justifications: [{ ref: "XI.19" }] },
+            { text: "“then their intersection is also at right angles to the same plane.”",
+              visible: GIVEN,
+              highlighted: ["DB","PT"] },
+            { text: "Let the two planes {AB|planeAB} and {BC|planeBC} be at right angles to the {plane of reference|PT},",
+              visible: GIVEN,
+              highlighted: ["planeAB","planeBC","PT"] },
+            { text: "and let BC be their intersection.",
+              visible: GIVEN,
+              highlighted: ["DB"] },
+            { text: "I say that {BD|DB} is at right angles to the {plane of reference|PT}.",
+              visible: GIVEN,
+              highlighted: ["DB","PT"] },
+            { text: "Suppose it is not.",
+              visible: GIVEN,
+              highlighted: ["DB"] },
+            { text: "From the point {D} draw {DE} at right angles to the straight line {AD} in the plane {AB|planeAB},",
+              visible: DEv,
+              highlighted: ["DE","AD","angEDA"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E",      name: geomlib.A.Point.appear },
+                  { elem: "angEDA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "DE at right angles to AD", ref: "I.11" }] },
+            { text: "and draw {DF} at right angles to {CD} in the plane {BC|planeBC}.",
+              visible: ALL,
+              highlighted: ["DF","CD","angFDC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DF",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F",      name: geomlib.A.Point.appear },
+                  { elem: "angFDC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "DF at right angles to CD", ref: "I.11" }] },
+            { text: "Now, since the plane {AB|planeAB} is at right angles to the {plane of reference|PT},",
+              visible: ALL,
+              highlighted: ["planeAB","PT"] },
+            { text: "and {DE} is at right angles in the plane {AB|planeAB} to {AD}, their intersection,",
+              visible: ALL,
+              highlighted: ["DE","AD","angEDA","planeAB"] },
+            { text: "therefore {DE} is at right angles to the {plane of reference|PT}.",
+              visible: ALL,
+              highlighted: ["DE","PT"],
+              justifications: [{ claim: "DE at right angles to the plane", ref: "XI.Def.4" }] },
+            { text: "Similarly we can prove that {DF} is also at right angles to the {plane of reference|PT}.",
+              visible: ALL,
+              highlighted: ["DF","CD","angFDC","PT"] },
+            { text: "Therefore from the same point {D} two straight lines have been set up",
+              visible: ALL,
+              highlighted: ["D","DE","DF"] },
+            { text: "at right angles to the {plane of reference|PT} on the same side, which is impossible.",
+              visible: ALL,
+              highlighted: ["DE","DF","PT"],
+              justifications: [{ claim: "two perpendiculars from one point", ref: "XI.13" }] },
+            { text: "Therefore no straight line except the intersection {DB} of the planes {AB|planeAB} and {BC|planeBC}",
+              visible: GIVEN,
+              highlighted: ["DB","planeAB","planeBC"] },
+            { text: "can be set up from the point {D} at right angles to the {plane of reference|PT}.",
+              visible: GIVEN,
+              highlighted: ["D","DB","PT"] },
+            { text: "Therefore, if two planes which cut one another are at right angles to any plane,",
+              visible: GIVEN,
+              highlighted: ["planeAB","planeBC","PT"] },
+            { text: "then their intersection is also at right angles to the same plane.",
+              visible: GIVEN,
+              highlighted: ["DB","PT"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.19") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.11":     "/elements/books/bookI/propositions/propI11/",
+        "XI.Def.4": "/elements/books/bookXI/definitions/defXI4/",
+        "XI.13":    "/elements/books/bookXI/propositions/propXI13/"
     });
 </script>
 </figure>
 
-Suppose it is not. From the point *D* draw *DE* at right angles to the straight line *AD* in the plane *AB,* and draw *DF* at right angles to *CD* in the plane *BC.* [!just I.11]
+Suppose it is not. From the point {D} draw {DE} at right angles to the straight line {AD} in the plane {AB|planeAB}, and draw {DF} at right angles to {CD} in the plane {BC|planeBC}. [!just I.11]
 
-Now, since the plane *AB* is at right angles to the plane of reference, and *DE* is at right angles in the plane *AB* to *AD,* their intersection, therefore *DE* is at right angles to the plane of reference. [!just XI.Def.4]
+Now, since the plane {AB|planeAB} is at right angles to the plane of reference, and {DE} is at right angles in the plane {AB|planeAB} to {AD}, their intersection, therefore {DE} is at right angles to the plane of reference. [!just XI.Def.4]
 
-Similarly we can prove that *DF* is also at right angles to the plane of reference. Therefore from the same point *D* two straight lines have been set up at right angles to the plane of reference on the same side, which is impossible. [!just XI.13]
+Similarly we can prove that {DF} is also at right angles to the plane of reference. Therefore from the same point {D} two straight lines have been set up at right angles to the plane of reference on the same side, which is impossible. [!just XI.13]
 
-Therefore no straight line except the intersection *DB* of the planes *AB* and *BC* can be set up from the point *D* at right angles to the plane of reference.
+Therefore no straight line except the intersection {DB} of the planes {AB|planeAB} and {BC|planeBC} can be set up from the point {D} at right angles to the plane of reference.
 
 Therefore, *if two planes which cut one another are at right angles to any plane, then their intersection is also at right angles to the same plane.*
 

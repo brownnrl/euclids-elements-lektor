@@ -15,14 +15,37 @@ statement: If a solid angle is contained by three plane angles, then the sum of 
 ----
 proof:
 
-Let the solid angle at *A* be contained by the three plane angles *BAC, CAD,* and *DAB.*
+Let the solid angle at {A} be contained by the three plane angles {BAC|angBAC}, {CAD|angCAD}, and {DAB|angDAB}.
 
-I say that the sum of any two of the angles *BAC, CAD,* and *DAB* is greater than the remaining one.
+I say that the sum of any two of the angles {BAC|angBAC}, {CAD|angCAD}, and {DAB|angDAB} is greater than the remaining one.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="200" tabindex="0"></canvas>
 <noscript><img alt="XI.20 diagram" src="propXI20.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the solid angle at A seen from above, its three faces
+    // drawn as the filled triangles ABC, ABD, ACD, and AE drawn in the face
+    // ABC making the angle BAE equal to DAB.
+    //
+    // The walk needs AB, AC, AD before BC, DB, DC are joined, so those six
+    // are solid black slide twins over Joyce's triangle edges, hidden at
+    // rest (initiallyHidden); the faces trace and fill when BEC and DB, DC
+    // close them. Added, all transparent: BE and EC, and the triangles DAB,
+    // EAB, DAC, EAC compared by I.4 and I.25 (explicit ;0 faces, so a
+    // highlight does not cover the markers, #140).
+    // Angle markers at A for BAC, CAD, DAB, BAE, EAC. The radii are pinned:
+    // DAB and CAD lie outside BAC, and BAE, EAC fill it, so four sit side by
+    // side at 22 and BAC rings them at 34 rather than five nested rings.
+    //
+    // Draggables (checked against the bundle): A, B, C, D free, all givens,
+    // so none is deferred. E and E' are derived; E is listed per slide.
+    var GIVEN = ["A","B","C","D","AB","AC","AD"];
+    var ANG   = GIVEN.concat(["angBAC","angCAD","angDAB"]);
+    var BAEv  = ANG.concat(["AE","angBAE"]);
+    var Ev    = BAEv.concat(["E"]);
+    var BECv  = Ev.concat(["BC","BE","EC","ABC"]);
+    var JOIN  = BECv.concat(["DB","DC","ABD","ACD","DABt","EABt","DACt","EACt"]);
+    var ALL   = JOIN.concat(["angEAC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,23 +60,153 @@ I say that the sum of any two of the angles *BAC, CAD,* and *DAB* is greater tha
             "ACD;polygon;triangle;A,C,D;0;0;black;random",
             "E';point;similar;B,A,D,A,B;0;0",
             "E;point;intersection;B,C,A,E'",
-            "AE;line;connect;A,E"
+            "AE;line;connect;A,E",
+            // Slide twins, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            "AC;line;connect;A,C",
+            "AD;line;connect;A,D",
+            "BC;line;connect;B,C",
+            "DB;line;connect;D,B",
+            "DC;line;connect;D,C",
+            // Transparent highlight targets.
+            "BE;line;connect;B,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            "DABt;polygon;triangle;D,A,B;0;0;0;0",
+            "EABt;polygon;triangle;E,A,B;0;0;0;0",
+            "DACt;polygon;triangle;D,A,C;0;0;0;0",
+            "EACt;polygon;triangle;E,A,C;0;0;0;0",
+            "angBAC;sector;angleMarker;A,B,C,34",
+            "angCAD;sector;angleMarker;A,C,D,22",
+            "angDAB;sector;angleMarker;A,D,B,22",
+            "angBAE;sector;angleMarker;A,B,E,22",
+            "angEAC;sector;angleMarker;A,E,C,22"
         ],
+        initiallyHidden: ["AB","AC","AD","BC","DB","DC"],
+        slides: [
+            { text: "“If a solid angle is contained by three plane angles,”",
+              visible: ANG,
+              highlighted: ["A","angBAC","angCAD","angDAB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "angCAD", name: geomlib.A.Sector.sweep },
+                  { elem: "angDAB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "XI.20" }] },
+            { text: "“then the sum of any two is greater than the remaining one.”",
+              visible: ANG,
+              highlighted: ["angBAC","angCAD","angDAB"] },
+            { text: "Let the solid angle at {A} be contained by the three plane angles {BAC|angBAC}, {CAD|angCAD}, and {DAB|angDAB}.",
+              visible: ANG,
+              highlighted: ["A","angBAC","angCAD","angDAB"] },
+            { text: "I say that the sum of any two of the angles {BAC|angBAC}, {CAD|angCAD}, and {DAB|angDAB} is greater than the remaining one.",
+              visible: ANG,
+              highlighted: ["angBAC","angCAD","angDAB"] },
+            { text: "If the angles {BAC|angBAC}, {CAD|angCAD}, and {DAB|angDAB} are equal to one another,",
+              visible: ANG,
+              highlighted: ["angBAC","angCAD","angDAB"] },
+            { text: "then it is clear that the sum of any two is greater than the remaining one.",
+              visible: ANG,
+              highlighted: ["angBAC","angCAD","angDAB"] },
+            { text: "But, if not, let {BAC|angBAC} be greater.",
+              visible: ANG,
+              highlighted: ["angBAC"] },
+            { text: "In the plane through {BA|AB} and {AC},",
+              visible: ANG,
+              highlighted: ["AB","AC"] },
+            { text: "construct the angle {BAE|angBAE} equal to the angle {DAB|angDAB} at the point {A} on the straight line {AB}.",
+              visible: BAEv,
+              highlighted: ["angBAE","angDAB","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angBAE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle BAE = angle DAB", ref: "I.23" }] },
+            { text: "Make {AE} equal to {AD},",
+              visible: Ev,
+              highlighted: ["AE","AD"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AE = AD", ref: "I.3" }] },
+            { text: "draw {BEC|BC} across through the point {E} cutting the straight lines {AB} and {AC} at the points {B} and {C},",
+              visible: BECv,
+              highlighted: ["BC","E","AB","AC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BC",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ABC", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and join {DB} and {DC}.",
+              visible: JOIN,
+              highlighted: ["DB","DC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DB",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DC",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ABD", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "ACD", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Now, since {DA|AD} equals {AE}, and {AB} is common, therefore two sides are equal to two sides.",
+              visible: JOIN,
+              highlighted: ["AD","AE","AB","DABt","EABt"] },
+            { text: "And the angle {DAB|angDAB} equals the angle {BAE|angBAE}, therefore the base {DB} equals the base {BE}.",
+              visible: JOIN,
+              highlighted: ["angDAB","angBAE","DB","BE"],
+              justifications: [{ claim: "DB = BE", ref: "I.4" }] },
+            { text: "And, since the sum of the two sides {BD|DB} and {DC} is greater than {BC},",
+              visible: JOIN,
+              highlighted: ["DB","DC","BC"],
+              justifications: [{ claim: "BD + DC > BC", ref: "I.20" }] },
+            { text: "and of these {DB} was proved equal to {BE}, therefore the remainder {DC} is greater than the remainder {EC}.",
+              visible: JOIN,
+              highlighted: ["DB","BE","DC","EC"] },
+            { text: "Now, since {DA|AD} equals {AE}, and {AC} is common, and the base {DC} is greater than the base {EC},",
+              visible: JOIN,
+              highlighted: ["AD","AE","AC","DC","EC","DACt","EACt"] },
+            { text: "therefore the angle {DAC|angCAD} is greater than the angle {EAC|angEAC}.",
+              visible: ALL,
+              highlighted: ["angCAD","angEAC"],
+              transition: { animations: [
+                  { elem: "angEAC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle DAC > angle EAC", ref: "I.25" }] },
+            { text: "But the angle {BAE|angBAE} equals the angle {DAB|angDAB},",
+              visible: ALL,
+              highlighted: ["angBAE","angDAB"] },
+            { text: "therefore the sum of the angles {DAB|angDAB} and {DAC|angCAD} is greater than the angle {BAC|angBAC}.",
+              visible: ALL,
+              highlighted: ["angDAB","angCAD","angBAC"] },
+            { text: "Similarly we can prove that the sum of any two of the remaining angles is greater than the remaining one.",
+              visible: ALL,
+              highlighted: ["angBAC","angCAD","angDAB"] },
+            { text: "Therefore, if a solid angle is contained by three plane angles,",
+              visible: JOIN.concat(["angBAC","angCAD","angDAB"]),
+              highlighted: ["A","angBAC","angCAD","angDAB"] },
+            { text: "then the sum of any two is greater than the remaining one.",
+              highlighted: ["angBAC","angCAD","angDAB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.20") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":  "/elements/books/bookI/propositions/propI3/",
+        "I.4":  "/elements/books/bookI/propositions/propI4/",
+        "I.20": "/elements/books/bookI/propositions/propI20/",
+        "I.23": "/elements/books/bookI/propositions/propI23/",
+        "I.25": "/elements/books/bookI/propositions/propI25/"
     });
 </script>
 </figure>
 
-If the angles *BAC, CAD,* and *DAB* are equal to one another, then it is clear that the sum of any two is greater than the remaining one.
+If the angles {BAC|angBAC}, {CAD|angCAD}, and {DAB|angDAB} are equal to one another, then it is clear that the sum of any two is greater than the remaining one.
 
-But, if not, let *BAC* be greater. In the plane through *BA* and *AC,* construct the angle *BAE* equal to the angle *DAB* at the point *A* on the straight line *AB.* Make *AE* equal to *AD,* draw *BEC* across through the point *E* cutting the straight lines *AB* and *AC* at the points *B* and *C,* and join *DB* and *DC.* [!just I.23; I.3]
+But, if not, let {BAC|angBAC} be greater. In the plane through {BA|AB} and {AC}, construct the angle {BAE|angBAE} equal to the angle {DAB|angDAB} at the point {A} on the straight line {AB}. Make {AE} equal to {AD}, draw {BEC|BC} across through the point {E} cutting the straight lines {AB} and {AC} at the points {B} and {C}, and join {DB} and {DC}. [!just I.23; I.3]
 
-Now, since *DA* equals *AE,* and *AB* is common, therefore two sides are equal to two sides. And the angle *DAB* equals the angle *BAE,* therefore the base *DB* equals the base *BE.* [!just I.4]
+Now, since {DA|AD} equals {AE}, and {AB} is common, therefore two sides are equal to two sides. And the angle {DAB|angDAB} equals the angle {BAE|angBAE}, therefore the base {DB} equals the base {BE}. [!just I.4]
 
-And, since the sum of the two sides *BD* and *DC* is greater than *BC,* and of these *DB* was proved equal to *BE,* therefore the remainder *DC* is greater than the remainder *EC.* [!just I.20]
+And, since the sum of the two sides {BD|DB} and {DC} is greater than {BC}, and of these {DB} was proved equal to {BE}, therefore the remainder {DC} is greater than the remainder {EC}. [!just I.20]
 
-Now, since *DA* equals *AE,* and *AC* is common, and the base *DC* is greater than the base *EC,* therefore the angle *DAC* is greater than the angle *EAC.* [!just I.25]
+Now, since {DA|AD} equals {AE}, and {AC} is common, and the base {DC} is greater than the base {EC}, therefore the angle {DAC|angCAD} is greater than the angle {EAC|angEAC}. [!just I.25]
 
-But the angle *BAE* equals the angle *DAB,* therefore the sum of the angles *DAB* and *DAC* is greater than the angle *BAC.*
+But the angle {BAE|angBAE} equals the angle {DAB|angDAB}, therefore the sum of the angles {DAB|angDAB} and {DAC|angCAD} is greater than the angle {BAC|angBAC}.
 
 Similarly we can prove that the sum of any two of the remaining angles is greater than the remaining one.
 
@@ -73,4 +226,4 @@ Various interpretations have been made of the intent of the form of proof, but a
 
 #### About three-dimensional analogues of two-dimensional constructions
 
-Up until this proposition, each construction in Book XI takes place within a plane, although different constructions in the same proposition may occur in different planes. One of the constructions here, however, takes place in two different planes. The angle *BAE* is constructed in one plane to equal a given angle *DAB* in a different plane. The construction in @I.23 to construct one angle equal to a given angle, strictly speaking, takes place in only one plane. Tracing that construction back through Book I leads through proposition @I.22 to @I.3. Proposition I.3 cuts one line off equal to another line. That basic construction can easily be modified so that the two lines are in different planes. Once that's done, the rest of the constructions in Book I also apply when their components lie in different planes. Still, the details should be verified before applying the results as done in the proof of this proposition.
+Up until this proposition, each construction in Book XI takes place within a plane, although different constructions in the same proposition may occur in different planes. One of the constructions here, however, takes place in two different planes. The angle {BAE|angBAE} is constructed in one plane to equal a given angle {DAB|angDAB} in a different plane. The construction in @I.23 to construct one angle equal to a given angle, strictly speaking, takes place in only one plane. Tracing that construction back through Book I leads through proposition @I.22 to @I.3. Proposition I.3 cuts one line off equal to another line. That basic construction can easily be modified so that the two lines are in different planes. Once that's done, the rest of the constructions in Book I also apply when their components lie in different planes. Still, the details should be verified before applying the results as done in the proof of this proposition.
