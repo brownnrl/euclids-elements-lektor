@@ -6,6 +6,8 @@ order: 43
 ---
 short_label: X.43
 ---
+red_highlight: yes
+---
 sections:
 
 #### prop_section ####
@@ -15,16 +17,27 @@ statement: A first bimedial straight line is divided at one and the same point o
 ----
 proof:
 
-Let *AB* be a first bimedial straight line divided at *C*, so that *AC* and *CB* are medial straight lines commensurable in square only and containing a rational rectangle. [!just X.37]
+Let {AB} be a first bimedial straight line divided at {C}, so that {AC} and {CB} are medial straight lines commensurable in square only and containing a rational rectangle. [!just X.37]
 
-I say that *AB* is not so divided at another point.
+I say that {AB} is not so divided at another point.
 
-If possible, let it also be divided at *D*, so that *AD* and *DB* are also medial straight lines commensurable in square only and containing a rational rectangle.
+If possible, let it also be divided at {D}, so that {AD} and {DB} are also medial straight lines commensurable in square only and containing a rational rectangle.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="70" tabindex="0"></canvas>
 <noscript><img alt="X.43 diagram" src="propX43.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the line AB divided at C and, on the reductio's
+    // hypothesis, at D. Added, all invisible at rest: transparent highlight
+    // targets AC, CB, AD, DB (;0;0;0). The rectangles and squares the proof
+    // compares are not drawn in Joyce's figure, so the walk lights their
+    // sides on AB.
+    //
+    // Draggables (checked against the bundle): A, B, C, D (line sliders) and
+    // the offscreen frees. D only arrives with "let it also be divided at D",
+    // so it is deferred; the closing slides withdraw it again.
+    var GIVEN = ["A","B","AB","C","AC","CB"];
+    var ALL   = GIVEN.concat(["D","AD","DB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -36,13 +49,89 @@ If possible, let it also be divided at *D*, so that *AD* and *DB* are also media
             "B;point;lineSlider;A0,A3,220,0",
             "AB;line;connect;A,B;0;0",
             "C;point;lineSlider;A0,A3,170,0",
-            "D;point;lineSlider;A0,A3,130,0"
+            "D;point;lineSlider;A0,A3,130,0",
+            // Highlight targets only — invisible at rest.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0"
         ],
+        deferDraggables: ["D"],
+        slides: [
+            { text: "“A first bimedial straight line is divided at one and the same point only.”",
+              visible: GIVEN,
+              highlighted: ["AB","C"],
+              justifications: [{ ref: "X.43" }] },
+            { text: "Let {AB} be a first bimedial straight line divided at {C},",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "so that {AC} and {CB} are medial straight lines commensurable in square only and containing a rational rectangle.",
+              visible: GIVEN,
+              highlighted: ["AC","CB"],
+              justifications: [{ claim: "AB first bimedial", ref: "X.37" }] },
+            { text: "I say that {AB} is not so divided at another point.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "If possible, let it also be divided at {D},",
+              visible: ALL,
+              highlighted: ["D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "so that {AD} and {DB} are also medial straight lines commensurable in square only and containing a rational rectangle.",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "Since, then, that by which twice the rectangle {AD} by {DB} differs from twice the rectangle {AC} by {CB}",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "is that by which the sum of the squares on {AC} and {CB} differs",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "from the sum of the squares on {AD} and {DB},",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "while twice the rectangle {AD} by {DB} differs from twice the rectangle {AC} by {CB} by a rational area,",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "for both are rational,",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "therefore the sum of the squares on {AC} and {CB} also differs",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "from the sum of the squares on {AD} and {DB} by a rational area,",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "though they are medial, which is absurd.",
+              visible: ALL,
+              highlighted: ["AC","CB","AD","DB"],
+              justifications: [{ claim: "a medial does not exceed a medial by a rational", ref: "X.26" }] },
+            { text: "Therefore a first bimedial straight line is not divided into its terms at different points.",
+              visible: ALL,
+              highlighted: ["AB","C","D"] },
+            { text: "Therefore it is so divided at one point only.",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "Therefore, a first bimedial straight line is divided at one and the same point only.",
+              visible: GIVEN,
+              highlighted: ["AB","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.43") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.26": "/elements/books/bookX/propositions/propX26/",
+        "X.37": "/elements/books/bookX/propositions/propX37/"
     });
 </script>
 </figure>
 
-Since, then, that by which twice the rectangle *AD* by *DB* differs from twice the rectangle *AC* by *CB* is that by which the sum of the squares on *AC* and *CB* differs from the sum of the squares on *AD* and *DB*, while twice the rectangle *AD* by *DB* differs from twice the rectangle *AC* by *CB* by a rational area, for both are rational, therefore the sum of the squares on *AC* and *CB* also differs from the sum of the squares on *AD* and *DB* by a rational area, though they are medial, which is absurd. [!just X.26]
+Since, then, that by which twice the rectangle {AD} by {DB} differs from twice the rectangle {AC} by {CB} is that by which the sum of the squares on {AC} and {CB} differs from the sum of the squares on {AD} and {DB}, while twice the rectangle {AD} by {DB} differs from twice the rectangle {AC} by {CB} by a rational area, for both are rational, therefore the sum of the squares on {AC} and {CB} also differs from the sum of the squares on {AD} and {DB} by a rational area, though they are medial, which is absurd. [!just X.26]
 
 Therefore a first bimedial straight line is not divided into its terms at different points. Therefore it is so divided at one point only.
 
