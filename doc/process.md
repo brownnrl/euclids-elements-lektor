@@ -359,6 +359,16 @@ the radius (`...;Vertex,Arm1,Arm2,38`); the rare reflex (>180°) case is
 `angleMarkerReflex`. Angles with the same rays share one marker (e.g.
 angle AFC = angle BFC when A, B, F are collinear).
 
+**Right angles use `angleMarkerRight`** (geomlib 0.18.0+, euclid#201): same
+fields as `angleMarker`, drawn as the conventional square corner, sides along
+the arms. Use it wherever the text treats the angle as right — by
+construction ("at right angles", I.11/I.12), by a cited proposition (I.47,
+III.18, III.31), or by hypothesis in a reductio, where the mark asserts what
+the text asserts (there is no 90° check, so a hypothesis angle draws as a
+rhombus). Judge by the text, not the colour or the measured angle: "half a
+right angle", "two right angles" sums and greater/less comparisons stay
+sectors. `radiusPx` is the corner distance, so radii carry over.
+
 Markers are normal colored elements now (translucent palette fill,
 distinct edge cycled per marker). Reveal them with `A.Sector.sweep` (the
 whole wedge flashes on its transition) on the slide where the angle
