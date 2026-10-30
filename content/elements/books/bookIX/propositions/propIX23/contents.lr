@@ -15,14 +15,20 @@ statement: If as many odd numbers as we please are added together, and their mul
 ----
 proof:
 
-Let as many odd numbers as we please, *AB, BC,* and *CD,* the multitude of which is odd, be added together.
+Let as many odd numbers as we please, {AB}, {BC}, and {CD}, the multitude of which is odd, be added together.
 
-I say that the sum *AD* is also odd.
+I say that the sum {AD} is also odd.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="230" height="60" tabindex="0"></canvas>
 <noscript><img alt="IX.23 diagram" src="propIX23.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: AD is the sum, its parts AB, BC, CD and the pieces
+    // the proof names (DE, CE, CA, AE) are transparent twins so each lights
+    // on its own. E, the derived end of the unit DE, appears when DE is
+    // subtracted; U1-U2 is the off-figure unit.
+    var GIVEN = ["A","B","C","D","AD","AB","BC","CD"];
+    var ALL = GIVEN.concat(["E","DE","CE","CA","AE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,17 +43,82 @@ I say that the sum *AD* is also odd.
             "C;point;lineSlider;A0,A3,120,0",
             "D;point;lineSlider;A0,A3,190,0",
             "E;point;cutoff;D,A,U1,U2",
-            "AD;line;connect;A,D"
+            "AD;line;connect;A,D",
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "CA;line;connect;C,A;0;0;0",
+            "AE;line;connect;A,E;0;0;0"
         ],
+        slides: [
+            { text: "“If as many odd numbers as we please are added together, and their multitude is odd,",
+              visible: GIVEN,
+              highlighted: ["AB","BC","CD"],
+              justifications: [{ ref: "IX.23" }] },
+            { text: "then the sum is also odd.”",
+              visible: GIVEN,
+              highlighted: ["AD"] },
+            { text: "Let as many odd numbers as we please, {AB}, {BC}, and {CD},",
+              visible: GIVEN,
+              highlighted: ["AB","BC","CD"] },
+            { text: "the multitude of which is odd, be added together.",
+              visible: GIVEN,
+              highlighted: ["AB","BC","CD"] },
+            { text: "I say that the sum {AD} is also odd.",
+              visible: GIVEN,
+              highlighted: ["AD"] },
+            { text: "Subtract the unit {DE} from {CD},",
+              visible: ALL,
+              highlighted: ["DE","CD"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "therefore the remainder {CE} is even.",
+              visible: ALL,
+              highlighted: ["CE"],
+              justifications: [{ claim: "CE even", ref: "VII.Def.7" }] },
+            { text: "But {CA} is also even,",
+              visible: ALL,
+              highlighted: ["CA"],
+              justifications: [{ claim: "CA even", ref: "IX.22" }] },
+            { text: "therefore the sum {AE} is also even.",
+              visible: ALL,
+              highlighted: ["AE"],
+              justifications: [{ claim: "AE even", ref: "IX.21" }] },
+            { text: "And {DE} is a unit. Therefore {AD} is odd.",
+              visible: ALL,
+              highlighted: ["DE","AD"],
+              justifications: [{ claim: "AD odd", ref: "VII.Def.7" }] },
+            { text: "Therefore, if as many odd numbers as we please are added together, and their multitude is odd,",
+              visible: ALL,
+              highlighted: ["AB","BC","CD"] },
+            { text: "then the sum is also odd.",
+              visible: ALL,
+              highlighted: ["AD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.23") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.7": "/elements/books/bookVII/definitions/defVII7/",
+        "IX.21": "/elements/books/bookIX/propositions/propIX21/",
+        "IX.22": "/elements/books/bookIX/propositions/propIX22/"
     });
 </script>
 </figure>
 
-Subtract the unit *DE* from *CD,* therefore the remainder *CE* is even. [!just VII.Def.7]
+Subtract the unit {DE} from {CD}, therefore the remainder {CE} is even. [!just VII.Def.7]
 
-But *CA* is also even, therefore the sum *AE* is also even. [!just IX.22, IX.21]
+But {CA} is also even, therefore the sum {AE} is also even. [!just IX.22, IX.21]
 
-And *DE* is a unit. Therefore *AD* is odd. [!just VII.Def.7]
+And {DE} is a unit. Therefore {AD} is odd. [!just VII.Def.7]
 
 Therefore, *if as many odd numbers as we please are added together, and their multitude is odd, then the sum is also odd.*
 

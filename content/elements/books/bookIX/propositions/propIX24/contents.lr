@@ -23,6 +23,10 @@ I say that the remainder *CA* is even.
 <canvas id="canvas_0" width="180" height="60" tabindex="0"></canvas>
 <noscript><img alt="IX.24 diagram" src="propIX24.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure places B between A and C, so its segments do not match
+    // the text (AB the whole, BC the part taken away, CA the remainder).
+    // The letters are left untokenized; the walk is captions only.
+    var ALL = ["A","B","C","AC"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -35,6 +39,35 @@ I say that the remainder *CA* is even.
             "C;point;lineSlider;A0,A3,140,0",
             "AC;line;connect;A,C"
         ],
+        slides: [
+            { text: "“If an even number is subtracted from an even number, then the remainder is even.”",
+              visible: ALL,
+              justifications: [{ ref: "IX.24" }] },
+            { text: "Let the even number BC be subtracted from the even number AB.",
+              visible: ALL },
+            { text: "I say that the remainder CA is even.",
+              visible: ALL },
+            { text: "Since AB is even, therefore it has a half part.",
+              visible: ALL },
+            { text: "For the same reason BC also has a half part,",
+              visible: ALL },
+            { text: "so that the remainder CA also has a half part, and CA is therefore even.",
+              visible: ALL,
+              justifications: [{ claim: "CA even", ref: "VII.Def.6" }] },
+            { text: "Therefore, if an even number is subtracted from an even number, then the remainder is even.",
+              visible: ALL,
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.24") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.6": "/elements/books/bookVII/definitions/defVII6/"
     });
 </script>
 </figure>
