@@ -15,14 +15,23 @@ statement: If between two numbers there fall numbers in continued proportion wit
 ----
 proof:
 
-Let the numbers *C* and *D* fall between the two numbers *A* and *B* in continued proportion with them, and make *E* in the same ratio to *F* as *A* is to *B.*
+Let the numbers {C} and {D} fall between the two numbers {A} and {B} in continued proportion with them, and make {E} in the same ratio to {F} as {A} is to {B}.
 
-I say that, as many numbers as have fallen between *A* and *B* in continued proportion, so many also fall between *E* and *F* in continued proportion.
+I say that, as many numbers as have fallen between {A} and {B} in continued proportion, so many also fall between {E} and {F} in continued proportion.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="310" tabindex="0"></canvas>
 <noscript><img alt="VIII.8 diagram" src="propVIII8.gif"/></noscript>
 <script type="text/javascript">
+    // A, C, D, B and E, F stand from the start; G, H, K, L (VII.33) and then
+    // M, N are stroked in when the proof takes them. The rest is highlight
+    // beats. The derived right ends carry the dots of the resting figure.
+    var GIVEN = ["A","C","D","B","E","F","D2","B2","F2"];
+    var GHKL  = GIVEN.concat(["G","H","K","L","G1","H1","K1","L1","G2","H2","K2","L2"]);
+    var ALL   = GHKL.concat(["M","N","M1","N1","M2","N2"]);
+    var ACDB  = ["A","C","D","B"];
+    var GHKLs = ["G","H","K","L"];
+    var EMNF  = ["E","M","N","F"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -84,25 +93,161 @@ I say that, as many numbers as have fallen between *A* and *B* in continued prop
             "N2;point;proportion;G1,G2,E1,E2,K1,K2,N1,D3;0",
             "N;line;connect;N1,N2;black"
         ],
+        // Draggables (checked against the bundle): A1, A2, C1, C2, E1, E2 and
+        // the lineSlider starts D1, B1, F1, G1, H1, K1, L1, M1, N1 (U0..U2 sit
+        // off-canvas). G, H, K, L and M, N arrive mid-walk, so their starts
+        // opt out of the every-slide union.
+        deferDraggables: ["G1","H1","K1","L1","M1","N1"],
+        slides: [
+            { text: "“If between two numbers there fall numbers in continued proportion with them,”",
+              visible: GIVEN,
+              highlighted: ACDB,
+              justifications: [{ ref: "VIII.8" }] },
+            { text: "“then, however many numbers fall between them in continued proportion,”",
+              visible: GIVEN,
+              highlighted: ["C","D"] },
+            { text: "“so many also fall in continued proportion between the numbers which have the same ratios with the original numbers.”",
+              visible: GIVEN,
+              highlighted: ["E","F"] },
+            { text: "Let the numbers {C} and {D} fall between the two numbers {A} and {B} in continued proportion with them,",
+              visible: GIVEN,
+              highlighted: ACDB },
+            { text: "and make {E} in the same ratio to {F} as {A} is to {B}.",
+              visible: GIVEN,
+              highlighted: ["E","F","A","B"] },
+            { text: "I say that, as many numbers as have fallen between {A} and {B} in continued proportion,",
+              visible: GIVEN,
+              highlighted: ACDB },
+            { text: "so many also fall between {E} and {F} in continued proportion.",
+              visible: GIVEN,
+              highlighted: ["E","F"] },
+            { text: "As many as {A}, {B}, {C}, and {D} are in multitude, take so many numbers {G}, {H}, {K}, and {L},",
+              visible: GHKL,
+              highlighted: ACDB.concat(GHKLs),
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "L", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "the least of those which have the same ratio with {A}, {C}, {D}, and {B}.",
+              visible: GHKL,
+              highlighted: GHKLs,
+              justifications: [{ claim: "G, H, K, L least in the ratio of A, C, D, B", ref: "VII.33" }] },
+            { text: "Then the extremes of them {G} and {L} are relatively prime.",
+              visible: GHKL,
+              highlighted: ["G","L"],
+              justifications: [{ claim: "the extremes G and L are relatively prime", ref: "VIII.3" }] },
+            { text: "Now, since {A}, {C}, {D}, and {B} are in the same ratio with {G}, {H}, {K}, and {L},",
+              visible: GHKL,
+              highlighted: ACDB.concat(GHKLs) },
+            { text: "and the multitude of the numbers {A}, {C}, {D}, and {B} equals the multitude of the numbers {G}, {H}, {K}, and {L},",
+              visible: GHKL,
+              highlighted: ACDB.concat(GHKLs) },
+            { text: "therefore, ex aequali {A} is to {B} as {G} is to {L}.",
+              visible: GHKL,
+              highlighted: ["A","B","G","L"],
+              justifications: [{ claim: "ex aequali, A : B = G : L", ref: "VII.14" }] },
+            { text: "But {A} is to {B} as {E} is to {F},",
+              visible: GHKL,
+              highlighted: ["A","B","E","F"] },
+            { text: "therefore {G} is to {L} as {E} is to {F}.",
+              visible: GHKL,
+              highlighted: ["G","L","E","F"],
+              justifications: [{ claim: "G : L = E : F", ref: "V.11" }] },
+            { text: "But {G} and {L} are relatively prime, numbers which are relatively prime are also least,",
+              visible: GHKL,
+              highlighted: ["G","L"],
+              justifications: [{ claim: "G and L are least in their ratio", ref: "VII.21" }] },
+            { text: "and the least numbers measure those which have the same ratio the same number of times,",
+              visible: GHKL,
+              highlighted: ["G","L","E","F"] },
+            { text: "the greater the greater and the less the less,",
+              visible: GHKL,
+              highlighted: ["G","L","E","F"] },
+            { text: "that is, the antecedent the antecedent and the consequent the consequent.",
+              visible: GHKL,
+              highlighted: ["G","L","E","F"],
+              justifications: [{ claim: "least numbers measure those in the same ratio", ref: "VII.20" }] },
+            { text: "Therefore {G} measures {E} the same number of times as {L} measures {F}.",
+              visible: GHKL,
+              highlighted: ["G","E","L","F"] },
+            { text: "Next, let {H} and {K} measure {M} and {N}, respectively, as many times as {G} measures {E}.",
+              visible: ALL,
+              highlighted: ["H","K","M","N","G","E"],
+              transition: { animations: [
+                  { elem: "M", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "N", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {G}, {H}, {K}, and {L} measure {E}, {M}, {N}, and {F} the same number of times.",
+              visible: ALL,
+              highlighted: GHKLs.concat(EMNF) },
+            { text: "Therefore {G}, {H}, {K}, and {L} are in the same ratio with {E}, {M}, {N}, and {F}.",
+              visible: ALL,
+              highlighted: GHKLs.concat(EMNF),
+              justifications: [{ claim: "G, H, K, L in the same ratio with E, M, N, F", ref: "VII.Def.20" }] },
+            { text: "But {G}, {H}, {K}, and {L} are in the same ratio with {A}, {C}, {D}, and {B},",
+              visible: ALL,
+              highlighted: GHKLs.concat(ACDB) },
+            { text: "therefore {A}, {C}, {D}, and {B} are also in the same ratio with {E}, {M}, {N}, and {F}.",
+              visible: ALL,
+              highlighted: ACDB.concat(EMNF) },
+            { text: "But {A}, {C}, {D}, and {B} are in continued proportion,",
+              visible: ALL,
+              highlighted: ACDB },
+            { text: "therefore {E}, {M}, {N}, and {F} are also in continued proportion.",
+              visible: ALL,
+              highlighted: EMNF },
+            { text: "Therefore, as many numbers as have fallen between {A} and {B} in continued proportion with them,",
+              visible: ALL,
+              highlighted: ACDB },
+            { text: "so many numbers have also fallen between {E} and {F} in continued proportion.",
+              visible: ALL,
+              highlighted: EMNF },
+            { text: "Therefore, if between two numbers there fall numbers in continued proportion with them,",
+              visible: ALL,
+              highlighted: ACDB },
+            { text: "then, however many numbers fall between them in continued proportion,",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "so many also fall in continued proportion between the numbers which have the same ratios with the original numbers.",
+              visible: ALL,
+              highlighted: EMNF,
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.8") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.11":       "/elements/books/bookV/propositions/propV11/",
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "VII.14":     "/elements/books/bookVII/propositions/propVII14/",
+        "VII.20":     "/elements/books/bookVII/propositions/propVII20/",
+        "VII.21":     "/elements/books/bookVII/propositions/propVII21/",
+        "VII.33":     "/elements/books/bookVII/propositions/propVII33/",
+        "VIII.3":     "/elements/books/bookVIII/propositions/propVIII3/"
     });
 </script>
 </figure>
 
-As many as *A, B, C,* and *D* are in multitude, take so many numbers *G, H, K,* and *L,* the least of those which have the same ratio with *A, C, D,* and *B.* Then the extremes of them *G* and *L* are relatively prime. [!just VII.33; VIII.3]
+As many as {A}, {B}, {C}, and {D} are in multitude, take so many numbers {G}, {H}, {K}, and {L}, the least of those which have the same ratio with {A}, {C}, {D}, and {B}. Then the extremes of them {G} and {L} are relatively prime. [!just VII.33; VIII.3]
 
-Now, since *A, C, D,* and *B* are in the same ratio with *G, H, K,* and *L,* and the multitude of the numbers *A, C, D,* and *B* equals the multitude of the numbers *G, H, K,* and *L,* therefore, *ex aequali A* is to *B* as *G* is to *L.* [!just VII.14]
+Now, since {A}, {C}, {D}, and {B} are in the same ratio with {G}, {H}, {K}, and {L}, and the multitude of the numbers {A}, {C}, {D}, and {B} equals the multitude of the numbers {G}, {H}, {K}, and {L}, therefore, *ex aequali* {A} is to {B} as {G} is to {L}. [!just VII.14]
 
-But *A* is to *B* as *E* is to *F,* therefore *G* is to *L* as *E* is to *F.* [!just V.11]
+But {A} is to {B} as {E} is to {F}, therefore {G} is to {L} as {E} is to {F}. [!just V.11]
 
-But *G* and *L* are relatively prime, numbers which are relatively prime are also least, and the least numbers measure those which have the same ratio the same number of times, the greater the greater and the less the less, that is, the antecedent the antecedent and the consequent the consequent. [!just VII.21; VII.20]
+But {G} and {L} are relatively prime, numbers which are relatively prime are also least, and the least numbers measure those which have the same ratio the same number of times, the greater the greater and the less the less, that is, the antecedent the antecedent and the consequent the consequent. [!just VII.21; VII.20]
 
-Therefore *G* measures *E* the same number of times as *L* measures *F.*
+Therefore {G} measures {E} the same number of times as {L} measures {F}.
 
-Next, let *H* and *K* measure *M* and *N,* respectively, as many times as *G* measures *E.* Then *G, H, K,* and *L* measure *E, M, N,* and *F* the same number of times. Therefore *G, H, K,* and *L* are in the same ratio with *E, M, N,* and *F.* [!just VII.Def.20]
+Next, let {H} and {K} measure {M} and {N}, respectively, as many times as {G} measures {E}. Then {G}, {H}, {K}, and {L} measure {E}, {M}, {N}, and {F} the same number of times. Therefore {G}, {H}, {K}, and {L} are in the same ratio with {E}, {M}, {N}, and {F}. [!just VII.Def.20]
 
-But *G, H, K,* and *L* are in the same ratio with *A, C, D,* and *B,* therefore *A, C, D,* and *B* are also in the same ratio with *E, M, N,* and *F.*
+But {G}, {H}, {K}, and {L} are in the same ratio with {A}, {C}, {D}, and {B}, therefore {A}, {C}, {D}, and {B} are also in the same ratio with {E}, {M}, {N}, and {F}.
 
-But *A, C, D,* and *B* are in continued proportion, therefore *E, M, N,* and *F* are also in continued proportion. Therefore, as many numbers as have fallen between *A* and *B* in continued proportion with them, so many numbers have also fallen between *E* and *F* in continued proportion.
+But {A}, {C}, {D}, and {B} are in continued proportion, therefore {E}, {M}, {N}, and {F} are also in continued proportion. Therefore, as many numbers as have fallen between {A} and {B} in continued proportion with them, so many numbers have also fallen between {E} and {F} in continued proportion.
 
 Therefore, *if between two numbers there fall numbers in continued proportion with them, then, however many numbers fall between them in continued proportion, so many also fall in continued proportion between the numbers which have the same ratios with the original numbers.*
 

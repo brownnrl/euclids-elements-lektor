@@ -15,12 +15,16 @@ statement: If there are as many numbers as we please in continued proportion, an
 ----
 proof:
 
-Let there are as many numbers as we please, *A, B, C,* and *D,* in continued proportion, and let *A* measure *D.*
+Let there are as many numbers as we please, {A}, {B}, {C}, and {D}, in continued proportion, and let {A} measure {D}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="170" tabindex="0"></canvas>
 <noscript><img alt="VIII.7 diagram" src="propVIII7.gif"/></noscript>
 <script type="text/javascript">
+    // The four numbers stand from the start; the walk is highlight beats.
+    // The derived right ends C2, D2 carry the dots of the resting figure.
+    var GIVEN = ["A","B","C","D","C2","D2"];
+    var EVERY = ["A","B","C","D"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,13 +51,60 @@ Let there are as many numbers as we please, *A, B, C,* and *D,* in continued pro
             "D2;point;proportion;A1,A2,B1,B2,C1,C2,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        // Draggables (checked against the bundle): A1, A2, B1, B2 and the
+        // lineSlider starts C1, D1, all givens, so nothing is deferred.
+        slides: [
+            { text: "“If there are as many numbers as we please in continued proportion,”",
+              visible: GIVEN,
+              highlighted: EVERY,
+              justifications: [{ ref: "VIII.7" }] },
+            { text: "“and the first measures the last, then it also measures the second.”",
+              visible: GIVEN,
+              highlighted: ["A","D","B"] },
+            { text: "Let there are as many numbers as we please, {A}, {B}, {C}, and {D}, in continued proportion,",
+              visible: GIVEN,
+              highlighted: EVERY },
+            { text: "and let {A} measure {D}.",
+              visible: GIVEN,
+              highlighted: ["A","D"] },
+            { text: "I say that {A} also measures {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "If {A} does not measure {B}, neither does any other of the numbers measure any other.",
+              visible: GIVEN,
+              highlighted: EVERY,
+              justifications: [{ claim: "if A does not measure B, none measures another", ref: "VIII.6" }] },
+            { text: "But {A} measures {D}.",
+              visible: GIVEN,
+              highlighted: ["A","D"] },
+            { text: "Therefore {A} also measures {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Therefore, if there are as many numbers as we please in continued proportion,",
+              visible: GIVEN,
+              highlighted: EVERY },
+            { text: "and the first measures the last, then it also measures the second.",
+              visible: GIVEN,
+              highlighted: ["A","D","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.7") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VIII.6": "/elements/books/bookVIII/propositions/propVIII6/"
     });
 </script>
 </figure>
 
-I say that *A* also measures *B.*
+I say that {A} also measures {B}.
 
-If *A* does not measure *B,* neither does any other of the numbers measure any other. But *A* measures *D.* Therefore *A* also measures *B.* [!just VIII.6]
+If {A} does not measure {B}, neither does any other of the numbers measure any other. But {A} measures {D}. Therefore {A} also measures {B}. [!just VIII.6]
 
 Therefore, *if there are as many numbers as we please in continued proportion, and the first measures the last, then it also measures the second.*
 
