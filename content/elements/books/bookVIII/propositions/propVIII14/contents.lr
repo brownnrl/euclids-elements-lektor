@@ -15,14 +15,16 @@ statement: If a square measures a square, then the side also measures the side; 
 ----
 proof:
 
-Let *A* and *B* be square numbers, let *C* and *D* be their sides, and let *A* measure *B.*
+Let {A} and {B} be square numbers, let {C} and {D} be their sides, and let {A} measure {B}.
 
-I say that *C* also measures *D.*
+I say that {C} also measures {D}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="170" tabindex="0"></canvas>
 <noscript><img alt="VIII.14 diagram" src="propVIII14.gif"/></noscript>
 <script type="text/javascript">
+    var GIVEN = ["A","B","C","D","A2","B2"];
+    var ALL   = GIVEN.concat(["E","E2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -54,25 +56,108 @@ I say that *C* also measures *D.*
             "E2;point;proportion;U1,U2,C1,C2,D1,D2,E1,E3;0",
             "E;line;connect;E1,E2;black"
         ],
+        // Numbers are line segments here. The squares A, B and their sides C,
+        // D are given and stand from the start; E is stroked in when the proof
+        // makes it. The rest is highlight beats; nothing is added to the
+        // figure. Draggables (checked against the bundle): C1, C2, D1, D2 and
+        // the lineSlider starts A1, B1, E1 (U1, U2 and the rails sit
+        // off-canvas). E arrives mid-walk, so E1 is deferred.
+        deferDraggables: ["E1"],
+        slides: [
+            { text: "“If a square measures a square, then the side also measures the side;”",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "VIII.14" }] },
+            { text: "“and, if the side measures the side, then the square also measures the square.”",
+              visible: GIVEN,
+              highlighted: ["C","D","A","B"] },
+            { text: "Let {A} and {B} be square numbers, let {C} and {D} be their sides, and let {A} measure {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "I say that {C} also measures {D}.",
+              visible: GIVEN,
+              highlighted: ["C","D"] },
+            { text: "Multiply {C} by {D} to make {E}.",
+              visible: ALL,
+              highlighted: ["C","D","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {A}, {E}, and {B} are continuously proportional in the ratio of {C} to {D}.",
+              visible: ALL,
+              highlighted: ["A","E","B","C","D"],
+              justifications: [{ claim: "A, E, B in the ratio of C to D", ref: "VIII.11" }] },
+            { text: "And, since {A}, {E}, and {B} are continuously proportional, and {A} measures {B},",
+              visible: ALL,
+              highlighted: ["A","E","B"] },
+            { text: "therefore {A} also measures {E}.",
+              visible: ALL,
+              highlighted: ["A","E"],
+              justifications: [{ claim: "A measures E", ref: "VIII.7" }] },
+            { text: "And {A} is to {E} as {C} is to {D}, therefore {C} measures {D}.",
+              visible: ALL,
+              highlighted: ["A","E","C","D"],
+              justifications: [{ claim: "C measures D", ref: "VII.Def.20" }] },
+            { text: "Next, let {C} measure {D}.",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "I say that {A} also measures {B}.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "With the same construction, we can in a similar manner prove that {A}, {E}, and {B}",
+              visible: ALL,
+              highlighted: ["A","E","B"] },
+            { text: "are continuously proportional in the ratio of {C} to {D}.",
+              visible: ALL,
+              highlighted: ["A","E","B","C","D"] },
+            { text: "And since {C} is to {D} as {A} is to {E}, and {C} measures {D},",
+              visible: ALL,
+              highlighted: ["C","D","A","E"] },
+            { text: "therefore {A} also measures {E}.",
+              visible: ALL,
+              highlighted: ["A","E"],
+              justifications: [{ claim: "A measures E", ref: "VII.Def.20" }] },
+            { text: "And {A}, {E}, and {B} are continuously proportional, therefore {A} also measures {B}.",
+              visible: ALL,
+              highlighted: ["A","E","B"] },
+            { text: "Therefore, if a square measures a square, then the side also measures the side;",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "and, if the side measures the side, then the square also measures the square.",
+              visible: ALL,
+              highlighted: ["C","D","A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.14") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "VIII.7":     "/elements/books/bookVIII/propositions/propVIII7/",
+        "VIII.11":    "/elements/books/bookVIII/propositions/propVIII11/"
     });
 </script>
 </figure>
 
 <div class="just">as in <a href="../propVIII11/">VIII.11</a></div>
 
-Multiply *C* by *D* to make *E.* Then *A, E,* and *B* are continuously proportional in the ratio of *C* to *D.*
+Multiply {C} by {D} to make {E}. Then {A}, {E}, and {B} are continuously proportional in the ratio of {C} to {D}.
 
-And, since *A, E,* and *B* are continuously proportional, and *A* measures *B,* therefore *A* also measures *E.* And *A* is to *E* as *C* is to *D,* therefore *C* measures *D.* [!just VIII.7; VII.Def.20]
+And, since {A}, {E}, and {B} are continuously proportional, and {A} measures {B}, therefore {A} also measures {E}. And {A} is to {E} as {C} is to {D}, therefore {C} measures {D}. [!just VIII.7; VII.Def.20]
 
 <hr width="50%">
 
-Next, let *C* measure *D.*
+Next, let {C} measure {D}.
 
-I say that *A* also measures *B.*
+I say that {A} also measures {B}.
 
-With the same construction, we can in a similar manner prove that *A, E,* and *B* are continuously proportional in the ratio of *C* to *D.* And since *C* is to *D* as *A* is to *E,* and *C* measures *D,* therefore *A* also measures *E.* [!just VII.Def.20]
+With the same construction, we can in a similar manner prove that {A}, {E}, and {B} are continuously proportional in the ratio of {C} to {D}. And since {C} is to {D} as {A} is to {E}, and {C} measures {D}, therefore {A} also measures {E}. [!just VII.Def.20]
 
-And *A, E,* and *B* are continuously proportional, therefore *A* also measures *B.*
+And {A}, {E}, and {B} are continuously proportional, therefore {A} also measures {B}.
 
 Therefore, *if a square measures a square, then the side also measures the side; and, if the side measures the side, then the square also measures the square.*
 

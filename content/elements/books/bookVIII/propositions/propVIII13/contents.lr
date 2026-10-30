@@ -15,14 +15,27 @@ statement: If there are as many numbers as we please in continued proportion, an
 ----
 proof:
 
-Let there be as many numbers as we please, *A, B,* and *C,* in continued proportion, so that *A* is to *B* as *B* is to *C.* Let *A, B,* and *C* multiplied by themselves make *D, E,* and *F,* and multiplied by *D, E,* and *F* let them make *G, H,* and *K.*
+Let there be as many numbers as we please, {A}, {B}, and {C}, in continued proportion, so that {A} is to {B} as {B} is to {C}. Let {A}, {B}, and {C} multiplied by themselves make {D}, {E}, and {F}, and multiplied by {D}, {E}, and {F} let them make {G}, {H}, and {K}.
 
-I say that *D, E,* and *F* and *G, H,* and *K* are in continued proportion.
+I say that {D}, {E}, and {F} and {G}, {H}, and {K} are in continued proportion.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="480" height="260" tabindex="0"></canvas>
 <noscript><img alt="VIII.13 diagram" src="propVIII13.gif"/></noscript>
 <script type="text/javascript">
+    var GIVEN    = ["A","B","C","D","E","F","G","H","K",
+                    "C2","D2","E2","F2","G2","H2","K2"];
+    var WITH_L   = GIVEN.concat(["L","L2"]);
+    var WITH_LMN = WITH_L.concat(["M","N","M2","N2"]);
+    var WITH_O   = WITH_LMN.concat(["O","O2"]);
+    var ALL      = WITH_O.concat(["P","Q","P2","Q2"]);
+    var ABC  = ["A","B","C"];
+    var DEF  = ["D","E","F"];
+    var GHK  = ["G","H","K"];
+    var DLE  = ["D","L","E"];
+    var GMNH = ["G","M","N","H"];
+    var EOF  = ["E","O","F"];
+    var HPQK = ["H","P","Q","K"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -90,15 +103,133 @@ I say that *D, E,* and *F* and *G, H,* and *K* are in continued proportion.
             "Q2;point;proportion;U1,U2,C1,C2,O1,O2,Q1,F3;0",
             "Q;line;connect;Q1,Q2;black"
         ],
+        // Numbers are line segments here. A, B, C, the squares D, E, F and the
+        // cubes G, H, K are given and stand from the start; L, M, N and then
+        // O, P, Q are stroked in as the proof makes them. The rest is
+        // highlight beats; nothing is added to the figure. Draggables
+        // (checked against the bundle): A1, A2, B1, B2, C1 and the lineSlider
+        // starts D1..Q1 (U1, U2 are invisible; the rails sit off-canvas).
+        // L..Q arrive mid-walk, so their starts are deferred.
+        deferDraggables: ["L1","M1","N1","O1","P1","Q1"],
+        slides: [
+            { text: "“If there are as many numbers as we please in continued proportion,”",
+              visible: GIVEN,
+              highlighted: ABC,
+              justifications: [{ ref: "VIII.13" }] },
+            { text: "“and each multiplied by itself makes some number, then the products are proportional;”",
+              visible: GIVEN,
+              highlighted: DEF },
+            { text: "“and, if the original numbers multiplied by the products make certain numbers,”",
+              visible: GIVEN,
+              highlighted: ABC.concat(DEF) },
+            { text: "“then the latter are also proportional.”",
+              visible: GIVEN,
+              highlighted: GHK },
+            { text: "Let there be as many numbers as we please, {A}, {B}, and {C}, in continued proportion,",
+              visible: GIVEN,
+              highlighted: ABC },
+            { text: "so that {A} is to {B} as {B} is to {C}.",
+              visible: GIVEN,
+              highlighted: ABC },
+            { text: "Let {A}, {B}, and {C} multiplied by themselves make {D}, {E}, and {F},",
+              visible: GIVEN,
+              highlighted: ABC.concat(DEF) },
+            { text: "and multiplied by {D}, {E}, and {F} let them make {G}, {H}, and {K}.",
+              visible: GIVEN,
+              highlighted: ABC.concat(DEF, GHK) },
+            { text: "I say that {D}, {E}, and {F} and {G}, {H}, and {K} are in continued proportion.",
+              visible: GIVEN,
+              highlighted: DEF.concat(GHK) },
+            { text: "Multiply {A} by {B} to make {L},",
+              visible: WITH_L,
+              highlighted: ["A","B","L"],
+              transition: { animations: [
+                  { elem: "L", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and multiply the numbers {A} and {B} by {L} to make {M} and {N} respectively.",
+              visible: WITH_LMN,
+              highlighted: ["A","B","L","M","N"],
+              transition: { animations: [
+                  { elem: "M", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "N", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Also multiply {B} by {C} to make {O},",
+              visible: WITH_O,
+              highlighted: ["B","C","O"],
+              transition: { animations: [
+                  { elem: "O", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and multiply the numbers {B} and {C} by {O} to make {P} and {Q} respectively.",
+              visible: ALL,
+              highlighted: ["B","C","O","P","Q"],
+              transition: { animations: [
+                  { elem: "P", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "Q", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, in manner similar to the foregoing, we can prove that {D}, {L}, and {E} and {G}, {M}, {N}, and {H}",
+              visible: ALL,
+              highlighted: DLE.concat(GMNH) },
+            { text: "are continuously proportional in the ratio of {A} to {B},",
+              visible: ALL,
+              highlighted: DLE.concat(GMNH, ["A","B"]) },
+            { text: "and further {E}, {O}, and {F} and {H}, {P}, {Q}, and {K}",
+              visible: ALL,
+              highlighted: EOF.concat(HPQK) },
+            { text: "are continuously proportional in the ratio of {B} to {C}.",
+              visible: ALL,
+              highlighted: EOF.concat(HPQK, ["B","C"]) },
+            { text: "Now {A} is to {B} as {B} is to {C},",
+              visible: ALL,
+              highlighted: ABC },
+            { text: "therefore {D}, {L}, and {E} are also in the same ratio with {E}, {O}, and {F},",
+              visible: ALL,
+              highlighted: DLE.concat(EOF) },
+            { text: "and further {G}, {M}, {N}, and {H} in the same ratio with {H}, {P}, {Q}, and {K}.",
+              visible: ALL,
+              highlighted: GMNH.concat(HPQK) },
+            { text: "And the multitude of {D}, {L}, and {E} equals the multitude of {E}, {O}, and {F}",
+              visible: ALL,
+              highlighted: DLE.concat(EOF) },
+            { text: "and that of {G}, {M}, {N}, and {H} to that of {H}, {P}, {Q}, and {K},",
+              visible: ALL,
+              highlighted: GMNH.concat(HPQK) },
+            { text: "therefore, ex aequali {D} is to {E} as {E} is to {F},",
+              visible: ALL,
+              highlighted: DEF,
+              justifications: [{ claim: "ex aequali, D : E = E : F", ref: "VII.14" }] },
+            { text: "and {G} is to {H} as {H} is to {K}.",
+              visible: ALL,
+              highlighted: GHK,
+              justifications: [{ claim: "ex aequali, G : H = H : K", ref: "VII.14" }] },
+            { text: "Therefore, if there are as many numbers as we please in continued proportion,",
+              visible: ALL,
+              highlighted: ABC },
+            { text: "and each multiplied by itself makes some number, then the products are proportional;",
+              visible: ALL,
+              highlighted: DEF },
+            { text: "and, if the original numbers multiplied by the products make certain numbers,",
+              visible: ALL,
+              highlighted: ABC.concat(DEF) },
+            { text: "then the latter are also proportional.",
+              visible: ALL,
+              highlighted: GHK,
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.13") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.14": "/elements/books/bookVII/propositions/propVII14/"
     });
 </script>
 </figure>
 
-Multiply *A* by *B* to make *L,* and multiply the numbers *A* and *B* by *L* to make *M* and *N* respectively. Also multiply *B* by *C* to make *O,* and multiply the numbers *B* and *C* by *O* to make *P* and *Q* respectively.
+Multiply {A} by {B} to make {L}, and multiply the numbers {A} and {B} by {L} to make {M} and {N} respectively. Also multiply {B} by {C} to make {O}, and multiply the numbers {B} and {C} by {O} to make {P} and {Q} respectively.
 
-Then, in manner similar to the foregoing, we can prove that *D, L,* and *E* and *G, M, N,* and *H* are continuously proportional in the ratio of *A* to *B,* and further *E, O,* and *F* and *H, P, Q,* and *K* are continuously proportional in the ratio of *B* to *C.*
+Then, in manner similar to the foregoing, we can prove that {D}, {L}, and {E} and {G}, {M}, {N}, and {H} are continuously proportional in the ratio of {A} to {B}, and further {E}, {O}, and {F} and {H}, {P}, {Q}, and {K} are continuously proportional in the ratio of {B} to {C}.
 
-Now *A* is to *B* as *B* is to *C,* therefore *D, L,* and *E* are also in the same ratio with *E, O,* and *F,* and further *G, M, N,* and *H* in the same ratio with *H, P, Q,* and *K.* And the multitude of *D, L,* and *E* equals the multitude of *E, O,* and *F* and that of *G, M, N,* and *H* to that of *H, P, Q,* and *K,* therefore, *ex aequali D* is to *E* as *E* is to *F,* and *G* is to *H* as *H* is to *K.* [!just VII.14]
+Now {A} is to {B} as {B} is to {C}, therefore {D}, {L}, and {E} are also in the same ratio with {E}, {O}, and {F}, and further {G}, {M}, {N}, and {H} in the same ratio with {H}, {P}, {Q}, and {K}. And the multitude of {D}, {L}, and {E} equals the multitude of {E}, {O}, and {F} and that of {G}, {M}, {N}, and {H} to that of {H}, {P}, {Q}, and {K}, therefore, *ex aequali* {D} is to {E} as {E} is to {F}, and {G} is to {H} as {H} is to {K}. [!just VII.14]
 
 Therefore, *if there are as many numbers as we please in continued proportion, and each multiplied by itself makes some number, then the products are proportional; and, if the original numbers multiplied by the products make certain numbers, then the latter are also proportional.*
 
