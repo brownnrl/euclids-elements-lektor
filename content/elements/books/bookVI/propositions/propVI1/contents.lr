@@ -15,16 +15,41 @@ statement: Triangles and parallelograms which are under the same height are to o
 ----
 proof:
 
-Let *ACB* and *ACD* be triangles, and let *CE* and *CF* be parallelograms under the same height.
+Let {ACB} and {ACD} be triangles, and let {CE} and {CF} be parallelograms under the same height.
 
-I say that the base *CB* is to the base *CD* as the triangle *ACB* is to the triangle *ACD,* and as the parallelogram *CE* is to the parallelogram *CF.*
+I say that the base {CB} is to the base {CD} as the triangle {ACB} is to the triangle {ACD}, and as the parallelogram {CE} is to the parallelogram {CF}.
 
-Produce *BD* in both directions to the points *H* and *L.* Make any number of straight lines *BG* and *GH* equal to the base *CB,* and any number of straight lines *DK* and *KL* equal to the base *CD.* Join *AG, AH, AK,* and *AL.* [!just I.3]
+Produce {BD} in both directions to the points {H} and {L}. Make any number of straight lines {BG} and {GH} equal to the base {CB}, and any number of straight lines {DK} and {KL} equal to the base {CD}. Join {AG}, {AH}, {AK}, and {AL}. [!just I.3]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="520" height="230" tabindex="0"></canvas>
 <noscript><img alt="VI.1 diagram" src="propVI1.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws HL whole, the four joins from A, the two filled
+    // triangles and the two filled parallelograms. The proof also names the
+    // equal pieces of the base line (CB, BG, GH, CD, DK, KL), the multiples
+    // CH and CL, and the triangles ABG, AGH, ACH, ACL: all are added as
+    // transparent highlight targets (explicit ;0 faces on the triangles).
+    //
+    // "Produce BD in both directions": BH and DL are solid slide twins over
+    // Joyce's HL, hidden at rest (initiallyHidden), so each produce strokes
+    // outward from its own end; HL itself stays out of the slide sets.
+    //
+    // Highlighting a filled parallelogram would promote its face over the
+    // triangle inside it (#140), so the parallelograms the prose calls CE and
+    // CF are faceless twins (;0 face) of ACBE and ACDF. The filled triangles
+    // already draw over the parallelograms, so they are lit directly; the
+    // prose's ACB and ADC reach them by alias.
+    //
+    // Draggables (checked against the bundle): A, and the lineSliders B, C, D
+    // (plus the invisible guide ends B0, B3) — all givens on slide 1.
+    // E, F (vertex) and G, H, K, L (extend) are derived and listed per slide.
+    var GIVEN = ["A","B","C","D","E","F","ACBE","ACDF","ABC","ACD","CE","CF","CB","CD"];
+    var PROD  = GIVEN.concat(["BD","BH","DL","H","L"]);
+    var CUTG  = PROD.concat(["G","BG","GH"]);
+    var CUTK  = CUTG.concat(["K","DK","KL"]);
+    var JOIN  = CUTK.concat(["AG","AH","AK","AL"]);
+    var ALL   = JOIN.concat(["ABG","AGH","ACH","ACL","CH","CL"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -50,23 +75,195 @@ Produce *BD* in both directions to the points *H* and *L.* Make any number of st
             "AH;line;connect;A,H",
             "AG;line;connect;A,G",
             "AK;line;connect;A,K",
-            "AL;line;connect;A,L"
+            "AL;line;connect;A,L",
+            // Pieces of the base line, as transparent highlight targets.
+            "CB;line;connect;C,B;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "BG;line;connect;B,G;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "DK;line;connect;D,K;0;0;0",
+            "KL;line;connect;K,L;0;0;0",
+            "CH;line;connect;C,H;0;0;0",
+            "CL;line;connect;C,L;0;0;0",
+            // The produces, slide twins over HL (see above).
+            "BH;line;connect;B,H",
+            "DL;line;connect;D,L",
+            // The parallelograms as the prose names them. Faceless.
+            "CE;polygon;quadrilateral;A,C,B,E;0;0;0;0",
+            "CF;polygon;quadrilateral;A,C,D,F;0;0;0;0",
+            // The triangles of the argument. Explicit ;0 faces.
+            "ABG;polygon;triangle;A,B,G;0;0;0;0",
+            "AGH;polygon;triangle;A,G,H;0;0;0;0",
+            "ACH;polygon;triangle;A,C,H;0;0;0;0",
+            "ACL;polygon;triangle;A,C,L;0;0;0;0"
         ],
+        initiallyHidden: ["BH","DL"],
+        aliases: { "ACB": "ABC", "ADC": "ACD", "FC": "CF", "BC": "CB" },
+        slides: [
+            { text: "“Triangles and parallelograms which are under the same height”",
+              visible: GIVEN,
+              highlighted: ["ABC","ACD","CE","CF"] },
+            { text: "“are to one another as their bases.”",
+              visible: GIVEN,
+              highlighted: ["CB","CD"],
+              justifications: [{ ref: "VI.1" }] },
+            { text: "Let {ACB} and {ACD} be triangles, and let {CE} and {CF} be parallelograms under the same height.",
+              visible: GIVEN,
+              highlighted: ["ABC","ACD","CE","CF"] },
+            { text: "I say that the base {CB} is to the base {CD} as the triangle {ACB} is to the triangle {ACD},",
+              visible: GIVEN,
+              highlighted: ["CB","CD","ABC","ACD"] },
+            { text: "and as the parallelogram {CE} is to the parallelogram {CF}.",
+              visible: GIVEN,
+              highlighted: ["CE","CF"] },
+            { text: "Produce {BD} in both directions to the points {H} and {L}.",
+              visible: PROD,
+              highlighted: ["BH","DL","H","L"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BH", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "H",  name: geomlib.A.Point.appear },
+                  { elem: "DL", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "L",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Make any number of straight lines {BG} and {GH} equal to the base {CB},",
+              visible: CUTG,
+              highlighted: ["BG","GH","CB","G"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "BG and GH cut off equal to CB", ref: "I.3" }] },
+            { text: "and any number of straight lines {DK} and {KL} equal to the base {CD}.",
+              visible: CUTK,
+              highlighted: ["DK","KL","CD","K"],
+              transition: { animations: [
+                  { elem: "K", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "DK and KL cut off equal to CD", ref: "I.3" }] },
+            { text: "Join {AG}, {AH}, {AK}, and {AL}.",
+              visible: JOIN,
+              highlighted: ["AG","AH","AK","AL"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AL", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since {CB}, {BG}, and {GH} equal one another,",
+              visible: ALL,
+              highlighted: ["CB","BG","GH"] },
+            { text: "the triangles {ACB}, {ABG}, and {AGH} also equal one another.",
+              visible: ALL,
+              highlighted: ["ABC","ABG","AGH"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ABG", name: geomlib.A.Polygon.outline },
+                  { elem: "AGH", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "triangles on equal bases and in the same parallels", ref: "I.38" }] },
+            { text: "Therefore, whatever multiple the base {CH} is of the base {CB},",
+              visible: ALL,
+              highlighted: ["CH","CB"] },
+            { text: "the triangle {ACH} is also that multiple of the triangle {ACB}.",
+              visible: ALL,
+              highlighted: ["ACH","ABC"],
+              transition: { animations: [
+                  { elem: "ACH", name: geomlib.A.Polygon.outline } ] } },
+            { text: "For the same reason, whatever multiple the base {CL} is of the base {CD},",
+              visible: ALL,
+              highlighted: ["CL","CD"] },
+            { text: "the triangle {ACL} is also that multiple of the triangle {ACD}.",
+              visible: ALL,
+              highlighted: ["ACL","ACD"],
+              transition: { animations: [
+                  { elem: "ACL", name: geomlib.A.Polygon.outline } ] } },
+            { text: "And, if the base {CH} equals the base {CL}, then the triangle {ACH} also equals the triangle {ACL};",
+              visible: ALL,
+              highlighted: ["CH","CL","ACH","ACL"] },
+            { text: "if the base {CH} is in excess of the base {CL},",
+              visible: ALL,
+              highlighted: ["CH","CL"] },
+            { text: "the triangle {ACH} is also in excess of the triangle {ACL}; and, if less, less.",
+              visible: ALL,
+              highlighted: ["ACH","ACL"],
+              justifications: [{ claim: "triangles on equal bases and in the same parallels", ref: "I.38" }] },
+            { text: "Thus, there being four magnitudes, namely two bases {CB} and {CD}, and two triangles {ACB} and {ACD},",
+              visible: ALL,
+              highlighted: ["CB","CD","ABC","ACD"] },
+            { text: "equimultiples have been taken of the base {CB} and the triangle {ACB}, namely the base {CH} and the triangle {ACH},",
+              visible: ALL,
+              highlighted: ["CH","ACH"] },
+            { text: "and other, arbitrary, equimultiples of the base {CD} and the triangle {ADC}, namely the base {CL} and the triangle {ACL},",
+              visible: ALL,
+              highlighted: ["CL","ACL"] },
+            { text: "and it has been proved that, if the base {CH} is in excess of the base {CL},",
+              visible: ALL,
+              highlighted: ["CH","CL"] },
+            { text: "the triangle {ACH} is also in excess of the triangle {ACL}; if equal, equal; and, if less, less.",
+              visible: ALL,
+              highlighted: ["ACH","ACL"] },
+            { text: "Therefore the base {CB} is to the base {CD} as the triangle {ACB} is to the triangle {ACD}.",
+              visible: ALL,
+              highlighted: ["CB","CD","ABC","ACD"],
+              justifications: [{ claim: "the definition of same ratio", ref: "V.Def.5" }] },
+            { text: "Next, since the parallelogram {CE} is double the triangle {ACB},",
+              visible: ALL,
+              highlighted: ["CE","ABC"],
+              justifications: [{ claim: "a parallelogram is double the triangle on its base", ref: "I.41" }] },
+            { text: "and the parallelogram {FC} is double the triangle {ACD},",
+              visible: ALL,
+              highlighted: ["CF","ACD"],
+              justifications: [{ ref: "I.41" }] },
+            { text: "and parts have the same ratio as their equimultiples,",
+              visible: ALL,
+              highlighted: ["CE","CF","ABC","ACD"],
+              justifications: [{ claim: "parts have the same ratio as their equimultiples", ref: "V.15" }] },
+            { text: "therefore the triangle {ACB} is to the triangle {ACD} as the parallelogram {CE} is to the parallelogram {FC}.",
+              visible: ALL,
+              highlighted: ["ABC","ACD","CE","CF"] },
+            { text: "Since, then, it was proved that the base {CB} is to {CD} as the triangle {ACB} is to the triangle {ACD},",
+              visible: ALL,
+              highlighted: ["CB","CD","ABC","ACD"] },
+            { text: "and the triangle {ACB} is to the triangle {ACD} as the parallelogram {CE} is to the parallelogram {CF},",
+              visible: ALL,
+              highlighted: ["ABC","ACD","CE","CF"] },
+            { text: "therefore also the base {CB} is to the base {CD} as the parallelogram {CE} is to the parallelogram {FC}.",
+              visible: ALL,
+              highlighted: ["CB","CD","CE","CF"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Therefore, triangles and parallelograms which are under the same height are to one another as their bases.",
+              visible: ALL,
+              highlighted: ["ABC","ACD","CE","CF","CB","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.1") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.38":     "/elements/books/bookI/propositions/propI38/",
+        "I.41":     "/elements/books/bookI/propositions/propI41/",
+        "V.Def.5":  "/elements/books/bookV/definitions/defV5/",
+        "V.11":     "/elements/books/bookV/propositions/propV11/",
+        "V.15":     "/elements/books/bookV/propositions/propV15/"
     });
 </script>
 </figure>
 
-Then, since *CB, BG,* and *GH* equal one another, the triangles *ACB, ABG,* and *AGH* also equal one another. [!just I.38]
+Then, since {CB}, {BG}, and {GH} equal one another, the triangles {ACB}, {ABG}, and {AGH} also equal one another. [!just I.38]
 
-Therefore, whatever multiple the base *CH* is of the base *CB,* the triangle *ACH* is also that multiple of the triangle *ACB.*
+Therefore, whatever multiple the base {CH} is of the base {CB}, the triangle {ACH} is also that multiple of the triangle {ACB}.
 
-For the same reason, whatever multiple the base *CL* is of the base *CD,* the triangle *ACL* is also that multiple of the triangle *ACD.* And, if the base *CH* equals the base *CL,* then the triangle *ACH* also equals the triangle *ACL*; if the base *CH* is in excess of the base *CL,* the triangle *ACH* is also in excess of the triangle *ACL*; and, if less, less. [!just I.38]
+For the same reason, whatever multiple the base {CL} is of the base {CD}, the triangle {ACL} is also that multiple of the triangle {ACD}. And, if the base {CH} equals the base {CL}, then the triangle {ACH} also equals the triangle {ACL}; if the base {CH} is in excess of the base {CL}, the triangle {ACH} is also in excess of the triangle {ACL}; and, if less, less. [!just I.38]
 
-Thus, there being four magnitudes, namely two bases *CB* and *CD,* and two triangles *ACB* and *ACD,* equimultiples have been taken of the base *CB* and the triangle *ACB,* namely the base *CH* and the triangle *ACH,* and other, arbitrary, equimultiples of the base *CD* and the triangle *ADC,* namely the base *CL* and the triangle *ACL,* and it has been proved that, if the base *CH* is in excess of the base *CL,* the triangle *ACH* is also in excess of the triangle *ACL*; if equal, equal; and, if less, less. Therefore the base *CB* is to the base *CD* as the triangle *ACB* is to the triangle *ACD.* [!just V.Def.5]
+Thus, there being four magnitudes, namely two bases {CB} and {CD}, and two triangles {ACB} and {ACD}, equimultiples have been taken of the base {CB} and the triangle {ACB}, namely the base {CH} and the triangle {ACH}, and other, arbitrary, equimultiples of the base {CD} and the triangle {ADC}, namely the base {CL} and the triangle {ACL}, and it has been proved that, if the base {CH} is in excess of the base {CL}, the triangle {ACH} is also in excess of the triangle {ACL}; if equal, equal; and, if less, less. Therefore the base {CB} is to the base {CD} as the triangle {ACB} is to the triangle {ACD}. [!just V.Def.5]
 
-Next, since the parallelogram *CE* is double the triangle *ACB,* and the parallelogram *FC* is double the triangle *ACD,* and parts have the same ratio as their equimultiples, therefore the triangle *ACB* is to the triangle *ACD* as the parallelogram *CE* is to the parallelogram *FC.* [!just I.41; V.15]
+Next, since the parallelogram {CE} is double the triangle {ACB}, and the parallelogram {FC} is double the triangle {ACD}, and parts have the same ratio as their equimultiples, therefore the triangle {ACB} is to the triangle {ACD} as the parallelogram {CE} is to the parallelogram {FC}. [!just I.41; V.15]
 
-Since, then, it was proved that the base *CB* is to *CD* as the triangle *ACB* is to the triangle *ACD,* and the triangle *ACB* is to the triangle *ACD* as the parallelogram *CE* is to the parallelogram *CF,* therefore also the base *CB* is to the base *CD* as the parallelogram *CE* is to the parallelogram *FC.* [!just V.11]
+Since, then, it was proved that the base {CB} is to {CD} as the triangle {ACB} is to the triangle {ACD}, and the triangle {ACB} is to the triangle {ACD} as the parallelogram {CE} is to the parallelogram {CF}, therefore also the base {CB} is to the base {CD} as the parallelogram {CE} is to the parallelogram {FC}. [!just V.11]
 
 Therefore, *triangles and parallelograms which are under the same height are to one another as their bases.*
 
@@ -76,17 +273,17 @@ guide:
 
 In a more proper setting out of the proposition, the triangles under the same height would not have a common side, and the parallelograms would not have a common base and side with the triangles. Since triangles on equal bases and in the same parallels are equal (@I.36), and parallelograms on equal bases and in the same parallels are equal (@I.35), and equals may be substituted in proportions (@V.7), Euclid's simplified setting out is sufficient. Nonetheless, a proper setting out does not require a more complicated proof.
 
-The goal of the proof is to show that three ratios, namely the ratio of the lines *CB* to *CD,* the ratio of the triangles *ACB* to *ACD,* and the ratio of the parallelograms *CE* to *CF,* are all the same ratio. That is
+The goal of the proof is to show that three ratios, namely the ratio of the lines {CB} to {CD}, the ratio of the triangles {ACB} to {ACD}, and the ratio of the parallelograms {CE} to {CF}, are all the same ratio. That is
 
-<center><i>CB</i> : <i>CD</i> = <i>ACB</i> : <i>ACD</i> = <i>CE</i> : <i>CF.</i></center>
+<center><span class="elem-ref" data-elem="CB"><i>CB</i></span> : <span class="elem-ref" data-elem="CD"><i>CD</i></span> = <span class="elem-ref" data-elem="ABC"><i>ACB</i></span> : <span class="elem-ref" data-elem="ACD"><i>ACD</i></span> = <span class="elem-ref" data-elem="CE"><i>CE</i></span> : <i><span class="elem-ref" data-elem="CF">CF</span>.</i></center>
 
-The first stage of the proof shows that *CB* : *CD* = *ACB* : *ACD.* By the definition of proportion, @V.Def.5, that means for any number *m* and any number *n* that
+The first stage of the proof shows that {CB} : {CD} = {ACB} : {ACD}. By the definition of proportion, @V.Def.5, that means for any number *m* and any number *n* that
 
-<center><i>m BC</i> >=< <i>n CD</i> when <i>m ABC</i> >=< <i>n ACD.</i></center>
+<center><i>m <span class="elem-ref" data-elem="CB">BC</span></i> >=< <i>n <span class="elem-ref" data-elem="CD">CD</span></i> when <i>m <span class="elem-ref" data-elem="ABC">ABC</span></i> >=< <i>n <span class="elem-ref" data-elem="ACD">ACD</span>.</i></center>
 
-Note that Euclid takes both *m* and *n* to be 3 in his proof. Now *m BC* equals the line *CH, n CD* equals the line *CL, m ABC* equals the triangle *ACH,* and *n ACD* equals the triangle *ACL.* So what has to be shown is that
+Note that Euclid takes both *m* and *n* to be 3 in his proof. Now *m* {BC} equals the line {CH}, *n* {CD} equals the line {CL}, *m* {ABC} equals the triangle {ACH}, and *n* {ACD} equals the triangle {ACL}. So what has to be shown is that
 
-<center><i>CH</i> >=< <i>CL</i> when <i>ACH</i> >=< <i>ACL.</i></center>
+<center><span class="elem-ref" data-elem="CH"><i>CH</i></span> >=< <span class="elem-ref" data-elem="CL"><i>CL</i></span> when <span class="elem-ref" data-elem="ACH"><i>ACH</i></span> >=< <i><span class="elem-ref" data-elem="ACL">ACL</span>.</i></center>
 
 But that follows from proposition @I.38. So the first stage of the proof is complete.
 

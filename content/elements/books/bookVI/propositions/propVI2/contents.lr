@@ -15,14 +15,37 @@ statement: If a straight line is drawn parallel to one of the sides of a triangl
 ----
 proof:
 
-Let *DE* be drawn parallel to *BC,* one of the sides of the triangle *ABC.*
+Let {DE} be drawn parallel to {BC}, one of the sides of the triangle {ABC}.
 
-I say that *BD* is to *AD* as *CE* is to *AE.*
+I say that {BD} is to {AD} as {CE} is to {AE}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="300" tabindex="0"></canvas>
 <noscript><img alt="VI.2 diagram" src="propVI2.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the triangle, DE, and the joins DC and BE. The
+    // proof also names the sides AB, AC, BC, the segments BD, AD, CE, AE,
+    // and the triangles BDE, CDE, ADE: all added as transparent highlight
+    // targets (explicit ;0 faces on the triangles), so the resting figure is
+    // unchanged. The only filled face is ABC, so lighting it covers nothing.
+    //
+    // "the perpendicular drawn from E to AB" is not drawn by Joyce either:
+    // its foot pE and the segment perpE are transparent, with a right-angle
+    // square rtE (markers are hidden at rest) shown on that slide only.
+    //
+    // The converse opens with DE, BE and DC withdrawn — "Join DE" and "With
+    // the same construction" draw them again.
+    //
+    // Draggables (checked against the bundle): A, B, C (free) and D
+    // (lineSlider), all givens on slide 1. E' (parallelogram) and E
+    // (intersection) are derived; E' is an invisible helper.
+    var TRI   = ["A","B","C","ABC","D","E","AB","AC","BC","BD","AD","CE","AE"];
+    var GIVEN = TRI.concat(["DE"]);
+    var JOIN  = GIVEN.concat(["BE","DC"]);
+    var EQ    = JOIN.concat(["BDE","CDE"]);
+    var ALL   = EQ.concat(["ADE"]);
+    var PERP  = ALL.concat(["perpE","rtE"]);
+    var CONV  = TRI.concat(["DE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,39 +60,196 @@ I say that *BD* is to *AD* as *CE* is to *AE.*
             "E';point;parallelogram;C,B,D;0;0",
             "E;point;intersection;D,E',A,C",
             "DE;line;connect;D,E",
-            "BE;line;connect;B,E"
+            "BE;line;connect;B,E",
+            // Sides and segments, as transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            // The triangles of the argument. Explicit ;0 faces.
+            "BDE;polygon;triangle;B,D,E;0;0;0;0",
+            "CDE;polygon;triangle;C,D,E;0;0;0;0",
+            "ADE;polygon;triangle;A,D,E;0;0;0;0",
+            // The perpendicular from E to AB (see above).
+            "pE;point;foot;E,A,B;0;0",
+            "perpE;line;connect;E,pE;0;0;0",
+            "rtE;sector;angleMarkerRight;pE,E,A,10;0;0;red;red"
         ],
+        aliases: { "CD": "DC", "EB": "BE", "DB": "BD", "DA": "AD",
+                   "EC": "CE", "EA": "AE", "CB": "BC" },
+        slides: [
+            { text: "“If {a straight line|DE} is drawn parallel to {one of the sides|BC} of a triangle,”",
+              visible: GIVEN,
+              highlighted: ["DE","BC"] },
+            { text: "“then it cuts the sides of the triangle proportionally;”",
+              visible: GIVEN,
+              highlighted: ["BD","AD","CE","AE"] },
+            { text: "“and, if the sides of the triangle are cut proportionally,”",
+              visible: GIVEN,
+              highlighted: ["BD","AD","CE","AE"] },
+            { text: "“then {the line joining the points of section|DE} is parallel to {the remaining side|BC} of the triangle.”",
+              visible: GIVEN,
+              highlighted: ["DE","D","E","BC"],
+              justifications: [{ ref: "VI.2" }] },
+            { text: "Let {DE} be drawn parallel to {BC}, one of the sides of the triangle {ABC}.",
+              visible: GIVEN,
+              highlighted: ["DE","BC","ABC"] },
+            { text: "I say that {BD} is to {AD} as {CE} is to {AE}.",
+              visible: GIVEN,
+              highlighted: ["BD","AD","CE","AE"] },
+            { text: "Join {BE} and {CD}.",
+              visible: JOIN,
+              highlighted: ["BE","DC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Therefore the triangle {BDE} equals the triangle {CDE},",
+              visible: EQ,
+              highlighted: ["BDE","CDE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BDE", name: geomlib.A.Polygon.outline },
+                  { elem: "CDE", name: geomlib.A.Polygon.outline } ] } },
+            { text: "for they are on the same base {DE} and in the same parallels {DE} and {BC}.",
+              visible: EQ,
+              highlighted: ["DE","BC"],
+              justifications: [{ claim: "triangles on the same base and in the same parallels", ref: "I.37" }] },
+            { text: "And {ADE} is another triangle.",
+              visible: ALL,
+              highlighted: ["ADE"],
+              transition: { animations: [
+                  { elem: "ADE", name: geomlib.A.Polygon.outline } ] } },
+            { text: "But equals have the same ratio to the same,",
+              visible: ALL,
+              highlighted: ["BDE","CDE","ADE"] },
+            { text: "therefore the triangle {BDE} is to the triangle {ADE} as the triangle {CDE} is to the triangle {ADE}.",
+              visible: ALL,
+              highlighted: ["BDE","CDE","ADE"],
+              justifications: [{ claim: "equals have the same ratio to the same", ref: "V.7" }] },
+            { text: "But the triangle {BDE} is to {ADE} as {BD} is to {AD},",
+              visible: ALL,
+              highlighted: ["BDE","ADE","BD","AD"] },
+            { text: "for, being under the same height, {the perpendicular|perpE} drawn from {E} to {AB}, they are to one another as their bases.",
+              visible: PERP,
+              highlighted: ["perpE","rtE","E","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "perpE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "rtE",   name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "triangles under the same height are as their bases", ref: "VI.1" }] },
+            { text: "For the same reason, the triangle {CDE} is to {ADE} as {CE} is to {AE}.",
+              visible: ALL,
+              highlighted: ["CDE","ADE","CE","AE"] },
+            { text: "Therefore {BD} is to {AD} also as {CE} is to {AE}.",
+              visible: ALL,
+              highlighted: ["BD","AD","CE","AE"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Next, let the sides {AB} and {AC} of the triangle {ABC} be cut proportionally,",
+              visible: TRI,
+              highlighted: ["AB","AC"] },
+            { text: "so that {BD} is to {AD} as {CE} is to {AE}. Join {DE}.",
+              visible: CONV,
+              highlighted: ["BD","AD","CE","AE","DE"],
+              transition: { animations: [
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that {DE} is parallel to {BC}.",
+              visible: CONV,
+              highlighted: ["DE","BC"] },
+            { text: "With the same construction, since {BD} is to {AD} as {CE} is to {AE},",
+              visible: JOIN,
+              highlighted: ["BD","AD","CE","AE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DC", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "but {BD} is to {AD} as the triangle {BDE} is to the triangle {ADE},",
+              visible: ALL,
+              highlighted: ["BD","AD","BDE","ADE"],
+              justifications: [{ ref: "VI.1" }] },
+            { text: "and {CE} is to {AE} as the triangle {CDE} is to the triangle {ADE},",
+              visible: ALL,
+              highlighted: ["CE","AE","CDE","ADE"],
+              justifications: [{ ref: "VI.1" }] },
+            { text: "therefore the triangle {BDE} is to the triangle {ADE} as the triangle {CDE} is to the triangle {ADE}.",
+              visible: ALL,
+              highlighted: ["BDE","CDE","ADE"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Therefore each of the triangles {BDE} and {CDE} has the same ratio to {ADE}.",
+              visible: ALL,
+              highlighted: ["BDE","CDE","ADE"] },
+            { text: "Therefore the triangle {BDE} equals the triangle {CDE}, and they are on the same base {DE}.",
+              visible: ALL,
+              highlighted: ["BDE","CDE","DE"],
+              justifications: [{ claim: "magnitudes with the same ratio to the same are equal", ref: "V.9" }] },
+            { text: "But equal triangles which are on the same base are also in the same parallels.",
+              visible: ALL,
+              highlighted: ["BDE","CDE"] },
+            { text: "Therefore {DE} is parallel to {BC}.",
+              visible: ALL,
+              highlighted: ["DE","BC"],
+              justifications: [{ claim: "equal triangles on the same base are in the same parallels", ref: "I.39" }] },
+            { text: "Therefore, if a straight line is drawn parallel to one of the sides of a triangle,",
+              visible: ALL,
+              highlighted: ["DE","BC"] },
+            { text: "then it cuts the sides of the triangle proportionally;",
+              visible: ALL,
+              highlighted: ["BD","AD","CE","AE"] },
+            { text: "and, if the sides of the triangle are cut proportionally,",
+              visible: ALL,
+              highlighted: ["BD","AD","CE","AE"] },
+            { text: "then the line joining the points of section is parallel to the remaining side of the triangle.",
+              visible: ALL,
+              highlighted: ["DE","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.2") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.37":     "/elements/books/bookI/propositions/propI37/",
+        "I.39":     "/elements/books/bookI/propositions/propI39/",
+        "V.7":      "/elements/books/bookV/propositions/propV7/",
+        "V.9":      "/elements/books/bookV/propositions/propV9/",
+        "V.11":     "/elements/books/bookV/propositions/propV11/",
+        "VI.1":     "/elements/books/bookVI/propositions/propVI1/"
     });
 </script>
 </figure>
 
-Join *BE* and *CD.*
+Join {BE} and {CD}.
 
-Therefore the triangle *BDE* equals the triangle *CDE,* for they are on the same base *DE* and in the same parallels *DE* and *BC.* [!just I.37]
+Therefore the triangle {BDE} equals the triangle {CDE}, for they are on the same base {DE} and in the same parallels {DE} and {BC}. [!just I.37]
 
-And *ADE* is another triangle.
+And {ADE} is another triangle.
 
-But equals have the same ratio to the same, therefore the triangle *BDE* is to the triangle *ADE* as the triangle *CDE* is to the triangle *ADE.* [!just V.7]
+But equals have the same ratio to the same, therefore the triangle {BDE} is to the triangle {ADE} as the triangle {CDE} is to the triangle {ADE}. [!just V.7]
 
-But the triangle *BDE* is to *ADE* as *BD* is to *AD,* for, being under the same height, the perpendicular drawn from *E* to *AB,* they are to one another as their bases. [!just VI.1]
+But the triangle {BDE} is to {ADE} as {BD} is to {AD}, for, being under the same height, the perpendicular drawn from {E} to {AB}, they are to one another as their bases. [!just VI.1]
 
-For the same reason, the triangle *CDE* is to *ADE* as *CE* is to *AE.*
+For the same reason, the triangle {CDE} is to {ADE} as {CE} is to {AE}.
 
-Therefore *BD* is to *AD* also as *CE* is to *AE.* [!just V.11]
+Therefore {BD} is to {AD} also as {CE} is to {AE}. [!just V.11]
 
 <hr width="50%">
 
-Next, let the sides *AB* and *AC* of the triangle *ABC* be cut proportionally, so that *BD* is to *AD* as *CE* is to *AE.* Join *DE.*
+Next, let the sides {AB} and {AC} of the triangle {ABC} be cut proportionally, so that {BD} is to {AD} as {CE} is to {AE}. Join {DE}.
 
-I say that *DE* is parallel to *BC.*
+I say that {DE} is parallel to {BC}.
 
-With the same construction, since *BD* is to *AD* as *CE* is to *AE,* but *BD* is to *AD* as the triangle *BDE* is to the triangle *ADE,* and *CE* is to *AE* as the triangle *CDE* is to the triangle *ADE,* therefore the triangle *BDE* is to the triangle *ADE* as the triangle *CDE* is to the triangle *ADE.* [!just VI.1; V.11]
+With the same construction, since {BD} is to {AD} as {CE} is to {AE}, but {BD} is to {AD} as the triangle {BDE} is to the triangle {ADE}, and {CE} is to {AE} as the triangle {CDE} is to the triangle {ADE}, therefore the triangle {BDE} is to the triangle {ADE} as the triangle {CDE} is to the triangle {ADE}. [!just VI.1; V.11]
 
-Therefore each of the triangles *BDE* and *CDE* has the same ratio to *ADE.*
+Therefore each of the triangles {BDE} and {CDE} has the same ratio to {ADE}.
 
-Therefore the triangle *BDE* equals the triangle *CDE,* and they are on the same base *DE.* [!just V.9]
+Therefore the triangle {BDE} equals the triangle {CDE}, and they are on the same base {DE}. [!just V.9]
 
-But equal triangles which are on the same base are also in the same parallels. Therefore *DE* is parallel to *BC.* [!just I.39]
+But equal triangles which are on the same base are also in the same parallels. Therefore {DE} is parallel to {BC}. [!just I.39]
 
 Therefore, *if a straight line is drawn parallel to one of the sides of a triangle, then it cuts the sides of the triangle proportionally; and, if the sides of the triangle are cut proportionally, then the line joining the points of section is parallel to the remaining side of the triangle.*
 
@@ -79,24 +259,24 @@ guide:
 
 Euclid prefers to prove a pair of converses in two stages, but in some propositions, as this one, the proofs in the two stages are almost inverses of each other, so both could be proved at once.
 
-In this proposition we have a given triangle *ABC* and a line *DE* joining a point *D* on the side *BC* to a point *E* on the side *AC.* The claim is that
+In this proposition we have a given triangle {ABC} and a line {DE} joining a point {D} on the side *BC* to a point {E} on the side {AC}. The claim is that
 
-<center><i>BD</i> : <i>AD</i> = <i>CE</i> : <i>AE</i> if and only if <i>DE</i> || <i>BC.</i></center>
+<center><span class="elem-ref" data-elem="BD"><i>BD</i></span> : <span class="elem-ref" data-elem="AD"><i>AD</i></span> = <span class="elem-ref" data-elem="CE"><i>CE</i></span> : <span class="elem-ref" data-elem="AE"><i>AE</i></span> if and only if <span class="elem-ref" data-elem="DE"><i>DE</i></span> || <i><span class="elem-ref" data-elem="BC">BC</span>.</i></center>
 
 By the previous proposition @VI.1 we know in any case that
 
-<center><i>BD</i> : <i>AD</i> = triangle <i>BDE</i> : triangle <i>ADE,</i> and
-<br><i>CE</i> : <i>AE</i> = triangle <i>CDE</i> : triangle <i>ADE.</i></center>
+<center><span class="elem-ref" data-elem="BD"><i>BD</i></span> : <span class="elem-ref" data-elem="AD"><i>AD</i></span> = triangle <span class="elem-ref" data-elem="BDE"><i>BDE</i></span> : triangle <i><span class="elem-ref" data-elem="ADE">ADE</span>,</i> and
+<br><span class="elem-ref" data-elem="CE"><i>CE</i></span> : <span class="elem-ref" data-elem="AE"><i>AE</i></span> = triangle <span class="elem-ref" data-elem="CDE"><i>CDE</i></span> : triangle <i><span class="elem-ref" data-elem="ADE">ADE</span>.</i></center>
 
 Hence,
 
-<center><i>BD</i> : <i>AD</i> = <i>CE</i> : <i>AE</i> if and only if <i>BDE</i> : <i>ADE</i> = <i>CDE</i> : <i>ADE.</i></center>
+<center><span class="elem-ref" data-elem="BD"><i>BD</i></span> : <span class="elem-ref" data-elem="AD"><i>AD</i></span> = <span class="elem-ref" data-elem="CE"><i>CE</i></span> : <span class="elem-ref" data-elem="AE"><i>AE</i></span> if and only if <span class="elem-ref" data-elem="BDE"><i>BDE</i></span> : <span class="elem-ref" data-elem="ADE"><i>ADE</i></span> = <span class="elem-ref" data-elem="CDE"><i>CDE</i></span> : <i><span class="elem-ref" data-elem="ADE">ADE</span>.</i></center>
 
-By propositions @V.7 and @V.9 the latter condition is equivalent to *BDE* = *CDE,* and that, in turn, by propositions @I.37 and @I.39 is equivalent to *DE* || *BC.*
+By propositions @V.7 and @V.9 the latter condition is equivalent to {BDE} = {CDE}, and that, in turn, by propositions @I.37 and @I.39 is equivalent to {DE} || {BC}.
 
 #### Note
 
-It should be noted that a proportion such as *BD* : *AD* = *AE* : *CE* is not intended. In that case the sides are cut proportionally, but the correspondence is not the intended one.
+It should be noted that a proportion such as {BD} : {AD} = {AE} : {CE} is not intended. In that case the sides are cut proportionally, but the correspondence is not the intended one.
 
 #### Use of this theorem
 
