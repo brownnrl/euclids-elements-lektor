@@ -15,12 +15,25 @@ statement: The rectangle contained by medial straight lines commensurable in len
 ----
 proof:
 
-Let the rectangle *AC* be contained by the medial straight lines *AB* and *BC* which are commensurable in length.
+Let the rectangle {AC|ACh} be contained by the medial straight lines {AB} and {BC} which are commensurable in length.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="170" height="250" tabindex="0"></canvas>
 <noscript><img alt="X.24 diagram" src="propX24.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the rectangle AC on AB with the square AD on AB on
+    // the other side (both random faces). The proof talks about the sides
+    // AB, BC, BD, so those are transparent highlight targets (;0;0;0). The
+    // square and the rectangle are lit through faceless, strokeless twins
+    // ADh / ACh, so a highlight never raises a face over the figure (#140);
+    // prose and captions reach them with the display override ({AD|ADh},
+    // {DA|ADh}, {AC|ACh}). Resting figure unchanged.
+    //
+    // Draggables (checked against the bundle): A, B, C (given) and the
+    // offscreen frees. D is a derived vertex, so the square and D simply
+    // stay out of the visible sets until "Describe the square".
+    var GIVEN = ["A","B","C","AC","ACh","AB","BC"];
+    var SQ    = GIVEN.concat(["AD","ADh","D","BD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -34,19 +47,77 @@ Let the rectangle *AC* be contained by the medial straight lines *AB* and *BC* w
             "C;point;lineSlider;B,C',0,40",
             "AC;polygon;parallelogram;A,B,C;0;0;black;random",
             "AD;polygon;square;B,A;0;0;black;random",
-            "D;point;vertex;AD,4"
+            "D;point;vertex;AD,4",
+            // Highlight targets only — the figure already draws these.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "ADh;polygon;square;B,A;0;0;0;0",
+            "ACh;polygon;parallelogram;A,B,C;0;0;0;0"
         ],
+        slides: [
+            { text: "“The rectangle contained by medial straight lines commensurable in length is medial.”",
+              visible: GIVEN,
+              highlighted: ["ACh","AB","BC"],
+              justifications: [{ ref: "X.24" }] },
+            { text: "Let the rectangle {AC|ACh} be contained by the medial straight lines {AB} and {BC} which are commensurable in length.",
+              visible: GIVEN,
+              highlighted: ["ACh","AB","BC"] },
+            { text: "I say that {AC|ACh} is medial.",
+              visible: GIVEN,
+              highlighted: ["ACh"] },
+            { text: "Describe the square {AD|ADh} on {AB}.",
+              visible: SQ,
+              highlighted: ["AB"],
+              transition: { animations: [
+                  { elem: "ADh", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Then {AD|ADh} is medial.",
+              visible: SQ,
+              highlighted: ["ADh"] },
+            { text: "And, since {AB} is commensurable in length with {BC}, while {AB} equals {BD},",
+              visible: SQ,
+              highlighted: ["AB","BC","BD"] },
+            { text: "therefore {DB|BD} is commensurable in length with {BC},",
+              visible: SQ,
+              highlighted: ["BD","BC"] },
+            { text: "so that {DA|ADh} is commensurable with {AC|ACh}.",
+              visible: SQ,
+              highlighted: ["ADh","ACh"],
+              justifications: [
+                  { claim: "DB : BC = DA : AC", ref: "VI.1" },
+                  { claim: "DA, AC commensurable", ref: "X.11" } ] },
+            { text: "But {DA|ADh} is medial, therefore {AC|ACh} is also medial.",
+              visible: SQ,
+              highlighted: ["ADh","ACh"],
+              justifications: [{ claim: "commensurable with a medial area", ref: "X.23.Cor" }] },
+            { text: "Therefore, the rectangle contained by medial straight lines commensurable in length is medial.",
+              visible: SQ,
+              highlighted: ["ACh","AB","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.24") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VI.1":     "/elements/books/bookVI/propositions/propVI1/",
+        "X.11":     "/elements/books/bookX/propositions/propX11/",
+        "X.23.Cor": "/elements/books/bookX/propositions/propX23/#cor"
     });
 </script>
 </figure>
 
-I say that *AC* is medial.
+I say that {AC|ACh} is medial.
 
-Describe the square *AD* on *AB*. Then *AD* is medial.
+Describe the square {AD|ADh} on {AB}. Then {AD|ADh} is medial.
 
-And, since *AB* is commensurable in length with *BC*, while *AB* equals *BD*, therefore *DB* is commensurable in length with *BC*, so that *DA* is commensurable with *AC*. [!just VI.1; X.11]
+And, since {AB} is commensurable in length with {BC}, while {AB} equals {BD}, therefore {DB|BD} is commensurable in length with {BC}, so that {DA|ADh} is commensurable with {AC|ACh}. [!just VI.1; X.11]
 
-But *DA* is medial, therefore *AC* is also medial. [!just X.23.Cor]
+But {DA|ADh} is medial, therefore {AC|ACh} is also medial. [!just X.23.Cor]
 
 Therefore, *the rectangle contained by medial straight lines commensurable in length is medial.*
 
@@ -57,7 +128,7 @@ guide:
 
 Medial lines were defined in Proposition @X.21, but medial rectangles have not been defined. The meaning of the term medial rectangle must be interpreted by the way it is used in the proof of this proposition.
 
-The square *AD*, which is the square on the medial line *AB*, is called a medial square, and since the rectangle *AC* is equal to the square *AD*, it is also proclaimed to be medial. Thus, a medial rectangle is one equal to the square on a medial line.
+The square {AD|ADh}, which is the square on the medial line {AB}, is called a medial square, and since the rectangle {AC|ACh} is equal to the square {AD|ADh}, it is also proclaimed to be medial. Thus, a medial rectangle is one equal to the square on a medial line.
 
 In this proposition, we have two medial numbers, *a* and *b*, such that *a*/*b* is a rational number. The conclusion is that *c* = √(*ab*) is a medial number. That is so since *c*² = *ab* = *b*²(*a*/*b*), which is an irrational number, while *c*⁴ = *a*²*b*² = *b*⁴(*a*/*b*)², which is a rational number.
 
