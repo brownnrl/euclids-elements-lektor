@@ -15,16 +15,44 @@ statement: The square on the straight line which produces with a medial area a m
 ----
 proof:
 
-Let *AB* be the straight line which produces with a medial area a medial whole, and *CD* a rational straight line, and to *CD* let *CE* be applied equal to the square on *AB* and producing *CF* as breadth.
+Let {AB} be the straight line which produces with a medial area a medial whole, and {CD} a rational straight line, and to {CD} let {CE|CEh} be applied equal to the square on {AB} and producing {CF} as breadth.
 
-I say that *CF* is a sixth apotome.
+I say that {CF} is a sixth apotome.
 
-Let *BG* be the annex to *AB*. Then *AG* and *GB* are straight lines incommensurable in square which make the sum of the squares on them medial, twice the rectangle *AG* by *GB* medial, and the sum of the squares on *AG* and *GB* incommensurable with twice the rectangle *AG* by *GB*. [!just X.78]
+Let {BG|GB} be the annex to {AB}. Then {AG} and {GB} are straight lines incommensurable in square which make the sum of the squares on them medial, twice the rectangle {AG} by {GB} medial, and the sum of the squares on {AG} and {GB} incommensurable with twice the rectangle {AG} by {GB}. [!just X.78]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="370" height="180" tabindex="0"></canvas>
 <noscript><img alt="X.102 diagram" src="propX102.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure (X.101's): AB with its annex BG on the line AG, the
+    // rational line CD, and on it CE (DCFE) equal to the square on AB,
+    // overlaid by FKHE (completing CH, the square on AG) and HKML (KL, the
+    // square on BG), all random-faced, with N bisecting FM and the parallel
+    // NO.
+    // Added, all hidden at rest: solid twins ABs, GBs (initiallyHidden) so
+    // AB stands alone before G and the annex is produced from B; transparent
+    // targets AB, GB, CF, CK, KM, CM, FM, EF (;0;0;0); faceless, strokeless
+    // targets CEh (twin of the random-faced DCFE, which would be raised over
+    // its neighbours when lit, #140), CHh, KLh, CLh, FLh, FOh, NLh for the
+    // rectangles the text names, reached with the display override
+    // ({CE|CEh}). No angle is called right, so no markers.
+    //
+    // Draggables (checked against the bundle): A, B, G, C, D (line sliders)
+    // and the offscreen frees. C and D arrive with "and CD a rational
+    // straight line", G with the annex, so all three are deferred. F, E, K,
+    // H, M, L, N, O are derived and listed per slide.
+    var GIVEN = ["A","B","AB","ABs"];
+    var RAT   = GIVEN.concat(["C","D","CD"]);
+    var APPL  = RAT.concat(["F","E","DCFE","CEh","CF"]);
+    var ANNEX = APPL.concat(["G","GB","GBs"]);
+    var WHOLE = ANNEX.concat(["AG"]);
+    var CHS   = WHOLE.concat(["K","H","FKHE","CHh","CK"]);
+    var SQS   = CHS.concat(["M","L","HKML","KLh","KM"]);
+    var CLS   = SQS.concat(["CLh","CM"]);
+    var REM   = CLS.concat(["FLh","FM"]);
+    var FES   = REM.concat(["EF"]);
+    var ALL   = FES.concat(["N","O","NO","FOh","NLh"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -53,41 +81,260 @@ Let *BG* be the annex to *AB*. Then *AG* and *GB* are straight lines incommensur
             "HKML;polygon;quadrilateral;H,K,M,L;0;0;black;random",
             "N;point;midpoint;F,M",
             "O;point;parallelogram;D,C,N",
-            "NO;line;connect;N,O"
+            "NO;line;connect;N,O",
+            // Slide-only twins and highlight targets.
+            "ABs;line;connect;A,B",
+            "GBs;line;connect;B,G",
+            "AB;line;connect;A,B;0;0;0",
+            "GB;line;connect;G,B;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "CK;line;connect;C,K;0;0;0",
+            "KM;line;connect;K,M;0;0;0",
+            "CM;line;connect;C,M;0;0;0",
+            "FM;line;connect;F,M;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "CEh;polygon;quadrilateral;D,C,F,E;0;0;0;0",
+            "CHh;polygon;quadrilateral;D,C,K,H;0;0;0;0",
+            "KLh;polygon;quadrilateral;H,K,M,L;0;0;0;0",
+            "CLh;polygon;quadrilateral;D,C,M,L;0;0;0;0",
+            "FLh;polygon;quadrilateral;E,F,M,L;0;0;0;0",
+            "FOh;polygon;quadrilateral;E,F,N,O;0;0;0;0",
+            "NLh;polygon;quadrilateral;O,N,M,L;0;0;0;0"
         ],
+        initiallyHidden: ["ABs","GBs"],
+        deferDraggables: ["C","D","G"],
+        slides: [
+            { text: "“The square on the straight line which produces with a medial area a medial whole,",
+              visible: ALL,
+              highlighted: ["AB"],
+              justifications: [{ ref: "X.102" }] },
+            { text: "if applied to a rational straight line, produces as breadth a sixth apotome.”",
+              visible: ALL,
+              highlighted: ["CD","CEh","CF"] },
+            { text: "Let {AB} be the straight line which produces with a medial area a medial whole,",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "and {CD} a rational straight line,",
+              visible: RAT,
+              highlighted: ["CD"],
+              transition: { animations: [
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and to {CD} let {CE|CEh} be applied equal to the square on {AB} and producing {CF} as breadth.",
+              visible: APPL,
+              highlighted: ["CD","AB","CF"],
+              transition: { animations: [
+                  { elem: "DCFE", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "I say that {CF} is a sixth apotome.",
+              visible: APPL,
+              highlighted: ["CF"] },
+            { text: "Let {BG|GB} be the annex to {AB}.",
+              visible: ANNEX,
+              highlighted: ["GB","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "GBs", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "G",   name: geomlib.A.Point.appear } ] } },
+            { text: "Then {AG} and {GB} are straight lines incommensurable in square which make the sum of the squares on them medial,",
+              visible: WHOLE,
+              highlighted: ["AG","GB"] },
+            { text: "twice the rectangle {AG} by {GB} medial,",
+              visible: WHOLE,
+              highlighted: ["AG","GB"] },
+            { text: "and the sum of the squares on {AG} and {GB} incommensurable with twice the rectangle {AG} by {GB}.",
+              visible: WHOLE,
+              highlighted: ["AG","GB"],
+              justifications: [{ claim: "AB makes with a medial area a medial whole", ref: "X.78" }] },
+            { text: "Now to {CD} apply {CH|CHh} equal to the square on {AG} and producing {CK} as breadth,",
+              visible: CHS,
+              highlighted: ["CD","AG","CK"],
+              transition: { animations: [
+                  { elem: "FKHE", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and {KL|KLh} equal to the square on {BG|GB}.",
+              visible: SQS,
+              highlighted: ["GB"],
+              transition: { animations: [
+                  { elem: "HKML", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Then the whole {CL|CLh} equals the sum of the squares on {AG} and {GB}.",
+              visible: CLS,
+              highlighted: ["CLh","AG","GB"] },
+            { text: "Therefore {CL|CLh} is also medial.",
+              visible: CLS,
+              highlighted: ["CLh"] },
+            { text: "And it is applied to the rational straight line {CD} producing {CM} as breadth,",
+              visible: CLS,
+              highlighted: ["CLh","CD","CM"] },
+            { text: "therefore {CM} is rational and incommensurable in length with {CD}.",
+              visible: CLS,
+              highlighted: ["CM","CD"],
+              justifications: [{ claim: "CM rational, incommensurable with CD", ref: "X.22" }] },
+            { text: "Since {CL|CLh} equals the sum of the squares on {AG} and {GB},",
+              visible: CLS,
+              highlighted: ["CLh","AG","GB"] },
+            { text: "and, in these, {CE|CEh} equals the square on {AB},",
+              visible: CLS,
+              highlighted: ["CEh","AB"] },
+            { text: "therefore the remainder {FL|FLh} equals twice the rectangle {AG} by {GB}.",
+              visible: REM,
+              highlighted: ["FLh","AG","GB"],
+              justifications: [{ claim: "AG² + GB² = 2 AG·GB + AB²", ref: "II.7" }] },
+            { text: "And twice the rectangle {AG} by {GB} is medial, therefore {FL|FLh} is also medial.",
+              visible: REM,
+              highlighted: ["AG","GB","FLh"] },
+            { text: "And it is applied to the rational straight line {FE|EF} producing {FM} as breadth,",
+              visible: FES,
+              highlighted: ["FLh","EF","FM"] },
+            { text: "therefore {FM} is rational and incommensurable in length with {CD}.",
+              visible: FES,
+              highlighted: ["FM","CD"],
+              justifications: [{ claim: "FM rational, incommensurable with CD", ref: "X.22" }] },
+            { text: "Since the sum of the squares on {AG} and {GB} is incommensurable with twice the rectangle {AG} by {GB},",
+              visible: FES,
+              highlighted: ["AG","GB"] },
+            { text: "{CL|CLh} equals the sum of the squares on {AG} and {GB},",
+              visible: FES,
+              highlighted: ["CLh","AG","GB"] },
+            { text: "and {FL|FLh} equals twice the rectangle {AG} by {GB},",
+              visible: FES,
+              highlighted: ["FLh","AG","GB"] },
+            { text: "therefore {CL|CLh} is incommensurable with {FL|FLh}.",
+              visible: FES,
+              highlighted: ["CLh","FLh"] },
+            { text: "But {CL|CLh} is to {FL|FLh} as {CM} is to {MF|FM},",
+              visible: FES,
+              highlighted: ["CLh","FLh","CM","FM"],
+              justifications: [{ claim: "CL : FL = CM : MF", ref: "VI.1" }] },
+            { text: "therefore {CM} is incommensurable in length with {MF|FM}. And both are rational.",
+              visible: FES,
+              highlighted: ["CM","FM"],
+              justifications: [{ claim: "CM, MF incommensurable", ref: "X.11" }] },
+            { text: "Therefore {CM} and {MF|FM} are rational straight lines commensurable in square only,",
+              visible: FES,
+              highlighted: ["CM","FM"] },
+            { text: "therefore {CF} is an apotome.",
+              visible: FES,
+              highlighted: ["CF"],
+              justifications: [{ claim: "CF an apotome", ref: "X.73" }] },
+            { text: "I say next that it is also a sixth apotome.",
+              visible: FES,
+              highlighted: ["CF"] },
+            { text: "Since {FL|FLh} equals twice the rectangle {AG} by {GB},",
+              visible: FES,
+              highlighted: ["FLh","AG","GB"] },
+            { text: "bisect {FM} at {N}, and draw {NO} through {N} parallel to {CD},",
+              visible: ALL,
+              highlighted: ["FM","CD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "N",  name: geomlib.A.Point.appear },
+                  { elem: "NO", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "therefore each of the rectangles {FO|FOh} and {NL|NLh} equals the rectangle {AG} by {GB}.",
+              visible: ALL,
+              highlighted: ["FOh","NLh","AG","GB"] },
+            { text: "And, since {AG} and {GB} are incommensurable in square,",
+              visible: ALL,
+              highlighted: ["AG","GB"] },
+            { text: "therefore the square on {AG} is incommensurable with the square on {GB}.",
+              visible: ALL,
+              highlighted: ["AG","GB"] },
+            { text: "But {CH|CHh} equals the square on {AG}, and {KL|KLh} equals the square on {GB},",
+              visible: ALL,
+              highlighted: ["CHh","AG","KLh","GB"] },
+            { text: "therefore {CH|CHh} is incommensurable with {KL|KLh}.",
+              visible: ALL,
+              highlighted: ["CHh","KLh"] },
+            { text: "But {CH|CHh} is to {KL|KLh} as {CK} is to {KM},",
+              visible: ALL,
+              highlighted: ["CHh","KLh","CK","KM"],
+              justifications: [{ claim: "CH : KL = CK : KM", ref: "VI.1" }] },
+            { text: "therefore {CK} is incommensurable with {KM}.",
+              visible: ALL,
+              highlighted: ["CK","KM"],
+              justifications: [{ claim: "CK, KM incommensurable", ref: "X.11" }] },
+            { text: "Since the rectangle {AG} by {GB} is a mean proportional between the squares on {AG} and {GB},",
+              visible: ALL,
+              highlighted: ["AG","GB"] },
+            { text: "{CH|CHh} equals the square on {AG}, {KL|KLh} equals the square on {GB},",
+              visible: ALL,
+              highlighted: ["CHh","AG","KLh","GB"] },
+            { text: "and {NL|NLh} equals the rectangle {AG} by {GB},",
+              visible: ALL,
+              highlighted: ["NLh","AG","GB"] },
+            { text: "therefore {NL|NLh} is also a mean proportional between {CH|CHh} and {KL|KLh}.",
+              visible: ALL,
+              highlighted: ["NLh","CHh","KLh"] },
+            { text: "Therefore {CH|CHh} is to {NL|NLh} as {NL|NLh} is to {KL|KLh}.",
+              visible: ALL,
+              highlighted: ["CHh","NLh","KLh"] },
+            { text: "And for the same reason as before the square on {CM} is greater than the square on {MF|FM}",
+              visible: ALL,
+              highlighted: ["CM","FM"] },
+            { text: "by the square on a straight line incommensurable with {CM}.",
+              visible: ALL,
+              highlighted: ["CM"],
+              justifications: [{ claim: "CM² − MF² incommensurable with CM", ref: "X.18" }] },
+            { text: "And neither of them is commensurable with the rational straight line {CD} set out,",
+              visible: ALL,
+              highlighted: ["CM","FM","CD"] },
+            { text: "therefore {CF} is a sixth apotome.",
+              visible: ALL,
+              highlighted: ["CF"],
+              justifications: [{ claim: "CF a sixth apotome", ref: "X.Def.III.6" }] },
+            { text: "Therefore, the square on the straight line which produces with a medial area a medial whole,",
+              visible: ALL,
+              highlighted: ["AB"] },
+            { text: "if applied to a rational straight line, produces as breadth a sixth apotome.",
+              visible: ALL,
+              highlighted: ["CD","CEh","CF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.102") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.7":        "/elements/books/bookII/propositions/propII7/",
+        "VI.1":        "/elements/books/bookVI/propositions/propVI1/",
+        "X.11":        "/elements/books/bookX/propositions/propX11/",
+        "X.18":        "/elements/books/bookX/propositions/propX18/",
+        "X.22":        "/elements/books/bookX/propositions/propX22/",
+        "X.73":        "/elements/books/bookX/propositions/propX73/",
+        "X.78":        "/elements/books/bookX/propositions/propX78/",
+        "X.Def.III.6": "/elements/books/bookX/definitions/defX.III.6/"
     });
 </script>
 </figure>
 
-Now to *CD* apply *CH* equal to the square on *AG* and producing *CK* as breadth, and *KL* equal to the square on *BG*. Then the whole *CL* equals the sum of the squares on *AG* and *GB*. Therefore *CL* is also medial.
+Now to {CD} apply {CH|CHh} equal to the square on {AG} and producing {CK} as breadth, and {KL|KLh} equal to the square on {BG|GB}. Then the whole {CL|CLh} equals the sum of the squares on {AG} and {GB}. Therefore {CL|CLh} is also medial.
 
-And it is applied to the rational straight line *CD* producing *CM* as breadth, therefore *CM* is rational and incommensurable in length with *CD*. [!just X.22]
+And it is applied to the rational straight line {CD} producing {CM} as breadth, therefore {CM} is rational and incommensurable in length with {CD}. [!just X.22]
 
-Since *CL* equals the sum of the squares on *AG* and *GB*, and, in these, *CE* equals the square on *AB*, therefore the remainder *FL* equals twice the rectangle *AG* by *GB*. And twice the rectangle *AG* by *GB* is medial, therefore *FL* is also medial. [!just II.7]
+Since {CL|CLh} equals the sum of the squares on {AG} and {GB}, and, in these, {CE|CEh} equals the square on {AB}, therefore the remainder {FL|FLh} equals twice the rectangle {AG} by {GB}. And twice the rectangle {AG} by {GB} is medial, therefore {FL|FLh} is also medial. [!just II.7]
 
-And it is applied to the rational straight line *FE* producing *FM* as breadth, therefore *FM* is rational and incommensurable in length with *CD*. [!just X.22]
+And it is applied to the rational straight line {FE|EF} producing {FM} as breadth, therefore {FM} is rational and incommensurable in length with {CD}. [!just X.22]
 
-Since the sum of the squares on *AG* and *GB* is incommensurable with twice the rectangle *AG* by *GB*, *CL* equals the sum of the squares on *AG* and *GB*, and *FL* equals twice the rectangle *AG* by *GB*, therefore *CL* is incommensurable with *FL*.
+Since the sum of the squares on {AG} and {GB} is incommensurable with twice the rectangle {AG} by {GB}, {CL|CLh} equals the sum of the squares on {AG} and {GB}, and {FL|FLh} equals twice the rectangle {AG} by {GB}, therefore {CL|CLh} is incommensurable with {FL|FLh}.
 
-But *CL* is to *FL* as *CM* is to *MF*, therefore *CM* is incommensurable in length with *MF*. And both are rational. [!just VI.1, X.11]
+But {CL|CLh} is to {FL|FLh} as {CM} is to {MF|FM}, therefore {CM} is incommensurable in length with {MF|FM}. And both are rational. [!just VI.1, X.11]
 
-Therefore *CM* and *MF* are rational straight lines commensurable in square only, therefore *CF* is an apotome. [!just X.73]
+Therefore {CM} and {MF|FM} are rational straight lines commensurable in square only, therefore {CF} is an apotome. [!just X.73]
 
 I say next that it is also a sixth apotome.
 
-Since *FL* equals twice the rectangle *AG* by *GB*, bisect *FM* at *N*, and draw *NO* through *N* parallel to *CD*, therefore each of the rectangles *FO* and *NL* equals the rectangle *AG* by *GB*.
+Since {FL|FLh} equals twice the rectangle {AG} by {GB}, bisect {FM} at {N}, and draw {NO} through {N} parallel to {CD}, therefore each of the rectangles {FO|FOh} and {NL|NLh} equals the rectangle {AG} by {GB}.
 
-And, since *AG* and *GB* are incommensurable in square, therefore the square on *AG* is incommensurable with the square on *GB*.
+And, since {AG} and {GB} are incommensurable in square, therefore the square on {AG} is incommensurable with the square on {GB}.
 
-But *CH* equals the square on *AG*, and *KL* equals the square on *GB*, therefore *CH* is incommensurable with *KL*.
+But {CH|CHh} equals the square on {AG}, and {KL|KLh} equals the square on {GB}, therefore {CH|CHh} is incommensurable with {KL|KLh}.
 
-But *CH* is to *KL* as *CK* is to *KM*, therefore *CK* is incommensurable with *KM*. [!just VI.1, X.11]
+But {CH|CHh} is to {KL|KLh} as {CK} is to {KM}, therefore {CK} is incommensurable with {KM}. [!just VI.1, X.11]
 
-Since the rectangle *AG* by *GB* is a mean proportional between the squares on *AG* and *GB*, *CH* equals the square on *AG*, *KL* equals the square on *GB*, and *NL* equals the rectangle *AG* by *GB*, therefore *NL* is also a mean proportional between *CH* and *KL*. Therefore *CH* is to *NL* as *NL* is to *KL*.
+Since the rectangle {AG} by {GB} is a mean proportional between the squares on {AG} and {GB}, {CH|CHh} equals the square on {AG}, {KL|KLh} equals the square on {GB}, and {NL|NLh} equals the rectangle {AG} by {GB}, therefore {NL|NLh} is also a mean proportional between {CH|CHh} and {KL|KLh}. Therefore {CH|CHh} is to {NL|NLh} as {NL|NLh} is to {KL|KLh}.
 
-And for the same reason as before the square on *CM* is greater than the square on *MF* by the square on a straight line incommensurable with *CM*. [!just X.18]
+And for the same reason as before the square on {CM} is greater than the square on {MF|FM} by the square on a straight line incommensurable with {CM}. [!just X.18]
 
-And neither of them is commensurable with the rational straight line *CD* set out, therefore *CF* is a sixth apotome. [!just X.Def.III.6]
+And neither of them is commensurable with the rational straight line {CD} set out, therefore {CF} is a sixth apotome. [!just X.Def.III.6]
 
 Therefore, *the square on the straight line which produces with a medial area a medial whole, if applied to a rational straight line, produces as breadth a sixth apotome.*
 
