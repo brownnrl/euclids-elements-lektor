@@ -15,14 +15,20 @@ statement: If a number is parts of a number, and another is the same parts of an
 ----
 proof:
 
-Let the number *AB* be parts of the number *C,* and another number *DE* be the same parts of another number *F* that *AB* is of *C.*
+Let the number {AB} be parts of the number {C}, and another number {DE} be the same parts of another number {F} that {AB} is of {C}.
 
-I say that the sum of *AB* and *DE* is also the same parts of the sum of *C* and *F* that *AB* is of *C.*
+I say that the sum of {AB} and {DE} is also the same parts of the sum of {C} and {F} that {AB} is of {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="150" height="210" tabindex="0"></canvas>
 <noscript><img alt="VII.6 diagram" src="propVII6.gif"/></noscript>
 <script type="text/javascript">
+    // AB is two thirds of C and DE two thirds of F; AG, GB and DH, HE are
+    // the parts. Line segments only, so the walk is highlight beats, with
+    // G and H appearing when AB and DE are divided.
+    var GIVEN = ["A","B","AB","C","D","E","DE","F"];
+    var DIV1  = GIVEN.concat(["G","AG","GB"]);
+    var DIV2  = DIV1.concat(["H","DH","HE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,19 +57,113 @@ I say that the sum of *AB* and *DE* is also the same parts of the sum of *C* and
             "DE;line;connect;D,E",
             "F';point;cutoff;F1,F3,D,E;0;0",
             "F2;point;cutoff;F',F3,D,H;0",
-            "F;line;connect;F1,F2;black"
+            "F;line;connect;F1,F2;black",
+            // Invisible highlight targets for the parts AB and DE are
+            // divided into. Zero-colour: nothing changes at rest.
+            "AG;line;connect;A,G;0;0;0",
+            "GB;line;connect;G,B;0;0;0",
+            "DH;line;connect;D,H;0;0;0",
+            "HE;line;connect;H,E;0;0;0"
         ],
+        // Draggables (checked against the bundle): the lineSliders A, D, G,
+        // H and the end handles C1, F1. A and D (and the C1, F1 handles of
+        // the givens C and F) stand from slide 1; G and H are the division
+        // points, which the proof introduces at "Divide", so they are
+        // deferred. B, E, C2, F2 are derived cutoffs.
+        deferDraggables: ["G","H"],
+        aliases: { "BA": "AB", "ED": "DE", "GA": "AG", "BG": "GB",
+                   "HD": "DH", "EH": "HE" },
+        slides: [
+            { text: "“If a number is parts of a number, and another is the same parts of another,”",
+              visible: GIVEN,
+              highlighted: ["AB","C","DE","F"] },
+            { text: "“then the sum is also the same parts of the sum that the one is of the one.”",
+              visible: GIVEN,
+              highlighted: ["AB","C","DE","F"],
+              justifications: [{ ref: "VII.6" }] },
+            { text: "Let the number {AB} be parts of the number {C},",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "and another number {DE} be the same parts of another number {F} that {AB} is of {C}.",
+              visible: GIVEN,
+              highlighted: ["DE","F"] },
+            { text: "I say that the sum of {AB} and {DE} is also the same parts of the sum of {C} and {F}",
+              visible: GIVEN,
+              highlighted: ["AB","DE","C","F"] },
+            { text: "that {AB} is of {C}.",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "Since there are as many parts of {DE} in {F} as there are parts {AB} is of {C},",
+              visible: GIVEN,
+              highlighted: ["DE","F","AB","C"] },
+            { text: "therefore there are as many parts of {F} in {DE} as there are parts of {C} in {AB}.",
+              visible: GIVEN,
+              highlighted: ["F","DE","C","AB"] },
+            { text: "Divide {AB} into the parts of {C}, namely {AG} and {GB},",
+              visible: DIV1,
+              highlighted: ["AG","GB","G"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "and divide {DE} into the parts of {F}, namely {DH}, and {HE}.",
+              visible: DIV2,
+              highlighted: ["DH","HE","H"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Point.appear } ] } },
+            { text: "Then the multitude of {AG} and {GB} equals the multitude of {DH} and {HE}.",
+              visible: DIV2,
+              highlighted: ["AG","GB","DH","HE"] },
+            { text: "And since {DH} is the same part of {F} that {AG} is of {C},",
+              visible: DIV2,
+              highlighted: ["DH","F","AG","C"] },
+            { text: "therefore the sum of {AG} and {DH} is the same part of the sum of {C} and {F}",
+              visible: DIV2,
+              highlighted: ["AG","DH","C","F"],
+              justifications: [{ claim: "AG + DH is the same part of C + F", ref: "VII.5" }] },
+            { text: "that {AG} is of {C}.",
+              visible: DIV2,
+              highlighted: ["AG","C"] },
+            { text: "For the same reason, the sum of {GB} and {HE} is the same parts of the sum of {C} and {F}",
+              visible: DIV2,
+              highlighted: ["GB","HE","C","F"],
+              justifications: [{ claim: "GB + HE is the same part of C + F", ref: "VII.5" }] },
+            { text: "that {GB} is of {C}.",
+              visible: DIV2,
+              highlighted: ["GB","C"] },
+            { text: "Therefore the sum of {AB} and {DE} is the same parts of the sum of {C} and {F}",
+              visible: DIV2,
+              highlighted: ["AB","DE","C","F"] },
+            { text: "that {AB} is of {C}.",
+              visible: DIV2,
+              highlighted: ["AB","C"] },
+            { text: "Therefore, if a number is parts of a number, and another is the same parts of another,",
+              visible: DIV2,
+              highlighted: ["AB","C","DE","F"] },
+            { text: "then the sum is also the same parts of the sum that the one is of the one.",
+              visible: DIV2,
+              highlighted: ["AB","C","DE","F"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.6") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.5": "/elements/books/bookVII/propositions/propVII5/"
     });
 </script>
 </figure>
 
-Since there are as many parts of *DE* in *F* as there are parts *AB* is of *C,* therefore there are as many parts of *F* in *DE* as there are parts of *C* in *AB.*
+Since there are as many parts of {DE} in {F} as there are parts {AB} is of {C}, therefore there are as many parts of {F} in {DE} as there are parts of {C} in {AB}.
 
-Divide *AB* into the parts of *C,* namely *AG* and *GB,* and divide *DE* into the parts of *F,* namely *DH,* and *HE.* Then the multitude of *AG* and *GB* equals the multitude of *DH* and *HE.*
+Divide {AB} into the parts of {C}, namely {AG} and {GB}, and divide {DE} into the parts of {F}, namely {DH}, and {HE}. Then the multitude of {AG} and {GB} equals the multitude of {DH} and {HE}.
 
-And since *DH* is the same part of *F* that *AG* is of *C,* therefore the sum of *AG* and *DH* is the same part of the sum of *C* and *F* that *AG* is of *C.* For the same reason, the sum of *GB* and *HE* is the same parts of the sum of *C* and *F* that *GB* is of *C.* [!just VII.5]
+And since {DH} is the same part of {F} that {AG} is of {C}, therefore the sum of {AG} and {DH} is the same part of the sum of {C} and {F} that {AG} is of {C}. For the same reason, the sum of {GB} and {HE} is the same parts of the sum of {C} and {F} that {GB} is of {C}. [!just VII.5]
 
-Therefore the sum of *AB* and *DE* is the same parts of the sum of *C* and *F* that *AB* is of *C.*
+Therefore the sum of {AB} and {DE} is the same parts of the sum of {C} and {F} that {AB} is of {C}.
 
 Therefore, *if a number is parts of a number, and another is the same parts of another, then the sum is also the same parts of the sum that the one is of the one.*
 

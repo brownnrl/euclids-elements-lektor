@@ -15,12 +15,18 @@ statement: If a number is part of a number, and another is the same part of anot
 ----
 proof:
 
-Let the number *A* be a part of *BC,* and another number *D* be the same part of another number *EF* that *A* is of *BC.*
+Let the number {A} be a part of {BC}, and another number {D} be the same part of another number {EF} that {A} is of {BC}.
 
 <figure class="diagram rdiagram">
 <canvas id="canvas_0" width="150" height="220" tabindex="0"></canvas>
 <noscript><img alt="VII.5 diagram" src="propVII5.gif"/></noscript>
 <script type="text/javascript">
+    // A is one half of BC and D one half of EF; BG, GC and EH, HF are the
+    // halves. The figure is line segments only, so the walk is highlight
+    // beats, with G and H appearing when BC and EF are divided.
+    var GIVEN = ["A","BC","B","C","D","EF","E","F"];
+    var DIV1  = GIVEN.concat(["G","BG","GC"]);
+    var DIV2  = DIV1.concat(["H","EH","HF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,21 +53,114 @@ Let the number *A* be a part of *BC,* and another number *D* be the same part of
             "D;line;connect;D1,D2;black",
             "H;point;cutoff;E,E3,D1,D2",
             "F;point;cutoff;H,E3,D1,D2",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // Invisible highlight targets for the numbers BC and EF are
+            // divided into. Zero-colour: nothing changes at rest.
+            "BG;line;connect;B,G;0;0;0",
+            "GC;line;connect;G,C;0;0;0",
+            "EH;line;connect;E,H;0;0;0",
+            "HF;line;connect;H,F;0;0;0"
         ],
+        // Draggables (checked against the bundle): the lineSliders B and E
+        // and the four end handles A1, A2, D1, D2 of A and D — all givens,
+        // standing from slide 1. G, C, H, F are derived cutoffs and follow
+        // the visible sets: G and H arrive with "Divide".
+        aliases: { "GB": "BG", "CG": "GC", "HE": "EH", "FH": "HF" },
+        slides: [
+            { text: "“If a number is part of a number, and another is the same part of another,”",
+              visible: GIVEN,
+              highlighted: ["A","BC","D","EF"] },
+            { text: "“then the sum is also the same part of the sum that the one is of the one.”",
+              visible: GIVEN,
+              highlighted: ["A","BC","D","EF"],
+              justifications: [{ ref: "VII.5" }] },
+            { text: "Let the number {A} be a part of {BC},",
+              visible: GIVEN,
+              highlighted: ["A","BC"] },
+            { text: "and another number {D} be the same part of another number {EF} that {A} is of {BC}.",
+              visible: GIVEN,
+              highlighted: ["D","EF"] },
+            { text: "I say that the sum of {A} and {D} is also the same part of the sum of {BC} and {EF}",
+              visible: GIVEN,
+              highlighted: ["A","D","BC","EF"] },
+            { text: "that {A} is of {BC}.",
+              visible: GIVEN,
+              highlighted: ["A","BC"] },
+            { text: "Since, whatever part {A} is of {BC}, {D} is also the same part of {EF},",
+              visible: GIVEN,
+              highlighted: ["A","BC","D","EF"] },
+            { text: "therefore, there are as many numbers equal to {D} in {EF} as there are in {BC} equal to {A}.",
+              visible: GIVEN,
+              highlighted: ["D","EF","BC","A"] },
+            { text: "Divide {BC} into the numbers equal to {A}, namely {BG} and {GC},",
+              visible: DIV1,
+              highlighted: ["A","BG","GC","G"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "and {EF} into the numbers equal to {D}, namely {EH} and {HF}.",
+              visible: DIV2,
+              highlighted: ["D","EH","HF","H"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Point.appear } ] } },
+            { text: "Then the multitude of {BG} and {GC} equals the multitude of {EH} and {HF}.",
+              visible: DIV2,
+              highlighted: ["BG","GC","EH","HF"] },
+            { text: "And, since {BG} equals {A}, and {EH} equals {D},",
+              visible: DIV2,
+              highlighted: ["BG","A","EH","D"] },
+            { text: "therefore the sum of {BG} and {EH} also equals the sum of {A} and {D}.",
+              visible: DIV2,
+              highlighted: ["BG","EH","A","D"] },
+            { text: "For the same reason the sum of {GC} and {HF} also equals the sum of {A} and {D}.",
+              visible: DIV2,
+              highlighted: ["GC","HF","A","D"] },
+            { text: "Therefore there are as many numbers in {BC} and {EF} equal to {A} and {D}",
+              visible: DIV2,
+              highlighted: ["BG","GC","EH","HF","A","D"] },
+            { text: "as there are in {BC} equal to {A}.",
+              visible: DIV2,
+              highlighted: ["BG","GC","A"] },
+            { text: "Therefore, the sum of {BC} and {EF} is the same multiple of the sum of {A} and {D}",
+              visible: DIV2,
+              highlighted: ["BC","EF","A","D"] },
+            { text: "that {BC} is of {A}.",
+              visible: DIV2,
+              highlighted: ["BC","A"] },
+            { text: "Therefore, the sum of {A} and {D} is the same part of the sum of {BC} and {EF}",
+              visible: DIV2,
+              highlighted: ["A","D","BC","EF"] },
+            { text: "that {A} is of {BC}.",
+              visible: DIV2,
+              highlighted: ["A","BC"] },
+            { text: "Therefore, if a number is part of a number, and another is the same part of another,",
+              visible: DIV2,
+              highlighted: ["A","BC","D","EF"] },
+            { text: "then the sum is also the same part of the sum that the one is of the one.",
+              visible: DIV2,
+              highlighted: ["A","BC","D","EF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.5") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    // Joyce gives no justifications in this proof (see the guide).
+    window.eucrefs = (window.eucrefs || {});
 </script>
 </figure>
 
-I say that the sum of *A* and *D* is also the same part of the sum of *BC* and *EF* that *A* is of *BC.*
+I say that the sum of {A} and {D} is also the same part of the sum of {BC} and {EF} that {A} is of {BC}.
 
-Since, whatever part *A* is of *BC, D* is also the same part of *EF,* therefore, there are as many numbers equal to *D* in *EF* as there are in *BC* equal to *A.*
+Since, whatever part {A} is of {BC}, {D} is also the same part of {EF}, therefore, there are as many numbers equal to {D} in {EF} as there are in {BC} equal to {A}.
 
-Divide *BC* into the numbers equal to *A,* namely *BG* and *GC,* and *EF* into the numbers equal to *D,* namely *EH* and *HF.* Then the multitude of *BG* and *GC* equals the multitude of *EH* and *HF.*
+Divide {BC} into the numbers equal to {A}, namely {BG} and {GC}, and {EF} into the numbers equal to {D}, namely {EH} and {HF}. Then the multitude of {BG} and {GC} equals the multitude of {EH} and {HF}.
 
-And, since *BG* equals *A,* and *EH* equals *D,* therefore the sum of *BG* and *EH* also equals the sum of *A* and *D.* For the same reason the sum of *GC* and *HF* also equals the sum of *A* and *D.*
+And, since {BG} equals {A}, and {EH} equals {D}, therefore the sum of {BG} and {EH} also equals the sum of {A} and {D}. For the same reason the sum of {GC} and {HF} also equals the sum of {A} and {D}.
 
-Therefore there are as many numbers in *BC* and *EF* equal to *A* and *D* as there are in *BC* equal to *A.* Therefore, the sum of *BC* and *EF* is the same multiple of the sum of *A* and *D* that *BC* is of *A.* Therefore, the sum of *A* and *D* is the same part of the sum of *BC* and *EF* that *A* is of *BC.*
+Therefore there are as many numbers in {BC} and {EF} equal to {A} and {D} as there are in {BC} equal to {A}. Therefore, the sum of {BC} and {EF} is the same multiple of the sum of {A} and {D} that {BC} is of {A}. Therefore, the sum of {A} and {D} is the same part of the sum of {BC} and {EF} that {A} is of {BC}.
 
 Therefore, *if a number is part of a number, and another is the same part of another, then the sum is also the same part of the sum that the one is of the one.*
 
