@@ -15,14 +15,38 @@ statement: If three straight lines are proportional, then the parallelepipedal s
 ----
 proof:
 
-Let *A, B,* and *C* be three straight lines in proportion, so that *A* is to *B* as *B* is to *C.*
+Let {A}, {B}, and {C} be three straight lines in proportion, so that {A} is to {B} as {B} is to {C}.
 
-I say that the solid formed out of *A, B,* and *C* equals the solid on *B* which is equilateral, but equiangular with the aforesaid solid.
+I say that the solid formed out of {A}, {B}, and {C} equals the solid on {B} which is equilateral, but equiangular with the aforesaid solid.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="460" height="310" tabindex="0"></canvas>
 <noscript><img alt="XI.36 diagram" src="propXI36.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the proportional lines A, B, C; the solid EK on B,
+    // with DE, GE, EF each equal to B; and the solid LH with LM, LO, LN
+    // equal to A, B, C and its solid angle at L equal to that at E.
+    //
+    // Added, all transparent unless noted: faceless hexagons on the solids'
+    // outlines (sLH, sEK) to carry the solid's highlight, since a
+    // polyhedron draws none; faceless quadrilaterals for the bases MN and
+    // DF, since a filled face would be raised over the figure (#140). ED,
+    // EG, EF, LM, LO, LN are solid slide twins over edges of Joyce's faces,
+    // hidden at rest (initiallyHidden), so they can be drawn from E and L.
+    // The plane angles at E and L are markers, hidden at rest.
+    //
+    // Draggables (checked against the bundle): the ends A1, A2, B1, B2, C1
+    // of the given lines (with their off-canvas tracks), and M, O, N and the
+    // unlettered corner c of the solids, which are deferred to the slides
+    // that construct them. Every other point is derived and listed per
+    // slide.
+    var LINES = ["A","B","C","A1","A2","B1","B2","C1","C2"];
+    var Ed  = LINES.concat(["E","D","G","F","ED","EG","EF"]);
+    var EK  = Ed.concat(["c","K","d","e","GcFE","GcKe","GEDe","Dd","Fd","Kd","sEK","pDF"]);
+    var LMd = EK.concat(["L","M","LM"]);
+    var Ld  = LMd.concat(["O","N","LO","LN"]);
+    var MNd = Ld.concat(["f","Mf","Nf","pMN"]);
+    var LH  = MNd.concat(["a","b","H","OaML","OaHb","OLNb","Hf","sLH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -74,24 +98,201 @@ I say that the solid formed out of *A, B,* and *C* equals the solid on *B* which
             "GEDe;polygon;quadrilateral;G,E,D,e;0;0;black;10,70,100",
             "Dd;line;connect;D,d",
             "Fd;line;connect;F,d",
-            "Kd;line;connect;K,d"
+            "Kd;line;connect;K,d",
+            // Transparent highlight targets: the solids' outlines and the
+            // bases MN and DF, faceless since a filled face is raised (#140).
+            "sLH;polygon;hexagon;M,L,N,b,H,a;0;0;0;0",
+            "sEK;polygon;hexagon;c,F,E,D,e,K;0;0;0;0",
+            "pMN;polygon;quadrilateral;M,L,N,f;0;0;0;0",
+            "pDF;polygon;quadrilateral;D,E,F,d;0;0;0;0",
+            // Slide twins over edges of Joyce's faces, hidden at rest.
+            "ED;line;connect;E,D",
+            "EG;line;connect;E,G",
+            "EF;line;connect;E,F",
+            "LM;line;connect;L,M",
+            "LO;line;connect;L,O",
+            "LN;line;connect;L,N",
+            // Angle markers, hidden at rest.
+            "angDEG;sector;angleMarker;E,D,G",
+            "angGEF;sector;angleMarker;E,G,F",
+            "angFED;sector;angleMarker;E,F,D",
+            "angNLO;sector;angleMarker;L,N,O",
+            "angOLM;sector;angleMarker;L,O,M",
+            "angMLN;sector;angleMarker;L,M,N"
         ],
+        initiallyHidden: ["ED","EG","EF","LM","LO","LN"],
+        deferDraggables: ["M","O","N","c"],
+        slides: [
+            { text: "“If three straight lines are proportional,”",
+              visible: LH,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "XI.36" }] },
+            { text: "“then the parallelepipedal solid formed out of the three equals the parallelepipedal solid on the mean”",
+              visible: LH,
+              highlighted: ["sLH","sEK"],
+              justifications: [{ ref: "XI.36" }] },
+            { text: "“which is equilateral, but equiangular with the aforesaid solid.”",
+              visible: LH,
+              highlighted: ["sEK","sLH"],
+              justifications: [{ ref: "XI.36" }] },
+            { text: "Let {A}, {B}, and {C} be three straight lines in proportion,",
+              visible: LINES,
+              highlighted: ["A","B","C"] },
+            { text: "so that {A} is to {B} as {B} is to {C}.",
+              visible: LINES,
+              highlighted: ["A","B","C"] },
+            { text: "I say that the solid formed out of {A}, {B}, and {C} equals the solid on {B}",
+              visible: LINES,
+              highlighted: ["A","B","C"] },
+            { text: "which is equilateral, but equiangular with the aforesaid solid.",
+              visible: LINES,
+              highlighted: ["B"] },
+            { text: "Set out the solid angle at {E} contained by the angles {DEG|angDEG}, {GEF|angGEF}, and {FED|angFED},",
+              visible: Ed,
+              highlighted: ["angDEG","angGEF","angFED"],
+              transition: { animations: [
+                  { elem: "ED", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angDEG", name: geomlib.A.Sector.sweep },
+                  { elem: "angGEF", name: geomlib.A.Sector.sweep },
+                  { elem: "angFED", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and make each of the straight lines {DE|ED}, {GE|EG}, and {EF} equal to {B}.",
+              visible: Ed,
+              highlighted: ["ED","EG","EF","B"],
+              justifications: [{ claim: "DE, GE, EF each = B", ref: "I.3" }] },
+            { text: "Complete the parallelepipedal solid {EK|sEK}.",
+              visible: EK,
+              highlighted: ["sEK"],
+              transition: { animations: [
+                  { elem: "GcFE", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "GEDe", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "GcKe", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "Fd", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "Dd", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "Kd", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Make {LM} equal to {A}.",
+              visible: LMd,
+              highlighted: ["LM","A"],
+              transition: { animations: [
+                  { elem: "LM", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "LM = A", ref: "I.3" }] },
+            { text: "Construct a solid angle at the point {L} on the straight line {LM} equal to the solid angle at {E},",
+              visible: Ld,
+              highlighted: ["L","LM","E"],
+              transition: { animations: [
+                  { elem: "LO", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "LN", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "namely that contained by {NLO|angNLO}, {OLM|angOLM}, and {MLN|angMLN}.",
+              visible: Ld,
+              highlighted: ["angNLO","angOLM","angMLN"],
+              transition: { animations: [
+                  { elem: "angNLO", name: geomlib.A.Sector.sweep },
+                  { elem: "angOLM", name: geomlib.A.Sector.sweep },
+                  { elem: "angMLN", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Make {LO} equal to {B}, and {LN} equal to {C}.",
+              visible: Ld,
+              highlighted: ["LO","B","LN","C"],
+              justifications: [{ claim: "LO = B, LN = C", ref: "I.3" }] },
+            { text: "Now, since {A} is to {B} as {B} is to {C}, while {A} equals {LM},",
+              visible: Ld,
+              highlighted: ["A","B","C","LM"] },
+            { text: "and {B} equals each of the straight lines {LO}, {ED}, and {C} to {LN},",
+              visible: Ld,
+              highlighted: ["B","LO","ED","C","LN"] },
+            { text: "therefore {LM} is to {EF} as {DE|ED} is to {LN}.",
+              visible: Ld,
+              highlighted: ["LM","EF","ED","LN"] },
+            { text: "Thus the sides about the equal angles {NLM|angMLN}, {DEF|angFED} are reciprocally proportional,",
+              visible: Ld,
+              highlighted: ["angMLN","angFED","LM","LN","ED","EF"] },
+            { text: "therefore the parallelogram {MN|pMN} equals the parallelogram {DF|pDF}.",
+              visible: MNd,
+              highlighted: ["pMN","pDF"],
+              transition: { animations: [
+                  { elem: "Mf", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "Nf", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "parallelogram MN = parallelogram DF", ref: "VI.4" }] },
+            { text: "And, since the angles {DEF|angFED} and {NLM|angMLN} are two plane rectilinear angles,",
+              visible: MNd,
+              highlighted: ["angFED","angMLN"] },
+            { text: "and on them the elevated straight lines {LO} and {EG} are set up which equal one an other",
+              visible: MNd,
+              highlighted: ["LO","EG"] },
+            { text: "and contain equal angles with the original straight lines respectively,",
+              visible: MNd,
+              highlighted: ["angNLO","angOLM","angDEG","angGEF"] },
+            { text: "therefore the perpendiculars drawn from the points {G} and {O}",
+              visible: MNd,
+              highlighted: ["G","O"] },
+            { text: "to the planes through {NL|LN} and {LM} and through {DE|ED} and {EF} equal one another,",
+              visible: MNd,
+              highlighted: ["pMN","pDF"],
+              justifications: [{ claim: "the perpendiculars from G and O are equal", ref: "XI.35.Cor" }] },
+            { text: "therefore the solids {LH|sLH} and {EK|sEK} are of the same height.",
+              visible: LH,
+              highlighted: ["sLH","sEK"],
+              transition: { animations: [
+                  { elem: "OaML", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "OLNb", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "OaHb", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "Hf", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "But parallelepipedal solids on equal bases and of the same height equal one another,",
+              visible: LH,
+              highlighted: ["pMN","pDF"] },
+            { text: "therefore the solid {HL|sLH} equals the solid {EK|sEK}.",
+              visible: LH,
+              highlighted: ["sLH","sEK"],
+              justifications: [{ claim: "solid HL = solid EK", ref: "XI.31" }] },
+            { text: "And {LH|sLH} is the solid formed out of {A}, {B}, and {C}, and {EK|sEK} is the solid on {B},",
+              visible: LH,
+              highlighted: ["sLH","sEK"] },
+            { text: "therefore the parallelepipedal solid formed out of {A}, {B}, and {C} equals the solid on {B}",
+              visible: LH,
+              highlighted: ["sLH","sEK"] },
+            { text: "which is equilateral, but equiangular with the aforesaid solid.",
+              visible: LH,
+              highlighted: ["sEK"] },
+            { text: "Therefore, if three straight lines are proportional,",
+              visible: LH,
+              highlighted: ["A","B","C"] },
+            { text: "then the parallelepipedal solid formed out of the three equals the parallelepipedal solid on the mean",
+              visible: LH,
+              highlighted: ["sLH","sEK"] },
+            { text: "which is equilateral, but equiangular with the aforesaid solid.",
+              visible: LH,
+              highlighted: ["sEK","sLH"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.36") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "VI.4":      "/elements/books/bookVI/propositions/propVI4/",
+        "XI.31":     "/elements/books/bookXI/propositions/propXI31/",
+        "XI.35.Cor": "/elements/books/bookXI/propositions/propXI35/#cor"
     });
 </script>
 </figure>
 
-Set out the solid angle at *E* contained by the angles *DEG, GEF,* and *FED,* and make each of the straight lines *DE, GE,* and *EF* equal to *B.* Complete the parallelepipedal solid *EK.* Make *LM* equal to *A.* Construct a solid angle at the point *L* on the straight line *LM* equal to the solid angle at *E,* namely that contained by *NLO, OLM,* and *MLN.* Make *LO* equal to *B,* and *LN* equal to *C.* [!just I.3]
+Set out the solid angle at {E} contained by the angles {DEG|angDEG}, {GEF|angGEF}, and {FED|angFED}, and make each of the straight lines {DE|ED}, {GE|EG}, and {EF} equal to {B}. Complete the parallelepipedal solid {EK|sEK}. Make {LM} equal to {A}. Construct a solid angle at the point {L} on the straight line {LM} equal to the solid angle at {E}, namely that contained by {NLO|angNLO}, {OLM|angOLM}, and {MLN|angMLN}. Make {LO} equal to {B}, and {LN} equal to {C}. [!just I.3]
 
-Now, since *A* is to *B* as *B* is to *C,* while *A* equals *LM,* and *B* equals each of the straight lines *LO, ED,* and *C* to *LN,* therefore *LM* is to *EF* as *DE* is to *LN.* Thus the sides about the equal angles *NLM, DEF* are reciprocally proportional, therefore the parallelogram *MN* equals the parallelogram *DF.* [!just VI.4]
+Now, since {A} is to {B} as {B} is to {C}, while {A} equals {LM}, and {B} equals each of the straight lines {LO}, {ED}, and {C} to {LN}, therefore {LM} is to {EF} as {DE|ED} is to {LN}. Thus the sides about the equal angles {NLM|angMLN}, {DEF|angFED} are reciprocally proportional, therefore the parallelogram {MN|pMN} equals the parallelogram {DF|pDF}. [!just VI.4]
 
-And, since the angles *DEF* and *NLM* are two plane rectilinear angles, and on them the elevated straight lines *LO* and *EG* are set up which equal one an other and contain equal angles with the original straight lines respectively, therefore the perpendiculars drawn from the points *G* and *O* to the planes through *NL* and *LM* and through *DE* and *EF* equal one another, therefore the solids *LH* and *EK* are of the same height. [!just XI.35.Cor]
+And, since the angles {DEF|angFED} and {NLM|angMLN} are two plane rectilinear angles, and on them the elevated straight lines {LO} and {EG} are set up which equal one an other and contain equal angles with the original straight lines respectively, therefore the perpendiculars drawn from the points {G} and {O} to the planes through {NL|LN} and {LM} and through {DE|ED} and {EF} equal one another, therefore the solids {LH|sLH} and {EK|sEK} are of the same height. [!just XI.35.Cor]
 
-But parallelepipedal solids on equal bases and of the same height equal one another, therefore the solid *HL* equals the solid *EK.* [!just XI.31]
+But parallelepipedal solids on equal bases and of the same height equal one another, therefore the solid {HL|sLH} equals the solid {EK|sEK}. [!just XI.31]
 
-And *LH* is the solid formed out of *A, B,* and *C,* and *EK* is the solid on *B,* therefore the parallelepipedal solid formed out of *A, B,* and *C* equals the solid on *B* which is equilateral, but equiangular with the aforesaid solid.
+And {LH|sLH} is the solid formed out of {A}, {B}, and {C}, and {EK|sEK} is the solid on {B}, therefore the parallelepipedal solid formed out of {A}, {B}, and {C} equals the solid on *B* which is equilateral, but equiangular with the aforesaid solid.
 
 Therefore, *if three straight lines are proportional, then the parallelepipedal solid formed out of the three equals the parallelepipedal solid on the mean which is equilateral, but equiangular with the aforesaid solid.*
 
 <div class="qed">Q.E.D.</div>
 ----
-guide: This straightforward proof depends on viewing the two parallelepipeds as having the same height, which they do if the base of the first is taken to be the parallelogram *MN* and the base of the second the parallelogram *DF.*
+guide: This straightforward proof depends on viewing the two parallelepipeds as having the same height, which they do if the base of the first is taken to be the parallelogram {MN|pMN} and the base of the second the parallelogram {DF|pDF}.

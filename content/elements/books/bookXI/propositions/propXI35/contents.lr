@@ -17,16 +17,45 @@ statement: If there are two equal plane angles, and on their vertices there are 
 ----
 proof:
 
-Let the angles *BAC* and *EDF* be two equal rectilinear angles, and from the points *A* and *D* let the elevated straight lines *AG* and *DM* be set up containing, with the original straight lines, equal angles respectively, namely, the angle *MDE* equal to the angle *GAB* and the angle *MDF* equal to the angle *GAC.*
+Let the angles {BAC|angBAC} and {EDF|angEDF} be two equal rectilinear angles, and from the points {A} and {D} let the elevated straight lines {AG} and {DM} be set up containing, with the original straight lines, equal angles respectively, namely, the angle {MDE|angMDE} equal to the angle {GAB|angGAB} and the angle {MDF|angMDF} equal to the angle {GAC|angGAC}.
 
-Take the points *G* and *M* at random on *AG* and *DM.* Draw *GL* and *MN* from the points *G* and *M* perpendicular to the plane through *BA* and *AC* and the plane through *ED* and *DF,* and let them meet the planes at *L* and *N.* Join *LA* and *ND.* [!just XI.11]
+Take the points {G} and {M} at random on {AG} and {DM}. Draw {GL} and {MN} from the points {G} and {M} perpendicular to the plane through {BA|AB} and {AC} and the plane through {ED|DE} and {DF}, and let them meet the planes at {L} and {N}. Join {LA} and {ND}. [!just XI.11]
 
-I say that the angle *GAL* equals the angle *MDN.*
+I say that the angle {GAL|angGAL} equals the angle {MDN|angMDN}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="440" height="280" tabindex="0"></canvas>
 <noscript><img alt="XI.35 diagram" src="propXI35.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the equal plane angles BAC and EDF in one plane, the
+    // elevated lines AG and DM, the perpendiculars GL and MN to the plane,
+    // AH cut off equal to DM with HK parallel to GL, and the perpendiculars
+    // from K and N to the arms.
+    //
+    // Added, all transparent unless noted: the segments AB, AC, DE, DF, AH,
+    // AK the proof names; faceless triangles tABC, tDEF, tHAC, tMDF, tBCK,
+    // tEFN to carry the triangles' highlight, since a filled face would be
+    // raised over the figure (#140). AG, DM, GL, MN, LA, ND, KC, NF, KB,
+    // NE, HC, MF are solid slide twins over edges of Joyce's faces, hidden
+    // at rest (initiallyHidden), so they can be drawn from the end the
+    // proof draws them from. Angle markers, hidden at rest; HCA, DFM, ACK,
+    // DFN, ABK, DEN, AKH, HKC, DNM are right angles.
+    //
+    // Draggables (checked against the bundle): A, D, G and the unlettered
+    // arm ends b, c, e, f and plane corners x, y, z. G is deferred to the
+    // slide that sets up AG. Every other point is derived and listed per
+    // slide.
+    var FLOOR = ["floorplane","A","D","B","C","E","F","Ab","Ac","De","Df",
+                 "AB","AC","DE","DF"];
+    var ELEV  = FLOOR.concat(["G","M","AG","DM"]);
+    var PERP  = ELEV.concat(["L","N","GL","MN"]);
+    var JOIN  = PERP.concat(["LA","ND"]);
+    var Hd    = JOIN.concat(["H","AH"]);
+    var HKd   = Hd.concat(["K","HK","AK"]);
+    var FEET  = HKd.concat(["KC","NF","KB","NE","ABKC","DENF"]);
+    var HCd   = FEET.concat(["HC","BC","MF","EF","HAC","MDF","tHAC","tMDF"]);
+    var ALL   = HCd.concat(["BAH","MED","tABC","tDEF","tBCK","tEFN"]);
+    var REST  = ALL.concat(["AGL","MDN"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -79,35 +108,383 @@ I say that the angle *GAL* equals the angle *MDN.*
             "HAC;polygon;triangle;H,A,C;0;0;black;120,50,100",
             "DENF;polygon;quadrilateral;D,E,N,F;0;0;black;300,50,90",
             "MED;polygon;triangle;M,E,D;0;0;black;300,75,100",
-            "MDF;polygon;triangle;M,D,F;0;0;black;300,50,100"
+            "MDF;polygon;triangle;M,D,F;0;0;black;300,50,100",
+            // Transparent highlight targets: segments the proof names.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "DF;line;connect;D,F;0;0;0",
+            "AH;line;connect;A,H;0;0;0",
+            "AK;line;connect;A,K;0;0;0",
+            // Faceless triangles, since a filled face is raised (#140).
+            "tABC;polygon;triangle;A,B,C;0;0;0;0",
+            "tDEF;polygon;triangle;D,E,F;0;0;0;0",
+            "tHAC;polygon;triangle;H,A,C;0;0;0;0",
+            "tMDF;polygon;triangle;M,D,F;0;0;0;0",
+            "tBCK;polygon;triangle;B,C,K;0;0;0;0",
+            "tEFN;polygon;triangle;E,F,N;0;0;0;0",
+            // Slide twins over edges of Joyce's faces, hidden at rest.
+            "AG;line;connect;A,G",
+            "DM;line;connect;D,M",
+            "GL;line;connect;G,L",
+            "MN;line;connect;M,N",
+            "LA;line;connect;L,A",
+            "ND;line;connect;N,D",
+            "KC;line;connect;K,C",
+            "NF;line;connect;N,F",
+            "KB;line;connect;K,B",
+            "NE;line;connect;N,E",
+            "HC;line;connect;H,C",
+            "MF;line;connect;M,F",
+            // Angle markers, hidden at rest.
+            "angBAC;sector;angleMarker;A,B,C",
+            "angEDF;sector;angleMarker;D,E,F",
+            "angGAB;sector;angleMarker;A,G,B",
+            "angGAC;sector;angleMarker;A,G,C",
+            "angMDE;sector;angleMarker;D,M,E",
+            "angMDF;sector;angleMarker;D,M,F",
+            "angGAL;sector;angleMarker;A,G,L",
+            "angMDN;sector;angleMarker;D,M,N",
+            "angACB;sector;angleMarker;C,A,B",
+            "angDFE;sector;angleMarker;F,D,E",
+            "angBCK;sector;angleMarker;C,B,K",
+            "angEFN;sector;angleMarker;F,E,N",
+            "angCBK;sector;angleMarker;B,C,K",
+            "angFEN;sector;angleMarker;E,F,N",
+            "rtHCA;sector;angleMarkerRight;C,H,A",
+            "rtDFM;sector;angleMarkerRight;F,D,M",
+            "rtACK;sector;angleMarkerRight;C,A,K",
+            "rtDFN;sector;angleMarkerRight;F,D,N",
+            "rtABK;sector;angleMarkerRight;B,A,K",
+            "rtDEN;sector;angleMarkerRight;E,D,N",
+            "rtAKH;sector;angleMarkerRight;K,A,H",
+            "rtHKC;sector;angleMarkerRight;K,H,C",
+            "rtDNM;sector;angleMarkerRight;N,D,M"
         ],
+        initiallyHidden: ["AG","DM","GL","MN","LA","ND","KC","NF","KB","NE","HC","MF"],
+        deferDraggables: ["G"],
+        slides: [
+            { text: "“If there are two equal plane angles,”",
+              visible: REST,
+              highlighted: ["angBAC","angEDF"],
+              justifications: [{ ref: "XI.35" }] },
+            { text: "“and on their vertices there are set up elevated straight lines containing equal angles with the original straight lines respectively,”",
+              visible: REST,
+              highlighted: ["AG","DM","angGAB","angGAC","angMDE","angMDF"],
+              justifications: [{ ref: "XI.35" }] },
+            { text: "“if on the elevated straight lines points are taken at random”",
+              visible: REST,
+              highlighted: ["G","M"],
+              justifications: [{ ref: "XI.35" }] },
+            { text: "“and perpendiculars are drawn from them to the planes in which the original angles are,”",
+              visible: REST,
+              highlighted: ["GL","MN"],
+              justifications: [{ ref: "XI.35" }] },
+            { text: "“and if from the points so arising in the planes straight lines are joined to the vertices of the original angles,”",
+              visible: REST,
+              highlighted: ["L","N","LA","ND"],
+              justifications: [{ ref: "XI.35" }] },
+            { text: "“then they contain with the elevated straight lines equal angles.”",
+              visible: REST,
+              highlighted: ["angGAL","angMDN"],
+              justifications: [{ ref: "XI.35" }] },
+            { text: "Let the angles {BAC|angBAC} and {EDF|angEDF} be two equal rectilinear angles,",
+              visible: FLOOR,
+              highlighted: ["angBAC","angEDF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "angEDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and from the points {A} and {D} let the elevated straight lines {AG} and {DM} be set up",
+              visible: ELEV,
+              highlighted: ["AG","DM"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "AG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DM", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "containing, with the original straight lines, equal angles respectively,",
+              visible: ELEV,
+              highlighted: ["AG","DM","Ab","Ac","De","Df"] },
+            { text: "namely, the angle {MDE|angMDE} equal to the angle {GAB|angGAB} and the angle {MDF|angMDF} equal to the angle {GAC|angGAC}.",
+              visible: ELEV,
+              highlighted: ["angMDE","angGAB","angMDF","angGAC"],
+              transition: { animations: [
+                  { elem: "angGAB", name: geomlib.A.Sector.sweep },
+                  { elem: "angMDE", name: geomlib.A.Sector.sweep },
+                  { elem: "angGAC", name: geomlib.A.Sector.sweep },
+                  { elem: "angMDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Take the points {G} and {M} at random on {AG} and {DM}.",
+              visible: ELEV,
+              highlighted: ["G","M","AG","DM"] },
+            { text: "Draw {GL} and {MN} from the points {G} and {M} perpendicular",
+              visible: PERP,
+              highlighted: ["GL","MN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "GL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "MN", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "to the plane through {BA|AB} and {AC} and the plane through {ED|DE} and {DF},",
+              visible: PERP,
+              highlighted: ["GL","MN","AB","AC","DE","DF"] },
+            { text: "and let them meet the planes at {L} and {N}.",
+              visible: PERP,
+              highlighted: ["L","N"],
+              justifications: [{ claim: "GL, MN perpendicular to the plane", ref: "XI.11" }] },
+            { text: "Join {LA} and {ND}.",
+              visible: JOIN,
+              highlighted: ["LA","ND"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "LA", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ND", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that the angle {GAL|angGAL} equals the angle {MDN|angMDN}.",
+              visible: JOIN,
+              highlighted: ["angGAL","angMDN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angGAL", name: geomlib.A.Sector.sweep },
+                  { elem: "angMDN", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Make {AH} equal to {DM},",
+              visible: Hd,
+              highlighted: ["AH","DM"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AH = DM", ref: "I.3" }] },
+            { text: "and draw {HK} through the point {H} parallel to {GL}.",
+              visible: HKd,
+              highlighted: ["HK","GL"],
+              transition: { animations: [
+                  { elem: "HK", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "HK parallel to GL", ref: "I.31" }] },
+            { text: "Since {GL} is perpendicular to the plane through {BA|AB} and {AC},",
+              visible: HKd,
+              highlighted: ["GL","AB","AC"] },
+            { text: "therefore {HK} is also perpendicular to the plane through {BA|AB} and {AC}.",
+              visible: HKd,
+              highlighted: ["HK","AB","AC"],
+              justifications: [{ claim: "HK perpendicular to the plane", ref: "XI.8" }] },
+            { text: "Draw {KC}, {NF}, {KB} and {NE} from the points {K} and {N} perpendicular to the straight lines {AC}, {DF}, {AB}, and {DE}.",
+              visible: FEET,
+              highlighted: ["rtACK","rtDFN","rtABK","rtDEN"],
+              transition: { animations: [
+                  { elem: "KC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "NF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "NE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ABKC", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DENF", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "rtACK", name: geomlib.A.Sector.sweep },
+                  { elem: "rtDFN", name: geomlib.A.Sector.sweep },
+                  { elem: "rtABK", name: geomlib.A.Sector.sweep },
+                  { elem: "rtDEN", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "perpendiculars from K and N", ref: "I.12" }] },
+            { text: "Join {HC}, {CB|BC}, {MF}, and {FE|EF}.",
+              visible: HCd,
+              highlighted: ["HC","BC","MF","EF"],
+              transition: { animations: [
+                  { elem: "HC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "MF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HAC", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "MDF", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Since the square on {HA|AH} equals the sum of the squares on {HK} and {KA|AK},",
+              visible: HCd,
+              highlighted: ["AH","HK","AK","rtAKH"],
+              transition: { animations: [
+                  { elem: "rtAKH", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the sum of the squares on {KC} and {CA|AC} equals the square on {KA|AK},",
+              visible: HCd,
+              highlighted: ["KC","AC","AK","rtACK"] },
+            { text: "therefore the square on {HA|AH} equals the sum of the squares on {HK}, {KC}, and {CA|AC}.",
+              visible: HCd,
+              highlighted: ["AH","HK","KC","AC"],
+              justifications: [{ claim: "HA² = HK² + KC² + CA²", ref: "I.47" }] },
+            { text: "But the square on {HC} equals the sum of the squares on {HK} and {KC},",
+              visible: HCd,
+              highlighted: ["HC","HK","KC","rtHKC"],
+              transition: { animations: [
+                  { elem: "rtHKC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the square on {HA|AH} equals the sum of the squares on {HC} and {CA|AC}.",
+              visible: HCd,
+              highlighted: ["AH","HC","AC"],
+              justifications: [{ claim: "HA² = HC² + CA²", ref: "I.47" }] },
+            { text: "Therefore the angle {HCA|rtHCA} is right.",
+              visible: HCd,
+              highlighted: ["rtHCA"],
+              transition: { animations: [
+                  { elem: "rtHCA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle HCA right", ref: "I.48" }] },
+            { text: "For the same reason the angle {DFM|rtDFM} is also right.",
+              visible: HCd,
+              highlighted: ["rtDFM"],
+              transition: { animations: [
+                  { elem: "rtDFM", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the angle {ACH|rtHCA} equals the angle {DFM|rtDFM}.",
+              visible: HCd,
+              highlighted: ["rtHCA","rtDFM"] },
+            { text: "But the angle {HAC|angGAC} equals the angle {MDF|angMDF}.",
+              visible: HCd,
+              highlighted: ["angGAC","angMDF"] },
+            { text: "Therefore {MDF|tMDF} and {HAC|tHAC} are two triangles which have two angles equal to two angles respectively,",
+              visible: HCd,
+              highlighted: ["tMDF","tHAC","rtHCA","rtDFM","angGAC","angMDF"] },
+            { text: "and one side equal to one side, namely, that opposite one of the equal angles, that is, {HA|AH} equals {MD|DM},",
+              visible: HCd,
+              highlighted: ["AH","DM","rtHCA","rtDFM"] },
+            { text: "therefore they also have the remaining sides equal to the remaining sides respectively. Therefore {AC} equals {DF}.",
+              visible: HCd,
+              highlighted: ["AC","DF"],
+              justifications: [{ claim: "AC = DF", ref: "I.26" }] },
+            { text: "Similarly we can prove that {AB} also equals {DE}.",
+              visible: ALL,
+              highlighted: ["AB","DE"],
+              transition: { animations: [
+                  { elem: "BAH", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "MED", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Since then {AC} equals {DF}, and {AB} equals {DE},",
+              visible: ALL,
+              highlighted: ["AC","DF","AB","DE"] },
+            { text: "the two sides {CA|AC} and {AB} equal the two sides {FD|DF} and {DE}.",
+              visible: ALL,
+              highlighted: ["AC","AB","DF","DE"] },
+            { text: "But the angle {CAB|angBAC} also equals the angle {FDE|angEDF},",
+              visible: ALL,
+              highlighted: ["angBAC","angEDF"] },
+            { text: "therefore the base {BC} equals the base {EF}, the triangle equals the triangle, and the remaining angles to the remaining angles.",
+              visible: ALL,
+              highlighted: ["BC","EF","tABC","tDEF"],
+              justifications: [{ claim: "triangle ABC = triangle DEF", ref: "I.4" }] },
+            { text: "Therefore the angle {ACB|angACB} equals the angle DPE.",
+              visible: ALL,
+              highlighted: ["angACB","angDFE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angACB", name: geomlib.A.Sector.sweep },
+                  { elem: "angDFE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But the right angle {ACK|rtACK} equals the right angle {DFN|rtDFN},",
+              visible: ALL,
+              highlighted: ["rtACK","rtDFN"] },
+            { text: "therefore the remaining angle {BCK|angBCK} equals the remaining angle {EFN|angEFN}.",
+              visible: ALL,
+              highlighted: ["angBCK","angEFN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBCK", name: geomlib.A.Sector.sweep },
+                  { elem: "angEFN", name: geomlib.A.Sector.sweep } ] } },
+            { text: "For the same reason the angle {CBK|angCBK} also equals the angle {FEN|angFEN}.",
+              visible: ALL,
+              highlighted: ["angCBK","angFEN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCBK", name: geomlib.A.Sector.sweep },
+                  { elem: "angFEN", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore {BCK|tBCK} and {EFN|tEFN} are two triangles which have two angles equal to two angles respectively,",
+              visible: ALL,
+              highlighted: ["tBCK","tEFN","angBCK","angEFN","angCBK","angFEN"] },
+            { text: "and one side equal to one side, namely, that adjacent to the equal angles, that is, {BC} equals {EF},",
+              visible: ALL,
+              highlighted: ["BC","EF"] },
+            { text: "therefore the remaining sides equal the remaining sides. Therefore {CK|KC} equals {FN|NF}.",
+              visible: ALL,
+              highlighted: ["KC","NF"],
+              justifications: [{ claim: "CK = FN", ref: "I.26" }] },
+            { text: "But {AC} also equals {DF}, therefore the two sides {AC} and {CK|KC} equal the two sides {DF} and {FN|NF},",
+              visible: ALL,
+              highlighted: ["AC","KC","DF","NF"] },
+            { text: "and they contain right angles. Therefore the base {AK} equals the base {DN|ND}.",
+              visible: ALL,
+              highlighted: ["rtACK","rtDFN","AK","ND"],
+              justifications: [{ claim: "AK = DN", ref: "I.4" }] },
+            { text: "And, since {AH} equals {DM}, therefore the square on {AH} equals the square on {DM}.",
+              visible: ALL,
+              highlighted: ["AH","DM"] },
+            { text: "But the sum of the squares on {AK} and {KH|HK} equals the square on {AH}, for the angle {AKH|rtAKH} is right,",
+              visible: ALL,
+              highlighted: ["AK","HK","AH","rtAKH"] },
+            { text: "and the sum of the squares on {DN|ND} and {NM|MN} equals the square on {DM}, for the angle {DNM|rtDNM} is right,",
+              visible: ALL,
+              highlighted: ["ND","MN","DM","rtDNM"],
+              transition: { animations: [
+                  { elem: "rtDNM", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "AK² + KH² = AH², DN² + NM² = DM²", ref: "I.47" }] },
+            { text: "therefore the sum of the squares on {AK} and {KH|HK} equals the sum of the squares on {DN|ND} and {NM|MN}.",
+              visible: ALL,
+              highlighted: ["AK","HK","ND","MN"] },
+            { text: "And of these the square on {AK} equals the square on {DN|ND},",
+              visible: ALL,
+              highlighted: ["AK","ND"] },
+            { text: "therefore the remaining square on {KH|HK} equals the square on {NM|MN}. Therefore {HK} equals {MN}.",
+              visible: ALL,
+              highlighted: ["HK","MN"] },
+            { text: "And, since the two sides {HA|AH} and {AK} equal the two sides {MD|DM} and {DN|ND} respectively,",
+              visible: ALL,
+              highlighted: ["AH","AK","DM","ND"] },
+            { text: "and the base {HK} equals the base {MN}, therefore the angle {HAK|angGAL} equals the angle {MDN|angMDN}.",
+              visible: ALL,
+              highlighted: ["HK","MN","angGAL","angMDN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angGAL", name: geomlib.A.Sector.sweep },
+                  { elem: "angMDN", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle HAK = angle MDN", ref: "I.8" }] },
+            { text: "Therefore, if there are two equal plane angles,",
+              visible: ALL,
+              highlighted: ["angBAC","angEDF"] },
+            { text: "and on their vertices there are set up elevated straight lines containing equal angles with the original straight lines respectively,",
+              visible: ALL,
+              highlighted: ["AG","DM","angGAB","angGAC","angMDE","angMDF"] },
+            { text: "if on the elevated straight lines points are taken at random",
+              visible: ALL,
+              highlighted: ["G","M"] },
+            { text: "and perpendiculars are drawn from them to the planes in which the original angles are,",
+              visible: ALL,
+              highlighted: ["GL","MN"] },
+            { text: "and if from the points so arising in the planes straight lines are joined to the vertices of the original angles,",
+              visible: ALL,
+              highlighted: ["L","N","LA","ND"] },
+            { text: "then they contain with the elevated straight lines equal angles.",
+              visible: ALL,
+              highlighted: ["angGAL","angMDN"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.35") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":   "/elements/books/bookI/propositions/propI3/",
+        "I.4":   "/elements/books/bookI/propositions/propI4/",
+        "I.8":   "/elements/books/bookI/propositions/propI8/",
+        "I.12":  "/elements/books/bookI/propositions/propI12/",
+        "I.26":  "/elements/books/bookI/propositions/propI26/",
+        "I.31":  "/elements/books/bookI/propositions/propI31/",
+        "I.47":  "/elements/books/bookI/propositions/propI47/",
+        "I.48":  "/elements/books/bookI/propositions/propI48/",
+        "XI.8":  "/elements/books/bookXI/propositions/propXI8/",
+        "XI.11": "/elements/books/bookXI/propositions/propXI11/"
     });
 </script>
 </figure>
 
-Make *AH* equal to *DM,* and draw *HK* through the point *H* parallel to *GL.* [!just I.3, I.31]
+Make {AH} equal to {DM}, and draw {HK} through the point {H} parallel to {GL}. [!just I.3, I.31]
 
-Since *GL* is perpendicular to the plane through *BA* and *AC,* therefore *HK* is also perpendicular to the plane through *BA* and *AC.* [!just XI.8]
+Since {GL} is perpendicular to the plane through {BA|AB} and {AC}, therefore {HK} is also perpendicular to the plane through {BA|AB} and {AC}. [!just XI.8]
 
-Draw *KC, NF, KB* and *NE* from the points *K* and *N* perpendicular to the straight lines *AC, DF, AB,* and *DE.* Join *HC, CB, MF,* and *FE.* [!just I.12]
+Draw {KC}, {NF}, {KB} and {NE} from the points {K} and {N} perpendicular to the straight lines {AC}, {DF}, {AB}, and {DE}. Join {HC}, {CB|BC}, {MF}, and {FE|EF}. [!just I.12]
 
-Since the square on *HA* equals the sum of the squares on *HK* and *KA,* and the sum of the squares on *KC* and *CA* equals the square on *KA,* therefore the square on *HA* equals the sum of the squares on *HK, KC,* and *CA.* [!just I.47]
+Since the square on {HA|AH} equals the sum of the squares on {HK} and {KA|AK}, and the sum of the squares on {KC} and {CA|AC} equals the square on {KA|AK}, therefore the square on {HA|AH} equals the sum of the squares on {HK}, {KC}, and {CA|AC}. [!just I.47]
 
-But the square on *HC* equals the sum of the squares on *HK* and *KC,* therefore the square on *HA* equals the sum of the squares on *HC* and *CA.* Therefore the angle *HCA* is right. For the same reason the angle *DFM* is also right. [!just I.47; I.48]
+But the square on {HC} equals the sum of the squares on {HK} and {KC}, therefore the square on {HA|AH} equals the sum of the squares on {HC} and {CA|AC}. Therefore the angle {HCA|rtHCA} is right. For the same reason the angle {DFM|rtDFM} is also right. [!just I.47; I.48]
 
-Therefore the angle *ACH* equals the angle *DFM.* But the angle *HAC* equals the angle *MDF.* Therefore *MDF* and *HAC* are two triangles which have two angles equal to two angles respectively, and one side equal to one side, namely, that opposite one of the equal angles, that is, *HA* equals *MD,* therefore they also have the remaining sides equal to the remaining sides respectively. Therefore *AC* equals *DF.* [!just I.26]
+Therefore the angle {ACH|rtHCA} equals the angle {DFM|rtDFM}. But the angle {HAC|angGAC} equals the angle {MDF|angMDF}. Therefore {MDF|tMDF} and {HAC|tHAC} are two triangles which have two angles equal to two angles respectively, and one side equal to one side, namely, that opposite one of the equal angles, that is, {HA|AH} equals {MD|DM}, therefore they also have the remaining sides equal to the remaining sides respectively. Therefore {AC} equals {DF}. [!just I.26]
 
-Similarly we can prove that *AB* also equals *DE.* Since then *AC* equals *DF,* and *AB* equals *DE,* the two sides *CA* and *AB* equal the two sides *FD* and *DE.* But the angle *CAB* also equals the angle *FDE,* therefore the base *BC* equals the base *EF,* the triangle equals the triangle, and the remaining angles to the remaining angles. Therefore the angle *ACB* equals the angle *DPE.* [!just I.4]
+Similarly we can prove that {AB} also equals {DE}. Since then {AC} equals {DF}, and {AB} equals {DE}, the two sides {CA|AC} and {AB} equal the two sides {FD|DF} and {DE}. But the angle {CAB|angBAC} also equals the angle {FDE|angEDF}, therefore the base {BC} equals the base {EF}, the triangle equals the triangle, and the remaining angles to the remaining angles. Therefore the angle {ACB|angACB} equals the angle *DPE.* [!just I.4]
 
-But the right angle *ACK* equals the right angle *DFN,* therefore the remaining angle *BCK* equals the remaining angle *EFN.* For the same reason the angle *CBK* also equals the angle *FEN.*
+But the right angle {ACK|rtACK} equals the right angle {DFN|rtDFN}, therefore the remaining angle {BCK|angBCK} equals the remaining angle {EFN|angEFN}. For the same reason the angle {CBK|angCBK} also equals the angle {FEN|angFEN}.
 
-Therefore *BCK* and *EFN* are two triangles which have two angles equal to two angles respectively, and one side equal to one side, namely, that adjacent to the equal angles, that is, *BC* equals *EF,* therefore the remaining sides equal the remaining sides. Therefore *CK* equals *FN.* [!just I.26]
+Therefore {BCK|tBCK} and {EFN|tEFN} are two triangles which have two angles equal to two angles respectively, and one side equal to one side, namely, that adjacent to the equal angles, that is, {BC} equals {EF}, therefore the remaining sides equal the remaining sides. Therefore {CK|KC} equals {FN|NF}. [!just I.26]
 
-But *AC* also equals *DF,* therefore the two sides *AC* and *CK* equal the two sides *DF* and *FN,* and they contain right angles. Therefore the base *AK* equals the base *DN.* [!just I.4]
+But {AC} also equals {DF}, therefore the two sides {AC} and {CK|KC} equal the two sides {DF} and {FN|NF}, and they contain right angles. Therefore the base {AK} equals the base {DN|ND}. [!just I.4]
 
-And, since *AH* equals *DM,* therefore the square on *AH* equals the square on *DM.* But the sum of the squares on *AK* and *KH* equals the square on *AH,* for the angle *AKH* is right, and the sum of the squares on *DN* and *NM* equals the square on *DM,* for the angle *DNM* is right, therefore the sum of the squares on *AK* and *KH* equals the sum of the squares on *DN* and *NM.* And of these the square on *AK* equals the square on *DN,* therefore the remaining square on *KH* equals the square on *NM.* Therefore *HK* equals *MN.* [!just I.47]
+And, since {AH} equals {DM}, therefore the square on {AH} equals the square on {DM}. But the sum of the squares on {AK} and {KH|HK} equals the square on {AH}, for the angle {AKH|rtAKH} is right, and the sum of the squares on {DN|ND} and {NM|MN} equals the square on {DM}, for the angle {DNM|rtDNM} is right, therefore the sum of the squares on {AK} and {KH|HK} equals the sum of the squares on {DN|ND} and {NM|MN}. And of these the square on {AK} equals the square on {DN|ND}, therefore the remaining square on {KH|HK} equals the square on {NM|MN}. Therefore {HK} equals {MN}. [!just I.47]
 
-And, since the two sides *HA* and *AK* equal the two sides *MD* and *DN* respectively, and the base *HK* equals the base *MN,* therefore the angle *HAK* equals the angle *MDN.* [!just I.8]
+And, since the two sides {HA|AH} and {AK} equal the two sides {MD|DM} and {DN|ND} respectively, and the base {HK} equals the base {MN}, therefore the angle {HAK|angGAL} equals the angle {MDN|angMDN}. [!just I.8]
 
 Therefore, *if there are two equal plane angles, and on their vertices there are set up elevated straight lines containing equal angles with the original straight lines respectively, if on the elevated straight lines points are taken at random and perpendiculars are drawn from them to the planes in which the original angles are, and if from the points so arising in the planes straight lines are joined to the vertices of the original angles, then they contain with the elevated straight lines equal angles.*
 
