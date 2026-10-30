@@ -17,16 +17,34 @@ statement: Given as many numbers as we please, to find the least of those which 
 ----
 proof:
 
-Let *A, B,* and *C* be the given numbers, as many as we please.
+Let {A}, {B}, and {C} be the given numbers, as many as we please.
 
-It is required to find the least of those which have the same ratio with *A, B,* and *C.*
+It is required to find the least of those which have the same ratio with {A}, {B}, and {C}.
 
-Either *A, B,* and *C* are relatively prime or they are not.
+Either {A}, {B}, and {C} are relatively prime or they are not.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="280" tabindex="0"></canvas>
 <noscript><img alt="VII.33 diagram" src="propVII33.gif"/></noscript>
 <script type="text/javascript">
+    // A, B, C the given numbers; D their greatest common measure; E, F, G
+    // the numbers of times D measures them; H, K, L the supposed lesser
+    // numbers in the same ratio, and M the number of times H measures A.
+    // Joyce's figure is drawn for the second case (not relatively prime).
+    // Line segments only, so the walk is highlight beats plus one stroke
+    // for D, the number the proof takes. H, K, L and M are withdrawn once
+    // the reductio closes. Nothing is added to the figure.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, C1, D1, D2, E1, F1, G1, H1, K1, L1, M1 and the off-canvas,
+    // colourless rail ends. D1, D2 and E1 onward arrive mid-walk, so they
+    // are deferred; B2, C2, E2, F2, G2, H2, K2, L2, M2 are derived and
+    // listed per slide.
+    var GIVEN    = ["A","B","C","A1","A2","B1","B2","C1","C2"];
+    var WITH_D   = GIVEN.concat(["D","D1","D2"]);
+    var WITH_EFG = WITH_D.concat(["E","E1","E2","F","F1","F2","G","G1","G2"]);
+    var WITH_HKL = WITH_EFG.concat(["H","H1","H2","K","K1","K2","L","L1","L2"]);
+    var WITH_M   = WITH_HKL.concat(["M","M1","M2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -85,31 +103,170 @@ Either *A, B,* and *C* are relatively prime or they are not.
             "M2;point;proportion;H1,H2,A1,A2,U1,U2,M1,A3;0",
             "M;line;connect;M1,M2;black"
         ],
+        deferDraggables: ["D1","D2","E1","F1","G1","H1","K1","L1","M1"],
+        slides: [
+            { text: "“Given as many numbers as we please, to find the least of those which have the same ratio with them.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "VII.33" }] },
+            { text: "Let {A}, {B}, and {C} be the given numbers, as many as we please.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "It is required to find the least of those which have the same ratio with {A}, {B}, and {C}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "Either {A}, {B}, and {C} are relatively prime or they are not.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            // Case one: relatively prime. Nothing further is drawn.
+            { text: "Now, if {A}, {B}, and {C} are relatively prime,",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "then they are the least of those which have the same ratio with them.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "VII.21" }] },
+            // Case two — the case Joyce's figure draws.
+            { text: "But, if not, take {D} the greatest common measure of {A}, {B}, and {C}.",
+              visible: WITH_D,
+              highlighted: ["D","A","B","C"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "D = GCM of A, B, C", ref: "VII.3" }] },
+            { text: "Let there be as many units in the numbers {E}, {F}, and {G}",
+              visible: WITH_EFG,
+              highlighted: ["E","F","G"] },
+            { text: "as the times that {D} measures the numbers {A}, {B}, and {C} respectively.",
+              visible: WITH_EFG,
+              highlighted: ["D","A","B","C"] },
+            { text: "Therefore the numbers {E}, {F}, and {G} measure the numbers {A}, {B}, and {C} respectively according to the units in {D}.",
+              visible: WITH_EFG,
+              highlighted: ["E","F","G","A","B","C","D"],
+              justifications: [{ ref: "VII.16" }] },
+            { text: "Therefore {E}, {F}, and {G} measure {A}, {B}, and {C} the same number of times.",
+              visible: WITH_EFG,
+              highlighted: ["E","F","G","A","B","C"] },
+            { text: "Therefore {E}, {F}, and {G} are in the same ratio with {A}, {B}, and {C}.",
+              visible: WITH_EFG,
+              highlighted: ["E","F","G","A","B","C"],
+              justifications: [{ ref: "VII.Def.20" }] },
+            { text: "I say next that they are the least that are in that ratio.",
+              visible: WITH_EFG,
+              highlighted: ["E","F","G"] },
+            { text: "If {E}, {F}, and {G} are not the least of those which have the same ratio with {A}, {B}, and {C},",
+              visible: WITH_EFG,
+              highlighted: ["E","F","G","A","B","C"] },
+            { text: "then there are numbers less than {E}, {F}, and {G} in the same ratio with {A}, {B}, and {C}.",
+              visible: WITH_EFG,
+              highlighted: ["E","F","G","A","B","C"] },
+            { text: "Let them be {H}, {K}, and {L}.",
+              visible: WITH_HKL,
+              highlighted: ["H","K","L"] },
+            { text: "Therefore {H} measures {A} the same number of times",
+              visible: WITH_HKL,
+              highlighted: ["H","A"] },
+            { text: "that the numbers {K} and {L} measure the numbers {B} and {C} respectively.",
+              visible: WITH_HKL,
+              highlighted: ["K","L","B","C"] },
+            { text: "Let there be as many units in {M} as the times that {H} measures {A}.",
+              visible: WITH_M,
+              highlighted: ["M","H","A"] },
+            { text: "Then the numbers {K} and {L} also measure the numbers {B} and {C} respectively according to the units in {M}.",
+              visible: WITH_M,
+              highlighted: ["K","L","B","C","M"] },
+            { text: "And, since {H} measures {A} according to the units in {M},",
+              visible: WITH_M,
+              highlighted: ["H","A","M"] },
+            { text: "therefore {M} also measures {A} according to the units in {H}.",
+              visible: WITH_M,
+              highlighted: ["M","A","H"],
+              justifications: [{ ref: "VII.16" }] },
+            { text: "For the same reason {M} also measures the numbers {B} and {C}",
+              visible: WITH_M,
+              highlighted: ["M","B","C"] },
+            { text: "according to the units in the numbers {K} and {L} respectively.",
+              visible: WITH_M,
+              highlighted: ["K","L"],
+              justifications: [{ ref: "VII.16" }] },
+            { text: "Therefore {M} measures {A}, {B}, and {C}.",
+              visible: WITH_M,
+              highlighted: ["M","A","B","C"] },
+            { text: "Now, since {H} measures {A} according to the units in {M}, therefore {H} multiplied by {M} makes {A}.",
+              visible: WITH_M,
+              highlighted: ["H","M","A"],
+              justifications: [{ ref: "VII.Def.15" }] },
+            { text: "For the same reason also {E} multiplied by {D} makes {A}.",
+              visible: WITH_M,
+              highlighted: ["E","D","A"],
+              justifications: [{ ref: "VII.Def.15" }] },
+            { text: "Therefore the product of {E} and {D} equals the product of {H} and {M}.",
+              visible: WITH_M,
+              highlighted: ["E","D","H","M"] },
+            { text: "Therefore {E} is to {H} as {M} is to {D}.",
+              visible: WITH_M,
+              highlighted: ["E","H","M","D"],
+              justifications: [{ ref: "VII.19" }] },
+            { text: "But {E} is greater than {H}, therefore {M} is also greater than {D}.",
+              visible: WITH_M,
+              highlighted: ["E","H","M","D"] },
+            { text: "And it measures {A}, {B}, and {C}, which is impossible,",
+              visible: WITH_M,
+              highlighted: ["M","A","B","C"] },
+            { text: "for by hypothesis, {D} is the greatest common measure of {A}, {B}, and {C}.",
+              visible: WITH_M,
+              highlighted: ["D","A","B","C"] },
+            // The reductio is closed: the supposed H, K, L and M are withdrawn.
+            { text: "Therefore there cannot be any numbers less than {E}, {F}, and {G}",
+              visible: WITH_EFG,
+              highlighted: ["E","F","G"] },
+            { text: "which are in the same ratio with {A}, {B}, and {C}.",
+              visible: WITH_EFG,
+              highlighted: ["A","B","C"] },
+            { text: "Therefore {E}, {F}, and {G} are the least of those which have the same ratio with {A}, {B}, and {C}.",
+              visible: WITH_EFG,
+              highlighted: ["E","F","G","A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.33") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.3":      "/elements/books/bookVII/propositions/propVII3/",
+        "VII.16":     "/elements/books/bookVII/propositions/propVII16/",
+        "VII.19":     "/elements/books/bookVII/propositions/propVII19/",
+        "VII.21":     "/elements/books/bookVII/propositions/propVII21/",
+        "VII.Def.15": "/elements/books/bookVII/definitions/defVII15/",
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/"
     });
 </script>
 </figure>
 
-Now, if *A, B,* and *C* are relatively prime, then they are the least of those which have the same ratio with them. [!just VII.21]
+Now, if {A}, {B}, and {C} are relatively prime, then they are the least of those which have the same ratio with them. [!just VII.21]
 
-But, if not, take *D* the greatest common measure of *A, B,* and *C.* Let there be as many units in the numbers *E, F,* and *G* as the times that *D* measures the numbers *A, B,* and *C* respectively. [!just VII.3]
+But, if not, take {D} the greatest common measure of {A}, {B}, and {C}. Let there be as many units in the numbers {E}, {F}, and {G} as the times that {D} measures the numbers {A}, {B}, and {C} respectively. [!just VII.3]
 
-Therefore the numbers *E, F,* and *G* measure the numbers *A, B,* and *C* respectively according to the units in *D.* Therefore *E, F,* and *G* measure *A, B,* and *C* the same number of times. Therefore *E, F,* and *G* are in the same ratio with *A, B,* and *C.* [!just VII.16; VII.Def.20]
+Therefore the numbers {E}, {F}, and {G} measure the numbers {A}, {B}, and {C} respectively according to the units in {D}. Therefore {E}, {F}, and {G} measure {A}, {B}, and {C} the same number of times. Therefore {E}, {F}, and {G} are in the same ratio with {A}, {B}, and {C}. [!just VII.16; VII.Def.20]
 
 I say next that they are the least that are in that ratio.
 
-If *E, F,* and *G* are not the least of those which have the same ratio with *A, B,* and *C,* then there are numbers less than *E, F,* and *G* in the same ratio with *A, B,* and *C.* Let them be *H, K,* and *L.* Therefore *H* measures *A* the same number of times that the numbers *K* and *L* measure the numbers *B* and *C* respectively.
+If {E}, {F}, and {G} are not the least of those which have the same ratio with {A}, {B}, and {C}, then there are numbers less than {E}, {F}, and {G} in the same ratio with {A}, {B}, and {C}. Let them be {H}, {K}, and {L}. Therefore {H} measures {A} the same number of times that the numbers {K} and {L} measure the numbers {B} and {C} respectively.
 
-Let there be as many units in *M* as the times that *H* measures *A.* Then the numbers *K* and *L* also measure the numbers *B* and *C* respectively according to the units in *M.*
+Let there be as many units in {M} as the times that {H} measures {A}. Then the numbers {K} and {L} also measure the numbers {B} and {C} respectively according to the units in {M}.
 
-And, since *H* measures *A* according to the units in *M,* therefore *M* also measures *A* according to the units in *H.* For the same reason *M* also measures the numbers *B* and *C* according to the units in the numbers *K* and *L* respectively. Therefore *M* measures *A, B,* and *C.* [!just VII.16]
+And, since {H} measures {A} according to the units in {M}, therefore {M} also measures {A} according to the units in {H}. For the same reason {M} also measures the numbers {B} and {C} according to the units in the numbers {K} and {L} respectively. Therefore {M} measures {A}, {B}, and {C}. [!just VII.16]
 
-Now, since *H* measures *A* according to the units in *M,* therefore *H* multiplied by *M* makes *A.* For the same reason also *E* multiplied by *D* makes *A.* [!just VII.Def.15]
+Now, since {H} measures {A} according to the units in {M}, therefore {H} multiplied by {M} makes {A}. For the same reason also {E} multiplied by {D} makes {A}. [!just VII.Def.15]
 
-Therefore the product of *E* and *D* equals the product of *H* and *M.* Therefore *E* is to *H* as *M* is to *D.* [!just VII.19]
+Therefore the product of {E} and {D} equals the product of {H} and {M}. Therefore {E} is to {H} as {M} is to {D}. [!just VII.19]
 
-But *E* is greater than *H,* therefore *M* is also greater than *D.* And it measures *A, B,* and *C,* which is impossible, for by hypothesis, *D* is the greatest common measure of *A, B,* and *C.*
+But {E} is greater than {H}, therefore {M} is also greater than {D}. And it measures {A}, {B}, and {C}, which is impossible, for by hypothesis, {D} is the greatest common measure of {A}, {B}, and {C}.
 
-Therefore there cannot be any numbers less than *E, F,* and *G* which are in the same ratio with *A, B,* and *C.* Therefore *E, F,* and *G* are the least of those which have the same ratio with *A, B,* and *C.*
+Therefore there cannot be any numbers less than {E}, {F}, and {G} which are in the same ratio with {A}, {B}, and {C}. Therefore {E}, {F}, and {G} are the least of those which have the same ratio with {A}, {B}, and {C}.
 
 <div class="qed">Q.E.D.</div>
 ----

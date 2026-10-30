@@ -17,18 +17,33 @@ statement: To find the least number which two given numbers measure.
 ----
 proof:
 
-Let *A* and *B* be the two given numbers.
+Let {A} and {B} be the two given numbers.
 
 It is required to find the least number which they measure.
 
-Now either *A* and *B* are relatively prime or they are not.
+Now either {A} and {B} are relatively prime or they are not.
 
-First, let *A* and *B* be relatively prime. Multiply *A* by *B* to make *C.* Then *B* multiplied by *A* makes *C.* Therefore *A* and *B* measure *C.* [!just VII.18]
+First, let {A} and {B} be relatively prime. Multiply {A} by {B} to make {C}. Then {B} multiplied by {A} makes {C}. Therefore {A} and {B} measure {C}. [!just VII.18]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="170" tabindex="0"></canvas>
 <noscript><img alt="VII.34 diagram" src="propVII34a.gif"/></noscript>
 <script type="text/javascript">
+    // First case: A and B relatively prime, C their product; D the supposed
+    // lesser number they measure, E and F the numbers of times A and B
+    // measure it. Line segments only, so the walk is highlight beats plus
+    // one stroke for C, the number the proof makes. D, E and F are withdrawn
+    // once the reductio closes. Nothing is added to the figure.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, D1, D2, E1, F1 and the off-canvas, colourless rail ends.
+    // C1 onward arrive mid-walk, so they are deferred; C2, E2, F2
+    // (proportion) are derived and listed per slide.
+    var GIVEN  = ["A","B","A1","A2","B1","B2"];
+    var WITH_C = GIVEN.concat(["C","C1","C2"]);
+    var WITH_D = WITH_C.concat(["D","D1","D2"]);
+    var WITH_E = WITH_D.concat(["E","E1","E2"]);
+    var WITH_F = WITH_E.concat(["F","F1","F2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -63,32 +78,150 @@ First, let *A* and *B* be relatively prime. Multiply *A* by *B* to make *C.* The
             "F2;point;proportion;B1,B2,D1,D2,U1,U2,F1,E3;0",
             "F;line;connect;F1,F2;black"
         ],
+        deferDraggables: ["C1","D1","D2","E1","F1"],
+        slides: [
+            { text: "“To find the least number which two given numbers measure.”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VII.34" }] },
+            { text: "Let {A} and {B} be the two given numbers.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "It is required to find the least number which they measure.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Now either {A} and {B} are relatively prime or they are not.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            // First case — this figure. The second has its own figure below.
+            { text: "First, let {A} and {B} be relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Multiply {A} by {B} to make {C}.",
+              visible: WITH_C,
+              highlighted: ["A","B","C"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {B} multiplied by {A} makes {C}.",
+              visible: WITH_C,
+              highlighted: ["B","A","C"],
+              justifications: [{ ref: "VII.18" }] },
+            { text: "Therefore {A} and {B} measure {C}.",
+              visible: WITH_C,
+              highlighted: ["A","B","C"] },
+            { text: "I say next that it is also the least number they measure.",
+              visible: WITH_C,
+              highlighted: ["C"] },
+            { text: "If not, then {A} and {B} measure some number {D} less than {C}",
+              visible: WITH_D,
+              highlighted: ["A","B","D","C"] },
+            { text: "Let there be as many units in {E} as the times that {A} measures {D},",
+              visible: WITH_E,
+              highlighted: ["E","A","D"] },
+            { text: "and as many units in {F} as the times that {B} measures {D}.",
+              visible: WITH_F,
+              highlighted: ["F","B","D"] },
+            { text: "Then {A} multiplied by {E} makes {D}, and {B} multiplied by {F} makes {D}.",
+              visible: WITH_F,
+              highlighted: ["A","E","B","F","D"],
+              justifications: [{ ref: "VII.Def.15" }] },
+            { text: "Therefore the product of {A} and {E} equals the product of {B} and {F}.",
+              visible: WITH_F,
+              highlighted: ["A","E","B","F"] },
+            { text: "Therefore {A} is to {B} as {F} is to {E}.",
+              visible: WITH_F,
+              highlighted: ["A","B","F","E"],
+              justifications: [{ ref: "VII.19" }] },
+            { text: "But {A} and {B} are relatively prime, primes are also least,",
+              visible: WITH_F,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VII.21" }] },
+            { text: "and the least measure the numbers which have the same ratio the same number of times,",
+              visible: WITH_F,
+              highlighted: ["A","B","F","E"] },
+            { text: "the greater the greater and the less the less,",
+              visible: WITH_F,
+              highlighted: ["A","B","F","E"] },
+            { text: "therefore {B} measures {E} as the consequent the consequent.",
+              visible: WITH_F,
+              highlighted: ["B","E"],
+              justifications: [{ ref: "VII.20" }] },
+            { text: "And, since {A} multiplied by {B} and by {E} makes {C} and {D},",
+              visible: WITH_F,
+              highlighted: ["A","B","E","C","D"] },
+            { text: "therefore {B} is to {E} as {C} is to {D}.",
+              visible: WITH_F,
+              highlighted: ["B","E","C","D"],
+              justifications: [{ ref: "VII.17" }] },
+            { text: "But {B} measures {E}, therefore {C} also measures {D}, the greater the less, which is impossible.",
+              visible: WITH_F,
+              highlighted: ["B","E","C","D"] },
+            // The reductio is closed: the supposed D, E and F are withdrawn.
+            { text: "Therefore {A} and {B} do not measure any number less than {C}.",
+              visible: WITH_C,
+              highlighted: ["A","B","C"] },
+            { text: "Therefore {C} is the least that is measured by {A} and {B}.",
+              visible: WITH_C,
+              highlighted: ["C","A","B"] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.34") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.17":     "/elements/books/bookVII/propositions/propVII17/",
+        "VII.18":     "/elements/books/bookVII/propositions/propVII18/",
+        "VII.19":     "/elements/books/bookVII/propositions/propVII19/",
+        "VII.20":     "/elements/books/bookVII/propositions/propVII20/",
+        "VII.21":     "/elements/books/bookVII/propositions/propVII21/",
+        "VII.Def.15": "/elements/books/bookVII/definitions/defVII15/"
     });
 </script>
 </figure>
 
 I say next that it is also the least number they measure.
 
-If not, then *A* and *B* measure some number *D* less than *C*
+If not, then {A} and {B} measure some number {D} less than {C}
 
-Let there be as many units in *E* as the times that *A* measures *D,* and as many units in *F* as the times that *B* measures *D.*
+Let there be as many units in {E} as the times that {A} measures {D}, and as many units in {F} as the times that {B} measures {D}.
 
-Then *A* multiplied by *E* makes *D,* and *B* multiplied by *F* makes *D.* Therefore the product of *A* and *E* equals the product of *B* and *F.* Therefore *A* is to *B* as *F* is to *E.* [!just VII.Def.15; VII.19]
+Then {A} multiplied by {E} makes {D}, and {B} multiplied by {F} makes {D}. Therefore the product of {A} and {E} equals the product of {B} and {F}. Therefore {A} is to {B} as {F} is to {E}. [!just VII.Def.15; VII.19]
 
-But *A* and *B* are relatively prime, primes are also least, and the least measure the numbers which have the same ratio the same number of times, the greater the greater and the less the less, therefore *B* measures *E* as the consequent the consequent. [!just VII.21; VII.20]
+But {A} and {B} are relatively prime, primes are also least, and the least measure the numbers which have the same ratio the same number of times, the greater the greater and the less the less, therefore {B} measures {E} as the consequent the consequent. [!just VII.21; VII.20]
 
-And, since *A* multiplied by *B* and by *E* makes *C* and *D,* therefore *B* is to *E* as *C* is to *D.* But *B* measures *E,* therefore *C* also measures *D,* the greater the less, which is impossible. [!just VII.17]
+And, since {A} multiplied by {B} and by {E} makes {C} and {D}, therefore {B} is to {E} as {C} is to {D}. But {B} measures {E}, therefore {C} also measures {D}, the greater the less, which is impossible. [!just VII.17]
 
-Therefore *A* and *B* do not measure any number less than *C.* Therefore *C* is the least that is measured by *A* and *B.*
+Therefore {A} and {B} do not measure any number less than {C}. Therefore {C} is the least that is measured by {A} and {B}.
 
 <hr width="40%">
 
-Next, let *A* and *B* not be relatively prime. Take *F* and *E,* the least numbers of those which have the same ratio with *A* and *B.* Therefore the product of *A* and *E* equals the product of *B* and *F.* [!just VII.33; VII.19]
+Next, let {A:canvas_1} and {B:canvas_1} not be relatively prime. Take {F:canvas_1} and {E:canvas_1}, the least numbers of those which have the same ratio with {A:canvas_1} and {B:canvas_1}. Therefore the product of {A:canvas_1} and {E:canvas_1} equals the product of {B:canvas_1} and {F:canvas_1}. [!just VII.33; VII.19]
 
 <figure class="diagram">
 <canvas id="canvas_1" width="250" height="205" tabindex="0"></canvas>
 <noscript><img alt="VII.34 diagram" src="propVII34b.gif"/></noscript>
 <script type="text/javascript">
+    // Second case: A and B not relatively prime; F and E the least numbers
+    // in their ratio, C = A × E; D the supposed lesser number A and B
+    // measure, G and H the numbers of times they measure it. Line segments
+    // only, so the walk is highlight beats plus strokes for F, E and C, the
+    // numbers the proof takes and makes. D, G and H are withdrawn once the
+    // reductio closes. Nothing is added to the figure.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, F1, F2, E1, C1, D1, D2, G1, H1 and the off-canvas, colourless
+    // rail ends. F1 onward arrive mid-walk, so they are deferred; E2, C2,
+    // G2, H2 (proportion) are derived and listed per slide.
+    var GIVEN   = ["A","B","A1","A2","B1","B2"];
+    var WITH_FE = GIVEN.concat(["F","F1","F2","E","E1","E2"]);
+    var WITH_C  = WITH_FE.concat(["C","C1","C2"]);
+    var WITH_D  = WITH_C.concat(["D","D1","D2"]);
+    var WITH_G  = WITH_D.concat(["G","G1","G2"]);
+    var WITH_H  = WITH_G.concat(["H","H1","H2"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -131,27 +264,121 @@ Next, let *A* and *B* not be relatively prime. Take *F* and *E,* the least numbe
             "H2;point;proportion;B1,B2,D1,D2,U1,U2,H1,G3;0",
             "H;line;connect;H1,H2;black"
         ],
+        deferDraggables: ["F1","F2","E1","C1","D1","D2","G1","H1"],
+        slides: [
+            { text: "Next, let {A} and {B} not be relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Take {F} and {E}, the least numbers of those which have the same ratio with {A} and {B}.",
+              visible: WITH_FE,
+              highlighted: ["F","E","A","B"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "F, E least in the ratio of A to B", ref: "VII.33" }] },
+            { text: "Therefore the product of {A} and {E} equals the product of {B} and {F}.",
+              visible: WITH_FE,
+              highlighted: ["A","E","B","F"],
+              justifications: [{ ref: "VII.19" }] },
+            { text: "Multiply {A} by {E} to make {C}.",
+              visible: WITH_C,
+              highlighted: ["A","E","C"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {B} multiplied by {F} makes {C}.",
+              visible: WITH_C,
+              highlighted: ["B","F","C"] },
+            { text: "Therefore {A} and {B} measure {C}.",
+              visible: WITH_C,
+              highlighted: ["A","B","C"] },
+            { text: "I say next that it is also the least number that they measure.",
+              visible: WITH_C,
+              highlighted: ["C"] },
+            { text: "If not, then {A} and {B} measure some number {D} less than {C}.",
+              visible: WITH_D,
+              highlighted: ["A","B","D","C"] },
+            { text: "Let there be as many units in {G} as the times that {A} measures {D},",
+              visible: WITH_G,
+              highlighted: ["G","A","D"] },
+            { text: "and as many units in {H} as the times that {B} measures {D}.",
+              visible: WITH_H,
+              highlighted: ["H","B","D"] },
+            { text: "Then {A} multiplied by {G} makes {D}, and {B} multiplied by {H} makes {D}.",
+              visible: WITH_H,
+              highlighted: ["A","G","B","H","D"] },
+            { text: "Therefore the product of {A} and {G} equals the product of {B} and {H}.",
+              visible: WITH_H,
+              highlighted: ["A","G","B","H"] },
+            { text: "Therefore {A} is to {B} as {H} is to {G}.",
+              visible: WITH_H,
+              highlighted: ["A","B","H","G"],
+              justifications: [{ ref: "VII.19" }] },
+            { text: "But {A} is to {B} as {F} is to {E}.",
+              visible: WITH_H,
+              highlighted: ["A","B","F","E"] },
+            { text: "Therefore {F} is to {E} as {H} is to {G}.",
+              visible: WITH_H,
+              highlighted: ["F","E","H","G"],
+              justifications: [{ ref: "V.11" }] },
+            { text: "But {F} and {E} are least,",
+              visible: WITH_H,
+              highlighted: ["F","E"] },
+            { text: "and the least measure the numbers which have the same ratio the same number of times,",
+              visible: WITH_H,
+              highlighted: ["F","E","H","G"] },
+            { text: "the greater the greater and the less the less, therefore {E} measures {G}.",
+              visible: WITH_H,
+              highlighted: ["E","G"],
+              justifications: [{ ref: "VII.20" }] },
+            { text: "And, since {A} multiplied by {E} and by {G} makes {C} and {D},",
+              visible: WITH_H,
+              highlighted: ["A","E","G","C","D"] },
+            { text: "therefore {E} is to {G} as {C} is to {D}.",
+              visible: WITH_H,
+              highlighted: ["E","G","C","D"],
+              justifications: [{ ref: "VII.17" }] },
+            { text: "But {E} measures {G}, therefore {C} also measures {D}, the greater the less, which is impossible.",
+              visible: WITH_H,
+              highlighted: ["E","G","C","D"] },
+            // The reductio is closed: the supposed D, G and H are withdrawn.
+            { text: "Therefore {A} and {B} do not measure any number less than {C}.",
+              visible: WITH_C,
+              highlighted: ["A","B","C"] },
+            { text: "Therefore {C} is the least that is measured by {A} and {B}.",
+              visible: WITH_C,
+              highlighted: ["C","A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.11":   "/elements/books/bookV/propositions/propV11/",
+        "VII.33": "/elements/books/bookVII/propositions/propVII33/"
     });
 </script>
 </figure>
 
-Multiply *A* by *E* to make *C.* Then *B* multiplied by *F* makes *C.* Therefore *A* and *B* measure *C.*
+Multiply {A} by {E} to make {C}. Then {B} multiplied by {F} makes {C}. Therefore {A} and {B} measure {C}.
 
 I say next that it is also the least number that they measure.
 
-If not, then *A* and *B* measure some number *D* less than *C.*
+If not, then {A} and {B} measure some number {D} less than {C}.
 
-Let there be as many units in *G* as the times that *A* measures *D,* and as many units in *H* as the times that *B* measures *D.*
+Let there be as many units in {G} as the times that {A} measures {D}, and as many units in {H} as the times that {B} measures {D}.
 
-Then *A* multiplied by *G* makes *D,* and *B* multiplied by *H* makes *D.* Therefore the product of *A* and *G* equals the product of *B* and *H.* Therefore *A* is to *B* as *H* is to *G.* [!just VII.19]
+Then {A} multiplied by {G} makes {D}, and {B} multiplied by {H} makes {D}. Therefore the product of {A} and {G} equals the product of {B} and {H}. Therefore {A} is to {B} as {H} is to {G}. [!just VII.19]
 
-But *A* is to *B* as *F* is to *E.* Therefore *F* is to *E* as *H* is to *G.* [!just V.11]
+But {A} is to {B} as {F} is to {E}. Therefore {F} is to {E} as {H} is to {G}. [!just V.11]
 
-But *F* and *E* are least, and the least measure the numbers which have the same ratio the same number of times, the greater the greater and the less the less, therefore *E* measures *G.* [!just VII.20]
+But {F} and {E} are least, and the least measure the numbers which have the same ratio the same number of times, the greater the greater and the less the less, therefore {E} measures {G}. [!just VII.20]
 
-And, since *A* multiplied by *E* and by *G* makes *C* and *D,* therefore *E* is to *G* as *C* is to *D.* [!just VII.17]
+And, since {A} multiplied by {E} and by {G} makes {C} and {D}, therefore {E} is to {G} as {C} is to {D}. [!just VII.17]
 
-But *E* measures *G,* therefore *C* also measures *D,* the greater the less, which is impossible. Therefore *A* and *B* do not measure any number less than *C.* Therefore *C* is the least that is measured by *A* and *B.*
+But {E} measures {G}, therefore {C} also measures {D}, the greater the less, which is impossible. Therefore {A} and {B} do not measure any number less than {C}. Therefore {C} is the least that is measured by {A} and {B}.
 
 <div class="qed">Q.E.D.</div>
 ----
