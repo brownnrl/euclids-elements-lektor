@@ -15,14 +15,26 @@ statement: If two numbers are relatively prime to two numbers, both to each, the
 ----
 proof:
 
-Let the two numbers *A* and *B* be relatively prime to the two numbers *C* and *D,* both to each, and let *A* multiplied by *B* make *E,* and let *C* multiplied by *D* make *F.*
+Let the two numbers {A} and {B} be relatively prime to the two numbers {C} and {D}, both to each, and let {A} multiplied by {B} make {E}, and let {C} multiplied by {D} make {F}.
 
-I say that *E* and *F* are relatively prime.
+I say that {E} and {F} are relatively prime.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="170" tabindex="0"></canvas>
 <noscript><img alt="VII.26 diagram" src="propVII26.gif"/></noscript>
 <script type="text/javascript">
+    // A and B each relatively prime to C and D; E the product of A and B, F
+    // the product of C and D. Line segments only, so the walk is highlight
+    // beats; no animations.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2, D1, D2, E1, F1 and the off-canvas, colourless rail ends
+    // and unit U1, U2. E1 and F1 arrive with the setting-out's products, so
+    // they are deferred; E2 and F2 (proportion) are derived and listed per
+    // slide.
+    var GIVEN  = ["A","B","C","D"];
+    var WITH_E = GIVEN.concat(["E","E1","E2"]);
+    var WITH_F = WITH_E.concat(["F","F1","F2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -57,13 +69,80 @@ I say that *E* and *F* are relatively prime.
             "F2;point;proportion;U1,U2,C1,C2,D1,D2,F1,F3;0",
             "F;line;connect;F1,F2;black"
         ],
+        deferDraggables: ["E1","F1"],
+        slides: [
+            { text: "“If two numbers are relatively prime to two numbers, both to each,",
+              visible: WITH_F,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "VII.26" }] },
+            { text: "then their products are also relatively prime.”",
+              visible: WITH_F,
+              highlighted: ["E","F"],
+              justifications: [{ ref: "VII.26" }] },
+            { text: "Let the two numbers {A} and {B} be relatively prime to the two numbers {C} and {D}, both to each,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "and let {A} multiplied by {B} make {E},",
+              visible: WITH_E,
+              highlighted: ["A","B","E"] },
+            { text: "and let {C} multiplied by {D} make {F}.",
+              visible: WITH_F,
+              highlighted: ["C","D","F"] },
+            { text: "I say that {E} and {F} are relatively prime.",
+              visible: WITH_F,
+              highlighted: ["E","F"] },
+            { text: "Since each of the numbers {A} and {B} is relatively prime to {C},",
+              visible: WITH_F,
+              highlighted: ["A","B","C"] },
+            { text: "therefore the product of {A} and {B} is also relatively prime to {C}.",
+              visible: WITH_F,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "VII.24" }] },
+            { text: "But the product of {A} and {B} is {E}, therefore {E} and {C} are relatively prime.",
+              visible: WITH_F,
+              highlighted: ["E","C"] },
+            { text: "For the same reason {E} and {D} are also relatively prime.",
+              visible: WITH_F,
+              highlighted: ["E","D"],
+              justifications: [{ ref: "VII.24" }] },
+            { text: "Therefore each of the numbers {C} and {D} is relatively prime to {E}.",
+              visible: WITH_F,
+              highlighted: ["C","D","E"] },
+            { text: "Therefore the product of {C} and {D} is also relatively prime to {E}.",
+              visible: WITH_F,
+              highlighted: ["C","D","E"],
+              justifications: [{ ref: "VII.24" }] },
+            { text: "But the product of {C} and {D} is {F}.",
+              visible: WITH_F,
+              highlighted: ["C","D","F"] },
+            { text: "Therefore {E} and {F} are relatively prime.",
+              visible: WITH_F,
+              highlighted: ["E","F"] },
+            { text: "Therefore, if two numbers are relatively prime to two numbers, both to each,",
+              visible: WITH_F,
+              highlighted: ["A","B","C","D"] },
+            { text: "then their products are also relatively prime.",
+              visible: WITH_F,
+              highlighted: ["E","F"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.26") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.24": "/elements/books/bookVII/propositions/propVII24/"
     });
 </script>
 </figure>
 
-Since each of the numbers *A* and *B* is relatively prime to *C,* therefore the product of *A* and *B* is also relatively prime to *C.* But the product of *A* and *B* is *E,* therefore *E* and *C* are relatively prime. For the same reason *E* and *D* are also relatively prime. Therefore each of the numbers *C* and *D* is relatively prime to *E.* [!just VII.24]
+Since each of the numbers {A} and {B} is relatively prime to {C}, therefore the product of {A} and {B} is also relatively prime to {C}. But the product of {A} and {B} is {E}, therefore {E} and {C} are relatively prime. For the same reason {E} and {D} are also relatively prime. Therefore each of the numbers {C} and {D} is relatively prime to {E}. [!just VII.24]
 
-Therefore the product of *C* and *D* is also relatively prime to *E.* But the product of *C* and *D* is *F.* Therefore *E* and *F* are relatively prime. [!just VII.24]
+Therefore the product of {C} and {D} is also relatively prime to {E}. But the product of {C} and {D} is {F}. Therefore {E} and {F} are relatively prime. [!just VII.24]
 
 Therefore, *if two numbers are relatively prime to two numbers, both to each, then their products are also relatively prime.*
 

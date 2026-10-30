@@ -15,12 +15,23 @@ statement: If two numbers are relatively prime, then the product of one of them 
 ----
 proof:
 
-Let *A* and *B* be two numbers relatively prime, and let *A* multiplied by itself make *C.*
+Let {A} and {B} be two numbers relatively prime, and let {A} multiplied by itself make {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="130" height="250" tabindex="0"></canvas>
 <noscript><img alt="VII.25 diagram" src="propVII25.gif"/></noscript>
 <script type="text/javascript">
+    // A and B relatively prime, C the product of A with itself, D made equal
+    // to A. Line segments only, so the walk is highlight beats; D is drawn
+    // when the proof makes it.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, D1 and the off-canvas, colourless rail ends and unit U1,
+    // U2. D1 arrives mid-walk, so it is deferred; C2 (proportion) and D2
+    // (cutoff) are derived and listed per slide.
+    var GIVEN  = ["A","B"];
+    var WITH_C = GIVEN.concat(["C","C1","C2"]);
+    var WITH_D = WITH_C.concat(["D","D1","D2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,17 +58,78 @@ Let *A* and *B* be two numbers relatively prime, and let *A* multiplied by itsel
             "D2;point;cutoff;D1,A3,A1,A2;0",
             "D;line;connect;D1,D2;black"
         ],
+        deferDraggables: ["D1"],
+        slides: [
+            { text: "“If two numbers are relatively prime,",
+              visible: WITH_C,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VII.25" }] },
+            { text: "then the product of one of them with itself is relatively prime to the remaining one.”",
+              visible: WITH_C,
+              highlighted: ["C","B"],
+              justifications: [{ ref: "VII.25" }] },
+            { text: "Let {A} and {B} be two numbers relatively prime,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and let {A} multiplied by itself make {C}.",
+              visible: WITH_C,
+              highlighted: ["A","C"] },
+            { text: "I say that {B} and {C} are relatively prime.",
+              visible: WITH_C,
+              highlighted: ["B","C"] },
+            { text: "Make {D} equal to {A}.",
+              visible: WITH_D,
+              highlighted: ["D","A"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since {A} and {B} are relatively prime, and {A} equals {D},",
+              visible: WITH_D,
+              highlighted: ["A","B","D"] },
+            { text: "therefore {D} and {B} are also relatively prime.",
+              visible: WITH_D,
+              highlighted: ["D","B"] },
+            { text: "Therefore each of the two numbers {D} and {A} is relatively prime to {B}.",
+              visible: WITH_D,
+              highlighted: ["D","A","B"] },
+            { text: "Therefore the product of {D} and {A} is also relatively prime to {B}.",
+              visible: WITH_D,
+              highlighted: ["D","A","B"],
+              justifications: [{ ref: "VII.24" }] },
+            { text: "But the number which is the product of {D} and {A} is {C}.",
+              visible: WITH_D,
+              highlighted: ["D","A","C"] },
+            { text: "Therefore {C} and {B} are relatively prime.",
+              visible: WITH_D,
+              highlighted: ["C","B"] },
+            { text: "Therefore, if two numbers are relatively prime,",
+              visible: WITH_D,
+              highlighted: ["A","B"] },
+            { text: "then the product of one of them with itself is relatively prime to the remaining one.",
+              visible: WITH_D,
+              highlighted: ["C","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.25") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.24": "/elements/books/bookVII/propositions/propVII24/"
     });
 </script>
 </figure>
 
-I say that *B* and *C* are relatively prime.
+I say that {B} and {C} are relatively prime.
 
-Make *D* equal to *A.*
+Make {D} equal to {A}.
 
-Since *A* and *B* are relatively prime, and *A* equals *D,* therefore *D* and *B* are also relatively prime. Therefore each of the two numbers *D* and *A* is relatively prime to *B.* Therefore the product of *D* and *A* is also relatively prime to *B.* [!just VII.24]
+Since {A} and {B} are relatively prime, and {A} equals {D}, therefore {D} and {B} are also relatively prime. Therefore each of the two numbers {D} and {A} is relatively prime to {B}. Therefore the product of {D} and {A} is also relatively prime to {B}. [!just VII.24]
 
-But the number which is the product of *D* and *A* is *C.* Therefore *C* and *B* are relatively prime.
+But the number which is the product of {D} and {A} is {C}. Therefore {C} and {B} are relatively prime.
 
 Therefore, *if two numbers are relatively prime, then the product of one of them with itself is relatively prime to the remaining one.*
 
