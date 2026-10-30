@@ -15,16 +15,42 @@ statement: Equiangular parallelograms have to one another the ratio compounded o
 ----
 proof:
 
-Let *AC* and *CF* be equiangular parallelograms having the angle *BCD* equal to the angle *ECG.*
+Let {AC} and {CF} be equiangular parallelograms having the angle {BCD|angBCD} equal to the angle {ECG|angECG}.
 
-I say that the parallelogram *AC* has to the parallelogram *CF* the ratio compounded of the ratios of the sides.
+I say that the parallelogram {AC} has to the parallelogram {CF} the ratio compounded of the ratios of the sides.
 
-Let them be placed so that *BC* is in a straight line with *CG.*  Then *DC* is also in a straight line with *CE.* [!just I.14]
+Let them be placed so that {BC} is in a straight line with {CG}.  Then {DC} is also in a straight line with {CE}. [!just I.14]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="380" height="270" tabindex="0"></canvas>
 <noscript><img alt="VI.23 diagram" src="propVI23.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the parallelograms ABCD and FECG (named AC and
+    // CF by their diagonals) placed with BCG and DCE straight through C,
+    // the completing parallelogram DCGH (his DG, also called CH), and the
+    // three lines K, L, M (slider ends on long invisible tracks), L and M
+    // fixed by proportion points.
+    //
+    // DCGH and H stay off the slides until "Complete the parallelogram DG";
+    // its two new sides are solid slide twins DH and GH, hidden at rest
+    // (initiallyHidden), stroking from D and G. K, L, M arrive as they are
+    // set out. Everything else added is transparent: the faceless
+    // parallelograms AC, CF, CH (explicit ;0 faces — a highlighted filled
+    // polygon is raised over the figure, #140) and the sides BC, CG, DC, CE.
+    // The equal angles BCD and ECG share a colour and are pinned to one
+    // radius so the ring stepping at C leaves them alike. None is a right
+    // angle.
+    //
+    // Draggables (checked against the bundle): A, C, F carry the givens
+    // from slide 1. H and the slider ends K1, K2, L1, M1 arrive mid-walk, so
+    // they are deferred. B, D, E, G, L2, M2 are derived, listed per slide.
+    var GIVEN = ["A","B","C","D","E","F","G","ABCD","FECG"];
+    var ANG   = GIVEN.concat(["angBCD","angECG"]);
+    var COMP  = ANG.concat(["H","DH","GH"]);
+    var DG    = ANG.concat(["H","DH","GH","DCGH"]);
+    var SETK  = DG.concat(["K1","K2","K"]);
+    var SETL  = SETK.concat(["L1","L2","L"]);
+    var SETM  = SETL.concat(["M1","M2","M"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -58,25 +84,153 @@ Let them be placed so that *BC* is in a straight line with *CG.*  Then *DC* is a
             "M3;point;free;90,1000;0;0",
             "M1;point;lineSlider;M0,M3,0,50;0",
             "M2;point;proportion;D,C,C,E,L1,L2,M1,M3;0",
-            "M;line;connect;M1,M2;black"
+            "M;line;connect;M1,M2;black",
+            // Slide twins, hidden at rest (see above).
+            "DH;line;connect;D,H",
+            "GH;line;connect;G,H",
+            // Transparent highlight targets; explicit ;0 faces.
+            "AC;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            "CF;polygon;quadrilateral;F,E,C,G;0;0;0;0",
+            "CH;polygon;quadrilateral;D,C,G,H;0;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CG;line;connect;C,G;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "angBCD;sector;angleMarker;C,B,D,20;0;0;3b6ea5;9ec5e8",
+            "angECG;sector;angleMarker;C,E,G,20;0;0;3b6ea5;9ec5e8"
         ],
+        deferDraggables: ["H","K1","K2","L1","M1"],
+        initiallyHidden: ["DH","GH"],
+        slides: [
+            { text: "“Equiangular parallelograms have to one another the ratio compounded of the ratios of their sides.”",
+              visible: GIVEN,
+              highlighted: ["AC","CF"],
+              justifications: [{ ref: "VI.23" }] },
+            { text: "Let {AC} and {CF} be equiangular parallelograms having the angle {BCD|angBCD} equal to the angle {ECG|angECG}.",
+              visible: ANG,
+              highlighted: ["AC","CF","angBCD","angECG"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBCD", name: geomlib.A.Sector.sweep },
+                  { elem: "angECG", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that the parallelogram {AC} has to the parallelogram {CF} the ratio compounded of the ratios of the sides.",
+              visible: ANG,
+              highlighted: ["AC","CF"] },
+            { text: "Let them be placed so that {BC} is in a straight line with {CG}.",
+              visible: ANG,
+              highlighted: ["BC","CG"] },
+            { text: "Then {DC} is also in a straight line with {CE}.",
+              visible: ANG,
+              highlighted: ["DC","CE"],
+              justifications: [{ claim: "DC, CE in a straight line", ref: "I.14" }] },
+            { text: "Complete the parallelogram {DG|CH}.",
+              visible: COMP,
+              highlighted: ["CH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the parallelogram DG", ref: "I.31" }] },
+            { text: "Set out a straight line {K},",
+              visible: SETK,
+              highlighted: ["K"],
+              transition: { animations: [
+                  { elem: "K", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and make it so that {BC} is to {CG} as {K} is to {L},",
+              visible: SETL,
+              highlighted: ["BC","CG","K","L"],
+              transition: { animations: [
+                  { elem: "L", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "BC : CG = K : L", ref: "VI.12" }] },
+            { text: "and {DC} is to {CE} as {L} is to {M}.",
+              visible: SETM,
+              highlighted: ["DC","CE","L","M"],
+              transition: { animations: [
+                  { elem: "M", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "DC : CE = L : M", ref: "VI.12" }] },
+            { text: "Then the ratios of {K} to {L} and of {L} to {M} are the same as the ratios of the sides,",
+              visible: SETM,
+              highlighted: ["K","L","M"] },
+            { text: "namely of {BC} to {CG} and of {DC} to {CE}.",
+              visible: SETM,
+              highlighted: ["BC","CG","DC","CE"] },
+            { text: "But the ratio of {K} to {M} is compounded of the ratio of {K} to {L} and of that of {L} to {M},",
+              visible: SETM,
+              highlighted: ["K","L","M"] },
+            { text: "so that {K} has also to {M} the ratio compounded of the ratios of the sides.",
+              visible: SETM,
+              highlighted: ["K","M","BC","CG","DC","CE"] },
+            { text: "Now since {BC} is to {CG} as the parallelogram {AC} is to the parallelogram {CH},",
+              visible: SETM,
+              highlighted: ["BC","CG","AC","CH"],
+              justifications: [{ claim: "BC : CG = AC : CH", ref: "VI.1" }] },
+            { text: "and {BC} is to {CG} as {K} is to {L}, therefore {K} is to {L} as {AC} is to {CH}.",
+              visible: SETM,
+              highlighted: ["K","L","AC","CH"],
+              justifications: [{ claim: "K : L = AC : CH", ref: "V.11" }] },
+            { text: "Again, since {DC} is to {CE} as the parallelogram {CH} is to {CF},",
+              visible: SETM,
+              highlighted: ["DC","CE","CH","CF"],
+              justifications: [{ claim: "DC : CE = CH : CF", ref: "VI.1" }] },
+            { text: "and {DC} is to {CE} as {L} is to {M},",
+              visible: SETM,
+              highlighted: ["DC","CE","L","M"] },
+            { text: "therefore {L} is to {M} as the parallelogram {CH} is to the parallelogram {CF}.",
+              visible: SETM,
+              highlighted: ["L","M","CH","CF"],
+              justifications: [{ claim: "L : M = CH : CF", ref: "V.11" }] },
+            { text: "Since then it was proved that {K} is to {L} as the parallelogram {AC} is to the parallelogram {CH},",
+              visible: SETM,
+              highlighted: ["K","L","AC","CH"] },
+            { text: "and {L} is to {M} as the parallelogram {CH} is to the parallelogram {CF},",
+              visible: SETM,
+              highlighted: ["L","M","CH","CF"] },
+            { text: "therefore, ex aequali {K} is to {M} as {AC} is to the parallelogram {CF}.",
+              visible: SETM,
+              highlighted: ["K","M","AC","CF"],
+              justifications: [{ claim: "ex aequali, K : M = AC : CF", ref: "V.22" }] },
+            { text: "But {K} has to {M} the ratio compounded of the ratios of the sides,",
+              visible: SETM,
+              highlighted: ["K","M","BC","CG","DC","CE"] },
+            { text: "therefore {AC} also has to {CF} the ratio compounded of the ratios of the sides.",
+              visible: SETM,
+              highlighted: ["AC","CF","BC","CG","DC","CE"] },
+            { text: "Therefore, equiangular parallelograms have to one another the ratio compounded of the ratios of their sides.",
+              visible: SETM,
+              highlighted: ["AC","CF","angBCD","angECG"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.23") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.14":  "/elements/books/bookI/propositions/propI14/",
+        "I.31":  "/elements/books/bookI/propositions/propI31/",
+        "V.11":  "/elements/books/bookV/propositions/propV11/",
+        "V.22":  "/elements/books/bookV/propositions/propV22/",
+        "VI.1":  "/elements/books/bookVI/propositions/propVI1/",
+        "VI.12": "/elements/books/bookVI/propositions/propVI12/"
     });
 </script>
 </figure>
 
-Complete the parallelogram *DG.*  Set out a straight line *K,* and make it so that *BC* is to *CG* as *K* is to *L,* and *DC* is to *CE* as *L* is to *M.* [!just I.31; VI.12]
+Complete the parallelogram {DG|CH}.  Set out a straight line {K}, and make it so that {BC} is to {CG} as {K} is to {L}, and {DC} is to {CE} as {L} is to {M}. [!just I.31; VI.12]
 
-Then the ratios of *K* to *L* and of *L* to *M* are the same as the ratios of the sides, namely of *BC* to *CG* and of *DC* to *CE.*
+Then the ratios of {K} to {L} and of {L} to {M} are the same as the ratios of the sides, namely of {BC} to {CG} and of {DC} to {CE}.
 
-But the ratio of *K* to *M* is compounded of the ratio of *K* to *L* and of that of *L* to *M,* so that *K* has also to *M* the ratio compounded of the ratios of the sides.
+But the ratio of {K} to {M} is compounded of the ratio of {K} to {L} and of that of {L} to {M}, so that {K} has also to {M} the ratio compounded of the ratios of the sides.
 
-Now since *BC* is to *CG* as the parallelogram *AC* is to the parallelogram *CH,* and *BC* is to *CG* as *K* is to *L,* therefore *K* is to *L* as *AC* is to *CH.* [!just VI.1; V.11]
+Now since {BC} is to {CG} as the parallelogram {AC} is to the parallelogram {CH}, and {BC} is to {CG} as {K} is to {L}, therefore {K} is to {L} as {AC} is to {CH}. [!just VI.1; V.11]
 
-Again, since *DC* is to *CE* as the parallelogram *CH* is to *CF,*  and *DC* is to *CE* as *L* is to *M,* therefore *L* is to *M* as the parallelogram *CH* is to the parallelogram *CF.* [!just VI.1; V.11]
+Again, since {DC} is to {CE} as the parallelogram {CH} is to {CF},  and {DC} is to {CE} as {L} is to {M}, therefore {L} is to {M} as the parallelogram {CH} is to the parallelogram {CF}. [!just VI.1; V.11]
 
-Since then it was proved that *K* is to *L* as the parallelogram *AC* is to the parallelogram *CH,* and *L* is to *M* as the parallelogram *CH* is to the parallelogram *CF,* therefore, *ex aequali K* is to *M* as *AC* is to the parallelogram *CF.* [!just V.22]
+Since then it was proved that {K} is to {L} as the parallelogram {AC} is to the parallelogram {CH}, and {L} is to {M} as the parallelogram {CH} is to the parallelogram {CF}, therefore, *ex aequali* {K} is to {M} as {AC} is to the parallelogram {CF}. [!just V.22]
 
-But *K* has to *M* the ratio compounded of the ratios of the sides, therefore *AC* also has to *CF* the ratio compounded of the ratios of the sides.
+But {K} has to {M} the ratio compounded of the ratios of the sides, therefore {AC} also has to {CF} the ratio compounded of the ratios of the sides.
 
 Therefore, *equiangular parallelograms have to one another the ratio compounded of the ratios of their sides.*
 

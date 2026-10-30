@@ -15,14 +15,34 @@ statement: In any parallelogram the parallelograms about the diameter are simila
 ----
 proof:
 
-Let *ABCD* be a parallelogram, and *AC* its diameter, and let *EG* and *HK* be parallelograms about *AC.*
+Let {ABCD|ABCDt} be a parallelogram, and {AC} its diameter, and let {EG} and {HK} be parallelograms about {AC}.
 
-I say that each of the parallelograms *EG* and *HK* is similar both to the whole *ABCD* and to the other.
+I say that each of the parallelograms {EG} and {HK} is similar both to the whole {ABCD|ABCDt} and to the other.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="350" height="300" tabindex="0"></canvas>
 <noscript><img alt="VI.24 diagram" src="propVI24.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the parallelogram ABCD, its diameter AC, and the
+    // parallelograms AGFE and FHCK about it (random faces), named EG and HK
+    // by their diagonals. Everything is given, so the walk is highlight
+    // beats plus angle sweeps; nothing is constructed.
+    //
+    // Everything added is transparent: the faceless twins ABCDt, EG, HK
+    // (explicit ;0 faces — Joyce's ABCD has the default opaque face, and a
+    // highlighted filled polygon is raised over the figure, #140, so prose
+    // and captions reach the whole as {ABCD|ABCDt}), the triangles ABC,
+    // ACD, AGF, AFE, and the side segments the proportions name. The
+    // equal-angle pairs share a colour (AFG/ACD, AFE/ACB); the three at A
+    // nest by the ring stepping. None is a right angle.
+    //
+    // Draggables (checked against the bundle): A, B, C free and F a
+    // lineSlider on AC — all givens, so nothing is deferred. D, E, G, H, K
+    // are derived and listed per slide.
+    var BASE  = ["A","B","C","D","E","F","G","H","K","ABCD","AC","AGFE","FHCK"];
+    var BAD   = BASE.concat(["angBAD"]);
+    var EQ1   = BAD.concat(["angDAC","angAFG","angACD"]);
+    var EQ2   = EQ1.concat(["angCAB","angAFE","angACB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -41,33 +61,198 @@ I say that each of the parallelograms *EG* and *HK* is similar both to the whole
             "AGFE;polygon;quadrilateral;A,G,F,E;0;0;black;random",
             "H;point;intersection;G,F,B,C",
             "K;point;intersection;E,F,C,D",
-            "FHCK;polygon;quadrilateral;F,H,C,K;0;0;black;random"
+            "FHCK;polygon;quadrilateral;F,H,C,K;0;0;black;random",
+            // Transparent highlight targets; explicit ;0 faces.
+            "ABCDt;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            "EG;polygon;quadrilateral;A,G,F,E;0;0;0;0",
+            "HK;polygon;quadrilateral;F,H,C,K;0;0;0;0",
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "ACD;polygon;triangle;A,C,D;0;0;0;0",
+            "AGF;polygon;triangle;A,G,F;0;0;0;0",
+            "AFE;polygon;triangle;A,F,E;0;0;0;0",
+            "BA;line;connect;B,A;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "DA;line;connect;D,A;0;0;0",
+            "BE;line;connect;B,E;0;0;0",
+            "EA;line;connect;E,A;0;0;0",
+            "DG;line;connect;D,G;0;0;0",
+            "GA;line;connect;G,A;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "FA;line;connect;F,A;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "angBAD;sector;angleMarker;A,B,D",
+            "angDAC;sector;angleMarker;A,D,C",
+            "angCAB;sector;angleMarker;A,C,B",
+            "angAFG;sector;angleMarker;F,A,G;0;0;3b6ea5;9ec5e8",
+            "angACD;sector;angleMarker;C,A,D;0;0;3b6ea5;9ec5e8",
+            "angAFE;sector;angleMarker;F,A,E;0;0;a5563b;e8b89e",
+            "angACB;sector;angleMarker;C,A,B;0;0;a5563b;e8b89e"
         ],
+        aliases: { "AB": "BA", "AD": "DA", "AE": "EA", "AG": "GA",
+                   "AF": "FA", "CA": "AC", "CB": "BC", "DC": "CD",
+                   "GF": "FG", "FE": "EF", "ACB": "ABC", "ADC": "ACD" },
+        slides: [
+            { text: "“In any parallelogram the parallelograms about the diameter are similar both to the whole and to one another.”",
+              visible: BASE,
+              highlighted: ["ABCDt","AC","EG","HK"],
+              justifications: [{ ref: "VI.24" }] },
+            { text: "Let {ABCD|ABCDt} be a parallelogram, and {AC} its diameter,",
+              visible: BASE,
+              highlighted: ["ABCDt","AC"] },
+            { text: "and let {EG} and {HK} be parallelograms about {AC}.",
+              visible: BASE,
+              highlighted: ["EG","HK","AC"] },
+            { text: "I say that each of the parallelograms {EG} and {HK} is similar both to the whole {ABCD|ABCDt} and to the other.",
+              visible: BASE,
+              highlighted: ["EG","HK","ABCDt"] },
+            { text: "For, since {EF} is parallel to a side {BC} of the triangle {ABC},",
+              visible: BASE,
+              highlighted: ["EF","BC","ABC"] },
+            { text: "proportionally, {BE} is to {EA} as {CF} is to {FA}.",
+              visible: BASE,
+              highlighted: ["BE","EA","CF","FA"],
+              justifications: [{ claim: "BE : EA = CF : FA", ref: "VI.2" }] },
+            { text: "Again, since {FG} is parallel to a side {CD} of the triangle {ACD},",
+              visible: BASE,
+              highlighted: ["FG","CD","ACD"] },
+            { text: "proportionally, {CF} is to {FA} as {DG} is to {GA}.",
+              visible: BASE,
+              highlighted: ["CF","FA","DG","GA"],
+              justifications: [{ claim: "CF : FA = DG : GA", ref: "VI.2" }] },
+            { text: "But it was proved that {CF} is to {FA} as {BE} is to {EA},",
+              visible: BASE,
+              highlighted: ["CF","FA","BE","EA"] },
+            { text: "therefore {BE} is to {EA} as {DG} is to {GA}.",
+              visible: BASE,
+              highlighted: ["BE","EA","DG","GA"] },
+            { text: "Therefore, taken jointly, {BA} is to {AE} as {DA} is to {AG},",
+              visible: BASE,
+              highlighted: ["BA","EA","DA","GA"],
+              justifications: [{ claim: "jointly, BA : AE = DA : AG", ref: "V.18" }] },
+            { text: "and, alternately, {BA} is to {AD} as {EA} is to {AG}.",
+              visible: BASE,
+              highlighted: ["BA","DA","EA","GA"],
+              justifications: [{ claim: "alternately, BA : AD = EA : AG", ref: "V.16" }] },
+            { text: "Therefore in the parallelograms {ABCD|ABCDt} and {EG}, the sides about the common angle {BAD|angBAD} are proportional.",
+              visible: BAD,
+              highlighted: ["ABCDt","EG","angBAD"],
+              transition: { animations: [
+                  { elem: "angBAD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "And, since {GF} is parallel to {DC}, the angle {AFG|angAFG} equals the angle {ACD|angACD},",
+              visible: BAD.concat(["angAFG","angACD"]),
+              highlighted: ["FG","CD","angAFG","angACD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angAFG", name: geomlib.A.Sector.sweep },
+                  { elem: "angACD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle AFG = angle ACD", ref: "I.29" }] },
+            { text: "and the angle {DAC|angDAC} is common to the two triangles {ADC} and {AGF},",
+              visible: EQ1,
+              highlighted: ["angDAC","ACD","AGF"],
+              transition: { animations: [
+                  { elem: "angDAC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the triangle {ADC} is equiangular with the triangle {AGF}.",
+              visible: EQ1,
+              highlighted: ["ACD","AGF"] },
+            { text: "For the same reason the triangle {ACB} is also equiangular with the triangle {AFE},",
+              visible: EQ2,
+              highlighted: ["ABC","AFE","angCAB","angAFE","angACB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCAB", name: geomlib.A.Sector.sweep },
+                  { elem: "angAFE", name: geomlib.A.Sector.sweep },
+                  { elem: "angACB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the whole parallelogram {ABCD|ABCDt} is equiangular with the parallelogram {EG}.",
+              visible: EQ2,
+              highlighted: ["ABCDt","EG"] },
+            { text: "Therefore, proportionally, {AD} is to {DC} as {AG} is to {GF},",
+              visible: BASE,
+              highlighted: ["DA","CD","GA","FG"] },
+            { text: "{DC} is to {CA} as {GF} is to {FA},",
+              visible: BASE,
+              highlighted: ["CD","AC","FG","FA"] },
+            { text: "{AC} is to {CB} as {AF} is to {FE},",
+              visible: BASE,
+              highlighted: ["AC","BC","FA","EF"] },
+            { text: "and {CB} is to {BA} as {FE} is to {EA}.",
+              visible: BASE,
+              highlighted: ["BC","BA","EF","EA"] },
+            { text: "And, since it was proved that {DC} is to {CA} as {GF} is to {FA},",
+              visible: BASE,
+              highlighted: ["CD","AC","FG","FA"] },
+            { text: "and {AC} is to {CB} as {AF} is to {FE},",
+              visible: BASE,
+              highlighted: ["AC","BC","FA","EF"] },
+            { text: "therefore, ex aequali, {DC} is to {CB} as {GF} is to {FE}.",
+              visible: BASE,
+              highlighted: ["CD","BC","FG","EF"],
+              justifications: [{ claim: "ex aequali, DC : CB = GF : FE", ref: "V.22" }] },
+            { text: "Therefore in the parallelograms {ABCD|ABCDt} and {EG} the sides about the equal angles are proportional.",
+              visible: BASE,
+              highlighted: ["ABCDt","EG"] },
+            { text: "Therefore the parallelogram {ABCD|ABCDt} is similar to the parallelogram {EG}.",
+              visible: BASE,
+              highlighted: ["ABCDt","EG"],
+              justifications: [{ claim: "ABCD similar to EG", ref: "VI.Def.1" }] },
+            { text: "For the same reason the parallelogram {ABCD|ABCDt} is also similar to the parallelogram {KH|HK}.",
+              visible: BASE,
+              highlighted: ["ABCDt","HK"] },
+            { text: "Therefore each of the parallelograms {EG} and {HK} is similar to {ABCD|ABCDt}.",
+              visible: BASE,
+              highlighted: ["EG","HK","ABCDt"] },
+            { text: "But figures similar to the same rectilinear figure are also similar to one another,",
+              visible: BASE,
+              highlighted: ["EG","HK","ABCDt"] },
+            { text: "therefore the parallelogram {EG} is also similar to the parallelogram {HK}.",
+              visible: BASE,
+              highlighted: ["EG","HK"],
+              justifications: [{ claim: "EG similar to HK", ref: "VI.21" }] },
+            { text: "Therefore, in any parallelogram the parallelograms about the diameter are similar both to the whole and to one another.",
+              visible: BASE,
+              highlighted: ["ABCDt","AC","EG","HK"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.24") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.29":     "/elements/books/bookI/propositions/propI29/",
+        "V.16":     "/elements/books/bookV/propositions/propV16/",
+        "V.18":     "/elements/books/bookV/propositions/propV18/",
+        "V.22":     "/elements/books/bookV/propositions/propV22/",
+        "VI.2":     "/elements/books/bookVI/propositions/propVI2/",
+        "VI.21":    "/elements/books/bookVI/propositions/propVI21/",
+        "VI.Def.1": "/elements/books/bookVI/definitions/defVI1/"
     });
 </script>
 </figure>
 
-For, since *EF* is parallel to a side *BC* of the triangle *ABC,* proportionally, *BE* is to *EA* as *CF* is to *FA.* [!just VI.2]
+For, since {EF} is parallel to a side {BC} of the triangle {ABC}, proportionally, {BE} is to {EA} as {CF} is to {FA}. [!just VI.2]
 
-Again, since *FG* is parallel to a side *CD* of the triangle *ACD,* proportionally, *CF* is to *FA* as *DG* is to *GA.* [!just VI.2]
+Again, since {FG} is parallel to a side {CD} of the triangle {ACD}, proportionally, {CF} is to {FA} as {DG} is to {GA}. [!just VI.2]
 
-But it was proved that *CF* is to *FA* as *BE* is to *EA,* therefore *BE* is to *EA* as *DG* is to *GA.*  Therefore, taken jointly, *BA* is to *AE* as *DA* is to *AG,* and, alternately, *BA* is to *AD* as *EA* is to *AG.* [!just V.18; V.16]
+But it was proved that {CF} is to {FA} as {BE} is to {EA}, therefore {BE} is to {EA} as {DG} is to {GA}.  Therefore, taken jointly, {BA} is to {AE} as {DA} is to {AG}, and, alternately, {BA} is to {AD} as {EA} is to {AG}. [!just V.18; V.16]
 
-Therefore in the parallelograms *ABCD* and *EG,* the sides about the common angle *BAD* are proportional.
+Therefore in the parallelograms {ABCD|ABCDt} and {EG}, the sides about the common angle {BAD|angBAD} are proportional.
 
-And, since *GF* is parallel to *DC,* the angle *AFG* equals the angle *ACD,* and the angle *DAC* is common to the two triangles *ADC* and *AGF,* therefore the triangle *ADC* is equiangular with the triangle *AGF.* [!just I.29]
+And, since {GF} is parallel to {DC}, the angle {AFG|angAFG} equals the angle {ACD|angACD}, and the angle {DAC|angDAC} is common to the two triangles {ADC} and {AGF}, therefore the triangle {ADC} is equiangular with the triangle {AGF}. [!just I.29]
 
-For the same reason the triangle *ACB* is also equiangular with the triangle *AFE,* and the whole parallelogram *ABCD* is equiangular with the parallelogram *EG.*
+For the same reason the triangle {ACB} is also equiangular with the triangle {AFE}, and the whole parallelogram {ABCD|ABCDt} is equiangular with the parallelogram {EG}.
 
-Therefore, proportionally, *AD* is to *DC* as *AG* is to *GF, DC* is to *CA* as *GF* is to *FA, AC* is to *CB* as *AF* is to *FE,* and  *CB* is to *BA* as *FE* is to *EA.*
+Therefore, proportionally, {AD} is to {DC} as {AG} is to {GF}, {DC} is to {CA} as {GF} is to {FA}, {AC} is to {CB} as {AF} is to {FE}, and  {CB} is to {BA} as {FE} is to {EA}.
 
-And, since it was proved that *DC* is to *CA* as *GF* is to *FA,* and *AC* is to *CB* as *AF* is to *FE,* therefore, *ex aequali, DC* is to *CB* as *GF* is to *FE.* [!just V.22]
+And, since it was proved that {DC} is to {CA} as {GF} is to {FA}, and {AC} is to {CB} as {AF} is to {FE}, therefore, *ex aequali,* {DC} is to {CB} as {GF} is to {FE}. [!just V.22]
 
-Therefore in the parallelograms *ABCD* and *EG* the sides about the equal angles are proportional.  Therefore the parallelogram *ABCD* is similar to the parallelogram *EG.* [!just VI.Def.1]
+Therefore in the parallelograms {ABCD|ABCDt} and {EG} the sides about the equal angles are proportional.  Therefore the parallelogram {ABCD|ABCDt} is similar to the parallelogram {EG}. [!just VI.Def.1]
 
-For the same reason the parallelogram *ABCD* is also similar to the parallelogram *KH.*  Therefore each of the parallelograms *EG* and *HK* is similar to *ABCD.*
+For the same reason the parallelogram {ABCD|ABCDt} is also similar to the parallelogram {KH|HK}.  Therefore each of the parallelograms {EG} and {HK} is similar to {ABCD|ABCDt}.
 
-But figures similar to the same rectilinear figure are also similar to one another, therefore the parallelogram *EG* is also similar to the parallelogram *HK.* [!just VI.21]
+But figures similar to the same rectilinear figure are also similar to one another, therefore the parallelogram {EG} is also similar to the parallelogram {HK}. [!just VI.21]
 
 Therefore, *in any parallelogram the parallelograms about the diameter are similar both to the whole and to one another.*
 
