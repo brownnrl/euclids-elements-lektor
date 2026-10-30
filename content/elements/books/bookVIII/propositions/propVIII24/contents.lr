@@ -15,12 +15,15 @@ statement: If two numbers have to one another the ratio which a square number ha
 ----
 proof:
 
-Let the two numbers *A* and *B* have to one another the ratio which the square number *C* has to the square number *D,* and let *A* be square.
+Let the two numbers {A} and {B} have to one another the ratio which the square number {C} has to the square number {D}, and let {A} be square.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="190" height="170" tabindex="0"></canvas>
 <noscript><img alt="VIII.24 diagram" src="propVIII24.gif"/></noscript>
 <script type="text/javascript">
+    // A walk of the proof over Joyce's lines: all four numbers are givens,
+    // nothing is constructed, so every beat is a highlight.
+    var GIVEN = ["A","B","C","D","D2"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,15 +50,75 @@ Let the two numbers *A* and *B* have to one another the ratio which the square n
             "D2;point;proportion;A1,A2,B1,B2,C1,C2,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        // Draggables (checked against the bundle): the lineSlider ends and
+        // the colourless rails; every one belongs to a given, so nothing is
+        // deferred. No elements added.
+        slides: [
+            { text: "If two numbers have to one another the ratio which a square number has to a square number,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "VIII.24" }] },
+            { text: "and the first is square, then the second is also a square.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Let the two numbers {A} and {B} have to one another",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "the ratio which the square number {C} has to the square number {D},",
+              visible: GIVEN,
+              highlighted: ["C","D"] },
+            { text: "and let {A} be square.",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "I say that {B} is also square.",
+              visible: GIVEN,
+              highlighted: ["B"] },
+            { text: "Since {C} and {D} are square, {C} and {D} are similar plane numbers.",
+              visible: GIVEN,
+              highlighted: ["C","D"] },
+            { text: "Therefore one mean proportional number falls between {C} and {D}.",
+              visible: GIVEN,
+              highlighted: ["C","D"],
+              justifications: [{ claim: "one mean between C and D", ref: "VIII.18" }] },
+            { text: "And {C} is to {D} as {A} is to {B},",
+              visible: GIVEN,
+              highlighted: ["C","D","A","B"] },
+            { text: "therefore one mean proportional number falls between {A} and {B} also.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "one mean between A and B", ref: "VIII.18" }] },
+            { text: "And {A} is square, therefore {B} is also square.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "B square", ref: "VIII.22" }] },
+            { text: "Therefore, if two numbers have to one another the ratio which a square number has to a square number,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "and the first is square, then the second is also a square.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.24") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VIII.18": "/elements/books/bookVIII/propositions/propVIII18/",
+        "VIII.22": "/elements/books/bookVIII/propositions/propVIII22/"
     });
 </script>
 </figure>
 
-I say that *B* is also square.
+I say that {B} is also square.
 
-Since *C* and *D* are square, *C* and *D* are similar plane numbers. Therefore one mean proportional number falls between *C* and *D.* [!just VIII.18]
+Since {C} and {D} are square, {C} and {D} are similar plane numbers. Therefore one mean proportional number falls between {C} and {D}. [!just VIII.18]
 
-And *C* is to *D* as *A* is to *B,* therefore one mean proportional number falls between *A* and *B* also. And *A* is square, therefore *B* is also square. [!just VIII.18; VIII.22]
+And {C} is to {D} as {A} is to {B}, therefore one mean proportional number falls between {A} and {B} also. And {A} is square, therefore {B} is also square. [!just VIII.18; VIII.22]
 
 Therefore, *if two numbers have to one another the ratio which a square number has to a square number, and the first is square, then the second is also a square.*
 
