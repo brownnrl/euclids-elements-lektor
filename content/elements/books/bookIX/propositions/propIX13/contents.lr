@@ -15,16 +15,27 @@ statement: If as many numbers as we please beginning from a unit are in continue
 ----
 proof:
 
-Let there be as many numbers as we please, *A, B, C,* and *D,* beginning from a unit and in continued proportion, and let *A,* the number after the unit, be prime.
+Let there be as many numbers as we please, {A}, {B}, {C}, and {D}, beginning from a unit and in continued proportion, and let {A}, the number after the unit, be prime.
 
-I say that *D,* the greatest of them, is not measured by any other number except *A, B,* or *C.*
+I say that {D}, the greatest of them, is not measured by any other number except {A}, {B}, or {C}.
 
-If possible, let it be measured by *E,* and let *E* not be the same with any of the numbers *A, B,* or *C.*
+If possible, let it be measured by {E}, and let {E} not be the same with any of the numbers {A}, {B}, or {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="165" tabindex="0"></canvas>
 <noscript><img alt="IX.13 diagram" src="propIX13.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: the walk is highlight beats over Joyce's eight lines.
+    // A reductio: E is supposed, then F, G, H are the successive quotients the
+    // proof makes, so those three are the only animations. All four are
+    // withdrawn at the close, when the supposition is refuted. Their slider
+    // ends are deferred so none stands on the canvas before its slide.
+    // The unit (U1-U2) sits off-canvas in Joyce's figure and is not drawn.
+    var GIVEN = ["A1","A2","A","B1","B2","B","C1","C2","C","D1","D2","D"];
+    var WITHE = GIVEN.concat(["E1","E2","E"]);
+    var WITHF = WITHE.concat(["F1","F2","F"]);
+    var WITHG = WITHF.concat(["G1","G2","G"]);
+    var ALL   = WITHG.concat(["H1","H2","H"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -65,57 +76,272 @@ If possible, let it be measured by *E,* and let *E* not be the same with any of 
             "H2;point;proportion;G1,G2,B1,B2,U1,U2,H1,D3;0",
             "H;line;connect;H1,H2;black"
         ],
+        deferDraggables: ["E1","E2","F1","G1","H1"],
+        slides: [
+            { text: "“If as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "IX.13" }] },
+            { text: "and the number after the unit is prime,",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "then the greatest is not measured by any except those which have a place among the proportional numbers.”",
+              visible: GIVEN,
+              highlighted: ["D","A","B","C"] },
+            { text: "Let there be as many numbers as we please, {A}, {B}, {C}, and {D},",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "beginning from a unit and in continued proportion,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "and let {A}, the number after the unit, be prime.",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "I say that {D}, the greatest of them, is not measured by any other number except {A}, {B}, or {C}.",
+              visible: GIVEN,
+              highlighted: ["D","A","B","C"] },
+            { text: "If possible, let it be measured by {E},",
+              visible: WITHE,
+              highlighted: ["D","E"] },
+            { text: "and let {E} not be the same with any of the numbers {A}, {B}, or {C}.",
+              visible: WITHE,
+              highlighted: ["E","A","B","C"] },
+            { text: "It is then clear that {E} is not prime,",
+              visible: WITHE,
+              highlighted: ["E"] },
+            { text: "for if {E} is prime and measures {D}, then it also measures {A},",
+              visible: WITHE,
+              highlighted: ["E","D","A"],
+              justifications: [{ claim: "a prime measuring D measures A", ref: "IX.12" }] },
+            { text: "which is prime, though it is not the same with it, which is impossible.",
+              visible: WITHE,
+              highlighted: ["A","E"] },
+            { text: "Therefore {E} is not prime, so it is composite.",
+              visible: WITHE,
+              highlighted: ["E"] },
+            { text: "But any composite number is measured by some prime number, therefore {E} is measured by some prime number.",
+              visible: WITHE,
+              highlighted: ["E"],
+              justifications: [{ claim: "a composite number is measured by some prime", ref: "VII.31" }] },
+            { text: "I say next that it is no measured by any other prime except {A}.",
+              visible: WITHE,
+              highlighted: ["E","A"] },
+            { text: "If {E} is measured by another, and {E} measures {D}, then that other measures {D},",
+              visible: WITHE,
+              highlighted: ["E","D"] },
+            { text: "so that it also measures {A}, which is prime, though it is not the same with it, which is impossible.",
+              visible: WITHE,
+              highlighted: ["A"],
+              justifications: [{ claim: "a prime measuring D measures A", ref: "IX.12" }] },
+            { text: "Therefore [only the prime] {A} measures {E}.",
+              visible: WITHE,
+              highlighted: ["A","E"] },
+            { text: "And, since {E} measures {D}, let it measure it according to {F}.",
+              visible: WITHF,
+              highlighted: ["E","D","F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that {F} is not the same with any of the numbers {A}, {B}, or {C}.",
+              visible: WITHF,
+              highlighted: ["F","A","B","C"] },
+            { text: "If {F} is the same with one of the numbers {A}, {B}, or {C}, and measures {D} according to {E},",
+              visible: WITHF,
+              highlighted: ["F","D","E"] },
+            { text: "then one of the numbers {A}, {B}, or {C} also measures {D} according to {E}.",
+              visible: WITHF,
+              highlighted: ["A","B","C","D","E"] },
+            { text: "But one of the numbers {A}, {B}, or {C} measures {D} according to some one of the numbers {A}, {B}, or {C},",
+              visible: WITHF,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ claim: "D is measured according to one of A, B, C", ref: "IX.11" }] },
+            { text: "therefore {E} is also the same with one of the numbers {A}, {B} or {C}, which is contrary to the hypothesis.",
+              visible: WITHF,
+              highlighted: ["E","A","B","C"] },
+            { text: "Therefore {F} is not the same as any one of the numbers {A}, {B}, or {C}.",
+              visible: WITHF,
+              highlighted: ["F"] },
+            { text: "Similarly we can prove that {F} is measured by {A}, by proving again that {F} is not prime.",
+              visible: WITHF,
+              highlighted: ["F","A"] },
+            { text: "If it is, and measures {D}, then it also measures {A},",
+              visible: WITHF,
+              highlighted: ["F","D","A"],
+              justifications: [{ claim: "a prime measuring D measures A", ref: "IX.12" }] },
+            { text: "which is prime, though it is not the same with it, which is impossible.",
+              visible: WITHF,
+              highlighted: ["A","F"] },
+            { text: "Therefore {F} is not prime, so it is composite.",
+              visible: WITHF,
+              highlighted: ["F"] },
+            { text: "But any composite number is measured by some prime number, therefore {F} is measured by some prime number.",
+              visible: WITHF,
+              highlighted: ["F"],
+              justifications: [{ claim: "a composite number is measured by some prime", ref: "VII.31" }] },
+            { text: "I say next that it is not measured by any other prime except {A}.",
+              visible: WITHF,
+              highlighted: ["F","A"] },
+            { text: "If any other prime number measures {F}, and {F} measures {D}, then that other also measures {D},",
+              visible: WITHF,
+              highlighted: ["F","D"] },
+            { text: "so that it also measures {A}, which is prime, though it is not the same with it, which is impossible.",
+              visible: WITHF,
+              highlighted: ["A"],
+              justifications: [{ claim: "a prime measuring D measures A", ref: "IX.12" }] },
+            { text: "Therefore [only the prime] {A} measures {F}.",
+              visible: WITHF,
+              highlighted: ["A","F"] },
+            { text: "And, since {E} measures {D} according to {F}, therefore {E} multiplied by {F} makes {D}.",
+              visible: WITHF,
+              highlighted: ["E","D","F"] },
+            { text: "But, further, {A} multiplied by {C} makes {D},",
+              visible: WITHF,
+              highlighted: ["A","C","D"],
+              justifications: [{ claim: "A × C = D", ref: "IX.11" }] },
+            { text: "therefore the product of {A} and {C} equals the product of {E} and {F}.",
+              visible: WITHF,
+              highlighted: ["A","C","E","F"] },
+            { text: "Therefore, proportionally {A} is to {E} as {F} is to {C}.",
+              visible: WITHF,
+              highlighted: ["A","E","F","C"],
+              justifications: [{ claim: "A : E = F : C", ref: "VII.19" }] },
+            { text: "But {A} measures {E}, therefore {F} also measures {C}.",
+              visible: WITHF,
+              highlighted: ["A","E","F","C"] },
+            { text: "Let it measure it according to {G}.",
+              visible: WITHG,
+              highlighted: ["F","C","G"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Similarly, then, we can prove that {G} is not the same with any of the numbers {A} or {B},",
+              visible: WITHG,
+              highlighted: ["G","A","B"] },
+            { text: "and that it is measured by {A}.",
+              visible: WITHG,
+              highlighted: ["G","A"] },
+            { text: "And, since {F} measures {C} according to {G}, therefore {F} multiplied by {G} makes {C}.",
+              visible: WITHG,
+              highlighted: ["F","C","G"] },
+            { text: "But, further, {A} multiplied by {B} makes {C},",
+              visible: WITHG,
+              highlighted: ["A","B","C"],
+              justifications: [{ claim: "A × B = C", ref: "IX.11" }] },
+            { text: "therefore the product of {A} and {B} equals the product of {F} and {G}.",
+              visible: WITHG,
+              highlighted: ["A","B","F","G"] },
+            { text: "Therefore, proportionally {A} is to {F} as {G} is to {B}.",
+              visible: WITHG,
+              highlighted: ["A","F","G","B"],
+              justifications: [{ claim: "A : F = G : B", ref: "VII.19" }] },
+            { text: "But {A} measures {F}, therefore {G} also measures {B}.",
+              visible: WITHG,
+              highlighted: ["A","F","G","B"] },
+            { text: "Let it measure it according to {H}.",
+              visible: ALL,
+              highlighted: ["G","B","H"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Similarly then we can prove that {H} is not the same with {A}.",
+              visible: ALL,
+              highlighted: ["H","A"] },
+            { text: "And, since {G} measures {B} according to {H}, therefore {G} multiplied by {H} makes {B}.",
+              visible: ALL,
+              highlighted: ["G","B","H"] },
+            { text: "But, further, {A} multiplied by itself makes {B},",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "A × A = B", ref: "IX.8" }] },
+            { text: "therefore the product of {H} and {G} equals the square on {A}.",
+              visible: ALL,
+              highlighted: ["H","G","A"] },
+            { text: "Therefore {H} is to {A} as {A} is to {G}.",
+              visible: ALL,
+              highlighted: ["H","A","G"],
+              justifications: [{ claim: "H : A = A : G", ref: "VII.19" }] },
+            { text: "But {A} measures {G}, therefore {H} also measures {A},",
+              visible: ALL,
+              highlighted: ["A","G","H"] },
+            { text: "which is prime, though it is not the same with it, which is absurd.",
+              visible: ALL,
+              highlighted: ["A","H"] },
+            { text: "Therefore {D} the greatest is not measured by any other number except {A}, {B}, or {C}.",
+              visible: GIVEN,
+              highlighted: ["D","A","B","C"] },
+            { text: "Therefore, if as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "and the number after the unit is prime,",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "then the greatest is not measured by any except those which have a place among the proportional numbers.",
+              visible: GIVEN,
+              highlighted: ["D","A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.13") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.19": "/elements/books/bookVII/propositions/propVII19/",
+        "VII.31": "/elements/books/bookVII/propositions/propVII31/",
+        "IX.8":   "/elements/books/bookIX/propositions/propIX8/",
+        "IX.11":  "/elements/books/bookIX/propositions/propIX11/",
+        "IX.12":  "/elements/books/bookIX/propositions/propIX12/"
     });
 </script>
 </figure>
 
-It is then clear that *E* is not prime, for if *E* is prime and measures *D,* then it also measures *A,* which is prime, though it is not the same with it, which is impossible. Therefore *E* is not prime, so it is composite. [!just IX.12]
+It is then clear that {E} is not prime, for if {E} is prime and measures {D}, then it also measures {A}, which is prime, though it is not the same with it, which is impossible. Therefore {E} is not prime, so it is composite. [!just IX.12]
 
-But any composite number is measured by some prime number, therefore *E* is measured by some prime number. [!just VII.31]
+But any composite number is measured by some prime number, therefore {E} is measured by some prime number. [!just VII.31]
 
-I say next that it is no measured by any other prime except *A.*
+I say next that it is no measured by any other prime except {A}.
 
-If *E* is measured by another, and *E* measures *D,* then that other measures *D,* so that it also measures *A,* which is prime, though it is not the same with it, which is impossible. Therefore [only the prime] *A* measures *E.* [!just IX.12]
+If {E} is measured by another, and {E} measures {D}, then that other measures {D}, so that it also measures {A}, which is prime, though it is not the same with it, which is impossible. Therefore [only the prime] {A} measures {E}. [!just IX.12]
 
-And, since *E* measures *D,* let it measure it according to *F.*
+And, since {E} measures {D}, let it measure it according to {F}.
 
-I say that *F* is not the same with any of the numbers *A, B,* or *C.*
+I say that {F} is not the same with any of the numbers {A}, {B}, or {C}.
 
-If *F* is the same with one of the numbers *A, B,* or *C,* and measures *D* according to *E,* then one of the numbers *A, B,* or *C* also measures *D* according to *E.* But one of the numbers *A, B,* or *C* measures *D* according to some one of the numbers *A, B,* or *C,* therefore *E* is also the same with one of the numbers *A, B* or *C,* which is contrary to the hypothesis. [!just IX.11]
+If {F} is the same with one of the numbers {A}, {B}, or {C}, and measures {D} according to {E}, then one of the numbers {A}, {B}, or {C} also measures {D} according to {E}. But one of the numbers {A}, {B}, or {C} measures {D} according to some one of the numbers {A}, {B}, or {C}, therefore {E} is also the same with one of the numbers {A}, {B} or {C}, which is contrary to the hypothesis. [!just IX.11]
 
-Therefore *F* is not the same as any one of the numbers *A, B,* or *C.*
+Therefore {F} is not the same as any one of the numbers {A}, {B}, or {C}.
 
-Similarly we can prove that *F* is measured by *A,* by proving again that *F* is not prime.
+Similarly we can prove that {F} is measured by {A}, by proving again that {F} is not prime.
 
-If it is, and measures *D,* then it also measures *A,* which is prime, though it is not the same with it, which is impossible. Therefore *F* is not prime, so it is composite. [!just IX.12]
+If it is, and measures {D}, then it also measures {A}, which is prime, though it is not the same with it, which is impossible. Therefore {F} is not prime, so it is composite. [!just IX.12]
 
-But any composite number is measured by some prime number, therefore *F* is measured by some prime number. [!just VII.31]
+But any composite number is measured by some prime number, therefore {F} is measured by some prime number. [!just VII.31]
 
-I say next that it is not measured by any other prime except *A.*
+I say next that it is not measured by any other prime except {A}.
 
-If any other prime number measures *F,* and *F* measures *D,* then that other also measures *D,* so that it also measures *A,* which is prime, though it is not the same with it, which is impossible. Therefore [only the prime] *A* measures *F.* [!just IX.12]
+If any other prime number measures {F}, and {F} measures {D}, then that other also measures {D}, so that it also measures {A}, which is prime, though it is not the same with it, which is impossible. Therefore [only the prime] {A} measures {F}. [!just IX.12]
 
-And, since *E* measures *D* according to *F,* therefore *E* multiplied by *F* makes *D.*
+And, since {E} measures {D} according to {F}, therefore {E} multiplied by {F} makes {D}.
 
-But, further, *A* multiplied by *C* makes *D,* therefore the product of *A* and *C* equals the product of *E* and *F.* [!just IX.11]
+But, further, {A} multiplied by {C} makes {D}, therefore the product of {A} and {C} equals the product of {E} and {F}. [!just IX.11]
 
-Therefore, proportionally *A* is to *E* as *F* is to *C.* [!just VII.19]
+Therefore, proportionally {A} is to {E} as {F} is to {C}. [!just VII.19]
 
-But *A* measures *E,* therefore *F* also measures *C.* Let it measure it according to *G.*
+But {A} measures {E}, therefore {F} also measures {C}. Let it measure it according to {G}.
 
-Similarly, then, we can prove that *G* is not the same with any of the numbers *A* or *B,* and that it is measured by *A.* And, since *F* measures *C* according to *G,* therefore *F* multiplied by *G* makes *C.*
+Similarly, then, we can prove that {G} is not the same with any of the numbers {A} or {B}, and that it is measured by {A}. And, since {F} measures {C} according to {G}, therefore {F} multiplied by {G} makes {C}.
 
-But, further, *A* multiplied by *B* makes *C,* therefore the product of *A* and *B* equals the product of *F* and *G.* Therefore, proportionally *A* is to *F* as *G* is to *B.* [!just IX.11, VII.19]
+But, further, {A} multiplied by {B} makes {C}, therefore the product of {A} and {B} equals the product of {F} and {G}. Therefore, proportionally {A} is to {F} as {G} is to {B}. [!just IX.11, VII.19]
 
-But *A* measures *F,* therefore *G* also measures *B.* Let it measure it according to *H.*
+But {A} measures {F}, therefore {G} also measures {B}. Let it measure it according to {H}.
 
-Similarly then we can prove that *H* is not the same with *A.*
+Similarly then we can prove that {H} is not the same with {A}.
 
-And, since *G* measures *B* according to *H,* therefore *G* multiplied by *H* makes *B.* But, further, *A* multiplied by itself makes *B,* therefore the product of *H* and *G* equals the square on *A.* [!just IX.8]
+And, since {G} measures {B} according to {H}, therefore {G} multiplied by {H} makes {B}. But, further, {A} multiplied by itself makes {B}, therefore the product of {H} and {G} equals the square on {A}. [!just IX.8]
 
-Therefore *H* is to *A* as *A* is to *G.* But *A* measures *G,* therefore *H* also measures *A,* which is prime, though it is not the same with it, which is absurd. [!just VII.19]
+Therefore {H} is to {A} as {A} is to {G}. But {A} measures {G}, therefore {H} also measures {A}, which is prime, though it is not the same with it, which is absurd. [!just VII.19]
 
-Therefore *D* the greatest is not measured by any other number except *A, B,* or *C.*
+Therefore {D} the greatest is not measured by any other number except {A}, {B}, or {C}.
 
 Therefore, *if as many numbers as we please beginning from a unit are in continued proportion, and the number after the unit is prime, then the greatest is not measured by any except those which have a place among the proportional numbers.*
 

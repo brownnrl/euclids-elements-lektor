@@ -15,16 +15,25 @@ statement: If a number is the least that is measured by prime numbers, then it i
 ----
 proof:
 
-Let the number *A* be the least that is measured by the prime numbers *B, C,* and *D.*
+Let the number {A} be the least that is measured by the prime numbers {B}, {C}, and {D}.
 
-I say that *A* is not measured by any other prime number except *B, C,* or *D.*
+I say that {A} is not measured by any other prime number except {B}, {C}, or {D}.
 
-If possible, let it be measured by the prime number *E,* and let *E* not be the same as any one of the numbers *B, C,* or *D.*
+If possible, let it be measured by the prime number {E}, and let {E} not be the same as any one of the numbers {B}, {C}, or {D}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="130" tabindex="0"></canvas>
 <noscript><img alt="IX.14 diagram" src="propIX14.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: the walk is highlight beats over Joyce's six lines.
+    // A reductio: E is supposed, and F, the quotient of A by E, is the one
+    // number the proof makes, so it is the only animation. Both are withdrawn
+    // at the close, when the supposition is refuted. Their slider ends are
+    // deferred so neither stands on the canvas before its slide. The unit
+    // (U1-U2) and C4 (the product of B and C) are off-figure helpers.
+    var GIVEN = ["B1","B2","B","C1","C2","C","D1","D2","D","C4","A1","A2","A"];
+    var WITHE = GIVEN.concat(["E1","E2","E"]);
+    var ALL   = WITHE.concat(["F1","F2","F"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -58,17 +67,92 @@ If possible, let it be measured by the prime number *E,* and let *E* not be the 
             "F2;point;proportion;E1,E2,A1,A2,U1,U2,F1,F3;0",
             "F;line;connect;F1,F2;black"
         ],
+        deferDraggables: ["E1","E2","F1"],
+        slides: [
+            { text: "“If a number is the least that is measured by prime numbers,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "IX.14" }] },
+            { text: "then it is not measured by any other prime number except those originally measuring it.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "Let the number {A} be the least that is measured by the prime numbers {B}, {C}, and {D}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "I say that {A} is not measured by any other prime number except {B}, {C}, or {D}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "If possible, let it be measured by the prime number {E},",
+              visible: WITHE,
+              highlighted: ["A","E"] },
+            { text: "and let {E} not be the same as any one of the numbers {B}, {C}, or {D}.",
+              visible: WITHE,
+              highlighted: ["E","B","C","D"] },
+            { text: "Now, since {E} measures {A}, let it measure it according to {F},",
+              visible: ALL,
+              highlighted: ["E","A","F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "therefore {E} multiplied by {F} makes {A}.",
+              visible: ALL,
+              highlighted: ["E","F","A"] },
+            { text: "And {A} is measured by the prime numbers {B}, {C}, and {D}.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "But, if two numbers multiplied by one another make some number, and any prime number measures the product,",
+              visible: ALL,
+              highlighted: ["E","F","A"] },
+            { text: "then it also measures one of the original numbers,",
+              visible: ALL,
+              highlighted: ["E","F"],
+              justifications: [{ claim: "a prime measuring a product measures a factor", ref: "VII.30" }] },
+            { text: "therefore each of {B}, {C}, and {D} measures one of the numbers {E} or {F}.",
+              visible: ALL,
+              highlighted: ["B","C","D","E","F"] },
+            { text: "Now they do not measure {E},",
+              visible: ALL,
+              highlighted: ["B","C","D","E"] },
+            { text: "for {E} is prime and not the same with any one of the numbers {B}, {C}, or {D}.",
+              visible: ALL,
+              highlighted: ["E","B","C","D"] },
+            { text: "Therefore they measure {F}, which is less than {A}, which is impossible,",
+              visible: ALL,
+              highlighted: ["B","C","D","F","A"] },
+            { text: "for {A} is by hypothesis the least number measured by {B}, {C}, and {D}.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "Therefore no prime number measures {A} except {B}, {C}, and {D}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "Therefore, if a number is the least that is measured by prime numbers,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "then it is not measured by any other prime number except those originally measuring it.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.14") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.30": "/elements/books/bookVII/propositions/propVII30/"
     });
 </script>
 </figure>
 
-Now, since *E* measures *A,* let it measure it according to *F,* therefore *E* multiplied by *F* makes *A.* And *A* is measured by the prime numbers *B, C,* and *D.*
+Now, since {E} measures {A}, let it measure it according to {F}, therefore {E} multiplied by {F} makes {A}. And {A} is measured by the prime numbers {B}, {C}, and {D}.
 
-But, if two numbers multiplied by one another make some number, and any prime number measures the product, then it also measures one of the original numbers, therefore each of *B, C,* and *D* measures one of the numbers *E* or *F.* [!just VII.30]
+But, if two numbers multiplied by one another make some number, and any prime number measures the product, then it also measures one of the original numbers, therefore each of {B}, {C}, and {D} measures one of the numbers {E} or {F}. [!just VII.30]
 
-Now they do not measure *E,* for *E* is prime and not the same with any one of the numbers *B, C,* or *D.* Therefore they measure *F,* which is less than *A,* which is impossible, for *A* is by hypothesis the least number measured by *B, C,* and *D.*
+Now they do not measure {E}, for {E} is prime and not the same with any one of the numbers {B}, {C}, or {D}. Therefore they measure {F}, which is less than {A}, which is impossible, for {A} is by hypothesis the least number measured by {B}, {C}, and {D}.
 
-Therefore no prime number measures *A* except *B, C,* and *D.*
+Therefore no prime number measures {A} except {B}, {C}, and {D}.
 
 Therefore, *if a number is the least that is measured by prime numbers, then it is not measured by any other prime number except those originally measuring it.*
 
