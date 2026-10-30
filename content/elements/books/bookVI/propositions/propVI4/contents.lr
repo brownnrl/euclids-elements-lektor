@@ -15,14 +15,44 @@ statement: In equiangular triangles the sides about the equal angles are proport
 ----
 proof:
 
-Let *ABC* and *DCE* be equiangular triangles having the angle *ABC* equal to the angle *DCE,* the angle *BAC* equal to the angle *CDE,* and the angle *ACB* equal to the angle *CED.*
+Let {ABC|ABCt} and {DCE|CDEt} be equiangular triangles having the angle {ABC|angABC} equal to the angle {DCE}, the angle {BAC} equal to the angle {CDE|angCDE}, and the angle {ACB} equal to the angle {CED}.
 
-I say that in the triangles *ABC* and *DEC* the sides about the equal angles are proportional where the corresponding sides are opposite the equal angles.
+I say that in the triangles {ABC|ABCt} and {DEC|CDEt} the sides about the equal angles are proportional where the corresponding sides are opposite the equal angles.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="330" height="300" tabindex="0"></canvas>
 <noscript><img alt="VI.4 diagram" src="propVI4.gif"/></noscript>
 <script type="text/javascript">
+    // Euclid sets the triangles base to base (BC in a straight line with
+    // CE), produces BA and ED to meet at F, and reads the proportions off
+    // the parallelogram FACD and the triangle FBE (VI.2, V.7, V.16, V.22).
+    //
+    // Joyce's figure draws both triangles (random faces), AF and DF; D1, D2
+    // are his hidden parallelogram helpers. The proof also names the sides,
+    // the lines FB and FE, the parallelogram FACD, the triangle FBE and six
+    // angles. Everything added is transparent (;0;0;0 lines, ;0;0;0;0
+    // polygons), so the resting figure is unchanged. The two triangles'
+    // own polygons have filled faces, which a highlight would raise over the
+    // markers (#140), so caption and prose refs to "the triangles" go to the
+    // faceless twins ABCt / CDEt. The polygon CDE owns that name, so the
+    // angle CDE takes the display override {CDE|angCDE}; likewise the
+    // angle ABC against the triangle ABC. AF and DF are declared A→F and
+    // D→F, so their own strokes run outward as "produced": no solid twins.
+    //
+    // Markers: equal angles share a colour — ABC with DCE (blue), BAC with
+    // CDE (purple), ACB with CED (green). The two at C are adjacent, not
+    // nested, so both are pinned to the default 22 to keep them on one ring
+    // instead of the same-vertex stepping. None is a right angle ("two right
+    // angles" is a sum). Markers are hidden in the static figure.
+    var GIVEN = ["A","B","C","D","E","ABC","CDE","ABCt","CDEt",
+                 "AB","BC","AC","CE","CD","DE"];
+    var ANG1  = GIVEN.concat(["angABC","angDCE"]);
+    var ANG2  = ANG1.concat(["angBAC","angCDE"]);
+    var ANG   = ANG2.concat(["angACB","angCED"]);
+    var MEET  = ANG.concat(["AF","DF","F"]);
+    var PAR   = MEET.concat(["FB","FE"]);
+    var PG    = PAR.concat(["FACD"]);
+    var TRI   = PG.concat(["FBE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -39,25 +69,184 @@ I say that in the triangles *ABC* and *DEC* the sides about the equal angles are
             "CDE;polygon;triangle;C,D,E;0;0;black;random",
             "F;point;intersection;B,A,E,D",
             "AF;line;connect;A,F",
-            "DF;line;connect;D,F"
+            "DF;line;connect;D,F",
+            // Highlight targets, all transparent.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "FE;line;connect;F,E;0;0;0",
+            "ABCt;polygon;triangle;A,B,C;0;0;0;0",
+            "CDEt;polygon;triangle;C,D,E;0;0;0;0",
+            "FACD;polygon;quadrilateral;F,A,C,D;0;0;0;0",
+            "FBE;polygon;triangle;F,B,E;0;0;0;0",
+            "angABC;sector;angleMarker;B,A,C;0;0;3b6ea5;9ec5e8",
+            "angDCE;sector;angleMarker;C,D,E,22;0;0;3b6ea5;9ec5e8",
+            "angBAC;sector;angleMarker;A,B,C;0;0;7a4fa3;cdb8e6",
+            "angCDE;sector;angleMarker;D,C,E;0;0;7a4fa3;cdb8e6",
+            "angACB;sector;angleMarker;C,A,B,22;0;0;3f8e4f;a8dbb0",
+            "angCED;sector;angleMarker;E,C,D;0;0;3f8e4f;a8dbb0"
         ],
+        // Draggables (checked against the bundle): A, B, C free and E a
+        // lineSlider on BC — the two given triangles, standing from slide 1.
+        // D and F are derived (intersection) and listed per slide; nothing
+        // to defer.
+        aliases: { "BA": "AB", "CB": "BC", "CA": "AC", "EC": "CE", "DC": "CD",
+                   "ED": "DE", "BF": "FB", "EF": "FE", "FA": "AF", "FD": "DF",
+                   "CBA": "angABC",
+                   "DCE": "angDCE", "ECD": "angDCE",
+                   "BAC": "angBAC", "CAB": "angBAC",
+                   "EDC": "angCDE",
+                   "ACB": "angACB", "BCA": "angACB",
+                   "CED": "angCED", "DEC": "angCED" },
+        slides: [
+            { text: "“In equiangular triangles the sides about the equal angles are proportional where the corresponding sides are opposite the equal angles.”",
+              visible: ANG,
+              highlighted: ["ABCt","CDEt"],
+              justifications: [{ ref: "VI.4" }] },
+            { text: "Let {ABC|ABCt} and {DCE|CDEt} be equiangular triangles",
+              visible: GIVEN,
+              highlighted: ["ABCt","CDEt"] },
+            { text: "having the angle {ABC|angABC} equal to the angle {DCE},",
+              visible: ANG1,
+              highlighted: ["angABC","angDCE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep },
+                  { elem: "angDCE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "the angle {BAC} equal to the angle {CDE|angCDE},",
+              visible: ANG2,
+              highlighted: ["angBAC","angCDE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "angCDE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the angle {ACB} equal to the angle {CED}.",
+              visible: ANG,
+              highlighted: ["angACB","angCED"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angACB", name: geomlib.A.Sector.sweep },
+                  { elem: "angCED", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that in the triangles {ABC|ABCt} and {DEC|CDEt} the sides about the equal angles are proportional",
+              visible: ANG,
+              highlighted: ["ABCt","CDEt"] },
+            { text: "where the corresponding sides are opposite the equal angles.",
+              visible: ANG,
+              highlighted: ["angABC","angDCE","angBAC","angCDE","angACB","angCED"] },
+            { text: "Let {BC} be placed in a straight line with {CE}.",
+              visible: ANG,
+              highlighted: ["BC","CE"] },
+            { text: "Then, since the sum of the angles {ABC|angABC} and {ACB} is less than two right angles,",
+              visible: ANG,
+              highlighted: ["angABC","angACB"],
+              justifications: [{ claim: "two angles of a triangle are less than two right angles", ref: "I.17" }] },
+            { text: "and the angle {ACB} equals the angle {DEC},",
+              visible: ANG,
+              highlighted: ["angACB","angCED"] },
+            { text: "therefore the sum of the angles {ABC|angABC} and {DEC} is less than two right angles.",
+              visible: ANG,
+              highlighted: ["angABC","angCED"] },
+            { text: "Therefore {BA} and {ED}, when produced, will meet.",
+              visible: ANG,
+              highlighted: ["AB","DE"],
+              justifications: [{ claim: "lines making angles less than two right angles meet", ref: "I.Post.5" }] },
+            { text: "Let them be produced and meet at {F}.",
+              visible: MEET,
+              highlighted: ["AF","DF","F"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AF", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "F",  name: geomlib.A.Point.appear } ] } },
+            { text: "Now, since the angle {DCE} equals the angle {ABC|angABC}, {DC} is parallel to {FB}.",
+              visible: PAR,
+              highlighted: ["angDCE","angABC","CD","FB"],
+              justifications: [{ claim: "DC parallel to FB", ref: "I.28" }] },
+            { text: "Again, since the angle {ACB} equals the angle {DEC}, {AC} is parallel to {FE}.",
+              visible: PAR,
+              highlighted: ["angACB","angCED","AC","FE"],
+              justifications: [{ claim: "AC parallel to FE", ref: "I.28" }] },
+            { text: "Therefore {FACD} is a parallelogram,",
+              visible: PG,
+              highlighted: ["FACD"],
+              transition: { animations: [
+                  { elem: "FACD", name: geomlib.A.Polygon.outline } ] } },
+            { text: "therefore {FA} equals {DC}, and {AC} equals {FD}.",
+              visible: PG,
+              highlighted: ["AF","CD","AC","DF"],
+              justifications: [{ claim: "opposite sides of a parallelogram", ref: "I.34" }] },
+            { text: "And, since {AC} is parallel to a side {FE} of the triangle {FBE},",
+              visible: TRI,
+              highlighted: ["AC","FE","FBE"],
+              transition: { animations: [
+                  { elem: "FBE", name: geomlib.A.Polygon.outline } ] } },
+            { text: "therefore {BA} is to {AF} as {BC} is to {CE}.",
+              visible: TRI,
+              highlighted: ["AB","AF","BC","CE"],
+              justifications: [{ claim: "BA : AF = BC : CE", ref: "VI.2" }] },
+            { text: "But {FD} equals {AC},",
+              visible: TRI,
+              highlighted: ["DF","AC"] },
+            { text: "therefore {BC} is to {CE} as {AC} is to {DE},",
+              visible: TRI,
+              highlighted: ["BC","CE","AC","DE"],
+              justifications: [{ claim: "equals have the same ratio", ref: "V.7" }] },
+            { text: "and alternately {BC} is to {CA} as {CE} is to {ED}.",
+              visible: TRI,
+              highlighted: ["BC","AC","CE","DE"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "Since then it was proved that {AB} is to {BC} as {DC} is to {CE},",
+              visible: TRI,
+              highlighted: ["AB","BC","CD","CE"] },
+            { text: "and {BC} is to {CA} as {CE} is to {ED},",
+              visible: TRI,
+              highlighted: ["BC","AC","CE","DE"] },
+            { text: "therefore, ex aequali, {BA} is to {AC} as {CD} is to {DE}.",
+              visible: TRI,
+              highlighted: ["AB","AC","CD","DE"],
+              justifications: [{ claim: "ex aequali", ref: "V.22" }] },
+            { text: "Therefore, in equiangular triangles the sides about the equal angles are proportional",
+              visible: ANG,
+              highlighted: ["ABCt","CDEt"] },
+            { text: "where the corresponding sides are opposite the equal angles.",
+              visible: ANG,
+              highlighted: ["angABC","angDCE","angBAC","angCDE","angACB","angCED"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.4") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.5": "/elements/books/bookI/postulates/post5/",
+        "I.17":     "/elements/books/bookI/propositions/propI17/",
+        "I.28":     "/elements/books/bookI/propositions/propI28/",
+        "I.34":     "/elements/books/bookI/propositions/propI34/",
+        "V.7":      "/elements/books/bookV/propositions/propV7/",
+        "V.16":     "/elements/books/bookV/propositions/propV16/",
+        "V.22":     "/elements/books/bookV/propositions/propV22/",
+        "VI.2":     "/elements/books/bookVI/propositions/propVI2/"
     });
 </script>
 </figure>
 
-Let *BC* be placed in a straight line with *CE.*
+Let {BC} be placed in a straight line with {CE}.
 
-Then, since the sum of the angles *ABC* and *ACB* is less than two right angles, and the angle *ACB* equals the angle *DEC,* therefore the sum of the angles *ABC* and *DEC* is less than two right angles. Therefore *BA* and *ED,* when produced, will meet. Let them be produced and meet at *F.* [!just I.17; I.Post.5]
+Then, since the sum of the angles {ABC|angABC} and {ACB} is less than two right angles, and the angle {ACB} equals the angle {DEC}, therefore the sum of the angles {ABC|angABC} and {DEC} is less than two right angles. Therefore {BA} and {ED}, when produced, will meet. Let them be produced and meet at {F}. [!just I.17; I.Post.5]
 
-Now, since the angle *DCE* equals the angle *ABC, DC* is parallel to *FB.* Again, since the angle *ACB* equals the angle *DEC, AC* is parallel to *FE.* [!just I.28]
+Now, since the angle {DCE} equals the angle {ABC|angABC}, {DC} is parallel to {FB}. Again, since the angle {ACB} equals the angle {DEC}, {AC} is parallel to {FE}. [!just I.28]
 
-Therefore *FACD* is a parallelogram, therefore *FA* equals *DC,* and *AC* equals *FD.* [!just I.34]
+Therefore {FACD} is a parallelogram, therefore {FA} equals {DC}, and {AC} equals {FD}. [!just I.34]
 
-And, since *AC* is parallel to a side *FE* of the triangle *FBE,* therefore *BA* is to *AF* as *BC* is to *CE.* [!just VI.2]
+And, since {AC} is parallel to a side {FE} of the triangle {FBE}, therefore {BA} is to {AF} as {BC} is to {CE}. [!just VI.2]
 
-But *FD* equals *AC,* therefore *BC* is to *CE* as *AC* is to *DE,* and alternately *BC* is to *CA* as *CE* is to *ED.* [!just V.7; V.16]
+But {FD} equals {AC}, therefore {BC} is to {CE} as {AC} is to {DE}, and alternately {BC} is to {CA} as {CE} is to {ED}. [!just V.7; V.16]
 
-Since then it was proved that *AB* is to *BC* as *DC* is to *CE,* and *BC* is to *CA* as *CE* is to *ED,* therefore, *ex aequali, BA* is to *AC* as *CD* is to *DE.* [!just V.22]
+Since then it was proved that {AB} is to {BC} as {DC} is to {CE}, and {BC} is to {CA} as {CE} is to {ED}, therefore, *ex aequali,* {BA} is to {AC} as {CD} is to {DE}. [!just V.22]
 
 Therefore, *in equiangular triangles the sides about the equal angles are proportional where the corresponding sides are opposite the equal angles.*
 

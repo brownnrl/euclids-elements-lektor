@@ -15,14 +15,49 @@ statement: If an angle of a triangle is bisected by a straight line cutting the 
 ----
 proof:
 
-Let *ABC* be a triangle, and let the angle *BAC* be bisected by the straight line *AD.*
+Let {ABC|ABCt} be a triangle, and let the angle {BAC} be bisected by the straight line {AD}.
 
-I say that *DB* is to *DC* as *AB* is to *AC.*
+I say that {DB} is to {DC} as {AB} is to {AC}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="290" tabindex="0"></canvas>
 <noscript><img alt="VI.3 diagram" src="propVI3.gif"/></noscript>
 <script type="text/javascript">
+    // Both halves of the proposition on Joyce's one figure: the bisector AD,
+    // the parallel CE through C, and AB carried through to E. The direct
+    // half walks I.29 twice, I.6 and VI.2; the converse starts again from
+    // the point of section D, joins AD, repeats the construction and walks
+    // VI.2 / V.11 / V.9 / I.5 / I.29 back to the bisection.
+    //
+    // Joyce's figure draws the triangle (random face), AD, AE and CE; E' is
+    // his hidden parallelogram helper. The proof also names the sides AB,
+    // AC, the base BC, its segments DB and DC, the line BAE, the triangle
+    // BCE and five angles. Everything added is transparent (;0;0;0 lines,
+    // ;0;0;0;0 polygons), so the resting figure is unchanged. The triangle's
+    // own polygon has a filled face, which a highlight would raise over the
+    // markers (#140), so the caption and prose refs to "the triangle ABC" go
+    // to the faceless twin ABCt. AD strokes from A (angleBisector line is
+    // A→D), CE from C and AE from A outward, as drawn, so no solid twins.
+    //
+    // Markers: the whole angle BAC at 32 around its halves BAD and CAD at
+    // 20; equal angles share a colour — BAD with AEC (blue), CAD with ACE
+    // (green). None is a right angle. Markers are hidden in the static figure.
+    var GIVEN = ["A","B","C","ABC","ABCt","AB","AC","BC"];
+    var BIS   = GIVEN.concat(["AD","D","DB","DC","angBAC","angBAD","angCAD"]);
+    var HALF  = GIVEN.concat(["AD","D","DB","DC","angBAD","angCAD"]);
+    var PAR   = HALF.concat(["CE"]);
+    var CON   = PAR.concat(["E","AE","BAE","BCE"]);
+    var ALT   = CON.concat(["angACE"]);
+    var EXT   = ALT.concat(["angAEC"]);
+    // The converse: D given on the base, AD not yet joined.
+    var CV0   = GIVEN.concat(["D","DB","DC"]);
+    var CV1   = CV0.concat(["AD"]);
+    var CV2   = CV1.concat(["angBAC"]);
+    var CV3   = CV1.concat(["CE","E","AE","BAE","BCE"]);
+    var CV4   = CV3.concat(["angAEC","angACE"]);
+    var CV5   = CV4.concat(["angBAD"]);
+    var CV6   = CV5.concat(["angCAD"]);
+    var CV7   = CV6.concat(["angBAC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,39 +72,251 @@ I say that *DB* is to *DC* as *AB* is to *AC.*
             "E';point;parallelogram;A,D,C;0;0",
             "E;point;intersection;B,A,C,E'",
             "AE;line;connect;A,E",
-            "CE;line;connect;C,E"
+            "CE;line;connect;C,E",
+            // Highlight targets, all transparent.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "BAE;line;connect;B,E;0;0;0",
+            "ABCt;polygon;triangle;A,B,C;0;0;0;0",
+            "BCE;polygon;triangle;B,C,E;0;0;0;0",
+            "angBAC;sector;angleMarker;A,B,C,32;0;0;7a4fa3;cdb8e6",
+            "angBAD;sector;angleMarker;A,B,D,20;0;0;3b6ea5;9ec5e8",
+            "angCAD;sector;angleMarker;A,C,D,20;0;0;3f8e4f;a8dbb0",
+            "angACE;sector;angleMarker;C,A,E;0;0;3f8e4f;a8dbb0",
+            "angAEC;sector;angleMarker;E,A,C;0;0;3b6ea5;9ec5e8"
         ],
+        // Draggables (checked against the bundle): A, B, C, free — the given
+        // triangle, standing from slide 1. D, E are derived (last /
+        // intersection) and listed per slide; nothing to defer.
+        aliases: { "BA": "AB", "CA": "AC", "CB": "BC", "BD": "DB", "CD": "DC",
+                   "DA": "AD", "EA": "AE", "EC": "CE", "EAB": "BAE",
+                   "EBC": "BCE", "CBE": "BCE",
+                   "BAC": "angBAC", "CAB": "angBAC",
+                   "BAD": "angBAD", "DAB": "angBAD",
+                   "CAD": "angCAD", "DAC": "angCAD",
+                   "ACE": "angACE", "ECA": "angACE",
+                   "AEC": "angAEC", "CEA": "angAEC" },
+        slides: [
+            // The statement, split at its seams (process.md “Open on the
+            // statement”), over the bisected triangle.
+            { text: "“If {an angle|angBAC} of {a triangle|ABCt} is bisected by {a straight line|AD} cutting {the base|BC},",
+              visible: BIS,
+              highlighted: ["angBAD","angCAD","AD","BC"],
+              justifications: [{ ref: "VI.3" }] },
+            { text: "then the segments of the base have the same ratio as the remaining sides of the triangle;",
+              visible: BIS,
+              highlighted: ["DB","DC","AB","AC"] },
+            { text: "and, if segments of the base have the same ratio as the remaining sides of the triangle,",
+              visible: BIS,
+              highlighted: ["DB","DC","AB","AC"] },
+            { text: "then the straight line joining {the vertex|A} to {the point of section|D} bisects the angle of the triangle.”",
+              visible: BIS,
+              highlighted: ["AD","angBAD","angCAD"] },
+            // The direct half.
+            { text: "Let {ABC|ABCt} be a triangle,",
+              visible: GIVEN,
+              highlighted: ["ABCt"] },
+            { text: "and let the angle {BAC} be bisected by the straight line {AD}.",
+              visible: BIS,
+              highlighted: ["angBAC","AD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "AD",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",      name: geomlib.A.Point.appear },
+                  { elem: "angBAD", name: geomlib.A.Sector.sweep },
+                  { elem: "angCAD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that {DB} is to {DC} as {AB} is to {AC}.",
+              visible: BIS,
+              highlighted: ["DB","DC","AB","AC"] },
+            { text: "Draw {CE} through {C} parallel to {DA},",
+              visible: PAR,
+              highlighted: ["CE","AD"],
+              transition: { animations: [
+                  { elem: "CE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and carry {AB} through to meet it at {E}.",
+              visible: CON,
+              highlighted: ["AB","AE","E"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AE", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "E",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "CE through C parallel to DA", ref: "I.31" }] },
+            { text: "Then, since the straight line {AC} falls upon the parallels {AD} and {EC},",
+              visible: CON,
+              highlighted: ["AC","AD","CE"] },
+            { text: "the angle {ACE} equals the angle {CAD}.",
+              visible: ALT,
+              highlighted: ["angACE","angCAD"],
+              transition: { animations: [
+                  { elem: "angACE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "alternate angles on the parallels AD and EC", ref: "I.29" }] },
+            { text: "But the angle {CAD} equals the angle {BAD} by hypothesis,",
+              visible: ALT,
+              highlighted: ["angCAD","angBAD"] },
+            { text: "therefore the angle {BAD} also equals the angle {ACE}.",
+              visible: ALT,
+              highlighted: ["angBAD","angACE"] },
+            { text: "Again, since the straight line {BAE} falls upon the parallels {AD} and {EC},",
+              visible: ALT,
+              highlighted: ["BAE","AD","CE"] },
+            { text: "the exterior angle {BAD} equals the interior angle {AEC}.",
+              visible: EXT,
+              highlighted: ["angBAD","angAEC"],
+              transition: { animations: [
+                  { elem: "angAEC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "exterior angle equals interior opposite", ref: "I.29" }] },
+            { text: "But the angle {ACE} was also proved equal to the angle {BAD},",
+              visible: EXT,
+              highlighted: ["angACE","angBAD"] },
+            { text: "therefore the angle {ACE} also equals the angle {AEC},",
+              visible: EXT,
+              highlighted: ["angACE","angAEC"] },
+            { text: "so that the side {AE} also equals the side {AC}.",
+              visible: EXT,
+              highlighted: ["AE","AC"],
+              justifications: [{ claim: "sides opposite equal angles", ref: "I.6" }] },
+            { text: "And, since {AD} is parallel to {EC}, one of the sides of the triangle {BCE},",
+              visible: EXT,
+              highlighted: ["AD","CE","BCE"] },
+            { text: "therefore, proportionally {DB} is to {DC} as {AB} is to {AE}.",
+              visible: EXT,
+              highlighted: ["DB","DC","AB","AE"],
+              justifications: [{ claim: "DB : DC = AB : AE", ref: "VI.2" }] },
+            { text: "But {AE} equals {AC},",
+              visible: EXT,
+              highlighted: ["AE","AC"] },
+            { text: "therefore {DB} is to {DC} as {AB} is to {AC}.",
+              visible: EXT,
+              highlighted: ["DB","DC","AB","AC"],
+              justifications: [{ claim: "equals have the same ratio", ref: "V.7" }] },
+            // The converse.
+            { text: "Next, let {DB} be to {DC} as {AB} is to {AC}.",
+              visible: CV0,
+              highlighted: ["DB","DC","AB","AC"] },
+            { text: "Join {AD}.",
+              visible: CV1,
+              highlighted: ["AD"],
+              transition: { animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that the straight line {AD} bisects the angle {BAC}.",
+              visible: CV2,
+              highlighted: ["AD","angBAC"],
+              transition: { animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "With the same construction,",
+              visible: CV3,
+              highlighted: ["CE","AE","E"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AE", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "E",  name: geomlib.A.Point.appear } ] } },
+            { text: "since {DB} is to {DC} as {AB} is to {AC},",
+              visible: CV3,
+              highlighted: ["DB","DC","AB","AC"] },
+            { text: "and also {DB} is to {DC} as {AB} is to {AE},",
+              visible: CV3,
+              highlighted: ["DB","DC","AB","AE"] },
+            { text: "for {AD} is parallel to {EC}, one of the sides of the triangle {BCE},",
+              visible: CV3,
+              highlighted: ["AD","CE","BCE"],
+              justifications: [{ claim: "DB : DC = AB : AE", ref: "VI.2" }] },
+            { text: "therefore also {AB} is to {AC} as {AB} is to {AE}.",
+              visible: CV3,
+              highlighted: ["AB","AC","AE"],
+              justifications: [{ claim: "ratios the same with the same ratio", ref: "V.11" }] },
+            { text: "Therefore {AC} equals {AE},",
+              visible: CV3,
+              highlighted: ["AC","AE"],
+              justifications: [{ claim: "AB has the same ratio to each", ref: "V.9" }] },
+            { text: "so that the angle {AEC} also equals the angle {ACE}.",
+              visible: CV4,
+              highlighted: ["angAEC","angACE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angAEC", name: geomlib.A.Sector.sweep },
+                  { elem: "angACE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "base angles of the isosceles triangle", ref: "I.5" }] },
+            { text: "But the angle {AEC} equals the exterior angle {BAD},",
+              visible: CV5,
+              highlighted: ["angAEC","angBAD"],
+              transition: { animations: [
+                  { elem: "angBAD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the angle {ACE} equals the alternate angle {CAD},",
+              visible: CV6,
+              highlighted: ["angACE","angCAD"],
+              transition: { animations: [
+                  { elem: "angCAD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "exterior and alternate angles", ref: "I.29" }] },
+            { text: "therefore the angle {BAD} also equals the angle {CAD}.",
+              visible: CV6,
+              highlighted: ["angBAD","angCAD"] },
+            { text: "Therefore the straight line {AD} bisects the angle {BAC}.",
+              visible: CV7,
+              highlighted: ["AD","angBAC"] },
+            // The closing restatement, split as the statement was.
+            { text: "Therefore, if an angle of a triangle is bisected by a straight line cutting the base,",
+              visible: CV7,
+              highlighted: ["angBAD","angCAD","AD","BC"] },
+            { text: "then the segments of the base have the same ratio as the remaining sides of the triangle;",
+              visible: CV7,
+              highlighted: ["DB","DC","AB","AC"] },
+            { text: "and, if segments of the base have the same ratio as the remaining sides of the triangle,",
+              visible: CV7,
+              highlighted: ["DB","DC","AB","AC"] },
+            { text: "then the straight line joining the vertex to the point of section bisects the angle of the triangle.",
+              visible: CV7,
+              highlighted: ["AD","angBAD","angCAD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.3") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.5":  "/elements/books/bookI/propositions/propI5/",
+        "I.6":  "/elements/books/bookI/propositions/propI6/",
+        "I.29": "/elements/books/bookI/propositions/propI29/",
+        "I.31": "/elements/books/bookI/propositions/propI31/",
+        "V.7":  "/elements/books/bookV/propositions/propV7/",
+        "V.9":  "/elements/books/bookV/propositions/propV9/",
+        "V.11": "/elements/books/bookV/propositions/propV11/",
+        "VI.2": "/elements/books/bookVI/propositions/propVI2/"
     });
 </script>
 </figure>
 
-Draw *CE* through *C* parallel to *DA,* and carry *AB* through to meet it at *E.* [!just I.31]
+Draw {CE} through {C} parallel to {DA}, and carry {AB} through to meet it at {E}. [!just I.31]
 
-Then, since the straight line *AC* falls upon the parallels *AD* and *EC,* the angle *ACE* equals the angle *CAD.* [!just I.29]
+Then, since the straight line {AC} falls upon the parallels {AD} and {EC}, the angle {ACE} equals the angle {CAD}. [!just I.29]
 
-But the angle *CAD* equals the angle *BAD* by hypothesis, therefore the angle *BAD* also equals the angle *ACE.*
+But the angle {CAD} equals the angle {BAD} by hypothesis, therefore the angle {BAD} also equals the angle {ACE}.
 
-Again, since the straight line *BAE* falls upon the parallels *AD* and *EC,* the exterior angle *BAD* equals the interior angle *AEC.* [!just I.29]
+Again, since the straight line {BAE} falls upon the parallels {AD} and {EC}, the exterior angle {BAD} equals the interior angle {AEC}. [!just I.29]
 
-But the angle *ACE* was also proved equal to the angle *BAD,* therefore the angle *ACE* also equals the angle *AEC,* so that the side *AE* also equals the side *AC.* [!just I.6]
+But the angle {ACE} was also proved equal to the angle {BAD}, therefore the angle {ACE} also equals the angle {AEC}, so that the side {AE} also equals the side {AC}. [!just I.6]
 
-And, since *AD* is parallel to *EC,* one of the sides of the triangle *BCE,* therefore, proportionally *DB* is to *DC* as *AB* is to *AE.* [!just VI.2]
+And, since {AD} is parallel to {EC}, one of the sides of the triangle {BCE}, therefore, proportionally {DB} is to {DC} as {AB} is to {AE}. [!just VI.2]
 
-But *AE* equals *AC,* therefore *DB* is to *DC* as *AB* is to *AC.* [!just V.7]
+But {AE} equals {AC}, therefore {DB} is to {DC} as {AB} is to {AC}. [!just V.7]
 
 <hr width="50%">
 
-Next, let *DB* be to *DC* as *AB* is to *AC.* Join *AD.*
+Next, let {DB} be to {DC} as {AB} is to {AC}. Join {AD}.
 
-I say that the straight line *AD* bisects the angle *BAC.*
+I say that the straight line {AD} bisects the angle {BAC}.
 
-With the same construction, since *DB* is to *DC* as *AB* is to *AC,* and also *DB* is to *DC* as *AB* is to *AE,* for *AD* is parallel to *EC,* one of the sides of the triangle *BCE,* therefore also *AB* is to *AC* as *AB* is to *AE.* [!just VI.2; V.11]
+With the same construction, since {DB} is to {DC} as {AB} is to {AC}, and also {DB} is to {DC} as {AB} is to {AE}, for {AD} is parallel to {EC}, one of the sides of the triangle {BCE}, therefore also {AB} is to {AC} as {AB} is to {AE}. [!just VI.2; V.11]
 
-Therefore *AC* equals *AE,* so that the angle *AEC* also equals the angle *ACE.* [!just V.9; I.5]
+Therefore {AC} equals {AE}, so that the angle {AEC} also equals the angle {ACE}. [!just V.9; I.5]
 
-But the angle *AEC* equals the exterior angle *BAD,* and the angle *ACE* equals the alternate angle *CAD,* therefore the angle *BAD* also equals the angle *CAD.* [!just I.29]
+But the angle {AEC} equals the exterior angle {BAD}, and the angle {ACE} equals the alternate angle {CAD}, therefore the angle {BAD} also equals the angle {CAD}. [!just I.29]
 
-Therefore the straight line *AD* bisects the angle *BAC.*
+Therefore the straight line {AD} bisects the angle {BAC}.
 
 Therefore, *if an angle of a triangle is bisected by a straight line cutting the base, then the segments of the base have the same ratio as the remaining sides of the triangle; and, if segments of the base have the same ratio as the remaining sides of the triangle, then the straight line joining the vertex to the point of section bisects the angle of the triangle.*
 
