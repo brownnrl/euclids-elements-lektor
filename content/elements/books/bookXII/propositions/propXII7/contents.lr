@@ -15,7 +15,7 @@ statement: Any prism with a triangular base is divided into three pyramids equal
 ----
 proof:
 
-Let there be a prism with the triangular base *ABC* and *DEF* opposite.
+Let there be a prism with the triangular base {ABC} and {DEF} opposite.
 
 I say that the prism *ABCDEF* is divided into three pyramids equal to one another, which have triangular bases.
 
@@ -23,6 +23,24 @@ I say that the prism *ABCDEF* is divided into three pyramids equal to one anothe
 <canvas id="canvas_0" width="260" height="250" tabindex="0"></canvas>
 <noscript><img alt="XII.7 diagram" src="propXII7.gif"/></noscript>
 <script type="text/javascript">
+    // Nothing is constructed but the three joins BD, EC, CD; the walk is
+    // highlight beats over Joyce's figure.
+    //
+    // A polyhedron draws no highlight, so each pyramid the prose names gets
+    // a faceless wireframe twin, an octagon that walks all six edges (ABDC,
+    // DEBC, ECFD, named as the guide names them). The prism is lit through
+    // its five faces. ABC and DEF are faceless twins of the shaded faces BAC
+    // and EDF (a highlighted filled face is raised over the figure). Every
+    // added element is transparent, so the resting figure is unchanged.
+    // Draggables (checked against the bundle): E (lineSlider) and A, B, C
+    // (planeSliders), all givens; D and F are vertices of the prism.
+    var GIVEN  = ["A","B","C","D","E","F","BAC","pris","EDF"];
+    var PRISM  = ["ABC","DEF","ABED","FCBE","ADFC"];
+    var BASE   = GIVEN.concat(PRISM);
+    var JOINED = BASE.concat(["BD","CE","CD","ABD","EBD","EBC","CEF",
+                              "ABDC","DEBC","ECFD"]);
+    var P1 = ["ABDC","ABD","C"], P2 = ["DEBC","EBD","C"],
+        P2b = ["DEBC","EBC","D"], P3 = ["ECFD","CEF","D"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -44,27 +62,125 @@ I say that the prism *ABCDEF* is divided into three pyramids equal to one anothe
             "F;point;vertex;EDF,3",
             "BD;line;connect;B,D",
             "CD;line;connect;C,D",
-            "CE;line;connect;C,E"
+            "CE;line;connect;C,E",
+            // Transparent highlight targets: the prism's faces and the
+            // triangles the proof names.
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "DEF;polygon;triangle;D,E,F;0;0;0;0",
+            "ABED;polygon;quadrilateral;A,B,E,D;0;0;0;0",
+            "FCBE;polygon;quadrilateral;F,C,B,E;0;0;0;0",
+            "ADFC;polygon;quadrilateral;A,D,F,C;0;0;0;0",
+            "ABD;polygon;triangle;A,B,D;0;0;0;0",
+            "EBD;polygon;triangle;E,B,D;0;0;0;0",
+            "EBC;polygon;triangle;E,B,C;0;0;0;0",
+            "CEF;polygon;triangle;C,E,F;0;0;0;0",
+            // Pyramid wireframes: each octagon walks the six edges.
+            "ABDC;polygon;octagon;A,B,D,C,A,D,C,B;0;0;0;0",
+            "DEBC;polygon;octagon;D,E,B,C,D,B,C,E;0;0;0;0",
+            "ECFD;polygon;octagon;E,C,F,D,E,F,D,C;0;0;0;0"
         ],
+        aliases: { "EC": "CE", "DEB": "EBD", "BCE": "EBC", "CBE": "EBC",
+                   "ECF": "CEF", "CAB": "ABC", "BCED": "DEBC" },
+        slides: [
+            { text: "“Any prism with a triangular base is divided into three pyramids equal to one another with triangular bases.”",
+              visible: GIVEN.concat(["BD","CE","CD"], PRISM),
+              highlighted: PRISM,
+              justifications: [{ ref: "XII.7" }] },
+            { text: "Let there be a prism with the triangular base {ABC} and {DEF} opposite.",
+              visible: BASE,
+              highlighted: ["ABC","DEF"] },
+            { text: "I say that the prism ABCDEF is divided into three pyramids equal to one another, which have triangular bases.",
+              highlighted: PRISM },
+            { text: "Join {BD}, {EC}, and {CD}.",
+              visible: JOINED,
+              transition: { mode: "cascade", animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since {ABED} is a parallelogram, and {BD} is its diameter,",
+              highlighted: ["ABED","BD"] },
+            { text: "therefore the triangle {ABD} equals the triangle {EBD}.",
+              highlighted: ["ABD","EBD"],
+              justifications: [{ claim: "triangle ABD = triangle EBD", ref: "I.34" }] },
+            { text: "Therefore the pyramid with triangular base {ABD} and vertex {C}",
+              highlighted: P1 },
+            { text: "equals the pyramid with triangular base {DEB} and vertex {C}.",
+              highlighted: P1.concat(P2),
+              justifications: [{ claim: "pyramids on equal bases, same height", ref: "XII.5" }] },
+            { text: "But the pyramid with triangular base {DEB} and vertex {C}",
+              highlighted: P2 },
+            { text: "is identical with the pyramid with triangular base {EBC} and vertex {D}, for they are contained by the same planes.",
+              highlighted: P2b },
+            { text: "Therefore the pyramid with triangular base {ABD} vertex {C}",
+              highlighted: P1 },
+            { text: "is also equal to the pyramid with triangular base {EBC} and vertex {D}.",
+              highlighted: P1.concat(P2b) },
+            { text: "Again, since {FCBE} is a parallelogram, and {CE} is its diameter,",
+              highlighted: ["FCBE","CE"] },
+            { text: "therefore the triangle {CEF} equals the triangle {CBE}.",
+              highlighted: ["CEF","EBC"],
+              justifications: [{ claim: "triangle CEF = triangle CBE", ref: "I.34" }] },
+            { text: "Therefore the pyramid with triangular base {BCE} and vertex {D}",
+              highlighted: P2b },
+            { text: "equals the pyramid with triangular base {ECF} and vertex {D}.",
+              highlighted: P2b.concat(P3),
+              justifications: [{ claim: "pyramids on equal bases, same height", ref: "XII.5" }] },
+            { text: "But the pyramid with triangular base {BCE} and vertex {D} was proved equal",
+              highlighted: P2b },
+            { text: "to the pyramid with triangular base {ABD} and vertex {C},",
+              highlighted: P2b.concat(P1) },
+            { text: "therefore the pyramid with triangular base {CEF} and vertex {D}",
+              highlighted: P3 },
+            { text: "equals the pyramid with triangular base {ABD} and vertex {C}.",
+              highlighted: P3.concat(P1) },
+            { text: "Therefore the prism ABCDEF is divided into three pyramids equal to one another which have triangular bases.",
+              highlighted: ["ABDC","DEBC","ECFD"] },
+            { text: "And, since the pyramid with triangular base {ABD} and vertex {C}",
+              highlighted: P1 },
+            { text: "is identical with the pyramid with triangular base {CAB} and vertex {D}, for they are contained by the same planes,",
+              highlighted: ["ABDC","ABC","D"] },
+            { text: "while the pyramid with triangular base {ABD} vertex {C} was proved to be a third",
+              highlighted: P1 },
+            { text: "of the prism with triangular base {ABC} and {DEF} opposite,",
+              highlighted: PRISM },
+            { text: "therefore the pyramid with triangular base {ABC} and vertex {D} is a third",
+              highlighted: ["ABDC","ABC","D"] },
+            { text: "of the prism with the same base {ABC}, and {DEF} opposite.",
+              highlighted: PRISM },
+            { text: "Therefore, any prism with a triangular base is divided into three pyramids equal to one another with triangular bases.",
+              highlighted: ["ABDC","DEBC","ECFD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.7") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.34":  "/elements/books/bookI/propositions/propI34/",
+        "XII.5": "/elements/books/bookXII/propositions/propXII5/"
     });
 </script>
 </figure>
 
-Join *BD, EC,* and *CD.*
+Join {BD}, {EC}, and {CD}.
 
-Since *ABED* is a parallelogram, and *BD* is its diameter, therefore the triangle *ABD* equals the triangle *EBD.* Therefore the pyramid with triangular base *ABD* and vertex *C* equals the pyramid with triangular base *DEB* and vertex *C.* [!just I.34; XII.5]
+Since {ABED} is a parallelogram, and {BD} is its diameter, therefore the triangle {ABD} equals the triangle {EBD}. Therefore the pyramid with triangular base {ABD} and vertex {C} equals the pyramid with triangular base {DEB} and vertex {C}. [!just I.34; XII.5]
 
-But the pyramid with triangular base *DEB* and vertex *C* is identical with the pyramid with triangular base *EBC* and vertex *D,* for they are contained by the same planes.
+But the pyramid with triangular base {DEB} and vertex {C} is identical with the pyramid with triangular base {EBC} and vertex {D}, for they are contained by the same planes.
 
-Therefore the pyramid with triangular base *ABD* vertex *C* is also equal to the pyramid with triangular base *EBC* and vertex *D.*
+Therefore the pyramid with triangular base {ABD} vertex {C} is also equal to the pyramid with triangular base {EBC} and vertex {D}.
 
-Again, since *FCBE* is a parallelogram, and *CE* is its diameter, therefore the triangle *CEF* equals the triangle *CBE.* [!just I.34]
+Again, since {FCBE} is a parallelogram, and {CE} is its diameter, therefore the triangle {CEF} equals the triangle {CBE}. [!just I.34]
 
-Therefore the pyramid with triangular base *BCE* and vertex *D* equals the pyramid with triangular base *ECF* and vertex *D.* [!just XII.5]
+Therefore the pyramid with triangular base {BCE} and vertex {D} equals the pyramid with triangular base {ECF} and vertex {D}. [!just XII.5]
 
-But the pyramid with triangular base *BCE* and vertex *D* was proved equal to the pyramid with triangular base *ABD* and vertex *C,* therefore the pyramid with triangular base *CEF* and vertex *D* equals the pyramid with triangular base *ABD* and vertex *C.* Therefore the prism *ABCDEF* is divided into three pyramids equal to one another which have triangular bases.
+But the pyramid with triangular base {BCE} and vertex {D} was proved equal to the pyramid with triangular base {ABD} and vertex {C}, therefore the pyramid with triangular base {CEF} and vertex {D} equals the pyramid with triangular base {ABD} and vertex {C}. Therefore the prism *ABCDEF* is divided into three pyramids equal to one another which have triangular bases.
 
-And, since the pyramid with triangular base *ABD* and vertex *C* is identical with the pyramid with triangular base *CAB* and vertex *D,* for they are contained by the same planes, while the pyramid with triangular base *ABD* vertex *C* was proved to be a third of the prism with triangular base *ABC* and *DEF* opposite, therefore the pyramid with triangular base *ABC* and vertex *D* is a third of the prism with the same base *ABC,* and *DEF* opposite.
+And, since the pyramid with triangular base {ABD} and vertex {C} is identical with the pyramid with triangular base {CAB} and vertex {D}, for they are contained by the same planes, while the pyramid with triangular base {ABD} vertex {C} was proved to be a third of the prism with triangular base {ABC} and {DEF} opposite, therefore the pyramid with triangular base {ABC} and vertex {D} is a third of the prism with the same base {ABC}, and {DEF} opposite.
 
 Therefore, *any prism with a triangular base is divided into three pyramids equal to one another with triangular bases.*
 
@@ -81,7 +197,7 @@ From this it is clear that any pyramid is a third part of the prism with the sam
 ----
 guide:
 
-The proof of this proposition is easier than it looks. The triangles *ABD* and *EBD* are equal since each is half the parallelogram *ABED*. Now since the pyramids *ABDC* and *DEBC* have equal bases and the same altitude, by @XII.5, they are equal pyramids. A similar argument shows pyramids *BCED* and *ECFD* are equal. But *DEBC* and *BCED* are the same pyramid named differently. So the prism is divided into three equal pyramids.
+The proof of this proposition is easier than it looks. The triangles {ABD} and {EBD} are equal since each is half the parallelogram {ABED}. Now since the pyramids {ABDC} and {DEBC} have equal bases and the same altitude, by @XII.5, they are equal pyramids. A similar argument shows pyramids {BCED} and {ECFD} are equal. But {DEBC} and {BCED} are the same pyramid named differently. So the prism is divided into three equal pyramids.
 
 #### Use of this proposition
 

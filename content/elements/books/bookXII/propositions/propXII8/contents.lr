@@ -15,9 +15,9 @@ statement: Similar pyramids with triangular bases are in triplicate ratio of the
 ----
 proof:
 
-Let there be similar and similarly situated pyramids with triangular bases *AB* and *DEF* vertices *G* and *H.*
+Let there be similar and similarly situated pyramids with triangular bases *AB* and {DEF} vertices {G} and {H}.
 
-I say that the pyramid *ABCG* has to the pyramid *DEFH* the ratio triplicate of that which *BC* has to *EF.*
+I say that the pyramid {ABCG|pABCG} has to the pyramid {DEFH|pDEFH} the ratio triplicate of that which {BC} has to {EF}.
 
 Complete the parallelepipedal solids *BGML* and *EHQP.*
 
@@ -25,6 +25,30 @@ Complete the parallelepipedal solids *BGML* and *EHQP.*
 <canvas id="canvas_0" width="440" height="280" tabindex="0"></canvas>
 <noscript><img alt="XII.8 diagram" src="propXII8.gif"/></noscript>
 <script type="text/javascript">
+    // The pyramids are given; the one construction is completing the two
+    // parallelepipeds, after which the walk is highlight beats.
+    //
+    // A polyhedron draws no highlight, so the two pyramids get faceless
+    // wireframe twins, octagons that walk all six edges (pABCG, pDEFH;
+    // prose refs use the display override). The solids BGML and EHQP are
+    // lit through their six faces; the prism that is half of BGML (bases
+    // ABC and KGN) through its five. Every added element is transparent,
+    // so the resting figure is unchanged.
+    // Draggables (checked against the bundle): B, E, F (lineSliders) are
+    // givens; M (lineSlider) and N (planeSlider) arrive only when the solids
+    // are completed, so they are deferred. Every other point is derived.
+    var PYR   = ["A","B","C","G","D","E","F","H","ABCG","DEFH",
+                 "AB","BC","BG","DE","EF","EH","ABC","DEF","pABCG","pDEFH"];
+    var SOLID = ["M","N","K","L","Q'","Q","R","O","P",
+                 "GNLK","HRPO","KAML","ODQP","MC","CN","QF","FR"];
+    var BOX1  = ["BM","BN","BK","GNLK","KAML","CMLN"];
+    var BOX2  = ["EQ","ER","EO","HRPO","ODQP","FQPR"];
+    var ALL   = PYR.concat(SOLID, BOX1, BOX2);
+    var ANG   = ALL.concat(["angABC","angDEF"]);
+    var ANG2  = ANG.concat(["angGBC","angHEF"]);
+    var ANG3  = ANG2.concat(["angABG","angDEH"]);
+    var FAC   = ANG3.concat(["KGN","ACNK"]);
+    var PRISM = ["ABC","KGN","BK","BN","ACNK"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -60,23 +84,146 @@ Complete the parallelepipedal solids *BGML* and *EHQP.*
             "MC;line;connect;M,C",
             "CN;line;connect;C,N",
             "QF;line;connect;Q,F",
-            "FR;line;connect;F,R"
+            "FR;line;connect;F,R",
+            // Transparent highlight targets: edges, bases, faces.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "BG;line;connect;B,G;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "EH;line;connect;E,H;0;0;0",
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "DEF;polygon;triangle;D,E,F;0;0;0;0",
+            "BM;polygon;quadrilateral;B,C,M,A;0;0;0;0",
+            "BN;polygon;quadrilateral;B,C,N,G;0;0;0;0",
+            "BK;polygon;quadrilateral;B,A,K,G;0;0;0;0",
+            "CMLN;polygon;quadrilateral;C,M,L,N;0;0;0;0",
+            "EQ;polygon;quadrilateral;E,F,Q,D;0;0;0;0",
+            "ER;polygon;quadrilateral;E,F,R,H;0;0;0;0",
+            "EO;polygon;quadrilateral;E,D,O,H;0;0;0;0",
+            "FQPR;polygon;quadrilateral;F,Q,P,R;0;0;0;0",
+            "KGN;polygon;triangle;K,G,N;0;0;0;0",
+            "ACNK;polygon;quadrilateral;A,C,N,K;0;0;0;0",
+            // Pyramid wireframes: each octagon walks the six edges.
+            "pABCG;polygon;octagon;A,B,C,G,A,C,G,B;0;0;0;0",
+            "pDEFH;polygon;octagon;D,E,F,H,D,F,H,E;0;0;0;0",
+            "angABC;sector;angleMarker;B,A,C",
+            "angGBC;sector;angleMarker;B,G,C",
+            "angABG;sector;angleMarker;B,A,G",
+            "angDEF;sector;angleMarker;E,D,F",
+            "angHEF;sector;angleMarker;E,H,F",
+            "angDEH;sector;angleMarker;E,D,H"
         ],
+        deferDraggables: ["M","N"],
+        aliases: { "MB": "BM" },
+        slides: [
+            { text: "“Similar pyramids with triangular bases are in triplicate ratio of their corresponding sides.”",
+              visible: PYR,
+              highlighted: ["pABCG","pDEFH"],
+              justifications: [{ ref: "XII.8" }] },
+            // Joyce's slip, left literal: "bases AB" for ABC.
+            { text: "Let there be similar and similarly situated pyramids with triangular bases AB and {DEF} vertices {G} and {H}.",
+              highlighted: ["pABCG","pDEFH","ABC","DEF","G","H"] },
+            { text: "I say that the pyramid {ABCG|pABCG} has to the pyramid {DEFH|pDEFH} the ratio triplicate of that which {BC} has to {EF}.",
+              highlighted: ["pABCG","pDEFH","BC","EF"] },
+            { text: "Complete the parallelepipedal solids BGML and EHQP.",
+              visible: ALL,
+              transition: { mode: "cascade", animations: [
+                  { elem: "MC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CN", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KAML", name: geomlib.A.Polygon.outline },
+                  { elem: "GNLK", name: geomlib.A.Polygon.outline },
+                  { elem: "QF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FR", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ODQP", name: geomlib.A.Polygon.outline },
+                  { elem: "HRPO", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Now, since the pyramid {ABCG|pABCG} is similar to the pyramid {DEFH|pDEFH},",
+              highlighted: ["pABCG","pDEFH"] },
+            { text: "therefore the angle {ABC|angABC} equals the angle {DEF|angDEF},",
+              visible: ANG,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep },
+                  { elem: "angDEF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "the angle {GBC|angGBC} equals the angle {HEF|angHEF},",
+              visible: ANG2,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angGBC", name: geomlib.A.Sector.sweep },
+                  { elem: "angHEF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "the angle {ABG|angABG} equals the angle {DEH|angDEH},",
+              visible: ANG3,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABG", name: geomlib.A.Sector.sweep },
+                  { elem: "angDEH", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and {AB} is to {DE} as {BC} is to {EF}, and as {BG} is to {EH}.",
+              highlighted: ["AB","DE","BC","EF","BG","EH"] },
+            { text: "And since {AB} is to {DE} as {BC} is to {EF}, and the sides are proportional about equal angles,",
+              highlighted: ["AB","DE","BC","EF","angABC","angDEF"] },
+            { text: "therefore the parallelogram {BM} is similar to the parallelogram {EQ}.",
+              highlighted: ["BM","EQ"] },
+            // Joyce's slip, left literal: "BR" for BK.
+            { text: "For the same reason {BN} is also similar to {ER}, and BR similar to {EO}.",
+              highlighted: ["BN","ER","BK","EO"] },
+            { text: "Therefore the three parallelograms {MB}, {BK}, and {BN} are similar to the three {EQ}, {EO}, and {ER}.",
+              highlighted: ["BM","BK","BN","EQ","EO","ER"] },
+            { text: "But the three parallelograms {MB}, {BK}, and {BN} are equal and similar to their three opposites,",
+              highlighted: BOX1,
+              justifications: [{ claim: "opposite planes equal and similar", ref: "XI.24" }] },
+            { text: "and the three {EQ}, {EO}, and {ER} are equal and similar to their three opposites.",
+              highlighted: BOX2,
+              justifications: [{ claim: "opposite planes equal and similar", ref: "XI.24" }] },
+            { text: "Therefore the solids BGML and EHQP are contained by similar planes equal in multitude.",
+              highlighted: BOX1.concat(BOX2) },
+            { text: "Therefore the solid BGML is similar to the solid EHQP.",
+              highlighted: BOX1.concat(BOX2) },
+            { text: "But similar parallelepipedal solids are in the triplicate ratio of their corresponding sides.",
+              highlighted: BOX1.concat(BOX2) },
+            { text: "Therefore the solid BGML has to the solid EHQP the ratio triplicate",
+              highlighted: BOX1.concat(BOX2) },
+            { text: "of that which the corresponding side {BC} has to the corresponding side {EF}.",
+              highlighted: ["BC","EF"],
+              justifications: [{ claim: "solids in triplicate ratio of BC to EF", ref: "XI.33" }] },
+            { text: "But the solid BGML is to the solid EHQP as the pyramid {ABCG|pABCG} is to the pyramid {DEFH|pDEFH},",
+              highlighted: ["pABCG","pDEFH"].concat(BOX1, BOX2) },
+            { text: "for the pyramid is a sixth part of the solid,",
+              highlighted: ["pABCG"].concat(BOX1) },
+            { text: "because the prism which is half of the parallelepipedal solid is also triple the pyramid.",
+              visible: FAC,
+              highlighted: PRISM.concat(["pABCG"]),
+              justifications: [{ claim: "the prism is half the solid", ref: "XI.28" },
+                               { claim: "the prism is triple the pyramid", ref: "XII.7" }] },
+            { text: "Therefore the pyramid {ABCG|pABCG} has to the pyramid {DEFH|pDEFH} the ratio triplicate of that which {BC} has to {EF}.",
+              visible: ANG3,
+              highlighted: ["pABCG","pDEFH","BC","EF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.8") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "XI.24": "/elements/books/bookXI/propositions/propXI24/",
+        "XI.28": "/elements/books/bookXI/propositions/propXI28/",
+        "XI.33": "/elements/books/bookXI/propositions/propXI33/",
+        "XII.7": "/elements/books/bookXII/propositions/propXII7/"
     });
 </script>
 </figure>
 
-Now, since the pyramid *ABCG* is similar to the pyramid *DEFH,* therefore the angle *ABC* equals the angle *DEF,* the angle *GBC* equals the angle *HEF,* the angle *ABG* equals the angle *DEH,* and *AB* is to *DE* as *BC* is to *EF,* and as *BG* is to *EH.*
+Now, since the pyramid {ABCG|pABCG} is similar to the pyramid {DEFH|pDEFH}, therefore the angle {ABC|angABC} equals the angle {DEF|angDEF}, the angle {GBC|angGBC} equals the angle {HEF|angHEF}, the angle {ABG|angABG} equals the angle {DEH|angDEH}, and {AB} is to {DE} as {BC} is to {EF}, and as {BG} is to {EH}.
 
-And since *AB* is to *DE* as *BC* is to *EF,* and the sides are proportional about equal angles, therefore the parallelogram *BM* is similar to the parallelogram *EQ.* For the same reason *BN* is also similar to *ER,* and *BR* similar to *EO.*
+And since {AB} is to {DE} as {BC} is to {EF}, and the sides are proportional about equal angles, therefore the parallelogram {BM} is similar to the parallelogram {EQ}. For the same reason {BN} is also similar to {ER}, and *BR* similar to {EO}.
 
-Therefore the three parallelograms *MB, BK,* and *BN* are similar to the three *EQ, EO,* and *ER.* But the three parallelograms *MB, BK,* and *BN* are equal and similar to their three opposites, and the three *EQ, EO,* and *ER* are equal and similar to their three opposites. [!just XI.24]
+Therefore the three parallelograms {MB}, {BK}, and {BN} are similar to the three {EQ}, {EO}, and {ER}. But the three parallelograms {MB}, {BK}, and {BN} are equal and similar to their three opposites, and the three {EQ}, {EO}, and {ER} are equal and similar to their three opposites. [!just XI.24]
 
 Therefore the solids *BGML* and *EHQP* are contained by similar planes equal in multitude. Therefore the solid *BGML* is similar to the solid *EHQP.*
 
-But similar parallelepipedal solids are in the triplicate ratio of their corresponding sides. Therefore the solid *BGML* has to the solid *EHQP* the ratio triplicate of that which the corresponding side *BC* has to the corresponding side *EF.* [!just XI.33]
+But similar parallelepipedal solids are in the triplicate ratio of their corresponding sides. Therefore the solid *BGML* has to the solid *EHQP* the ratio triplicate of that which the corresponding side {BC} has to the corresponding side {EF}. [!just XI.33]
 
-But the solid *BGML* is to the solid *EHQP* as the pyramid *ABCG* is to the pyramid *DEFH,* for the pyramid is a sixth part of the solid, because the prism which is half of the parallelepipedal solid is also triple the pyramid. Therefore the pyramid *ABCG* has to the pyramid *DEFH* the ratio triplicate of that which *BC* has to *EF.* [!just XI.28; XII.7]
+But the solid *BGML* is to the solid *EHQP* as the pyramid {ABCG|pABCG} is to the pyramid {DEFH|pDEFH}, for the pyramid is a sixth part of the solid, because the prism which is half of the parallelepipedal solid is also triple the pyramid. Therefore the pyramid {ABCG|pABCG} has to the pyramid {DEFH|pDEFH} the ratio triplicate of that which {BC} has to {EF}. [!just XI.28; XII.7]
 
 <div class="qed">Q.E.D.</div>
 <br clear="all">
