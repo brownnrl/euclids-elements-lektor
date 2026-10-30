@@ -15,14 +15,39 @@ statement: In equal triangles which have one angle equal to one angle the sides 
 ----
 proof:
 
-Let *ABC* and *ADE* be equal triangles having one angle equal to one angle, namely the angle *BAC* equal to the angle *DAE.*
+Let {ABC|ABCt} and {ADE|ADEt} be equal triangles having one angle equal to one angle, namely the angle {BAC|angBAC} equal to the angle {DAE|angDAE}.
 
-I say that in the triangles *ABC* and *ADE* the sides about the equal angles are reciprocally proportional, that is to say, that *CA* is to *AD* as *EA* is to *AB.*
+I say that in the triangles {ABC|ABCt} and {ADE|ADEt} the sides about the equal angles are reciprocally proportional, that is to say, that {CA|AC} is to {AD} as {EA|AE} is to {AB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="270" tabindex="0"></canvas>
 <noscript><img alt="VI.15 diagram" src="propVI15.gif"/></noscript>
 <script type="text/javascript">
+    // Euclid places the triangles vertex to vertex (CA in a straight line
+    // with AD, so EA with AB), joins BD, and compares each triangle with ABD
+    // (V.7, VI.1, V.11; the converse by VI.1, V.11, V.9).
+    //
+    // Joyce's figure draws both triangles (random faces) and BD. The proof
+    // also names the sides about the angle at A, the triangle ABD and the
+    // two equal angles: all added transparent (;0;0;0 lines, ;0;0;0;0
+    // polygons), so the resting figure is unchanged. The triangles' own
+    // polygons have filled faces, which a highlight would raise over the
+    // angle markers inside them (#140), so caption and prose refs to the
+    // triangles go to the faceless twins ABCt / ADEt via display overrides.
+    // BD is declared B→D and strokes from B when joined, so no twin.
+    //
+    // Markers: BAC and DAE are vertical angles at A (equal, one colour),
+    // pinned at 22 so the same-vertex stepping does not put them on
+    // different rings. Neither is a right angle. Hidden at rest.
+    //
+    // Draggables (checked against the bundle): A, B, C free and D a
+    // lineSlider on AC — all givens on slide 1. E is derived and listed per
+    // slide; nothing to defer. The converse re-joins BD ("If BD is again
+    // joined"), so BD and ABD are dropped while the converse is set out.
+    var GIVEN = ["A","B","C","D","E","ABC","ADE","ABCt","ADEt",
+                 "AB","AC","AD","AE","angBAC","angDAE"];
+    var JOIN  = GIVEN.concat(["BD"]);
+    var ALL   = JOIN.concat(["ABD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -36,35 +61,174 @@ I say that in the triangles *ABC* and *ADE* the sides about the equal angles are
             "E';point;extend;B,A,B,A;0;0",
             "E;point;proportion;A,D,A,C,A,B,A,E'",
             "ADE;polygon;triangle;A,D,E;0;0;black;random",
-            "BD;line;connect;B,D"
+            "BD;line;connect;B,D",
+            // Highlight targets, all transparent.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "ABCt;polygon;triangle;A,B,C;0;0;0;0",
+            "ADEt;polygon;triangle;A,D,E;0;0;0;0",
+            "ABD;polygon;triangle;A,B,D;0;0;0;0",
+            "angBAC;sector;angleMarker;A,B,C,22;0;0;3b6ea5;9ec5e8",
+            "angDAE;sector;angleMarker;A,D,E,22;0;0;3b6ea5;9ec5e8"
         ],
+        slides: [
+            { text: "“In equal triangles which have one angle equal to one angle”",
+              visible: GIVEN,
+              highlighted: ["ABCt","ADEt","angBAC","angDAE"] },
+            { text: "“the sides about the equal angles are reciprocally proportional;”",
+              visible: GIVEN,
+              highlighted: ["AC","AD","AE","AB"] },
+            { text: "“and those triangles which have one angle equal to one angle,”",
+              visible: GIVEN,
+              highlighted: ["ABCt","ADEt","angBAC","angDAE"] },
+            { text: "“and in which the sides about the equal angles are reciprocally proportional, are equal.”",
+              visible: GIVEN,
+              highlighted: ["AC","AD","AE","AB","ABCt","ADEt"],
+              justifications: [{ ref: "VI.15" }] },
+            { text: "Let {ABC|ABCt} and {ADE|ADEt} be equal triangles having one angle equal to one angle,",
+              visible: GIVEN,
+              highlighted: ["ABCt","ADEt"] },
+            { text: "namely the angle {BAC|angBAC} equal to the angle {DAE|angDAE}.",
+              visible: GIVEN,
+              highlighted: ["angBAC","angDAE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "angDAE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that in the triangles {ABC|ABCt} and {ADE|ADEt} the sides about the equal angles are reciprocally proportional,",
+              visible: GIVEN,
+              highlighted: ["ABCt","ADEt"] },
+            { text: "that is to say, that {CA|AC} is to {AD} as {EA|AE} is to {AB}.",
+              visible: GIVEN,
+              highlighted: ["AC","AD","AE","AB"] },
+            { text: "Place them so that {CA|AC} is in a straight line with {AD}.",
+              visible: GIVEN,
+              highlighted: ["AC","AD"] },
+            { text: "Therefore {EA|AE} is also in a straight line with {AB}.",
+              visible: GIVEN,
+              highlighted: ["AE","AB"],
+              justifications: [{ claim: "EA in a straight line with AB", ref: "I.14" }] },
+            { text: "Join {BD}.",
+              visible: JOIN,
+              highlighted: ["BD"],
+              transition: { animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Since then the triangle {ABC|ABCt} equals the triangle {ADE|ADEt}, and {ABD} is another triangle,",
+              visible: ALL,
+              highlighted: ["ABCt","ADEt","ABD"],
+              transition: { animations: [
+                  { elem: "ABD", name: geomlib.A.Polygon.outline } ] } },
+            { text: "therefore the triangle {ABC|ABCt} is to the triangle {ABD} as the triangle {ADE|ADEt} is to the triangle {ABD}.",
+              visible: ALL,
+              highlighted: ["ABCt","ADEt","ABD"],
+              justifications: [{ claim: "equals have the same ratio to the same", ref: "V.7" }] },
+            { text: "But {ABC|ABCt} is to {ABD} as {AC} is to {AD},",
+              visible: ALL,
+              highlighted: ["ABCt","ABD","AC","AD"],
+              justifications: [{ claim: "triangles under the same height are as their bases", ref: "VI.1" }] },
+            { text: "and {ADE|ADEt} is to {ABD} as {AE} is to {AB}.",
+              visible: ALL,
+              highlighted: ["ADEt","ABD","AE","AB"],
+              justifications: [{ ref: "VI.1" }] },
+            { text: "Therefore also {AC} is to {AD} as {AE} is to {AB}.",
+              visible: ALL,
+              highlighted: ["AC","AD","AE","AB"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Therefore in the triangles {ABC|ABCt} and {ADE|ADEt} the sides about the equal angles are reciprocally proportional.",
+              visible: ALL,
+              highlighted: ["ABCt","ADEt","AC","AD","AE","AB"] },
+            { text: "Next, let the sides of the triangles {ABC|ABCt} and {ADE|ADEt} be reciprocally proportional,",
+              visible: GIVEN,
+              highlighted: ["ABCt","ADEt"] },
+            { text: "that is to say, let {AE} be to {AB} as {CA|AC} is to {AD}.",
+              visible: GIVEN,
+              highlighted: ["AE","AB","AC","AD"] },
+            { text: "I say that the triangle {ABC|ABCt} equals the triangle {ADE|ADEt}.",
+              visible: GIVEN,
+              highlighted: ["ABCt","ADEt"] },
+            { text: "If {BD} is again joined, since {AC} is to {AD} as {AE} is to {AB},",
+              visible: ALL,
+              highlighted: ["BD","AC","AD","AE","AB"],
+              transition: { animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "while {AC} is to {AD} as the triangle {ABC|ABCt} is to the triangle {ABD},",
+              visible: ALL,
+              highlighted: ["AC","AD","ABCt","ABD"],
+              justifications: [{ claim: "triangles under the same height are as their bases", ref: "VI.1" }] },
+            { text: "and {AE} is to {AB} as the triangle {ADE|ADEt} is to the triangle {ABD},",
+              visible: ALL,
+              highlighted: ["AE","AB","ADEt","ABD"],
+              justifications: [{ ref: "VI.1" }] },
+            { text: "therefore the triangle {ABC|ABCt} is to the triangle {ABD} as the triangle {ADE|ADEt} is to the triangle {ABD}.",
+              visible: ALL,
+              highlighted: ["ABCt","ADEt","ABD"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Therefore each of the triangles {ABC|ABCt} and {ADE|ADEt} has the same ratio to {ABD}.",
+              visible: ALL,
+              highlighted: ["ABCt","ADEt","ABD"] },
+            { text: "Therefore the triangle {ABC|ABCt} equals the triangle {ADE|ADEt}.",
+              visible: ALL,
+              highlighted: ["ABCt","ADEt"],
+              justifications: [{ claim: "magnitudes with the same ratio to the same are equal", ref: "V.9" }] },
+            { text: "Therefore, in equal triangles which have one angle equal to one angle",
+              visible: ALL,
+              highlighted: ["ABCt","ADEt","angBAC","angDAE"] },
+            { text: "the sides about the equal angles are reciprocally proportional;",
+              visible: ALL,
+              highlighted: ["AC","AD","AE","AB"] },
+            { text: "and those triangles which have one angle equal to one angle,",
+              visible: ALL,
+              highlighted: ["ABCt","ADEt","angBAC","angDAE"] },
+            { text: "and in which the sides about the equal angles are reciprocally proportional, are equal.",
+              visible: ALL,
+              highlighted: ["AC","AD","AE","AB","ABCt","ADEt"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.15") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.14":     "/elements/books/bookI/propositions/propI14/",
+        "V.7":      "/elements/books/bookV/propositions/propV7/",
+        "V.9":      "/elements/books/bookV/propositions/propV9/",
+        "V.11":     "/elements/books/bookV/propositions/propV11/",
+        "VI.1":     "/elements/books/bookVI/propositions/propVI1/"
     });
 </script>
 </figure>
 
-Place them so that *CA* is in a straight line with *AD.* Therefore *EA* is also in a straight line with *AB.* [!just I.14]
+Place them so that {CA|AC} is in a straight line with {AD}. Therefore {EA|AE} is also in a straight line with {AB}. [!just I.14]
 
-Join *BD.*
+Join {BD}.
 
-Since then the triangle *ABC* equals the triangle *ADE,* and *ABD* is another triangle, therefore the triangle *ABC* is to the triangle *ABD* as the triangle *ADE* is to the triangle *ABD.* [!just V.7]
+Since then the triangle {ABC|ABCt} equals the triangle {ADE|ADEt}, and {ABD} is another triangle, therefore the triangle {ABC|ABCt} is to the triangle {ABD} as the triangle {ADE|ADEt} is to the triangle {ABD}. [!just V.7]
 
-But *ABC* is to *ABD* as *AC* is to *AD,* and *ADE* is to *ABD* as *AE* is to *AB.* [!just VI.1]
+But {ABC|ABCt} is to {ABD} as {AC} is to {AD}, and {ADE|ADEt} is to {ABD} as {AE} is to {AB}. [!just VI.1]
 
-Therefore also *AC* is to *AD* as *AE* is to *AB.* [!just V.11]
+Therefore also {AC} is to {AD} as {AE} is to {AB}. [!just V.11]
 
-Therefore in the triangles *ABC* and *ADE* the sides about the equal angles are reciprocally proportional.
+Therefore in the triangles {ABC|ABCt} and {ADE|ADEt} the sides about the equal angles are reciprocally proportional.
 
 <hr width="50%">
 
-Next, let the sides of the triangles *ABC* and *ADE* be reciprocally proportional, that is to say, let *AE* be to *AB* as *CA* is to *AD.*
+Next, let the sides of the triangles {ABC|ABCt} and {ADE|ADEt} be reciprocally proportional, that is to say, let {AE} be to {AB} as {CA|AC} is to {AD}.
 
-I say that the triangle *ABC* equals the triangle *ADE.*
+I say that the triangle {ABC|ABCt} equals the triangle {ADE|ADEt}.
 
-If *BD* is again joined, since *AC* is to *AD* as *AE* is to *AB,* while *AC* is to *AD* as the triangle *ABC* is to the triangle *ABD,* and *AE* is to *AB* as the triangle *ADE* is to the triangle *ABD,* therefore the triangle *ABC* is to the triangle *ABD* as the triangle *ADE* is to the triangle *ABD.* [!just VI.1; V.11]
+If {BD} is again joined, since {AC} is to {AD} as {AE} is to {AB}, while {AC} is to {AD} as the triangle {ABC|ABCt} is to the triangle {ABD}, and {AE} is to {AB} as the triangle {ADE|ADEt} is to the triangle {ABD}, therefore the triangle {ABC|ABCt} is to the triangle {ABD} as the triangle {ADE|ADEt} is to the triangle {ABD}. [!just VI.1; V.11]
 
-Therefore each of the triangles *ABC* and *ADE* has the same ratio to *ABD.*
+Therefore each of the triangles {ABC|ABCt} and {ADE|ADEt} has the same ratio to {ABD}.
 
-Therefore the triangle *ABC* equals the triangle *ADE.* [!just V.9]
+Therefore the triangle {ABC|ABCt} equals the triangle {ADE|ADEt}. [!just V.9]
 
 Therefore, *in equal triangles which have one angle equal to one angle the sides about the equal angles are reciprocally proportional; and those triangles which have one angle equal to one angle, and in which the sides about the equal angles are reciprocally proportional, are equal.*
 

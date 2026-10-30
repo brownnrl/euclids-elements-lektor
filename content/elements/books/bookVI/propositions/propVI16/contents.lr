@@ -15,18 +15,45 @@ statement: If four straight lines are proportional, then the rectangle contained
 ----
 proof:
 
-Let the four straight lines *AB, CD, E,* and *F* be proportional, so that *AB* is to *CD* as *E* is to *F.*
+Let the four straight lines {AB}, {CD}, {E}, and {F} be proportional, so that {AB} is to {CD} as {E} is to {F}.
 
-I say that the rectangle *AB* by *F* equals the rectangle *CD* by *E.*
+I say that the rectangle {AB} by {F} equals the rectangle {CD} by {E}.
 
-Draw *AG* and *CH* from the points *A* and *C* at right angles to the straight lines *AB* and *CD,* and make *AG* equal to *F,* and *CH* equal to *E.* [!just I.11; I.3]
+Draw {AG} and {CH} from the points {A} and {C} at right angles to the straight lines {AB} and {CD}, and make {AG} equal to {F}, and {CH} equal to {E}. [!just I.11; I.3]
 
-Complete the parallelograms *BG* and *DH.* [!just I.31]
+Complete the parallelograms {BG|BGt} and {DH|DHt}. [!just I.31]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="380" height="220" tabindex="0"></canvas>
 <noscript><img alt="VI.16 diagram" src="propVI16.gif"/></noscript>
 <script type="text/javascript">
+    // Euclid erects AG, CH at right angles to AB, CD, equal to F and E
+    // (I.11, I.3), completes the rectangles BG, DH (I.31), and reads both
+    // directions off VI.14 with V.7.
+    //
+    // Joyce's figure draws the two filled parallelograms and the lines E, F;
+    // AB, AG, CD, CH are only parallelogram sides there. The walk needs them
+    // before the parallelograms exist, so ABs, CDs, AGs, CHs are solid slide
+    // twins over those sides, hidden at rest (initiallyHidden); AGs and CHs
+    // are declared A→G and C→H so they stroke from A and C as drawn. The
+    // names AB, CD, AG, CH are transparent targets for captions and prose. The right
+    // angles at A and C ("at right angles", by construction) are red
+    // angleMarkerRight squares, hidden at rest. Highlighting a filled
+    // parallelogram would raise its face over them (#140), so caption and
+    // prose refs to BG and DH go to the faceless twins BGt / DHt.
+    //
+    // The statement slides stand over the resting figure, since they speak
+    // of the rectangles; the proof then withdraws to the givens, and the
+    // converse ("With the same construction") rebuilds it.
+    //
+    // Draggables (checked against the bundle): A, B, C, D free, the guide
+    // ends L0, L1 (invisible) and the lineSliders E0, E1, F0, F1 that fix E
+    // and F — all givens on slide 1. G and H are derived (cutoff) and listed
+    // per slide; nothing to defer.
+    var GIVEN = ["A","B","C","D","AB","CD","ABs","CDs","E","F"];
+    var PERP  = GIVEN.concat(["AG","CH","AGs","CHs","rtA","rtC"]);
+    var CUT   = PERP.concat(["G","H"]);
+    var ALL   = CUT.concat(["BG","DH","BGt","DHt"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,31 +76,185 @@ Complete the parallelograms *BG* and *DH.* [!just I.31]
             "BG;polygon;parallelogram;B,A,G;0;0;black;random",
             "H';point;perpendicular;C,D;0;0",
             "H;point;cutoff;C,H',E0,E1",
-            "DH;polygon;parallelogram;D,C,H;0;0;black;random"
+            "DH;polygon;parallelogram;D,C,H;0;0;black;random",
+            // Slide twins over the parallelogram sides (see above).
+            "ABs;line;connect;A,B",
+            "CDs;line;connect;C,D",
+            "AGs;line;connect;A,G",
+            "CHs;line;connect;C,H",
+            // The same four as transparent highlight targets, standing at
+            // rest so the prose hovers light them.
+            "AB;line;connect;A,B;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "CH;line;connect;C,H;0;0;0",
+            // The parallelograms as highlight targets. Faceless.
+            "BGt;polygon;parallelogram;B,A,G;0;0;0;0",
+            "DHt;polygon;parallelogram;D,C,H;0;0;0;0",
+            "rtA;sector;angleMarkerRight;A,B,G;0;0;red;red",
+            "rtC;sector;angleMarkerRight;C,D,H;0;0;red;red"
         ],
+        initiallyHidden: ["ABs","CDs","AGs","CHs"],
+        slides: [
+            { text: "“If four straight lines are proportional,”",
+              visible: ALL,
+              highlighted: ["AB","CD","E","F"] },
+            { text: "“then the rectangle contained by the extremes equals the rectangle contained by the means;”",
+              visible: ALL,
+              highlighted: ["BGt","DHt"] },
+            { text: "“and, if the rectangle contained by the extremes equals the rectangle contained by the means,”",
+              visible: ALL,
+              highlighted: ["BGt","DHt"] },
+            { text: "“then the four straight lines are proportional.”",
+              visible: ALL,
+              highlighted: ["AB","CD","E","F"],
+              justifications: [{ ref: "VI.16" }] },
+            { text: "Let the four straight lines {AB}, {CD}, {E}, and {F} be proportional,",
+              visible: GIVEN,
+              highlighted: ["AB","CD","E","F"] },
+            { text: "so that {AB} is to {CD} as {E} is to {F}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD","E","F"] },
+            { text: "I say that the rectangle {AB} by {F} equals the rectangle {CD} by {E}.",
+              visible: GIVEN,
+              highlighted: ["AB","F","CD","E"] },
+            { text: "Draw {AG} and {CH} from the points {A} and {C} at right angles to the straight lines {AB} and {CD},",
+              visible: PERP,
+              highlighted: ["AG","CH","rtA","rtC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AGs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "rtA", name: geomlib.A.Sector.sweep },
+                  { elem: "CHs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "rtC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "AG, CH at right angles to AB, CD", ref: "I.11" }] },
+            { text: "and make {AG} equal to {F}, and {CH} equal to {E}.",
+              visible: CUT,
+              highlighted: ["AG","F","CH","E","G","H"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "G", name: geomlib.A.Point.appear },
+                  { elem: "H", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AG cut off equal to F, CH to E", ref: "I.3" }] },
+            { text: "Complete the parallelograms {BG|BGt} and {DH|DHt}.",
+              visible: ALL,
+              highlighted: ["BGt","DHt"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BG", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DH", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.31" }] },
+            { text: "Then since {AB} is to {CD} as {E} is to {F}, while {E} equals {CH}, and {F} equals {AG},",
+              visible: ALL,
+              highlighted: ["AB","CD","E","F","CH","AG"] },
+            { text: "therefore {AB} is to {CD} as {CH} is to {AG}.",
+              visible: ALL,
+              highlighted: ["AB","CD","CH","AG"],
+              justifications: [{ claim: "equals have the same ratio", ref: "V.7" }] },
+            { text: "Therefore in the parallelograms {BG|BGt} and {DH|DHt} the sides about the equal angles are reciprocally proportional.",
+              visible: ALL,
+              highlighted: ["BGt","DHt","rtA","rtC","AB","CD","CH","AG"] },
+            { text: "But those equiangular parallelograms in which the sides about the equal angles are reciprocally proportional are equal,",
+              visible: ALL,
+              highlighted: ["BGt","DHt","rtA","rtC"] },
+            { text: "therefore the parallelogram {BG|BGt} equals the parallelogram {DH|DHt}.",
+              visible: ALL,
+              highlighted: ["BGt","DHt"],
+              justifications: [{ claim: "equiangular, sides reciprocally proportional: equal", ref: "VI.14" }] },
+            { text: "And {BG|BGt} is the rectangle {AB} by {F}, for {AG} equals {F},",
+              visible: ALL,
+              highlighted: ["BGt","AB","F","AG"] },
+            { text: "and {DH|DHt} is the rectangle {CD} by {E}, for {E} equals {CH},",
+              visible: ALL,
+              highlighted: ["DHt","CD","E","CH"] },
+            { text: "therefore the rectangle {AB} by {F} equals the rectangle {CD} by {E}.",
+              visible: ALL,
+              highlighted: ["AB","F","CD","E","BGt","DHt"] },
+            { text: "Next, let the rectangle {AB} by {F} be equal to the rectangle {CD} by {E}.",
+              visible: GIVEN,
+              highlighted: ["AB","F","CD","E"] },
+            { text: "I say that the four straight lines are proportional, so that {AB} is to {CD} as {E} is to {F}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD","E","F"] },
+            { text: "With the same construction, since the rectangle {AB} by {F} equals the rectangle {CD} by {E},",
+              visible: ALL,
+              highlighted: ["AB","F","CD","E"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AGs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CHs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BG", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DH", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and the rectangle {AB} by {F} is {BG|BGt}, for {AG} equals {F},",
+              visible: ALL,
+              highlighted: ["AB","F","BGt","AG"] },
+            { text: "and the rectangle {CD} by {E} is {DH|DHt}, for {CH} equals {E},",
+              visible: ALL,
+              highlighted: ["CD","E","DHt","CH"] },
+            { text: "therefore {BG|BGt} equals {DH|DHt}. And they are equiangular.",
+              visible: ALL,
+              highlighted: ["BGt","DHt","rtA","rtC"] },
+            { text: "But in equal and equiangular parallelograms the sides about the equal angles are reciprocally proportional.",
+              visible: ALL,
+              highlighted: ["BGt","DHt","AB","CD","CH","AG"] },
+            { text: "Therefore {AB} is to {CD} as {CH} is to {AG}.",
+              visible: ALL,
+              highlighted: ["AB","CD","CH","AG"],
+              justifications: [{ claim: "equal and equiangular: sides reciprocally proportional", ref: "VI.14" }] },
+            { text: "But {CH} equals {E}, and {AG} equals {F},",
+              visible: ALL,
+              highlighted: ["CH","E","AG","F"] },
+            { text: "therefore {AB} is to {CD} as {E} is to {F}.",
+              visible: ALL,
+              highlighted: ["AB","CD","E","F"],
+              justifications: [{ claim: "equals have the same ratio", ref: "V.7" }] },
+            { text: "Therefore, if four straight lines are proportional,",
+              visible: ALL,
+              highlighted: ["AB","CD","E","F"] },
+            { text: "then the rectangle contained by the extremes equals the rectangle contained by the means;",
+              visible: ALL,
+              highlighted: ["BGt","DHt"] },
+            { text: "and, if the rectangle contained by the extremes equals the rectangle contained by the means,",
+              visible: ALL,
+              highlighted: ["BGt","DHt"] },
+            { text: "then the four straight lines are proportional.",
+              visible: ALL,
+              highlighted: ["AB","CD","E","F"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.16") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":   "/elements/books/bookI/propositions/propI3/",
+        "I.11":  "/elements/books/bookI/propositions/propI11/",
+        "I.31":  "/elements/books/bookI/propositions/propI31/",
+        "V.7":   "/elements/books/bookV/propositions/propV7/",
+        "VI.14": "/elements/books/bookVI/propositions/propVI14/"
     });
 </script>
 </figure>
 
-Then since *AB* is to *CD* as *E* is to *F,* while *E* equals *CH,* and *F* equals *AG,* therefore *AB* is to *CD* as *CH* is to *AG.* [!just V.7]
+Then since {AB} is to {CD} as {E} is to {F}, while {E} equals {CH}, and {F} equals {AG}, therefore {AB} is to {CD} as {CH} is to {AG}. [!just V.7]
 
-Therefore in the parallelograms *BG* and *DH* the sides about the equal angles are reciprocally proportional.
+Therefore in the parallelograms {BG|BGt} and {DH|DHt} the sides about the equal angles are reciprocally proportional.
 
-But those equiangular parallelograms in which the sides about the equal angles are reciprocally proportional are equal, therefore the parallelogram *BG* equals the parallelogram *DH.* [!just VI.14]
+But those equiangular parallelograms in which the sides about the equal angles are reciprocally proportional are equal, therefore the parallelogram {BG|BGt} equals the parallelogram {DH|DHt}. [!just VI.14]
 
-And *BG* is the rectangle *AB* by *F,* for *AG* equals *F,* and *DH* is the rectangle *CD* by *E,* for *E* equals *CH,* therefore the rectangle *AB* by *F* equals the rectangle *CD* by *E.*
+And {BG|BGt} is the rectangle {AB} by {F}, for {AG} equals {F}, and {DH|DHt} is the rectangle {CD} by {E}, for {E} equals {CH}, therefore the rectangle {AB} by {F} equals the rectangle {CD} by {E}.
 
 <hr width="50%">
 
-Next, let the rectangle *AB* by *F* be equal to the rectangle *CD* by *E.*
+Next, let the rectangle {AB} by {F} be equal to the rectangle {CD} by {E}.
 
-I say that the four straight lines are proportional, so that *AB* is to *CD* as *E* is to *F.*
+I say that the four straight lines are proportional, so that {AB} is to {CD} as {E} is to {F}.
 
-With the same construction, since the rectangle *AB* by *F* equals the rectangle *CD* by *E,* and the rectangle *AB* by *F* is *BG,* for *AG* equals *F,* and the rectangle *CD* by *E* is *DH,* for *CH* equals *E,* therefore *BG* equals *DH.* And they are equiangular.
+With the same construction, since the rectangle {AB} by {F} equals the rectangle {CD} by {E}, and the rectangle {AB} by {F} is {BG|BGt}, for {AG} equals {F}, and the rectangle {CD} by {E} is {DH|DHt}, for {CH} equals {E}, therefore {BG|BGt} equals {DH|DHt}. And they are equiangular.
 
-But in equal and equiangular parallelograms the sides about the equal angles are reciprocally proportional. Therefore *AB* is to *CD* as *CH* is to *AG.* [!just VI.14]
+But in equal and equiangular parallelograms the sides about the equal angles are reciprocally proportional. Therefore {AB} is to {CD} as {CH} is to {AG}. [!just VI.14]
 
-But *CH* equals *E,* and *AG* equals *F,* therefore *AB* is to *CD* as *E* is to *F.* [!just V.7]
+But {CH} equals {E}, and {AG} equals {F}, therefore {AB} is to {CD} as {E} is to {F}. [!just V.7]
 
 Therefore, *if four straight lines are proportional, then the rectangle contained by the extremes equals the rectangle contained by the means; and, if the rectangle contained by the extremes equals the rectangle contained by the means, then the four straight lines are proportional.*
 
