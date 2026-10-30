@@ -15,14 +15,36 @@ statement: If two straight lines meeting one another are parallel to two straigh
 ----
 proof:
 
-Let the two straight lines *AB* and *BC* meeting one another be parallel to the two straight lines *DE* and *EF* meeting one another not in the same plane.
+Let the two straight lines {AB} and {BC} meeting one another be parallel to the two straight lines {DE} and {EF} meeting one another not in the same plane.
 
-I say that the plane produced through *AB* and *BC* and the plane produced through *DE* and *EF* do not meet one another.
+I say that the plane produced through {AB} and {BC} and the plane produced through {DE} and {EF} do not meet one another.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="310" tabindex="0"></canvas>
 <noscript><img alt="XI.15 diagram" src="propXI15.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the upper plane P through AB and BC, the lower plane
+    // Q through DE and EF, the perpendicular BG from B to Q, and GH, GK
+    // through G parallel to ED and EF.
+    //
+    // Added, all transparent: PT and QT, faceless twins of the filled
+    // planes P and Q (a filled polygon is raised over the figure when
+    // highlighted, #140); the right-angle squares at G for BGH and BGK
+    // (right by XI.Def.3) and at B for GBA and GBC (right once proved);
+    // and angGBAs, a plain sector twin of GBA lit while the angle is only
+    // known as part of a two-right-angle sum, before it is shown right.
+    //
+    // Draggables (checked against the bundle): X, Y, Z, P0, P2, Q0, Q2,
+    // A, B, C, E free; D, F, G, H, K sliders. G, H and K arrive with the
+    // construction, so they are deferred. P1, P3, Q1, Q3 are derived and
+    // listed per slide.
+    var GIVEN = ["P","PT","P0","P1","P2","P3","Q","QT","Q0","Q1","Q2","Q3",
+                 "A","B","C","AB","BC","D","E","F","DE","EF"];
+    var PERP  = GIVEN.concat(["G","BG"]);
+    var PARS  = PERP.concat(["H","K","GH","GK"]);
+    var RTG   = PARS.concat(["angBGH","angBGK"]);
+    var RTB   = RTG.concat(["angGBA"]);
+    var FULL  = RTB.concat(["angGBC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -60,27 +82,162 @@ I say that the plane produced through *AB* and *BC* and the plane produced throu
             "K';point;parallelogram;F,E,G;0;0",
             "K;point;lineSlider;G,K',160,250",
             "GH;line;connect;G,H",
-            "GK;line;connect;G,K"
+            "GK;line;connect;G,K",
+            // Transparent highlight targets.
+            "PT;polygon;quadrilateral;P0,P1,P2,P3;0;0;0;0",
+            "QT;polygon;quadrilateral;Q0,Q1,Q2,Q3;0;0;0;0",
+            "angBGH;sector;angleMarkerRight;G,B,H",
+            "angBGK;sector;angleMarkerRight;G,B,K",
+            "angGBA;sector;angleMarkerRight;B,G,A",
+            "angGBC;sector;angleMarkerRight;B,G,C",
+            "angGBAs;sector;angleMarker;B,G,A,22;0;0;0;0"
         ],
+        deferDraggables: ["G","H","K"],
+        aliases: { "BA": "AB", "GB": "BG", "ED": "DE",
+                   "BGH": "angBGH", "BGK": "angBGK",
+                   "GBA": "angGBA", "GBC": "angGBC" },
+        slides: [
+            { text: "“If two straight lines meeting one another”",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "“are parallel to two straight lines meeting one another not in the same plane,”",
+              visible: GIVEN,
+              highlighted: ["DE","EF"] },
+            { text: "“then the planes through them are parallel.”",
+              visible: GIVEN,
+              highlighted: ["PT","QT"],
+              justifications: [{ ref: "XI.15" }] },
+            { text: "Let the two straight lines {AB} and {BC} meeting one another",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "be parallel to the two straight lines {DE} and {EF} meeting one another not in the same plane.",
+              visible: GIVEN,
+              highlighted: ["DE","EF"] },
+            { text: "I say that the {plane|PT} produced through {AB} and {BC}",
+              visible: GIVEN,
+              highlighted: ["PT","AB","BC"] },
+            { text: "and the {plane|QT} produced through {DE} and {EF} do not meet one another.",
+              visible: GIVEN,
+              highlighted: ["QT","DE","EF"] },
+            { text: "Draw {BG} from the point {B} perpendicular to the {plane|QT} through {DE} and {EF}",
+              visible: PERP,
+              highlighted: ["B","BG","QT"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "BG perpendicular to the plane", ref: "XI.11" }] },
+            { text: "to where it meets the {plane|QT} at the point {G}.",
+              visible: PERP,
+              highlighted: ["G","QT"] },
+            { text: "Draw {GH} through {G} parallel to {ED}, and {GK} parallel to {EF}.",
+              visible: PARS,
+              highlighted: ["GH","GK","DE","EF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear },
+                  { elem: "GK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.31" }] },
+            { text: "Now, since {BG} is at right angles to the {plane|QT} through {DE} and {EF},",
+              visible: PARS,
+              highlighted: ["BG","QT"] },
+            { text: "therefore it makes right angles with all the straight lines which meet it and lie in the {plane|QT} through {DE} and {EF}.",
+              visible: PARS,
+              highlighted: ["BG","QT"],
+              justifications: [{ claim: "a line at right angles to a plane", ref: "XI.Def.3" }] },
+            { text: "But each of the straight lines {GH} and {GK} meets it and lies in the {plane|QT} through {DE} and {EF},",
+              visible: PARS,
+              highlighted: ["GH","GK","BG","QT"] },
+            { text: "therefore each of the angles {BGH} and {BGK} is right.",
+              visible: RTG,
+              highlighted: ["angBGH","angBGK"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBGH", name: geomlib.A.Sector.sweep },
+                  { elem: "angBGK", name: geomlib.A.Sector.sweep } ] } },
+            { text: "And, since {BA} is parallel to {GH},",
+              visible: RTG,
+              highlighted: ["AB","GH"],
+              justifications: [{ claim: "parallels to one line, not in one plane", ref: "XI.9" }] },
+            { text: "therefore the sum of the angles {GBA|angGBAs} and {BGH} equals two right angles.",
+              visible: RTG.concat(["angGBAs"]),
+              highlighted: ["angGBAs","angBGH","AB","BG","GH"],
+              justifications: [{ claim: "interior angles on the same side", ref: "I.29" }] },
+            { text: "But the angle {BGH} is right, therefore the angle {GBA} is also right.",
+              visible: RTB,
+              highlighted: ["angBGH","angGBA"],
+              transition: { animations: [
+                  { elem: "angGBA", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore {GB} is at right angles to {BA}.",
+              visible: RTB,
+              highlighted: ["BG","AB","angGBA"] },
+            { text: "For the same reason {GB} is also at right angles to {BC}.",
+              visible: FULL,
+              highlighted: ["BG","BC","angGBC"],
+              transition: { animations: [
+                  { elem: "angGBC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Since then the straight line {GB} is set up at right angles",
+              visible: FULL,
+              highlighted: ["BG","angGBA","angGBC"] },
+            { text: "to the two straight lines {BA} and {BC} which cut one another,",
+              visible: FULL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore {GB} is also at right angles to the {plane|PT} through {BA} and {BC}.",
+              visible: FULL,
+              highlighted: ["BG","PT"],
+              justifications: [{ claim: "at right angles to two lines at their section", ref: "XI.4" }] },
+            { text: "But planes to which the same straight line is at right angles are parallel,",
+              visible: FULL,
+              highlighted: ["BG","PT","QT"],
+              justifications: [{ ref: "XI.14" }] },
+            { text: "therefore the {plane|PT} through {AB} and {BC} is parallel to the {plane|QT} through {DE} and {EF}.",
+              visible: FULL,
+              highlighted: ["PT","QT"] },
+            { text: "Therefore, if two straight lines meeting one another",
+              visible: FULL,
+              highlighted: ["AB","BC"] },
+            { text: "are parallel to two straight lines meeting one another not in the same plane,",
+              visible: FULL,
+              highlighted: ["DE","EF"] },
+            { text: "then the planes through them are parallel.",
+              visible: FULL,
+              highlighted: ["PT","QT"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.15") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.29":     "/elements/books/bookI/propositions/propI29/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "XI.Def.3": "/elements/books/bookXI/definitions/defXI3/",
+        "XI.4":     "/elements/books/bookXI/propositions/propXI4/",
+        "XI.9":     "/elements/books/bookXI/propositions/propXI9/",
+        "XI.11":    "/elements/books/bookXI/propositions/propXI11/",
+        "XI.14":    "/elements/books/bookXI/propositions/propXI14/"
     });
 </script>
 </figure>
 
-Draw *BG* from the point *B* perpendicular to the plane through *DE* and *EF* to where it meets the plane at the point *G.* [!just XI.11]
+Draw {BG} from the point {B} perpendicular to the plane through {DE} and {EF} to where it meets the plane at the point {G}. [!just XI.11]
 
-Draw *GH* through *G* parallel to *ED,* and *GK* parallel to *EF.* [!just I.31]
+Draw {GH} through {G} parallel to {ED}, and {GK} parallel to {EF}. [!just I.31]
 
-Now, since *BG* is at right angles to the plane through *DE* and *EF,* therefore it makes right angles with all the straight lines which meet it and lie in the plane through *DE* and *EF.* [!just XI.Def.3]
+Now, since {BG} is at right angles to the plane through {DE} and {EF}, therefore it makes right angles with all the straight lines which meet it and lie in the plane through {DE} and {EF}. [!just XI.Def.3]
 
-But each of the straight lines *GH* and *GK* meets it and lies in the plane through *DE* and *EF,* therefore each of the angles *BGH* and *BGK* is right.
+But each of the straight lines {GH} and {GK} meets it and lies in the plane through {DE} and {EF}, therefore each of the angles {BGH} and {BGK} is right.
 
-And, since *BA* is parallel to *GH,* therefore the sum of the angles *GBA* and *BGH* equals two right angles. [!just XI.9, I.29]
+And, since {BA} is parallel to {GH}, therefore the sum of the angles {GBA} and {BGH} equals two right angles. [!just XI.9, I.29]
 
-But the angle *BGH* is right, therefore the angle *GBA* is also right. Therefore *GB* is at right angles to *BA.* For the same reason *GB* is also at right angles to *BC.*
+But the angle {BGH} is right, therefore the angle {GBA} is also right. Therefore {GB} is at right angles to {BA}. For the same reason {GB} is also at right angles to {BC}.
 
-Since then the straight line *GB* is set up at right angles to the two straight lines *BA* and *BC* which cut one another, therefore *GB* is also at right angles to the plane through *BA* and *BC.* [!just XI.4]
+Since then the straight line {GB} is set up at right angles to the two straight lines {BA} and {BC} which cut one another, therefore {GB} is also at right angles to the plane through {BA} and {BC}. [!just XI.4]
 
-But planes to which the same straight line is at right angles are parallel, therefore the plane through *AB* and *BC* is parallel to the plane through *DE* and *EF.* [!just XI.14]
+But planes to which the same straight line is at right angles are parallel, therefore the plane through {AB} and {BC} is parallel to the plane through {DE} and {EF}. [!just XI.14]
 
 Therefore, *if two straight lines meeting one another are parallel to two straight lines meeting one another not in the same plane, then the planes through them are parallel.*
 

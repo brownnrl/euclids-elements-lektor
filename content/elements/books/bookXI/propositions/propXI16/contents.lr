@@ -15,16 +15,33 @@ statement: If two parallel planes are cut by any plane, then their intersections
 ----
 proof:
 
-Let the two parallel planes *AB* and *CD* be cut by the plane *EFGH,* and let *EF* and *GH* be their intersections. [!just XI.3]
+Let the two parallel planes {AB} and {CD} be cut by the plane {EFGH}, and let {EF} and {GH} be their intersections. [!just XI.3]
 
-I say that *EF* is parallel to *GH.*
+I say that {EF} is parallel to {GH}.
 
-If not, then *EF* and *GH* will, when produced, meet either in the direction of *F* and *H* or in the direction of *E* and *G.*
+If not, then {EF} and {GH} will, when produced, meet either in the direction of {F} and {H} or in the direction of {E} and {G}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="320" height="230" tabindex="0"></canvas>
 <noscript><img alt="XI.16 diagram" src="propXI16.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the parallel planes AB (P) and CD (Q), cut by the
+    // plane EFGH in EF and GH, and the supposed meeting point K of EF and
+    // GH produced in the direction of F and H.
+    //
+    // Added, all transparent: AB and CD, faceless twins of the filled
+    // planes P and Q (a filled polygon is raised over the figure when
+    // highlighted, #140), named as the prose names the planes; EFGH, the
+    // cutting plane. Joyce draws EF produced to K as the bent EF, FK, so
+    // the slides light both and the EFK token binds to FK. The supposition
+    // (K, FK, HK) is withdrawn once EF and GH are shown not to meet.
+    //
+    // Draggables (checked against the bundle): X, Y, Z, A, B, C, D free;
+    // E, G, K sliders. K arrives with the supposition, so it is deferred.
+    // P1, P3, Q1, Q3, F, H are derived and listed per slide.
+    var GIVEN = ["P","Q","AB","CD","A","B","P1","P3","C","D","Q1","Q3",
+                 "EFGH","E","F","G","H","EF","GH","EG","FH"];
+    var MEET  = GIVEN.concat(["K","FK","HK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -54,21 +71,105 @@ If not, then *EF* and *GH* will, when produced, meet either in the direction of 
             "M;point;midpoint;E,G;0;0",
             "K;point;lineSlider;M,X,270,100",
             "FK;line;connect;F,K",
-            "HK;line;connect;H,K"
+            "HK;line;connect;H,K",
+            // Transparent highlight targets.
+            "AB;polygon;quadrilateral;A,P1,B,P3;0;0;0;0",
+            "CD;polygon;quadrilateral;C,Q1,D,Q3;0;0;0;0",
+            "EFGH;polygon;quadrilateral;E,F,H,G;0;0;0;0"
         ],
+        deferDraggables: ["K"],
+        aliases: { "EFK": "FK" },
+        slides: [
+            { text: "“If two parallel planes are cut by any plane, then their intersections are parallel.”",
+              visible: GIVEN,
+              highlighted: ["AB","CD","EF","GH"],
+              justifications: [{ ref: "XI.16" }] },
+            { text: "Let the two parallel planes {AB} and {CD} be cut by the plane {EFGH},",
+              visible: GIVEN,
+              highlighted: ["AB","CD","EFGH"] },
+            { text: "and let {EF} and {GH} be their intersections.",
+              visible: GIVEN,
+              highlighted: ["EF","GH"],
+              justifications: [{ claim: "the common section of two planes is a straight line", ref: "XI.3" }] },
+            { text: "I say that {EF} is parallel to {GH}.",
+              visible: GIVEN,
+              highlighted: ["EF","GH"] },
+            { text: "If not, then {EF} and {GH} will, when produced, meet",
+              visible: GIVEN,
+              highlighted: ["EF","GH"] },
+            { text: "either in the direction of {F} and {H} or in the direction of {E} and {G}.",
+              visible: GIVEN,
+              highlighted: ["F","H","E","G"] },
+            { text: "First, let them meet when produced in the direction of {F} and {H} at {K}.",
+              visible: MEET,
+              highlighted: ["FK","HK","K"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",  name: geomlib.A.Point.appear } ] } },
+            { text: "Now, since {EFK|FK} lies in the plane {AB},",
+              visible: MEET,
+              highlighted: ["EF","FK","AB"] },
+            { text: "therefore all the points on {EFK|FK} also lie in the plane {AB}.",
+              visible: MEET,
+              highlighted: ["EF","FK","AB"],
+              justifications: [{ claim: "a straight line is not partly in one plane, partly in another", ref: "XI.1" }] },
+            { text: "But {K} is one of the points on the straight line {EFK|FK}, therefore {K} lies in the plane {AB}.",
+              visible: MEET,
+              highlighted: ["K","EF","FK","AB"] },
+            { text: "For the same reason {K} also lies in the plane {CD}.",
+              visible: MEET,
+              highlighted: ["K","GH","HK","CD"] },
+            { text: "Therefore the planes {AB} and {CD} will meet when produced.",
+              visible: MEET,
+              highlighted: ["AB","CD","K"] },
+            { text: "But they do not meet, because, by hypothesis, they are parallel.",
+              visible: MEET,
+              highlighted: ["AB","CD"] },
+            { text: "Therefore the straight lines {EF} and {GH} do not meet when produced in the direction of {F} and {H}.",
+              visible: GIVEN,
+              highlighted: ["EF","GH","F","H"] },
+            { text: "Similarly we can prove that neither do the straight lines {EF} and {GH} meet",
+              visible: GIVEN,
+              highlighted: ["EF","GH"] },
+            { text: "when produced in the direction of {E} and {G}.",
+              visible: GIVEN,
+              highlighted: ["EF","GH","E","G"] },
+            { text: "But straight lines which do not meet in either direction are parallel.",
+              visible: GIVEN,
+              highlighted: ["EF","GH"] },
+            { text: "Therefore {EF} is parallel to {GH}.",
+              visible: GIVEN,
+              highlighted: ["EF","GH"] },
+            { text: "Therefore, if two parallel planes are cut by any plane, then their intersections are parallel.",
+              visible: GIVEN,
+              highlighted: ["AB","CD","EF","GH"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.16") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "XI.1": "/elements/books/bookXI/propositions/propXI1/",
+        "XI.3": "/elements/books/bookXI/propositions/propXI3/"
     });
 </script>
 </figure>
 
-First, let them meet when produced in the direction of *F* and *H* at *K.*
+First, let them meet when produced in the direction of {F} and {H} at {K}.
 
-Now, since *EFK* lies in the plane *AB,* therefore all the points on *EFK* also lie in the plane *AB.* But *K* is one of the points on the straight line *EFK,* therefore *K* lies in the plane *AB.* For the same reason *K* also lies in the plane *CD.* Therefore the planes *AB* and *CD* will meet when produced. [!just XI.1]
+Now, since {EFK} lies in the plane {AB}, therefore all the points on {EFK} also lie in the plane {AB}. But {K} is one of the points on the straight line {EFK}, therefore {K} lies in the plane {AB}. For the same reason {K} also lies in the plane {CD}. Therefore the planes {AB} and {CD} will meet when produced. [!just XI.1]
 
-But they do not meet, because, by hypothesis, they are parallel. Therefore the straight lines *EF* and *GH* do not meet when produced in the direction of *F* and *H.*
+But they do not meet, because, by hypothesis, they are parallel. Therefore the straight lines {EF} and {GH} do not meet when produced in the direction of {F} and {H}.
 
-Similarly we can prove that neither do the straight lines *EF* and *GH* meet when produced in the direction of *E* and *G.*
+Similarly we can prove that neither do the straight lines {EF} and {GH} meet when produced in the direction of {E} and {G}.
 
-But straight lines which do not meet in either direction are parallel. Therefore *EF* is parallel to *GH.*
+But straight lines which do not meet in either direction are parallel. Therefore {EF} is parallel to {GH}.
 
 Therefore, *if two parallel planes are cut by any plane, then their intersections are parallel.*
 
