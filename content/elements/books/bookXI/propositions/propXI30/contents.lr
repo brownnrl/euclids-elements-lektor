@@ -15,12 +15,51 @@ statement: Parallelepipedal solids which are on the same base and of the same he
 ----
 proof:
 
-Let *CM* and *CN* be parallelepipedal solids on the same base *AB* and of the same height, and let the ends of their edges which stand up, namely *AF, AG, LM, LN, CD, CE, BH,* and *BK,* not be on the same straight lines.
+Let {CM} and {CN} be parallelepipedal solids on the same base {AB} and of the same height, and let the ends of their edges which stand up, namely {AF}, {AG}, {LM}, {LN}, {CD}, {CE}, {BH}, and {BK}, not be on the same straight lines.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="320" height="310" tabindex="0"></canvas>
 <noscript><img alt="XI.30 diagram" src="propXI30.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the solids CM (top FDHM) and CN (top GEKN, the green
+    // ceiling) on the common base ACBL, with the intermediate solid CP (top
+    // OQRP) built by producing NK, DH to R and FM, GE to P, Q, and joining
+    // AO, LP, CQ, BR.
+    //
+    // The walk produces and joins those lines, so Joyce's FP, DR, CQOA,
+    // BRPL and the points O, P, Q, R are left out of the slides until the
+    // construction reaches them. FMs and DHs, for the FM and DH that Joyce
+    // draws only as parts of FP and DR, stand in for them before; KR, HR,
+    // MP, EQ (stroked from the end produced) and AOs, LPs, CQs, BRs carry
+    // the construction. These solid slide twins are hidden at rest
+    // (initiallyHidden); the refs go to transparent FM, DH, AO, LP, CQ, BR,
+    // so prose hovers still light at rest. O, where FM produced crosses GE, appears with P
+    // and Q.
+    //
+    // Added, all transparent: CM, CP, CN, faceless hexagons on each solid's
+    // outline to light the solid as a whole; ACBL, the base (the floor
+    // plane draws no highlight); FDHM, OQRP, GEKN, the tops; the edges AF,
+    // AG, LM, LN, CD, CE, BH, FM, DH, AO, LP, CQ, BR and the lines NK, GE,
+    // GQ, NR. Joyce's KB serves
+    // as BK.
+    //
+    // Draggables (checked against the bundle): E, N, A (sliders along the
+    // edge directions from G) and D (planeSlider on the ceiling), all
+    // givens, so none is deferred. O, P, Q, R are derived and listed per
+    // slide. The outline hexagons assume D stays to the right of the base,
+    // as Joyce draws it.
+    var BASE = ["G","E","N","A","C","L","B","K","D","F","H","M",
+                "ceiling","floor","AGNL","ACEG","KB","ACDF","LBHM",
+                "FMs","DHs","FM","DH",
+                "CM","CN","CP","ACBL","FDHM","GEKN","OQRP",
+                "AF","AG","LM","LN","CD","CE","BH","NK","GE","GQ","NR"];
+    var PR1  = BASE.concat(["R","KR","HR"]);
+    var PR2  = PR1.concat(["P","Q","O","MP","EQ"]);
+    var JOIN = PR2.concat(["AOs","LPs","CQs","BRs","AO","LP","CQ","BR"]);
+    var ALL  = JOIN.concat(["FP","DR","CQOA","BRPL"]);
+    var EDGES1 = ["AF","AG","LM","LN","CD","CE","BH","KB"];
+    var EDGES2 = ["AF","AO","LM","LP","CD","CQ","BH","BR"];
+    var EDGES3 = ["AG","AO","CE","CQ","LN","LP","KB","BR"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -55,21 +94,161 @@ Let *CM* and *CN* be parallelepipedal solids on the same base *AB* and of the sa
             "FP;line;connect;F,P",
             "DR;line;connect;D,R",
             "BRPL;polygon;quadrilateral;B,R,P,L;0;0;black;0",
-            "CQOA;polygon;quadrilateral;C,Q,O,A;0;0;black;0"
+            "CQOA;polygon;quadrilateral;C,Q,O,A;0;0;black;0",
+            // Slide twins, hidden at rest (see above).
+            "FMs;line;connect;F,M",
+            "DHs;line;connect;D,H",
+            "KR;line;connect;K,R",
+            "HR;line;connect;H,R",
+            "MP;line;connect;M,P",
+            "EQ;line;connect;E,Q",
+            "AOs;line;connect;A,O",
+            "LPs;line;connect;L,P",
+            "CQs;line;connect;C,Q",
+            "BRs;line;connect;B,R",
+            // Transparent highlight targets.
+            "CM;polygon;hexagon;L,A,C,D,H,M;0;0;0;0",
+            "CP;polygon;hexagon;L,A,C,Q,R,P;0;0;0;0",
+            "CN;polygon;hexagon;A,C,E,K,N,L;0;0;0;0",
+            "ACBL;polygon;quadrilateral;A,C,B,L;0;0;0;0",
+            "FDHM;polygon;quadrilateral;F,D,H,M;0;0;0;0",
+            "OQRP;polygon;quadrilateral;O,Q,R,P;0;0;0;0",
+            "GEKN;polygon;quadrilateral;G,E,K,N;0;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "LM;line;connect;L,M;0;0;0",
+            "LN;line;connect;L,N;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "BH;line;connect;B,H;0;0;0",
+            "NK;line;connect;N,K;0;0;0",
+            "GE;line;connect;G,E;0;0;0",
+            "FM;line;connect;F,M;0;0;0",
+            "DH;line;connect;D,H;0;0;0",
+            "AO;line;connect;A,O;0;0;0",
+            "LP;line;connect;L,P;0;0;0",
+            "CQ;line;connect;C,Q;0;0;0",
+            "BR;line;connect;B,R;0;0;0",
+            "GQ;line;connect;G,Q;0;0;0",
+            "NR;line;connect;N,R;0;0;0"
         ],
+        initiallyHidden: ["FMs","DHs","KR","HR","MP","EQ","AOs","LPs","CQs","BRs"],
+        aliases: { "BK": "KB", "AB": "ACBL" },
+        slides: [
+            { text: "“Parallelepipedal solids which are on the same base and of the same height,”",
+              visible: BASE,
+              highlighted: ["CM","CN","ACBL"],
+              justifications: [{ ref: "XI.30" }] },
+            { text: "“and in which the ends of their edges which stand up are not on the same straight lines, equal one another.”",
+              visible: BASE,
+              highlighted: ["FDHM","GEKN","CM","CN"] },
+            { text: "Let {CM} and {CN} be parallelepipedal solids on the same base {AB|ACBL} and of the same height,",
+              visible: BASE,
+              highlighted: ["CM","CN","ACBL"] },
+            { text: "and let the ends of their edges which stand up, namely {AF}, {AG}, {LM}, {LN}, {CD}, {CE}, {BH}, and {BK|KB},",
+              visible: BASE,
+              highlighted: EDGES1 },
+            { text: "not be on the same straight lines.",
+              visible: BASE,
+              highlighted: ["FDHM","GEKN"] },
+            { text: "I say that the solid {CM} equals the solid {CN}.",
+              visible: BASE,
+              highlighted: ["CM","CN"] },
+            { text: "Produce {NK} and {DH} to meet one another at {R},",
+              visible: PR1,
+              highlighted: ["NK","DH","R"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "KR", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "HR", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "R",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "and produce {FM} and {GE} to {P} and {Q}.",
+              visible: PR2,
+              highlighted: ["FM","GE","P","Q"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "MP", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "O",  name: geomlib.A.Point.appear },
+                  { elem: "P",  name: geomlib.A.Point.appear },
+                  { elem: "EQ", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "Q",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Join {AO}, {LP}, {CQ}, and {BR}.",
+              visible: JOIN,
+              highlighted: ["AO","LP","CQ","BR"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AOs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "LPs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CQs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BRs", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then the solid {CM}, of which the parallelogram {ACBL} is the base and {FDHM} its opposite,",
+              visible: ALL,
+              highlighted: ["CM","ACBL","FDHM"] },
+            { text: "equals the solid {CP}, of which the parallelogram {ACBL} is the base and {OQRP} its opposite,",
+              visible: ALL,
+              highlighted: ["CP","ACBL","OQRP"] },
+            { text: "for they are on the same base {ACBL} and of the same height,",
+              visible: ALL,
+              highlighted: ["CM","CP","ACBL"] },
+            { text: "and the ends of their edges which stand up, namely {AF}, {AO}, {LM}, {LP}, {CD}, {CQ}, {BH}, and {BR},",
+              visible: ALL,
+              highlighted: EDGES2 },
+            { text: "are on the same straight lines {FP} and {DR}.",
+              visible: ALL,
+              highlighted: ["FP","DR"],
+              justifications: [{ claim: "solid CM = solid CP", ref: "XI.29" }] },
+            { text: "But the solid {CP}, of which the parallelogram {ACBL} is the base and {OQRP} its opposite,",
+              visible: ALL,
+              highlighted: ["CP","ACBL","OQRP"] },
+            { text: "equals the solid {CN}, of which the parallelogram {ACBL} is the base and {GEKN} its opposite,",
+              visible: ALL,
+              highlighted: ["CN","ACBL","GEKN"] },
+            { text: "for they are again on the same base {ACBL} and of the same height,",
+              visible: ALL,
+              highlighted: ["CP","CN","ACBL"] },
+            { text: "and the ends of their edges which stand up, namely {AG}, {AO}, {CE}, {CQ}, {LN}, {LP}, {BK|KB}, and {BR},",
+              visible: ALL,
+              highlighted: EDGES3 },
+            { text: "are on the same straight lines {GQ} and {NR}.",
+              visible: ALL,
+              highlighted: ["GQ","NR"],
+              justifications: [{ claim: "solid CP = solid CN", ref: "XI.29" }] },
+            { text: "Hence the solid {CM} also equals the solid {CN}.",
+              visible: ALL,
+              highlighted: ["CM","CN"] },
+            { text: "Therefore, parallelepipedal solids which are on the same base and of the same height,",
+              visible: ALL,
+              highlighted: ["CM","CN","ACBL"] },
+            { text: "and in which the ends of their edges which stand up are not on the same straight lines, equal one another.",
+              visible: ALL,
+              highlighted: ["FDHM","GEKN","CM","CN"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.30") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "XI.29":    "/elements/books/bookXI/propositions/propXI29/"
     });
 </script>
 </figure>
 
-I say that the solid *CM* equals the solid *CN.*
+I say that the solid {CM} equals the solid {CN}.
 
-Produce *NK* and *DH* to meet one another at *R,* and produce *FM* and *GE* to *P* and *Q.* Join *AO, LP, CQ,* and *BR.*
+Produce {NK} and {DH} to meet one another at {R}, and produce {FM} and {GE} to {P} and {Q}. Join {AO}, {LP}, {CQ}, and {BR}.
 
-Then the solid *CM,* of which the parallelogram *ACBL* is the base and *FDHM* its opposite, equals the solid *CP,* of which the parallelogram *ACBL* is the base and *OQRP* its opposite, for they are on the same base *ACBL* and of the same height, and the ends of their edges which stand up, namely *AF, AO, LM, LP, CD, CQ, BH,* and *BR,* are on the same straight lines *FP* and *DR.* [!just XI.29]
+Then the solid {CM}, of which the parallelogram {ACBL} is the base and {FDHM} its opposite, equals the solid {CP}, of which the parallelogram {ACBL} is the base and {OQRP} its opposite, for they are on the same base {ACBL} and of the same height, and the ends of their edges which stand up, namely {AF}, {AO}, {LM}, {LP}, {CD}, {CQ}, {BH}, and {BR}, are on the same straight lines {FP} and {DR}. [!just XI.29]
 
-But the solid *CP,* of which the parallelogram *ACBL* is the base and *OQRP* its opposite, equals the solid *CN,* of which the parallelogram *ACBL* is the base and *GEKN* its opposite, for they are again on the same base *ACBL* and of the same height, and the ends of their edges which stand up, namely *AG, AO, CE, CQ, LN, LP, BK,* and *BR,* are on the same straight lines *GQ* and *NR.* [!just XI.29]
+But the solid {CP}, of which the parallelogram {ACBL} is the base and {OQRP} its opposite, equals the solid {CN}, of which the parallelogram {ACBL} is the base and {GEKN} its opposite, for they are again on the same base {ACBL} and of the same height, and the ends of their edges which stand up, namely {AG}, {AO}, {CE}, {CQ}, {LN}, {LP}, {BK}, and {BR}, are on the same straight lines {GQ} and {NR}. [!just XI.29]
 
-Hence the solid *CM* also equals the solid *CN.*
+Hence the solid {CM} also equals the solid {CN}.
 
 Therefore, *parallelepipedal solids which are on the same base and of the same height, and in which the ends of their edges which stand up are not on the same straight lines, equal one another.*
 

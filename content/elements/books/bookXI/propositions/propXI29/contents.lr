@@ -15,12 +15,38 @@ statement: Parallelepipedal solids which are on the same base and of the same he
 ----
 proof:
 
-Let *CM* and *CN* be parallelepipedal solids on the same base *AB* and of the same height, and let the ends of their edges which stand up, namely *AG, AF, LM, LN, CD, CE, BH,* and *BK,* be on the same straight lines *FN* and *DK.*
+Let {CM} and {CN} be parallelepipedal solids on the same base {AB} and of the same height, and let the ends of their edges which stand up, namely {AG}, {AF}, {LM}, {LN}, {CD}, {CE}, {BH}, and {BK}, be on the same straight lines {FN} and {DK}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="300" tabindex="0"></canvas>
 <noscript><img alt="XI.29 diagram" src="propXI29.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the solids CM (top FMHD, the yellow ceiling) and CN
+    // (top GNKE) on the common base ACBL, with F, G, M, N on one line and
+    // D, E, H, K on another. The proof constructs nothing, so the walk is
+    // highlight beats only.
+    //
+    // Added, all transparent: CM and CN, faceless hexagons on each solid's
+    // outline (A, L, M, H, D, C and A, L, N, K, E, C) to light the solid as
+    // a whole; AB, the base ACBL (the floor plane draws no highlight); CF, a
+    // faceless twin of Joyce's filled AFDC (a filled face is raised over the
+    // figure when highlighted, #140); the parallelograms CH, CK, DG, HN, BM
+    // and GEHM, the triangles DCE, HBK, AFG, MLN (explicit ;0 faces); and
+    // the edges and lines the proof names. Joyce's ACEG and LBKN are already
+    // faceless and serve as CG and BN.
+    //
+    // Draggables (checked against the bundle): M, D, A, N, sliders along
+    // the three fixed edge directions from F, all givens, so none is
+    // deferred. The outline hexagons hold under any such drag.
+    var ALL = ["F","M","D","A","L","C","B","H","N","G","K","E",
+               "ceiling","floor","AFDC","ALMF","HB","ACEG","LBKN","HK","M,N",
+               "CM","CN","AB","CF","CH","CK","DG","HN","BM","GEHM",
+               "DCE","HBK","AFG","MLN",
+               "AG","AF","LM","LN","CD","CE","BK","FN","DK",
+               "CB","DH","EK","EH","DE"];
+    var EDGES  = ["AG","AF","LM","LN","CD","CE","HB","BK"];
+    var PRISM1 = ["AFG","DCE","CF","DG","ACEG"];
+    var PRISM2 = ["MLN","HBK","BM","HN","LBKN"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,21 +75,140 @@ Let *CM* and *CN* be parallelepipedal solids on the same base *AB* and of the sa
             "ACEG;polygon;quadrilateral;A,C,E,G;0;0;black;0",
             "LBKN;polygon;quadrilateral;L,B,K,N;0;0;black;0",
             "HK;line;connect;H,K",
-            "M,N;line;connect;M,N"
+            "M,N;line;connect;M,N",
+            // Transparent highlight targets.
+            "CM;polygon;hexagon;A,L,M,H,D,C;0;0;0;0",
+            "CN;polygon;hexagon;A,L,N,K,E,C;0;0;0;0",
+            "AB;polygon;quadrilateral;A,L,B,C;0;0;0;0",
+            "CF;polygon;quadrilateral;A,F,D,C;0;0;0;0",
+            "CH;polygon;quadrilateral;C,B,H,D;0;0;0;0",
+            "CK;polygon;quadrilateral;C,B,K,E;0;0;0;0",
+            "DG;polygon;quadrilateral;D,E,G,F;0;0;0;0",
+            "HN;polygon;quadrilateral;H,K,N,M;0;0;0;0",
+            "BM;polygon;quadrilateral;L,B,H,M;0;0;0;0",
+            "GEHM;polygon;quadrilateral;G,E,H,M;0;0;0;0",
+            "DCE;polygon;triangle;D,C,E;0;0;0;0",
+            "HBK;polygon;triangle;H,B,K;0;0;0;0",
+            "AFG;polygon;triangle;A,F,G;0;0;0;0",
+            "MLN;polygon;triangle;M,L,N;0;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            "LM;line;connect;L,M;0;0;0",
+            "LN;line;connect;L,N;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "BK;line;connect;B,K;0;0;0",
+            "FN;line;connect;F,N;0;0;0",
+            "DK;line;connect;D,K;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "DH;line;connect;D,H;0;0;0",
+            "EK;line;connect;E,K;0;0;0",
+            "EH;line;connect;E,H;0;0;0",
+            "DE;line;connect;D,E;0;0;0"
         ],
+        aliases: { "BH": "HB", "CG": "ACEG", "BN": "LBKN", "AD": "CF" },
+        slides: [
+            { text: "“Parallelepipedal solids which are on the same base and of the same height,”",
+              visible: ALL,
+              highlighted: ["CM","CN","AB"],
+              justifications: [{ ref: "XI.29" }] },
+            { text: "“and in which the ends of their edges which stand up are on the same straight lines, equal one another.”",
+              visible: ALL,
+              highlighted: ["FN","DK","CM","CN"] },
+            { text: "Let {CM} and {CN} be parallelepipedal solids on the same base {AB} and of the same height,",
+              visible: ALL,
+              highlighted: ["CM","CN","AB"] },
+            { text: "and let the ends of their edges which stand up, namely {AG}, {AF}, {LM}, {LN}, {CD}, {CE}, {BH|HB}, and {BK},",
+              visible: ALL,
+              highlighted: EDGES },
+            { text: "be on the same straight lines {FN} and {DK}.",
+              visible: ALL,
+              highlighted: ["FN","DK"] },
+            { text: "I say that the solid {CM} equals the solid {CN}.",
+              visible: ALL,
+              highlighted: ["CM","CN"] },
+            { text: "Since each of the figures {CH} and {CK} is a parallelogram,",
+              visible: ALL,
+              highlighted: ["CH","CK"] },
+            { text: "therefore {CB} equals each of the straight lines {DH} and {EK}.",
+              visible: ALL,
+              highlighted: ["CB","DH","EK"],
+              justifications: [{ claim: "CB = DH, CB = EK", ref: "I.34" }] },
+            { text: "Therefore {DH} also equals {EK}.",
+              visible: ALL,
+              highlighted: ["DH","EK"] },
+            { text: "Subtract {EH} from each, therefore the remainder {DE} equals the remainder {HK}.",
+              visible: ALL,
+              highlighted: ["EH","DE","HK"] },
+            { text: "Therefore the triangle {DCE} also equals the triangle {HBK},",
+              visible: ALL,
+              highlighted: ["DCE","HBK"],
+              justifications: [{ claim: "triangle DCE = triangle HBK", ref: "I.8" },
+                               { ref: "I.4" }] },
+            { text: "and the parallelogram {DG} equals the parallelogram {HN}.",
+              visible: ALL,
+              highlighted: ["DG","HN"],
+              justifications: [{ claim: "parallelogram DG = parallelogram HN", ref: "I.36" }] },
+            { text: "For the same reason the triangle {AFG} equals the triangle {MLN}.",
+              visible: ALL,
+              highlighted: ["AFG","MLN"] },
+            { text: "But the parallelogram {CF} equals the parallelogram {BM}, and {CG|ACEG} equals {BN|LBKN}, for they are opposite,",
+              visible: ALL,
+              highlighted: ["CF","BM","ACEG","LBKN"] },
+            { text: "therefore the prism contained by the two triangles {AFG} and {DCE}",
+              visible: ALL,
+              highlighted: PRISM1 },
+            { text: "and the three parallelograms {AD|CF}, {DG}, and {CG|ACEG}",
+              visible: ALL,
+              highlighted: ["CF","DG","ACEG"] },
+            { text: "equals the prism contained by the two triangles {MLN} and {HBK}",
+              visible: ALL,
+              highlighted: PRISM2 },
+            { text: "and the three parallelograms {BM}, {HN}, and {BN|LBKN}.",
+              visible: ALL,
+              highlighted: ["BM","HN","LBKN"],
+              justifications: [{ claim: "the two prisms are equal", ref: "XI.Def.10" }] },
+            { text: "Add to each the solid of which the parallelogram {AB} is the base and {GEHM} its opposite,",
+              visible: ALL,
+              highlighted: ["AB","GEHM"] },
+            { text: "therefore the whole parallelepipedal solid {CM} equals the whole parallelepipedal solid {CN}.",
+              visible: ALL,
+              highlighted: ["CM","CN"] },
+            { text: "Therefore, parallelepipedal solids which are on the same base and of the same height,",
+              visible: ALL,
+              highlighted: ["CM","CN","AB"] },
+            { text: "and in which the ends of their edges which stand up are on the same straight lines, equal one another.",
+              visible: ALL,
+              highlighted: ["FN","DK","CM","CN"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.29") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.4":       "/elements/books/bookI/propositions/propI4/",
+        "I.8":       "/elements/books/bookI/propositions/propI8/",
+        "I.34":      "/elements/books/bookI/propositions/propI34/",
+        "I.36":      "/elements/books/bookI/propositions/propI36/",
+        "XI.Def.10": "/elements/books/bookXI/definitions/defXI10/"
     });
 </script>
 </figure>
 
-I say that the solid *CM* equals the solid *CN.*
+I say that the solid {CM} equals the solid {CN}.
 
-Since each of the figures *CH* and *CK* is a parallelogram, therefore *CB* equals each of the straight lines *DH* and *EK.* Therefore *DH* also equals *EK.* [!just I.34]
+Since each of the figures {CH} and {CK} is a parallelogram, therefore {CB} equals each of the straight lines {DH} and {EK}. Therefore {DH} also equals {EK}. [!just I.34]
 
-Subtract *EH* from each, therefore the remainder *DE* equals the remainder *HK.* Therefore the triangle *DCE* also equals the triangle *HBK,* and the parallelogram *DG* equals the parallelogram *HN.* For the same reason the triangle *AFG* equals the triangle *MLN.* [!just I.8, I.4; I.36]
+Subtract {EH} from each, therefore the remainder {DE} equals the remainder {HK}. Therefore the triangle {DCE} also equals the triangle {HBK}, and the parallelogram {DG} equals the parallelogram {HN}. For the same reason the triangle {AFG} equals the triangle {MLN}. [!just I.8, I.4; I.36]
 
-But the parallelogram *CF* equals the parallelogram *BM,* and *CG* equals *BN,* for they are opposite, therefore the prism contained by the two triangles *AFG* and *DCE* and the three parallelograms *AD, DG,* and *CG* equals the prism contained by the two triangles *MLN* and *HBK* and the three parallelograms *BM, HN,* and *BN.* [!just XI.Def.10]
+But the parallelogram {CF} equals the parallelogram {BM}, and {CG} equals {BN}, for they are opposite, therefore the prism contained by the two triangles {AFG} and {DCE} and the three parallelograms {AD}, {DG}, and {CG} equals the prism contained by the two triangles {MLN} and {HBK} and the three parallelograms {BM}, {HN}, and {BN}. [!just XI.Def.10]
 
-Add to each the solid of which the parallelogram *AB* is the base and *GEHM* its opposite, therefore the whole parallelepipedal solid *CM* equals the whole parallelepipedal solid *CN.*
+Add to each the solid of which the parallelogram {AB} is the base and {GEHM} its opposite, therefore the whole parallelepipedal solid {CM} equals the whole parallelepipedal solid {CN}.
 
 Therefore, *parallelepipedal solids which are on the same base and of the same height, and in which the ends of their edges which stand up are on the same straight lines, equal one another.*
 
