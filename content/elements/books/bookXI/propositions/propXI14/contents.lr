@@ -15,7 +15,7 @@ statement: Planes to which the same straight line is at right angles are paralle
 ----
 proof:
 
-Let any straight line *AB* be at right angles to each of the planes *CD* and *EF.*
+Let any straight line {AB} be at right angles to each of the planes {CD} and {EF}.
 
 I say that the planes are parallel.
 
@@ -23,6 +23,26 @@ I say that the planes are parallel.
 <canvas id="canvas_0" width="310" height="200" tabindex="0"></canvas>
 <noscript><img alt="XI.14 diagram" src="propXI14.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the planes CD (P, through A) and EF (Q, through B),
+    // the line AB at right angles to both, and off to the right the
+    // supposed common section GH with K on it, joined to A and B.
+    //
+    // Added, all transparent: CD and EF, faceless twins of the filled
+    // planes P and Q (a filled polygon is raised over the figure when
+    // highlighted, #140), named as the prose names the planes; ABK, the
+    // triangle; and the right-angle squares at B and A for ABK and BAK,
+    // right by XI.Def.3 within the reductio. The supposition (GH, K, AK,
+    // BK) is withdrawn on the closing slides once the planes are shown
+    // not to meet.
+    //
+    // Draggables (checked against the bundle): X, Y, Z, C, D, E, F, A, G
+    // free; B, H, K sliders. G, H and K arrive with the supposition, so
+    // they are deferred. C1, D1, E1, F1 are derived and listed per slide.
+    var GIVEN = ["P","Q","CD","EF","C","D","E","F","C1","D1","E1","F1",
+                 "A","B","AB"];
+    var SECT  = GIVEN.concat(["G","H","GH"]);
+    var KPT   = SECT.concat(["K"]);
+    var JOIN  = KPT.concat(["AK","BK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,21 +69,113 @@ I say that the planes are parallel.
             "GH;line;connect;G,H",
             "K;point;lineSlider;GH,240,125",
             "AK;line;connect;A,K",
-            "BK;line;connect;B,K"
+            "BK;line;connect;B,K",
+            // Transparent highlight targets.
+            "CD;polygon;quadrilateral;C,C1,D,D1;0;0;0;0",
+            "EF;polygon;quadrilateral;F,F1,E,E1;0;0;0;0",
+            "ABK;polygon;triangle;A,B,K;0;0;0;0",
+            "angABK;sector;angleMarkerRight;B,A,K",
+            "angBAK;sector;angleMarkerRight;A,B,K"
         ],
+        deferDraggables: ["G","H","K"],
+        aliases: { "KB": "BK", "KA": "AK", "HG": "GH",
+                   "KBA": "angABK", "KAB": "angBAK" },
+        slides: [
+            { text: "“Planes to which the same straight line is at right angles are parallel.”",
+              visible: GIVEN,
+              highlighted: ["AB","CD","EF"],
+              justifications: [{ ref: "XI.14" }] },
+            { text: "Let any straight line {AB} be at right angles to each of the planes {CD} and {EF}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD","EF"] },
+            { text: "I say that the planes are parallel.",
+              visible: GIVEN,
+              highlighted: ["CD","EF"] },
+            { text: "For, if not, then they meet when produced. Let them meet.",
+              visible: GIVEN,
+              highlighted: ["CD","EF"],
+              justifications: [{ claim: "parallel planes do not meet", ref: "XI.Def.8" }] },
+            { text: "Then they intersect as a straight line. Let it be {GH}.",
+              visible: SECT,
+              highlighted: ["GH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "two planes cut in a straight line", ref: "XI.3" }] },
+            { text: "Take a point {K} at random on {GH},",
+              visible: KPT,
+              highlighted: ["K","GH"],
+              transition: { animations: [
+                  { elem: "K", name: geomlib.A.Point.appear } ] } },
+            { text: "and join {AK} and {BK}.",
+              visible: JOIN,
+              highlighted: ["AK","BK"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BK", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since {AB} is at right angles to the plane {EF},",
+              visible: JOIN,
+              highlighted: ["AB","EF"] },
+            { text: "therefore {AB} is also at right angle to {BK} which is a straight line in the plane {EF} produced.",
+              visible: JOIN,
+              highlighted: ["AB","BK","EF"],
+              justifications: [{ claim: "a line at right angles to a plane", ref: "XI.Def.3" }] },
+            { text: "Therefore the angle {ABK|angABK} is right.",
+              visible: JOIN.concat(["angABK"]),
+              highlighted: ["angABK"],
+              transition: { animations: [
+                  { elem: "angABK", name: geomlib.A.Sector.sweep } ] } },
+            { text: "For the same reason the angle {BAK|angBAK} is also right.",
+              visible: JOIN.concat(["angABK","angBAK"]),
+              highlighted: ["AK","CD","angBAK"],
+              transition: { animations: [
+                  { elem: "angBAK", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Thus, in the triangle {ABK} the sum of the two angles {ABK|angABK} and {BAK|angBAK} equals two right angles,",
+              visible: JOIN.concat(["ABK","angABK","angBAK"]),
+              highlighted: ["ABK","angABK","angBAK"] },
+            { text: "which is impossible.",
+              visible: JOIN.concat(["ABK","angABK","angBAK"]),
+              highlighted: ["ABK"],
+              justifications: [{ claim: "two angles of a triangle are less than two right angles", ref: "I.17" }] },
+            { text: "Therefore the planes {CD} and {EF} do not meet when produced.",
+              visible: GIVEN,
+              highlighted: ["CD","EF"] },
+            { text: "Therefore the planes {CD} and {EF} are parallel.",
+              visible: GIVEN,
+              highlighted: ["CD","EF"],
+              justifications: [{ claim: "planes which do not meet", ref: "XI.Def.8" }] },
+            { text: "Therefore, planes at right angles to the same straight line are parallel.",
+              visible: GIVEN,
+              highlighted: ["AB","CD","EF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.14") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.17":     "/elements/books/bookI/propositions/propI17/",
+        "XI.Def.3": "/elements/books/bookXI/definitions/defXI3/",
+        "XI.Def.8": "/elements/books/bookXI/definitions/defXI8/",
+        "XI.3":     "/elements/books/bookXI/propositions/propXI3/"
     });
 </script>
 </figure>
 
-For, if not, then they meet when produced. Let them meet. Then they intersect as a straight line. Let it be *GH.* [!just XI.Def.8, XI.3]
+For, if not, then they meet when produced. Let them meet. Then they intersect as a straight line. Let it be {GH}. [!just XI.Def.8, XI.3]
 
-Take a point *K* at random on *GH,* and join *AK* and *BK.*
+Take a point {K} at random on {GH}, and join {AK} and {BK}.
 
-Now, since *AB* is at right angles to the plane *EF,* therefore *AB* is also at right angle to *BK* which is a straight line in the plane *EF* produced. Therefore the angle *ABK* is right. For the same reason the angle *BAK* is also right. [!just XI.Def.3]
+Now, since {AB} is at right angles to the plane {EF}, therefore {AB} is also at right angle to {BK} which is a straight line in the plane {EF} produced. Therefore the angle {ABK|angABK} is right. For the same reason the angle {BAK|angBAK} is also right. [!just XI.Def.3]
 
-Thus, in the triangle *ABK* the sum of the two angles *ABK* and *BAK* equals two right angles, which is impossible. [!just I.17]
+Thus, in the triangle {ABK} the sum of the two angles {ABK|angABK} and {BAK|angBAK} equals two right angles, which is impossible. [!just I.17]
 
-Therefore the planes *CD* and *EF* do not meet when produced. Therefore the planes *CD* and *EF* are parallel. [!just XI.Def.8]
+Therefore the planes {CD} and {EF} do not meet when produced. Therefore the planes {CD} and {EF} are parallel. [!just XI.Def.8]
 
 Therefore, *planes at right angles to the same straight line are parallel.*
 
@@ -71,7 +183,7 @@ Therefore, *planes at right angles to the same straight line are parallel.*
 ----
 guide:
 
-Part of this proof is unnecessary. The line *GH* is irrelevant. If the two points meet, then they meet at some point, so the point *K* might just as well be taken as a point where they meet. The proof should, however, include another case, and that is where the given line meets both given planes at a point common to both planes.
+Part of this proof is unnecessary. The line {GH} is irrelevant. If the two points meet, then they meet at some point, so the point {K} might just as well be taken as a point where they meet. The proof should, however, include another case, and that is where the given line meets both given planes at a point common to both planes.
 
 #### Use of this proposition
 

@@ -15,12 +15,28 @@ statement: From the same point two straight lines cannot be set up at right angl
 ----
 proof:
 
-For, if possible, from the same point *A* let the two straight lines *AB* and *AC* be set up at right angles to the plane of reference and on the same side.
+For, if possible, from the same point {A} let the two straight lines {AB} and {AC} be set up at right angles to the plane of reference and on the same side.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="250" tabindex="0"></canvas>
 <noscript><img alt="XI.13 diagram" src="propXI13.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the plane of reference P, the two perpendiculars AB
+    // and AC from A on the same side, and DAE, the section of the plane
+    // through BA and AC with the plane of reference.
+    //
+    // Added, all transparent: PT, a faceless twin of the filled plane P
+    // (raised over the figure if highlighted, #140); planeBAC, the plane
+    // through BA and AC, outlined D-B-C-E so it holds all three lines; and
+    // the right-angle squares at A for CAE and BAE, right by hypothesis.
+    // DE is Joyce's own line, stroked from D when the section is drawn.
+    //
+    // Draggables (checked against the bundle): X, Y, Y', Z, P0, A free;
+    // P1, P3, B, C, D sliders. D arrives with DAE, so it is deferred.
+    // P2 and E are derived and listed per slide.
+    var GIVEN = ["P","PT","P0","P1","P2","P3","A","B","C","AB","AC"];
+    var PLN   = GIVEN.concat(["planeBAC"]);
+    var SEC   = PLN.concat(["D","E","DE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,17 +58,95 @@ For, if possible, from the same point *A* let the two straight lines *AB* and *A
             "AC;line;connect;A,C",
             "D;point;lineSlider;P0,P3,40,140",
             "E;point;intersection;A,D,P1,P2",
-            "DE;line;connect;D,E"
+            "DE;line;connect;D,E",
+            // Transparent highlight targets.
+            "PT;polygon;quadrilateral;P0,P1,P2,P3;0;0;0;0",
+            "planeBAC;polygon;quadrilateral;D,B,C,E;0;0;0;0",
+            "angCAE;sector;angleMarkerRight;A,C,E",
+            "angBAE;sector;angleMarkerRight;A,B,E"
         ],
+        deferDraggables: ["D"],
+        aliases: { "BA": "AB", "CA": "AC", "DAE": "DE",
+                   "CAE": "angCAE", "EAC": "angCAE",
+                   "BAE": "angBAE", "EAB": "angBAE" },
+        slides: [
+            { text: "“From the same point two straight lines cannot be set up at right angles to the same plane on the same side.”",
+              visible: GIVEN,
+              highlighted: ["AB","AC","PT"],
+              justifications: [{ ref: "XI.13" }] },
+            { text: "For, if possible, from the same point {A} let the two straight lines {AB} and {AC} be set up",
+              visible: GIVEN,
+              highlighted: ["A","AB","AC"] },
+            { text: "at right angles to the {plane of reference|PT} and on the same side.",
+              visible: GIVEN,
+              highlighted: ["AB","AC","PT"] },
+            { text: "Draw a plane through {BA|AB} and {AC}.",
+              visible: PLN,
+              highlighted: ["planeBAC","AB","AC"],
+              transition: { animations: [
+                  { elem: "planeBAC", name: geomlib.A.Polygon.outline } ] } },
+            { text: "It intersects the {plane of reference|PT} in a straight line through {A}. Let the line be {DAE|DE}.",
+              visible: SEC,
+              highlighted: ["PT","A","DE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "D",  name: geomlib.A.Point.appear },
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "two planes cut in a straight line", ref: "XI.3" }] },
+            { text: "Therefore the straight lines {AB}, {AC}, and {DAE|DE} lie in one plane.",
+              visible: SEC,
+              highlighted: ["AB","AC","DE","planeBAC"] },
+            { text: "And, since {CA|AC} is at right angles to the {plane of reference|PT},",
+              visible: SEC,
+              highlighted: ["AC","PT"] },
+            { text: "it also makes right angles with all the straight lines which meet it and lie in the {plane of reference|PT}.",
+              visible: SEC,
+              highlighted: ["AC","PT"],
+              justifications: [{ claim: "a line at right angles to a plane", ref: "XI.Def.3" }] },
+            { text: "But {DAE|DE} meets it and lies in the {plane of reference|PT}, therefore the angle {CAE|angCAE} is right.",
+              visible: SEC.concat(["angCAE"]),
+              highlighted: ["DE","AC","angCAE"],
+              transition: { animations: [
+                  { elem: "angCAE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "For the same reason the angle {BAE|angBAE} is also right.",
+              visible: SEC.concat(["angCAE","angBAE"]),
+              highlighted: ["AB","angBAE"],
+              transition: { animations: [
+                  { elem: "angBAE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the angle {CAE|angCAE} equals the angle {BAE|angBAE}.",
+              visible: SEC.concat(["angCAE","angBAE"]),
+              highlighted: ["angCAE","angBAE"] },
+            { text: "And they lie in one plane, which is impossible.",
+              visible: SEC.concat(["angCAE","angBAE"]),
+              highlighted: ["angCAE","angBAE","planeBAC"] },
+            { text: "Therefore, from the same point two straight lines cannot be set up",
+              visible: GIVEN,
+              highlighted: ["A","AB","AC"] },
+            { text: "at right angles to the same plane on the same side.",
+              visible: GIVEN,
+              highlighted: ["AB","AC","PT"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.13") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "XI.Def.3": "/elements/books/bookXI/definitions/defXI3/",
+        "XI.3":     "/elements/books/bookXI/propositions/propXI3/"
     });
 </script>
 </figure>
 
-Draw a plane through *BA* and *AC.* It intersects the plane of reference in a straight line through *A.* Let the line be *DAE.* [!just XI.3]
+Draw a plane through {BA} and {AC}. It intersects the plane of reference in a straight line through {A}. Let the line be {DAE}. [!just XI.3]
 
-Therefore the straight lines *AB, AC,* and *DAE* lie in one plane. And, since *CA* is at right angles to the plane of reference, it also makes right angles with all the straight lines which meet it and lie in the plane of reference. [!just XI.Def.3]
+Therefore the straight lines {AB}, {AC}, and {DAE} lie in one plane. And, since {CA} is at right angles to the plane of reference, it also makes right angles with all the straight lines which meet it and lie in the plane of reference. [!just XI.Def.3]
 
-But *DAE* meets it and lies in the plane of reference, therefore the angle *CAE* is right. For the same reason the angle *BAE* is also right. Therefore the angle *CAE* equals the angle *BAE.*
+But {DAE} meets it and lies in the plane of reference, therefore the angle {CAE} is right. For the same reason the angle {BAE} is also right. Therefore the angle {CAE} equals the angle {BAE}.
 
 And they lie in one plane, which is impossible.
 
