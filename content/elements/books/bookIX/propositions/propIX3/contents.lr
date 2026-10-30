@@ -15,16 +15,22 @@ statement: If a cubic number multiplied by itself makes some number, then the pr
 ----
 proof:
 
-Let the cubic number *A* multiplied by itself make *B.*
+Let the cubic number {A} multiplied by itself make {B}.
 
-I say that *B* is cubic.
+I say that {B} is cubic.
 
-Take *C,* the side of *A.* Multiply *C* by itself make *D.* It is then manifest that *C* multiplied by *D* makes *A.*
+Take {C}, the side of {A}. Multiply {C} by itself make {D}. It is then manifest that {C} multiplied by {D} makes {A}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="140" tabindex="0"></canvas>
 <noscript><img alt="IX.3 diagram" src="propIX3.gif"/></noscript>
 <script type="text/javascript">
+    // The numbers are line segments on four rows: A, B = A by A, and C (the
+    // side of A) with D = C by C on the third row. Nothing is added to the
+    // figure; the slides only light the segments the proof names.
+    var GIVEN = ["A","B","A1","A2","B1","B2"];
+    var SIDE  = GIVEN.concat(["C","C1","C2"]);
+    var ALL   = SIDE.concat(["D","D1","D2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,21 +57,124 @@ Take *C,* the side of *A.* Multiply *C* by itself make *D.* It is then manifest 
             "D2;point;proportion;U1,U2,C1,C2,C1,C2,D1,C3;0",
             "D;line;connect;D1,D2;black"
         ],
+        // Draggables (checked against the bundle): the end-handles A1, A2,
+        // B1, C1, C2, D1 are lineSliders (the row anchors and U1, U2 are free
+        // points far off-canvas). A and B are given on slide 2; C and D
+        // arrive with "Take C ... make D", so their handles are deferred and
+        // follow `visible`. B2 and D2 are derived (proportion) and listed per
+        // slide. The unit U1U2 lies off-canvas in Joyce's figure, so "the
+        // unit" is left untokenized. The resting figure is unchanged.
+        deferDraggables: ["C1","C2","D1"],
+        slides: [
+            { text: "“If a cubic number multiplied by itself makes some number, then the product is a cube.”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "IX.3" }] },
+            { text: "Let the cubic number {A} multiplied by itself make {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that {B} is cubic.",
+              visible: GIVEN,
+              highlighted: ["B"] },
+            { text: "Take {C}, the side of {A}.",
+              visible: SIDE,
+              highlighted: ["C","A"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Multiply {C} by itself make {D}.",
+              visible: ALL,
+              highlighted: ["C","D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "It is then manifest that {C} multiplied by {D} makes {A}.",
+              visible: ALL,
+              highlighted: ["C","D","A"] },
+            { text: "Now, since {C} multiplied by itself makes {D}, therefore {C} measures {D} according to the units in itself.",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "But further the unit also measures {C} according to the units in it,",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "therefore the unit is to {C} as {C} is to {D}.",
+              visible: ALL,
+              highlighted: ["C","D"],
+              justifications: [{ claim: "unit : C = C : D", ref: "VII.Def.20" }] },
+            { text: "Again, since {C} multiplied by {D} makes {A}, therefore {D} measures {A} according to the units in {C}.",
+              visible: ALL,
+              highlighted: ["C","D","A"] },
+            { text: "But the unit also measures {C} according to the units in it,",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "therefore the unit is to {C} as {D} is to {A}.",
+              visible: ALL,
+              highlighted: ["C","D","A"] },
+            { text: "But the unit is to {C} as {C} is to {D},",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "therefore the unit is to {C} as {C} is to {D}, and as {D} is to {A}.",
+              visible: ALL,
+              highlighted: ["C","D","A"] },
+            { text: "Therefore between the unit and the number {A} two mean proportional numbers {C} and {D} have fallen in continued proportion.",
+              visible: ALL,
+              highlighted: ["C","D","A"] },
+            { text: "Again, since {A} multiplied by itself makes {B}, therefore {A} measures {B} according to the units in itself.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "But the unit also measures {A} according to the units in it,",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "therefore the unit is to {A} as {A} is to {B}.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "unit : A = A : B", ref: "VII.Def.20" }] },
+            { text: "But between the unit and {A} two mean proportional numbers have fallen,",
+              visible: ALL,
+              highlighted: ["A","C","D"] },
+            { text: "therefore two mean proportional numbers also fall between {A} and {B}.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "two means between A and B", ref: "VIII.8" }] },
+            { text: "But, if two mean proportional numbers fall between two numbers, and the first is a cube,",
+              visible: ALL },
+            { text: "then the second is also a cube.",
+              visible: ALL,
+              justifications: [{ ref: "VIII.23" }] },
+            { text: "And {A} is a cube, therefore {B} is also a cube.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "A is a cube, so B is a cube", ref: "VIII.23" }] },
+            { text: "Therefore, if a cubic number multiplied by itself makes some number, then the product is a cube.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.3") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "VIII.8":     "/elements/books/bookVIII/propositions/propVIII8/",
+        "VIII.23":    "/elements/books/bookVIII/propositions/propVIII23/"
     });
 </script>
 </figure>
 
-Now, since *C* multiplied by itself makes *D,* therefore *C* measures *D* according to the units in itself. But further the unit also measures *C* according to the units in it, therefore the unit is to *C* as *C* is to *D.* [!just VII.Def.20]
+Now, since {C} multiplied by itself makes {D}, therefore {C} measures {D} according to the units in itself. But further the unit also measures {C} according to the units in it, therefore the unit is to {C} as {C} is to {D}. [!just VII.Def.20]
 
-Again, since *C* multiplied by *D* makes *A,* therefore *D* measures *A* according to the units in *C.* But the unit also measures *C* according to the units in it, therefore the unit is to *C* as *D* is to *A.* But the unit is to *C* as *C* is to *D,* therefore the unit is to *C* as *C* is to *D,* and as *D* is to *A.*
+Again, since {C} multiplied by {D} makes {A}, therefore {D} measures {A} according to the units in {C}. But the unit also measures {C} according to the units in it, therefore the unit is to {C} as {D} is to {A}. But the unit is to {C} as {C} is to {D}, therefore the unit is to {C} as {C} is to {D}, and as {D} is to {A}.
 
-Therefore between the unit and the number *A* two mean proportional numbers *C* and *D* have fallen in continued proportion.
+Therefore between the unit and the number {A} two mean proportional numbers {C} and {D} have fallen in continued proportion.
 
-Again, since *A* multiplied by itself makes *B,* therefore *A* measures *B* according to the units in itself. But the unit also measures *A* according to the units in it, therefore the unit is to *A* as *A* is to *B.* [!just VII.Def.20]
+Again, since {A} multiplied by itself makes {B}, therefore {A} measures {B} according to the units in itself. But the unit also measures {A} according to the units in it, therefore the unit is to {A} as {A} is to {B}. [!just VII.Def.20]
 
-But between the unit and *A* two mean proportional numbers have fallen, therefore two mean proportional numbers also fall between *A* and *B.* [!just VIII.8]
+But between the unit and {A} two mean proportional numbers have fallen, therefore two mean proportional numbers also fall between {A} and {B}. [!just VIII.8]
 
-But, if two mean proportional numbers fall between two numbers, and the first is a cube, then the second is also a cube. And *A* is a cube, therefore *B* is also a cube. [!just VIII.23]
+But, if two mean proportional numbers fall between two numbers, and the first is a cube, then the second is also a cube. And {A} is a cube, therefore {B} is also a cube. [!just VIII.23]
 
 Therefore, *if a cubic number multiplied by itself makes some number, then the product is a cube.*
 
