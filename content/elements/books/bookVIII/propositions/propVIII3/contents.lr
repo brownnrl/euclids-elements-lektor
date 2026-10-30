@@ -15,14 +15,22 @@ statement: If as many numbers as we please in continued proportion are the least
 ----
 proof:
 
-Let as many numbers as we please, *A, B, C,* and *D,* in continued proportion be the least of those which have the same ratio with them.
+Let as many numbers as we please, {A}, {B}, {C}, and {D}, in continued proportion be the least of those which have the same ratio with them.
 
-I say that the extremes of them, *A* and *D,* are relatively prime.
+I say that the extremes of them, {A} and {D}, are relatively prime.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="420" height="200" tabindex="0"></canvas>
 <noscript><img alt="VIII.3 diagram" src="propVIII3.gif"/></noscript>
 <script type="text/javascript">
+    // A walk of the proof over Joyce's lines. The numbers enter as the proof
+    // names them: E, F (VII.33), G, H, K and L, M, N, O (VIII.2), each
+    // stroked from its left end.
+    // The derived right-end points carry the dots of the resting figure.
+    var GIVEN = ["A","B","C","D","A2","B2","C2","D2"];
+    var EF    = GIVEN.concat(["E","F","E1","E2","F1","F2"]);
+    var GHK   = EF.concat(["G","H","K","G1","H1","K1","G2","H2","K2"]);
+    var ALL   = GHK.concat(["L","M","N","O","L1","M1","N1","O1","L2","M2","N2","O2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -84,17 +92,138 @@ I say that the extremes of them, *A* and *D,* are relatively prime.
             "D2;point;cutoff;D1,D3,O1,O2;0",
             "D;line;connect;D1,D2;black"
         ],
+        // Draggables (checked against the bundle): every lineSlider end is
+        // draggable, all colourless. A1..D1 are the givens' left ends and stand
+        // from slide 1; the ends of E, F (whose right ends set every length),
+        // G, H, K and L, M, N, O arrive with their numbers, so they are
+        // deferred and listed in the slides that introduce them. No elements
+        // added: every caption names one of Joyce's lines.
+        deferDraggables: ["E1","E2","F1","F2","G1","H1","K1","L1","M1","N1","O1"],
+        slides: [
+            { text: "If as many numbers as we please in continued proportion",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "VIII.3" }] },
+            { text: "are the least of those which have the same ratio with them,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "then the extremes of them are relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","D"] },
+            { text: "Let as many numbers as we please, {A}, {B}, {C}, and {D}, in continued proportion",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "be the least of those which have the same ratio with them.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "I say that the extremes of them, {A} and {D}, are relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","D"] },
+            { text: "Take two numbers {E} and {F}, the least that are in the ratio of {A}, {B}, {C} and {D},",
+              visible: EF,
+              highlighted: ["E","F"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "E, F least in the ratio of A, B, C, D", ref: "VII.33" }] },
+            { text: "then three others {G}, {H} and {K} with the same property,",
+              visible: GHK,
+              highlighted: ["G","H","K"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "G, H, K least in the same ratio", ref: "VIII.2" }] },
+            { text: "and others, more by one continually,",
+              visible: GHK,
+              highlighted: ["E","F","G","H","K"] },
+            { text: "until the multitude taken becomes equal to the multitude of the numbers {A}, {B}, {C}, and {D}.",
+              visible: GHK,
+              highlighted: ["A","B","C","D"] },
+            { text: "Let them be {L}, {M}, {N}, and {O}.",
+              visible: ALL,
+              highlighted: ["L","M","N","O"],
+              transition: { animations: [
+                  { elem: "L", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "M", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "N", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "O", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "L, M, N, O least in the same ratio", ref: "VIII.2" }] },
+            { text: "Since {E} and {F} are the least of those which have the same ratio with them,",
+              visible: ALL,
+              highlighted: ["E","F"] },
+            { text: "therefore they are relatively prime.",
+              visible: ALL,
+              highlighted: ["E","F"],
+              justifications: [{ claim: "E and F are relatively prime", ref: "VII.22" }] },
+            { text: "And, since the numbers {E} and {F} multiplied by themselves respectively make the numbers {G} and {K},",
+              visible: ALL,
+              highlighted: ["E","F","G","K"] },
+            { text: "and multiplied by the numbers {G} and {K} respectively make the numbers {L} and {O},",
+              visible: ALL,
+              highlighted: ["E","F","G","K","L","O"],
+              justifications: [{ claim: "E, F make G, K and then L, O", ref: "VIII.2.Cor" }] },
+            { text: "therefore both {G} and {K} and {L} and {O} are relatively prime.",
+              visible: ALL,
+              highlighted: ["G","K","L","O"],
+              justifications: [{ claim: "G, K and L, O are relatively prime", ref: "VII.27" }] },
+            { text: "And, since {A}, {B}, {C}, and {D} are the least of those which have the same ratio with them,",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "while {L}, {M}, {N}, and {O} are the least that are in the same ratio with {A}, {B}, {C}, and {D},",
+              visible: ALL,
+              highlighted: ["L","M","N","O"] },
+            { text: "and the multitude of the numbers {A}, {B}, {C}, and {D} equals the multitude of the numbers {L}, {M}, {N}, and {O},",
+              visible: ALL,
+              highlighted: ["A","B","C","D","L","M","N","O"] },
+            { text: "therefore the numbers {A}, {B}, {C}, and {D} equal the numbers {L}, {M}, {N}, and {O} respectively.",
+              visible: ALL,
+              highlighted: ["A","B","C","D","L","M","N","O"] },
+            { text: "Therefore {A} equals {L}, and {D} equals {O}.",
+              visible: ALL,
+              highlighted: ["A","L","D","O"] },
+            { text: "And {L} and {O} are relatively prime.",
+              visible: ALL,
+              highlighted: ["L","O"] },
+            { text: "Therefore {A} and {D} are also relatively prime.",
+              visible: ALL,
+              highlighted: ["A","D"] },
+            { text: "Therefore, if as many numbers as we please in continued proportion",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "are the least of those which have the same ratio with them,",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "then the extremes of them are relatively prime.",
+              visible: ALL,
+              highlighted: ["A","D"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.3") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.22":     "/elements/books/bookVII/propositions/propVII22/",
+        "VII.27":     "/elements/books/bookVII/propositions/propVII27/",
+        "VII.33":     "/elements/books/bookVII/propositions/propVII33/",
+        "VIII.2":     "/elements/books/bookVIII/propositions/propVIII2/",
+        "VIII.2.Cor": "/elements/books/bookVIII/propositions/propVIII2/#cor"
     });
 </script>
 </figure>
 
-Take two numbers *E* and *F,* the least that are in the ratio of *A, B, C* and *D,* then three others *G, H* and *K* with the same property, and others, more by one continually, until the multitude taken becomes equal to the multitude of the numbers *A, B, C,* and *D.* Let them be *L, M, N,* and *O.* [!just VII.33; VIII.2]
+Take two numbers {E} and {F}, the least that are in the ratio of {A}, {B}, {C} and {D}, then three others {G}, {H} and {K} with the same property, and others, more by one continually, until the multitude taken becomes equal to the multitude of the numbers {A}, {B}, {C}, and {D}. Let them be {L}, {M}, {N}, and {O}. [!just VII.33; VIII.2]
 
-Since *E* and *F* are the least of those which have the same ratio with them, therefore they are relatively prime. And, since the numbers *E* and *F* multiplied by themselves respectively make the numbers *G* and *K,* and multiplied by the numbers *G* and *K* respectively make the numbers *L* and *O,* therefore both *G* and *K* and *L* and *O* are relatively prime. [!just VII.22; VIII.2.Cor; VII.27]
+Since {E} and {F} are the least of those which have the same ratio with them, therefore they are relatively prime. And, since the numbers {E} and {F} multiplied by themselves respectively make the numbers {G} and {K}, and multiplied by the numbers {G} and {K} respectively make the numbers {L} and {O}, therefore both {G} and {K} and {L} and {O} are relatively prime. [!just VII.22; VIII.2.Cor; VII.27]
 
-And, since *A, B, C,* and *D* are the least of those which have the same ratio with them, while *L, M, N,* and *O* are the least that are in the same ratio with *A, B, C,* and *D,* and the multitude of the numbers *A, B, C,* and *D* equals the multitude of the numbers *L, M, N,* and *O,* therefore the numbers *A, B, C,* and *D* equal the numbers *L, M, N,* and *O* respectively. Therefore *A* equals *L,* and *D* equals *O.*
+And, since {A}, {B}, {C}, and {D} are the least of those which have the same ratio with them, while {L}, {M}, {N}, and {O} are the least that are in the same ratio with {A}, {B}, {C}, and {D}, and the multitude of the numbers {A}, {B}, {C}, and {D} equals the multitude of the numbers {L}, {M}, {N}, and {O}, therefore the numbers {A}, {B}, {C}, and {D} equal the numbers {L}, {M}, {N}, and {O} respectively. Therefore {A} equals {L}, and {D} equals {O}.
 
-And *L* and *O* are relatively prime. Therefore *A* and *D* are also relatively prime.
+And {L} and {O} are relatively prime. Therefore {A} and {D} are also relatively prime.
 
 Therefore, *if as many numbers as we please in continued proportion are the least of those which have the same ratio with them, then the extremes of them are relatively prime.*
 

@@ -17,14 +17,25 @@ statement: Given as many ratios as we please in least numbers, to find numbers i
 ----
 proof:
 
-Let the given ratios in least numbers be that of *A* to *B,* that of *C* to *D,* and that of *E* to *F.*
+Let the given ratios in least numbers be that of {A} to {B}, that of {C} to {D}, and that of {E} to {F}.
 
-It is required to find numbers in continued proportion which are the least that are in the ratio of *A* to *B,* in the ratio of *C* to *D,* and in the ratio of *E* to *F.*
+It is required to find numbers in continued proportion which are the least that are in the ratio of {A} to {B}, in the ratio of {C} to {D}, and in the ratio of {E} to {F}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="400" height="280" tabindex="0"></canvas>
 <noscript><img alt="VIII.4 diagram" src="propVIII4.gif"/></noscript>
 <script type="text/javascript">
+    // First case, E measures K. The numbers enter as the proof names them,
+    // each stroked from its left end: G (VII.34), H, K, L, then the
+    // supposed lesser N, O, M, P of the reductio, withdrawn at its close.
+    // No elements added. The derived right ends carry the resting figure's
+    // dots, so they ride along with their lines.
+    var GIVEN = ["A","B","C","D","E","F"];
+    var Gv    = GIVEN.concat(["G","G1","G2"]);
+    var Hv    = Gv.concat(["H","H1","H2"]);
+    var Kv    = Hv.concat(["K","K1","K2"]);
+    var Lv    = Kv.concat(["L","L1","L2"]);
+    var HYP   = Lv.concat(["N","O","M","P","N1","N2","O1","O2","M1","M2","P1","P2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -90,40 +101,170 @@ It is required to find numbers in continued proportion which are the least that 
             "P2;point;proportion;U0,U1,U1,U2,L1,L2,P1,P3;0",
             "P;line;connect;P1,P2;black"
         ],
+        // Draggables (checked against the bundle): every lineSlider end, all
+        // colourless. The givens' ends stand from slide 1; the left ends of
+        // G, H, K, L and N, O, M, P arrive with their numbers.
+        deferDraggables: ["G1","H1","K1","L1","N1","O1","M1","P1"],
+        slides: [
+            { text: "Given as many ratios as we please in least numbers,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E","F"],
+              justifications: [{ ref: "VIII.4" }] },
+            { text: "to find numbers in continued proportion which are the least in the given ratios.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "Let the given ratios in least numbers be that of {A} to {B},",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "that of {C} to {D}, and that of {E} to {F}.",
+              visible: GIVEN,
+              highlighted: ["C","D","E","F"] },
+            { text: "It is required to find numbers in continued proportion which are the least",
+              visible: GIVEN },
+            { text: "that are in the ratio of {A} to {B}, in the ratio of {C} to {D}, and in the ratio of {E} to {F}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "Take {G}, the least number measured by {B} and {C}.",
+              visible: Gv,
+              highlighted: ["G","B","C"],
+              transition: { animations: [ { elem: "G", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "G the least number measured by B and C", ref: "VII.34" }] },
+            { text: "Let {A} measure {H} as many times as {B} measures {G},",
+              visible: Hv,
+              highlighted: ["A","H","B","G"],
+              transition: { animations: [ { elem: "H", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and let {D} measure {K} as many times as {C} measures {G}.",
+              visible: Kv,
+              highlighted: ["D","K","C","G"],
+              transition: { animations: [ { elem: "K", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now {E} either measures or does not measure {K}.",
+              visible: Kv,
+              highlighted: ["E","K"] },
+            { text: "First, let it measure it. Let {K} measure {L} as many times as {E} measures {K}.",
+              visible: Lv,
+              highlighted: ["K","L","E"],
+              transition: { animations: [ { elem: "L", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since {A} measures {H} the same number of times that {B} measures {G},",
+              visible: Lv,
+              highlighted: ["A","H","B","G"] },
+            { text: "therefore {A} is to {B} as {H} is to {G}.",
+              visible: Lv,
+              highlighted: ["A","B","H","G"],
+              justifications: [
+                  { claim: "A : H = B : G", ref: "VII.Def.20" },
+                  { claim: "alternately, A : B = H : G", ref: "VII.13" } ] },
+            { text: "For the same reason {C} is to {D} as {G} is to {K}, and {E} is to {F} as {K} is to {L}.",
+              visible: Lv,
+              highlighted: ["C","D","G","K","E","F","L"] },
+            { text: "Therefore {H}, {G}, {K}, and {L} are continuously proportional",
+              visible: Lv,
+              highlighted: ["H","G","K","L"] },
+            { text: "in the ratio of {A} to {B}, in the ratio of {C} to {D}, and in the ratio of {E} to {F}.",
+              visible: Lv,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "I say next that they are also the least that have this property.",
+              visible: Lv,
+              highlighted: ["H","G","K","L"] },
+            { text: "If {H}, {G}, {K}, and {L} are not the least numbers continuously proportional",
+              visible: Lv,
+              highlighted: ["H","G","K","L"] },
+            { text: "in the ratios of {A} to {B}, of {C} to {D}, and of {E} to {F}, let them be {N}, {O}, {M}, and {P}.",
+              visible: HYP,
+              highlighted: ["N","O","M","P"],
+              transition: { animations: [ { elem: "N", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "O", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "M", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "P", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then since {A} is to {B} as {N} is to {O}, while {A} and {B} are least,",
+              visible: HYP,
+              highlighted: ["A","B","N","O"] },
+            { text: "and the least numbers measure those which have the same ratio the same number of times,",
+              visible: HYP,
+              highlighted: ["A","B","N","O"] },
+            { text: "the greater the greater and the less the less, that is, the antecedent the antecedent and the consequent the consequent,",
+              visible: HYP,
+              highlighted: ["A","N","B","O"] },
+            { text: "therefore {B} measures {O}.",
+              visible: HYP,
+              highlighted: ["B","O"],
+              justifications: [{ claim: "B measures O", ref: "VII.20" }] },
+            { text: "For the same reason {C} also measures {O}. Therefore {B} and {C} measure {O}.",
+              visible: HYP,
+              highlighted: ["B","C","O"] },
+            { text: "Therefore the least number measured by {B} and {C} also measures {O}.",
+              visible: HYP,
+              highlighted: ["B","C","O"],
+              justifications: [{ claim: "the least number measured by B and C measures O", ref: "VII.35" }] },
+            { text: "But {G} is the least number measured by {B} and {C},",
+              visible: HYP,
+              highlighted: ["G","B","C"] },
+            { text: "therefore {G} measures {O}, the greater the less, which is impossible.",
+              visible: HYP,
+              highlighted: ["G","O"] },
+            { text: "Therefore there are no numbers less than {H}, {G}, {K}, and {L}",
+              visible: Lv,
+              highlighted: ["H","G","K","L"] },
+            { text: "which are continuously in the ratio of {A} to {B}, of {C} to {D}, and of {E} to {F}.",
+              visible: Lv,
+              highlighted: ["A","B","C","D","E","F"] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.4") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "VII.13":     "/elements/books/bookVII/propositions/propVII13/",
+        "VII.20":     "/elements/books/bookVII/propositions/propVII20/",
+        "VII.34":     "/elements/books/bookVII/propositions/propVII34/",
+        "VII.35":     "/elements/books/bookVII/propositions/propVII35/"
     });
 </script>
 </figure>
 
-Take *G,* the least number measured by *B* and *C.* [!just VII.34]
+Take {G}, the least number measured by {B} and {C}. [!just VII.34]
 
-Let *A* measure *H* as many times as *B* measures *G,* and let *D* measure *K* as many times as *C* measures *G.*
+Let {A} measure {H} as many times as {B} measures {G}, and let {D} measure {K} as many times as {C} measures {G}.
 
-Now *E* either measures or does not measure *K.*
+Now {E} either measures or does not measure {K}.
 
-First, let it measure it. Let *K* measure *L* as many times as *E* measures *K.*
+First, let it measure it. Let {K} measure {L} as many times as {E} measures {K}.
 
-Now, since *A* measures *H* the same number of times that *B* measures *G,* therefore *A* is to *B* as *H* is to *G.* [!just VII.Def.20; VII.13]
+Now, since {A} measures {H} the same number of times that {B} measures {G}, therefore {A} is to {B} as {H} is to {G}. [!just VII.Def.20; VII.13]
 
-For the same reason *C* is to *D* as *G* is to *K,* and *E* is to *F* as *K* is to *L.* Therefore *H, G, K,* and *L* are continuously proportional in the ratio of *A* to *B,* in the ratio of *C* to *D,* and in the ratio of *E* to *F.*
+For the same reason {C} is to {D} as {G} is to {K}, and {E} is to {F} as {K} is to {L}. Therefore {H}, {G}, {K}, and {L} are continuously proportional in the ratio of {A} to {B}, in the ratio of {C} to {D}, and in the ratio of {E} to {F}.
 
 I say next that they are also the least that have this property.
 
-If *H, G, K,* and *L* are not the least numbers continuously proportional in the ratios of *A* to *B,* of *C* to *D,* and of *E* to *F,* let them be *N, O, M,* and *P.*
+If {H}, {G}, {K}, and {L} are not the least numbers continuously proportional in the ratios of {A} to {B}, of {C} to {D}, and of {E} to {F}, let them be {N}, {O}, {M}, and {P}.
 
-Then since *A* is to *B* as *N* is to *O,* while *A* and *B* are least, and the least numbers measure those which have the same ratio the same number of times, the greater the greater and the less the less, that is, the antecedent the antecedent and the consequent the consequent, therefore *B* measures *O.* [!just VII.20]
+Then since {A} is to {B} as {N} is to {O}, while {A} and {B} are least, and the least numbers measure those which have the same ratio the same number of times, the greater the greater and the less the less, that is, the antecedent the antecedent and the consequent the consequent, therefore {B} measures {O}. [!just VII.20]
 
-For the same reason *C* also measures *O.* Therefore *B* and *C* measure *O.* Therefore the least number measured by *B* and *C* also measures *O.* [!just VII.35]
+For the same reason {C} also measures {O}. Therefore {B} and {C} measure {O}. Therefore the least number measured by {B} and {C} also measures {O}. [!just VII.35]
 
-But *G* is the least number measured by *B* and *C,* therefore *G* measures *O,* the greater the less, which is impossible. Therefore there are no numbers less than *H, G, K,* and *L* which are continuously in the ratio of *A* to *B,* of *C* to *D,* and of *E* to *F.*
+But {G} is the least number measured by {B} and {C}, therefore {G} measures {O}, the greater the less, which is impossible. Therefore there are no numbers less than {H}, {G}, {K}, and {L} which are continuously in the ratio of {A} to {B}, of {C} to {D}, and of {E} to {F}.
 
-Next, let *E* not measure *K.*
+Next, let {E:canvas_1} not measure {K:canvas_1}.
 
-Take *M,* the least number measured by *E* and *K.* Let *H* and *G* measure *N* and *O* as many times as *K* measures *M,* respectively, and let *F* measure *P* as many times as *E* measures *M.*
+Take {M:canvas_1}, the least number measured by {E:canvas_1} and {K:canvas_1}. Let {H:canvas_1} and {G:canvas_1} measure {N:canvas_1} and {O:canvas_1} as many times as {K:canvas_1} measures {M:canvas_1}, respectively, and let {F:canvas_1} measure {P:canvas_1} as many times as {E:canvas_1} measures {M:canvas_1}.
 
 <figure class="diagram">
 <canvas id="canvas_1" width="420" height="320" tabindex="0"></canvas>
 <noscript><img alt="VIII.4 diagram" src="propVIII4b.gif"/></noscript>
 <script type="text/javascript">
+    // Second case, E does not measure K. G, H, K carry over from the first
+    // case; M (VII.34), N, O, P enter as the proof names them, then the
+    // supposed lesser Q, R, S, T of the reductio, withdrawn at its close.
+    // No elements added.
+    var GIVEN1 = ["A","B","C","D","E","F","G","H","K","G1","G2","H1","H2","K1","K2"];
+    var Mv     = GIVEN1.concat(["M","M1","M2"]);
+    var NOv    = Mv.concat(["N","O","N1","N2","O1","O2"]);
+    var Pv     = NOv.concat(["P","P1","P2"]);
+    var HYP1   = Pv.concat(["Q","R","S","T","Q1","Q2","R1","R2","S1","S2","T1","T2"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -200,29 +341,159 @@ Take *M,* the least number measured by *E* and *K.* Let *H* and *G* measure *N* 
             "T2;point;proportion;U0,U2,U0,U1,P1,P2,T1,P3;0",
             "T;line;connect;T1,T2;black"
         ],
+        // Draggables (checked against the bundle): every lineSlider end, all
+        // colourless. The givens and G, H, K stand from slide 1; the left
+        // ends of M, N, O, P and Q, R, S, T arrive with their numbers.
+        deferDraggables: ["M1","N1","O1","P1","Q1","R1","S1","T1"],
+        slides: [
+            { text: "Next, let {E} not measure {K}.",
+              visible: GIVEN1,
+              highlighted: ["E","K"] },
+            { text: "Take {M}, the least number measured by {E} and {K}.",
+              visible: Mv,
+              highlighted: ["M","E","K"],
+              transition: { animations: [ { elem: "M", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Let {H} and {G} measure {N} and {O} as many times as {K} measures {M}, respectively,",
+              visible: NOv,
+              highlighted: ["H","G","N","O","K","M"],
+              transition: { animations: [ { elem: "N", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "O", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and let {F} measure {P} as many times as {E} measures {M}.",
+              visible: Pv,
+              highlighted: ["F","P","E","M"],
+              transition: { animations: [ { elem: "P", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since {H} measures {N} the same number of times that {G} measures {O},",
+              visible: Pv,
+              highlighted: ["H","N","G","O"] },
+            { text: "therefore {H} is to {G} as {N} is to {O}.",
+              visible: Pv,
+              highlighted: ["H","G","N","O"],
+              justifications: [
+                  { claim: "H : N = G : O", ref: "VII.Def.20" },
+                  { claim: "alternately, H : G = N : O", ref: "VII.13" } ] },
+            { text: "But {H} is to {G} as {A} is to {B}, therefore {A} is to {B} as is {N} is to {O}.",
+              visible: Pv,
+              highlighted: ["H","G","A","B","N","O"] },
+            { text: "For the same reason {C} is to {D} as is {O} is to {M}.",
+              visible: Pv,
+              highlighted: ["C","D","O","M"] },
+            { text: "Again, since {E} measures {M} the same number of times that {F} measures {P},",
+              visible: Pv,
+              highlighted: ["E","M","F","P"] },
+            { text: "therefore {E} is to {F} as {M} is to {P}.",
+              visible: Pv,
+              highlighted: ["E","F","M","P"],
+              justifications: [
+                  { claim: "E : M = F : P", ref: "VII.Def.20" },
+                  { claim: "alternately, E : F = M : P", ref: "VII.13" } ] },
+            { text: "Therefore {N}, {O}, {M}, and {P} are continuously proportional",
+              visible: Pv,
+              highlighted: ["N","O","M","P"] },
+            { text: "in the ratios of {A} to {B}, of {C} to {D}, and of {E} to {F}.",
+              visible: Pv,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "I say next that they are also the least that are in the ratios {A}, {B}, {C}, {D}, {E}, and {F}.",
+              visible: Pv,
+              highlighted: ["N","O","M","P"] },
+            { text: "If not, there are numbers less than {N}, {O}, {M}, and {P}",
+              visible: Pv,
+              highlighted: ["N","O","M","P"] },
+            { text: "continuously proportional in the ratios {A}, {B}, {C}, {D}, {E}, and {F}.",
+              visible: Pv,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "Let them be {Q}, {R}, {S}, and {T}.",
+              visible: HYP1,
+              highlighted: ["Q","R","S","T"],
+              transition: { animations: [ { elem: "Q", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "R", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "S", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "T", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now since {Q} is to {R} as {A} is to {B}, while {A} and {B} are least,",
+              visible: HYP1,
+              highlighted: ["Q","R","A","B"] },
+            { text: "and the least numbers measure those which have the same ratio with them the same number of times,",
+              visible: HYP1,
+              highlighted: ["A","B","Q","R"] },
+            { text: "the antecedent the antecedent and the consequent the consequent, therefore {B} measures {R}.",
+              visible: HYP1,
+              highlighted: ["B","R"],
+              justifications: [{ claim: "B measures R", ref: "VII.20" }] },
+            { text: "For the same reason {C} also measures {R}, therefore {B} and {C} measure {R}.",
+              visible: HYP1,
+              highlighted: ["B","C","R"] },
+            { text: "Therefore the least number measured by {B} and {C} also measures {R}.",
+              visible: HYP1,
+              highlighted: ["B","C","R"],
+              justifications: [{ claim: "the least number measured by B and C measures R", ref: "VII.35" }] },
+            { text: "But {G} is the least number measured by {B} and {C}, therefore {G} measures {R}.",
+              visible: HYP1,
+              highlighted: ["G","R"] },
+            { text: "And {G} is to {R} as {K} is to {S}, therefore {K} also measures {S}.",
+              visible: HYP1,
+              highlighted: ["G","R","K","S"],
+              justifications: [{ claim: "G : R = K : S", ref: "VII.13" }] },
+            { text: "But {E} also measures {S}. Therefore {E} and {K} measure {S}.",
+              visible: HYP1,
+              highlighted: ["E","K","S"] },
+            { text: "Therefore the least number measured by {E} and {K} also measures {S}.",
+              visible: HYP1,
+              highlighted: ["E","K","S"],
+              justifications: [{ claim: "the least number measured by E and K measures S", ref: "VII.35" }] },
+            { text: "But {M} is the least number measured by {E} and {K},",
+              visible: HYP1,
+              highlighted: ["M","E","K"] },
+            { text: "therefore {M} measures {S}, the greater the less, which is impossible.",
+              visible: HYP1,
+              highlighted: ["M","S"] },
+            { text: "Therefore there are no numbers less than {N}, {O}, {M}, and {P}",
+              visible: Pv,
+              highlighted: ["N","O","M","P"] },
+            { text: "continuously proportional in the ratios of {A} to {B}, of {C} to {D}, and of {E} to {F}.",
+              visible: Pv,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "Therefore {N}, {O}, {M}, and {P} are the least numbers continuously proportional",
+              visible: Pv,
+              highlighted: ["N","O","M","P"] },
+            { text: "in the ratios {A}, {B}, {C}, {D}, {E}, and {F}.",
+              visible: Pv,
+              highlighted: ["N","O","M","P","A","B","C","D","E","F"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup (merged with canvas_0's).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "VII.13":     "/elements/books/bookVII/propositions/propVII13/",
+        "VII.20":     "/elements/books/bookVII/propositions/propVII20/",
+        "VII.35":     "/elements/books/bookVII/propositions/propVII35/"
     });
 </script>
 </figure>
 
-Since *H* measures *N* the same number of times that *G* measures *O,* therefore *H* is to *G* as *N* is to *O.* But *H* is to *G* as *A* is to *B,* therefore *A* is to *B* as is *N* is to *O.* For the same reason *C* is to *D* as is *O* is to *M.* [!just VII.13; VII.Def.20]
+Since {H} measures {N} the same number of times that {G} measures {O}, therefore {H} is to {G} as {N} is to {O}. But {H} is to {G} as {A} is to {B}, therefore {A} is to {B} as is {N} is to {O}. For the same reason {C} is to {D} as is {O} is to {M}. [!just VII.13; VII.Def.20]
 
-Again, since *E* measures *M* the same number of times that *F* measures *P,* therefore *E* is to *F* as *M* is to *P.* Therefore *N, O, M,* and *P* are continuously proportional in the ratios of *A* to *B,* of *C* to *D,* and of *E* to *F.* [!just VII.13; VII.Def.20]
+Again, since {E} measures {M} the same number of times that {F} measures {P}, therefore {E} is to {F} as {M} is to {P}. Therefore {N}, {O}, {M}, and {P} are continuously proportional in the ratios of {A} to {B}, of {C} to {D}, and of {E} to {F}. [!just VII.13; VII.Def.20]
 
-I say next that they are also the least that are in the ratios *A, B, C, D, E,* and *F.*
+I say next that they are also the least that are in the ratios {A}, {B}, {C}, {D}, {E}, and {F}.
 
-If not, there are numbers less than *N, O, M,* and *P* continuously proportional in the ratios *A, B, C, D, E,* and *F.* Let them be *Q, R, S,* and *T.*
+If not, there are numbers less than {N}, {O}, {M}, and {P} continuously proportional in the ratios {A}, {B}, {C}, {D}, {E}, and {F}. Let them be {Q}, {R}, {S}, and {T}.
 
-Now since *Q* is to *R* as *A* is to *B,* while *A* and *B* are least, and the least numbers measure those which have the same ratio with them the same number of times, the antecedent the antecedent and the consequent the consequent, therefore *B* measures *R.* For the same reason *C* also measures *R,* therefore *B* and *C* measure *R.* [!just VII.20]
+Now since {Q} is to {R} as {A} is to {B}, while {A} and {B} are least, and the least numbers measure those which have the same ratio with them the same number of times, the antecedent the antecedent and the consequent the consequent, therefore {B} measures {R}. For the same reason {C} also measures {R}, therefore {B} and {C} measure {R}. [!just VII.20]
 
-Therefore the least number measured by *B* and *C* also measures *R.* But *G* is the least number measured by *B* and *C,* therefore *G* measures *R.* [!just VII.35]
+Therefore the least number measured by {B} and {C} also measures {R}. But {G} is the least number measured by {B} and {C}, therefore {G} measures {R}. [!just VII.35]
 
-And *G* is to *R* as *K* is to *S,* therefore *K* also measures *S.* [!just VII.13]
+And {G} is to {R} as {K} is to {S}, therefore {K} also measures {S}. [!just VII.13]
 
-But *E* also measures *S.* Therefore *E* and *K* measure *S.*
+But {E} also measures {S}. Therefore {E} and {K} measure {S}.
 
-Therefore the least number measured by *E* and *K* also measures *S.* But *M* is the least number measured by *E* and *K,* therefore *M* measures *S,* the greater the less, which is impossible. [!just VII.35]
+Therefore the least number measured by {E} and {K} also measures {S}. But {M} is the least number measured by {E} and {K}, therefore {M} measures {S}, the greater the less, which is impossible. [!just VII.35]
 
-Therefore there are no numbers less than *N, O, M,* and *P* continuously proportional in the ratios of *A* to *B,* of *C* to *D,* and of *E* to *F.* Therefore *N, O, M,* and *P* are the least numbers continuously proportional in the ratios *A, B, C, D, E,* and *F.*
+Therefore there are no numbers less than {N}, {O}, {M}, and {P} continuously proportional in the ratios of {A} to {B}, of {C} to {D}, and of {E} to {F}. Therefore {N}, {O}, {M}, and {P} are the least numbers continuously proportional in the ratios {A}, {B}, {C}, {D}, {E}, and {F}.
 
 <div class="qed">Q.E.D.</div>
 ----
