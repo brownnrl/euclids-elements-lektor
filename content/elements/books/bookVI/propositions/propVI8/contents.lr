@@ -17,14 +17,47 @@ statement: If in a right-angled triangle a perpendicular is drawn from the right
 ----
 proof:
 
-Let *ABC* be a right-angled triangle having the angle *BAC* right, and let *AD* be drawn from *A* perpendicular to *BC.*
+Let {ABC|ABCt} be a right-angled triangle having the angle {BAC|rtBAC} right, and let {AD} be drawn from {A} perpendicular to {BC}.
 
-I say that each of the triangles *DBA* and *DAC* is similar to the whole *ABC,* and, further, they are similar to one another.
+I say that each of the triangles {DBA} and {DAC} is similar to the whole {ABC|ABCt}, and, further, they are similar to one another.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="330" height="200" tabindex="0"></canvas>
 <noscript><img alt="VI.8 diagram" src="propVI8.gif"/></noscript>
 <script type="text/javascript">
+    // The right-angled triangle ABC, the perpendicular AD, and the two
+    // triangles DBA and DAC it cuts off; both similarities go through I.32
+    // and VI.4 to VI.Def.1.
+    //
+    // Joyce's figure keeps A on the semicircle on BC (the circle, named
+    // ABC, is a transparent helper) and fills the two small triangles ABD
+    // and ACD; the whole triangle has no element of its own. Everything
+    // added leaves the resting figure as it was. ABCt is a solid outline of
+    // the whole triangle with no face, hidden at rest (initiallyHidden), so
+    // the opening slides can show ABC before the perpendicular is drawn; AD
+    // is a solid twin of the perpendicular, hidden at rest, so the slide
+    // strokes it from A. The sides AB, AC, BC, BD, CD are transparent
+    // highlight targets, and DBA and DAC are faceless twins of the filled
+    // triangles: a highlighted filled polygon is raised (#140) and would
+    // cover the angle markers, so captions and prose name the twins.
+    //
+    // Markers: the right angles BAC, BDA, ADC (by hypothesis and by the
+    // perpendicular) are red squares; equal angles share a colour — ACB and
+    // DAB orange, the angle at B and DAC blue. At A the two parts DAB and
+    // DAC lie side by side inside the right angle, so all three are pinned
+    // to opt out of ring stepping; the two squares at D are pinned too.
+    // Angle and triangle names collide (DAC): the triangle owns it, the
+    // angle takes the display override.
+    //
+    // Draggables (checked against the bundle): B, C free and A a
+    // circleSlider — the given triangle's vertices, all on slide 1, so
+    // nothing is deferred. D is derived (`foot`) and listed per slide.
+    var GIVEN = ["A","B","C","ABCt","rtBAC"];
+    var PERP  = GIVEN.concat(["AD","D","rtBDA","rtADC"]);
+    var TRI   = PERP.concat(["ABD","ACD","AB","AC","BC","BD","CD","DBA","DAC"]);
+    var COMB  = TRI.concat(["angB"]);
+    var REMC  = COMB.concat(["angC","angDAB"]);
+    var REMB  = REMC.concat(["angDAC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,27 +70,196 @@ I say that each of the triangles *DBA* and *DAC* is similar to the whole *ABC,* 
             "A;point;circleSlider;ABC,200,40",
             "D;point;foot;A,B,C",
             "ABD;polygon;triangle;A,B,D;0;0;black;random",
-            "ACD;polygon;triangle;A,C,D;0;0;black;random"
+            "ACD;polygon;triangle;A,C,D;0;0;black;random",
+            // The whole triangle as a solid, faceless outline, and the
+            // perpendicular, both hidden at rest (see above).
+            "ABCt;polygon;triangle;A,B,C;0;0;black;0",
+            "AD;line;connect;A,D",
+            // The sides, as transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            // Faceless twins of the two small triangles. Explicit ;0 faces.
+            "DBA;polygon;triangle;D,B,A;0;0;0;0",
+            "DAC;polygon;triangle;D,A,C;0;0;0;0",
+            "rtBAC;sector;angleMarkerRight;A,B,C,16;0;0;red;red",
+            "rtBDA;sector;angleMarkerRight;D,B,A,16;0;0;red;red",
+            "rtADC;sector;angleMarkerRight;D,A,C,16;0;0;red;red",
+            "angB;sector;angleMarker;B,A,C;0;0;3b6ea5;9ec5e8",
+            "angDAC;sector;angleMarker;A,D,C,26;0;0;3b6ea5;9ec5e8",
+            "angC;sector;angleMarker;C,A,B;0;0;c06a1b;f3c590",
+            "angDAB;sector;angleMarker;A,D,B,26;0;0;c06a1b;f3c590"
         ],
+        initiallyHidden: ["ABCt","AD"],
+        aliases: { "DA": "AD", "BA": "AB", "CA": "AC", "CB": "BC", "DB": "BD",
+                   "DC": "CD", "ADC": "DAC", "ABD": "DBA",
+                   "CAB": "rtBAC", "ADB": "rtBDA", "CDA": "rtADC",
+                   "ACB": "angC", "BCA": "angC", "DAB": "angDAB", "BAD": "angDAB",
+                   "CAD": "angDAC" },
+        slides: [
+            { text: "“If in a right-angled triangle”",
+              visible: GIVEN,
+              highlighted: ["ABCt","rtBAC"],
+              transition: { animations: [
+                  { elem: "rtBAC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "VI.8" }] },
+            { text: "“a perpendicular is drawn from {the right angle|rtBAC} to {the base|BC},”",
+              visible: PERP.concat(["BC"]),
+              highlighted: ["AD","BC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",     name: geomlib.A.Point.appear },
+                  { elem: "rtBDA", name: geomlib.A.Sector.sweep },
+                  { elem: "rtADC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "“then the triangles adjoining the perpendicular are similar both to the whole and to one another.”",
+              visible: TRI,
+              highlighted: ["DBA","DAC","ABCt"] },
+            { text: "Let {ABC|ABCt} be a right-angled triangle having the angle {BAC|rtBAC} right,",
+              visible: GIVEN,
+              highlighted: ["ABCt","rtBAC"] },
+            { text: "and let {AD} be drawn from {A} perpendicular to {BC}.",
+              visible: PERP.concat(["BC"]),
+              highlighted: ["AD","A","BC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",     name: geomlib.A.Point.appear },
+                  { elem: "rtBDA", name: geomlib.A.Sector.sweep },
+                  { elem: "rtADC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that each of the triangles {DBA} and {DAC} is similar to the whole {ABC|ABCt},",
+              visible: TRI,
+              highlighted: ["DBA","DAC","ABCt"] },
+            { text: "and, further, they are similar to one another.",
+              visible: TRI,
+              highlighted: ["DBA","DAC"] },
+            { text: "Since the angle {BAC|rtBAC} equals the angle {BDA|rtBDA}, for each is right,",
+              visible: TRI,
+              highlighted: ["rtBAC","rtBDA"] },
+            { text: "and the angle at {B|angB} is common to the two triangles {ABC|ABCt} and {DBA},",
+              visible: COMB,
+              highlighted: ["angB","ABCt","DBA"],
+              transition: { animations: [
+                  { elem: "angB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the remaining angle {ACB|angC} equals the remaining angle {DAB|angDAB}.",
+              visible: REMC,
+              highlighted: ["angC","angDAB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angC",   name: geomlib.A.Sector.sweep },
+                  { elem: "angDAB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the angles of a triangle sum to two right angles", ref: "I.32" }] },
+            { text: "Therefore the triangle {ABC|ABCt} is equiangular with the triangle {DBA}.",
+              visible: REMC,
+              highlighted: ["ABCt","DBA"] },
+            { text: "Therefore {BC}, which is opposite the right angle in the triangle {ABC|ABCt},",
+              visible: REMC,
+              highlighted: ["BC","rtBAC"] },
+            { text: "is to {BA}, which is opposite the right angle in the triangle {DBA},",
+              visible: REMC,
+              highlighted: ["AB","rtBDA"] },
+            { text: "as {AB}, which is opposite the angle at {C|angC} in the triangle {ABC|ABCt},",
+              visible: REMC,
+              highlighted: ["AB","angC"] },
+            { text: "is to {DB}, which is opposite the equal angle {BAD|angDAB} in the triangle {DBA},",
+              visible: REMC,
+              highlighted: ["BD","angDAB"] },
+            { text: "and also as {AC} is to {DA}, which is opposite the angle at {B|angB} common to the two triangles.",
+              visible: REMC,
+              highlighted: ["AC","AD","angB"],
+              justifications: [{ claim: "BC : BA = AB : DB = AC : DA", ref: "VI.4" }] },
+            { text: "Therefore the triangle {ABC|ABCt} is both equiangular to the triangle {DBA}",
+              visible: REMC,
+              highlighted: ["ABCt","DBA"] },
+            { text: "and has the sides about the equal angles proportional.",
+              visible: REMC,
+              highlighted: ["ABCt","DBA"] },
+            { text: "Therefore the triangle {ABC|ABCt} is similar to the triangle {DBA}.",
+              visible: REMC,
+              highlighted: ["ABCt","DBA"],
+              justifications: [{ ref: "VI.Def.1" }] },
+            { text: "In the same manner we can prove that the triangle {DAC} is also similar to the triangle {ABC|ABCt}.",
+              visible: REMC,
+              highlighted: ["DAC","ABCt"] },
+            { text: "Therefore each of the triangles {DBA} and {DAC} is similar to the whole {ABC|ABCt}.",
+              visible: REMC,
+              highlighted: ["DBA","DAC","ABCt"] },
+            { text: "I say next that the triangles {DBA} and {DAC} are also similar to one another.",
+              visible: REMC,
+              highlighted: ["DBA","DAC"] },
+            { text: "Since the right angle {BDA|rtBDA} equals the right angle {ADC|rtADC},",
+              visible: REMC,
+              highlighted: ["rtBDA","rtADC"] },
+            { text: "and moreover the angle {DAB|angDAB} was also proved equal to the angle at {C|angC},",
+              visible: REMC,
+              highlighted: ["angDAB","angC"] },
+            { text: "therefore the remaining angle at {B|angB} also equals the remaining angle {DAC|angDAC}.",
+              visible: REMB,
+              highlighted: ["angB","angDAC"],
+              transition: { animations: [
+                  { elem: "angDAC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the angles of a triangle sum to two right angles", ref: "I.32" }] },
+            { text: "Therefore the triangle {DBA} is equiangular with the triangle {ADC|DAC}.",
+              visible: REMB,
+              highlighted: ["DBA","DAC"] },
+            { text: "Therefore {BD}, which is opposite the angle {DAB|angDAB} in the triangle {DBA},",
+              visible: REMB,
+              highlighted: ["BD","angDAB"] },
+            { text: "is to {AD}, which is opposite the angle at {C|angC} in the triangle {DAC} equal to the angle {DAB|angDAB},",
+              visible: REMB,
+              highlighted: ["AD","angC","angDAB"] },
+            { text: "as {AD}, itself which is opposite the angle at {B|angB} in the triangle {DBA},",
+              visible: REMB,
+              highlighted: ["AD","angB"] },
+            { text: "is to {CD}, which is opposite the angle {DAC|angDAC} in the triangle {DAC} equal to the angle at {B|angB},",
+              visible: REMB,
+              highlighted: ["CD","angDAC","angB"] },
+            { text: "and also as {BA} is to {AC}, these sides opposite the right angles.",
+              visible: REMB,
+              highlighted: ["AB","AC","rtBDA","rtADC"],
+              justifications: [{ claim: "BD : AD = AD : CD = BA : AC", ref: "VI.4" }] },
+            { text: "Therefore the triangle {DBA} is similar to the triangle {DAC}.",
+              visible: REMB,
+              highlighted: ["DBA","DAC"],
+              justifications: [{ ref: "VI.Def.1" }] },
+            { text: "Therefore, if in a right-angled triangle a perpendicular is drawn from {the right angle|rtBAC} to {the base|BC},",
+              visible: REMB,
+              highlighted: ["ABCt","AD","BC"] },
+            { text: "then the triangles adjoining the perpendicular are similar both to the whole and to one another.",
+              visible: REMB,
+              highlighted: ["DBA","DAC","ABCt"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.8") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.32":     "/elements/books/bookI/propositions/propI32/",
+        "VI.4":     "/elements/books/bookVI/propositions/propVI4/",
+        "VI.Def.1": "/elements/books/bookVI/definitions/defVI1/"
     });
 </script>
 </figure>
 
-Since the angle *BAC* equals the angle *BDA,* for each is right, and the angle at *B* is common to the two triangles *ABC* and *DBA,* therefore the remaining angle *ACB* equals the remaining angle *DAB.* Therefore the triangle *ABC* is equiangular with the triangle *DBA.* [!just I.32]
+Since the angle {BAC|rtBAC} equals the angle {BDA|rtBDA}, for each is right, and the angle at {B|angB} is common to the two triangles {ABC|ABCt} and {DBA}, therefore the remaining angle {ACB|angC} equals the remaining angle {DAB|angDAB}. Therefore the triangle {ABC|ABCt} is equiangular with the triangle {DBA}. [!just I.32]
 
-Therefore *BC,* which is opposite the right angle in the triangle *ABC,* is to *BA,* which is opposite the right angle in the triangle *DBA,* as *AB,* which is opposite the angle at *C* in the triangle *ABC,* is to *DB,* which is opposite the equal angle *BAD* in the triangle *DBA,* and also as *AC* is to *DA,* which is opposite the angle at *B* common to the two triangles. [!just VI.4]
+Therefore {BC}, which is opposite the right angle in the triangle {ABC|ABCt}, is to {BA}, which is opposite the right angle in the triangle {DBA}, as {AB}, which is opposite the angle at {C|angC} in the triangle {ABC|ABCt}, is to {DB}, which is opposite the equal angle {BAD|angDAB} in the triangle {DBA}, and also as {AC} is to {DA}, which is opposite the angle at {B|angB} common to the two triangles. [!just VI.4]
 
-Therefore the triangle *ABC* is both equiangular to the triangle *DBA* and has the sides about the equal angles proportional.
+Therefore the triangle {ABC|ABCt} is both equiangular to the triangle {DBA} and has the sides about the equal angles proportional.
 
-Therefore the triangle *ABC* is similar to the triangle *DBA.* [!just VI.Def.1]
+Therefore the triangle {ABC|ABCt} is similar to the triangle {DBA}. [!just VI.Def.1]
 
-In the same manner we can prove that the triangle *DAC* is also similar to the triangle *ABC.* Therefore each of the triangles *DBA* and *DAC* is similar to the whole *ABC.*
+In the same manner we can prove that the triangle {DAC} is also similar to the triangle {ABC|ABCt}. Therefore each of the triangles {DBA} and {DAC} is similar to the whole {ABC|ABCt}.
 
-I say next that the triangles *DBA* and *DAC* are also similar to one another.
+I say next that the triangles {DBA} and {DAC} are also similar to one another.
 
-Since the right angle *BDA* equals the right angle *ADC,* and moreover the angle *DAB* was also proved equal to the angle at *C,* therefore the remaining angle at *B* also equals the remaining angle *DAC.* Therefore the triangle *DBA* is equiangular with the triangle *ADC.* [!just I.32]
+Since the right angle {BDA|rtBDA} equals the right angle {ADC|rtADC}, and moreover the angle {DAB|angDAB} was also proved equal to the angle at {C|angC}, therefore the remaining angle at {B|angB} also equals the remaining angle {DAC|angDAC}. Therefore the triangle {DBA} is equiangular with the triangle {ADC|DAC}. [!just I.32]
 
-Therefore *BD,* which is opposite the angle *DAB* in the triangle *DBA,* is to *AD,* which is opposite the angle at *C* in the triangle *DAC* equal to the angle *DAB,* as *AD,* itself which is opposite the angle at *B* in the triangle *DBA,* is to *CD,* which is opposite the angle *DAC* in the triangle *DAC* equal to the angle at *B,* and also as *BA* is to *AC,* these sides opposite the right angles. Therefore the triangle *DBA* is similar to the triangle *DAC.* [!just VI.4; VI.Def.1]
+Therefore {BD}, which is opposite the angle {DAB|angDAB} in the triangle {DBA}, is to {AD}, which is opposite the angle at {C|angC} in the triangle {DAC} equal to the angle {DAB|angDAB}, as {AD}, itself which is opposite the angle at {B|angB} in the triangle {DBA}, is to {CD}, which is opposite the angle {DAC|angDAC} in the triangle {DAC} equal to the angle at {B|angB}, and also as {BA} is to {AC}, these sides opposite the right angles. Therefore the triangle {DBA} is similar to the triangle {DAC}. [!just VI.4; VI.Def.1]
 
 Therefore, *if in a right-angled triangle a perpendicular is drawn from the right angle to the base, then the triangles adjoining the perpendicular are similar both to the whole and to one another.*
 
@@ -66,7 +268,7 @@ Therefore, *if in a right-angled triangle a perpendicular is drawn from the righ
 ----
 guide:
 
-Essentially, triangles *ABC* and *DBA* are equiangular since they are right triangles with a common angle. Therefore, they are similar. Likewise, triangles *ABC* and *DAC* are similar.
+Essentially, triangles {ABC|ABCt} and {DBA} are equiangular since they are right triangles with a common angle. Therefore, they are similar. Likewise, triangles {ABC|ABCt} and {DAC} are similar.
 
 Note that Euclid verbosely draws from proposition @VI.4 the conclusions that equiangular triangles are similar and that triangles similar to the same triangle are similar to each other. The general proposition that figures similar to the same figure are also similar to one another is proposition @VI.21. There is no reason why that proposition could not have been placed before this one.
 

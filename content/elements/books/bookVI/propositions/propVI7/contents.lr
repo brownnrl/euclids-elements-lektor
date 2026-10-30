@@ -15,14 +15,52 @@ statement: If two triangles have one angle equal to one angle, the sides about o
 ----
 proof:
 
-Let *ABC* and *DEF* be two triangles having one angle equal to one angle, the angle *BAC* equal to the angle *EDF,* the sides about other angles *ABC* and *DEF* proportional, so that *AB* is to *BC* as *DE* is to *EF.* And, first, each of the remaining angles at *C* and *F* less than a right angle.
+Let {ABC|ABCt} and {DEF|DEFt} be two triangles having one angle equal to one angle, the angle {BAC|angA} equal to the angle {EDF|angD}, the sides about other angles {ABC|angABC} and {DEF|angDEF} proportional, so that {AB} is to {BC} as {DE} is to {EF}. And, first, each of the remaining angles at {C|angC} and {F|angF} less than a right angle.
 
-I say that the triangle *ABC* is equiangular with the triangle *DEF,* the angle *ABC* equals the angle *DEF,* and the remaining angle, namely the angle at *C,* equals the remaining angle, the angle at *F.*
+I say that the triangle {ABC|ABCt} is equiangular with the triangle {DEF|DEFt}, the angle {ABC|angABC} equals the angle {DEF|angDEF}, and the remaining angle, namely the angle at {C|angC}, equals the remaining angle, the angle at {F|angF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="340" height="280" tabindex="0"></canvas>
 <noscript><img alt="VI.7 diagram (a)" src="propVI7a.gif"/></noscript>
 <script type="text/javascript">
+    // Two figures, one per case, each with its own walk: this one is the
+    // first case (the angles at C and F less than a right angle), canvas_1
+    // the second. The prose between the canvases binds to canvas_0 by DOM
+    // order and everything after canvas_1 to canvas_1, which is what each
+    // passage means, so no ref needs a canvas selector.
+    //
+    // Both cases are a reductio: G is the point the I.23 construction
+    // would give if ABC were greater than DEF. Joyce's figure has it as a
+    // slider on AC (F is `similar`, so ABC in fact equals DEF), and the
+    // walk withdraws G, BG and their angles once the absurdity is reached
+    // (III.16's close).
+    //
+    // Everything added is transparent: the sides AB, BC, DE, EF (;0;0;0)
+    // and faceless twins of the triangles ABC, DEF, ABG (explicit ;0
+    // faces). A highlighted filled polygon is raised (#140) and would cover
+    // the angle markers, so captions and prose route "the triangle ABC" /
+    // "DEF" to the twins with the display override. Angle and triangle
+    // names collide (ABC, DEF, ABG): the triangles own them, the angles take
+    // the display override.
+    //
+    // Markers: equal angles share a colour — A, D orange; DEF and ABG blue;
+    // AGB and F green; C and BGC teal; ABC (the angle supposed greater)
+    // purple. AGB and BGC lie side by side at G, pinned at 22 so they do not
+    // step into rings; ABG nests inside ABC at B. None is a right angle in
+    // the text ("less than" / "greater than a right angle"), so all are
+    // sectors.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E free, given on
+    // slide 1; G is a lineSlider that arrives with the construction, so it
+    // is deferred. F is derived (`similar`) and listed per slide.
+    var GIVEN = ["A","B","C","ABC","D","E","F","DEF",
+                 "AB","BC","DE","EF","ABCt","DEFt"];
+    var HYP   = GIVEN.concat(["angA","angD"]);
+    var SIDES = HYP.concat(["angABC","angDEF"]);
+    var ACUTE = SIDES.concat(["angC","angF"]);
+    var CON   = ACUTE.concat(["angABG","BG","G","ABG"]);
+    var REM   = CON.concat(["angAGB"]);
+    var ISO   = REM.concat(["angBGC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,38 +75,228 @@ I say that the triangle *ABC* is equiangular with the triangle *DEF,* the angle 
             "F;point;similar;D,E,A,B,C",
             "DEF;polygon;triangle;D,E,F;0;0;black;random",
             "G;point;lineSlider;A,C,140,240",
-            "BG;line;connect;B,G"
+            "BG;line;connect;B,G",
+            // The sides, as transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            // Faceless twins of the triangles. Explicit ;0 faces.
+            "ABCt;polygon;triangle;A,B,C;0;0;0;0",
+            "DEFt;polygon;triangle;D,E,F;0;0;0;0",
+            "ABG;polygon;triangle;A,B,G;0;0;0;0",
+            "angA;sector;angleMarker;A,B,C;0;0;c06a1b;f3c590",
+            "angD;sector;angleMarker;D,E,F;0;0;c06a1b;f3c590",
+            "angABC;sector;angleMarker;B,A,C;0;0;7a4fa3;cdb8e6",
+            "angDEF;sector;angleMarker;E,D,F;0;0;3b6ea5;9ec5e8",
+            "angABG;sector;angleMarker;B,A,G;0;0;3b6ea5;9ec5e8",
+            "angC;sector;angleMarker;C,A,B;0;0;2a8a8a;9fdcdc",
+            "angF;sector;angleMarker;F,D,E;0;0;3f8e4f;a8dbb0",
+            "angAGB;sector;angleMarker;G,A,B,22;0;0;3f8e4f;a8dbb0",
+            "angBGC;sector;angleMarker;G,B,C,22;0;0;2a8a8a;9fdcdc"
         ],
+        deferDraggables: ["G"],
+        aliases: { "BA": "AB", "CB": "BC", "ED": "DE", "FE": "EF", "GB": "BG",
+                   "BAC": "angA", "CAB": "angA", "EDF": "angD", "FDE": "angD",
+                   "CBA": "angABC", "FED": "angDEF", "GBA": "angABG",
+                   "AGB": "angAGB", "BGA": "angAGB", "DFE": "angF", "EFD": "angF",
+                   "BGC": "angBGC", "CGB": "angBGC" },
+        slides: [
+            { text: "“If two triangles have one angle equal to one angle,”",
+              visible: HYP,
+              highlighted: ["ABCt","DEFt","angA","angD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angA", name: geomlib.A.Sector.sweep },
+                  { elem: "angD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "VI.7" }] },
+            { text: "“the sides about other angles proportional,”",
+              visible: SIDES,
+              highlighted: ["AB","BC","DE","EF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep },
+                  { elem: "angDEF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "“and the remaining angles either both less or both not less than a right angle,”",
+              visible: ACUTE,
+              highlighted: ["angC","angF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "angF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "“then the triangles are equiangular and have those angles equal the sides about which are proportional.”",
+              visible: ACUTE,
+              highlighted: ["ABCt","DEFt","angABC","angDEF"] },
+            { text: "Let {ABC|ABCt} and {DEF|DEFt} be two triangles having one angle equal to one angle,",
+              visible: HYP,
+              highlighted: ["ABCt","DEFt"] },
+            { text: "the angle {BAC|angA} equal to the angle {EDF|angD},",
+              visible: HYP,
+              highlighted: ["angA","angD"] },
+            { text: "the sides about other angles {ABC|angABC} and {DEF|angDEF} proportional,",
+              visible: SIDES,
+              highlighted: ["angABC","angDEF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep },
+                  { elem: "angDEF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "so that {AB} is to {BC} as {DE} is to {EF}.",
+              visible: SIDES,
+              highlighted: ["AB","BC","DE","EF"] },
+            { text: "And, first, each of the remaining angles at {C|angC} and {F|angF} less than a right angle.",
+              visible: ACUTE,
+              highlighted: ["angC","angF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "angF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that the triangle {ABC|ABCt} is equiangular with the triangle {DEF|DEFt},",
+              visible: ACUTE,
+              highlighted: ["ABCt","DEFt"] },
+            { text: "the angle {ABC|angABC} equals the angle {DEF|angDEF},",
+              visible: ACUTE,
+              highlighted: ["angABC","angDEF"] },
+            { text: "and the remaining angle, namely the angle at {C|angC}, equals the remaining angle, the angle at {F|angF}.",
+              visible: ACUTE,
+              highlighted: ["angC","angF"] },
+            { text: "If the angle {ABC|angABC} does not equal the angle {DEF|angDEF}, then one of them is greater.",
+              visible: ACUTE,
+              highlighted: ["angABC","angDEF"] },
+            { text: "Let the angle {ABC|angABC} be greater.",
+              visible: ACUTE,
+              highlighted: ["angABC"] },
+            { text: "Construct the angle {ABG|angABG} equal to the angle {DEF|angDEF} on the straight line {AB} and at the point {B} on it.",
+              visible: CON,
+              highlighted: ["angABG","angDEF","AB","B"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angABG", name: geomlib.A.Sector.sweep },
+                  { elem: "BG",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",      name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "angle ABG = angle DEF", ref: "I.23" }] },
+            { text: "Then, since the angle {A|angA} equals {D|angD}, and the angle {ABG|angABG} equals the angle {DEF|angDEF},",
+              visible: CON,
+              highlighted: ["angA","angD","angABG","angDEF"] },
+            { text: "therefore the remaining angle {AGB|angAGB} equals the remaining angle {DFE|angF}.",
+              visible: REM,
+              highlighted: ["angAGB","angF"],
+              transition: { animations: [
+                  { elem: "angAGB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the angles of a triangle sum to two right angles", ref: "I.32" }] },
+            { text: "Therefore the triangle {ABG} is equiangular with the triangle {DEF|DEFt}.",
+              visible: REM,
+              highlighted: ["ABG","DEFt"] },
+            { text: "Therefore {AB} is to {BG} as {DE} is to {EF}.",
+              visible: REM,
+              highlighted: ["AB","BG","DE","EF"],
+              justifications: [{ claim: "AB : BG = DE : EF", ref: "VI.4" }] },
+            { text: "But, by hypothesis, {DE} is to {EF} as {AB} is to {BC},",
+              visible: REM,
+              highlighted: ["DE","EF","AB","BC"] },
+            { text: "therefore {AB} has the same ratio to each of the straight lines {BC} and {BG}.",
+              visible: REM,
+              highlighted: ["AB","BC","BG"],
+              justifications: [{ claim: "AB : BC = AB : BG", ref: "V.11" }] },
+            { text: "Therefore {BC} equals {BG},",
+              visible: REM,
+              highlighted: ["BC","BG"],
+              justifications: [{ claim: "BC = BG", ref: "V.9" }] },
+            { text: "so that the angle at {C|angC} also equals the angle {BGC|angBGC}.",
+              visible: ISO,
+              highlighted: ["angC","angBGC"],
+              transition: { animations: [
+                  { elem: "angBGC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "base angles of the isosceles triangle BGC", ref: "I.5" }] },
+            { text: "But, by hypothesis, the angle at {C|angC} is less than a right angle,",
+              visible: ISO,
+              highlighted: ["angC"] },
+            { text: "therefore the angle {BGC|angBGC} is also less than a right angle,",
+              visible: ISO,
+              highlighted: ["angBGC"] },
+            { text: "so that the angle {AGB|angAGB} adjacent to it is greater than a right angle.",
+              visible: ISO,
+              highlighted: ["angAGB","angBGC"],
+              justifications: [{ claim: "angle AGB + angle BGC = 2rt", ref: "I.13" }] },
+            { text: "And it was proved equal to the angle at {F|angF},",
+              visible: ISO,
+              highlighted: ["angAGB","angF"] },
+            { text: "therefore the angle at {F|angF} is also greater than a right angle.",
+              visible: ISO,
+              highlighted: ["angF"] },
+            { text: "But it is by hypothesis less than a right angle, which is absurd.",
+              visible: ISO,
+              highlighted: ["angF"] },
+            // The supposed construction is withdrawn.
+            { text: "Therefore the angle {ABC|angABC} is not unequal to the angle {DEF|angDEF}. Therefore it equals it.",
+              visible: ACUTE,
+              highlighted: ["angABC","angDEF"] },
+            { text: "But the angle at {A|angA} also equals the angle at {D|angD},",
+              visible: ACUTE,
+              highlighted: ["angA","angD"] },
+            { text: "therefore the remaining angle at {C|angC} equals the remaining angle at {F|angF}.",
+              visible: ACUTE,
+              highlighted: ["angC","angF"],
+              justifications: [{ claim: "the angles of a triangle sum to two right angles", ref: "I.32" }] },
+            { text: "Therefore the triangle {ABC|ABCt} is equiangular with the triangle {DEF|DEFt}.",
+              visible: ACUTE,
+              highlighted: ["ABCt","DEFt"] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.7") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup, shared by both canvases' decks.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.5":  "/elements/books/bookI/propositions/propI5/",
+        "I.13": "/elements/books/bookI/propositions/propI13/",
+        "I.17": "/elements/books/bookI/propositions/propI17/",
+        "I.23": "/elements/books/bookI/propositions/propI23/",
+        "I.32": "/elements/books/bookI/propositions/propI32/",
+        "V.9":  "/elements/books/bookV/propositions/propV9/",
+        "V.11": "/elements/books/bookV/propositions/propV11/",
+        "VI.4": "/elements/books/bookVI/propositions/propVI4/"
     });
 </script>
 </figure>
 
-If the angle *ABC* does not equal the angle *DEF,* then one of them is greater.
+If the angle {ABC|angABC} does not equal the angle {DEF|angDEF}, then one of them is greater.
 
-Let the angle *ABC* be greater. Construct the angle *ABG* equal to the angle *DEF* on the straight line *AB* and at the point *B* on it. [!just I.23]
+Let the angle {ABC|angABC} be greater. Construct the angle {ABG|angABG} equal to the angle {DEF|angDEF} on the straight line {AB} and at the point {B} on it. [!just I.23]
 
-Then, since the angle *A* equals *D,* and the angle *ABG* equals the angle *DEF,* therefore the remaining angle *AGB* equals the remaining angle *DFE.* [!just I.32]
+Then, since the angle {A|angA} equals {D|angD}, and the angle {ABG|angABG} equals the angle {DEF|angDEF}, therefore the remaining angle {AGB|angAGB} equals the remaining angle {DFE|angF}. [!just I.32]
 
-Therefore the triangle *ABG* is equiangular with the triangle *DEF.*
+Therefore the triangle {ABG} is equiangular with the triangle {DEF|DEFt}.
 
-Therefore *AB* is to *BG* as *DE* is to *EF.* [!just VI.4]
+Therefore {AB} is to {BG} as {DE} is to {EF}. [!just VI.4]
 
-But, by hypothesis, *DE* is to *EF* as *AB* is to *BC,* therefore *AB* has the same ratio to each of the straight lines *BC* and *BG.* Therefore *BC* equals *BG,* so that the angle at *C* also equals the angle *BGC.* [!just V.11; V.9; I.5]
+But, by hypothesis, {DE} is to {EF} as {AB} is to {BC}, therefore {AB} has the same ratio to each of the straight lines {BC} and {BG}. Therefore {BC} equals {BG}, so that the angle at {C|angC} also equals the angle {BGC|angBGC}. [!just V.11; V.9; I.5]
 
-But, by hypothesis, the angle at *C* is less than a right angle, therefore the angle *BGC* is also less than a right angle, so that the angle *AGB* adjacent to it is greater than a right angle. [!just I.13]
+But, by hypothesis, the angle at {C|angC} is less than a right angle, therefore the angle {BGC|angBGC} is also less than a right angle, so that the angle {AGB|angAGB} adjacent to it is greater than a right angle. [!just I.13]
 
-And it was proved equal to the angle at *F,* therefore the angle at *F* is also greater than a right angle. But it is by hypothesis less than a right angle, which is absurd.
+And it was proved equal to the angle at {F|angF}, therefore the angle at {F|angF} is also greater than a right angle. But it is by hypothesis less than a right angle, which is absurd.
 
-Therefore the angle *ABC* is not unequal to the angle *DEF.* Therefore it equals it.
+Therefore the angle {ABC|angABC} is not unequal to the angle {DEF|angDEF}. Therefore it equals it.
 
-But the angle at *A* also equals the angle at *D,* therefore the remaining angle at *C* equals the remaining angle at *F.* [!just I.32]
+But the angle at {A|angA} also equals the angle at {D|angD}, therefore the remaining angle at {C|angC} equals the remaining angle at {F|angF}. [!just I.32]
 
-Therefore the triangle *ABC* is equiangular with the triangle *DEF.*
+Therefore the triangle {ABC|ABCt} is equiangular with the triangle {DEF|DEFt}.
 
 <figure class="diagram">
 <canvas id="canvas_1" width="340" height="280" tabindex="0"></canvas>
 <noscript><img alt="VI.7 diagram (b)" src="propVI7b.gif"/></noscript>
 <script type="text/javascript">
+    // The second case: the angles at C and F not less than a right angle.
+    // Same figure, same additions and colours as canvas_0 (see there); G
+    // is again the reductio's point, withdrawn at the absurdity. BGC is a
+    // faceless twin for "the triangle BGC" (I.17). None of the angles is
+    // treated as right ("not less than a right angle"), so all are sectors.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E free, given on
+    // slide 1; G (lineSlider) arrives with the construction and is
+    // deferred. F is derived and listed per slide.
+    var GIVEN = ["A","B","C","ABC","D","E","F","DEF",
+                 "AB","BC","DE","EF","ABCt","DEFt",
+                 "angA","angD","angABC","angDEF"];
+    var OBT   = GIVEN.concat(["angC","angF"]);
+    var CON   = OBT.concat(["angABG","BG","G"]);
+    var ISO   = CON.concat(["angBGC","BGC"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -83,29 +311,115 @@ Therefore the triangle *ABC* is equiangular with the triangle *DEF.*
             "F;point;similar;D,E,A,B,C",
             "DEF;polygon;triangle;D,E,F;0;0;black;random",
             "G;point;lineSlider;A,C,160,150",
-            "BG;line;connect;B,G"
+            "BG;line;connect;B,G",
+            // The sides, as transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            // Faceless twins of the triangles. Explicit ;0 faces.
+            "ABCt;polygon;triangle;A,B,C;0;0;0;0",
+            "DEFt;polygon;triangle;D,E,F;0;0;0;0",
+            "BGC;polygon;triangle;B,G,C;0;0;0;0",
+            "angA;sector;angleMarker;A,B,C;0;0;c06a1b;f3c590",
+            "angD;sector;angleMarker;D,E,F;0;0;c06a1b;f3c590",
+            "angABC;sector;angleMarker;B,A,C;0;0;7a4fa3;cdb8e6",
+            "angDEF;sector;angleMarker;E,D,F;0;0;3b6ea5;9ec5e8",
+            "angABG;sector;angleMarker;B,A,G;0;0;3b6ea5;9ec5e8",
+            "angC;sector;angleMarker;C,A,B;0;0;2a8a8a;9fdcdc",
+            "angF;sector;angleMarker;F,D,E;0;0;3f8e4f;a8dbb0",
+            "angBGC;sector;angleMarker;G,B,C,22;0;0;2a8a8a;9fdcdc"
         ],
+        deferDraggables: ["G"],
+        aliases: { "BA": "AB", "CB": "BC", "ED": "DE", "FE": "EF", "GB": "BG",
+                   "BAC": "angA", "CAB": "angA", "EDF": "angD", "FDE": "angD",
+                   "CBA": "angABC", "FED": "angDEF", "GBA": "angABG",
+                   "CGB": "angBGC" },
+        slides: [
+            { text: "Next let each of the angles at {C|angC} and {F|angF} be supposed not less than a right angle.",
+              visible: OBT,
+              highlighted: ["angC","angF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "angF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say again that, in this case too, the triangle {ABC|ABCt} is equiangular with the triangle {DEF|DEFt}.",
+              visible: OBT,
+              highlighted: ["ABCt","DEFt"] },
+            { text: "With the same construction, we can prove similarly that {BC} equals {BG},",
+              visible: CON,
+              highlighted: ["angABG","angDEF","BC","BG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angABG", name: geomlib.A.Sector.sweep },
+                  { elem: "BG",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",      name: geomlib.A.Point.appear } ] } },
+            { text: "so that the angle at {C|angC} also equals the angle {BGC|angBGC}.",
+              visible: ISO,
+              highlighted: ["angC","angBGC"],
+              transition: { animations: [
+                  { elem: "angBGC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "base angles of the isosceles triangle BGC", ref: "I.5" }] },
+            { text: "But the angle at {C|angC} is not less than a right angle,",
+              visible: ISO,
+              highlighted: ["angC"] },
+            { text: "therefore neither is the angle {BGC|angBGC} less than a right angle.",
+              visible: ISO,
+              highlighted: ["angBGC"] },
+            { text: "Thus in the triangle {BGC} the sum of two angles is not less than two right angles, which is impossible.",
+              visible: ISO,
+              highlighted: ["BGC","angC","angBGC"],
+              justifications: [{ claim: "any two angles of a triangle are less than two right angles", ref: "I.17" }] },
+            // The supposed construction is withdrawn.
+            { text: "Therefore, once more, the angle {ABC|angABC} is not unequal to the angle {DEF|angDEF}. Therefore it equals it.",
+              visible: OBT,
+              highlighted: ["angABC","angDEF"] },
+            { text: "But the angle at {A|angA} also equals the angle at {D|angD},",
+              visible: OBT,
+              highlighted: ["angA","angD"] },
+            { text: "therefore the remaining angle at {C|angC} equals the remaining angle at {F|angF}.",
+              visible: OBT,
+              highlighted: ["angC","angF"],
+              justifications: [{ claim: "the angles of a triangle sum to two right angles", ref: "I.32" }] },
+            { text: "Therefore the triangle {ABC|ABCt} is equiangular with the triangle {DEF|DEFt}.",
+              visible: OBT,
+              highlighted: ["ABCt","DEFt"] },
+            { text: "Therefore, if two triangles have one angle equal to one angle,",
+              visible: OBT,
+              highlighted: ["angA","angD"] },
+            { text: "the sides about other angles proportional,",
+              visible: OBT,
+              highlighted: ["AB","BC","DE","EF"] },
+            { text: "and the remaining angles either both less or both not less than a right angle,",
+              visible: OBT,
+              highlighted: ["angC","angF"] },
+            { text: "then the triangles are equiangular and have those angles equal the sides about which are proportional.",
+              visible: OBT,
+              highlighted: ["ABCt","DEFt","angABC","angDEF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
 <hr width="50%">
 
-Next let each of the angles at *C* and *F* be supposed not less than a right angle.
+Next let each of the angles at {C|angC} and {F|angF} be supposed not less than a right angle.
 
-I say again that, in this case too, the triangle *ABC* is equiangular with the triangle *DEF.*
+I say again that, in this case too, the triangle {ABC|ABCt} is equiangular with the triangle {DEF|DEFt}.
 
-With the same construction, we can prove similarly that *BC* equals *BG,* so that the angle at *C* also equals the angle *BGC.* [!just I.5]
+With the same construction, we can prove similarly that {BC} equals {BG}, so that the angle at {C|angC} also equals the angle {BGC|angBGC}. [!just I.5]
 
-But the angle at *C* is not less than a right angle, therefore neither is the angle *BGC* less than a right angle.
+But the angle at {C|angC} is not less than a right angle, therefore neither is the angle {BGC|angBGC} less than a right angle.
 
-Thus in the triangle *BGC* the sum of two angles is not less than two right angles, which is impossible. [!just I.17]
+Thus in the triangle {BGC} the sum of two angles is not less than two right angles, which is impossible. [!just I.17]
 
-Therefore, once more, the angle *ABC* is not unequal to the angle *DEF.* Therefore it equals it.
+Therefore, once more, the angle {ABC|angABC} is not unequal to the angle {DEF|angDEF}. Therefore it equals it.
 
-But the angle at *A* also equals the angle at *D,* therefore the remaining angle at *C* equals the remaining angle at *F.* [!just I.32]
+But the angle at {A|angA} also equals the angle at {D|angD}, therefore the remaining angle at {C|angC} equals the remaining angle at {F|angF}. [!just I.32]
 
-Therefore the triangle *ABC* is equiangular with the triangle *DEF.*
+Therefore the triangle {ABC|ABCt} is equiangular with the triangle {DEF|DEFt}.
 
 Therefore, *if two triangles have one angle equal to one angle, the sides about other angles proportional, and the remaining angles either both less or both not less than a right angle, then the triangles are equiangular and have those angles equal the sides about which are proportional.*
 
