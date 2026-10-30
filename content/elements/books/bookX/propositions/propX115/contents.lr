@@ -15,14 +15,26 @@ statement: From a medial straight line there arise irrational straight lines inf
 ----
 proof:
 
-Let *A* be a medial straight line.
+Let {A} be a medial straight line.
 
-I say that from *A* there arise irrational straight lines infinite in number, and none of them is the same as any of the preceding.
+I say that from {A} there arise irrational straight lines infinite in number, and none of them is the same as any of the preceding.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="160" tabindex="0"></canvas>
 <noscript><img alt="X.115 diagram" src="propX115.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the medial line A, the rational line B, and the
+    // irrational lines C (square on C = B by A) and D (square on D = B by
+    // C). Nothing added. No angles, so no markers.
+    //
+    // Draggables (checked against the bundle): the hidden line-slider ends
+    // A1, A2, B1, B2, C1, D1 and the offscreen frees. A1, A2 are given on
+    // the first proof slide; B1, B2, C1 and D1 are deferred so B, C and D
+    // arrive with their captions. C2 and D2 are derived and listed.
+    var MED = ["A1","A2","A"];
+    var RAT = MED.concat(["B1","B2","B"]);
+    var CS  = RAT.concat(["C1","C2","C"]);
+    var ALL = CS.concat(["D1","D2","D"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,17 +61,98 @@ I say that from *A* there arise irrational straight lines infinite in number, an
             "D2;point;meanProportional;B1,B2,C1,C2,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        deferDraggables: ["B1","B2","C1","D1"],
+        slides: [
+            { text: "“From a medial straight line there arise irrational straight lines infinite in number,",
+              visible: ALL,
+              highlighted: ["A","C","D"],
+              justifications: [{ ref: "X.115" }] },
+            { text: "and none of them is the same as any preceding.”",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "Let {A} be a medial straight line.",
+              visible: MED,
+              highlighted: ["A"] },
+            { text: "I say that from {A} there arise irrational straight lines infinite in number,",
+              visible: MED,
+              highlighted: ["A"] },
+            { text: "and none of them is the same as any of the preceding.",
+              visible: MED,
+              highlighted: ["A"] },
+            { text: "Set out a rational straight line {B},",
+              visible: RAT,
+              highlighted: ["B"],
+              transition: { animations: [
+                  { elem: "B", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and let the square on {C} equal the rectangle {B} by {A}.",
+              visible: CS,
+              highlighted: ["C","B","A"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {C} is irrational, for that which is contained by an irrational and a rational straight line is irrational.",
+              visible: CS,
+              highlighted: ["C","A","B"],
+              justifications: [
+                  { claim: "B by A irrational", ref: "X.20" },
+                  { claim: "C irrational", ref: "X.Def.I.4" } ] },
+            { text: "And it is not the same with any of the preceding,",
+              visible: CS,
+              highlighted: ["C"] },
+            { text: "for the square on none of the preceding,",
+              visible: CS,
+              highlighted: ["C"] },
+            { text: "if applied to a rational straight line will produce as breadth a medial straight line.",
+              visible: CS,
+              highlighted: ["B","A"] },
+            { text: "Again, let the square on {D} equal the rectangle {B} by {C}.",
+              visible: ALL,
+              highlighted: ["D","B","C"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then the square on {D} is irrational.",
+              visible: ALL,
+              highlighted: ["D"],
+              justifications: [{ claim: "D² irrational", ref: "X.20" }] },
+            { text: "Therefore {D} is irrational, and it is not the same with any of the preceding,",
+              visible: ALL,
+              highlighted: ["D"],
+              justifications: [{ claim: "D irrational", ref: "X.Def.I.4" }] },
+            { text: "for the square on none of the preceding, if applied to a rational straight line, will produce {C} as breadth.",
+              visible: ALL,
+              highlighted: ["B","C"] },
+            { text: "Similarly, if this arrangement proceeds ad infinitum,",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "it is manifest that from the medial straight line there arise irrational straight lines infinite in number,",
+              visible: ALL,
+              highlighted: ["A","C","D"] },
+            { text: "and none is the same with any of the preceding.",
+              visible: ALL,
+              highlighted: ["C","D"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.115") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.20":      "/elements/books/bookX/propositions/propX20/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-Set out a rational straight line *B*, and let the square on *C* equal the rectangle *B* by *A*. Then *C* is irrational, for that which is contained by an irrational and a rational straight line is irrational. [!just X.Def.I.4; X.20]
+Set out a rational straight line {B}, and let the square on {C} equal the rectangle {B} by {A}. Then {C} is irrational, for that which is contained by an irrational and a rational straight line is irrational. [!just X.Def.I.4; X.20]
 
 And it is not the same with any of the preceding, for the square on none of the preceding, if applied to a rational straight line will produce as breadth a medial straight line.
 
-Again, let the square on *D* equal the rectangle *B* by *C*. Then the square on *D* is irrational. [!just X.20]
+Again, let the square on {D} equal the rectangle {B} by {C}. Then the square on {D} is irrational. [!just X.20]
 
-Therefore *D* is irrational, and it is not the same with any of the preceding, for the square on none of the preceding, if applied to a rational straight line, will produce *C* as breadth. [!just X.Def.I.4]
+Therefore {D} is irrational, and it is not the same with any of the preceding, for the square on none of the preceding, if applied to a rational straight line, will produce {C} as breadth. [!just X.Def.I.4]
 
 Similarly, if this arrangement proceeds *ad infinitum*, it is manifest that from the medial straight line there arise irrational straight lines infinite in number, and none is the same with any of the preceding.
 

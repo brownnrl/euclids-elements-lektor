@@ -15,16 +15,36 @@ statement: If an area is contained by an apotome and the binomial straight line 
 ----
 proof:
 
-Let an area, the rectangle *AB* by *CD*, be contained by the apotome *AB* and the binomial straight line *CD*, and let *CE* be the greater term of the latter, let the terms *CE* and *ED* of the binomial straight line be commensurable with the terms *AF* and *FB* of the apotome and in the same ratio, and let the side of the rectangle *AB* by *CD* be *G*.
+Let an area, the rectangle {AB} by {CD}, be contained by the apotome {AB} and the binomial straight line {CD}, and let {CE} be the greater term of the latter, let the terms {CE} and {ED} of the binomial straight line be commensurable with the terms {AF} and {FB} of the apotome and in the same ratio, and let the side of the rectangle {AB} by {CD} be {G}.
 
-I say that *G* is rational.
+I say that {G} is rational.
 
-Set out a rational straight line *H*, and to *CD* apply a rectangle equal to the square on *H* and producing *KL* as breadth. Then *KL* is an apotome.
+Set out a rational straight line {H}, and to {CD} apply a rectangle equal to the square on {H} and producing {KL} as breadth. Then {KL} is an apotome.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.114 diagram" src="propX114.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the apotome AB with its annex BF (drawn as the one
+    // line AF), the binomial CD divided at E, the side G, the rational line
+    // H, and the apotome KL with its annex LM (drawn as the one line KM).
+    // Added, all hidden at rest: solid twins AB, FB, KL, ML
+    // (initiallyHidden) so each apotome is set out before its annex and
+    // each annex strokes from the apotome's end; transparent targets CE, ED
+    // (;0;0;0) for the terms of CD. No angles, so no markers.
+    //
+    // Draggables (checked against the bundle): the line sliders A, B, C, D,
+    // E, K and the hidden handles G1, H1, H2, plus the offscreen frees. A,
+    // B, C, D are given on the first proof slide; E, G1, H1, H2 and K are
+    // deferred so CE, G, H and KL arrive with their captions. F, G2, L, M
+    // are derived and listed.
+    var GIV = ["A","B","AB","C","D","CD"];
+    var CES = GIV.concat(["E","CE","ED"]);
+    var AFS = CES.concat(["F","FB","AF"]);
+    var GS  = AFS.concat(["G1","G2","G"]);
+    var HS  = GS.concat(["H1","H2","H"]);
+    var KLS = HS.concat(["K","L","KL"]);
+    var ALL = KLS.concat(["M","ML","KM"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -57,29 +77,169 @@ Set out a rational straight line *H*, and to *CD* apply a rectangle equal to the
             "K;point;lineSlider;K0,K3,40,0",
             "L;point;proportion;C,D,H1,H2,H1,H2,K,K3",
             "M;point;proportion;C,E,E,D,K,L,L,K3",
-            "KM;line;connect;K,M"
+            "KM;line;connect;K,M",
+            // Slide-only twins and highlight targets.
+            "AB;line;connect;A,B",
+            "FB;line;connect;B,F",
+            "KL;line;connect;K,L",
+            "ML;line;connect;L,M",
+            "CE;line;connect;C,E;0;0;0",
+            "ED;line;connect;E,D;0;0;0"
         ],
+        initiallyHidden: ["AB","FB","KL","ML"],
+        deferDraggables: ["E","G1","H1","H2","K"],
+        aliases: { "BF": "FB", "LM": "ML", "DE": "ED" },
+        slides: [
+            { text: "“If an area is contained by an apotome and the binomial straight line",
+              visible: ALL,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "X.114" }] },
+            { text: "the terms of which are commensurable with the terms of the apotome and in the same ratio,",
+              visible: ALL,
+              highlighted: ["CE","ED","AF","FB"] },
+            { text: "then the side of the area is rational.”",
+              visible: ALL,
+              highlighted: ["G"] },
+            { text: "Let an area, the rectangle {AB} by {CD},",
+              visible: GIV,
+              highlighted: ["AB","CD"] },
+            { text: "be contained by the apotome {AB} and the binomial straight line {CD},",
+              visible: GIV,
+              highlighted: ["AB","CD"] },
+            { text: "and let {CE} be the greater term of the latter,",
+              visible: CES,
+              highlighted: ["CE"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "let the terms {CE} and {ED} of the binomial straight line",
+              visible: CES,
+              highlighted: ["CE","ED"] },
+            { text: "be commensurable with the terms {AF} and {FB} of the apotome and in the same ratio,",
+              visible: AFS,
+              highlighted: ["AF","FB"],
+              transition: { animations: [
+                  { elem: "FB", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and let the side of the rectangle {AB} by {CD} be {G}.",
+              visible: GS,
+              highlighted: ["AB","CD","G"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that {G} is rational.",
+              visible: GS,
+              highlighted: ["G"] },
+            { text: "Set out a rational straight line {H},",
+              visible: HS,
+              highlighted: ["H"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and to {CD} apply a rectangle equal to the square on {H} and producing {KL} as breadth.",
+              visible: KLS,
+              highlighted: ["CD","H","KL"],
+              transition: { animations: [
+                  { elem: "KL", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {KL} is an apotome.",
+              visible: KLS,
+              highlighted: ["KL"] },
+            { text: "Let its terms be {KM} and {ML}",
+              visible: ALL,
+              highlighted: ["KM","ML"],
+              transition: { animations: [
+                  { elem: "ML", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "commensurable with the terms {CE} and {ED} of the binomial straight line and in the same ratio.",
+              visible: ALL,
+              highlighted: ["KM","ML","CE","ED"],
+              justifications: [{ claim: "KM, ML commensurable with CE, ED", ref: "X.112" }] },
+            { text: "But {CE} and {ED} are also commensurable with {AF} and {FB} and in the same ratio,",
+              visible: ALL,
+              highlighted: ["CE","ED","AF","FB"] },
+            { text: "therefore {AF} is to {FB} as {KM} is to {ML}.",
+              visible: ALL,
+              highlighted: ["AF","FB","KM","ML"] },
+            { text: "Therefore, alternately, {AF} is to {KM} as {BF} is to {LM}.",
+              visible: ALL,
+              highlighted: ["AF","KM","FB","ML"] },
+            { text: "Therefore the remainder {AB} is to the remainder {KL} as {AF} is to {KM}.",
+              visible: ALL,
+              highlighted: ["AB","KL","AF","KM"],
+              justifications: [{ claim: "AB : KL = AF : KM", ref: "V.19" }] },
+            { text: "But {AF} is commensurable with {KM}, therefore {AB} is also commensurable with {KL}.",
+              visible: ALL,
+              highlighted: ["AF","KM","AB","KL"],
+              justifications: [
+                  { claim: "AF, KM commensurable", ref: "X.12" },
+                  { claim: "AB, KL commensurable", ref: "X.11" } ] },
+            { text: "And {AB} is to {KL} as the rectangle {CD} by {AB} is to the rectangle {CD} by {KL},",
+              visible: ALL,
+              highlighted: ["AB","KL","CD"],
+              justifications: [{ claim: "AB : KL = CD·AB : CD·KL", ref: "VI.1" }] },
+            { text: "therefore the rectangle {CD} by {AB} is also commensurable with the rectangle {CD} by {KL}.",
+              visible: ALL,
+              highlighted: ["CD","AB","KL"],
+              justifications: [{ claim: "CD·AB, CD·KL commensurable", ref: "X.11" }] },
+            { text: "But the rectangle {CD} by {KL} equals the square on {H},",
+              visible: ALL,
+              highlighted: ["CD","KL","H"] },
+            { text: "therefore the rectangle {CD} by {AB} is commensurable with the square on {H}.",
+              visible: ALL,
+              highlighted: ["CD","AB","H"] },
+            { text: "But the square on {G} equals the rectangle {CD} by {AB},",
+              visible: ALL,
+              highlighted: ["G","CD","AB"] },
+            { text: "therefore the square on {G} is commensurable with the square on {H}.",
+              visible: ALL,
+              highlighted: ["G","H"] },
+            { text: "But the square on {H} is rational, therefore the square on {G} is also rational.",
+              visible: ALL,
+              highlighted: ["H","G"] },
+            { text: "Therefore {G} is rational. And it is the side of the rectangle {CD} by {AB}.",
+              visible: ALL,
+              highlighted: ["G","CD","AB"] },
+            { text: "Therefore, if an area is contained by an apotome and the binomial straight line",
+              visible: ALL,
+              highlighted: ["AB","CD"] },
+            { text: "the terms of which are commensurable with the terms of the apotome and in the same ratio,",
+              visible: ALL,
+              highlighted: ["CE","ED","AF","FB"] },
+            { text: "then the side of the area is rational.",
+              visible: ALL,
+              highlighted: ["G"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.114") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.19":  "/elements/books/bookV/propositions/propV19/",
+        "VI.1":  "/elements/books/bookVI/propositions/propVI1/",
+        "X.11":  "/elements/books/bookX/propositions/propX11/",
+        "X.12":  "/elements/books/bookX/propositions/propX12/",
+        "X.112": "/elements/books/bookX/propositions/propX112/"
     });
 </script>
 </figure>
 
-Let its terms be *KM* and *ML* commensurable with the terms *CE* and *ED* of the binomial straight line and in the same ratio. [!just X.112]
+Let its terms be {KM} and {ML} commensurable with the terms {CE} and {ED} of the binomial straight line and in the same ratio. [!just X.112]
 
-But *CE* and *ED* are also commensurable with *AF* and *FB* and in the same ratio, therefore *AF* is to *FB* as *KM* is to *ML*.
+But {CE} and {ED} are also commensurable with {AF} and {FB} and in the same ratio, therefore {AF} is to {FB} as {KM} is to {ML}.
 
-Therefore, alternately, *AF* is to *KM* as *BF* is to *LM*. Therefore the remainder *AB* is to the remainder *KL* as *AF* is to *KM*. [!just V.19]
+Therefore, alternately, {AF} is to {KM} as {BF} is to {LM}. Therefore the remainder {AB} is to the remainder {KL} as {AF} is to {KM}. [!just V.19]
 
-But *AF* is commensurable with *KM*, therefore *AB* is also commensurable with *KL*. [!just X.12, X.11]
+But {AF} is commensurable with {KM}, therefore {AB} is also commensurable with {KL}. [!just X.12, X.11]
 
-And *AB* is to *KL* as the rectangle *CD* by *AB* is to the rectangle *CD* by *KL*, therefore the rectangle *CD* by *AB* is also commensurable with the rectangle *CD* by *KL*. [!just VI.1; X.11]
+And {AB} is to {KL} as the rectangle {CD} by {AB} is to the rectangle {CD} by {KL}, therefore the rectangle {CD} by {AB} is also commensurable with the rectangle {CD} by {KL}. [!just VI.1; X.11]
 
-But the rectangle *CD* by *KL* equals the square on *H*, therefore the rectangle *CD* by *AB* is commensurable with the square on *H*.
+But the rectangle {CD} by {KL} equals the square on {H}, therefore the rectangle {CD} by {AB} is commensurable with the square on {H}.
 
-But the square on *G* equals the rectangle *CD* by *AB*, therefore the square on *G* is commensurable with the square on *H*.
+But the square on {G} equals the rectangle {CD} by {AB}, therefore the square on {G} is commensurable with the square on {H}.
 
-But the square on *H* is rational, therefore the square on *G* is also rational.
+But the square on {H} is rational, therefore the square on {G} is also rational.
 
-Therefore *G* is rational. And it is the side of the rectangle *CD* by *AB*.
+Therefore {G} is rational. And it is the side of the rectangle {CD} by {AB}.
 
 Therefore, *if an area is contained by an apotome and the binomial straight line the terms of which are commensurable with the terms of the apotome and in the same ratio, then the side of the area is rational.*
 
