@@ -17,12 +17,26 @@ statement: To find medial straight lines commensurable in square only which cont
 ----
 proof:
 
-Set out the rational straight lines *A,* *B,* and *C* commensurable in square only. Take a mean proportional *D* between *A* and *B.* Let it be contrived that *B* is to *C* as *D* is to *E.* [!just VI.13; VI.12]
+Set out the rational straight lines {A}, {B}, and {C} commensurable in square only. Take a mean proportional {D} between {A} and {B}. Let it be contrived that {B} is to {C} as {D} is to {E}. [!just VI.13; VI.12]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="360" height="130" tabindex="0"></canvas>
 <noscript><img alt="X.28 diagram" src="propX28.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure, unchanged: the lines A, B, C on three rows, with D
+    // beside A and E beside B. D is the mean proportional between A and B
+    // (D2), and E the fourth proportional with B : C = D : E (E2). No
+    // rectangles or squares are drawn in Joyce's figure, so "the rectangle
+    // A by C" and "the square on D" light the lines themselves. Nothing is
+    // added.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2, D1, E1 and the offscreen frees. A, B, C are set out
+    // first; D1 and E1 are deferred so D and E arrive with their captions.
+    // D2 and E2 are derived and listed per slide.
+    var GIVEN = ["A","A1","A2","B","B1","B2","C","C1","C2"];
+    var DM    = GIVEN.concat(["D","D1","D2"]);
+    var ALL   = DM.concat(["E","E1","E2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -50,25 +64,116 @@ Set out the rational straight lines *A,* *B,* and *C* commensurable in square on
             "E2;point;proportion;B1,B2,C1,C2,D1,D2,E1,B3;0",
             "E;line;connect;E1,E2;black"
         ],
+        deferDraggables: ["D1","E1"],
+        slides: [
+            { text: "“To find medial straight lines commensurable in square only which contain a medial rectangle.”",
+              visible: ALL,
+              highlighted: ["D","E"],
+              justifications: [{ ref: "X.28" }] },
+            { text: "Set out the rational straight lines {A}, {B}, and {C} commensurable in square only.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "A", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "B", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Take a mean proportional {D} between {A} and {B}.",
+              visible: DM,
+              highlighted: ["D","A","B"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "mean proportional", ref: "VI.13" }] },
+            { text: "Let it be contrived that {B} is to {C} as {D} is to {E}.",
+              visible: ALL,
+              highlighted: ["B","C","D","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "fourth proportional", ref: "VI.12" }] },
+            { text: "Since {A} and {B} are rational straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "therefore the rectangle {A} by {B}, that is, the square on {D}, is medial.",
+              visible: ALL,
+              highlighted: ["A","B","D"],
+              justifications: [
+                  { claim: "rectangle A by B = square on D", ref: "VI.17" },
+                  { claim: "the rectangle is medial", ref: "X.21" } ] },
+            { text: "Therefore {D} is medial.",
+              visible: ALL,
+              highlighted: ["D"],
+              justifications: [{ claim: "D is medial", ref: "X.21" }] },
+            { text: "And since {B} and {C} are commensurable in square only, and {B} is to {C} as {D} is to {E},",
+              visible: ALL,
+              highlighted: ["B","C","D","E"] },
+            { text: "therefore {D} and {E} are also commensurable in square only.",
+              visible: ALL,
+              highlighted: ["D","E"],
+              justifications: [{ claim: "D, E commensurable in square only", ref: "X.11" }] },
+            { text: "But {D} is medial, therefore {E} is also medial.",
+              visible: ALL,
+              highlighted: ["D","E"],
+              justifications: [{ claim: "commensurable with a medial line", ref: "X.23.Note" }] },
+            { text: "Therefore {D} and {E} are medial straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["D","E"] },
+            { text: "I say next that they also contain a medial rectangle.",
+              visible: ALL,
+              highlighted: ["D","E"] },
+            { text: "Since {B} is to {C} as {D} is to {E}, therefore, alternately, {B} is to {D} as {C} is to {E}.",
+              visible: ALL,
+              highlighted: ["B","C","D","E"],
+              justifications: [{ claim: "B : D = C : E", ref: "V.16" }] },
+            { text: "But {B} is to {D} as {D} is to {A}, therefore {D} is to {A} as {C} is to {E}.",
+              visible: ALL,
+              highlighted: ["B","D","A","C","E"] },
+            { text: "Therefore the rectangle {A} by {C} equals the rectangle {D} by {E}.",
+              visible: ALL,
+              highlighted: ["A","C","D","E"],
+              justifications: [{ claim: "rectangle A by C = rectangle D by E", ref: "VI.16" }] },
+            { text: "But the rectangle {A} by {C} is medial, therefore the rectangle {D} by {E} is also medial.",
+              visible: ALL,
+              highlighted: ["A","C","D","E"],
+              justifications: [{ claim: "rectangle A by C is medial", ref: "X.21" }] },
+            { text: "Therefore medial straight lines commensurable in square only have been found which contain a medial rectangle.",
+              visible: ALL,
+              highlighted: ["D","E"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.28") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.16":      "/elements/books/bookV/propositions/propV16/",
+        "VI.12":     "/elements/books/bookVI/propositions/propVI12/",
+        "VI.13":     "/elements/books/bookVI/propositions/propVI13/",
+        "VI.16":     "/elements/books/bookVI/propositions/propVI16/",
+        "X.11":      "/elements/books/bookX/propositions/propX11/",
+        "X.21":      "/elements/books/bookX/propositions/propX21/",
+        "X.23.Note": "/elements/books/bookX/propositions/propX23/#note"
     });
 </script>
 </figure>
 
-Since *A* and *B* are rational straight lines commensurable in square only, therefore the rectangle *A* by *B,* that is, the square on *D,* is medial. Therefore *D* is medial. [!just VI.17; X.21]
+Since {A} and {B} are rational straight lines commensurable in square only, therefore the rectangle {A} by {B}, that is, the square on {D}, is medial. Therefore {D} is medial. [!just VI.17; X.21]
 
-And since *B* and *C* are commensurable in square only, and *B* is to *C* as *D* is to *E,* therefore *D* and *E* are also commensurable in square only. [!just X.11]
+And since {B} and {C} are commensurable in square only, and {B} is to {C} as {D} is to {E}, therefore {D} and {E} are also commensurable in square only. [!just X.11]
 
-But *D* is medial, therefore *E* is also medial. <div class="just"><a href="/elements/books/bookX/propositions/propX23/#note">X.23,Note</a></div>
+But {D} is medial, therefore {E} is also medial. <div class="just"><a href="/elements/books/bookX/propositions/propX23/#note">X.23,Note</a></div>
 
-Therefore *D* and *E* are medial straight lines commensurable in square only.
+Therefore {D} and {E} are medial straight lines commensurable in square only.
 
 I say next that they also contain a medial rectangle.
 
-Since *B* is to *C* as *D* is to *E,* therefore, alternately, *B* is to *D* as *C* is to *E.* [!just V.16]
+Since {B} is to {C} as {D} is to {E}, therefore, alternately, {B} is to {D} as {C} is to {E}. [!just V.16]
 
-But *B* is to *D* as *D* is to *A,* therefore *D* is to *A* as *C* is to *E.* Therefore the rectangle *A* by *C* equals the rectangle *D* by *E.* [!just VI.16]
+But {B} is to {D} as {D} is to {A}, therefore {D} is to {A} as {C} is to {E}. Therefore the rectangle {A} by {C} equals the rectangle {D} by {E}. [!just VI.16]
 
-But the rectangle *A* by *C* is medial, therefore the rectangle *D* by *E* is also medial. [!just X.21]
+But the rectangle {A} by {C} is medial, therefore the rectangle {D} by {E} is also medial. [!just X.21]
 
 Therefore medial straight lines commensurable in square only have been found which contain a medial rectangle.
 
@@ -76,8 +181,8 @@ Therefore medial straight lines commensurable in square only have been found whi
 ----
 guide:
 
-There has been no construction given in Book X for the required lines *A,* *B,* and *C.* One example would be where their lengths are 1, √2, and √3.
+There has been no construction given in Book X for the required lines {A}, {B}, and {C}. One example would be where their lengths are 1, √2, and √3.
 
-Set *A* to have length 1, *B* length √*b,* an irrational number where *b* is rational, and *C* length √*c,* an irrational number where *c* is rational, with *b*/*c* and irrational number. Then *D* has length *b*<sup>1/4</sup> while *E* has length (√*c*)/*b*<sup>1/4</sup>. Then *D* and *E* are medial and commensurable in square only, and the *b*<sup>1/4</sup> by (√*c*)/*b*<sup>1/4</sup> rectangle they contain has area √*c,* an irrational number.
+Set {A} to have length 1, {B} length √*b,* an irrational number where *b* is rational, and {C} length √*c,* an irrational number where *c* is rational, with *b*/*c* and irrational number. Then {D} has length *b*<sup>1/4</sup> while {E} has length (√*c*)/*b*<sup>1/4</sup>. Then {D} and {E} are medial and commensurable in square only, and the *b*<sup>1/4</sup> by (√*c*)/*b*<sup>1/4</sup> rectangle they contain has area √*c,* an irrational number.
 
 This proposition is used in @X.75.
