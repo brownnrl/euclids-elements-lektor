@@ -15,14 +15,20 @@ statement: If a unit number measures any number, and another number measures any
 ----
 proof:
 
-Let the unit *A* measure any number *BC,* and let another number *D* measure any other number *EF* the same number of times.
+Let the unit {A} measure any number {BC}, and let another number {D} measure any other number {EF} the same number of times.
 
-I say that, alternately also, the unit measures the number *D* the same number of times that *BC* measures *EF.*
+I say that, alternately also, the unit measures the number {D} the same number of times that {BC} measures {EF}.
 
 <figure class="diagram rdiagram">
 <canvas id="canvas_0" width="280" height="140" tabindex="0"></canvas>
 <noscript><img alt="VII.15 diagram" src="propVII15.gif"/></noscript>
 <script type="text/javascript">
+    // A is the unit, BC three units (BG, GH, HC), D two units, and EF three
+    // times D (EK, KL, LF). Line segments only, so the walk is highlight
+    // beats, with G, H and K, L appearing when BC and EF are divided.
+    var GIVEN = ["A","BC","B","C","D","D2","EF","E","F"];
+    var DIV1  = GIVEN.concat(["G","H","BG","GH","HC"]);
+    var DIV2  = DIV1.concat(["K","L","EK","KL","LF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,23 +55,127 @@ I say that, alternately also, the unit measures the number *D* the same number o
             "K;point;cutoff;E,E3,D1,D2",
             "L;point;cutoff;K,E3,D1,D2",
             "F;point;cutoff;L,E3,D1,D2",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // Invisible highlight targets for the units of BC and the parts
+            // of EF equal to D. Zero-colour: nothing changes at rest.
+            "BG;line;connect;B,G;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "HC;line;connect;H,C;0;0;0",
+            "EK;line;connect;E,K;0;0;0",
+            "KL;line;connect;K,L;0;0;0",
+            "LF;line;connect;L,F;0;0;0"
         ],
+        // Draggables (checked against the bundle): the lineSliders A1, A2
+        // (ends of the unit A), B, D1 and E, all givens standing from slide
+        // 1. G, H, C, D2, K, L, F are derived cutoffs and follow the visible
+        // sets: G, H and K, L arrive with "Divide".
+        slides: [
+            { text: "“If a unit number measures any number, and another number measures any other number the same number of times,”",
+              visible: GIVEN,
+              highlighted: ["A","BC","D","EF"] },
+            { text: "“then alternately, the unit measures the third number the same number of times that the second measures the fourth.”",
+              visible: GIVEN,
+              highlighted: ["A","D","BC","EF"],
+              justifications: [{ ref: "VII.15" }] },
+            { text: "Let the unit {A} measure any number {BC},",
+              visible: GIVEN,
+              highlighted: ["A","BC"] },
+            { text: "and let another number {D} measure any other number {EF} the same number of times.",
+              visible: GIVEN,
+              highlighted: ["D","EF"] },
+            { text: "I say that, alternately also, the unit measures the number {D} the same number of times that {BC} measures {EF}.",
+              visible: GIVEN,
+              highlighted: ["A","D","BC","EF"] },
+            { text: "Since the unit {A} measures the number {BC} the same number of times that {D} measures {EF},",
+              visible: GIVEN,
+              highlighted: ["A","BC","D","EF"] },
+            { text: "therefore there are as many numbers equal to {D} in {EF} as there are units in {BC}.",
+              visible: GIVEN,
+              highlighted: ["D","EF","BC"] },
+            { text: "Divide {BC} into the units in it, {BG}, {GH}, and {HC},",
+              visible: DIV1,
+              highlighted: ["BG","GH","HC","G","H"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear },
+                  { elem: "H", name: geomlib.A.Point.appear } ] } },
+            { text: "and divide {EF} into the numbers {EK}, {KL}, and {LF} equal to {D}.",
+              visible: DIV2,
+              highlighted: ["EK","KL","LF","K","L","D"],
+              transition: { animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "L", name: geomlib.A.Point.appear } ] } },
+            { text: "Then the multitude of {BG}, {GH}, and {HC} equals the multitude of {EK}, {KL}, and {LF}.",
+              visible: DIV2,
+              highlighted: ["BG","GH","HC","EK","KL","LF"] },
+            { text: "And, since the units {BG}, {GH}, and {HC} equal one another,",
+              visible: DIV2,
+              highlighted: ["BG","GH","HC"] },
+            { text: "and the numbers {EK}, {KL}, and {LF} also equal one another,",
+              visible: DIV2,
+              highlighted: ["EK","KL","LF"] },
+            { text: "while the multitude of the units {BG}, {GH}, and {HC} equals the multitude of the numbers {EK}, {KL}, and {LF},",
+              visible: DIV2,
+              highlighted: ["BG","GH","HC","EK","KL","LF"] },
+            { text: "therefore the unit {BG} is to the number {EK} as the unit {GH} is to the number {KL},",
+              visible: DIV2,
+              highlighted: ["BG","EK","GH","KL"] },
+            { text: "and as the unit {HC} is to the number {LF}.",
+              visible: DIV2,
+              highlighted: ["HC","LF"] },
+            { text: "Since {one of the antecedents|BG} is to {one of the consequents|EK}",
+              visible: DIV2,
+              highlighted: ["BG","EK"] },
+            { text: "as {the sum of the antecedents|BC} is to {the sum of the consequents|EF},",
+              visible: DIV2,
+              highlighted: ["BC","EF"] },
+            { text: "therefore the unit {BG} is to the number {EK} as {BC} is to {EF}.",
+              visible: DIV2,
+              highlighted: ["BG","EK","BC","EF"],
+              justifications: [{ ref: "VII.12" }] },
+            { text: "But the unit {BG} equals the unit {A}, and the number {EK} equals the number {D}.",
+              visible: DIV2,
+              highlighted: ["BG","A","EK","D"] },
+            { text: "Therefore the unit {A} is to the number {D} as {BC} is to {EF}.",
+              visible: DIV2,
+              highlighted: ["A","D","BC","EF"] },
+            { text: "Therefore the unit {A} measures the number {D} the same number of times that {BC} measures {EF}.",
+              visible: DIV2,
+              highlighted: ["A","D","BC","EF"],
+              justifications: [{ ref: "VII.Def.20" }] },
+            { text: "Therefore, if a unit number measures any number, and another number measures any other number the same number of times,",
+              visible: DIV2,
+              highlighted: ["A","BC","D","EF"] },
+            { text: "then alternately, the unit measures the third number the same number of times that the second measures the fourth.",
+              visible: DIV2,
+              highlighted: ["A","D","BC","EF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.15") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.12": "/elements/books/bookVII/propositions/propVII12/",
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/"
     });
 </script>
 </figure>
 
-Since the unit *A* measures the number *BC* the same number of times that *D* measures *EF,* therefore there are as many numbers equal to *D* in *EF* as there are units in *BC.*
+Since the unit {A} measures the number {BC} the same number of times that {D} measures {EF}, therefore there are as many numbers equal to {D} in {EF} as there are units in {BC}.
 
-Divide *BC* into the units in it, *BG, GH,* and *HC,* and divide *EF* into the numbers *EK, KL,* and *LF* equal to *D.* Then the multitude of *BG, GH,* and *HC* equals the multitude of *EK, KL,* and *LF.*
+Divide {BC} into the units in it, {BG}, {GH}, and {HC}, and divide {EF} into the numbers {EK}, {KL}, and {LF} equal to {D}. Then the multitude of {BG}, {GH}, and {HC} equals the multitude of {EK}, {KL}, and {LF}.
 
-And, since the units *BG, GH,* and *HC* equal one another, and the numbers *EK, KL,* and *LF* also equal one another, while the multitude of the units *BG, GH,* and *HC* equals the multitude of the numbers *EK, KL,* and *LF,* therefore the unit *BG* is to the number *EK* as the unit *GH* is to the number *KL,* and as the unit *HC* is to the number *LF.*
+And, since the units {BG}, {GH}, and {HC} equal one another, and the numbers {EK}, {KL}, and {LF} also equal one another, while the multitude of the units {BG}, {GH}, and {HC} equals the multitude of the numbers {EK}, {KL}, and {LF}, therefore the unit {BG} is to the number {EK} as the unit {GH} is to the number {KL}, and as the unit {HC} is to the number {LF}.
 
-Since one of the antecedents is to one of the consequents as the sum of the antecedents is to the sum of the consequents, therefore the unit *BG* is to the number *EK* as *BC* is to *EF.* [!just VII.12]
+Since one of the antecedents is to one of the consequents as the sum of the antecedents is to the sum of the consequents, therefore the unit {BG} is to the number {EK} as {BC} is to {EF}. [!just VII.12]
 
-But the unit *BG* equals the unit *A,* and the number *EK* equals the number *D.* Therefore the unit *A* is to the number *D* as *BC* is to *EF.*
+But the unit {BG} equals the unit {A}, and the number {EK} equals the number {D}. Therefore the unit {A} is to the number {D} as {BC} is to {EF}.
 
-Therefore the unit *A* measures the number *D* the same number of times that *BC* measures *EF.* [!just VII.Def.20]
+Therefore the unit {A} measures the number {D} the same number of times that {BC} measures {EF}. [!just VII.Def.20]
 
 Therefore, *if a unit number measures any number, and another number measures any other number the same number of times, then alternately, the unit measures the third number the same number of times that the second measures the fourth.*
 

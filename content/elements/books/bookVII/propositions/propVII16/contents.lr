@@ -15,14 +15,19 @@ statement: If two numbers multiplied by one another make certain numbers, then t
 ----
 proof:
 
-Let *A* and *B* be two numbers, and let *A* multiplied by *B* make *C,* and *B* multiplied by *A* make *D.*
+Let {A} and {B} be two numbers, and let {A} multiplied by {B} make {C}, and {B} multiplied by {A} make {D}.
 
-I say that *C* equals *D.*
+I say that {C} equals {D}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="200" tabindex="0"></canvas>
 <noscript><img alt="VII.16 diagram" src="propVII16.gif"/></noscript>
 <script type="text/javascript">
+    // A and B are the given numbers, C = A x B, D = B x A (drawn equal to C),
+    // and E the unit. Line segments only, so the walk is highlight beats;
+    // the unit E joins the figure when the proof first names it.
+    var GIVEN = ["A","B","C","C2","D","D2"];
+    var UNIT  = GIVEN.concat(["E"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -54,21 +59,93 @@ I say that *C* equals *D.*
             "D2;point;cutoff;D1,D3,C1,C2;0",
             "D;line;connect;D1,D2;black"
         ],
+        // Draggables (checked against the bundle): the lineSlider ends A1,
+        // A2, B1, B2, E1, E2 and the left ends C1, D1, all zero-colour
+        // handles. C2 and D2 are derived. E's handles draw nothing, so the
+        // line E itself is what the visible sets withhold until slide 7.
+        slides: [
+            { text: "“If two numbers multiplied by one another make certain numbers,”",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "“then the numbers so produced equal one another.”",
+              visible: GIVEN,
+              highlighted: ["C","D"],
+              justifications: [{ ref: "VII.16" }] },
+            { text: "Let {A} and {B} be two numbers,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and let {A} multiplied by {B} make {C}, and {B} multiplied by {A} make {D}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "I say that {C} equals {D}.",
+              visible: GIVEN,
+              highlighted: ["C","D"] },
+            { text: "Since {A} multiplied by {B} makes {C}, therefore {B} measures {C} according to the units in {A}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "VII.Def.15" }] },
+            { text: "But the unit {E} also measures the number {A} according to the units in it,",
+              visible: UNIT,
+              highlighted: ["E","A"] },
+            { text: "therefore the unit {E} measures {A} the same number of times that {B} measures {C}.",
+              visible: UNIT,
+              highlighted: ["E","A","B","C"] },
+            { text: "Therefore, alternately, the unit {E} measures the number {B} the same number of times that {A} measures {C}.",
+              visible: UNIT,
+              highlighted: ["E","B","A","C"],
+              justifications: [{ ref: "VII.15" }] },
+            { text: "Again, since {B} multiplied by {A} makes {D}, therefore {A} measures {D} according to the units in {B}.",
+              visible: UNIT,
+              highlighted: ["B","A","D"] },
+            { text: "But the unit {E} also measures {B} according to the units in it,",
+              visible: UNIT,
+              highlighted: ["E","B"] },
+            { text: "therefore the unit {E} measures the number {B} the same number of times that {A} measures {D}.",
+              visible: UNIT,
+              highlighted: ["E","B","A","D"] },
+            { text: "But the unit {E} measures the number {B} the same number of times that {A} measures {C},",
+              visible: UNIT,
+              highlighted: ["E","B","A","C"] },
+            { text: "therefore {A} measures each of the numbers {C} and {D} the same number of times.",
+              visible: UNIT,
+              highlighted: ["A","C","D"] },
+            { text: "Therefore {C} equals {D}.",
+              visible: UNIT,
+              highlighted: ["C","D"] },
+            { text: "Therefore, if two numbers multiplied by one another make certain numbers,",
+              visible: UNIT,
+              highlighted: ["A","B","C","D"] },
+            { text: "then the numbers so produced equal one another.",
+              visible: UNIT,
+              highlighted: ["C","D"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.16") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.15": "/elements/books/bookVII/propositions/propVII15/",
+        "VII.Def.15": "/elements/books/bookVII/definitions/defVII15/"
     });
 </script>
 </figure>
 
-Since *A* multiplied by *B* makes *C,* therefore *B* measures *C* according to the units in *A.* [!just VII.Def.15]
+Since {A} multiplied by {B} makes {C}, therefore {B} measures {C} according to the units in {A}. [!just VII.Def.15]
 
-But the unit *E* also measures the number *A* according to the units in it, therefore the unit *E* measures *A* the same number of times that *B* measures *C.*
+But the unit {E} also measures the number {A} according to the units in it, therefore the unit {E} measures {A} the same number of times that {B} measures {C}.
 
-Therefore, alternately, the unit *E* measures the number *B* the same number of times that *A* measures *C.* [!just VII.15]
+Therefore, alternately, the unit {E} measures the number {B} the same number of times that {A} measures {C}. [!just VII.15]
 
-Again, since *B* multiplied by *A* makes *D,* therefore *A* measures *D* according to the units in *B.* But the unit *E* also measures *B* according to the units in it, therefore the unit *E* measures the number *B* the same number of times that *A* measures *D.*
+Again, since {B} multiplied by {A} makes {D}, therefore {A} measures {D} according to the units in {B}. But the unit {E} also measures {B} according to the units in it, therefore the unit {E} measures the number {B} the same number of times that {A} measures {D}.
 
-But the unit *E* measures the number *B* the same number of times that *A* measures *C,* therefore *A* measures each of the numbers *C* and *D* the same number of times.
+But the unit {E} measures the number {B} the same number of times that {A} measures {C}, therefore {A} measures each of the numbers {C} and {D} the same number of times.
 
-Therefore *C* equals *D.*
+Therefore {C} equals {D}.
 
 Therefore, *if two numbers multiplied by one another make certain numbers, then the numbers so produced equal one another.*
 
