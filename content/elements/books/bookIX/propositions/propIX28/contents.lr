@@ -15,12 +15,18 @@ statement: If an odd number is multiplied by an even number, then the product is
 ----
 proof:
 
-Let the odd number *A* multiplied by the even number *B* make *C.*
+Let the odd number {A} multiplied by the even number {B} make {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="130" tabindex="0"></canvas>
 <noscript><img alt="IX.28 diagram" src="propIX28.gif"/></noscript>
 <script type="text/javascript">
+    // The numbers are line segments on three rows: A, B, and the product C.
+    // Nothing is added to the figure; the slides only light the segments the
+    // proof names. All three are given, so no draggable is deferred; C2 is
+    // derived (proportion) and listed in every slide. The unit U1U2 lies
+    // off-canvas in Joyce's figure.
+    var ALL = ["A","B","C","A1","A2","B1","B2","C1","C2"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -44,15 +50,62 @@ Let the odd number *A* multiplied by the even number *B* make *C.*
             "C2;point;proportion;U1,U2,A1,A2,B1,B2,C1,C3;0",
             "C;line;connect;C1,C2;black"
         ],
+        slides: [
+            { text: "“If an odd number is multiplied by an even number, then the product is even.”",
+              visible: ALL,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "IX.28" }] },
+            { text: "Let the odd number {A} multiplied by the even number {B} make {C}.",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "I say that {C} is even.",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "Since {A} multiplied by {B} makes {C},",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "therefore {C} is made up of as many numbers equal to {B} as there are units in {A}.",
+              visible: ALL,
+              highlighted: ["C","B","A"],
+              justifications: [{ claim: "C is B taken A times", ref: "VII.Def.15" }] },
+            { text: "And {B} is even, therefore {C} is made up of even numbers.",
+              visible: ALL,
+              highlighted: ["B","C"] },
+            { text: "But, if as many even numbers as we please be added together, the whole is even.",
+              visible: ALL,
+              highlighted: ["C"],
+              justifications: [{ claim: "a sum of evens is even", ref: "IX.21" }] },
+            { text: "Therefore {C} is even.",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "Therefore, if an odd number is multiplied by an even number,",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "then the product is even.",
+              visible: ALL,
+              highlighted: ["C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.28") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.15": "/elements/books/bookVII/definitions/defVII15/",
+        "IX.21": "/elements/books/bookIX/propositions/propIX21/"
     });
 </script>
 </figure>
 
-I say that *C* is even.
+I say that {C} is even.
 
-Since *A* multiplied by *B* makes *C,* therefore *C* is made up of as many numbers equal to *B* as there are units in *A.* And *B* is even, therefore *C* is made up of even numbers. [!just VII.Def.15]
+Since {A} multiplied by {B} makes {C}, therefore {C} is made up of as many numbers equal to {B} as there are units in {A}. And {B} is even, therefore {C} is made up of even numbers. [!just VII.Def.15]
 
-But, if as many even numbers as we please be added together, the whole is even. Therefore *C* is even. [!just IX.21]
+But, if as many even numbers as we please be added together, the whole is even. Therefore {C} is even. [!just IX.21]
 
 Therefore, *if an odd number is multiplied by an even number, then the product is even.*
 
@@ -62,7 +115,7 @@ guide:
 
 This is one of two propositions that examine the result of multiplying even and odd numbers by each other. The third proposition, the product of two even numbers, is omitted.
 
-Note that the proof for this theorem makes no use of the assumption that *A* is an odd number. The statement of this theorem might just as well be "if any number is multiplied by an even number, then the product is even."
+Note that the proof for this theorem makes no use of the assumption that {A} is an odd number. The statement of this theorem might just as well be "if any number is multiplied by an even number, then the product is even."
 
 #### Use of this proposition
 

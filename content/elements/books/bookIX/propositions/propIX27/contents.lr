@@ -15,14 +15,20 @@ statement: If an even number is subtracted from an odd number, then the remainde
 ----
 proof:
 
-Let the even number *BC* be subtracted from the odd number *AB.*
+Let the even number {BC} be subtracted from the odd number {AB}.
 
-I say that the remainder *CA* is odd.
+I say that the remainder {CA} is odd.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="230" height="60" tabindex="0"></canvas>
 <noscript><img alt="IX.27 diagram" src="propIX27.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: AB is Joyce's one drawn line. The parts BC, CA, AD,
+    // DB, CD are transparent twins so each lights on its own. D, the end of
+    // the unit AD cut off from A toward B, is derived and joins the visible
+    // set when the unit is subtracted.
+    var GIVEN = ["A","B","C","AB","BC","CA"];
+    var ALL   = GIVEN.concat(["D","AD","DB","CD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -36,15 +42,65 @@ I say that the remainder *CA* is odd.
             "B;point;lineSlider;A0,A3,200,0",
             "C;point;lineSlider;A0,A3,130,0",
             "D;point;cutoff;A,B,U1,U2",
-            "AB;line;connect;A,B"
+            "AB;line;connect;A,B",
+            // Highlight twins over AB (transparent).
+            "BC;line;connect;B,C;0;0;0",
+            "CA;line;connect;C,A;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "CD;line;connect;C,D;0;0;0"
         ],
+        slides: [
+            { text: "“If an even number is subtracted from an odd number, then the remainder is odd.”",
+              visible: GIVEN,
+              highlighted: ["BC","AB"],
+              justifications: [{ ref: "IX.27" }] },
+            { text: "Let the even number {BC} be subtracted from the odd number {AB}.",
+              visible: GIVEN,
+              highlighted: ["BC","AB"] },
+            { text: "I say that the remainder {CA} is odd.",
+              visible: GIVEN,
+              highlighted: ["CA"] },
+            { text: "Subtract the unit {AD}, therefore {DB} is even.",
+              visible: ALL,
+              highlighted: ["AD","DB"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "odd less a unit is even", ref: "VII.Def.7" }] },
+            { text: "But {BC} is also even, therefore the remainder {CD} is even.",
+              visible: ALL,
+              highlighted: ["DB","BC","CD"],
+              justifications: [{ claim: "even less even is even", ref: "IX.24" }] },
+            { text: "Therefore {CA} is odd.",
+              visible: ALL,
+              highlighted: ["CD","AD","CA"],
+              justifications: [{ claim: "even plus a unit is odd", ref: "VII.Def.7" }] },
+            { text: "Therefore, if an even number is subtracted from an odd number,",
+              visible: ALL,
+              highlighted: ["BC","AB"] },
+            { text: "then the remainder is odd.",
+              visible: ALL,
+              highlighted: ["CA"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.27") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.7": "/elements/books/bookVII/definitions/defVII7/",
+        "IX.24": "/elements/books/bookIX/propositions/propIX24/"
     });
 </script>
 </figure>
 
-Subtract the unit *AD,* therefore *DB* is even. [!just VII.Def.7]
+Subtract the unit {AD}, therefore {DB} is even. [!just VII.Def.7]
 
-But *BC* is also even, therefore the remainder *CD* is even. Therefore *CA* is odd. [!just IX.24, VII.Def.7]
+But {BC} is also even, therefore the remainder {CD} is even. Therefore {CA} is odd. [!just IX.24, VII.Def.7]
 
 Therefore, *if an even number is subtracted from an odd number, then the remainder is odd.*
 
