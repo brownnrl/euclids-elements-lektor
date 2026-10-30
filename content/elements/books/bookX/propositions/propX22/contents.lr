@@ -17,12 +17,25 @@ proof:
 
 If there are two straight lines, then the first is to the second as the square on the first is to the rectangle contained by the two straight lines.
 
-Let *FE* and *EG* be two straight lines.
+Let {FE} and {EG} be two straight lines.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="240" height="160" tabindex="0"></canvas>
 <noscript><img alt="X.22 lemma diagram" src="propX22l.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's lemma figure: the square FD on FE (random face) and the
+    // rectangle DG beside it (default opaque face). The given lines FE and
+    // EG are drawn only as edges of those two, so solid twins FE / EG
+    // (initiallyHidden — the resting figure is unchanged) carry them on the
+    // slides before the square is described. DE is a transparent highlight
+    // target (;0;0;0). The square and the rectangle are lit through
+    // faceless, strokeless twins FDh / DGh (#140); prose and captions reach
+    // them with the display override ({DF|FDh}, {GD|DGh}).
+    //
+    // Draggables (checked against the bundle): F, E, G (given) and the
+    // offscreen frees. D is a derived vertex, listed from "Describe".
+    var L_GIVEN = ["F","E","G","FE","EG"];
+    var L_SQ    = L_GIVEN.concat(["FD","FDh","D","DG","DGh","DE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -35,17 +48,75 @@ Let *FE* and *EG* be two straight lines.
             "E;point;lineSlider;F0,F3,110,0",
             "FD;polygon;square;E,F;0;0;black;random",
             "D;point;vertex;FD,4",
-            "DG;polygon;parallelogram;D,E,G"
+            "DG;polygon;parallelogram;D,E,G",
+            // Slide-only twins and highlight targets.
+            "FE;line;connect;F,E",
+            "EG;line;connect;E,G",
+            "DE;line;connect;D,E;0;0;0",
+            "FDh;polygon;square;E,F;0;0;0;0",
+            "DGh;polygon;parallelogram;D,E,G;0;0;0;0"
         ],
+        initiallyHidden: ["FE","EG"],
+        slides: [
+            { text: "“If there are two straight lines, then the first is to the second",
+              visible: L_GIVEN,
+              highlighted: ["FE","EG"],
+              justifications: [{ ref: "Lemma" }] },
+            { text: "as the square on the first is to the rectangle contained by the two straight lines.”",
+              visible: L_GIVEN,
+              highlighted: ["FE","EG"] },
+            { text: "Let {FE} and {EG} be two straight lines.",
+              visible: L_GIVEN,
+              highlighted: ["FE","EG"] },
+            { text: "I say that {FE} is to {EG} as the square on {FE} is to the rectangle {FE} by {EG}.",
+              visible: L_GIVEN,
+              highlighted: ["FE","EG"] },
+            { text: "Describe the square {DF|FDh} on {FE}, and complete {GD|DGh}.",
+              visible: L_SQ,
+              highlighted: ["FE"],
+              justifications: [{ claim: "the square on FE", ref: "I.46" }],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FDh", name: geomlib.A.Polygon.outline },
+                  { elem: "DGh", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Since then {FE} is to {EG} as {FD|FDh} is to {DG|DGh},",
+              visible: L_SQ,
+              highlighted: ["FE","EG","FDh","DGh"],
+              justifications: [{ claim: "FE : EG = FD : DG", ref: "VI.1" }] },
+            { text: "and {FD|FDh} is the square on {FE}, and {DG|DGh} the rectangle {DE} by {EG}, that is, the rectangle {FE} by {EG},",
+              visible: L_SQ,
+              highlighted: ["FDh","DGh","DE","EG","FE"] },
+            { text: "therefore {FE} is to {EG} as the square on {FE} is to the rectangle {FE} by {EG}.",
+              visible: L_SQ,
+              highlighted: ["FE","EG","FDh","DGh"] },
+            { text: "Similarly the rectangle {GE|EG} by {EF|FE} is to the square on {EF|FE},",
+              visible: L_SQ,
+              highlighted: ["DGh","FDh"] },
+            { text: "that is {GD|DGh} is to {FD|FDh}, as {GE|EG} is to {EF|FE}.",
+              visible: L_SQ,
+              highlighted: ["DGh","FDh","EG","FE"],
+              justifications: [{ claim: "GD : FD = GE : EF", ref: "VI.1" }, { ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // (shared by both canvases on this page).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.46": "/elements/books/bookI/propositions/propI46/",
+        "VI.1": "/elements/books/bookVI/propositions/propVI1/"
     });
 </script>
 </figure>
 
-I say that *FE* is to *EG* as the square on *FE* is to the rectangle *FE* by *EG*.
+I say that {FE} is to {EG} as the square on {FE} is to the rectangle {FE} by {EG}.
 
-Describe the square *DF* on *FE*, and complete *GD*.
+Describe the square {DF|FDh} on {FE}, and complete {GD|DGh}.
 
-Since then *FE* is to *EG* as *FD* is to *DG*, and *FD* is the square on *FE*, and *DG* the rectangle *DE* by *EG*, that is, the rectangle *FE* by *EG*, therefore *FE* is to *EG* as the square on *FE* is to the rectangle *FE* by *EG*. Similarly the rectangle *GE* by *EF* is to the square on *EF*, that is *GD* is to *FD*, as *GE* is to *EF*. [!just VI.1]
+Since then {FE} is to {EG} as {FD|FDh} is to {DG|DGh}, and {FD|FDh} is the square on {FE}, and {DG|DGh} the rectangle {DE} by {EG}, that is, the rectangle {FE} by {EG}, therefore {FE} is to {EG} as the square on {FE} is to the rectangle {FE} by {EG}. Similarly the rectangle {GE|EG} by {EF|FE} is to the square on {EF|FE}, that is {GD|DGh} is to {FD|FDh}, as {GE|EG} is to {EF|FE}. [!just VI.1]
 
 <div class="qed">Q.E.D.</div>
 <br clear="all">
@@ -58,16 +129,32 @@ proof:
 
 The square on a medial straight line, if applied to a rational straight line, produces as breadth a straight line rational and incommensurable in length with that to which it is applied.
 
-Let *A* be medial and *CB* rational, and let a rectangular area *BD* equal to the square on *A* be applied to *BC*, producing *CD* as breadth.
+Let {A:canvas_1} be medial and {CB|BC:canvas_1} rational, and let a rectangular area {BD|BDh:canvas_1} equal to the square on {A:canvas_1} be applied to {BC:canvas_1}, producing {CD:canvas_1} as breadth.
 
-I say that *CD* is rational and incommensurable in length with *CB*.
+I say that {CD:canvas_1} is rational and incommensurable in length with {CB|BC:canvas_1}.
 
-Since *A* is medial, the square on it equals a rectangular area contained by rational straight lines commensurable in square only. [!just X.21]
+Since {A:canvas_1} is medial, the square on it equals a rectangular area contained by rational straight lines commensurable in square only. [!just X.21]
 
 <figure class="diagram">
 <canvas id="canvas_1" width="270" height="250" tabindex="0"></canvas>
 <noscript><img alt="X.22 diagram" src="propX22.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the medial line A, the rectangle BD applied to BC
+    // with breadth CD, and the rectangle GF (sides EG, EF) equal to the
+    // square on A. Added, all invisible at rest: transparent highlight
+    // targets CD and EF (;0;0;0); faceless, strokeless twins BDh / FGh that
+    // carry the rectangles' highlights so a raised random face never covers
+    // the figure (#140); right-angle markers at C and E for "equiangular"
+    // (hidden at rest, showAngles is off). The prose above this canvas
+    // binds to it explicitly ({A:canvas_1}); captions use the display
+    // override for Joyce's spellings ({CB|BC}, {DC|CD}, {FE|EF}, {GF|FGh}).
+    //
+    // Draggables (checked against the bundle): A1, A2, B, C (given), E, G,
+    // and the offscreen frees. E and G only arrive with "Let the square on
+    // it equal GF", so they are deferred; D and F are derived and listed.
+    var GIVEN = ["A","A1","A2","B","C","BC","D","BD","BDh","CD"];
+    var GF    = GIVEN.concat(["E","G","EG","F","EF","FG","FGh"]);
+    var ANG   = GF.concat(["angC","angE"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -95,29 +182,151 @@ Since *A* is medial, the square on it equals a rectangular area contained by rat
             "F';point;perpendicular;E,G;0;0",
             "F'';point;extend;F',E,F',E;0;0",
             "F;point;proportion;E,G,A1,A2,A1,A2,E,F''",
-            "FG;polygon;parallelogram;F,E,G;0;0;black;random"
+            "FG;polygon;parallelogram;F,E,G;0;0;black;random",
+            // Highlight targets and markers only — invisible at rest.
+            "CD;line;connect;C,D;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "BDh;polygon;parallelogram;B,C,D;0;0;0;0",
+            "FGh;polygon;parallelogram;F,E,G;0;0;0;0",
+            "angC;sector;angleMarkerRight;C,B,D",
+            "angE;sector;angleMarkerRight;E,G,F"
         ],
+        deferDraggables: ["E","G"],
+        slides: [
+            { text: "“The square on a medial straight line, if applied to a rational straight line,",
+              visible: GIVEN,
+              highlighted: ["A","BC"],
+              justifications: [{ ref: "X.22" }] },
+            { text: "produces as breadth a straight line rational and incommensurable in length with that to which it is applied.”",
+              visible: GIVEN,
+              highlighted: ["CD","BC"] },
+            { text: "Let {A} be medial and {CB|BC} rational,",
+              visible: GIVEN,
+              highlighted: ["A","BC"] },
+            { text: "and let a rectangular area {BD|BDh} equal to the square on {A} be applied to {BC}, producing {CD} as breadth.",
+              visible: GIVEN,
+              highlighted: ["BDh","A","BC","CD"] },
+            { text: "I say that {CD} is rational and incommensurable in length with {CB|BC}.",
+              visible: GIVEN,
+              highlighted: ["CD","BC"] },
+            { text: "Since {A} is medial,",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "the square on it equals a rectangular area contained by rational straight lines commensurable in square only.",
+              visible: GIVEN,
+              highlighted: ["A"],
+              justifications: [{ claim: "square on a medial line", ref: "X.21" }] },
+            { text: "Let the square on it equal {GF|FGh}.",
+              visible: GF,
+              highlighted: ["FGh","A"],
+              transition: { animations: [
+                  { elem: "FGh", name: geomlib.A.Polygon.outline } ] } },
+            { text: "But the square on it also equals {BD|BDh}, therefore {BD|BDh} equals {GF|FGh}.",
+              visible: GF,
+              highlighted: ["BDh","FGh"] },
+            { text: "But it is also equiangular with it,",
+              visible: ANG,
+              highlighted: ["BDh","FGh"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "angE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and in equal and equiangular parallelograms the sides about the equal angles are reciprocally proportional,",
+              visible: ANG,
+              highlighted: ["BC","CD","EG","EF"] },
+            { text: "therefore, {BC} is to {EG} as {EF} is to {CD}.",
+              visible: ANG,
+              highlighted: ["BC","EG","EF","CD"],
+              justifications: [{ claim: "BC : EG = EF : CD", ref: "VI.14" }] },
+            { text: "Therefore the square on {BC} is to the square on {EG} as the square on {EF} is to the square on {CD}.",
+              visible: GF,
+              highlighted: ["BC","EG","EF","CD"],
+              justifications: [{ claim: "BC² : EG² = EF² : CD²", ref: "VI.22" }] },
+            { text: "But the square on {CB|BC} is commensurable with the square on {EG}, for each of these straight lines is rational,",
+              visible: GF,
+              highlighted: ["BC","EG"] },
+            { text: "therefore the square on {EF} is also commensurable with the square on {CD}.",
+              visible: GF,
+              highlighted: ["EF","CD"],
+              justifications: [{ claim: "EF², CD² commensurable", ref: "X.11" }] },
+            { text: "But the square on {EF} is rational, therefore the square on {CD} is also rational. Therefore {CD} is rational.",
+              visible: GF,
+              highlighted: ["EF","CD"],
+              justifications: [{ claim: "CD rational", ref: "X.Def.I.4" }] },
+            { text: "And since {EF} is incommensurable in length with {EG}, for they are commensurable in square only,",
+              visible: GF,
+              highlighted: ["EF","EG"] },
+            { text: "while {EF} is to {EG} as the square on {EF} is to the rectangle {FE|EF} by {EG},",
+              visible: GF,
+              highlighted: ["EF","EG","FGh"],
+              justifications: [{ claim: "EF : EG = EF² : EF·EG", ref: "Lemma" }] },
+            { text: "therefore the square on {EF} is incommensurable with the rectangle {FE|EF} by {EG}.",
+              visible: GF,
+              highlighted: ["EF","FGh"],
+              justifications: [{ claim: "EF², EF·EG incommensurable", ref: "X.11" }] },
+            { text: "But the square on {CD} is commensurable with the square on {EF}, for the straight lines are rational in square,",
+              visible: GF,
+              highlighted: ["CD","EF"] },
+            { text: "and the rectangle {DC|CD} by {CB|BC} is commensurable with the rectangle {FE|EF} by {EG}, for they equal the square on {A},",
+              visible: GF,
+              highlighted: ["BDh","FGh","A"] },
+            { text: "therefore the square on {CD} is incommensurable with the rectangle {DC|CD} by {CB|BC}.",
+              visible: GF,
+              highlighted: ["CD","BDh"],
+              justifications: [{ claim: "CD², DC·CB incommensurable", ref: "X.13" }] },
+            { text: "But the square on {CD} is to the rectangle {DC|CD} by {CB|BC} as {DC|CD} is to {CB|BC},",
+              visible: GF,
+              highlighted: ["CD","BC","BDh"],
+              justifications: [{ claim: "CD² : DC·CB = DC : CB", ref: "Lemma" }] },
+            { text: "therefore {DC|CD} is incommensurable in length with {CB|BC}.",
+              visible: GF,
+              highlighted: ["CD","BC"],
+              justifications: [{ claim: "DC, CB incommensurable in length", ref: "X.11" }] },
+            { text: "Therefore {CD} is rational and incommensurable in length with {CB|BC}.",
+              visible: GF,
+              highlighted: ["CD","BC"] },
+            { text: "Therefore, the square on a medial straight line, if applied to a rational straight line,",
+              visible: GF,
+              highlighted: ["A","BC"] },
+            { text: "produces as breadth a straight line rational and incommensurable in length with that to which it is applied.",
+              visible: GF,
+              highlighted: ["CD","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.22") return "#prop";
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    Object.assign(window.eucrefs, {
+        "VI.14":     "/elements/books/bookVI/propositions/propVI14/",
+        "VI.22":     "/elements/books/bookVI/propositions/propVI22/",
+        "X.11":      "/elements/books/bookX/propositions/propX11/",
+        "X.13":      "/elements/books/bookX/propositions/propX13/",
+        "X.21":      "/elements/books/bookX/propositions/propX21/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-Let the square on it equal *GF*. But the square on it also equals *BD*, therefore *BD* equals *GF*.
+Let the square on it equal {GF|FGh}. But the square on it also equals {BD|BDh}, therefore {BD|BDh} equals {GF|FGh}.
 
-But it is also equiangular with it, and in equal and equiangular parallelograms the sides about the equal angles are reciprocally proportional, therefore, *BC* is to *EG* as *EF* is to *CD*. [!just VI.14]
+But it is also equiangular with it, and in equal and equiangular parallelograms the sides about the equal angles are reciprocally proportional, therefore, {BC} is to {EG} as {EF} is to {CD}. [!just VI.14]
 
-Therefore the square on *BC* is to the square on *EG* as the square on *EF* is to the square on *CD*. [!just VI.22]
+Therefore the square on {BC} is to the square on {EG} as the square on {EF} is to the square on {CD}. [!just VI.22]
 
-But the square on *CB* is commensurable with the square on *EG*, for each of these straight lines is rational, therefore the square on *EF* is also commensurable with the square on *CD*. [!just X.11]
+But the square on {CB|BC} is commensurable with the square on {EG}, for each of these straight lines is rational, therefore the square on {EF} is also commensurable with the square on {CD}. [!just X.11]
 
-But the square on *EF* is rational, therefore the square on *CD* is also rational. Therefore *CD* is rational. [!just X.Def.I.4]
+But the square on {EF} is rational, therefore the square on {CD} is also rational. Therefore {CD} is rational. [!just X.Def.I.4]
 
-And since *EF* is incommensurable in length with *EG*, for they are commensurable in square only, while *EF* is to *EG* as the square on *EF* is to the rectangle *FE* by *EG*, therefore the square on *EF* is incommensurable with the rectangle *FE* by *EG*. <div class="just"><a href="#lemma">Lemma</a><br><a href="/elements/books/bookX/propositions/propX11/">X.11</a></div>
+And since {EF} is incommensurable in length with {EG}, for they are commensurable in square only, while {EF} is to {EG} as the square on {EF} is to the rectangle {FE|EF} by {EG}, therefore the square on {EF} is incommensurable with the rectangle {FE|EF} by {EG}. <div class="just"><a href="#lemma">Lemma</a><br><a href="/elements/books/bookX/propositions/propX11/">X.11</a></div>
 
-But the square on *CD* is commensurable with the square on *EF*, for the straight lines are rational in square, and the rectangle *DC* by *CB* is commensurable with the rectangle *FE* by *EG*, for they equal the square on *A*, therefore the square on *CD* is incommensurable with the rectangle *DC* by *CB*. [!just X.13]
+But the square on {CD} is commensurable with the square on {EF}, for the straight lines are rational in square, and the rectangle {DC|CD} by {CB|BC} is commensurable with the rectangle {FE|EF} by {EG}, for they equal the square on {A}, therefore the square on {CD} is incommensurable with the rectangle {DC|CD} by {CB|BC}. [!just X.13]
 
-But the square on *CD* is to the rectangle *DC* by *CB* as *DC* is to *CB*, therefore *DC* is incommensurable in length with *CB*. <div class="just"><a href="#lemma">Lemma</a>, <a href="/elements/books/bookX/propositions/propX11/">X.11</a></div>
+But the square on {CD} is to the rectangle {DC|CD} by {CB|BC} as {DC|CD} is to {CB|BC}, therefore {DC|CD} is incommensurable in length with {CB|BC}. <div class="just"><a href="#lemma">Lemma</a>, <a href="/elements/books/bookX/propositions/propX11/">X.11</a></div>
 
-Therefore *CD* is rational and incommensurable in length with *CB*.
+Therefore {CD} is rational and incommensurable in length with {CB|BC}.
 
 Therefore, *the square on a medial straight line, if applied to a rational straight line, produces as breadth a straight line rational and incommensurable in length with that to which it is applied.*
 
@@ -125,9 +334,9 @@ Therefore, *the square on a medial straight line, if applied to a rational strai
 ----
 guide:
 
-Given medial line *A* and rational line *BC*, then *CD* = *A*²/(*BC*) is a rational line incommensurable to *BC*.
+Given medial line {A} and rational line {BC}, then {CD} = {A}²/({BC}) is a rational line incommensurable to {BC}.
 
-To understand this, let *a* be the length of *A* (relative to the standard unit length), *b* the length of *BC*, and *c* the length of *CD*, so that *c* = *a*²/*b*.
+To understand this, let *a* be the length of {A} (relative to the standard unit length), *b* the length of {BC}, and *c* the length of {CD}, so that *c* = *a*²/*b*.
 
 We're given a medial number *a* (*a*⁴ is a rational number but *a*² is an irrational number), and *b*² is a rational number. Then it follows that *c*² is a rational number (being *a*⁴/*b*²), but *c*/*b* is an irrational number (being *a*²/*b*²). That follows since the product or quotient of two rational numbers is a rational number, but the product or quotient of an irrational number and a rational number is an irrational number.
 
