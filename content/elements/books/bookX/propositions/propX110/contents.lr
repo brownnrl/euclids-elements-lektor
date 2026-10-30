@@ -15,14 +15,30 @@ statement: If from a medial area there is subtracted a medial area incommensurab
 ----
 proof:
 
-As in the foregoing figures, let there be subtracted the medial area *BD* incommensurable with the whole from the medial area *BC*.
+As in the foregoing figures, let there be subtracted the medial area {BD} incommensurable with the whole from the medial area {BC|BCc}.
 
-I say that the side of *EC* is one of two irrational straight lines, either a second apotome of a medial straight line or a straight line which produces with a medial area a medial whole.
+I say that the side of {EC} is one of two irrational straight lines, either a second apotome of a medial straight line or a straight line which produces with a medial area a medial whole.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="240" tabindex="0"></canvas>
 <noscript><img alt="X.110 diagram" src="propX110.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure (as X.109): the medial area BC with the medial area BD
+    // cut from it, leaving EC; the rational line FG with GH applied equal
+    // to BC and GK (GFKL) equal to BD, leaving LH. Added, all hidden at
+    // rest: transparent targets FH, FK, KH, KL (;0;0;0); faceless targets
+    // BCc, GHc (the wholes, so lighting them raises no face over BD or GK,
+    // #140) and EC, LH (the remainders), built on the fourth vertices BC4,
+    // GH4. Captions and prose reach BC and GH through display overrides.
+    // The text sets nothing out ("As in the foregoing figures"), so the
+    // whole figure stands from the first slide and the walk is highlight
+    // beats. No angle is called right in the text, so no markers.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, F, G and the
+    // offscreen frees, all part of the figure the first proof slide cites,
+    // so none is deferred. E, H, K, L are derived and listed per slide.
+    var ALL = ["A","B","C","D","E","BC","BD","BCc","EC",
+               "F","G","H","K","L","GH","GFKL","GHc","LH","FH","FK","KH","KL"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,27 +63,173 @@ I say that the side of *EC* is one of two irrational straight lines, either a se
             "GH;polygon;parallelogram;G,F,H;0;0;black;150,100,100",
             "K;point;proportion;F,G,A,D,B,A,F,F3",
             "L;point;parallelogram;G,F,K",
-            "GFKL;polygon;quadrilateral;G,F,K,L;0;0;black;190,100,100"
+            "GFKL;polygon;quadrilateral;G,F,K,L;0;0;black;190,100,100",
+            // Slide-only highlight targets — invisible at rest.
+            "FG;line;connect;F,G;0;0;0",
+            "FH;line;connect;F,H;0;0;0",
+            "FK;line;connect;F,K;0;0;0",
+            "KH;line;connect;K,H;0;0;0",
+            "KL;line;connect;K,L;0;0;0",
+            "BC4;point;vertex;BC,4;0;0",
+            "GH4;point;vertex;GH,4;0;0",
+            "BCc;polygon;quadrilateral;B,A,C,BC4;0;0;0;0",
+            "EC;polygon;quadrilateral;E,D,C,BC4;0;0;0;0",
+            "GHc;polygon;quadrilateral;G,F,H,GH4;0;0;0;0",
+            "LH;polygon;quadrilateral;L,K,H,GH4;0;0;0;0"
         ],
+        aliases: { "KF": "FK", "HF": "FH", "HK": "KH", "GK": "GFKL", "LK": "KL", "CE": "EC", "DB": "BD" },
+        slides: [
+            { text: "“If from a medial area there is subtracted a medial area incommensurable with the whole,",
+              visible: ALL,
+              highlighted: ["BCc", "BD"],
+              justifications: [{ ref: "X.110" }] },
+            { text: "then the two remaining irrational straight lines arise,",
+              visible: ALL,
+              highlighted: ["EC"] },
+            { text: "either a second apotome of a medial straight line",
+              visible: ALL,
+              highlighted: ["EC"] },
+            { text: "or a straight line which produce with a medial area a medial whole.”",
+              visible: ALL,
+              highlighted: ["EC"] },
+            { text: "As in the foregoing figures, let there be subtracted the medial area {BD} incommensurable with the whole",
+              visible: ALL,
+              highlighted: ["BD"] },
+            { text: "from the medial area {BC|BCc}.",
+              visible: ALL,
+              highlighted: ["BCc"] },
+            { text: "I say that the side of {EC} is one of two irrational straight lines,",
+              visible: ALL,
+              highlighted: ["EC"] },
+            { text: "either a second apotome of a medial straight line",
+              visible: ALL,
+              highlighted: ["EC"] },
+            { text: "or a straight line which produces with a medial area a medial whole.",
+              visible: ALL,
+              highlighted: ["EC"] },
+            { text: "Since each of the rectangles {BC|BCc} and {BD} is medial, and {BC|BCc} is incommensurable with {BD},",
+              visible: ALL,
+              highlighted: ["BCc", "BD"] },
+            { text: "therefore each of the straight lines {FH} and {FK} is rational and incommensurable in length with {FG}.",
+              visible: ALL,
+              highlighted: ["FH", "FK", "FG"],
+              justifications: [{ claim: "FH, FK rational, incommensurable with FG", ref: "X.22" }] },
+            { text: "Since {BC|BCc} is incommensurable with {BD}, that is, {GH|GHc} with {GK|GFKL},",
+              visible: ALL,
+              highlighted: ["BCc", "BD", "GHc", "GFKL"] },
+            { text: "therefore {HF|FH} is also incommensurable with {FK}.",
+              visible: ALL,
+              highlighted: ["FH", "FK"],
+              justifications: [{ claim: "GH : GK = HF : FK", ref: "VI.1" }, { claim: "HF, FK incommensurable in length", ref: "X.11" }] },
+            { text: "Therefore {FH} and {FK} are rational straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["FH", "FK"] },
+            { text: "Therefore {KH} is an apotome.",
+              visible: ALL,
+              highlighted: ["KH"],
+              justifications: [{ claim: "KH an apotome", ref: "X.73" }] },
+            { text: "If then the square on {FH} is greater than the square on {FK}",
+              visible: ALL,
+              highlighted: ["FH", "FK"] },
+            { text: "by the square on a straight line commensurable with {FH},",
+              visible: ALL,
+              highlighted: ["FH"] },
+            { text: "while neither of the straight lines {FH} nor {FK} is commensurable in length with the rational straight line {FG} set out,",
+              visible: ALL,
+              highlighted: ["FH", "FK", "FG"] },
+            { text: "then {KH} is a third apotome.",
+              visible: ALL,
+              highlighted: ["KH"],
+              justifications: [{ claim: "KH a third apotome", ref: "X.Def.III.3" }] },
+            { text: "But {KL} is rational,",
+              visible: ALL,
+              highlighted: ["KL"] },
+            { text: "and the rectangle contained by a rational straight line and a third apotome is irrational,",
+              visible: ALL,
+              highlighted: ["LH"] },
+            { text: "and the side of it is irrational, and is called a second apotome of a medial straight line,",
+              visible: ALL,
+              highlighted: ["LH"] },
+            { text: "so that the side of {LH}, that is, of {EC}, is a second apotome of a medial straight line.",
+              visible: ALL,
+              highlighted: ["LH", "EC"],
+              justifications: [{ claim: "side of LH a second apotome of a medial", ref: "X.93" }] },
+            { text: "But, if the square on {FH} is greater than the square on {FK}",
+              visible: ALL,
+              highlighted: ["FH", "FK"] },
+            { text: "by the square on a straight line incommensurable with {FH},",
+              visible: ALL,
+              highlighted: ["FH"] },
+            { text: "while neither of the straight lines {HF|FH} nor {FK} is commensurable in length with {FG},",
+              visible: ALL,
+              highlighted: ["FH", "FK", "FG"] },
+            { text: "then {KH} is a sixth apotome.",
+              visible: ALL,
+              highlighted: ["KH"],
+              justifications: [{ claim: "KH a sixth apotome", ref: "X.Def.III.6" }] },
+            { text: "But the side of the rectangle contained by a rational straight line and a sixth apotome",
+              visible: ALL,
+              highlighted: ["LH"] },
+            { text: "is a straight line which produces with a medial area a medial whole.",
+              visible: ALL,
+              highlighted: ["LH"],
+              justifications: [{ claim: "side of rational by sixth apotome", ref: "X.96" }] },
+            { text: "Therefore the side of {LH}, that is, of {EC},",
+              visible: ALL,
+              highlighted: ["LH", "EC"] },
+            { text: "is a straight line which produces with a medial area a medial whole.",
+              visible: ALL,
+              highlighted: ["EC"] },
+            { text: "Therefore, if a medial area incommensurable with the whole is subtracted from a medial area,",
+              visible: ALL,
+              highlighted: ["BD", "BCc"] },
+            { text: "then two remaining irrational straight lines arise,",
+              visible: ALL,
+              highlighted: ["EC"] },
+            { text: "either a second apotome of a medial straight line",
+              visible: ALL,
+              highlighted: ["EC"] },
+            { text: "or a straight line which produces with a medial area a medial whole.",
+              visible: ALL,
+              highlighted: ["EC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.110") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VI.1":        "/elements/books/bookVI/propositions/propVI1/",
+        "X.11":        "/elements/books/bookX/propositions/propX11/",
+        "X.22":        "/elements/books/bookX/propositions/propX22/",
+        "X.73":        "/elements/books/bookX/propositions/propX73/",
+        "X.93":        "/elements/books/bookX/propositions/propX93/",
+        "X.96":        "/elements/books/bookX/propositions/propX96/",
+        "X.Def.III.3": "/elements/books/bookX/definitions/defX.III.3/",
+        "X.Def.III.6": "/elements/books/bookX/definitions/defX.III.6/"
     });
 </script>
 </figure>
 
-Since each of the rectangles *BC* and *BD* is medial, and *BC* is incommensurable with *BD*, therefore each of the straight lines *FH* and *FK* is rational and incommensurable in length with *FG*. [!just X.22]
+Since each of the rectangles {BC|BCc} and {BD} is medial, and {BC|BCc} is incommensurable with {BD}, therefore each of the straight lines {FH} and {FK} is rational and incommensurable in length with {FG}. [!just X.22]
 
-Since *BC* is incommensurable with *BD*, that is, *GH* with *GK*, therefore *HF* is also incommensurable with *FK*. [!just VI.1, X.11]
+Since {BC|BCc} is incommensurable with {BD}, that is, {GH|GHc} with {GK}, therefore {HF} is also incommensurable with {FK}. [!just VI.1, X.11]
 
-Therefore *FH* and *FK* are rational straight lines commensurable in square only. Therefore *KH* is an apotome. [!just X.73]
+Therefore {FH} and {FK} are rational straight lines commensurable in square only. Therefore {KH} is an apotome. [!just X.73]
 
-If then the square on *FH* is greater than the square on *FK* by the square on a straight line commensurable with *FH*, while neither of the straight lines *FH* nor *FK* is commensurable in length with the rational straight line *FG* set out, then *KH* is a third apotome. [!just X.Def.III.3]
+If then the square on {FH} is greater than the square on {FK} by the square on a straight line commensurable with {FH}, while neither of the straight lines {FH} nor {FK} is commensurable in length with the rational straight line {FG} set out, then {KH} is a third apotome. [!just X.Def.III.3]
 
-But *KL* is rational, and the rectangle contained by a rational straight line and a third apotome is irrational, and the side of it is irrational, and is called a second apotome of a medial straight line, so that the side of *LH*, that is, of *EC*, is a second apotome of a medial straight line. [!just X.93]
+But {KL} is rational, and the rectangle contained by a rational straight line and a third apotome is irrational, and the side of it is irrational, and is called a second apotome of a medial straight line, so that the side of {LH}, that is, of {EC}, is a second apotome of a medial straight line. [!just X.93]
 
-But, if the square on *FH* is greater than the square on *FK* by the square on a straight line incommensurable with *FH*, while neither of the straight lines *HF* nor *FK* is commensurable in length with *FG*, then *KH* is a sixth apotome. [!just X.Def.III.6]
+But, if the square on {FH} is greater than the square on {FK} by the square on a straight line incommensurable with {FH}, while neither of the straight lines {HF} nor {FK} is commensurable in length with {FG}, then {KH} is a sixth apotome. [!just X.Def.III.6]
 
 But the side of the rectangle contained by a rational straight line and a sixth apotome is a straight line which produces with a medial area a medial whole. [!just X.96]
 
-Therefore the side of *LH*, that is, of *EC*, is a straight line which produces with a medial area a medial whole.
+Therefore the side of {LH}, that is, of {EC}, is a straight line which produces with a medial area a medial whole.
 
 Therefore, *if a medial area incommensurable with the whole is subtracted from a medial area, then two remaining irrational straight lines arise, either a second apotome of a medial straight line or a straight line which produces with a medial area a medial whole.*
 
