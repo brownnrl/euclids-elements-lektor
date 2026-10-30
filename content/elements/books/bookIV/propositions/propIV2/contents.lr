@@ -17,12 +17,44 @@ statement: To inscribe in a given circle a triangle equiangular with a given tri
 ----
 proof:
 
-Let *ABC* be the given circle, and *DEF* the given triangle.
+Let {ABC} be the given circle, and {DEF} the given triangle.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="350" height="290" tabindex="0"></canvas>
 <noscript><img alt="IV.2 diagram" src="propIV2.gif"/></noscript>
 <script type="text/javascript">
+    // The tangent at A, the two I.23 angle copies at A, the join BC, then
+    // the III.32 alternate-segment argument twice and I.32 for the third
+    // angle.
+    //
+    // Joyce's figure builds the circle from the triangle: A and B are free,
+    // C is the `similar` point making ABC similar to DEF, and the circle is
+    // the circumcircle of ABC. The walk follows the proof's order instead
+    // — circle and triangle given, A on the circle, the angles at A copied
+    // — which the figure supports unchanged.
+    //
+    // Everything added leaves the resting figure as it was. AH and AG (the
+    // two halves of the tangent the proof names) and the arc arcB are
+    // transparent highlight targets. AC and BC are solid black lines over
+    // the sides of triABC, hidden at rest (initiallyHidden): the slides
+    // need the sides one at a time, in the order the construction draws
+    // them, and triABC's blue face arrives only on the closing slide. AB is
+    // Joyce's own line.
+    //
+    // Angle markers: equal angles share a colour — DEF, HAC and ABC blue;
+    // DFE, GAB and ACB green; EDF and BAC purple. The three markers at A
+    // lie side by side along the tangent rather than nested, so all three
+    // are pinned at 22 px to opt out of same-vertex ring stepping. No angle
+    // is called right in this proof, so there is no right-angle mark.
+    var GIVEN = ["circABC","DEF","D","E","F"];
+    var TANG  = GIVEN.concat(["A","G","H","GH","AH","AG"]);
+    var ANG1  = TANG.concat(["angE","AC","C","angHAC"]);
+    var ANG2  = ANG1.concat(["angF","AB","B","angGAB"]);
+    var JOIN  = ANG2.concat(["BC"]);
+    var ALT1  = JOIN.concat(["angB","arcB"]);
+    var ALT2  = ALT1.concat(["angC"]);
+    var REM   = ALT2.concat(["angA","angD"]);
+    var DONE  = REM.concat(["triABC"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,25 +74,160 @@ Let *ABC* be the given circle, and *DEF* the given triangle.
             "AG';line;perpendicular;A,O;0;0;0",
             "G;point;lineSlider;AG',35,190",
             "H;point;lineSlider;AG',200,250",
-            "GH;line;connect;G,H"
+            "GH;line;connect;G,H",
+            // The two parts of the tangent the proof names.
+            "AH;line;connect;A,H;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            // The sides AC and BC, drawn A to C and B to C as the
+            // construction joins them; hidden at rest (see above).
+            "AC;line;connect;A,C",
+            "BC;line;connect;B,C",
+            // The circumference of the alternate segment: from A through B
+            // to C, on the side of AC away from H.
+            "arcB;sector;arc;C,B,A;0;0;0;0",
+            "angE;sector;angleMarker;E,D,F;0;0;3b6ea5;9ec5e8",
+            "angF;sector;angleMarker;F,D,E;0;0;3f8e4f;a8dbb0",
+            "angD;sector;angleMarker;D,E,F;0;0;7a4fa3;cdb8e6",
+            "angHAC;sector;angleMarker;A,H,C,22;0;0;3b6ea5;9ec5e8",
+            "angGAB;sector;angleMarker;A,G,B,22;0;0;3f8e4f;a8dbb0",
+            "angA;sector;angleMarker;A,B,C,22;0;0;7a4fa3;cdb8e6",
+            "angB;sector;angleMarker;B,A,C;0;0;3b6ea5;9ec5e8",
+            "angC;sector;angleMarker;C,A,B;0;0;3f8e4f;a8dbb0"
         ],
+        // Draggables (checked against the bundle): D, E, F, A, B free; G, H
+        // lineSliders on the tangent. D, E, F are the given triangle and
+        // stand from slide 1. A is not taken until "touching the circle at
+        // A", G and H arrive with the tangent, and B with the angle GAB, so
+        // those four are deferred and follow `visible`. C (similar) is
+        // derived and listed per slide. The resting figure is unaffected.
+        deferDraggables: ["A","B","G","H"],
+        initiallyHidden: ["AC","BC"],
+        // The circle owns the name ABC in prose; the angle ABC takes the
+        // display override {ABC|angB}, and the angle DEF {DEF|angE}, since
+        // the triangle owns DEF.
+        aliases: { "ABC": "circABC", "HG": "GH", "HA": "AH", "GA": "AG",
+                   "CA": "AC", "BA": "AB", "CB": "BC",
+                   "HAC": "angHAC", "CAH": "angHAC",
+                   "GAB": "angGAB", "BAG": "angGAB",
+                   "DFE": "angF", "EFD": "angF",
+                   "EDF": "angD", "FDE": "angD",
+                   "BAC": "angA", "CAB": "angA",
+                   "ACB": "angC", "BCA": "angC" },
+        slides: [
+            { text: "“To inscribe in a given circle a triangle equiangular with a given triangle.”",
+              visible: GIVEN,
+              highlighted: ["circABC","DEF"],
+              justifications: [{ ref: "IV.2" }] },
+            { text: "Let {ABC} be the given circle, and {DEF} the given triangle.",
+              visible: GIVEN,
+              highlighted: ["circABC","DEF"] },
+            { text: "It is required to inscribe a triangle equiangular with the triangle {DEF} in the circle {ABC}.",
+              visible: GIVEN,
+              highlighted: ["DEF","circABC"] },
+            { text: "Draw {GH} touching the circle {ABC} at {A}.",
+              visible: TANG,
+              highlighted: ["GH","A"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "A",  name: geomlib.A.Point.appear },
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "GH touches the circle at A", ref: "III.16,Cor" }] },
+            { text: "Construct the angle {HAC} equal to the angle {DEF|angE} on the straight line {AH} and at the point {A} on it,",
+              visible: ANG1,
+              highlighted: ["AH","A"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angE",   name: geomlib.A.Sector.sweep },
+                  { elem: "AC",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "C",      name: geomlib.A.Point.appear },
+                  { elem: "angHAC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle HAC = angle DEF", ref: "I.23" }] },
+            { text: "and construct the angle {GAB} equal to the angle {DFE} on the straight line {AG} and at the point {A} on it.",
+              visible: ANG2,
+              highlighted: ["AG","A"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angF",   name: geomlib.A.Sector.sweep },
+                  { elem: "AB",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "B",      name: geomlib.A.Point.appear },
+                  { elem: "angGAB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle GAB = angle DFE", ref: "I.23" }] },
+            { text: "Join {BC}.",
+              visible: JOIN,
+              highlighted: ["BC"],
+              transition: { animations: [
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since a straight line {AH} touches the circle {ABC},",
+              visible: JOIN,
+              highlighted: ["AH","circABC"] },
+            { text: "and from the point of contact at {A} the straight line {AC} is drawn across in the circle,",
+              visible: JOIN,
+              highlighted: ["A","AC"] },
+            { text: "therefore the angle {HAC} equals the angle {ABC|angB} in {the alternate segment|arcB} of the circle.",
+              visible: ALT1,
+              highlighted: ["angHAC","angB","arcB","AC"],
+              transition: { animations: [
+                  { elem: "angB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle HAC = angle ABC in the alternate segment", ref: "III.32" }] },
+            { text: "But the angle {HAC} equals the angle {DEF|angE}, therefore the angle {ABC|angB} also equals the angle {DEF|angE}.",
+              visible: ALT1,
+              highlighted: ["angHAC","angE","angB"],
+              justifications: [{ claim: "equal to the same angle HAC", ref: "C.N.1" }] },
+            { text: "For the same reason the angle {ACB} also equals the angle {DFE},",
+              visible: ALT2,
+              highlighted: ["angGAB","angC","angF"],
+              transition: { animations: [
+                  { elem: "angC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "angle GAB = angle ACB in the alternate segment", ref: "III.32" },
+                  { claim: "angle GAB = angle DFE", ref: "C.N.1" } ] },
+            { text: "therefore the remaining angle {BAC} also equals the remaining angle {EDF}.",
+              visible: REM,
+              highlighted: ["angA","angD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angA", name: geomlib.A.Sector.sweep },
+                  { elem: "angD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the three angles of a triangle equal two right angles", ref: "I.32" }] },
+            { text: "Therefore a triangle equiangular with the given triangle has been inscribed in the given circle.",
+              visible: DONE,
+              highlighted: ["angA","angB","angC","angD","angE","angF"],
+              transition: { animations: [
+                  { elem: "triABC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [
+                  { claim: "each angle of ABC touches the circumference", ref: "IV.Def.2" },
+                  { ref: "Q.E.F." } ] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IV.2") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":   "/elements/books/bookI/postulates/post1/",
+        "C.N.1":      "/elements/books/bookI/commonnotions/cn1/",
+        "I.23":       "/elements/books/bookI/propositions/propI23/",
+        "I.32":       "/elements/books/bookI/propositions/propI32/",
+        "III.16,Cor": "/elements/books/bookIII/propositions/propIII16/#cor",
+        "III.32":     "/elements/books/bookIII/propositions/propIII32/",
+        "IV.Def.2":   "/elements/books/bookIV/definitions/defIV2/"
     });
 </script>
 </figure>
 
-It is required to inscribe a triangle equiangular with the triangle *DEF* in the circle *ABC.*
+It is required to inscribe a triangle equiangular with the triangle {DEF} in the circle {ABC}.
 
 <div class="just"><a href="/elements/books/bookIII/propositions/propIII16/#cor">III.16,Cor</a></div>
 
-Draw *GH* touching the circle *ABC* at *A.*
+Draw {GH} touching the circle {ABC} at {A}.
 
-Construct the angle *HAC* equal to the angle *DEF* on the straight line *AH* and at the point *A* on it, and construct the angle *GAB* equal to the angle *DFE* on the straight line *AG* and at the point *A* on it. Join *BC.* [!just I.23]
+Construct the angle {HAC} equal to the angle {DEF|angE} on the straight line {AH} and at the point {A} on it, and construct the angle {GAB} equal to the angle {DFE} on the straight line {AG} and at the point {A} on it. Join {BC}. [!just I.23]
 
-Then, since a straight line *AH* touches the circle *ABC,* and from the point of contact at *A* the straight line *AC* is drawn across in the circle, therefore the angle *HAC* equals the angle *ABC* in the alternate segment of the circle. [!just III.32]
+Then, since a straight line {AH} touches the circle {ABC}, and from the point of contact at {A} the straight line {AC} is drawn across in the circle, therefore the angle {HAC} equals the angle {ABC|angB} in the alternate segment of the circle. [!just III.32]
 
-But the angle *HAC* equals the angle *DEF,* therefore the angle *ABC* also equals the angle *DEF.*
+But the angle {HAC} equals the angle {DEF|angE}, therefore the angle {ABC|angB} also equals the angle {DEF|angE}.
 
-For the same reason the angle *ACB* also equals the angle *DFE,* therefore the remaining angle *BAC* also equals the remaining angle *EDF.* [!just I.32]
+For the same reason the angle {ACB} also equals the angle {DFE}, therefore the remaining angle {BAC} also equals the remaining angle {EDF}. [!just I.32]
 
 Therefore a triangle equiangular with the given triangle has been inscribed in the given circle. [!just IV.Def.2]
 

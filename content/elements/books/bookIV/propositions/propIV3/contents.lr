@@ -17,14 +17,56 @@ statement: To circumscribe about a given circle a triangle equiangular with a gi
 ----
 proof:
 
-Let *ABC* be the given circle, and *DEF* the given triangle.
+Let {ABC} be the given circle, and {DEF} the given triangle.
 
-It is required to circumscribe a triangle equiangular with the triangle *DEF* about the circle *ABC.*
+It is required to circumscribe a triangle equiangular with the triangle {DEF} about the circle {ABC}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="360" height="290" tabindex="0"></canvas>
 <noscript><img alt="IV.3 diagram" src="propIV3.gif"/></noscript>
 <script type="text/javascript">
+    // EF produced both ways, the centre K and a radius KB, the I.23 angle
+    // copies at K, the three tangents, then the angle sums: the
+    // quadrilateral AMBK for the angle at M, "similarly" BNCK for the angle
+    // at N, and I.32 for the angle at L.
+    //
+    // Joyce's figure builds A and C from the triangle (`similar` points
+    // A' and C', cut off on the radius), and M, N, L as the crossings of
+    // the perpendiculars at A, B, C, so it follows the proof's order as it
+    // stands. ABC is the circle's edge with no face; ABCdup, a faceless-edge
+    // twin, carries the fill above LMN.
+    //
+    // Everything added leaves the resting figure as it was. EF (the side
+    // the proof produces), KM (the diagonal that divides AMBK into two
+    // triangles) and the quadrilaterals AMBK and BNCK are transparent
+    // highlight targets. FH, KB, KA, KC, LM, MN and NL are solid black
+    // lines over Joyce's HF, BK, AK, CK and the sides of LMN, hidden at rest
+    // (initiallyHidden) and used by the slides instead: they run in the
+    // direction the construction draws them — F out to H, K out to the
+    // circumference — and give the three tangents strokes of their own
+    // before LMN's face lands on the closing slides.
+    //
+    // Angle markers: equal angles share a colour — DEG and AKB blue, DFH
+    // and BKC green, DEF and AMB purple, DFE and LNB orange, EDF and MLN
+    // teal. The right angles at A, B, C (III.18) are red squares. Markers
+    // at a shared vertex here lie side by side (E, F, K, B), not nested, so
+    // they are pinned to opt out of same-vertex ring stepping.
+    var GIVEN = ["ABC","ABCdup","DEF","D","E","F"];
+    var PROD  = GIVEN.concat(["EF","EG","FH","G","H"]);
+    var CEN   = PROD.concat(["K"]);
+    var RAD   = CEN.concat(["KB","B"]);
+    var ANG1  = RAD.concat(["angDEG","KA","A","angAKB"]);
+    var ANG2  = ANG1.concat(["angDFH","KC","C","angBKC"]);
+    var TAN   = ANG2.concat(["LM","MN","NL","L","M","N"]);
+    var RIGHT = TAN.concat(["rtKAM","rtKBM","rtKBN","rtKCN"]);
+    var QUAD  = RIGHT.concat(["AMBK"]);
+    var SPLIT = QUAD.concat(["KM"]);
+    // KM was transitory: dropped once the two triangles have been named.
+    var SUM   = QUAD.concat(["angM"]);
+    var DEFS  = SUM.concat(["angE"]);
+    var SIM   = DEFS.concat(["BNCK","angN","angF"]);
+    var REM   = SIM.concat(["angL","angD"]);
+    var DONE  = REM.concat(["LMN"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -55,25 +97,237 @@ It is required to circumscribe a triangle equiangular with the triangle *DEF* ab
             "N;point;intersection;Btan,Ctan",
             "L;point;intersection;Ctan,Atan",
             "LMN;polygon;triangle;L,M,N;0;0;black;random",
-            "ABCdup;circle;radius;K,B;0;0;0;random"
+            "ABCdup;circle;radius;K,B;0;0;0;random",
+            // The side the proof produces.
+            "EF;line;connect;E,F;0;0;0",
+            // Slide twins of HF, BK, AK, CK and the sides of LMN, hidden at
+            // rest (see above).
+            "FH;line;connect;F,H",
+            "KB;line;connect;K,B",
+            "KA;line;connect;K,A",
+            "KC;line;connect;K,C",
+            "LM;line;connect;L,M",
+            "MN;line;connect;M,N",
+            "NL;line;connect;N,L",
+            // The quadrilaterals and the diagonal of AMBK. Explicit ;0 faces.
+            "KM;line;connect;K,M;0;0;0",
+            "AMBK;polygon;quadrilateral;A,M,B,K;0;0;0;0",
+            "BNCK;polygon;quadrilateral;B,N,C,K;0;0;0;0",
+            "angDEG;sector;angleMarker;E,D,G,22;0;0;3b6ea5;9ec5e8",
+            "angE;sector;angleMarker;E,D,F,22;0;0;7a4fa3;cdb8e6",
+            "angDFH;sector;angleMarker;F,D,H,22;0;0;3f8e4f;a8dbb0",
+            "angF;sector;angleMarker;F,D,E,22;0;0;c06a1b;f3c590",
+            "angD;sector;angleMarker;D,E,F;0;0;2a8a8a;9fdcdc",
+            "angAKB;sector;angleMarker;K,A,B,22;0;0;3b6ea5;9ec5e8",
+            "angBKC;sector;angleMarker;K,B,C,22;0;0;3f8e4f;a8dbb0",
+            "angM;sector;angleMarker;M,A,B;0;0;7a4fa3;cdb8e6",
+            "angN;sector;angleMarker;N,C,B;0;0;c06a1b;f3c590",
+            "angL;sector;angleMarker;L,M,N;0;0;2a8a8a;9fdcdc",
+            "rtKAM;sector;angleMarkerRight;A,K,M,16;0;0;red;red",
+            "rtKBM;sector;angleMarkerRight;B,K,M,16;0;0;red;red",
+            "rtKBN;sector;angleMarkerRight;B,K,N,16;0;0;red;red",
+            "rtKCN;sector;angleMarkerRight;C,K,N,16;0;0;red;red"
         ],
+        // Draggables (checked against the bundle): B, K, D, E, F free; G, H
+        // lineSliders on EF. D, E, F are the given triangle and stand from
+        // slide 1. G and H arrive when EF is produced, K when the centre is
+        // taken, B with the radius drawn "at random", so those four are
+        // deferred and follow `visible`. A, C (cutoff) and L, M, N
+        // (intersection) are derived and listed per slide. The resting
+        // figure is unaffected.
+        deferDraggables: ["G","H","K","B"],
+        initiallyHidden: ["FH","KB","KA","KC","LM","MN","NL"],
+        // The triangle owns DEF; the angle DEF takes {DEF|angE}.
+        aliases: { "FE": "EF", "GE": "EG", "HF": "FH",
+                   "BK": "KB", "AK": "KA", "CK": "KC",
+                   "LAM": "LM", "ML": "LM", "MBN": "MN", "NM": "MN",
+                   "NCL": "NL", "LN": "NL", "MK": "KM",
+                   "BKA": "angAKB", "AKB": "angAKB",
+                   "BKC": "angBKC", "CKB": "angBKC",
+                   "DEG": "angDEG", "GED": "angDEG",
+                   "DFH": "angDFH", "HFD": "angDFH",
+                   "DFE": "angF", "EFD": "angF",
+                   "EDF": "angD", "FDE": "angD",
+                   "AMB": "angM", "BMA": "angM",
+                   "LNB": "angN", "BNL": "angN",
+                   "MLN": "angL", "NLM": "angL",
+                   "KAM": "rtKAM", "MAK": "rtKAM",
+                   "KBM": "rtKBM", "MBK": "rtKBM" },
+        slides: [
+            { text: "“To circumscribe about a given circle a triangle equiangular with a given triangle.”",
+              visible: GIVEN,
+              highlighted: ["ABC","DEF"],
+              justifications: [{ ref: "IV.3" }] },
+            { text: "Let {ABC} be the given circle, and {DEF} the given triangle.",
+              visible: GIVEN,
+              highlighted: ["ABC","DEF"] },
+            { text: "It is required to circumscribe a triangle equiangular with the triangle {DEF} about the circle {ABC}.",
+              visible: GIVEN,
+              highlighted: ["DEF","ABC"] },
+            { text: "Produce {EF} in both directions to the points {G} and {H}.",
+              visible: PROD,
+              highlighted: ["EF","G","H"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EG", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "FH", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "H",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Take the center {K} of the circle {ABC},",
+              visible: CEN,
+              highlighted: ["K"],
+              transition: { animations: [
+                  { elem: "K", name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "III.1" }] },
+            { text: "and draw a radius {KB} at random.",
+              visible: RAD,
+              highlighted: ["KB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "KB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "B",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "On the straight line {KB} and at the point {K} on it, construct the angle {BKA} equal to the angle {DEG},",
+              visible: ANG1,
+              highlighted: ["KB","K"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angDEG", name: geomlib.A.Sector.sweep },
+                  { elem: "KA",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "A",      name: geomlib.A.Point.appear },
+                  { elem: "angAKB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle BKA = angle DEG", ref: "I.23" }] },
+            { text: "and the angle {BKC} equal to the angle {DFH}.",
+              visible: ANG2,
+              highlighted: ["KB","K"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angDFH", name: geomlib.A.Sector.sweep },
+                  { elem: "KC",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "C",      name: geomlib.A.Point.appear },
+                  { elem: "angBKC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle BKC = angle DFH", ref: "I.23" }] },
+            { text: "Through the points {A}, {B}, and {C} draw {LAM}, {MBN}, and {NCL} touching the circle {ABC}.",
+              visible: TAN,
+              highlighted: ["A","B","C"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "LM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "MN", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "NL", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "at right angles to the radii at A, B, C", ref: "III.16,Cor" }] },
+            { text: "Now, since {LM}, {MN}, and {NL} touch the circle {ABC} at the points {A}, {B}, and {C},",
+              visible: TAN,
+              highlighted: ["LM","MN","NL","A","B","C"] },
+            { text: "and {KA}, {KB}, and {KC} have been joined from the center {K} to the points {A}, {B}, and {C},",
+              visible: TAN,
+              highlighted: ["KA","KB","KC","K"] },
+            { text: "therefore the angles at the points {A}, {B}, and {C} are right.",
+              visible: RIGHT,
+              highlighted: ["rtKAM","rtKBM","rtKBN","rtKCN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtKAM", name: geomlib.A.Sector.sweep },
+                  { elem: "rtKBM", name: geomlib.A.Sector.sweep },
+                  { elem: "rtKBN", name: geomlib.A.Sector.sweep },
+                  { elem: "rtKCN", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "a radius to the point of contact is perpendicular to the tangent", ref: "III.18" }] },
+            { text: "And, since the four angles of the quadrilateral {AMBK} equal four right angles,",
+              visible: QUAD,
+              highlighted: ["AMBK"],
+              transition: { animations: [
+                  { elem: "AMBK", name: geomlib.A.Polygon.outline } ] } },
+            { text: "inasmuch as {AMBK} is in fact divisible into two triangles,",
+              visible: SPLIT,
+              highlighted: ["AMBK","KM"],
+              transition: { animations: [
+                  { elem: "KM", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "the angles of each triangle equal two right angles", ref: "I.32" }] },
+            { text: "and the angles {KAM} and {KBM} are right,",
+              visible: QUAD,
+              highlighted: ["rtKAM","rtKBM"] },
+            { text: "therefore the sum of the remaining angles {AKB} and {AMB} equals two right angles.",
+              visible: SUM,
+              highlighted: ["angAKB","angM"],
+              transition: { animations: [
+                  { elem: "angM", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "take away the right angles at A and B", ref: "C.N.3" }] },
+            { text: "But the sum of the angles {DEG} and {DEF|angE} also equals two right angles,",
+              visible: DEFS,
+              highlighted: ["angDEG","angE"],
+              transition: { animations: [
+                  { elem: "angE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angles DEG and DEF on the straight line GF", ref: "I.13" }] },
+            { text: "therefore the sum of the angles {AKB} and {AMB} equals the sum of the angles {DEG} and {DEF|angE},",
+              visible: DEFS,
+              highlighted: ["angAKB","angM","angDEG","angE"],
+              justifications: [{ claim: "each sum equals two right angles", ref: "C.N.1" }] },
+            { text: "of which the angle {AKB} equals the angle {DEG},",
+              visible: DEFS,
+              highlighted: ["angAKB","angDEG"] },
+            { text: "therefore the remaining angle {AMB} equals the remaining angle {DEF|angE}.",
+              visible: DEFS,
+              highlighted: ["angM","angE"],
+              justifications: [{ claim: "take away the equal angles AKB and DEG", ref: "C.N.3" }] },
+            { text: "Similarly it can be proved that the angle {LNB} also equals the angle {DFE},",
+              visible: SIM,
+              highlighted: ["BNCK","angN","angF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angN", name: geomlib.A.Sector.sweep },
+                  { elem: "angF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the remaining angle {MLN} equals the angle {EDF}.",
+              visible: REM,
+              highlighted: ["angL","angD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angL", name: geomlib.A.Sector.sweep },
+                  { elem: "angD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the three angles of a triangle equal two right angles", ref: "I.32" }] },
+            { text: "Therefore the triangle {LMN} is equiangular with the triangle {DEF},",
+              visible: DONE,
+              highlighted: ["angL","angM","angN","angD","angE","angF"],
+              transition: { animations: [
+                  { elem: "LMN", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and it has been circumscribed about the circle {ABC}.",
+              visible: DONE,
+              highlighted: ["LM","MN","NL","ABC"],
+              justifications: [{ claim: "each side of LMN touches the circle", ref: "IV.Def.4" }] },
+            { text: "Therefore a triangle equiangular with the given triangle has been circumscribed about a given circle.",
+              visible: DONE,
+              highlighted: ["angL","angM","angN","angD","angE","angF"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IV.3") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":   "/elements/books/bookI/postulates/post1/",
+        "I.Post.2":   "/elements/books/bookI/postulates/post2/",
+        "C.N.1":      "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.3":      "/elements/books/bookI/commonnotions/cn3/",
+        "I.13":       "/elements/books/bookI/propositions/propI13/",
+        "I.23":       "/elements/books/bookI/propositions/propI23/",
+        "I.32":       "/elements/books/bookI/propositions/propI32/",
+        "III.1":      "/elements/books/bookIII/propositions/propIII1/",
+        "III.16,Cor": "/elements/books/bookIII/propositions/propIII16/#cor",
+        "III.18":     "/elements/books/bookIII/propositions/propIII18/",
+        "IV.Def.4":   "/elements/books/bookIV/definitions/defIV4/"
     });
 </script>
 </figure>
 
 <div class="just"><a href="/elements/books/bookIII/propositions/propIII1/">III.1</a><br><a href="/elements/books/bookI/propositions/propI23/">I.23</a><br><a href="/elements/books/bookIII/propositions/propIII16/#cor">III.16,Cor</a></div>
 
-Produce *EF* in both directions to the points *G* and *H.* Take the center *K* of the circle *ABC,* and draw a radius *KB* at random. On the straight line *KB* and at the point *K* on it, construct the angle *BKA* equal to the angle *DEG,* and the angle *BKC* equal to the angle *DFH.* Through the points *A,* *B,* and *C* draw *LAM, MBN,* and *NCL* touching the circle *ABC.*
+Produce {EF} in both directions to the points {G} and {H}. Take the center {K} of the circle {ABC}, and draw a radius {KB} at random. On the straight line {KB} and at the point {K} on it, construct the angle {BKA} equal to the angle {DEG}, and the angle {BKC} equal to the angle {DFH}. Through the points {A}, {B}, and {C} draw {LAM}, {MBN}, and {NCL} touching the circle {ABC}.
 
-Now, since *LM, MN,* and *NL* touch the circle *ABC* at the points *A, B,* and *C,* and *KA, KB,* and *KC* have been joined from the center *K* to the points *A, B,* and *C,* therefore the angles at the points *A, B,* and *C* are right. [!just III.18]
+Now, since {LM}, {MN}, and {NL} touch the circle {ABC} at the points {A}, {B}, and {C}, and {KA}, {KB}, and {KC} have been joined from the center {K} to the points {A}, {B}, and {C}, therefore the angles at the points {A}, {B}, and {C} are right. [!just III.18]
 
-And, since the four angles of the quadrilateral *AMBK* equal four right angles, inasmuch as *AMBK* is in fact divisible into two triangles, and the angles *KAM* and *KBM* are right, therefore the sum of the remaining angles *AKB* and *AMB* equals two right angles.
+And, since the four angles of the quadrilateral {AMBK} equal four right angles, inasmuch as {AMBK} is in fact divisible into two triangles, and the angles {KAM} and {KBM} are right, therefore the sum of the remaining angles {AKB} and {AMB} equals two right angles.
 
-But the sum of the angles *DEG* and *DEF* also equals two right angles, therefore the sum of the angles *AKB* and *AMB* equals the sum of the angles *DEG* and *DEF,* of which the angle *AKB* equals the angle *DEG,* therefore the remaining angle *AMB* equals the remaining angle *DEF.* [!just I.13]
+But the sum of the angles {DEG} and {DEF|angE} also equals two right angles, therefore the sum of the angles {AKB} and {AMB} equals the sum of the angles {DEG} and {DEF|angE}, of which the angle {AKB} equals the angle {DEG}, therefore the remaining angle {AMB} equals the remaining angle {DEF|angE}. [!just I.13]
 
-Similarly it can be proved that the angle *LNB* also equals the angle *DFE,* therefore the remaining angle *MLN* equals the angle *EDF.* [!just I.32]
+Similarly it can be proved that the angle {LNB} also equals the angle {DFE}, therefore the remaining angle {MLN} equals the angle {EDF}. [!just I.32]
 
-Therefore the triangle *LMN* is equiangular with the triangle *DEF,* and it has been circumscribed about the circle *ABC.* [!just IV.Def.4]
+Therefore the triangle {LMN} is equiangular with the triangle {DEF}, and it has been circumscribed about the circle {ABC}. [!just IV.Def.4]
 
 Therefore a triangle equiangular with the given triangle has been circumscribed about a given circle.
 
