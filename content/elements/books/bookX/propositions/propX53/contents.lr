@@ -17,12 +17,31 @@ statement: To find the sixth binomial line.
 ----
 proof:
 
-Set out two numbers *AC* and *CB* such that *AB* does not have to either of them the ratio which a square number has to a square number, and let there also be another number *D* which is not square and which does not have to either of the numbers *BA* or *AC* the ratio which a square number has to a square number.
+Set out two numbers {AC} and {CB} such that {AB} does not have to either of them the ratio which a square number has to a square number, and let there also be another number {D} which is not square and which does not have to either of the numbers {BA} or {AC} the ratio which a square number has to a square number.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="160" height="270" tabindex="0"></canvas>
 <noscript><img alt="X.53 diagram" src="propX53.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the number AB (blue) with C on it, the number D
+    // (blue), the rational line E, and FH with G on it. Added, all hidden at
+    // rest: transparent targets AC, CB (;0;0;0); solid twins FG, GH
+    // (initiallyHidden) so each term strokes in as it is contrived. K, the
+    // line whose square makes up the excess, is not drawn in Joyce's figure
+    // and stays literal; "commensurable in length with A" is his slip for K
+    // and is left literal too.
+    //
+    // Draggables (checked against the bundle): A, B, C (the numbers AC, CB),
+    // D1, D2 (the number D), E1, E2 (the line E), F, and the offscreen
+    // frees. D1/D2, E1/E2 and F arrive with "another number D", "set out any
+    // rational straight line E" and "the square on FG", so they are deferred.
+    // G and H are derived (meanProportional) and listed per slide.
+    var GIVEN = ["A","B","C","AB","AC","CB"];
+    var NUMD  = GIVEN.concat(["D","D1","D2"]);
+    var RAT   = NUMD.concat(["E","E1","E2"]);
+    var TFG   = RAT.concat(["F","G","FG"]);
+    var TGH   = TFG.concat(["H","GH"]);
+    var ALL   = TGH.concat(["FH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,41 +70,225 @@ Set out two numbers *AC* and *CB* such that *AB* does not have to either of them
             "G;point;meanProportional;E1,E2,F,G',F,F3",
             "H';point;proportion;B,A,A,C,F,G,G,F3;0;0",
             "H;point;meanProportional;F,G,G,H',G,F3",
-            "FH;line;connect;F,H"
+            "FH;line;connect;F,H",
+            // Slide-only twins and highlight targets.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "FG;line;connect;F,G",
+            "GH;line;connect;G,H"
         ],
+        initiallyHidden: ["FG","GH"],
+        deferDraggables: ["D1","D2","E1","E2","F"],
+        aliases: { "BA": "AB", "BC": "CB", "HG": "GH" },
+        slides: [
+            { text: "“To find the sixth binomial line.”",
+              visible: ALL,
+              highlighted: ["FH"],
+              justifications: [{ ref: "X.53" }] },
+            { text: "Set out two numbers {AC} and {CB}",
+              visible: GIVEN,
+              highlighted: ["AC","CB"] },
+            { text: "such that {AB} does not have to either of them the ratio which a square number has to a square number,",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "and let there also be another number {D} which is not square",
+              visible: NUMD,
+              highlighted: ["D"] },
+            { text: "and which does not have to either of the numbers {BA} or {AC}",
+              visible: NUMD,
+              highlighted: ["D","AB","AC"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: NUMD,
+              highlighted: ["D","AB","AC"] },
+            { text: "Set out any rational straight line {E},",
+              visible: RAT,
+              highlighted: ["E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and let it be contrived that {D} is to {AB} as the square on {E} is to the square on {FG}.",
+              visible: TFG,
+              highlighted: ["D","AB","E","FG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",  name: geomlib.A.Point.appear },
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "D : AB = E² : FG²", ref: "X.6.Cor" }] },
+            { text: "Then the square on {E} is commensurable with the square on {FG}.",
+              visible: TFG,
+              highlighted: ["E","FG"],
+              justifications: [{ ref: "X.6" }] },
+            { text: "And {E} is rational, therefore {FG} is also rational.",
+              visible: TFG,
+              highlighted: ["E","FG"] },
+            { text: "Now, since {D} does not have to {AB} the ratio which a square number has to a square number,",
+              visible: TFG,
+              highlighted: ["D","AB"] },
+            { text: "neither does the square on {E} have to the square on {FG}",
+              visible: TFG,
+              highlighted: ["E","FG"] },
+            { text: "the ratio which a square number has to a square number,",
+              visible: TFG,
+              highlighted: ["E","FG"] },
+            { text: "therefore {E} is incommensurable in length with {FG}.",
+              visible: TFG,
+              highlighted: ["E","FG"],
+              justifications: [{ claim: "E, FG incommensurable in length", ref: "X.9" }] },
+            { text: "Again, let it be contrived that {BA} is to {AC} as the square on {FG} is to the square on {GH}.",
+              visible: TGH,
+              highlighted: ["AB","AC","FG","GH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "BA : AC = FG² : GH²", ref: "X.6.Cor" }] },
+            { text: "Then the square on {FG} is commensurable with the square on {HG}.",
+              visible: TGH,
+              highlighted: ["FG","GH"],
+              justifications: [{ ref: "X.6" }] },
+            { text: "Therefore the square on {HG} is rational. Therefore {HG} is rational.",
+              visible: TGH,
+              highlighted: ["GH"] },
+            { text: "And, since {BA} does not have to {AC} the ratio which a square number has to a square number,",
+              visible: TGH,
+              highlighted: ["AB","AC"] },
+            { text: "neither does the square on {FG} have to the square on {GH}",
+              visible: TGH,
+              highlighted: ["FG","GH"] },
+            { text: "the ratio which a square number has to a square number,",
+              visible: TGH,
+              highlighted: ["FG","GH"] },
+            { text: "therefore {FG} is incommensurable in length with {GH}.",
+              visible: TGH,
+              highlighted: ["FG","GH"],
+              justifications: [{ claim: "FG, GH incommensurable in length", ref: "X.9" }] },
+            { text: "Therefore {FG} and {GH} are rational straight lines commensurable in square only.",
+              visible: TGH,
+              highlighted: ["FG","GH"] },
+            { text: "Therefore {FH} is binomial.",
+              visible: ALL,
+              highlighted: ["FH"],
+              justifications: [{ claim: "FH binomial", ref: "X.36" }] },
+            { text: "It is next to be proved that it is also a sixth binomial straight line.",
+              visible: ALL,
+              highlighted: ["FH"] },
+            { text: "Since {D} is to {AB} as the square on {E} is to the square on {FG},",
+              visible: ALL,
+              highlighted: ["D","AB","E","FG"] },
+            { text: "and also {BA} is to {AC} as the square on {FG} is to the square on {GH},",
+              visible: ALL,
+              highlighted: ["AB","AC","FG","GH"] },
+            { text: "therefore, ex aequali, {D} is to {AC} as the square on {E} is to the square on {GH}.",
+              visible: ALL,
+              highlighted: ["D","AC","E","GH"],
+              justifications: [{ claim: "D : AC = E² : GH²", ref: "V.22" }] },
+            { text: "But {D} does not have to {AC} the ratio which a square number has to a square number,",
+              visible: ALL,
+              highlighted: ["D","AC"] },
+            { text: "therefore neither does the square on {E} have to the square on {GH}",
+              visible: ALL,
+              highlighted: ["E","GH"] },
+            { text: "the ratio which a square number has to a square number,",
+              visible: ALL,
+              highlighted: ["E","GH"] },
+            { text: "therefore {E} is incommensurable in length with {GH}.",
+              visible: ALL,
+              highlighted: ["E","GH"],
+              justifications: [{ claim: "E, GH incommensurable in length", ref: "X.9" }] },
+            { text: "But it was also proved incommensurable with {FG},",
+              visible: ALL,
+              highlighted: ["E","FG"] },
+            { text: "therefore each of the straight lines {FG} and {GH} is incommensurable in length with {E}.",
+              visible: ALL,
+              highlighted: ["FG","GH","E"] },
+            { text: "And, since {BA} is to {AC} as the square on {FG} is to the square on {GH},",
+              visible: ALL,
+              highlighted: ["AB","AC","FG","GH"] },
+            { text: "therefore the square on {FG} is greater than the square on {GH}.",
+              visible: ALL,
+              highlighted: ["FG","GH"] },
+            { text: "Let then the sum of the squares on {GH} and K equal the square on {FG}.",
+              visible: ALL,
+              highlighted: ["GH","FG"] },
+            { text: "Then, in conversion, {AB} is to {BC} as the square on {FG} is to the square on K.",
+              visible: ALL,
+              highlighted: ["AB","CB","FG"],
+              justifications: [{ claim: "AB : BC = FG² : K²", ref: "V.19.Cor" }] },
+            { text: "But {AB} does not have to {BC} the ratio which a square number has to a square number,",
+              visible: ALL,
+              highlighted: ["AB","CB"] },
+            { text: "so that neither does the square on {FG} have to the square on K",
+              visible: ALL,
+              highlighted: ["FG"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: ALL,
+              highlighted: ["FG"] },
+            { text: "Therefore {FG} is incommensurable in length with A.",
+              visible: ALL,
+              highlighted: ["FG"],
+              justifications: [{ ref: "X.9" }] },
+            { text: "Therefore the square on {FG} is greater than the square on {GH}",
+              visible: ALL,
+              highlighted: ["FG","GH"] },
+            { text: "by the square on a straight line incommensurable with {FG}.",
+              visible: ALL,
+              highlighted: ["FG"] },
+            { text: "And {FG} and {GH} are rational straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["FG","GH"] },
+            { text: "and neither of them is commensurable in length with the rational straight line {E} set out.",
+              visible: ALL,
+              highlighted: ["FG","GH","E"] },
+            { text: "Therefore {FH} is a sixth binomial straight line.",
+              visible: ALL,
+              highlighted: ["FH"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.53") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.19.Cor":   "/elements/books/bookV/propositions/propV19/#cor",
+        "V.22":       "/elements/books/bookV/propositions/propV22/",
+        "X.6":        "/elements/books/bookX/propositions/propX6/",
+        "X.6.Cor":    "/elements/books/bookX/propositions/propX6/#cor",
+        "X.9":        "/elements/books/bookX/propositions/propX9/",
+        "X.36":       "/elements/books/bookX/propositions/propX36/"
     });
 </script>
 </figure>
 
-Set out any rational straight line *E*, and let it be contrived that *D* is to *AB* as the square on *E* is to the square on *FG*. Then the square on *E* is commensurable with the square on *FG*.  And *E* is rational, therefore *FG* is also rational. [!just X.6.Cor; X.6]
+Set out any rational straight line {E}, and let it be contrived that {D} is to {AB} as the square on {E} is to the square on {FG}. Then the square on {E} is commensurable with the square on {FG}.  And {E} is rational, therefore {FG} is also rational. [!just X.6.Cor; X.6]
 
-Now, since *D* does not have to *AB* the ratio which a square number has to a square number, neither does the square on *E* have to the square on *FG* the ratio which a square number has to a square number, therefore *E* is incommensurable in length with *FG*. [!just X.9]
+Now, since {D} does not have to {AB} the ratio which a square number has to a square number, neither does the square on {E} have to the square on {FG} the ratio which a square number has to a square number, therefore {E} is incommensurable in length with {FG}. [!just X.9]
 
-Again, let it be contrived that *BA* is to *AC* as the square on *FG* is to the square on *GH*. Then the square on *FG* is commensurable with the square on *HG*. [!just X.6.Cor; X.6]
+Again, let it be contrived that {BA} is to {AC} as the square on {FG} is to the square on {GH}. Then the square on {FG} is commensurable with the square on {HG}. [!just X.6.Cor; X.6]
 
-Therefore the square on *HG* is rational. Therefore *HG* is rational. And, since *BA* does not have to *AC* the ratio which a square number has to a square number, neither does the square on *FG* have to the square on *GH* the ratio which a square number has to a square number, therefore *FG* is incommensurable in length with *GH*. [!just X.9]
+Therefore the square on {HG} is rational. Therefore {HG} is rational. And, since {BA} does not have to {AC} the ratio which a square number has to a square number, neither does the square on {FG} have to the square on {GH} the ratio which a square number has to a square number, therefore {FG} is incommensurable in length with {GH}. [!just X.9]
 
-Therefore *FG* and *GH* are rational straight lines commensurable in square only. Therefore *FH* is binomial. [!just X.36]
+Therefore {FG} and {GH} are rational straight lines commensurable in square only. Therefore {FH} is binomial. [!just X.36]
 
 It is next to be proved that it is also a sixth binomial straight line.
 
-Since *D* is to *AB* as the square on *E* is to the square on *FG*, and also *BA* is to *AC* as the square on *FG* is to the square on *GH*, therefore, *ex aequali*, *D* is to *AC* as the square on *E* is to the square on *GH*. [!just V.22]
+Since {D} is to {AB} as the square on {E} is to the square on {FG}, and also {BA} is to {AC} as the square on {FG} is to the square on {GH}, therefore, *ex aequali*, {D} is to {AC} as the square on {E} is to the square on {GH}. [!just V.22]
 
-But *D* does not have to *AC* the ratio which a square number has to a square number, therefore neither does the square on *E* have to the square on *GH* the ratio which a square number has to a square number, therefore *E* is incommensurable in length with *GH*. [!just X.9]
+But {D} does not have to {AC} the ratio which a square number has to a square number, therefore neither does the square on {E} have to the square on {GH} the ratio which a square number has to a square number, therefore {E} is incommensurable in length with {GH}. [!just X.9]
 
-But it was also proved incommensurable with *FG*, therefore each of the straight lines *FG* and *GH* is incommensurable in length with *E*.
+But it was also proved incommensurable with {FG}, therefore each of the straight lines {FG} and {GH} is incommensurable in length with {E}.
 
-And, since *BA* is to *AC* as the square on *FG* is to the square on *GH*, therefore the square on *FG* is greater than the square on *GH*.
+And, since {BA} is to {AC} as the square on {FG} is to the square on {GH}, therefore the square on {FG} is greater than the square on {GH}.
 
-Let then the sum of the squares on *GH* and *K* equal the square on *FG*.  Then, in conversion, *AB* is to *BC* as the square on *FG* is to the square on *K*. [!just V.19.Cor]
+Let then the sum of the squares on {GH} and *K* equal the square on {FG}.  Then, in conversion, {AB} is to {BC} as the square on {FG} is to the square on *K*. [!just V.19.Cor]
 
-But *AB* does not have to *BC* the ratio which a square number has to a square number, so that neither does the square on *FG* have to the square on *K* the ratio which a square number has to a square number.
+But {AB} does not have to {BC} the ratio which a square number has to a square number, so that neither does the square on {FG} have to the square on *K* the ratio which a square number has to a square number.
 
-Therefore *FG* is incommensurable in length with *A*. Therefore the square on *FG* is greater than the square on *GH* by the square on a straight line incommensurable with *FG*. [!just X.9]
+Therefore {FG} is incommensurable in length with *A*. Therefore the square on {FG} is greater than the square on {GH} by the square on a straight line incommensurable with {FG}. [!just X.9]
 
-And *FG* and *GH* are rational straight lines commensurable in square only, and neither of them is commensurable in length with the rational straight line *E* set out.
+And {FG} and {GH} are rational straight lines commensurable in square only, and neither of them is commensurable in length with the rational straight line {E} set out.
 
-Therefore *FH* is a sixth binomial straight line.
+Therefore {FH} is a sixth binomial straight line.
 
 <div class="qed">Q.E.D.</div>
 ----

@@ -13,16 +13,35 @@ kind: lemma
 ----
 proof:
 
-Let there be two squares *AB* and *BC*, and let them be placed so that *DB* is in a straight line with *BE*.  Then *FB* is also in a straight line with *BG*.  Complete the parallelogram *AC*.
+Let there be two squares {AB} and {BC}, and let them be placed so that {DB} is in a straight line with {BE}.  Then {FB} is also in a straight line with {BG}.  Complete the parallelogram {AC}.
 
-I say that *AC* is a square, that *DG* is a mean proportional between *AB* and *BC*, and further that *DC* is a mean proportional between *AC* and *CB*.
+I say that {AC} is a square, that {DG} is a mean proportional between {AB} and {BC}, and further that {DC} is a mean proportional between {AC} and {CB}.
 
-Since *DB* equals *BF*, and *BE* is to *BG*, therefore the whole *DE* equals the whole *FG*.
+Since {DB} equals {BF}, and {BE} is to {BG}, therefore the whole {DE|DEs} equals the whole {FG}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="260" tabindex="0"></canvas>
 <noscript><img alt="X.54 Lemma diagram" src="propX54l.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's lemma figure: the squares AB (ADBF) and BC (BECG) on the
+    // diagonal through A, B, C, and the completed parallelogram AC (AKCH),
+    // all random-faced. Added, all hidden at rest: faceless, strokeless
+    // twins AB, BC, AC, DG, DC (;0;0;0;0) that carry the highlights, since a
+    // highlighted filled AKCH would be raised over both squares (#140);
+    // transparent segment targets (;0;0;0), with DEs, AHs, KCs standing in
+    // for Joyce's DE, AH, KC, whose names belong to the long construction
+    // lines; a right-angle marker at K for "it is also rectangular". "BE is
+    // to BG" (for "equals") and "AC is to CG" (for KC) are Joyce's slips,
+    // left literal.
+    //
+    // Draggables (checked against the bundle): A, B, C (line sliders on the
+    // diagonal) and the offscreen frees, all givens. D, E, F, G, H, K are
+    // derived (intersection) and listed per slide.
+    var L_SQ  = ["A","B","C","D","E","F","G","ADBF","BECG","AB","BC",
+                 "DB","BE","FB","BG","AD","DEs","FG"];
+    var L_ALL = L_SQ.concat(["H","K","AKCH","AC","DG","DC","AHs","KCs",
+                             "AK","HC","DK","KG","GC"]);
+    var L_RT  = L_ALL.concat(["angK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -50,25 +69,153 @@ Since *DB* equals *BF*, and *BE* is to *BG*, therefore the whole *DE* equals the
             "K;point;intersection;KC,KA",
             "AKCH;polygon;quadrilateral;A,K,C,H;0;0;black;random",
             "ADBF;polygon;quadrilateral;A,D,B,F;0;0;black;random",
-            "BECG;polygon;quadrilateral;B,E,C,G;0;0;black;random"
+            "BECG;polygon;quadrilateral;B,E,C,G;0;0;black;random",
+            // Slide-only highlight targets and marker.
+            "AB;polygon;quadrilateral;A,D,B,F;0;0;0;0",
+            "BC;polygon;quadrilateral;B,E,C,G;0;0;0;0",
+            "AC;polygon;quadrilateral;A,K,C,H;0;0;0;0",
+            "DG;polygon;quadrilateral;D,B,G,K;0;0;0;0",
+            "DC;polygon;quadrilateral;D,E,C,K;0;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "BE;line;connect;B,E;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "BG;line;connect;B,G;0;0;0",
+            "DEs;line;connect;D,E;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "AHs;line;connect;A,H;0;0;0",
+            "KCs;line;connect;K,C;0;0;0",
+            "AK;line;connect;A,K;0;0;0",
+            "HC;line;connect;H,C;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DK;line;connect;D,K;0;0;0",
+            "KG;line;connect;K,G;0;0;0",
+            "GC;line;connect;G,C;0;0;0",
+            "angK;sector;angleMarkerRight;K,A,C"
         ],
+        aliases: { "CB": "BC", "BF": "FB", "KD": "DK", "CG": "GC", "CD": "DC" },
+        slides: [
+            { text: "Let there be two squares {AB} and {BC},",
+              visible: L_SQ,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "Lemma" }] },
+            { text: "and let them be placed so that {DB} is in a straight line with {BE}.",
+              visible: L_SQ,
+              highlighted: ["DB","BE"] },
+            { text: "Then {FB} is also in a straight line with {BG}.",
+              visible: L_SQ,
+              highlighted: ["FB","BG"] },
+            { text: "Complete the parallelogram {AC}.",
+              visible: L_ALL,
+              highlighted: ["AC"],
+              transition: { animations: [
+                  { elem: "AC", name: geomlib.A.Polygon.outline } ] } },
+            { text: "I say that {AC} is a square,",
+              visible: L_ALL,
+              highlighted: ["AC"] },
+            { text: "that {DG} is a mean proportional between {AB} and {BC},",
+              visible: L_ALL,
+              highlighted: ["DG","AB","BC"] },
+            { text: "and further that {DC} is a mean proportional between {AC} and {CB}.",
+              visible: L_ALL,
+              highlighted: ["DC","AC","BC"] },
+            { text: "Since {DB} equals {BF}, and {BE} is to {BG},",
+              visible: L_ALL,
+              highlighted: ["DB","FB","BE","BG"] },
+            { text: "therefore the whole {DE|DEs} equals the whole {FG}.",
+              visible: L_ALL,
+              highlighted: ["DEs","FG"] },
+            { text: "But {DE|DEs} equals each of the straight lines {AH|AHs} and {KC|KCs},",
+              visible: L_ALL,
+              highlighted: ["DEs","AHs","KCs"] },
+            { text: "and {FG} equals each of the straight lines {AK} and {HC},",
+              visible: L_ALL,
+              highlighted: ["FG","AK","HC"],
+              justifications: [{ claim: "opposite sides equal", ref: "I.34" }] },
+            { text: "therefore each of the straight lines {AH|AHs} and {KC|KCs} also equals each of the straight lines {AK} and {HC}.",
+              visible: L_ALL,
+              highlighted: ["AHs","KCs","AK","HC"] },
+            { text: "Therefore the parallelogram {AC} is equilateral.",
+              visible: L_ALL,
+              highlighted: ["AC"] },
+            { text: "And it is also rectangular, therefore {AC} is a square.",
+              visible: L_RT,
+              highlighted: ["AC","angK"],
+              transition: { animations: [
+                  { elem: "angK", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Since {FB} is to {BG} as {DB} is to {BE},",
+              visible: L_RT,
+              highlighted: ["FB","BG","DB","BE"] },
+            { text: "while {FB} is to {BG} as {AB} is to {DG},",
+              visible: L_RT,
+              highlighted: ["FB","BG","AB","DG"] },
+            { text: "and {DB} is to {BE} as {DG} is to {BC},",
+              visible: L_RT,
+              highlighted: ["DB","BE","DG","BC"] },
+            { text: "therefore {AB} is to {DG} as {DG} is to {BC}.",
+              visible: L_RT,
+              highlighted: ["AB","DG","BC"],
+              justifications: [{ claim: "FB : BG = AB : DG, DB : BE = DG : BC", ref: "VI.1" },
+                               { claim: "AB : DG = DG : BC", ref: "VI.11" }] },
+            { text: "Therefore {DG} is a mean proportional between {AB} and {BC}.",
+              visible: L_RT,
+              highlighted: ["DG","AB","BC"] },
+            { text: "I say next that {DC} is also a mean proportional between {AC} and {CB}.",
+              visible: L_RT,
+              highlighted: ["DC","AC","BC"] },
+            { text: "Since {AD} is to {DK} as {KG} is to {GC}, for they are equal respectively,",
+              visible: L_RT,
+              highlighted: ["AD","DK","KG","GC"] },
+            { text: "and, taken jointly, {AK} is to {KD} as {KC|KCs} is to {CG},",
+              visible: L_RT,
+              highlighted: ["AK","DK","KCs","GC"],
+              justifications: [{ claim: "AK : KD = KC : CG", ref: "V.18" }] },
+            { text: "while {AK} is to {KD} as {AC} is to {CD},",
+              visible: L_RT,
+              highlighted: ["AK","DK","AC","DC"] },
+            { text: "and AC is to {CG} as {DC} is to {CB},",
+              visible: L_RT,
+              highlighted: ["GC","DC","BC"],
+              justifications: [{ ref: "VI.1" }] },
+            { text: "therefore {AC} is to {DC} as {DC} is to {BC}.",
+              visible: L_RT,
+              highlighted: ["AC","DC","BC"],
+              justifications: [{ claim: "AC : DC = DC : BC", ref: "VI.11" }] },
+            { text: "Therefore {DC} is a mean proportional between {AC} and {CB}.",
+              visible: L_RT,
+              highlighted: ["DC","AC","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // (shared by both canvases on this page).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.34":  "/elements/books/bookI/propositions/propI34/",
+        "V.18":  "/elements/books/bookV/propositions/propV18/",
+        "VI.1":  "/elements/books/bookVI/propositions/propVI1/",
+        "VI.11": "/elements/books/bookVI/propositions/propVI11/"
     });
 </script>
 </figure>
 
-But *DE* equals each of the straight lines *AH* and *KC*, and *FG* equals each of the straight lines *AK* and *HC*, therefore each of the straight lines *AH* and *KC* also equals each of the straight lines *AK* and *HC*. [!just I.34]
+But {DE|DEs} equals each of the straight lines {AH|AHs} and {KC|KCs}, and {FG} equals each of the straight lines {AK} and {HC}, therefore each of the straight lines {AH|AHs} and {KC|KCs} also equals each of the straight lines {AK} and {HC}. [!just I.34]
 
-Therefore the parallelogram *AC* is equilateral. And it is also rectangular, therefore *AC* is a square.
+Therefore the parallelogram {AC} is equilateral. And it is also rectangular, therefore {AC} is a square.
 
-Since *FB* is to *BG* as *DB* is to *BE*, while *FB* is to *BG* as *AB* is to *DG*, and *DB* is to *BE* as *DG* is to *BC*, therefore *AB* is to *DG* as *DG* is to *BC*. [!just VI.1; VI.11]
+Since {FB} is to {BG} as {DB} is to {BE}, while {FB} is to {BG} as {AB} is to {DG}, and {DB} is to {BE} as {DG} is to {BC}, therefore {AB} is to {DG} as {DG} is to {BC}. [!just VI.1; VI.11]
 
-Therefore *DG* is a mean proportional between *AB* and *BC*.
+Therefore {DG} is a mean proportional between {AB} and {BC}.
 
-I say next that *DC* is also a mean proportional between *AC* and *CB*.
+I say next that {DC} is also a mean proportional between {AC} and {CB}.
 
-Since *AD* is to *DK* as *KG* is to *GC*, for they are equal respectively, and, taken jointly, *AK* is to *KD* as *KC* is to *CG*, while *AK* is to *KD* as *AC* is to *CD*, and *AC* is to *CG* as *DC* is to *CB*, therefore *AC* is to *DC* as *DC* is to *BC*. [!just V.18; VI.1; VI.11]
+Since {AD} is to {DK} as {KG} is to {GC}, for they are equal respectively, and, taken jointly, {AK} is to {KD} as {KC|KCs} is to {CG}, while {AK} is to {KD} as {AC} is to {CD}, and *AC* is to {CG} as {DC} is to {CB}, therefore {AC} is to {DC} as {DC} is to {BC}. [!just V.18; VI.1; VI.11]
 
-Therefore *DC* is a mean proportional between *AC* and *CB*.
+Therefore {DC} is a mean proportional between {AC} and {CB}.
 
 <div class="qed">Q.E.D.</div>
 #### prop_section ####
@@ -78,16 +225,40 @@ statement: If an area is contained by a rational straight line and the first bin
 ----
 proof:
 
-Let the area *AC* be contained by the rational straight line *AB* and the first binomial *AD*.
+Let the area {AC:canvas_1} be contained by the rational straight line {AB:canvas_1} and the first binomial {AD:canvas_1}.
 
-I say that the side of the area *AC* is the irrational straight line which is called binomial.
+I say that the side of the area {AC:canvas_1} is the irrational straight line which is called binomial.
 
-Since *AD* is a first binomial straight line, divide it into its terms at *E*, and let *AE* be the greater term.
+Since {AD:canvas_1} is a first binomial straight line, divide it into its terms at {E:canvas_1}, and let {AE:canvas_1} be the greater term.
 
 <figure class="diagram">
 <canvas id="canvas_1" width="400" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.54 diagram" src="propX54.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the area AC (ABCD) on the rational AB and the first
+    // binomial AD, divided at E, with F bisecting ED; G from the application
+    // to AE; the parallels GH, EK, FL; the rectangles AH and GK (filled);
+    // and the squares SN (SPNM) and NQ (NOQR) completed to the square SQ.
+    // Added, all hidden at rest: faceless, strokeless twins AC, AHh, GK, EL,
+    // SN, NQ, MR, PO (;0;0;0;0) that carry the highlights, since a raised
+    // filled region would cover its neighbours' edges (#140) — the filled
+    // polygon owns the name AH, so prose and captions reach AHh with
+    // {AH|AHh}; transparent segment targets (;0;0;0); solid twins GH, EK
+    // (initiallyHidden) so the parallels stroke down from G and E.
+    //
+    // Draggables (checked against the bundle): A, D (line sliders), B (line
+    // slider on the perpendicular) — the givens — E and S (line sliders) and
+    // the offscreen frees. E arrives with "divide it into its terms at E" and
+    // S with "construct the square SN", so both are deferred. F, G, H, K, L,
+    // P, M, N, T, O, Q, R are derived and listed per slide.
+    var GIVEN = ["A","B","C","D","ABCD","AC","AB","AD","CD"];
+    var TERMS = GIVEN.concat(["E","AE","ED"]);
+    var BIS   = TERMS.concat(["F","EF"]);
+    var APPL  = BIS.concat(["G","AG","GE"]);
+    var PAR   = APPL.concat(["H","K","L","GH","EK","FL","AH","HGEK","AHh","GK","EL"]);
+    var SQ1   = PAR.concat(["S","P","N","M","SPNM","SN","PN","MN"]);
+    var SQ2   = SQ1.concat(["O","Q","R","T","NOQR","NQ","NO","NR"]);
+    var ALL   = SQ2.concat(["SQ","MR","PO","MO"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -128,51 +299,306 @@ Since *AD* is a first binomial straight line, divide it into its terms at *E*, a
             "NOQR;polygon;square;N,O;0;0;black;90,80,100",
             "Q;point;vertex;NOQR,3",
             "R;point;vertex;NOQR,4",
-            "SQ;polygon;parallelogram;S,T,Q;0;0;black;0"
+            "SQ;polygon;parallelogram;S,T,Q;0;0;black;0",
+            // Slide-only twins and highlight targets.
+            "AC;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            "AHh;polygon;quadrilateral;A,B,H,G;0;0;0;0",
+            "GK;polygon;quadrilateral;G,E,K,H;0;0;0;0",
+            "EL;polygon;quadrilateral;E,F,L,K;0;0;0;0",
+            "SN;polygon;quadrilateral;S,P,N,M;0;0;0;0",
+            "NQ;polygon;quadrilateral;N,O,Q,R;0;0;0;0",
+            "MR;polygon;parallelogram;R,N,M;0;0;0;0",
+            "PO;polygon;parallelogram;P,T,O;0;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "GE;line;connect;G,E;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "NO;line;connect;N,O;0;0;0",
+            "PN;line;connect;P,N;0;0;0",
+            "NR;line;connect;N,R;0;0;0",
+            "MO;line;connect;M,O;0;0;0",
+            "GH;line;connect;G,H",
+            "EK;line;connect;E,K"
         ],
+        initiallyHidden: ["GH","EK"],
+        deferDraggables: ["E","S"],
+        aliases: { "DE": "ED", "FE": "EF", "EG": "GE", "KG": "GK", "RN": "NR", "NP": "PN" },
+        slides: [
+            { text: "“If an area is contained by a rational straight line and the first binomial,",
+              visible: ALL,
+              highlighted: ["AC","AB","AD"],
+              justifications: [{ ref: "X.54" }] },
+            { text: "then the side of the area is the irrational straight line which is called binomial.”",
+              visible: ALL,
+              highlighted: ["AC","MO"] },
+            { text: "Let the area {AC} be contained by the rational straight line {AB} and the first binomial {AD}.",
+              visible: GIVEN,
+              highlighted: ["AC","AB","AD"] },
+            { text: "I say that the side of the area {AC} is the irrational straight line which is called binomial.",
+              visible: GIVEN,
+              highlighted: ["AC"] },
+            { text: "Since {AD} is a first binomial straight line, divide it into its terms at {E},",
+              visible: TERMS,
+              highlighted: ["AD","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "and let {AE} be the greater term.",
+              visible: TERMS,
+              highlighted: ["AE"] },
+            { text: "It is then manifest that {AE} and {ED} are rational straight lines commensurable in square only,",
+              visible: TERMS,
+              highlighted: ["AE","ED"] },
+            { text: "the square on {AE} is greater than the square on {ED} by the square on a straight line commensurable with {AE},",
+              visible: TERMS,
+              highlighted: ["AE","ED"] },
+            { text: "and {AE} is commensurable in length with the rational straight line {AB} set out.",
+              visible: TERMS,
+              highlighted: ["AE","AB"],
+              justifications: [{ claim: "AD a first binomial", ref: "X.Def.II.1" }] },
+            { text: "Bisect {ED} at the point {F}.",
+              visible: BIS,
+              highlighted: ["ED","F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "Then, since the square on {AE} is greater than the square on {ED}",
+              visible: BIS,
+              highlighted: ["AE","ED"] },
+            { text: "by the square on a straight line commensurable with {AE},",
+              visible: BIS,
+              highlighted: ["AE"] },
+            { text: "therefore, if there is applied to the greater {AE}",
+              visible: BIS,
+              highlighted: ["AE"] },
+            { text: "a parallelogram equal to the fourth part of the square on the less,",
+              visible: BIS,
+              highlighted: ["AE","ED"] },
+            { text: "that is, to the square on {EF}, and deficient by a square figure,",
+              visible: BIS,
+              highlighted: ["AE","EF"] },
+            { text: "then it divides it into commensurable parts.",
+              visible: BIS,
+              highlighted: ["AE"],
+              justifications: [{ claim: "the parts are commensurable", ref: "X.17" }] },
+            { text: "Apply to {AE} the rectangle {AG} by {GE} equal to the square on {EF}.",
+              visible: APPL,
+              highlighted: ["AG","GE","EF"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "Then {AG} is commensurable in length with {EG}.",
+              visible: APPL,
+              highlighted: ["AG","GE"] },
+            { text: "Draw {GH}, {EK}, and {FL} from {G}, {E}, and {F} parallel to either of the straight lines {AB} and {CD}.",
+              visible: PAR,
+              highlighted: ["GH","EK","FL"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "GH",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EK",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FL",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AH",   name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "HGEK", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Construct the square {SN} equal to the parallelogram {AH|AHh},",
+              visible: SQ1,
+              highlighted: ["SN","AHh"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "S",    name: geomlib.A.Point.appear },
+                  { elem: "SPNM", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and the square {NQ} equal to {GK},",
+              visible: SQ2,
+              highlighted: ["NQ","GK"],
+              transition: { animations: [
+                  { elem: "NOQR", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and place them so that {MN} is in a straight line with {NO}.",
+              visible: SQ2,
+              highlighted: ["MN","NO"] },
+            { text: "Then {RN} is also in a straight line with {NP}.",
+              visible: SQ2,
+              highlighted: ["NR","PN"] },
+            { text: "Complete the parallelogram {SQ}.",
+              visible: ALL,
+              highlighted: ["SQ"],
+              transition: { animations: [
+                  { elem: "SQ", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Then {SQ} is a square.",
+              visible: ALL,
+              highlighted: ["SQ"],
+              justifications: [{ ref: "II.4" },
+                               { claim: "SQ is a square", ref: "Lemma" }] },
+            { text: "Now, since the rectangle {AG} by {GE} equals the square on {EF},",
+              visible: ALL,
+              highlighted: ["AG","GE","EF"] },
+            { text: "therefore {AG} is to {EF} as {FE} is to {EG}.",
+              visible: ALL,
+              highlighted: ["AG","EF","GE"],
+              justifications: [{ claim: "AG : EF = FE : EG", ref: "VI.17" }] },
+            { text: "Therefore {AH|AHh} is to {EL} as {EL} is to {KG}.",
+              visible: ALL,
+              highlighted: ["AHh","EL","GK"] },
+            { text: "Therefore {EL} is a mean proportional between {AH|AHh} and {GK}.",
+              visible: ALL,
+              highlighted: ["EL","AHh","GK"],
+              justifications: [{ claim: "AH : EL = EL : KG", ref: "VI.1" }] },
+            { text: "But {AH|AHh} equals {SN}, and {GK} equals {NQ},",
+              visible: ALL,
+              highlighted: ["AHh","SN","GK","NQ"] },
+            { text: "therefore {EL} is a mean proportional between {SN} and {NQ}.",
+              visible: ALL,
+              highlighted: ["EL","SN","NQ"] },
+            { text: "But {MR} is also a mean proportional between the same {SN} and {NQ},",
+              visible: ALL,
+              highlighted: ["MR","SN","NQ"],
+              justifications: [{ claim: "MR a mean proportional", ref: "Lemma" }] },
+            { text: "therefore {EL} equals {MR}, so that it also equals {PO}.",
+              visible: ALL,
+              highlighted: ["EL","MR","PO"] },
+            { text: "But {AH|AHh} and {GK} also equal {SN} and {NQ},",
+              visible: ALL,
+              highlighted: ["AHh","GK","SN","NQ"] },
+            { text: "therefore the whole {AC} equals the whole {SQ}, that is, it equals the square on {MO},",
+              visible: ALL,
+              highlighted: ["AC","SQ","MO"] },
+            { text: "Therefore {MO} is the side of {AC}.",
+              visible: ALL,
+              highlighted: ["MO","AC"] },
+            { text: "I say next that {MO} is binomial.",
+              visible: ALL,
+              highlighted: ["MO"] },
+            { text: "Since {AG} is commensurable with {GE},",
+              visible: ALL,
+              highlighted: ["AG","GE"] },
+            { text: "therefore {AE} is also commensurable with each of the straight lines {AG} and {GE}.",
+              visible: ALL,
+              highlighted: ["AE","AG","GE"],
+              justifications: [{ claim: "AE commensurable with AG, GE", ref: "X.15" }] },
+            { text: "But {AE} is also, by hypothesis, commensurable with {AB},",
+              visible: ALL,
+              highlighted: ["AE","AB"] },
+            { text: "therefore {AG} and {GE} are also commensurable with {AB}.",
+              visible: ALL,
+              highlighted: ["AG","GE","AB"],
+              justifications: [{ claim: "AG, GE commensurable with AB", ref: "X.12" }] },
+            { text: "And {AB} is rational, therefore each of the straight lines {AG} and {GE} is also rational.",
+              visible: ALL,
+              highlighted: ["AB","AG","GE"] },
+            { text: "Therefore each of the rectangles {AH|AHh} and {GK} is rational,",
+              visible: ALL,
+              highlighted: ["AHh","GK"] },
+            { text: "and {AH|AHh} is commensurable with {GK}.",
+              visible: ALL,
+              highlighted: ["AHh","GK"],
+              justifications: [{ claim: "AH, GK rational", ref: "X.19" }] },
+            { text: "But {AH|AHh} equals {SN}, and {GK} equals {NQ},",
+              visible: ALL,
+              highlighted: ["AHh","SN","GK","NQ"] },
+            { text: "therefore the sum of {SN} and {NQ}, that is the squares on {MN} and {NO}, are rational and commensurable.",
+              visible: ALL,
+              highlighted: ["SN","NQ","MN","NO"] },
+            { text: "Since {AE} is incommensurable in length with {ED}, while {AE} is commensurable with {AG},",
+              visible: ALL,
+              highlighted: ["AE","ED","AG"] },
+            { text: "and {DE} is commensurable with {EF}, therefore {AG} is also incommensurable with {EF},",
+              visible: ALL,
+              highlighted: ["ED","EF","AG"],
+              justifications: [{ claim: "AG, EF incommensurable", ref: "X.13" }] },
+            { text: "so that {AH|AHh} is also incommensurable with {EL}.",
+              visible: ALL,
+              highlighted: ["AHh","EL"],
+              justifications: [{ claim: "AH : EL = AG : EF", ref: "VI.1" },
+                               { claim: "AH, EL incommensurable", ref: "X.11" }] },
+            { text: "But {AH|AHh} equals {SN}, and {EL} equals {MR}, therefore {SN} is also incommensurable with {MR}.",
+              visible: ALL,
+              highlighted: ["AHh","SN","EL","MR"] },
+            { text: "But {SN} is to {MR} as {PN} is to {NR}, therefore {PN} is incommensurable with {NR}.",
+              visible: ALL,
+              highlighted: ["SN","MR","PN","NR"],
+              justifications: [{ claim: "SN : MR = PN : NR", ref: "VI.1" },
+                               { claim: "PN, NR incommensurable", ref: "X.11" }] },
+            { text: "But {PN} equals {MN}, and {NR} equals {NO}, therefore {MN} is incommensurable with {NO}.",
+              visible: ALL,
+              highlighted: ["PN","MN","NR","NO"] },
+            { text: "And the square on {MN} is commensurable with the square on {NO}, and each is rational,",
+              visible: ALL,
+              highlighted: ["MN","NO"] },
+            { text: "therefore {MN} and {NO} are rational straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["MN","NO"] },
+            { text: "Therefore {MO} is binomial and the side of {AC}.",
+              visible: ALL,
+              highlighted: ["MO","AC"],
+              justifications: [{ claim: "MO binomial", ref: "X.36" }] },
+            { text: "Therefore, if an area is contained by a rational straight line and the first binomial,",
+              visible: ALL,
+              highlighted: ["AC","AB","AD"] },
+            { text: "then the side of the area is the irrational straight line which is called binomial.",
+              visible: ALL,
+              highlighted: ["AC","MO"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.54") return "#prop";
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    Object.assign(window.eucrefs, {
+        "II.4":       "/elements/books/bookII/propositions/propII4/",
+        "VI.17":      "/elements/books/bookVI/propositions/propVI17/",
+        "X.11":       "/elements/books/bookX/propositions/propX11/",
+        "X.12":       "/elements/books/bookX/propositions/propX12/",
+        "X.13":       "/elements/books/bookX/propositions/propX13/",
+        "X.15":       "/elements/books/bookX/propositions/propX15/",
+        "X.17":       "/elements/books/bookX/propositions/propX17/",
+        "X.19":       "/elements/books/bookX/propositions/propX19/",
+        "X.36":       "/elements/books/bookX/propositions/propX36/",
+        "X.Def.II.1": "/elements/books/bookX/definitions/defX.II.1/"
     });
 </script>
 </figure>
 
-It is then manifest that *AE* and *ED* are rational straight lines commensurable in square only, the square on *AE* is greater than the square on *ED* by the square on a straight line commensurable with *AE*, and *AE* is commensurable in length with the rational straight line *AB* set out. [!just X.Def.II.1]
+It is then manifest that {AE} and {ED} are rational straight lines commensurable in square only, the square on {AE} is greater than the square on {ED} by the square on a straight line commensurable with {AE}, and {AE} is commensurable in length with the rational straight line {AB} set out. [!just X.Def.II.1]
 
-Bisect *ED* at the point *F*.
+Bisect {ED} at the point {F}.
 
-Then, since the square on *AE* is greater than the square on *ED* by the square on a straight line commensurable with *AE*, therefore, if there is applied to the greater *AE* a parallelogram equal to the fourth part of the square on the less, that is, to the square on *EF*, and deficient by a square figure, then it divides it into commensurable parts. [!just X.17]
+Then, since the square on {AE} is greater than the square on {ED} by the square on a straight line commensurable with {AE}, therefore, if there is applied to the greater {AE} a parallelogram equal to the fourth part of the square on the less, that is, to the square on {EF}, and deficient by a square figure, then it divides it into commensurable parts. [!just X.17]
 
-Apply to *AE* the rectangle *AG* by *GE* equal to the square on *EF*.  Then *AG* is commensurable in length with *EG*.
+Apply to {AE} the rectangle {AG} by {GE} equal to the square on {EF}.  Then {AG} is commensurable in length with {EG}.
 
 <div class="just"><a href="/elements/books/bookII/propositions/propII4/">II.4</a><br><a href="#lemma">Lemma</a></div>
 
-Draw *GH*, *EK*, and *FL* from *G*, *E*, and *F* parallel to either of the straight lines *AB* and *CD*.  Construct the square *SN* equal to the parallelogram *AH*, and the square *NQ* equal to *GK*, and place them so that *MN* is in a straight line with *NO*.  Then *RN* is also in a straight line with *NP*.  Complete the parallelogram *SQ*. Then *SQ* is a square.
+Draw {GH}, {EK}, and {FL} from {G}, {E}, and {F} parallel to either of the straight lines {AB} and {CD}.  Construct the square {SN} equal to the parallelogram {AH|AHh}, and the square {NQ} equal to {GK}, and place them so that {MN} is in a straight line with {NO}.  Then {RN} is also in a straight line with {NP}.  Complete the parallelogram {SQ}. Then {SQ} is a square.
 
-Now, since the rectangle *AG* by *GE* equals the square on *EF*, therefore *AG* is to *EF* as *FE* is to *EG*. [!just VI.17]
+Now, since the rectangle {AG} by {GE} equals the square on {EF}, therefore {AG} is to {EF} as {FE} is to {EG}. [!just VI.17]
 
-Therefore *AH* is to *EL* as *EL* is to *KG*. Therefore *EL* is a mean proportional between *AH* and *GK*. [!just VI.1]
+Therefore {AH|AHh} is to {EL} as {EL} is to {KG}. Therefore {EL} is a mean proportional between {AH|AHh} and {GK}. [!just VI.1]
 
 <div class="just"><a href="#lemma">Lemma</a></div>
 
-But *AH* equals *SN*, and *GK* equals *NQ*, therefore *EL* is a mean proportional between *SN* and *NQ*. But *MR* is also a mean proportional between the same *SN* and *NQ*, therefore *EL* equals *MR*, so that it also equals *PO*.
+But {AH|AHh} equals {SN}, and {GK} equals {NQ}, therefore {EL} is a mean proportional between {SN} and {NQ}. But {MR} is also a mean proportional between the same {SN} and {NQ}, therefore {EL} equals {MR}, so that it also equals {PO}.
 
-But *AH* and *GK* also equal *SN* and *NQ*, therefore the whole *AC* equals the whole *SQ*, that is, it equals the square on *MO*, Therefore *MO* is the side of *AC*.
+But {AH|AHh} and {GK} also equal {SN} and {NQ}, therefore the whole {AC} equals the whole {SQ}, that is, it equals the square on {MO}, Therefore {MO} is the side of {AC}.
 
-I say next that *MO* is binomial.
+I say next that {MO} is binomial.
 
-Since *AG* is commensurable with *GE*, therefore *AE* is also commensurable with each of the straight lines *AG* and *GE*. [!just X.15]
+Since {AG} is commensurable with {GE}, therefore {AE} is also commensurable with each of the straight lines {AG} and {GE}. [!just X.15]
 
-But *AE* is also, by hypothesis, commensurable with *AB*, therefore *AG* and *GE* are also commensurable with *AB*. [!just X.12]
+But {AE} is also, by hypothesis, commensurable with {AB}, therefore {AG} and {GE} are also commensurable with {AB}. [!just X.12]
 
-And *AB* is rational, therefore each of the straight lines *AG* and *GE* is also rational. Therefore each of the rectangles *AH* and *GK* is rational, and *AH* is commensurable with *GK*. [!just X.19]
+And {AB} is rational, therefore each of the straight lines {AG} and {GE} is also rational. Therefore each of the rectangles {AH|AHh} and {GK} is rational, and {AH|AHh} is commensurable with {GK}. [!just X.19]
 
-But *AH* equals *SN*, and *GK* equals *NQ*, therefore the sum of *SN* and *NQ*, that is the squares on *MN* and *NO*, are rational and commensurable.
+But {AH|AHh} equals {SN}, and {GK} equals {NQ}, therefore the sum of {SN} and {NQ}, that is the squares on {MN} and {NO}, are rational and commensurable.
 
-Since *AE* is incommensurable in length with *ED*, while *AE* is commensurable with *AG*, and *DE* is commensurable with *EF*, therefore *AG* is also incommensurable with *EF*, so that *AH* is also incommensurable with *EL*. [!just X.13; VI.1, X.11]
+Since {AE} is incommensurable in length with {ED}, while {AE} is commensurable with {AG}, and {DE} is commensurable with {EF}, therefore {AG} is also incommensurable with {EF}, so that {AH|AHh} is also incommensurable with {EL}. [!just X.13; VI.1, X.11]
 
-But *AH* equals *SN*, and *EL* equals *MR*, therefore *SN* is also incommensurable with *MR*. But *SN* is to *MR* as *PN* is to *NR*, therefore *PN* is incommensurable with *NR*. [!just VI.1; X.11]
+But {AH|AHh} equals {SN}, and {EL} equals {MR}, therefore {SN} is also incommensurable with {MR}. But {SN} is to {MR} as {PN} is to {NR}, therefore {PN} is incommensurable with {NR}. [!just VI.1; X.11]
 
-But *PN* equals *MN*, and *NR* equals *NO*, therefore *MN* is incommensurable with *NO*. And the square on *MN* is commensurable with the square on *NO*, and each is rational, therefore *MN* and *NO* are rational straight lines commensurable in square only.
+But {PN} equals {MN}, and {NR} equals {NO}, therefore {MN} is incommensurable with {NO}. And the square on {MN} is commensurable with the square on {NO}, and each is rational, therefore {MN} and {NO} are rational straight lines commensurable in square only.
 
-Therefore *MO* is binomial and the side of *AC*. [!just X.36]
+Therefore {MO} is binomial and the side of {AC}. [!just X.36]
 
 Therefore, *if an area is contained by a rational straight line and the first binomial, then the side of the area is the irrational straight line which is called binomial.*
 
