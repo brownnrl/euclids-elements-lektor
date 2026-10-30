@@ -17,12 +17,33 @@ statement: To cut a given finite straight line in extreme and mean ratio.
 ----
 proof:
 
-Let *AB* be the given finite straight line.
+Let {AB} be the given finite straight line.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="350" tabindex="0"></canvas>
 <noscript><img alt="VI.30 diagram" src="propVI30.gif"/></noscript>
 <script type="text/javascript">
+    // Describe the square BC on AB; apply to AC the parallelogram CD
+    // (C, F, D and the unlettered corner N) with excess AD similar to BC
+    // (VI.29). Then BF equals AD, so FE : ED = AE : EB (VI.14), and with
+    // FE = AB, ED = AE the line is cut at E in extreme and mean ratio.
+    //
+    // Joyce's figure draws only the square ABHC, the square NAED and EF, so
+    // AB is a solid slide twin over the square's side, hidden at rest
+    // (initiallyHidden), for the slides before the square is described.
+    // Everything else added is transparent: AC, AE, EB, ED, the parallelograms
+    // CD, CE, BF (explicit ;0 faces), and the faceless twins BCt of ABHC and
+    // ADt of NAED. ABHC's filled face would be raised over EF when
+    // highlighted (#140), so the prose reaches the squares as {BC|BCt} and
+    // {AD|ADt}. The equal angles at E of BF and AD are the right angles of
+    // the squares, so they are marked as right angles.
+    //
+    // Draggables (checked against the bundle): only A and B, free — the
+    // given line. H, C, N, E, D, F are derived and listed per slide.
+    var GIVEN = ["A","B","AB"];
+    var SQ    = GIVEN.concat(["ABHC","H","C"]);
+    var APP   = SQ.concat(["NAED","N","E","D","F","EF"]);
+    var ANG   = APP.concat(["rtBEF","rtAED"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -39,29 +60,133 @@ Let *AB* be the given finite straight line.
             "NAED;polygon;parallelogram;N,A,E;0;0;black;random",
             "D;point;vertex;NAED,4",
             "F;point;intersection;C,H,D,E",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // Slide twin, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            // Transparent highlight targets; explicit ;0 faces.
+            "AC;line;connect;A,C;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "BCt;polygon;quadrilateral;A,B,H,C;0;0;0;0",
+            "ADt;polygon;quadrilateral;N,A,E,D;0;0;0;0",
+            "CD;polygon;quadrilateral;C,F,D,N;0;0;0;0",
+            "CE;polygon;quadrilateral;A,E,F,C;0;0;0;0",
+            "BF;polygon;quadrilateral;E,B,H,F;0;0;0;0",
+            "rtBEF;sector;angleMarkerRight;E,B,F,14;0;0;3b6ea5;9ec5e8",
+            "rtAED;sector;angleMarkerRight;E,A,D,14;0;0;3b6ea5;9ec5e8"
         ],
+        initiallyHidden: ["AB"],
+        aliases: { "FE": "EF" },
+        slides: [
+            { text: "“To cut {a given finite straight line|AB} in extreme and mean ratio.”",
+              visible: GIVEN,
+              highlighted: ["AB"],
+              justifications: [{ ref: "VI.30" }] },
+            { text: "Let {AB} be the given finite straight line.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "It is required to cut {AB} in extreme and mean ratio.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "Describe the square {BC|BCt} on {AB}.",
+              visible: SQ,
+              highlighted: ["BCt","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "H",    name: geomlib.A.Point.appear },
+                  { elem: "C",    name: geomlib.A.Point.appear },
+                  { elem: "ABHC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.46" }] },
+            { text: "Apply the parallelogram {CD} to {AC} equal to the sum of {BC|BCt} and the figure {AD|ADt} similar to {BC|BCt}.",
+              visible: APP,
+              highlighted: ["CD","AC","ADt"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "N",    name: geomlib.A.Point.appear },
+                  { elem: "E",    name: geomlib.A.Point.appear },
+                  { elem: "D",    name: geomlib.A.Point.appear },
+                  { elem: "NAED", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "EF",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F",    name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "CD applied to AC, exceeding by AD similar to BC", ref: "VI.29" }] },
+            { text: "Now {BC|BCt} is a square, therefore {AD|ADt} is also a square.",
+              visible: APP,
+              highlighted: ["BCt","ADt"] },
+            { text: "And, since {BC|BCt} equals {CD}, subtract {CE} from each,",
+              visible: APP,
+              highlighted: ["BCt","CD","CE"] },
+            { text: "therefore the remainder {BF} equals the remainder {AD|ADt}.",
+              visible: APP,
+              highlighted: ["BF","ADt"],
+              justifications: [{ claim: "BF = AD", ref: "C.N.3" }] },
+            { text: "But it is also equiangular with it,",
+              visible: ANG,
+              highlighted: ["BF","ADt","rtBEF","rtAED"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtBEF", name: geomlib.A.Sector.sweep },
+                  { elem: "rtAED", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore in {BF} and {AD|ADt} the sides about the equal angles are reciprocally proportional.",
+              visible: ANG,
+              highlighted: ["BF","ADt","rtBEF","rtAED"] },
+            { text: "Therefore {FE} is to {ED} as {AE} is to {EB}.",
+              visible: ANG,
+              highlighted: ["EF","ED","AE","EB"],
+              justifications: [{ claim: "FE : ED = AE : EB", ref: "VI.14" }] },
+            { text: "But {FE} equals {AB}, and {ED} equals {AE}.",
+              visible: ANG,
+              highlighted: ["EF","AB","ED","AE"] },
+            { text: "Therefore {AB} is to {AE} as {AE} is to {EB}.",
+              visible: ANG,
+              highlighted: ["AB","AE","EB"],
+              justifications: [{ claim: "AB : AE = AE : EB", ref: "V.7" }] },
+            { text: "And {AB} is greater than {AE}, therefore {AE} is also greater than {EB}.",
+              visible: ANG,
+              highlighted: ["AB","AE","EB"] },
+            { text: "Therefore the straight line {AB} has been cut in extreme and mean ratio at {E},",
+              visible: ANG,
+              highlighted: ["AB","E"] },
+            { text: "and the greater segment of it is {AE}.",
+              visible: ANG,
+              highlighted: ["AE"],
+              justifications: [
+                  { claim: "AB cut in extreme and mean ratio", ref: "VI.Def.3" },
+                  { ref: "Q.E.F." } ] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.30") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "C.N.3":    "/elements/books/bookI/commonnotions/cn3/",
+        "I.46":     "/elements/books/bookI/propositions/propI46/",
+        "V.7":      "/elements/books/bookV/propositions/propV7/",
+        "VI.14":    "/elements/books/bookVI/propositions/propVI14/",
+        "VI.29":    "/elements/books/bookVI/propositions/propVI29/",
+        "VI.Def.3": "/elements/books/bookVI/definitions/defVI3/"
     });
 </script>
 </figure>
 
-It is required to cut *AB* in extreme and mean ratio.
+It is required to cut {AB} in extreme and mean ratio.
 
-Describe the square *BC* on *AB.*  Apply the parallelogram *CD* to *AC* equal to the sum of *BC* and the figure *AD* similar to *BC.* [!just I.46; VI.29]
+Describe the square {BC|BCt} on {AB}.  Apply the parallelogram {CD} to {AC} equal to the sum of {BC|BCt} and the figure {AD|ADt} similar to {BC|BCt}. [!just I.46; VI.29]
 
-Now *BC* is a square, therefore *AD* is also a square.
+Now {BC|BCt} is a square, therefore {AD|ADt} is also a square.
 
-And, since *BC* equals *CD,* subtract *CE* from each, therefore the remainder *BF* equals the remainder *AD.*
+And, since {BC|BCt} equals {CD}, subtract {CE} from each, therefore the remainder {BF} equals the remainder {AD|ADt}.
 
-But it is also equiangular with it, therefore in *BF* and *AD* the sides about the equal angles are reciprocally proportional. Therefore *FE* is to *ED* as *AE* is to *EB.* [!just VI.14]
+But it is also equiangular with it, therefore in {BF} and {AD|ADt} the sides about the equal angles are reciprocally proportional. Therefore {FE} is to {ED} as {AE} is to {EB}. [!just VI.14]
 
-But *FE* equals *AB,* and *ED* equals *AE.*
+But {FE} equals {AB}, and {ED} equals {AE}.
 
-Therefore *AB* is to *AE* as *AE* is to *EB.* [!just V.7]
+Therefore {AB} is to {AE} as {AE} is to {EB}. [!just V.7]
 
-And *AB* is greater than *AE,* therefore *AE* is also greater than *EB.*
+And {AB} is greater than {AE}, therefore {AE} is also greater than {EB}.
 
-Therefore the straight line *AB* has been cut in extreme and mean ratio at *E,* and the greater segment of it is *AE.* [!just VI.Def.3]
+Therefore the straight line {AB} has been cut in extreme and mean ratio at {E}, and the greater segment of it is {AE}. [!just VI.Def.3]
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">

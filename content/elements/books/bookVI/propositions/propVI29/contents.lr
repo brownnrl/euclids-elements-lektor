@@ -17,14 +17,46 @@ statement: To apply a parallelogram equal to a given rectilinear figure to a giv
 ----
 proof:
 
-Let *C* be the given rectilinear figure, *AB* be the given straight line, and *D* the parallelogram to which the excess is required to be similar.
+Let {C} be the given rectilinear figure, {AB} be the given straight line, and {D} the parallelogram to which the excess is required to be similar.
 
-It is required to apply a parallelogram equal to the rectilinear figure *C*  to the straight line *AB* but exceeding it by a parallelogram similar to *D.*
+It is required to apply a parallelogram equal to the rectilinear figure {C}  to the straight line {AB} but exceeding it by a parallelogram similar to {D}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="550" height="250" tabindex="0"></canvas>
 <noscript><img alt="VI.29 diagram" src="propVI29.gif"/></noscript>
 <script type="text/javascript">
+    // Bisect AB at E; describe BF (= EL) on EB similar to D, and GH equal to
+    // BF + C and similar to D (VI.25); make FLM = KH and FEN = KG, complete
+    // MN, draw the diameter FO and describe the figure. The gnomon XWV is
+    // MN less EL, so equals C; AO = AN + EO = LP + EO equals the gnomon.
+    //
+    // Joyce's figure draws the parallelograms only as the filled pieces FP
+    // (EFMP) and AO, with FO, LQ, EN and the gnomon's arc XWV. The proof
+    // builds the figure in an order those pieces cannot show, so AB, the
+    // outline of BF, and the sides LM, MO, NO are solid slide twins over
+    // Joyce's lines, hidden at rest (initiallyHidden), as on IV.13.
+    //
+    // Everything else added is transparent: EL's sides FL, FE, the segments
+    // AE, EB, FLM, FEN, KH, KG, the parallelograms MN, AN, NB, LP, EO, QP,
+    // AOt (a faceless twin of Joyce's filled AO, which would be raised over
+    // EN and LQ when highlighted, #140), and the gnomon region XWVg (the
+    // hexagon LMONEB; Joyce's XWV is the arc that marks it). The prose
+    // reaches them as {AO|AOt}, {XWV|XWVg}, {VWX|XWVg}. A2 is the unlettered
+    // corner of AO under A. No angle in the argument; no markers.
+    //
+    // Draggables (checked against the bundle): A, B, D2, D3, K sliders and
+    // C1..C5, D1 free, plus the invisible line ends. K arrives with GH and
+    // is deferred; the rest are givens. E, F, L, G, H, M, N, O, P, Q, V, W,
+    // X are derived and listed per slide.
+    var GIVEN = ["A","B","AB","C","C1","C2","C3","C4","C5",
+                 "D","D1","D2","D3","D4"];
+    var BIS   = GIVEN.concat(["E"]);
+    var BFS   = BIS.concat(["F","L","BFs"]);
+    var GHS   = BFS.concat(["GH","K","G","H"]);
+    var PROD  = GHS.concat(["LMs","EN","M","N"]);
+    var MNS   = PROD.concat(["MOs","NOs","O"]);
+    var FIG   = MNS.concat(["FO","FP","AO","LQ","P","Q"]);
+    var GNOM  = FIG.concat(["XWV","X","W","V"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -78,35 +110,229 @@ It is required to apply a parallelogram equal to the rectilinear figure *C*  to 
             "V;point;cutoff;B,L,B,Y;black;0",
             "W;point;cutoff;B,O,B,Y;black;0",
             "X;point;cutoff;B,A,B,Y;black;0",
-            "XWV;sector;arc;X,W,V;0;0;darkGray;0"
+            "XWV;sector;arc;X,W,V;0;0;darkGray;0",
+            // The unlettered corner of AO under A.
+            "A2;point;parallelogram;A,P,O;0;0",
+            // Slide twins, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            "BFs;polygon;quadrilateral;E,B,L,F;0;0;black;0",
+            "LMs;line;connect;L,M",
+            "MOs;line;connect;M,O",
+            "NOs;line;connect;N,O",
+            // Transparent highlight targets; explicit ;0 faces.
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "FL;line;connect;F,L;0;0;0",
+            "FE;line;connect;F,E;0;0;0",
+            "KH;line;connect;K,H;0;0;0",
+            "KG;line;connect;K,G;0;0;0",
+            "FLM;line;connect;F,M;0;0;0",
+            "FEN;line;connect;F,N;0;0;0",
+            "MN;polygon;quadrilateral;F,M,O,N;0;0;0;0",
+            "AN;polygon;quadrilateral;A,E,N,A2;0;0;0;0",
+            "NB;polygon;quadrilateral;E,B,Q,N;0;0;0;0",
+            "LP;polygon;quadrilateral;B,P,M,L;0;0;0;0",
+            "EO;polygon;quadrilateral;E,P,O,N;0;0;0;0",
+            "QP;polygon;quadrilateral;B,P,O,Q;0;0;0;0",
+            "AOt;polygon;quadrilateral;A,P,O,A2;0;0;0;0",
+            "XWVg;polygon;hexagon;L,M,O,N,E,B;0;0;0;0"
         ],
+        initiallyHidden: ["AB","BFs","LMs","MOs","NOs"],
+        deferDraggables: ["K"],
+        aliases: { "BF": "EBLF", "FB": "EBLF", "EL": "EBLF", "PQ": "QP" },
+        slides: [
+            { text: "“To apply a parallelogram equal to {a given rectilinear figure|C} to {a given straight line|AB}”",
+              visible: GIVEN,
+              highlighted: ["C","AB"],
+              justifications: [{ ref: "VI.29" }] },
+            { text: "“but exceeding it by a parallelogram similar to {a given one|D}.”",
+              visible: GIVEN,
+              highlighted: ["D"] },
+            { text: "Let {C} be the given rectilinear figure, {AB} be the given straight line,",
+              visible: GIVEN,
+              highlighted: ["C","AB"] },
+            { text: "and {D} the parallelogram to which the excess is required to be similar.",
+              visible: GIVEN,
+              highlighted: ["D"] },
+            { text: "It is required to apply a parallelogram equal to the rectilinear figure {C} to the straight line {AB}",
+              visible: GIVEN,
+              highlighted: ["C","AB"] },
+            { text: "but exceeding it by a parallelogram similar to {D}.",
+              visible: GIVEN,
+              highlighted: ["D"] },
+            { text: "Bisect {AB} at {E}.",
+              visible: BIS,
+              highlighted: ["AB","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AE = EB", ref: "I.10" }] },
+            { text: "Describe the parallelogram {BF} on {EB} similar and similarly situated to {D},",
+              visible: BFS,
+              highlighted: ["EBLF","EB","D"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",   name: geomlib.A.Point.appear },
+                  { elem: "L",   name: geomlib.A.Point.appear },
+                  { elem: "BFs", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "BF on EB similar to D", ref: "VI.18" }] },
+            { text: "and construct {GH} equal to the sum of {BF} and {C} and similar and similarly situated to {D}.",
+              visible: GHS,
+              highlighted: ["GH","EBLF","C","D"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "K",  name: geomlib.A.Point.appear },
+                  { elem: "H",  name: geomlib.A.Point.appear },
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "GH", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "GH = BF + C, similar to D", ref: "VI.25" }] },
+            { text: "Let {KH} correspond to {FL} and {KG} to {FE}.",
+              visible: GHS,
+              highlighted: ["KH","FL","KG","FE"] },
+            { text: "Now, since {GH} is greater than {FB},",
+              visible: GHS,
+              highlighted: ["GH","EBLF"] },
+            { text: "therefore {KH} is also greater than {FL}, and {KG} greater than {FE}.",
+              visible: GHS,
+              highlighted: ["KH","FL","KG","FE"] },
+            { text: "Produce {FL} and {FE}. Make {FLM} equal to {KH}, and {FEN} equal to {KG}.",
+              visible: PROD,
+              highlighted: ["FLM","KH","FEN","KG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "LMs", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "M",   name: geomlib.A.Point.appear },
+                  { elem: "EN",  name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "N",   name: geomlib.A.Point.appear } ] },
+              justifications: [
+                  { claim: "produce FL and FE", ref: "I.Post.2" },
+                  { claim: "FLM = KH, FEN = KG", ref: "I.3" } ] },
+            { text: "Complete {MN}.",
+              visible: MNS,
+              highlighted: ["MN"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "MOs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "NOs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "O",   name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "parallels through M and N", ref: "I.31" }] },
+            { text: "Then {MN} is both equal and similar to {GH}.",
+              visible: MNS,
+              highlighted: ["MN","GH"] },
+            { text: "But {GH} is similar to {EL}, therefore {MN} is also similar to {EL},",
+              visible: MNS,
+              highlighted: ["GH","EBLF","MN"],
+              justifications: [{ claim: "MN similar to EL", ref: "VI.21" }] },
+            { text: "therefore {EL} is about the same diameter with {MN}.",
+              visible: MNS,
+              highlighted: ["EBLF","MN"],
+              justifications: [{ claim: "EL about the same diameter with MN", ref: "VI.26" }] },
+            { text: "Draw their diameter {FO}, and describe the figure.",
+              visible: FIG,
+              highlighted: ["FO"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FO", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "P",  name: geomlib.A.Point.appear },
+                  { elem: "Q",  name: geomlib.A.Point.appear },
+                  { elem: "LQ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FP", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "AO", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [
+                  { claim: "the diameter FO", ref: "I.Post.1" },
+                  { claim: "parallels through P and Q", ref: "I.31" } ] },
+            { text: "Since {GH} equals the sum of {EL} and {C}, while {GH} equals {MN},",
+              visible: FIG,
+              highlighted: ["GH","EBLF","C","MN"] },
+            { text: "therefore {MN} also equals the sum of {EL} and {C}.",
+              visible: FIG,
+              highlighted: ["MN","EBLF","C"] },
+            { text: "Subtract {EL} from each.",
+              visible: FIG,
+              highlighted: ["EBLF","MN","GH"] },
+            { text: "Therefore the remainder, the gnomon {XWV|XWVg}, equals {C}.",
+              visible: GNOM,
+              highlighted: ["XWVg","XWV","C"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "XWV", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "gnomon XWV = C", ref: "C.N.3" }] },
+            { text: "Now, since {AE} equals {EB}, therefore {AN} equals {NB},",
+              visible: GNOM,
+              highlighted: ["AE","EB","AN","NB"],
+              justifications: [{ claim: "AN = NB", ref: "I.36" }] },
+            { text: "that is, {LP}.",
+              visible: GNOM,
+              highlighted: ["NB","LP"],
+              justifications: [{ claim: "NB = LP, complements", ref: "I.43" }] },
+            { text: "Add {EO} to each.",
+              visible: GNOM,
+              highlighted: ["EO","AN","LP"] },
+            { text: "Therefore the whole {AO|AOt} equals the gnomon {VWX|XWVg}.",
+              visible: GNOM,
+              highlighted: ["AOt","XWVg","XWV"],
+              justifications: [{ claim: "AO = gnomon VWX", ref: "C.N.2" }] },
+            { text: "But the gnomon {VWX|XWVg} equals {C}, therefore {AO|AOt} also equals {C}.",
+              visible: GNOM,
+              highlighted: ["XWVg","XWV","C","AOt"],
+              justifications: [{ claim: "AO = C", ref: "C.N.1" }] },
+            { text: "Therefore the parallelogram {AO|AOt} equal to the given rectilinear figure {C} has been applied to the given straight line {AB}",
+              visible: GNOM,
+              highlighted: ["AOt","C","AB"] },
+            { text: "but exceeding it by a parallelogram {QP} similar to {D},",
+              visible: GNOM,
+              highlighted: ["QP","D"] },
+            { text: "since {PQ} is also similar to {EL}.",
+              visible: GNOM,
+              highlighted: ["QP","EBLF"],
+              justifications: [
+                  { claim: "PQ similar to EL", ref: "VI.24" },
+                  { ref: "Q.E.F." } ] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.29") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/",
+        "C.N.3":    "/elements/books/bookI/commonnotions/cn3/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.10":     "/elements/books/bookI/propositions/propI10/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "I.36":     "/elements/books/bookI/propositions/propI36/",
+        "I.43":     "/elements/books/bookI/propositions/propI43/",
+        "VI.18":    "/elements/books/bookVI/propositions/propVI18/",
+        "VI.21":    "/elements/books/bookVI/propositions/propVI21/",
+        "VI.24":    "/elements/books/bookVI/propositions/propVI24/",
+        "VI.25":    "/elements/books/bookVI/propositions/propVI25/",
+        "VI.26":    "/elements/books/bookVI/propositions/propVI26/"
     });
 </script>
 </figure>
 
-Bisect *AB* at *E.* Describe the parallelogram *BF* on *EB* similar and similarly situated to *D,* and construct *GH* equal to the sum of *BF* and *C* and similar and similarly situated to *D.* [!just VI.25]
+Bisect {AB} at {E}. Describe the parallelogram {BF} on {EB} similar and similarly situated to {D}, and construct {GH} equal to the sum of {BF} and {C} and similar and similarly situated to {D}. [!just VI.25]
 
-Let *KH* correspond to *FL* and *KG* to *FE.*
+Let {KH} correspond to {FL} and {KG} to {FE}.
 
-Now, since *GH* is greater than *FB,* therefore *KH* is also greater than *FL,* and *KG* greater than *FE.*
+Now, since {GH} is greater than {FB}, therefore {KH} is also greater than {FL}, and {KG} greater than {FE}.
 
-Produce *FL* and *FE.*  Make *FLM* equal to *KH,* and *FEN* equal to *KG.* Complete *MN.*  Then *MN* is both equal and similar to *GH.*
+Produce {FL} and {FE}.  Make {FLM} equal to {KH}, and {FEN} equal to {KG}. Complete {MN}.  Then {MN} is both equal and similar to {GH}.
 
-But *GH* is similar to *EL,* therefore *MN* is also similar to *EL,*  therefore *EL* is about the same diameter with *MN.* [!just VI.21, VI.26]
+But {GH} is similar to {EL}, therefore {MN} is also similar to {EL},  therefore {EL} is about the same diameter with {MN}. [!just VI.21, VI.26]
 
-Draw their diameter *FO,* and describe the figure.
+Draw their diameter {FO}, and describe the figure.
 
-Since *GH* equals the sum of *EL* and *C,* while *GH* equals *MN,* therefore *MN* also equals the sum of *EL* and *C.*
+Since {GH} equals the sum of {EL} and {C}, while {GH} equals {MN}, therefore {MN} also equals the sum of {EL} and {C}.
 
-Subtract *EL* from each.  Therefore the remainder, the gnomon *XWV,* equals *C.*
+Subtract {EL} from each.  Therefore the remainder, the gnomon {XWV|XWVg}, equals {C}.
 
-Now, since *AE* equals *EB,* therefore *AN* equals *NB,* that is, *LP.* [!just I.36, I.43]
+Now, since {AE} equals {EB}, therefore {AN} equals {NB}, that is, {LP}. [!just I.36, I.43]
 
-Add *EO* to each.  Therefore the whole *AO* equals the gnomon *VWX.*
+Add {EO} to each.  Therefore the whole {AO|AOt} equals the gnomon {VWX|XWVg}.
 
-But the gnomon *VWX* equals *C,* therefore *AO* also equals *C.*
+But the gnomon {VWX|XWVg} equals {C}, therefore {AO|AOt} also equals {C}.
 
-Therefore the parallelogram *AO* equal to the given rectilinear figure *C* has been applied to the given straight line *AB* but exceeding it by a parallelogram *QP* similar to *D,* since *PQ* is also similar to *EL.* [!just VI.24]
+Therefore the parallelogram {AO|AOt} equal to the given rectilinear figure {C} has been applied to the given straight line {AB} but exceeding it by a parallelogram {QP} similar to {D}, since {PQ} is also similar to {EL}. [!just VI.24]
 
 <div class="qed">Q.E.F.</div>
 ----
@@ -120,6 +346,11 @@ The construction in this proposition is a generalization of that described in th
 <canvas id="canvas_1" width="250" height="270" tabindex="0"></canvas>
 <noscript><img alt="VI.29 simplified diagram" src="propVI29a.gif"/></noscript>
 <script type="text/javascript">
+    // Guide figure: hover targets only, no slideshow. Added transparent
+    // (explicit ;0 faces): AB, BP, the square BEFL, BQOP (a faceless twin
+    // of Joyce's filled PQ, which would be raised over FO), and the
+    // rectangle AO with A2, its unlettered corner under A. FNOM is Joyce's
+    // faceless MN.
     geomlib.init({
         canvasid: "canvas_1",
         background: "0,0,100",
@@ -148,19 +379,27 @@ The construction in this proposition is a generalization of that described in th
             "AQ;polygon;parallelogram;A,B,Q;0;0;black;random",
             "PQ;polygon;parallelogram;P,B,Q;0;0;black;random",
             "MN;polygon;parallelogram;M,F,N;0;0;black;0",
-            "BL;line;connect;B,L"
+            "BL;line;connect;B,L",
+            // Transparent hover targets; explicit ;0 faces.
+            "A2;point;parallelogram;A,B,Q;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "BP;line;connect;B,P;0;0;0",
+            "BEFL;polygon;quadrilateral;B,E,F,L;0;0;0;0",
+            "BQOP;polygon;quadrilateral;B,Q,O,P;0;0;0;0",
+            "AO;polygon;quadrilateral;A,P,O,A2;0;0;0;0"
         ],
+        aliases: { "FNOM": "MN" }
     });
 </script>
 </figure>
 
-Like the last proposition, this one is more easily understood when the given parallelogram *D* is a square.
+Like the last proposition, this one is more easily understood when the given parallelogram {D:canvas_0} is a square.
 
-In that case of this proposition a rectangle *AO* equal to a given rectilinear figure *C* is applied to a given straight line *AB* but exceeds it by a square (*BQOP* in the figure). So the rectangle being laid alongside the line extends past the end of the line *AB,* but the part that extends beyond the end is a square.
+In that case of this proposition a rectangle {AO} equal to a given rectilinear figure {C} is applied to a given straight line {AB} but exceeds it by a square ({BQOP} in the figure). So the rectangle being laid alongside the line extends past the end of the line {AB}, but the part that extends beyond the end is a square.
 
-For the construction, bisect *AB* at *E,* construct the square *BEFL,* then make the square *FNOM* equal to the square *BEFL* plus the figure *C,* and complete the figure.
+For the construction, bisect {AB} at {E}, construct the square {BEFL}, then make the square {FNOM} equal to the square {BEFL} plus the figure {C}, and complete the figure.
 
-As in the last proposition we can understand the meaning of this construction more easily if we interpret it algebraically. Let *a* stand for the known quantity *AB* and *x* stand for the unknown quantity *BP.* Then this
-construction finds *x* so that (*a* + *x*) *x* = *C.* In other words it solves the quadratic equation *ax* + *x*<sup>2</sup> = *C.*
+As in the last proposition we can understand the meaning of this construction more easily if we interpret it algebraically. Let *a* stand for the known quantity {AB} and *x* stand for the unknown quantity {BP}. Then this
+construction finds *x* so that (*a* + *x*) *x* = *C.* In other words it solves the quadratic equation *ax* + *x*<sup>2</sup> = *C.*
 
 The construction of this proposition is used in the next proposition to cut a straight line in extreme and mean ratio.
