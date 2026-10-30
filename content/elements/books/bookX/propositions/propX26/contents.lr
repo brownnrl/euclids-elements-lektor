@@ -15,18 +15,40 @@ statement: A medial area does not exceed a medial area by a rational area.
 ----
 proof:
 
-If possible, let the medial area *AB* exceed the medial area *AC* by the rational area *DB*.
+If possible, let the medial area {AB|ABh} exceed the medial area {AC|ACh} by the rational area {DB|BDh}.
 
-Set out a rational straight line *EF*. Apply to *EF* the rectangular parallelogram *FH* equal to *AB* producing *EH* as breadth. Subtract the rectangle *FG* equal to *AC*. Then the remainder *BD* equals the remainder *KH*.
+Set out a rational straight line {EF}. Apply to {EF} the rectangular parallelogram {FH|FHh} equal to {AB|ABh} producing {EH} as breadth. Subtract the rectangle {FG|FGh} equal to {AC|ACh}. Then the remainder {BD|BDh} equals the remainder {KH|KHh}.
 
-But *DB* is rational, therefore *KH* is also rational.
+But {DB|BDh} is rational, therefore {KH|KHh} is also rational.
 
-Since each of the rectangles *AB* and *AC* is medial, and *AB* equals *FH* while *AC* equals *FG*, therefore each of the rectangles *FH* and *FG* is also medial.
+Since each of the rectangles {AB|ABh} and {AC|ACh} is medial, and {AB|ABh} equals {FH|FHh} while {AC|ACh} equals {FG|FGh}, therefore each of the rectangles {FH|FHh} and {FG|FGh} is also medial.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="220" tabindex="0"></canvas>
 <noscript><img alt="X.26 diagram" src="propX26.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the medial area AB split into AC (cyan) and the
+    // remainder BD (pink); to the right the rational line EF with FH applied
+    // to it, drawn as FG (cyan) over the remainder HK (pink). AB and FH are
+    // never drawn as single polygons, so they, and the four filled areas,
+    // are lit through faceless, strokeless twins ABh, ACh, BDh, FHh, FGh,
+    // KHh (#140); prose and captions reach them with the display override
+    // ({AB|ABh}, {DB|BDh}, {KH|KHh}, …). The sides EF, EH, EG, GH are
+    // transparent highlight targets (;0;0;0). FHs is a solid pink twin of
+    // the whole FH, hidden at rest (initiallyHidden), so "Apply FH" shows
+    // the area before "Subtract FG" divides it. Resting figure unchanged.
+    //
+    // Draggables (checked against the bundle): A, B, C (given), E, F and
+    // the offscreen frees (O sits invisible at the corner). E and F arrive
+    // with "Set out a rational straight line EF", so they are deferred; D,
+    // G, H, K are derived and follow the visible sets.
+    //
+    // A reductio: the construction rests on the supposition, so the closing
+    // slide withdraws it and leaves the given areas.
+    var GIVEN = ["A","B","C","D","AC","BD","ABh","ACh","BDh"];
+    var EFS   = GIVEN.concat(["E","F","EF"]);
+    var FHS   = EFS.concat(["H","EH","FHs","FHh"]);
+    var ALL   = EFS.concat(["H","EH","FHh","G","K","FG","FGh","HK","KHh","EG","GH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -52,27 +74,156 @@ Since each of the rectangles *AB* and *AC* is medial, and *AB* equals *FH* while
             "FG;polygon;parallelogram;F,E,G;0;0;black;cyan",
             "K;point;vertex;FG,4",
             "H;point;proportion;E,F,C,D,A',B,E,G'",
-            "HK;polygon;parallelogram;H,G,K;0;0;black;pink"
+            "HK;polygon;parallelogram;H,G,K;0;0;black;pink",
+            // Slide twin, hidden at rest (see above).
+            "FHs;polygon;parallelogram;F,E,H;0;0;black;pink",
+            // Highlight targets only — the figure already draws these.
+            "EF;line;connect;E,F;0;0;0",
+            "EH;line;connect;E,H;0;0;0",
+            "EG;line;connect;E,G;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "ABh;polygon;parallelogram;A,A',B;0;0;0;0",
+            "ACh;polygon;parallelogram;A,A',C;0;0;0;0",
+            "BDh;polygon;parallelogram;B,C,D;0;0;0;0",
+            "FHh;polygon;parallelogram;F,E,H;0;0;0;0",
+            "FGh;polygon;parallelogram;F,E,G;0;0;0;0",
+            "KHh;polygon;parallelogram;H,G,K;0;0;0;0"
         ],
+        initiallyHidden: ["FHs"],
+        deferDraggables: ["E","F"],
+        slides: [
+            { text: "“A medial area does not exceed a medial area by a rational area.”",
+              visible: GIVEN,
+              highlighted: ["ABh","ACh"],
+              justifications: [{ ref: "X.26" }] },
+            { text: "If possible, let the medial area {AB|ABh} exceed the medial area {AC|ACh} by the rational area {DB|BDh}.",
+              visible: GIVEN,
+              highlighted: ["ABh","ACh","BDh"] },
+            { text: "Set out a rational straight line {EF}.",
+              visible: EFS,
+              transition: { animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Apply to {EF} the rectangular parallelogram {FH|FHh} equal to {AB|ABh} producing {EH} as breadth.",
+              visible: FHS,
+              highlighted: ["EF","ABh","EH"],
+              transition: { animations: [
+                  { elem: "FHh", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Subtract the rectangle {FG|FGh} equal to {AC|ACh}.",
+              visible: ALL,
+              highlighted: ["ACh"],
+              transition: { animations: [
+                  { elem: "FGh", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Then the remainder {BD|BDh} equals the remainder {KH|KHh}.",
+              visible: ALL,
+              highlighted: ["BDh","KHh"] },
+            { text: "But {DB|BDh} is rational, therefore {KH|KHh} is also rational.",
+              visible: ALL,
+              highlighted: ["BDh","KHh"] },
+            { text: "Since each of the rectangles {AB|ABh} and {AC|ACh} is medial, and {AB|ABh} equals {FH|FHh} while {AC|ACh} equals {FG|FGh},",
+              visible: ALL,
+              highlighted: ["ABh","ACh","FHh","FGh"] },
+            { text: "therefore each of the rectangles {FH|FHh} and {FG|FGh} is also medial.",
+              visible: ALL,
+              highlighted: ["FHh","FGh"] },
+            { text: "They are applied to the rational straight line {EF},",
+              visible: ALL,
+              highlighted: ["FHh","FGh","EF"] },
+            { text: "therefore each of the straight lines {HE|EH} and {EG} is rational and incommensurable in length with {EF}.",
+              visible: ALL,
+              highlighted: ["EH","EG","EF"],
+              justifications: [{ claim: "HE, EG rational, incommensurable in length with EF", ref: "X.22" }] },
+            { text: "Since {DB|BDh} is rational and equals {KH|KHh}, therefore {KH|KHh} is rational.",
+              visible: ALL,
+              highlighted: ["BDh","KHh"] },
+            { text: "And it is applied to the rational straight line {EF},",
+              visible: ALL,
+              highlighted: ["KHh","EF"] },
+            { text: "therefore {GH} is rational and commensurable in length with {EF}.",
+              visible: ALL,
+              highlighted: ["GH","EF"],
+              justifications: [{ claim: "GH rational, commensurable in length with EF", ref: "X.20" }] },
+            { text: "But {EG} is also rational, and is incommensurable in length with {EF},",
+              visible: ALL,
+              highlighted: ["EG","EF"] },
+            { text: "therefore {EG} is incommensurable in length with {GH}.",
+              visible: ALL,
+              highlighted: ["EG","GH"],
+              justifications: [{ claim: "EG, GH incommensurable in length", ref: "X.13" }] },
+            { text: "And {EG} is to {GH} as the square on {EG} is to the rectangle {EG} by {GH},",
+              visible: ALL,
+              highlighted: ["EG","GH"] },
+            { text: "therefore the square on {EG} is incommensurable with the rectangle {EG} by {GH}.",
+              visible: ALL,
+              highlighted: ["EG","GH"],
+              justifications: [{ claim: "square on EG, rectangle EG by GH incommensurable", ref: "X.11" }] },
+            { text: "But the squares on {EG} and {GH} are commensurable with the square on {EG}, for both are rational,",
+              visible: ALL,
+              highlighted: ["EG","GH"] },
+            { text: "and twice the rectangle {EG} by {GH} is commensurable with the rectangle {EG} by {GH}, for it is double it,",
+              visible: ALL,
+              highlighted: ["EG","GH"],
+              justifications: [{ claim: "twice EG by GH commensurable with EG by GH", ref: "X.6" }] },
+            { text: "therefore the sum of the squares on {EG} and {GH} is incommensurable with twice the rectangle {EG} by {GH}.",
+              visible: ALL,
+              highlighted: ["EG","GH"],
+              justifications: [{ claim: "EG² + GH², 2 EG·GH incommensurable", ref: "X.13" }] },
+            { text: "Therefore the sum of the squares on {EG} and {GH} plus twice the rectangle {EG} by {GH},",
+              visible: ALL,
+              highlighted: ["EG","GH"] },
+            { text: "that is, the square on {EH} is incommensurable with the sum of the squares on {EG} and {GH}.",
+              visible: ALL,
+              highlighted: ["EH","EG","GH"],
+              justifications: [
+                  { claim: "EH² = EG² + GH² + 2 EG·GH", ref: "II.4" },
+                  { claim: "EH², EG² + GH² incommensurable", ref: "X.16" } ] },
+            { text: "But the squares on {EG} and {GH} are rational, therefore the square on {EH} is irrational.",
+              visible: ALL,
+              highlighted: ["EG","GH","EH"],
+              justifications: [{ claim: "square on EH irrational", ref: "X.Def.I.4" }] },
+            { text: "Therefore {EH} is irrational. But it is also rational, which is impossible.",
+              visible: ALL,
+              highlighted: ["EH"] },
+            { text: "Therefore, a medial area does not exceed a medial area by a rational area.",
+              visible: GIVEN,
+              highlighted: ["ABh","ACh"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.26") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.4":      "/elements/books/bookII/propositions/propII4/",
+        "X.6":       "/elements/books/bookX/propositions/propX6/",
+        "X.11":      "/elements/books/bookX/propositions/propX11/",
+        "X.13":      "/elements/books/bookX/propositions/propX13/",
+        "X.16":      "/elements/books/bookX/propositions/propX16/",
+        "X.20":      "/elements/books/bookX/propositions/propX20/",
+        "X.22":      "/elements/books/bookX/propositions/propX22/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-They are applied to the rational straight line *EF*, therefore each of the straight lines *HE* and *EG* is rational and incommensurable in length with *EF*. [!just X.22]
+They are applied to the rational straight line {EF}, therefore each of the straight lines {HE|EH} and {EG} is rational and incommensurable in length with {EF}. [!just X.22]
 
-Since *DB* is rational and equals *KH*, therefore *KH* is rational. And it is applied to the rational straight line *EF*, therefore *GH* is rational and commensurable in length with *EF*. [!just X.20]
+Since {DB|BDh} is rational and equals {KH|KHh}, therefore {KH|KHh} is rational. And it is applied to the rational straight line {EF}, therefore {GH} is rational and commensurable in length with {EF}. [!just X.20]
 
-But *EG* is also rational, and is incommensurable in length with *EF*, therefore *EG* is incommensurable in length with *GH*. [!just X.13]
+But {EG} is also rational, and is incommensurable in length with {EF}, therefore {EG} is incommensurable in length with {GH}. [!just X.13]
 
-And *EG* is to *GH* as the square on *EG* is to the rectangle *EG* by *GH*, therefore the square on *EG* is incommensurable with the rectangle *EG* by *GH*. [!just X.11]
+And {EG} is to {GH} as the square on {EG} is to the rectangle {EG} by {GH}, therefore the square on {EG} is incommensurable with the rectangle {EG} by {GH}. [!just X.11]
 
-But the squares on *EG* and *GH* are commensurable with the square on *EG*, for both are rational, and twice the rectangle *EG* by *GH* is commensurable with the rectangle *EG* by *GH*, for it is double it, therefore the sum of the squares on *EG* and *GH* is incommensurable with twice the rectangle *EG* by *GH*. [!just X.6; X.13]
+But the squares on {EG} and {GH} are commensurable with the square on {EG}, for both are rational, and twice the rectangle {EG} by {GH} is commensurable with the rectangle {EG} by {GH}, for it is double it, therefore the sum of the squares on {EG} and {GH} is incommensurable with twice the rectangle {EG} by {GH}. [!just X.6; X.13]
 
-Therefore the sum of the squares on *EG* and *GH* plus twice the rectangle *EG* by *GH*, that is, the square on *EH* is incommensurable with the sum of the squares on *EG* and *GH*. [!just II.4; X.16]
+Therefore the sum of the squares on {EG} and {GH} plus twice the rectangle {EG} by {GH}, that is, the square on {EH} is incommensurable with the sum of the squares on {EG} and {GH}. [!just II.4; X.16]
 
-But the squares on *EG* and *GH* are rational, therefore the square on *EH* is irrational. [!just X.Def.I.4]
+But the squares on {EG} and {GH} are rational, therefore the square on {EH} is irrational. [!just X.Def.I.4]
 
-Therefore *EH* is irrational. But it is also rational, which is impossible.
+Therefore {EH} is irrational. But it is also rational, which is impossible.
 
 Therefore, *a medial area does not exceed a medial area by a rational area.*
 

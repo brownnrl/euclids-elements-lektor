@@ -15,20 +15,42 @@ statement: The rectangle contained by medial straight lines commensurable in squ
 ----
 proof:
 
-Let the rectangle *AC* be contained by the medial straight lines *AB* and *BC* which are commensurable in square only.
+Let the rectangle {AC|ACh} be contained by the medial straight lines {AB} and {BC} which are commensurable in square only.
 
-I say that *AC* is either rational or medial.
+I say that {AC|ACh} is either rational or medial.
 
-Describe the squares *AD* and *BE* on *AB* and *BC*. Then each of the squares *AD* and *BE* is medial.
+Describe the squares {AD|ADh} and {BE|BEh} on {AB} and {BC}. Then each of the squares {AD|ADh} and {BE|BEh} is medial.
 
-Set out a rational straight line *FG*. Apply the rectangular parallelogram *GH* to *FG* equal to *AD*, producing *FH* as breadth, apply the rectangular parallelogram *MK* to *HM* equal to *AC*, producing *HK* as breadth, and further apply similarly *NL* to *KN* equal to *BE*, producing *KL* as breadth. Then *FH*, *HK*, and *KL* are in a straight line.
+Set out a rational straight line {FG}. Apply the rectangular parallelogram {GH|GHh} to {FG} equal to {AD|ADh}, producing {FH} as breadth, apply the rectangular parallelogram {MK|MKh} to {HM} equal to {AC|ACh}, producing {HK} as breadth, and further apply similarly {NL|NLh} to {KN} equal to {BE|BEh}, producing {KL} as breadth. Then {FH}, {HK}, and {KL} are in a straight line.
 
-Since each of the squares *AD* and *BE* is medial, and *AD* equals *GH* while *BE* equals *NL*, therefore each of the rectangles *GH* and *NL* is also medial.
+Since each of the squares {AD|ADh} and {BE|BEh} is medial, and {AD|ADh} equals {GH|GHh} while {BE|BEh} equals {NL|NLh}, therefore each of the rectangles {GH|GHh} and {NL|NLh} is also medial.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="340" height="270" tabindex="0"></canvas>
 <noscript><img alt="X.25 diagram" src="propX25.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the rectangle AC (yellow) contained by AB and BC, the
+    // squares AD (orange) and BE (pink) on them, and to the right the
+    // rational line FG with GH, MK (declared "HN") and NL (declared "LN")
+    // applied to it in turn, breadths FH, HK, KL in one straight line. The
+    // proof talks about the sides, so AB, BC, DB, BO, FG, FH, HK, KL, HM, KN
+    // are transparent highlight targets (;0;0;0). The six filled areas are
+    // lit through faceless, strokeless twins ACh, ADh, BEh, GHh, MKh, NLh,
+    // so a highlight never raises a face over the figure (#140); prose and
+    // captions reach them with the display override ({AC|ACh}, {DA|ADh},
+    // {CO|BEh} — Joyce's CO is the square BE — {HN|MKh}, …). Resting
+    // figure unchanged.
+    //
+    // Draggables (checked against the bundle): A, B, C (given), F, G and
+    // the offscreen frees. F and G arrive with "Set out a rational straight
+    // line FG", so they are deferred; every other point is derived and
+    // follows the visible sets.
+    var GIVEN = ["A","B","C","AC","ACh","AB","BC"];
+    var SQ    = GIVEN.concat(["AD","ADh","D","BE","BEh","O","E","DB","BO"]);
+    var FGS   = SQ.concat(["F","G","FG"]);
+    var GHS   = FGS.concat(["GH","GHh","M","H","FH"]);
+    var MKS   = GHS.concat(["HN","MKh","N","K","HK","HM"]);
+    var ALL   = MKS.concat(["LN","NLh","L","KL","KN"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -58,29 +80,196 @@ Since each of the squares *AD* and *BE* is medial, and *AD* equals *GH* while *B
             "K;point;vertex;HN,4",
             "P;point;proportion;F,G,B,C,B,C,N,M';0;0",
             "LN;polygon;parallelogram;K,N,P;0;0;black;pink",
-            "L;point;vertex;LN,4"
+            "L;point;vertex;LN,4",
+            // Highlight targets only — the figure already draws these.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "BO;line;connect;B,O;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "FH;line;connect;F,H;0;0;0",
+            "HK;line;connect;H,K;0;0;0",
+            "KL;line;connect;K,L;0;0;0",
+            "HM;line;connect;H,M;0;0;0",
+            "KN;line;connect;K,N;0;0;0",
+            "ACh;polygon;parallelogram;A,B,C;0;0;0;0",
+            "ADh;polygon;square;B,A;0;0;0;0",
+            "BEh;polygon;square;C,B;0;0;0;0",
+            "GHh;polygon;parallelogram;F,G,M;0;0;0;0",
+            "MKh;polygon;parallelogram;H,M,N;0;0;0;0",
+            "NLh;polygon;parallelogram;K,N,P;0;0;0;0"
         ],
+        deferDraggables: ["F","G"],
+        slides: [
+            { text: "“The rectangle contained by medial straight lines commensurable in square only is either rational or medial.”",
+              visible: GIVEN,
+              highlighted: ["ACh","AB","BC"],
+              justifications: [{ ref: "X.25" }] },
+            { text: "Let the rectangle {AC|ACh} be contained by the medial straight lines {AB} and {BC} which are commensurable in square only.",
+              visible: GIVEN,
+              highlighted: ["ACh","AB","BC"] },
+            { text: "I say that {AC|ACh} is either rational or medial.",
+              visible: GIVEN,
+              highlighted: ["ACh"] },
+            { text: "Describe the squares {AD|ADh} and {BE|BEh} on {AB} and {BC}.",
+              visible: SQ,
+              highlighted: ["AB","BC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ADh", name: geomlib.A.Polygon.outline },
+                  { elem: "BEh", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Then each of the squares {AD|ADh} and {BE|BEh} is medial.",
+              visible: SQ,
+              highlighted: ["ADh","BEh"] },
+            { text: "Set out a rational straight line {FG}.",
+              visible: FGS,
+              transition: { animations: [
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Apply the rectangular parallelogram {GH|GHh} to {FG} equal to {AD|ADh}, producing {FH} as breadth,",
+              visible: GHS,
+              highlighted: ["FG","ADh","FH"],
+              transition: { animations: [
+                  { elem: "GHh", name: geomlib.A.Polygon.outline } ] } },
+            { text: "apply the rectangular parallelogram {MK|MKh} to {HM} equal to {AC|ACh}, producing {HK} as breadth,",
+              visible: MKS,
+              highlighted: ["HM","ACh","HK"],
+              transition: { animations: [
+                  { elem: "MKh", name: geomlib.A.Polygon.outline } ] } },
+            { text: "and further apply similarly {NL|NLh} to {KN} equal to {BE|BEh}, producing {KL} as breadth.",
+              visible: ALL,
+              highlighted: ["KN","BEh","KL"],
+              transition: { animations: [
+                  { elem: "NLh", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Then {FH}, {HK}, and {KL} are in a straight line.",
+              visible: ALL,
+              highlighted: ["FH","HK","KL"] },
+            { text: "Since each of the squares {AD|ADh} and {BE|BEh} is medial, and {AD|ADh} equals {GH|GHh} while {BE|BEh} equals {NL|NLh},",
+              visible: ALL,
+              highlighted: ["ADh","BEh","GHh","NLh"] },
+            { text: "therefore each of the rectangles {GH|GHh} and {NL|NLh} is also medial.",
+              visible: ALL,
+              highlighted: ["GHh","NLh"] },
+            { text: "And they are applied to the rational straight line {FG},",
+              visible: ALL,
+              highlighted: ["GHh","NLh","FG"] },
+            { text: "therefore each of the straight lines {FH} and {KL} is rational and incommensurable in length with {FG}.",
+              visible: ALL,
+              highlighted: ["FH","KL","FG"],
+              justifications: [{ claim: "FH, KL rational, incommensurable in length with FG", ref: "X.22" }] },
+            { text: "And, since {AD|ADh} is commensurable with {BE|BEh}, therefore {GH|GHh} is commensurable with {NL|NLh}.",
+              visible: ALL,
+              highlighted: ["ADh","BEh","GHh","NLh"] },
+            { text: "And {GH|GHh} is to {NL|NLh} as {FH} is to {KL},",
+              visible: ALL,
+              highlighted: ["GHh","NLh","FH","KL"],
+              justifications: [{ claim: "GH : NL = FH : KL", ref: "VI.1" }] },
+            { text: "therefore {FH} is commensurable in length with {KL}.",
+              visible: ALL,
+              highlighted: ["FH","KL"],
+              justifications: [{ claim: "FH, KL commensurable in length", ref: "X.11" }] },
+            { text: "Therefore {FH} and {KL} are rational straight lines commensurable in length,",
+              visible: ALL,
+              highlighted: ["FH","KL"] },
+            { text: "therefore the rectangle {FH} by {KL} is rational.",
+              visible: ALL,
+              highlighted: ["FH","KL"],
+              justifications: [{ claim: "rectangle FH by KL rational", ref: "X.19" }] },
+            { text: "And, since {DB} equals {BA|AB} while {OB|BO} equals {BC},",
+              visible: ALL,
+              highlighted: ["DB","AB","BO","BC"] },
+            { text: "therefore {DB} is to {BC} as {AB} is to {BO}.",
+              visible: ALL,
+              highlighted: ["DB","BC","AB","BO"] },
+            { text: "But {DB} is to {BC} as {DA|ADh} is to {AC|ACh},",
+              visible: ALL,
+              highlighted: ["DB","BC","ADh","ACh"] },
+            { text: "and {AB} is to {BO} as {AC|ACh} is to {CO|BEh},",
+              visible: ALL,
+              highlighted: ["AB","BO","ACh","BEh"] },
+            { text: "therefore {DA|ADh} is to {AC|ACh} as {AC|ACh} is to {CO|BEh}.",
+              visible: ALL,
+              highlighted: ["ADh","ACh","BEh"],
+              justifications: [{ claim: "DA : AC = AC : CO", ref: "VI.1" }] },
+            { text: "But {AD|ADh} equals {GH|GHh}, {AC|ACh} equals {MK|MKh}, and {CO|BEh} equals {NL|NLh},",
+              visible: ALL,
+              highlighted: ["ADh","GHh","ACh","MKh","BEh","NLh"] },
+            { text: "therefore {GH|GHh} is to {MK|MKh} as {MK|MKh} is to {NL|NLh}.",
+              visible: ALL,
+              highlighted: ["GHh","MKh","NLh"] },
+            { text: "Therefore {FH} is to {HK} as {HK} is to {KL}.",
+              visible: ALL,
+              highlighted: ["FH","HK","KL"],
+              justifications: [
+                  { claim: "GH : MK = FH : HK, MK : NL = HK : KL", ref: "VI.1" },
+                  { claim: "FH : HK = HK : KL", ref: "V.11" } ] },
+            { text: "Therefore the rectangle {FH} by {KL} equals the square on {HK}.",
+              visible: ALL,
+              highlighted: ["FH","KL","HK"],
+              justifications: [{ claim: "FH by KL = square on HK", ref: "VI.17" }] },
+            { text: "But the rectangle {FH} by {KL} is rational, therefore the square on {HK} is also rational.",
+              visible: ALL,
+              highlighted: ["FH","KL","HK"] },
+            { text: "Therefore {HK} is rational.",
+              visible: ALL,
+              highlighted: ["HK"] },
+            { text: "And, if it is commensurable in length with {FG}, then {HN|MKh} is rational,",
+              visible: ALL,
+              highlighted: ["HK","FG","MKh"],
+              justifications: [{ claim: "HN rational", ref: "X.19" }] },
+            { text: "but, if it is incommensurable in length with {FG},",
+              visible: ALL,
+              highlighted: ["HK","FG"] },
+            { text: "then {KH|HK} and {HM} are rational straight lines commensurable in square only, and therefore {HN|MKh} is medial.",
+              visible: ALL,
+              highlighted: ["HK","HM","MKh"],
+              justifications: [{ claim: "HN medial", ref: "X.21" }] },
+            { text: "Therefore {HN|MKh} is either rational or medial.",
+              visible: ALL,
+              highlighted: ["MKh"] },
+            { text: "But {HN|MKh} equals {AC|ACh}, therefore {AC|ACh} is either rational or medial.",
+              visible: ALL,
+              highlighted: ["MKh","ACh"] },
+            { text: "Therefore, the rectangle contained by medial straight lines commensurable in square only is either rational or medial.",
+              visible: ALL,
+              highlighted: ["ACh","AB","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.25") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.11":  "/elements/books/bookV/propositions/propV11/",
+        "VI.1":  "/elements/books/bookVI/propositions/propVI1/",
+        "VI.17": "/elements/books/bookVI/propositions/propVI17/",
+        "X.11":  "/elements/books/bookX/propositions/propX11/",
+        "X.19":  "/elements/books/bookX/propositions/propX19/",
+        "X.21":  "/elements/books/bookX/propositions/propX21/",
+        "X.22":  "/elements/books/bookX/propositions/propX22/"
     });
 </script>
 </figure>
 
-And they are applied to the rational straight line *FG*, therefore each of the straight lines *FH* and *KL* is rational and incommensurable in length with *FG*. [!just X.22]
+And they are applied to the rational straight line {FG}, therefore each of the straight lines {FH} and {KL} is rational and incommensurable in length with {FG}. [!just X.22]
 
-And, since *AD* is commensurable with *BE*, therefore *GH* is commensurable with *NL*. And *GH* is to *NL* as *FH* is to *KL*, therefore *FH* is commensurable in length with *KL*. [!just VI.1; X.11]
+And, since {AD|ADh} is commensurable with {BE|BEh}, therefore {GH|GHh} is commensurable with {NL|NLh}. And {GH|GHh} is to {NL|NLh} as {FH} is to {KL}, therefore {FH} is commensurable in length with {KL}. [!just VI.1; X.11]
 
-Therefore *FH* and *KL* are rational straight lines commensurable in length, therefore the rectangle *FH* by *KL* is rational. [!just X.19]
+Therefore {FH} and {KL} are rational straight lines commensurable in length, therefore the rectangle {FH} by {KL} is rational. [!just X.19]
 
-And, since *DB* equals *BA* while *OB* equals *BC*, therefore *DB* is to *BC* as *AB* is to *BO*.
+And, since {DB} equals {BA|AB} while {OB|BO} equals {BC}, therefore {DB} is to {BC} as {AB} is to {BO}.
 
-But *DB* is to *BC* as *DA* is to *AC*, and *AB* is to *BO* as *AC* is to *CO*, therefore *DA* is to *AC* as *AC* is to *CO*. [!just VI.1]
+But {DB} is to {BC} as {DA|ADh} is to {AC|ACh}, and {AB} is to {BO} as {AC|ACh} is to {CO|BEh}, therefore {DA|ADh} is to {AC|ACh} as {AC|ACh} is to {CO|BEh}. [!just VI.1]
 
-But *AD* equals *GH*, *AC* equals *MK*, and *CO* equals *NL*, therefore *GH* is to *MK* as *MK* is to *NL*. Therefore *FH* is to *HK* as *HK* is to *KL*. Therefore the rectangle *FH* by *KL* equals the square on *HK*. [!just VI.1, V.11; VI.17]
+But {AD|ADh} equals {GH|GHh}, {AC|ACh} equals {MK|MKh}, and {CO|BEh} equals {NL|NLh}, therefore {GH|GHh} is to {MK|MKh} as {MK|MKh} is to {NL|NLh}. Therefore {FH} is to {HK} as {HK} is to {KL}. Therefore the rectangle {FH} by {KL} equals the square on {HK}. [!just VI.1, V.11; VI.17]
 
-But the rectangle *FH* by *KL* is rational, therefore the square on *HK* is also rational.
+But the rectangle {FH} by {KL} is rational, therefore the square on {HK} is also rational.
 
-Therefore *HK* is rational. And, if it is commensurable in length with *FG*, then *HN* is rational, but, if it is incommensurable in length with *FG*, then *KH* and *HM* are rational straight lines commensurable in square only, and therefore *HN* is medial. [!just X.19; X.21]
+Therefore {HK} is rational. And, if it is commensurable in length with {FG}, then {HN|MKh} is rational, but, if it is incommensurable in length with {FG}, then {KH|HK} and {HM} are rational straight lines commensurable in square only, and therefore {HN|MKh} is medial. [!just X.19; X.21]
 
-Therefore *HN* is either rational or medial. But *HN* equals *AC*, therefore *AC* is either rational or medial.
+Therefore {HN|MKh} is either rational or medial. But {HN|MKh} equals {AC|ACh}, therefore {AC|ACh} is either rational or medial.
 
 Therefore, *the rectangle contained by medial straight lines commensurable in square only is either rational or medial.*
 
