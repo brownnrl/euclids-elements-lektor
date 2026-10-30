@@ -15,14 +15,44 @@ statement: If a straight line is cut in extreme and mean ratio, then the sum of 
 ----
 proof:
 
-Let *AB* be a straight line cut in extreme and mean ratio at *C,* and let *AC* be the greater segment.
+Let {AB} be a straight line cut in extreme and mean ratio at {C}, and let {AC} be the greater segment.
 
-I say that the sum of the squares on *AB* and *BC* is triple the square on *CA.*
+I say that the sum of the squares on {AB} and {BC} is triple the square on {CA}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="250" tabindex="0"></canvas>
 <noscript><img alt="XIII.4 diagram" src="propXIII4.gif"/></noscript>
 <script type="text/javascript">
+    // The square AE on AB is tiled by the diameter BD and the lines CG, HK
+    // into four regions: the complements AF and FE, the square CK on BC and
+    // the square HG on AC. Every sentence of the proof is an addition over
+    // those tiles (AK = AF + CK, CE = CK + FE, the gnomon LMN = AF + CK + FE).
+    // Joyce's figure draws none of them as regions, so they are added here:
+    // `initiallyHidden` where they carry a fill, ;0 faces where they are only
+    // outlines / highlight targets (AK, CE, the gnomon LMN). The resting
+    // figure is unchanged.
+    //
+    // Colour: the equal complements AF and FE ORANGE, CK CYAN, HG GREEN, as
+    // on II.7. Joyce's own square BADE keeps its random face and is never
+    // highlighted (a highlighted face is raised over the tiles); "the square
+    // ADEB" / "the whole square AE" reach AE, a faceless twin.
+    //
+    // AB is a solid twin of the square's top edge, hidden at rest, so the cut
+    // line can stand alone before the square is described; AC and BC are
+    // transparent targets.
+    //
+    // Draggables (checked against the bundle): only A and B, free, the given
+    // line's ends — both on slide 1. Every other point is derived and listed
+    // per slide; the gnomon's L, M, N arrive with the gnomon.
+    // Joyce's arc NML has the default opaque face, so it is never
+    // animated or highlighted (either would promote it); it just appears.
+    var BASE = ["A","B","C","AB","AC","BC"];
+    var SQ   = BASE.concat(["BADE","D","E","AE"]);
+    var FIG  = SQ.concat(["BD","CG","HK","G","F","H","K"]);
+    var AKv  = FIG.concat(["AK","HG"]);
+    var COMP = AKv.concat(["AF","FE"]);
+    var CEv  = COMP.concat(["CK","CE"]);
+    var GNO  = CEv.concat(["LMN","NML","L","M","N"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,27 +77,161 @@ I say that the sum of the squares on *AB* and *BC* is triple the square on *CA.*
             "L;point;cutoff;F,H,F,F'",
             "M;point;cutoff;F,B,F,F'",
             "N;point;cutoff;F,G,F,F'",
-            "NML;sector;arc;N,M,L;0;0;gray"
+            "NML;sector;arc;N,M,L;0;0;gray",
+            // The cut line: solid, hidden at rest (BADE's edge draws it there).
+            "AB;line;connect;A,B",
+            // Hover / highlight targets only.
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            // Filled tiles, hidden at rest.
+            "HG;polygon;quadrilateral;H,F,G,D;0;0;0;green",
+            "AF;polygon;quadrilateral;A,C,F,H;0;0;0;orange",
+            "FE;polygon;quadrilateral;F,K,E,G;0;0;0;orange",
+            "CK;polygon;quadrilateral;C,B,K,F;0;0;0;cyan",
+            // Containers and the faceless twin of the square. Explicit ;0 faces.
+            "AE;polygon;quadrilateral;A,B,E,D;0;0;0;0",
+            "AK;polygon;quadrilateral;A,B,K,H;0;0;0;0",
+            "CE;polygon;quadrilateral;C,B,E,G;0;0;0;0",
+            // The gnomon as a region: AE less HG, six corners.
+            "LMN;polygon;hexagon;A,B,E,G,F,H;0;0;0;0"
         ],
+        initiallyHidden: ["AB","HG","AF","FE","CK"],
+        aliases: { "ADEB": "AE", "CA": "AC", "CB": "BC" },
+        slides: [
+            { text: "“If {a straight line|AB} is cut in extreme and mean ratio,”",
+              visible: BASE,
+              highlighted: ["AB","C"] },
+            { text: "“then the sum of the squares on {the whole|AB} and on {the lesser segment|BC}”",
+              visible: BASE,
+              highlighted: ["AB","BC","AE","CK"] },
+            { text: "“is triple the square on {the greater segment|AC}.”",
+              visible: BASE,
+              highlighted: ["AC","HG"],
+              justifications: [{ ref: "XIII.4" }] },
+            { text: "Let {AB} be a straight line cut in extreme and mean ratio at {C}, and let {AC} be the greater segment.",
+              visible: BASE,
+              highlighted: ["AB","C","AC"] },
+            { text: "I say that the sum of the squares on {AB} and {BC} is triple the square on {CA|AC}.",
+              visible: BASE,
+              highlighted: ["AB","BC","AC"] },
+            { text: "Describe the square {ADEB|AE} on {AB},",
+              visible: SQ,
+              highlighted: ["AB"],
+              transition: { animations: [
+                  { elem: "BADE", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "the square ADEB on AB", ref: "I.46" }] },
+            { text: "and draw the figure.",
+              visible: FIG,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HK", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "the diameter BD, and CG, HK parallel to the sides", ref: "I.31" }] },
+            { text: "Since, then, {AB} is cut in extreme and mean ratio at {C}, and {AC} is the greater segment,",
+              visible: FIG,
+              highlighted: ["AB","C","AC"],
+              justifications: [{ ref: "VI.Def.3" }] },
+            { text: "therefore the rectangle {AB} by {BC} equals the square on {AC}.",
+              visible: FIG,
+              highlighted: ["AB","BC","AC"],
+              justifications: [{ ref: "VI.17" }] },
+            { text: "And {AK} is the rectangle {AB} by {BC}, and {HG} is the square on {AC}, therefore {AK} equals {HG}.",
+              visible: AKv,
+              highlighted: ["AK","HG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AK", name: geomlib.A.Polygon.outline },
+                  { elem: "HG", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "And, since {AF} equals {FE},",
+              visible: COMP,
+              highlighted: ["AF","FE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "AF", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "FE", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "complements about the diameter BD", ref: "I.43" }] },
+            { text: "add {CK} to each, therefore the whole {AK} equals the whole {CE}.",
+              visible: CEv,
+              highlighted: ["AK","CE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "CE", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "C.N.2" }] },
+            { text: "Therefore the sum of {AK} and {CE} is double {AK}.",
+              visible: CEv,
+              highlighted: ["AK","CE"] },
+            { text: "But the sum of {AK} and {CE} is the sum of the gnomon {LMN} and the square {CK},",
+              visible: GNO,
+              highlighted: ["LMN","CK"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "LMN", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "LMN is a gnomon", ref: "II.Def.2" }] },
+            { text: "therefore the sum of the gnomon {LMN} and the square {CK} is double {AK}.",
+              visible: GNO,
+              highlighted: ["LMN","CK","AK"] },
+            { text: "But, further, {AK} was also proved equal to {HG},",
+              visible: GNO,
+              highlighted: ["AK","HG"] },
+            { text: "therefore the sum of the gnomon {LMN} and the squares {CK} and {HG} is triple the square {HG}.",
+              visible: GNO,
+              highlighted: ["LMN","CK","HG"] },
+            { text: "And the sum of the gnomon {LMN} and the squares {CK} and {HG}",
+              visible: GNO,
+              highlighted: ["LMN","CK","HG"] },
+            { text: "is the sum of the whole square {AE} and {CK},",
+              visible: GNO,
+              highlighted: ["AE","CK"] },
+            { text: "which are the squares on {AB} and {BC}, while {HG} is the square on {AC}.",
+              visible: GNO,
+              highlighted: ["AB","BC","HG","AC"] },
+            { text: "Therefore the sum of the squares on {AB} and {BC} is triple the square on {AC}.",
+              visible: GNO,
+              highlighted: ["AE","CK","HG"] },
+            { text: "Therefore, if {a straight line|AB} is cut in extreme and mean ratio,",
+              visible: GNO,
+              highlighted: ["AB","C"] },
+            { text: "then the sum of the squares on {the whole|AB} and on {the lesser segment|BC}",
+              visible: GNO,
+              highlighted: ["AE","CK"] },
+            { text: "is triple the square on {the greater segment|AC}.",
+              visible: GNO,
+              highlighted: ["HG"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.4") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "I.43":     "/elements/books/bookI/propositions/propI43/",
+        "I.46":     "/elements/books/bookI/propositions/propI46/",
+        "II.Def.2": "/elements/books/bookII/definitions/defII2/",
+        "VI.Def.3": "/elements/books/bookVI/definitions/defVI3/",
+        "VI.17":    "/elements/books/bookVI/propositions/propVI17/"
     });
 </script>
 </figure>
 
-Describe the square *ADEB* on *AB,* and draw the figure. [!just I.46]
+Describe the square {ADEB} on {AB}, and draw the figure. [!just I.46]
 
-Since, then, *AB* is cut in extreme and mean ratio at *C,* and *AC* is the greater segment, therefore the rectangle *AB* by *BC* equals the square on *AC.* [!just VI.Def.3, VI.17]
+Since, then, {AB} is cut in extreme and mean ratio at {C}, and {AC} is the greater segment, therefore the rectangle {AB} by {BC} equals the square on {AC}. [!just VI.Def.3, VI.17]
 
-And *AK* is the rectangle *AB* by *BC,* and *HG* is the square on *AC,* therefore *AK* equals *HG.*
+And {AK} is the rectangle {AB} by {BC}, and {HG} is the square on {AC}, therefore {AK} equals {HG}.
 
-And, since *AF* equals *FE,* add *CK* to each, therefore the whole *AK* equals the whole *CE.* Therefore the sum of *AK* and *CE* is double *AK.*
+And, since {AF} equals {FE}, add {CK} to each, therefore the whole {AK} equals the whole {CE}. Therefore the sum of {AK} and {CE} is double {AK}.
 
-But the sum of *AK* and *CE* is the sum of the gnomon *LMN* and the square *CK,* therefore the sum of the gnomon *LMN* and the square *CK* is double *AK.*
+But the sum of {AK} and {CE} is the sum of the gnomon {LMN} and the square {CK}, therefore the sum of the gnomon {LMN} and the square {CK} is double {AK}.
 
-But, further, *AK* was also proved equal to *HG,* therefore the sum of the gnomon *LMN* and the squares *CK* and *HG* is triple the square *HG.*
+But, further, {AK} was also proved equal to {HG}, therefore the sum of the gnomon {LMN} and the squares {CK} and {HG} is triple the square {HG}.
 
-And the sum of the gnomon *LMN* and the squares *CK* and *HG* is the sum of the whole square *AE* and *CK,* which are the squares on *AB* and *BC,* while *HG* is the square on *AC.*
+And the sum of the gnomon {LMN} and the squares {CK} and {HG} is the sum of the whole square {AE} and {CK}, which are the squares on {AB} and {BC}, while {HG} is the square on {AC}.
 
-Therefore the sum of the squares on *AB* and *BC* is triple the square on *AC.*
+Therefore the sum of the squares on {AB} and {BC} is triple the square on {AC}.
 
 Therefore, *if a straight line is cut in extreme and mean ratio, then the sum of the squares on the whole and on the lesser segment is triple the square on the greater segment.*
 
