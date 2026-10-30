@@ -17,18 +17,32 @@ proof:
 
 <div class="just"><a href="/elements/books/bookX/propositions/propX17/#lemma">X.17,Lemma</a></div>
 
-Let *A* and *BC* be two unequal straight lines, of which *BC* is the greater, and to *BC* let there be applied a parallelogram equal to the fourth part of the square on the less, *A*, but falling short by a square. Let this be the rectangle *BD* by *DC*, and let *BD* be incommensurable in length with *DC*.
+Let {A} and {BC} be two unequal straight lines, of which {BC} is the greater, and to {BC} let there be applied a parallelogram equal to the fourth part of the square on the less, {A}, but falling short by a square. Let this be the rectangle {BD} by {DC}, and let {BD} be incommensurable in length with {DC}.
 
-I say that the square on *BC* is greater than the square on *A* by the square on a straight line incommensurable with *BC*.
+I say that the square on {BC} is greater than the square on {A} by the square on a straight line incommensurable with {BC}.
 
-With the same construction as before, we can prove similarly that the square on *BC* is greater than the square on *A* by the square on *FD*.
+With the same construction as before, we can prove similarly that the square on {BC} is greater than the square on {A} by the square on {FD}.
 
-It is to be proved that *BC* is incommensurable in length with *DF*.
+It is to be proved that {BC} is incommensurable in length with {DF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="190" tabindex="0"></canvas>
 <noscript><img alt="X.18 diagram" src="propX18.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure (X.17's again): A, BC with D on it, E, F, and the
+    // rectangle BD by DC (rect). The segments of BC the proof names — BD,
+    // DC, DF, BF, and ED, EF for "the same construction" — are added as
+    // transparent highlight targets (;0;0;0); the resting figure is
+    // unchanged. The walk is highlight beats; E and F appear with "the same
+    // construction as before" (X.17's, assumed) in each half, and the
+    // converse starts again from the application only.
+    //
+    // Draggables (checked against the bundle): A1, A2 (A's ends), B, C
+    // (lineSliders, the givens) and the offscreen frees. D, E, F are derived
+    // (cutoff / midpoint) and listed per slide.
+    var GIVEN = ["A","A1","A2","B","C","BC"];
+    var APPL  = GIVEN.concat(["D","rect","BD","DC"]);
+    var CONS  = APPL.concat(["E","F","ED","EF","DF","BF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -54,29 +68,232 @@ It is to be proved that *BC* is incommensurable in length with *DF*.
             "D;point;cutoff;E,C,E,c",
             "F;point;cutoff;E,B,D,E",
             "d;point;perpendicular;D,C;0;0",
-            "rect;polygon;parallelogram;B,D,d;0;0;black;random"
+            "rect;polygon;parallelogram;B,D,d;0;0;black;random",
+            // Highlight targets only — BC already draws these.
+            "BD;line;connect;B,D;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "DF;line;connect;D,F;0;0;0",
+            "BF;line;connect;B,F;0;0;0"
         ],
+        aliases: { "CD": "DC", "FD": "DF" },
+        slides: [
+            { text: "“If there are two unequal straight lines,”",
+              visible: APPL,
+              highlighted: ["A","BC"] },
+            { text: "“and to {the greater|BC} there is applied {a parallelogram|rect}”",
+              visible: APPL,
+              highlighted: ["BC","rect"] },
+            { text: "“equal to the fourth part of the square on {the less|A} but falling short by a square,”",
+              visible: APPL,
+              highlighted: ["A","rect"] },
+            { text: "“and if it divides it into incommensurable parts,”",
+              visible: APPL,
+              highlighted: ["BD","DC"] },
+            { text: "“then the square on {the greater|BC} is greater than the square on {the less|A}”",
+              visible: APPL,
+              highlighted: ["BC","A"] },
+            { text: "“by the square on a straight line incommensurable with {the greater|BC}.”",
+              visible: APPL,
+              highlighted: ["BC"] },
+            { text: "“And if the square on {the greater|BC} is greater than the square on {the less|A}”",
+              visible: APPL,
+              highlighted: ["BC","A"] },
+            { text: "“by the square on a straight line incommensurable with {the greater|BC},”",
+              visible: APPL,
+              highlighted: ["BC"] },
+            { text: "“and if there is applied to {the greater|BC} {a parallelogram|rect}”",
+              visible: APPL,
+              highlighted: ["BC","rect"] },
+            { text: "“equal to the fourth part of the square on {the less|A} but falling short by a square,”",
+              visible: APPL,
+              highlighted: ["A","rect"] },
+            { text: "“then it divides it into incommensurable parts.”",
+              visible: APPL,
+              highlighted: ["BD","DC"],
+              justifications: [{ ref: "X.18" }] },
+            { text: "Let {A} and {BC} be two unequal straight lines, of which {BC} is the greater,",
+              visible: APPL,
+              highlighted: ["A","BC"] },
+            { text: "and to {BC} let there be applied a parallelogram equal to the fourth part of the square on the less, {A},",
+              visible: APPL,
+              highlighted: ["BC","rect","A"] },
+            { text: "but falling short by a square.",
+              visible: APPL,
+              highlighted: ["rect"] },
+            { text: "Let this be the rectangle {BD} by {DC}, and let {BD} be incommensurable in length with {DC}.",
+              visible: APPL,
+              highlighted: ["rect","BD","DC"],
+              justifications: [{ claim: "the applied parallelogram is the rectangle BD by DC", ref: "X.17,Lemma" }] },
+            { text: "I say that the square on {BC} is greater than the square on {A}",
+              visible: APPL,
+              highlighted: ["BC","A"] },
+            { text: "by the square on a straight line incommensurable with {BC}.",
+              visible: APPL,
+              highlighted: ["BC"] },
+            { text: "With the same construction as before, we can prove similarly",
+              visible: CONS,
+              highlighted: ["E","F","ED","EF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E", name: geomlib.A.Point.appear },
+                  { elem: "F", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the same construction", ref: "X.17" }] },
+            { text: "that the square on {BC} is greater than the square on {A} by the square on {FD}.",
+              visible: CONS,
+              highlighted: ["BC","A","DF"] },
+            { text: "It is to be proved that {BC} is incommensurable in length with {DF}.",
+              visible: CONS,
+              highlighted: ["BC","DF"] },
+            { text: "Since {BD} is incommensurable in length with {DC},",
+              visible: CONS,
+              highlighted: ["BD","DC"] },
+            { text: "therefore {BC} is also incommensurable in length with {CD}.",
+              visible: CONS,
+              highlighted: ["BC","DC"],
+              justifications: [{ claim: "the whole incommensurable with a part", ref: "X.16" }] },
+            { text: "But {DC} is commensurable with the sum of {BF} and {DC},",
+              visible: CONS,
+              highlighted: ["DC","BF"],
+              justifications: [{ claim: "BF equals DC", ref: "X.6" }] },
+            { text: "therefore {BC} is incommensurable with the sum of {BF} and {DC},",
+              visible: CONS,
+              highlighted: ["BC","BF","DC"],
+              justifications: [{ claim: "incommensurable with a commensurable", ref: "X.13" }] },
+            { text: "so that {BC} is also incommensurable in length with the remainder {FD}.",
+              visible: CONS,
+              highlighted: ["BC","DF"],
+              justifications: [{ claim: "the remainder incommensurable too", ref: "X.16" }] },
+            { text: "And the square on {BC} is greater than the square on {A} by the square on {FD},",
+              visible: CONS,
+              highlighted: ["BC","A","DF"] },
+            { text: "therefore the square on {BC} is greater than the square on {A}",
+              visible: CONS,
+              highlighted: ["BC","A"] },
+            { text: "by the square on {a straight line incommensurable with BC|DF}.",
+              visible: CONS,
+              highlighted: ["DF","BC"] },
+            // The converse starts afresh from the application: E, F withdrawn.
+            { text: "Next, let the square on {BC} be greater than the square on {A}",
+              visible: APPL,
+              highlighted: ["BC","A"] },
+            { text: "by the square on a straight line incommensurable with {BC}.",
+              visible: APPL,
+              highlighted: ["BC"] },
+            { text: "Apply to {BC} a parallelogram equal to the fourth part of the square on {A} but falling short by a square.",
+              visible: APPL,
+              highlighted: ["BC","rect","A"] },
+            { text: "Let this be the rectangle {BD} by {DC}.",
+              visible: APPL,
+              highlighted: ["rect","BD","DC"],
+              justifications: [{ ref: "X.17,Lemma" }] },
+            { text: "It is to be proved that {BD} is incommensurable in length with {DC}.",
+              visible: APPL,
+              highlighted: ["BD","DC"] },
+            { text: "With the same construction, we can prove similarly",
+              visible: CONS,
+              highlighted: ["E","F","ED","EF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E", name: geomlib.A.Point.appear },
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "that the square on {BC} is greater than the square on {A} by the square on {FD}.",
+              visible: CONS,
+              highlighted: ["BC","A","DF"] },
+            { text: "But the square on {BC} is greater than the square on {A}",
+              visible: CONS,
+              highlighted: ["BC","A"] },
+            { text: "by the square on a straight line incommensurable with {BC},",
+              visible: CONS,
+              highlighted: ["BC"] },
+            { text: "therefore {BC} is incommensurable in length with {FD},",
+              visible: CONS,
+              highlighted: ["BC","DF"] },
+            { text: "so that {BC} is also incommensurable with the remainder, the sum of {BF} and {DC}.",
+              visible: CONS,
+              highlighted: ["BC","BF","DC"],
+              justifications: [{ claim: "the remainder incommensurable too", ref: "X.16" }] },
+            { text: "But the sum of {BF} and {DC} is commensurable in length with {DC},",
+              visible: CONS,
+              highlighted: ["BF","DC"],
+              justifications: [{ claim: "BF equals DC", ref: "X.6" }] },
+            { text: "therefore {BC} is also incommensurable in length with {DC},",
+              visible: CONS,
+              highlighted: ["BC","DC"],
+              justifications: [{ claim: "incommensurable with a commensurable", ref: "X.13" }] },
+            { text: "so that, taken separately, {BD} is also incommensurable in length with {DC}.",
+              visible: CONS,
+              highlighted: ["BD","DC"],
+              justifications: [{ claim: "the parts incommensurable too", ref: "X.16" }] },
+            { text: "Therefore, if there are two unequal straight lines,",
+              visible: CONS,
+              highlighted: ["A","BC"] },
+            { text: "and to {the greater|BC} there is applied {a parallelogram|rect}",
+              visible: CONS,
+              highlighted: ["BC","rect"] },
+            { text: "equal to the fourth part of the square on {the less|A} but falling short by a square,",
+              visible: CONS,
+              highlighted: ["A","rect"] },
+            { text: "and if it divides it into incommensurable parts,",
+              visible: CONS,
+              highlighted: ["BD","DC"] },
+            { text: "then the square on {the greater|BC} is greater than the square on {the less|A}",
+              visible: CONS,
+              highlighted: ["BC","A"] },
+            { text: "by the square on {a straight line incommensurable with the greater|DF}.",
+              visible: CONS,
+              highlighted: ["DF","BC"] },
+            { text: "And if the square on {the greater|BC} is greater than the square on {the less|A}",
+              visible: CONS,
+              highlighted: ["BC","A"] },
+            { text: "by the square on {a straight line incommensurable with the greater|DF},",
+              visible: CONS,
+              highlighted: ["DF","BC"] },
+            { text: "and if there is applied to {the greater|BC} {a parallelogram|rect}",
+              visible: CONS,
+              highlighted: ["BC","rect"] },
+            { text: "equal to the fourth part of the square on {the less|A} but falling short by a square,",
+              visible: CONS,
+              highlighted: ["A","rect"] },
+            { text: "then it divides it into incommensurable parts.",
+              visible: CONS,
+              highlighted: ["BD","DC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.18") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.6":        "/elements/books/bookX/propositions/propX6/",
+        "X.13":       "/elements/books/bookX/propositions/propX13/",
+        "X.16":       "/elements/books/bookX/propositions/propX16/",
+        "X.17":       "/elements/books/bookX/propositions/propX17/",
+        "X.17,Lemma": "/elements/books/bookX/propositions/propX17/#lemma"
     });
 </script>
 </figure>
 
-Since *BD* is incommensurable in length with *DC*, therefore *BC* is also incommensurable in length with *CD*. [!just X.16]
+Since {BD} is incommensurable in length with {DC}, therefore {BC} is also incommensurable in length with {CD}. [!just X.16]
 
-But *DC* is commensurable with the sum of *BF* and *DC*, therefore *BC* is incommensurable with the sum of *BF* and *DC*, so that *BC* is also incommensurable in length with the remainder *FD*. [!just X.6, X.13; X.16]
+But {DC} is commensurable with the sum of {BF} and {DC}, therefore {BC} is incommensurable with the sum of {BF} and {DC}, so that {BC} is also incommensurable in length with the remainder {FD}. [!just X.6, X.13; X.16]
 
-And the square on *BC* is greater than the square on *A* by the square on *FD*, therefore the square on *BC* is greater than the square on *A* by the square on a straight line incommensurable with *BC*.
+And the square on {BC} is greater than the square on {A} by the square on {FD}, therefore the square on {BC} is greater than the square on {A} by the square on a straight line incommensurable with {BC}.
 
 ***
 
-Next, let the square on *BC* be greater than the square on *A* by the square on a straight line incommensurable with *BC*. Apply to *BC* a parallelogram equal to the fourth part of the square on *A* but falling short by a square. Let this be the rectangle *BD* by *DC*.
+Next, let the square on {BC} be greater than the square on {A} by the square on a straight line incommensurable with {BC}. Apply to {BC} a parallelogram equal to the fourth part of the square on {A} but falling short by a square. Let this be the rectangle {BD} by {DC}.
 
-It is to be proved that *BD* is incommensurable in length with *DC*.
+It is to be proved that {BD} is incommensurable in length with {DC}.
 
-With the same construction, we can prove similarly that the square on *BC* is greater than the square on *A* by the square on *FD*.
+With the same construction, we can prove similarly that the square on {BC} is greater than the square on {A} by the square on {FD}.
 
-But the square on *BC* is greater than the square on *A* by the square on a straight line incommensurable with *BC*, therefore *BC* is incommensurable in length with *FD*, so that *BC* is also incommensurable with the remainder, the sum of *BF* and *DC*. [!just X.16]
+But the square on {BC} is greater than the square on {A} by the square on a straight line incommensurable with {BC}, therefore {BC} is incommensurable in length with {FD}, so that {BC} is also incommensurable with the remainder, the sum of {BF} and {DC}. [!just X.16]
 
-But the sum of *BF* and *DC* is commensurable in length with *DC*, therefore *BC* is also incommensurable in length with *DC*, so that, taken separately, *BD* is also incommensurable in length with *DC*. [!just X.6, X.13; X.16]
+But the sum of {BF} and {DC} is commensurable in length with {DC}, therefore {BC} is also incommensurable in length with {DC}, so that, taken separately, {BD} is also incommensurable in length with {DC}. [!just X.6, X.13; X.16]
 
 Therefore, *if there are two unequal straight lines, and to the greater there is applied a parallelogram equal to the fourth part of the square on the less but falling short by a square, and if it divides it into incommensurable parts, then the square on the greater is greater than the square on the less by the square on a straight line incommensurable with the greater. And if the square on the greater is greater than the square on the less by the square on a straight line incommensurable with the greater, and if there is applied to the greater a parallelogram equal to the fourth part of the square on the less but falling short by a square, then it divides it into incommensurable parts.*
 

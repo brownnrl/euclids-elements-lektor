@@ -17,12 +17,21 @@ proof:
 
 If to any straight line there is applied a parallelogram but falling short by a square, then the applied parallelogram equals the rectangle contained by the segments of the straight line resulting from the application.
 
-Apply to the straight line *AB* the parallelogram *AD* but falling short by the square *DB*.
+Apply to the straight line {AB} the parallelogram {AD} but falling short by the square {DB}.
 
 <figure class="diagram rdiagram">
 <canvas id="canvas_0" width="240" height="130" tabindex="0"></canvas>
 <noscript><img alt="X.17 lemma diagram" src="propX17l.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's lemma figure: the square BD on CB and the parallelogram AD on
+    // AC. Added, as transparent highlight targets (;0;0;0) so the resting
+    // figure is unchanged: the line AB and its segments AC, CB, and the side
+    // DC. The walk is highlight beats only.
+    //
+    // Draggables (checked against the bundle): A, B, C (lineSliders, all
+    // part of the given application, standing from slide 1) and the
+    // offscreen frees. D is derived (a vertex) and listed per slide.
+    var L_ALL = ["A","B","C","D","AD","BD","AB","AC","CB","DC"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -35,15 +44,47 @@ Apply to the straight line *AB* the parallelogram *AD* but falling short by the 
             "C;point;lineSlider;A0,A3,140,0",
             "BD;polygon;square;C,B;0;0;black;random",
             "D;point;vertex;BD,4",
-            "AD;polygon;parallelogram;A,C,D;0;0;black;random"
+            "AD;polygon;parallelogram;A,C,D;0;0;black;random",
+            // Highlight targets only — the two polygons already draw these.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "DC;line;connect;D,C;0;0;0"
         ],
+        aliases: { "DB": "BD", "CD": "DC" },
+        slides: [
+            { text: "“If to {any straight line|AB} there is applied {a parallelogram|AD} but falling short by {a square|BD},”",
+              visible: L_ALL,
+              highlighted: ["AB","AD","BD"] },
+            { text: "“then {the applied parallelogram|AD} equals the rectangle contained by the segments of the straight line resulting from the application.”",
+              visible: L_ALL,
+              highlighted: ["AD","AC","CB"],
+              justifications: [{ ref: "Lemma" }] },
+            { text: "Apply to the straight line {AB} the parallelogram {AD} but falling short by the square {DB|BD}.",
+              visible: L_ALL,
+              highlighted: ["AB","AD","BD"] },
+            { text: "I say that {AD} equals the rectangle {AC} by {CB}.",
+              visible: L_ALL,
+              highlighted: ["AD","AC","CB"] },
+            { text: "This is indeed at once clear, for, since {DB|BD} is a square, {DC} equals {CB},",
+              visible: L_ALL,
+              highlighted: ["BD","DC","CB"] },
+            { text: "and {AD} is the rectangle {AC} by {CD|DC}, that is, the rectangle {AC} by {CB}.",
+              visible: L_ALL,
+              highlighted: ["AD","AC","DC","CB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-I say that *AD* equals the rectangle *AC* by *CB*.
+I say that {AD} equals the rectangle {AC} by {CB}.
 
-This is indeed at once clear, for, since *DB* is a square, *DC* equals *CB*, and *AD* is the rectangle *AC* by *CD*, that is, the rectangle *AC* by *CB*.
+This is indeed at once clear, for, since {DB} is a square, {DC} equals {CB}, and {AD} is the rectangle {AC} by {CD}, that is, the rectangle {AC} by {CB}.
 
 <div class="qed">Q.E.D.</div>
 <br clear="all">
@@ -58,12 +99,26 @@ If there are two unequal straight lines, and to the greater there is applied a p
 
 <div class="just"><a href="#lemma">Lemma</a></div>
 
-Let *A* and *BC* be two unequal straight lines, of which *BC* is the greater, and let there be applied to *BC* a parallelogram equal to the fourth part of the square on the less, *A*, that is, equal to the square on the half of *A* but falling short by a square figure. Let this be the rectangle *BD* by *DC*, and let *BD* be commensurable in length with *DC*.
+Let {A:canvas_1} and {BC:canvas_1} be two unequal straight lines, of which {BC:canvas_1} is the greater, and let there be applied to {BC:canvas_1} a parallelogram equal to the fourth part of the square on the less, {A:canvas_1}, that is, equal to the square on the half of {A:canvas_1} but falling short by a square figure. Let this be the rectangle {BD:canvas_1} by {DC:canvas_1}, and let {BD:canvas_1} be commensurable in length with {DC:canvas_1}.
 
 <figure class="diagram">
 <canvas id="canvas_1" width="260" height="170" tabindex="0"></canvas>
 <noscript><img alt="X.17 diagram" src="propX17.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: A, BC with D on it, E, F, and the rectangle BD by DC
+    // (rect) standing on BD. The proof works with the segments of BC, so
+    // BD, DC, ED, EC, EF, DF and BF are added as transparent highlight
+    // targets (;0;0;0); the resting figure is unchanged. The walk is
+    // highlight beats; E and F appear with "Bisect BC at E" (bare
+    // point-appears, I.10/I.3 assumed) and again with "the same
+    // construction" in the converse, which starts from the application only.
+    //
+    // Draggables (checked against the bundle): A1, A2 (A's ends), B, C
+    // (lineSliders, the givens) and the offscreen frees. D, E, F are derived
+    // (cutoff / midpoint) and listed per slide.
+    var GIVEN = ["A","A1","A2","B","C","BC"];
+    var APPL  = GIVEN.concat(["D","rect","BD","DC"]);
+    var CONS  = APPL.concat(["E","F","ED","EC","EF","DF","BF"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -89,45 +144,278 @@ Let *A* and *BC* be two unequal straight lines, of which *BC* is the greater, an
             "D;point;cutoff;E,C,E,c",
             "F;point;cutoff;E,B,D,E",
             "d;point;perpendicular;D,C;0;0",
-            "rect;polygon;parallelogram;B,D,d;0;0;black;random"
+            "rect;polygon;parallelogram;B,D,d;0;0;black;random",
+            // Highlight targets only — BC already draws these.
+            "BD;line;connect;B,D;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "DF;line;connect;D,F;0;0;0",
+            "BF;line;connect;B,F;0;0;0"
         ],
+        aliases: { "CD": "DC", "DE": "ED", "CE": "EC", "FD": "DF" },
+        slides: [
+            { text: "“If there are two unequal straight lines,”",
+              visible: APPL,
+              highlighted: ["A","BC"] },
+            { text: "“and to {the greater|BC} there is applied {a parallelogram|rect}”",
+              visible: APPL,
+              highlighted: ["BC","rect"] },
+            { text: "“equal to the fourth part of the square on {the less|A} minus a square figure,”",
+              visible: APPL,
+              highlighted: ["A","rect"] },
+            { text: "“and if it divides it into parts commensurable in length,”",
+              visible: APPL,
+              highlighted: ["BD","DC"] },
+            { text: "“then the square on {the greater|BC} is greater than the square on {the less|A}”",
+              visible: APPL,
+              highlighted: ["BC","A"] },
+            { text: "“by the square on a straight line commensurable with {the greater|BC}.”",
+              visible: APPL,
+              highlighted: ["BC"] },
+            { text: "“And if the square on {the greater|BC} is greater than the square on {the less|A}”",
+              visible: APPL,
+              highlighted: ["BC","A"] },
+            { text: "“by the square on a straight line commensurable with {the greater|BC},”",
+              visible: APPL,
+              highlighted: ["BC"] },
+            { text: "“and if there is applied to {the greater|BC} {a parallelogram|rect}”",
+              visible: APPL,
+              highlighted: ["BC","rect"] },
+            { text: "“equal to the fourth part of the square on {the less|A} minus a square figure,”",
+              visible: APPL,
+              highlighted: ["A","rect"] },
+            { text: "“then it divides it into parts commensurable in length.”",
+              visible: APPL,
+              highlighted: ["BD","DC"],
+              justifications: [{ ref: "X.17" }] },
+            { text: "Let {A} and {BC} be two unequal straight lines, of which {BC} is the greater,",
+              visible: APPL,
+              highlighted: ["A","BC"] },
+            { text: "and let there be applied to {BC} a parallelogram equal to the fourth part of the square on the less, {A},",
+              visible: APPL,
+              highlighted: ["BC","rect","A"] },
+            { text: "that is, equal to the square on the half of {A} but falling short by a square figure.",
+              visible: APPL,
+              highlighted: ["A","rect"] },
+            { text: "Let this be the rectangle {BD} by {DC}, and let {BD} be commensurable in length with {DC}.",
+              visible: APPL,
+              highlighted: ["rect","BD","DC"],
+              justifications: [{ claim: "the applied parallelogram is the rectangle BD by DC", ref: "Lemma" }] },
+            { text: "I say that the square on {BC} is greater than the square on {A}",
+              visible: APPL,
+              highlighted: ["BC","A"] },
+            { text: "by the square on a straight line commensurable with {BC}.",
+              visible: APPL,
+              highlighted: ["BC"] },
+            { text: "Bisect {BC} at the point {E}, and make {EF} equal to {DE}.",
+              visible: CONS,
+              highlighted: ["BC","E","EF","ED"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E", name: geomlib.A.Point.appear },
+                  { elem: "F", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "BC bisected at E", ref: "I.10" },
+                               { claim: "EF = DE", ref: "I.3" }] },
+            { text: "Therefore the remainder {DC} equals {BF}.",
+              visible: CONS,
+              highlighted: ["DC","BF"] },
+            { text: "And, since the straight line {BC} was cut into equal parts at {E}, and into unequal parts at {D},",
+              visible: CONS,
+              highlighted: ["BC","E","D"] },
+            { text: "therefore the rectangle {BD} by {DC}, together with the square on {ED}, equals the square on {EC}.",
+              visible: CONS,
+              highlighted: ["rect","BD","DC","ED","EC"],
+              justifications: [{ claim: "BD·DC + ED² = EC²", ref: "II.5" }] },
+            { text: "And the same is true of their quadruples,",
+              visible: CONS,
+              highlighted: ["rect","ED","EC"] },
+            { text: "therefore four times the rectangle {BD} by {DC}, together with four times the square on {DE},",
+              visible: CONS,
+              highlighted: ["rect","BD","DC","ED"] },
+            { text: "equals four times the square on {EC}.",
+              visible: CONS,
+              highlighted: ["EC"] },
+            { text: "But the square on {A} equals four times the rectangle {BD} by {DC},",
+              visible: CONS,
+              highlighted: ["A","rect","BD","DC"] },
+            { text: "and the square on {DF} equals four times the square on {DE}, for {DF} is double {DE}.",
+              visible: CONS,
+              highlighted: ["DF","ED"] },
+            { text: "And the square on {BC} equals four times the square on {EC}, for again {BC} is double {CE}.",
+              visible: CONS,
+              highlighted: ["BC","EC"] },
+            { text: "Therefore the sum of the squares on {A} and {DF} equals the square on {BC},",
+              visible: CONS,
+              highlighted: ["A","DF","BC"] },
+            { text: "so that the square on {BC} is greater than the square on {A} by the square on {DF}.",
+              visible: CONS,
+              highlighted: ["BC","A","DF"] },
+            { text: "It is to be proved that {BC} is also commensurable with {DF}.",
+              visible: CONS,
+              highlighted: ["BC","DF"] },
+            { text: "Since {BD} is commensurable in length with {DC}, therefore {BC} is also commensurable in length with {CD}.",
+              visible: CONS,
+              highlighted: ["BD","DC","BC"],
+              justifications: [{ claim: "the whole commensurable with a part", ref: "X.15" }] },
+            { text: "But {CD} is commensurable in length with {CD} and {BF}, for {CD} equals {BF}.",
+              visible: CONS,
+              highlighted: ["DC","BF"],
+              justifications: [{ claim: "equal magnitudes are commensurable", ref: "X.6" }] },
+            { text: "Therefore {BC} is also commensurable in length with {BF} and {CD},",
+              visible: CONS,
+              highlighted: ["BC","BF","DC"],
+              justifications: [{ claim: "commensurable with the same", ref: "X.12" }] },
+            { text: "so that {BC} is also commensurable in length with the remainder {FD}.",
+              visible: CONS,
+              highlighted: ["BC","DF"],
+              justifications: [{ claim: "the remainder commensurable too", ref: "X.15" }] },
+            { text: "Therefore the square on {BC} is greater than the square on {A}",
+              visible: CONS,
+              highlighted: ["BC","A"] },
+            { text: "by the square on {a straight line commensurable with BC|DF}.",
+              visible: CONS,
+              highlighted: ["DF","BC"] },
+            // The converse starts afresh from the application: E, F withdrawn.
+            { text: "Next, let the square on {BC} be greater than the square on {A}",
+              visible: APPL,
+              highlighted: ["BC","A"] },
+            { text: "by the square on a straight line commensurable with {BC}.",
+              visible: APPL,
+              highlighted: ["BC"] },
+            { text: "Apply to {BC} a parallelogram equal to the fourth part of the square on {A} but falling short by a square figure,",
+              visible: APPL,
+              highlighted: ["BC","rect","A"] },
+            { text: "and let it be the rectangle {BD} by {DC}.",
+              visible: APPL,
+              highlighted: ["rect","BD","DC"],
+              justifications: [{ ref: "Lemma" }] },
+            { text: "It is to be proved that {BD} is commensurable in length with {DC}.",
+              visible: APPL,
+              highlighted: ["BD","DC"] },
+            { text: "With the same construction, we can prove similarly",
+              visible: CONS,
+              highlighted: ["E","F"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E", name: geomlib.A.Point.appear },
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "that the square on {BC} is greater than the square on {A} by the square on {FD}.",
+              visible: CONS,
+              highlighted: ["BC","A","DF"] },
+            { text: "But the square on {BC} is greater than the square on {A}",
+              visible: CONS,
+              highlighted: ["BC","A"] },
+            { text: "by the square on a straight line commensurable with {BC}.",
+              visible: CONS,
+              highlighted: ["BC"] },
+            { text: "Therefore {BC} is commensurable in length with {FD},",
+              visible: CONS,
+              highlighted: ["BC","DF"] },
+            { text: "so that {BC} is also commensurable in length with the remainder, the sum of {BF} and {DC}.",
+              visible: CONS,
+              highlighted: ["BC","BF","DC"],
+              justifications: [{ claim: "the remainder commensurable too", ref: "X.15" }] },
+            { text: "But the sum of {BF} and {DC} is commensurable with {DC},",
+              visible: CONS,
+              highlighted: ["BF","DC"],
+              justifications: [{ claim: "BF equals DC", ref: "X.6" }] },
+            { text: "so that {BC} is also commensurable in length with {CD},",
+              visible: CONS,
+              highlighted: ["BC","DC"],
+              justifications: [{ claim: "commensurable with the same", ref: "X.12" }] },
+            { text: "and therefore, taken separately, {BD} is commensurable in length with {DC}.",
+              visible: CONS,
+              highlighted: ["BD","DC"],
+              justifications: [{ claim: "the parts commensurable too", ref: "X.15" }] },
+            { text: "Therefore, if there are two unequal straight lines,",
+              visible: CONS,
+              highlighted: ["A","BC"] },
+            { text: "and to {the greater|BC} there is applied {a parallelogram|rect}",
+              visible: CONS,
+              highlighted: ["BC","rect"] },
+            { text: "equal to the fourth part of the square on {the less|A} minus a square figure,",
+              visible: CONS,
+              highlighted: ["A","rect"] },
+            { text: "and if it divides it into parts commensurable in length,",
+              visible: CONS,
+              highlighted: ["BD","DC"] },
+            { text: "then the square on {the greater|BC} is greater than the square on {the less|A}",
+              visible: CONS,
+              highlighted: ["BC","A"] },
+            { text: "by the square on {a straight line commensurable with the greater|DF}.",
+              visible: CONS,
+              highlighted: ["DF","BC"] },
+            { text: "And if the square on {the greater|BC} is greater than the square on {the less|A}",
+              visible: CONS,
+              highlighted: ["BC","A"] },
+            { text: "by the square on {a straight line commensurable with the greater|DF},",
+              visible: CONS,
+              highlighted: ["DF","BC"] },
+            { text: "and if there is applied to {the greater|BC} {a parallelogram|rect}",
+              visible: CONS,
+              highlighted: ["BC","rect"] },
+            { text: "equal to the fourth part of the square on {the less|A} minus a square figure,",
+              visible: CONS,
+              highlighted: ["A","rect"] },
+            { text: "then it divides it into parts commensurable in length.",
+              visible: CONS,
+              highlighted: ["BD","DC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.17") return "#prop";
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // (shared by both canvases on this page).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":  "/elements/books/bookI/propositions/propI3/",
+        "I.10": "/elements/books/bookI/propositions/propI10/",
+        "II.5": "/elements/books/bookII/propositions/propII5/",
+        "X.6":  "/elements/books/bookX/propositions/propX6/",
+        "X.12": "/elements/books/bookX/propositions/propX12/",
+        "X.15": "/elements/books/bookX/propositions/propX15/"
     });
 </script>
 </figure>
 
-I say that the square on *BC* is greater than the square on *A* by the square on a straight line commensurable with *BC*.
+I say that the square on {BC} is greater than the square on {A} by the square on a straight line commensurable with {BC}.
 
-Bisect *BC* at the point *E*, and make *EF* equal to *DE*. [!just I.10, I.3]
+Bisect {BC} at the point {E}, and make {EF} equal to {DE}. [!just I.10, I.3]
 
-Therefore the remainder *DC* equals *BF*. And, since the straight line *BC* was cut into equal parts at *E*, and into unequal parts at *D*, therefore the rectangle *BD* by *DC*, together with the square on *ED*, equals the square on *EC*. [!just II.5]
+Therefore the remainder {DC} equals {BF}. And, since the straight line {BC} was cut into equal parts at {E}, and into unequal parts at {D}, therefore the rectangle {BD} by {DC}, together with the square on {ED}, equals the square on {EC}. [!just II.5]
 
-And the same is true of their quadruples, therefore four times the rectangle *BD* by *DC*, together with four times the square on *DE*, equals four times the square on *EC*.
+And the same is true of their quadruples, therefore four times the rectangle {BD} by {DC}, together with four times the square on {DE}, equals four times the square on {EC}.
 
-But the square on *A* equals four times the rectangle *BD* by *DC*, and the square on *DF* equals four times the square on *DE*, for *DF* is double *DE*. And the square on *BC* equals four times the square on *EC*, for again *BC* is double *CE*.
+But the square on {A} equals four times the rectangle {BD} by {DC}, and the square on {DF} equals four times the square on {DE}, for {DF} is double {DE}. And the square on {BC} equals four times the square on {EC}, for again {BC} is double {CE}.
 
-Therefore the sum of the squares on *A* and *DF* equals the square on *BC*, so that the square on *BC* is greater than the square on *A* by the square on *DF*.
+Therefore the sum of the squares on {A} and {DF} equals the square on {BC}, so that the square on {BC} is greater than the square on {A} by the square on {DF}.
 
-It is to be proved that *BC* is also commensurable with *DF*.
+It is to be proved that {BC} is also commensurable with {DF}.
 
-Since *BD* is commensurable in length with *DC*, therefore *BC* is also commensurable in length with *CD*. [!just X.15]
+Since {BD} is commensurable in length with {DC}, therefore {BC} is also commensurable in length with {CD}. [!just X.15]
 
-But *CD* is commensurable in length with *CD* and *BF*, for *CD* equals *BF*. [!just X.6]
+But {CD} is commensurable in length with {CD} and {BF}, for {CD} equals {BF}. [!just X.6]
 
-Therefore *BC* is also commensurable in length with *BF* and *CD*, so that *BC* is also commensurable in length with the remainder *FD*. Therefore the square on *BC* is greater than the square on *A* by the square on a straight line commensurable with *BC*. [!just X.12; X.15]
+Therefore {BC} is also commensurable in length with {BF} and {CD}, so that {BC} is also commensurable in length with the remainder {FD}. Therefore the square on {BC} is greater than the square on {A} by the square on a straight line commensurable with {BC}. [!just X.12; X.15]
 
 ***
 
-Next, let the square on *BC* be greater than the square on *A* by the square on a straight line commensurable with *BC*. Apply to *BC* a parallelogram equal to the fourth part of the square on *A* but falling short by a square figure, and let it be the rectangle *BD* by *DC*.
+Next, let the square on {BC} be greater than the square on {A} by the square on a straight line commensurable with {BC}. Apply to {BC} a parallelogram equal to the fourth part of the square on {A} but falling short by a square figure, and let it be the rectangle {BD} by {DC}.
 
-It is to be proved that *BD* is commensurable in length with *DC*.
+It is to be proved that {BD} is commensurable in length with {DC}.
 
-With the same construction, we can prove similarly that the square on *BC* is greater than the square on *A* by the square on *FD*.
+With the same construction, we can prove similarly that the square on {BC} is greater than the square on {A} by the square on {FD}.
 
-But the square on *BC* is greater than the square on *A* by the square on a straight line commensurable with *BC*.
+But the square on {BC} is greater than the square on {A} by the square on a straight line commensurable with {BC}.
 
-Therefore *BC* is commensurable in length with *FD*, so that *BC* is also commensurable in length with the remainder, the sum of *BF* and *DC*. [!just X.15]
+Therefore {BC} is commensurable in length with {FD}, so that {BC} is also commensurable in length with the remainder, the sum of {BF} and {DC}. [!just X.15]
 
-But the sum of *BF* and *DC* is commensurable with *DC*, so that *BC* is also commensurable in length with *CD*, and therefore, taken separately, *BD* is commensurable in length with *DC*. [!just X.6, X.12; X.15]
+But the sum of {BF} and {DC} is commensurable with {DC}, so that {BC} is also commensurable in length with {CD}, and therefore, taken separately, {BD} is commensurable in length with {DC}. [!just X.6, X.12; X.15]
 
 Therefore, *if there are two unequal straight lines, and to the greater there is applied a parallelogram equal to the fourth part of the square on the less minus a square figure, and if it divides it into parts commensurable in length, then the square on the greater is greater than the square on the less by the square on a straight line commensurable with the greater. And if the square on the greater is greater than the square on the less by the square on a straight line commensurable with the greater, and if there is applied to the greater a parallelogram equal to the fourth part of the square on the less minus a square figure, then it divides it into parts commensurable in length.*
 
@@ -139,7 +427,7 @@ The construction solves the equation
 
 <center><i>x</i><sup>2</sup> = <i>bx</i> – <i>a</i><sup>2</sup>/4,</center>
 
-where *b* denotes the greater line *BC* and *a* denotes the lesser line *A*. The solution is the line *DC*, which is
+where *b* denotes the greater line {BC} and *a* denotes the lesser line {A}. The solution is the line {DC}, which is
 
 <center><img alt="x equals half of b minus the square root of the quantity b squared minus a squared" src="propX17a.gif" width="145" height="50"></center>
 
