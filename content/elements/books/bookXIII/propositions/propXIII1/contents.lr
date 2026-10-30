@@ -15,12 +15,45 @@ statement: If a straight line is cut in extreme and mean ratio, then the square 
 ----
 proof:
 
-Let the straight line *AB* be cut in extreme and mean ratio at the point *C,* and let *AC* be the greater segment. Produce the straight line *AD* in a straight line with *CA,* and make *AD* half of *AB.*
+Let the straight line {AB} be cut in extreme and mean ratio at the point {C}, and let {AC} be the greater segment. Produce the straight line {AD} in a straight line with {CA}, and make {AD} half of {AB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="350" tabindex="0"></canvas>
 <noscript><img alt="XIII.1 diagram" src="propXIII1.gif"/></noscript>
 <script type="text/javascript">
+    // AB cut at C, AD produced, the squares AE (on AB, below) and DF (on DC,
+    // above), the figure in DF, and FC carried through to G. The argument is
+    // an area count: CE = FH (VI.17), KC = LH + HC (VI.1 and the
+    // complements), so AE = the gnomon MNO; AE is four times DH, so DF is
+    // five times DH.
+    //
+    // Everything added leaves the resting figure as it was. AB and AD are
+    // solid slide twins over the edges of Joyce's two squares, hidden at rest
+    // (initiallyHidden), so the line can stand before the squares are
+    // described, AD stroking out from A as it is produced. The other lines
+    // the prose names (AC, BC, CD, AK, AH, FC, DP) are transparent highlight
+    // targets.
+    //
+    // The regions are new polygons, filled and initiallyHidden: CE and FH
+    // (proved equal) ORANGE; KC GREEN, and its two halves LH and HC LIGHT
+    // GREEN; DH (also called AP) LAVENDER. The two squares and the gnomon are
+    // spoken of as wholes: AE and DFsq are faceless twins of Joyce's BAKE and
+    // DCFL (whose random faces would cover the coloured regions if they were
+    // highlighted, #140), and MNO is the gnomon as a faceless hexagon. The
+    // element DF is Joyce's diagonal, so the square takes {DF|DFsq}. ONM is
+    // Joyce's gnomon arc.
+    var REST = ["A","B","BAKE","E","K","C","D","DCFL","F","L","DF","G","CG",
+                "H","P","PR","AQ","O","M","N","ONM","AB","AD","AC","CD","AE","DFsq"];
+    var LINE  = ["A","B","C","AB","AC","BC"];
+    var PROD  = LINE.concat(["D","AD","CD"]);
+    var SQ    = PROD.concat(["BAKE","E","K","DCFL","F","L","AE","DFsq","AK"]);
+    var FIG   = SQ.concat(["DF","AQ","H","P","PR","AH","DP"]);
+    var CARRY = FIG.concat(["CG","G","FC"]);
+    var EQ    = CARRY.concat(["CE","FH"]);
+    var KCH   = EQ.concat(["KC","HC"]);
+    var LHC   = KCH.concat(["LH"]);
+    var GNO   = LHC.concat(["ONM","M","N","O","MNO"]);
+    var QUAD  = GNO.concat(["DH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -50,29 +83,208 @@ Let the straight line *AB* be cut in extreme and mean ratio at the point *C,* an
             "O;point;midpoint;A,H",
             "M;point;cutoff;H,P,H,O",
             "N;point;cutoff;H,F,H,O",
-            "ONM;sector;arc;O,N,M;0;0;gray"
+            "ONM;sector;arc;O,N,M;0;0;gray",
+            // Slide twins of the line, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            "AD;line;connect;A,D",
+            // Transparent highlight targets.
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "AK;line;connect;A,K;0;0;0",
+            "AH;line;connect;A,H;0;0;0",
+            "FC;line;connect;F,C;0;0;0",
+            "DP;line;connect;D,P;0;0;0",
+            // The regions, filled and hidden at rest.
+            "CE;polygon;quadrilateral;C,B,E,G;0;0;0;f2a65a",
+            "FH;polygon;quadrilateral;H,R,F,Q;0;0;0;f2a65a",
+            "KC;polygon;quadrilateral;K,A,C,G;0;0;0;5fb36a",
+            "HC;polygon;quadrilateral;A,C,R,H;0;0;0;a8dbb0",
+            "LH;polygon;quadrilateral;P,H,Q,L;0;0;0;a8dbb0",
+            "DH;polygon;quadrilateral;D,A,H,P;0;0;0;b9a6e8",
+            // The wholes. Explicit ;0 faces.
+            "AE;polygon;quadrilateral;A,B,E,K;0;0;0;0",
+            "DFsq;polygon;quadrilateral;D,C,F,L;0;0;0;0",
+            "MNO;polygon;hexagon;P,L,F,C,A,H;0;0;0;0"
         ],
+        // Draggables (checked against the bundle): only A and B, free — the
+        // given line, standing from slide 1. Every other point is derived and
+        // listed per slide. No deferDraggables needed.
+        initiallyHidden: ["AB","AD","CE","FH","KC","HC","LH","DH"],
+        aliases: { "BA": "AB", "CA": "AC", "DA": "AD", "CB": "BC",
+                   "DC": "CD", "KA": "AK", "HA": "AH", "CF": "FC", "PD": "DP",
+                   "HF": "FH", "CK": "KC", "CH": "HC", "AP": "DH" },
+        slides: [
+            // The statement, over the resting figure (process.md “Open on
+            // the statement”), split at its seams.
+            { text: "“If a straight line is cut in extreme and mean ratio,”",
+              visible: REST,
+              highlighted: ["AB","C"] },
+            { text: "“then the square on {the greater segment added to the half of the whole|CD}”",
+              visible: REST,
+              highlighted: ["CD","DFsq"] },
+            { text: "“is five times the square on {the half|AD}.”",
+              visible: REST,
+              highlighted: ["AD","DH"],
+              justifications: [{ ref: "XIII.1" }] },
+            { text: "Let the straight line {AB} be cut in extreme and mean ratio at the point {C},",
+              visible: LINE,
+              highlighted: ["AB","C"] },
+            { text: "and let {AC} be the greater segment.",
+              visible: LINE,
+              highlighted: ["AC"] },
+            { text: "Produce the straight line {AD} in a straight line with {CA}, and make {AD} half of {AB}.",
+              visible: PROD,
+              highlighted: ["AD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "D",  name: geomlib.A.Point.appear } ] },
+              justifications: [
+                  { claim: "CA produced", ref: "I.Post.2" },
+                  { claim: "AD half of AB", ref: "I.10" } ] },
+            { text: "I say that the square on {CD} is five times the square on {AD}.",
+              visible: PROD,
+              highlighted: ["CD","AD"] },
+            { text: "Describe the squares {AE} and {DF|DFsq} on {AB} and {DC},",
+              visible: SQ,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BAKE", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DCFL", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "the squares on AB and DC", ref: "I.46" }] },
+            { text: "draw the figure in {DF|DFsq},",
+              visible: FIG,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AQ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear },
+                  { elem: "P",  name: geomlib.A.Point.appear },
+                  { elem: "PR", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "parallels through A and H", ref: "I.31" }] },
+            { text: "and carry {FC} through to {G}.",
+              visible: CARRY,
+              highlighted: ["FC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CG", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "G",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Now, since {AB} is cut in extreme and mean ratio at {C},",
+              visible: CARRY,
+              highlighted: ["AB","C"],
+              justifications: [{ claim: "AB is to AC as AC is to CB", ref: "VI.Def.3" }] },
+            { text: "therefore the rectangle {AB} by {BC} equals the square on {AC}.",
+              visible: CARRY,
+              highlighted: ["AB","BC","AC"],
+              justifications: [{ claim: "rectangle AB by BC = square on AC", ref: "VI.17" }] },
+            { text: "And {CE} is the rectangle {AB} by {BC}, and {FH} is the square on {AC},",
+              visible: EQ,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CE", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "FH", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "therefore {CE} equals {FH}.",
+              visible: EQ,
+              highlighted: ["CE","FH"] },
+            { text: "And, since {BA} is double {AD}, while {BA} equals {KA}, and {AD} equals {AH},",
+              visible: EQ,
+              highlighted: ["AB","AD","AK","AH"] },
+            { text: "therefore {KA} is also double {AH}.",
+              visible: EQ,
+              highlighted: ["AK","AH"] },
+            { text: "But {KA} is to {AH} as {CK} is to {CH}, therefore {CK} is double {CH}.",
+              visible: KCH,
+              highlighted: ["AK","AH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "KC", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "HC", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "KC is to CH as KA is to AH", ref: "VI.1" }] },
+            { text: "But the sum of {LH} and {HC} is also double {CH}.",
+              visible: LHC,
+              highlighted: ["HC"],
+              transition: { animations: [
+                  { elem: "LH", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "complements LH = HC", ref: "I.43" }] },
+            { text: "Therefore {KC} equals the sum of {LH} and {HC}.",
+              visible: LHC,
+              highlighted: ["KC","LH","HC"] },
+            { text: "But {CE} was also proved equal to {HF}, therefore the whole square {AE} equals the gnomon {MNO}.",
+              visible: GNO,
+              // Joyce's gnomon arc ONM has the default (opaque) face, so it
+              // is not swept: an animating element is promoted and would
+              // paint that face over the regions. It simply appears here.
+              highlighted: ["AE","MNO"],
+              justifications: [{ claim: "KC + CE = LH + HC + HF", ref: "C.N.2" }] },
+            { text: "And, since {BA} is double {AD}, therefore the square on {BA} is quadruple the square on {AD},",
+              visible: GNO,
+              highlighted: ["AB","AD"] },
+            { text: "that is, {AE} is quadruple {DH}.",
+              visible: QUAD,
+              highlighted: ["AE"],
+              transition: { animations: [
+                  { elem: "DH", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "But {AE} equals the gnomon {MNO}, therefore the gnomon {MNO} is also quadruple {AP}.",
+              visible: QUAD,
+              highlighted: ["MNO","DH"] },
+            { text: "Therefore the whole {DF|DFsq} is five times {AP}.",
+              visible: QUAD,
+              highlighted: ["DFsq","DH"] },
+            { text: "And {DF|DFsq} is the square on {DC}, and {AP} the square on {DP},",
+              visible: QUAD,
+              highlighted: ["DFsq","CD","DH","DP"] },
+            { text: "therefore the square on {CD} is five times the square on {DA}.",
+              visible: QUAD,
+              highlighted: ["CD","AD"] },
+            { text: "Therefore, if a straight line is cut in extreme and mean ratio,",
+              visible: QUAD,
+              highlighted: ["AB","C"] },
+            { text: "then the square on the greater segment added to the half of the whole",
+              visible: QUAD,
+              highlighted: ["DFsq","CD"] },
+            { text: "is five times the square on the half.",
+              visible: QUAD,
+              highlighted: ["DH","AD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.1") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/",
+        "I.10":     "/elements/books/bookI/propositions/propI10/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "I.43":     "/elements/books/bookI/propositions/propI43/",
+        "I.46":     "/elements/books/bookI/propositions/propI46/",
+        "VI.Def.3": "/elements/books/bookVI/definitions/defVI3/",
+        "VI.1":     "/elements/books/bookVI/propositions/propVI1/",
+        "VI.17":    "/elements/books/bookVI/propositions/propVI17/"
     });
 </script>
 </figure>
 
-I say that the square on *CD* is five times the square on *AD.*
+I say that the square on {CD} is five times the square on {AD}.
 
-Describe the squares *AE* and *DF* on *AB* and *DC,* draw the figure in *DF,* and carry *FC* through to *G.* [!just I.46]
+Describe the squares {AE} and {DF|DFsq} on {AB} and {DC}, draw the figure in {DF|DFsq}, and carry {FC} through to {G}. [!just I.46]
 
-Now, since *AB* is cut in extreme and mean ratio at *C,* therefore the rectangle *AB* by *BC* equals the square on *AC.* And *CE* is the rectangle *AB* by *BC,* and *FH* is the square on *AC,* therefore *CE* equals *FH.* [!just VI.Def.3; VI.17]
+Now, since {AB} is cut in extreme and mean ratio at {C}, therefore the rectangle {AB} by {BC} equals the square on {AC}. And {CE} is the rectangle {AB} by {BC}, and {FH} is the square on {AC}, therefore {CE} equals {FH}. [!just VI.Def.3; VI.17]
 
-And, since *BA* is double *AD,* while *BA* equals *KA,* and *AD* equals *AH,* therefore *KA* is also double *AH.*
+And, since {BA} is double {AD}, while {BA} equals {KA}, and {AD} equals {AH}, therefore {KA} is also double {AH}.
 
-But *KA* is to *AH* as *CK* is to *CH,* therefore *CK* is double *CH.* But the sum of *LH* and *HC* is also double *CH.* Therefore *KC* equals the sum of *LH* and *HC.* [!just VI.1]
+But {KA} is to {AH} as {CK} is to {CH}, therefore {CK} is double {CH}. But the sum of {LH} and {HC} is also double {CH}. Therefore {KC} equals the sum of {LH} and {HC}. [!just VI.1]
 
-But *CE* was also proved equal to *HF,* therefore the whole square *AE* equals the gnomon *MNO.*
+But {CE} was also proved equal to {HF}, therefore the whole square {AE} equals the gnomon {MNO}.
 
-And, since *BA* is double *AD,* therefore the square on *BA* is quadruple the square on *AD,* that is, *AE* is quadruple *DH.*
+And, since {BA} is double {AD}, therefore the square on {BA} is quadruple the square on {AD}, that is, {AE} is quadruple {DH}.
 
-But *AE* equals the gnomon *MNO,* therefore the gnomon *MNO* is also quadruple *AP.* Therefore the whole *DF* is five times *AP.*
+But {AE} equals the gnomon {MNO}, therefore the gnomon {MNO} is also quadruple {AP}. Therefore the whole {DF|DFsq} is five times {AP}.
 
-And *DF* is the square on *DC,* and *AP* the square on *DP,* therefore the square on *CD* is five times the square on *DA.*
+And {DF|DFsq} is the square on {DC}, and {AP} the square on {DP}, therefore the square on {CD} is five times the square on {DA}.
 
 Therefore, *if a straight line is cut in extreme and mean ratio, then the square on the greater segment added to the half of the whole is five times the square on the half.*
 

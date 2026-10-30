@@ -15,14 +15,50 @@ statement: If the square on a straight line is five times the square on a segmen
 ----
 proof:
 
-Let the square on the straight line *AB* be five times the square on the segment *AC* of it, and let *CD* be double *AC.*
+Let the square on the straight line {AB} be five times the square on the segment {AC} of it, and let {CD} be double {AC}.
 
-I say that, when *CD* is cut in extreme and mean ratio, then the greater segment is *CB.*
+I say that, when {CD} is cut in extreme and mean ratio, then the greater segment is {CB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="240" height="320" tabindex="0"></canvas>
 <noscript><img alt="XIII.2 diagram" src="propXIII2.gif"/></noscript>
 <script type="text/javascript">
+    // AB with AC on it (the square on AB five times the square on AC), CD
+    // double AC, the squares AF (on AB, above) and CG (on CD, below), the
+    // figure in AF, and BE drawn through. The argument is an area count: the
+    // gnomon MNO is four times AH, and so is CG; KB = LH + HB (VI.1 and the
+    // complements), so the remainders HF and BG are equal, and that is the
+    // rectangle CD by DB equal to the square on CB.
+    //
+    // Everything added leaves the resting figure as it was. AB and BD are
+    // solid slide twins over the edges of Joyce's two squares, hidden at rest
+    // (initiallyHidden), so the line can stand before the squares are
+    // described, BD stroking out from B as CD is made double AC. The other
+    // lines the prose names (AC, CB, CD, CK, CH, DG) are transparent
+    // highlight targets.
+    //
+    // The regions are new polygons, filled and initiallyHidden: AH (the
+    // square on AC) LAVENDER; KB GREEN, and its two halves BH and LH LIGHT
+    // GREEN; HF and BG (proved equal) ORANGE. The two squares and the gnomon
+    // are spoken of as wholes: AFsq and CG are faceless twins of Joyce's ABFL
+    // and DCKG (whose random faces would cover the coloured regions if they
+    // were highlighted, #140), and MNO is the gnomon as a faceless hexagon.
+    // The element AF is Joyce's diagonal, so the square takes {AF|AFsq}. ONM
+    // is Joyce's gnomon arc; it keeps its default face, so it is never
+    // animated or highlighted (a promoted element would paint that face over
+    // the regions) and simply appears with the gnomon.
+    var REST = ["A","B","ABFL","F","L","C","D","DCKG","K","G","AF","E","BE",
+                "CQ","H","PR","O","M","N","ONM","AB","BD","AC","CB","CD","AFsq","CG"];
+    var LINE = ["A","B","C","AB","AC","CB"];
+    var DBL  = LINE.concat(["D","BD","CD"]);
+    var SQ   = DBL.concat(["ABFL","F","L","DCKG","K","G","AFsq","CG","CK","DG"]);
+    var FIG  = SQ.concat(["AF","CQ","H","PR","CH"]);
+    var THRU = FIG.concat(["BE","E"]);
+    var FIFTH = THRU.concat(["AH"]);
+    var GNO  = FIFTH.concat(["ONM","M","N","O","MNO"]);
+    var KBH  = GNO.concat(["KB","BH"]);
+    var LHB  = KBH.concat(["LH"]);
+    var REM  = LHB.concat(["HF","BG"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -56,47 +92,259 @@ I say that, when *CD* is cut in extreme and mean ratio, then the greater segment
             "O;point;midpoint;H,C",
             "M;point;cutoff;H,P,H,O",
             "N;point;cutoff;H,F,H,O",
-            "ONM;sector;arc;O,N,M;0;0;gray"
+            "ONM;sector;arc;O,N,M;0;0;gray",
+            // Slide twins of the line, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            "BD;line;connect;B,D",
+            // Transparent highlight targets.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "CK;line;connect;C,K;0;0;0",
+            "CH;line;connect;C,H;0;0;0",
+            "DG;line;connect;D,G;0;0;0",
+            // The regions, filled and hidden at rest.
+            "AH;polygon;quadrilateral;A,C,H,P;0;0;0;b9a6e8",
+            "KB;polygon;quadrilateral;C,B,E,K;0;0;0;5fb36a",
+            "BH;polygon;quadrilateral;C,B,R,H;0;0;0;a8dbb0",
+            "LH;polygon;quadrilateral;P,H,Q,L;0;0;0;a8dbb0",
+            "HF;polygon;quadrilateral;H,R,F,Q;0;0;0;f2a65a",
+            "BG;polygon;quadrilateral;B,D,G,E;0;0;0;f2a65a",
+            // The wholes. Explicit ;0 faces.
+            "AFsq;polygon;quadrilateral;A,B,F,L;0;0;0;0",
+            "CG;polygon;quadrilateral;D,C,K,G;0;0;0;0",
+            "MNO;polygon;hexagon;P,L,F,B,C,H;0;0;0;0"
         ],
+        // Draggables (checked against the bundle): only A and B, free — the
+        // given line, standing from slide 1. Every other point is derived
+        // (C is the meanProportional that makes the square on AB five times
+        // the square on AC) and listed per slide. No deferDraggables needed.
+        initiallyHidden: ["AB","BD","AH","KB","BH","LH","HF","BG"],
+        aliases: { "BA": "AB", "CA": "AC", "BC": "CB", "DC": "CD", "DB": "BD",
+                   "KC": "CK", "HC": "CH", "GD": "DG",
+                   "HB": "BH", "FH": "HF" },
+        slides: [
+            // The statement, over the resting figure (process.md “Open on
+            // the statement”), split at its seams.
+            { text: "“If {the square on a straight line|AFsq} is five times {the square on a segment on it|AH},”",
+              visible: REST,
+              highlighted: ["AFsq","AH"] },
+            { text: "“then, when {the double of the said segment|CD} is cut in extreme and mean ratio,”",
+              visible: REST,
+              highlighted: ["CD"] },
+            { text: "“the greater segment is {the remaining part of the original straight line|CB}.”",
+              visible: REST,
+              highlighted: ["CB"],
+              justifications: [{ ref: "XIII.2" }] },
+            { text: "Let the square on the straight line {AB} be five times the square on the segment {AC} of it,",
+              visible: LINE,
+              highlighted: ["AB","AC"] },
+            { text: "and let {CD} be double {AC}.",
+              visible: DBL,
+              highlighted: ["CD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "D",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AC produced", ref: "I.Post.2" }] },
+            { text: "I say that, when {CD} is cut in extreme and mean ratio, then the greater segment is {CB}.",
+              visible: DBL,
+              highlighted: ["CD","CB"] },
+            { text: "Describe the squares {AF|AFsq} and {CG} on {AB} and {CD} respectively,",
+              visible: SQ,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ABFL", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DCKG", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "the squares on AB and CD", ref: "I.46" }] },
+            { text: "draw the figure in {AF|AFsq},",
+              visible: FIG,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CQ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear },
+                  { elem: "PR", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "parallels through C and H", ref: "I.31" }] },
+            { text: "and draw {BE} through.",
+              visible: THRU,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "E",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Now, since the square on {BA} is five times the square on {AC}, therefore {AF|AFsq} is five times {AH}.",
+              visible: FIFTH,
+              highlighted: ["AFsq"],
+              transition: { animations: [
+                  { elem: "AH", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Therefore the gnomon {MNO} is quadruple {AH}.",
+              visible: GNO,
+              highlighted: ["MNO","AH"],
+              justifications: [{ claim: "AF less AH", ref: "C.N.3" }] },
+            { text: "And, since {DC} is double {CA}, therefore the square on {DC} is quadruple the square on {CA},",
+              visible: GNO,
+              highlighted: ["CD","AC"] },
+            { text: "that is, {CG} is quadruple {AH}.",
+              visible: GNO,
+              highlighted: ["CG","AH"] },
+            { text: "But the gnomon {MNO} is also quadruple {AH}, therefore the gnomon {MNO} equals {CG}.",
+              visible: GNO,
+              highlighted: ["MNO","CG"],
+              justifications: [{ ref: "C.N.1" }] },
+            { text: "And, since {DC} is double {CA}, while {DC} equals {CK}, and {AC} equals {CH},",
+              visible: GNO,
+              highlighted: ["CD","AC","CK","CH"] },
+            { text: "therefore {KB} is also double {BH}.",
+              visible: KBH,
+              highlighted: ["CK","CH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "KB", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "BH", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "KB is to BH as KC is to CH", ref: "VI.1" }] },
+            { text: "But the sum of {LH} and {HB} is also double {HB},",
+              visible: LHB,
+              highlighted: ["BH"],
+              transition: { animations: [
+                  { elem: "LH", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "complements LH = HB", ref: "I.43" }] },
+            { text: "therefore {KB} equals the sum of {LH} and {HB}.",
+              visible: LHB,
+              highlighted: ["KB","LH","BH"] },
+            { text: "But the whole gnomon {MNO} was also proved equal to the whole {CG},",
+              visible: LHB,
+              highlighted: ["MNO","CG"] },
+            { text: "therefore the remainder {HF} equals {BG}.",
+              visible: REM,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "HF", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "BG", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "MNO less LH, HB; CG less KB", ref: "C.N.3" }] },
+            { text: "And {BG} is the rectangle {CD} by {DB}, for {CD} equals {DG},",
+              visible: REM,
+              highlighted: ["BG","BD","DG"] },
+            { text: "and {HF} is the square on {CB}, therefore the rectangle {CD} by {DB} equals the square on {CB}.",
+              visible: REM,
+              highlighted: ["HF","BG"] },
+            { text: "Therefore {DC} is to {CB} as {CB} is to {BD}.",
+              visible: REM,
+              highlighted: ["CD","CB","BD"],
+              justifications: [{ claim: "DC is to CB as CB is to BD", ref: "VI.17" }] },
+            { text: "But {DC} is greater than {CB}, therefore {CB} is also greater than {BD}.",
+              visible: REM,
+              highlighted: ["CD","CB","BD"],
+              justifications: [{ claim: "DC greater than CB", ref: "Lemma" },
+                               { ref: "V.14" }] },
+            { text: "Therefore, when the straight line {CD} is cut in extreme and mean ratio, {CB} is the greater segment.",
+              visible: REM,
+              highlighted: ["CD","CB"],
+              justifications: [{ ref: "VI.Def.3" }, { ref: "Q.E.D." }] },
+            // The lemma: DC (the double of AC) is greater than CB. The squares
+            // it talks about are already on the figure — the square on CA is
+            // AH, the square on BC is HF, the square on BA is AF.
+            { text: "That the double {AC} is greater than {BC} is to be proved thus.",
+              visible: REM,
+              highlighted: ["CD","CB"] },
+            { text: "If not, let {BC} be, if possible, double {CA}.",
+              visible: REM,
+              highlighted: ["CB","AC"] },
+            { text: "Therefore {the square on BC|HF} is quadruple {the square on CA|AH}.",
+              visible: REM,
+              highlighted: ["HF","AH"] },
+            { text: "Therefore the sum of the squares on {BC} and {CA} is five times the square on {CA}.",
+              visible: REM,
+              highlighted: ["HF","AH"] },
+            { text: "But, by hypothesis, {the square on BA|AFsq} is also five times {the square on CA|AH}",
+              visible: REM,
+              highlighted: ["AFsq","AH"] },
+            { text: "Therefore the square on {BA} equals the sum of the squares on {BC} and {CA}, which is impossible.",
+              visible: REM,
+              highlighted: ["AFsq","HF","AH"],
+              justifications: [{ claim: "the square on AB also has twice the rectangle AC by CB", ref: "II.4" }] },
+            { text: "Therefore {CB} is not double {AC}.",
+              visible: REM,
+              highlighted: ["CB","AC"] },
+            { text: "Similarly we can prove that neither is a straight line less than {CB} double {CA},",
+              visible: REM,
+              highlighted: ["CB","AC"] },
+            { text: "for the absurdity is much greater.",
+              visible: REM,
+              highlighted: [] },
+            { text: "Therefore the double {AC} is greater than {CB}.",
+              visible: REM,
+              highlighted: ["CD","CB"] },
+            { text: "Therefore, if the square on a straight line is five times the square on a segment on it,",
+              visible: REM,
+              highlighted: ["AFsq","AH"] },
+            { text: "then, when the double of the said segment is cut in extreme and mean ratio,",
+              visible: REM,
+              highlighted: ["CD"] },
+            { text: "the greater segment is the remaining part of the original straight line.",
+              visible: REM,
+              highlighted: ["CB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.2") return "#prop";
+            // "Lemma" stays plain text: the lemma sits inside the proof body
+            // (### Lemma), not in a section of its own, so it has no anchor.
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.3":    "/elements/books/bookI/commonnotions/cn3/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "I.43":     "/elements/books/bookI/propositions/propI43/",
+        "I.46":     "/elements/books/bookI/propositions/propI46/",
+        "II.4":     "/elements/books/bookII/propositions/propII4/",
+        "V.14":     "/elements/books/bookV/propositions/propV14/",
+        "VI.Def.3": "/elements/books/bookVI/definitions/defVI3/",
+        "VI.1":     "/elements/books/bookVI/propositions/propVI1/",
+        "VI.17":    "/elements/books/bookVI/propositions/propVI17/"
     });
 </script>
 </figure>
 
-Describe the squares *AF* and *CG* on *AB* and *CD* respectively, draw the figure in *AF,* and draw *BE* through. [!just I.46]
+Describe the squares {AF|AFsq} and {CG} on {AB} and {CD} respectively, draw the figure in {AF|AFsq}, and draw {BE} through. [!just I.46]
 
-Now, since the square on *BA* is five times the square on *AC,* therefore *AF* is five times *AH.* Therefore the gnomon *MNO* is quadruple *AH.*
+Now, since the square on {BA} is five times the square on {AC}, therefore {AF|AFsq} is five times {AH}. Therefore the gnomon {MNO} is quadruple {AH}.
 
-And, since *DC* is double *CA,* therefore the square on *DC* is quadruple the square on *CA,* that is, *CG* is quadruple *AH.* But the gnomon *MNO* is also quadruple *AH,* therefore the gnomon *MNO* equals *CG.*
+And, since {DC} is double {CA}, therefore the square on {DC} is quadruple the square on {CA}, that is, {CG} is quadruple {AH}. But the gnomon {MNO} is also quadruple {AH}, therefore the gnomon {MNO} equals {CG}.
 
-And, since *DC* is double *CA,* while *DC* equals *CK,* and *AC* equals *CH,* therefore *KB* is also double *BH.* [!just VI.1]
+And, since {DC} is double {CA}, while {DC} equals {CK}, and {AC} equals {CH}, therefore {KB} is also double {BH}. [!just VI.1]
 
-But the sum of *LH* and *HB* is also double *HB,* therefore *KB* equals the sum of *LH* and *HB.*
+But the sum of {LH} and {HB} is also double {HB}, therefore {KB} equals the sum of {LH} and {HB}.
 
-But the whole gnomon *MNO* was also proved equal to the whole *CG,* therefore the remainder *HF* equals *BG.*
+But the whole gnomon {MNO} was also proved equal to the whole {CG}, therefore the remainder {HF} equals {BG}.
 
-And *BG* is the rectangle *CD* by *DB,* for *CD* equals *DG,* and *HF* is the square on *CB,* therefore the rectangle *CD* by *DB* equals the square on *CB.*
+And {BG} is the rectangle {CD} by {DB}, for {CD} equals {DG}, and {HF} is the square on {CB}, therefore the rectangle {CD} by {DB} equals the square on {CB}.
 
-Therefore *DC* is to *CB* as *CB* is to *BD.* But *DC* is greater than *CB,* therefore *CB* is also greater than *BD.*
+Therefore {DC} is to {CB} as {CB} is to {BD}. But {DC} is greater than {CB}, therefore {CB} is also greater than {BD}.
 
-Therefore, when the straight line *CD* is cut in extreme and mean ratio, *CB* is the greater segment.
+Therefore, when the straight line {CD} is cut in extreme and mean ratio, {CB} is the greater segment.
 
 <div class="qed">Q.E.D.</div>
 
 ### Lemma
 
-That the double *AC* is greater than *BC* is to be proved thus.
+That the double {AC} is greater than {BC} is to be proved thus.
 
-If not, let *BC* be, if possible, double *CA.*
+If not, let {BC} be, if possible, double {CA}.
 
-Therefore the square on *BC* is quadruple the square on *CA.* Therefore the sum of the squares on *BC* and *CA* is five times the square on *CA.* But, by hypothesis, the square on *BA* is also five times the square on *CA*
+Therefore the square on {BC} is quadruple the square on {CA}. Therefore the sum of the squares on {BC} and {CA} is five times the square on {CA}. But, by hypothesis, the square on {BA} is also five times the square on {CA}
 
-Therefore the square on *BA* equals the sum of the squares on *BC* and *CA,* which is impossible. [!just II.4]
+Therefore the square on {BA} equals the sum of the squares on {BC} and {CA}, which is impossible. [!just II.4]
 
-Therefore *CB* is not double *AC.*
+Therefore {CB} is not double {AC}.
 
-Similarly we can prove that neither is a straight line less than *CB* double *CA,* for the absurdity is much greater.
+Similarly we can prove that neither is a straight line less than {CB} double {CA}, for the absurdity is much greater.
 
-Therefore the double *AC* is greater than *CB.*
+Therefore the double {AC} is greater than {CB}.
 
 Therefore, *if the square on a straight line is five times the square on a segment on it, then, when the double of the said segment is cut in extreme and mean ratio, the greater segment is the remaining part of the original straight line.*
 
