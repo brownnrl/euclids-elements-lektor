@@ -15,14 +15,38 @@ statement: If two straight lines meeting one another are parallel to two straigh
 ----
 proof:
 
-Let the two straight lines *AB* and *BC* meeting one another be parallel to the two straight lines *DE* and *EF* meeting one another not in the same plane.
+Let the two straight lines {AB} and {BC} meeting one another be parallel to the two straight lines {DE} and {EF} meeting one another not in the same plane.
 
-I say that the angle *ABC* equals the angle *DEF.*
+I say that the angle {ABC|angB} equals the angle {DEF|angE}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="310" height="300" tabindex="0"></canvas>
 <noscript><img alt="XI.10 diagram" src="propXI10.gif"/></noscript>
 <script type="text/javascript">
+    // AB, BC meet at B in the upper plane P; DE, EF, parallel to them, meet
+    // at E in the lower plane Q. The four are cut off equal (in the figure
+    // D = E + A - B and F = E + C - B already make them so), AD, BE, CF are
+    // joined and shown equal and parallel (I.33, XI.9), then AC, DF, and
+    // I.8 gives the equal angles.
+    //
+    // Joyce draws AB, BC, AC and DE, EF, DF only as the edges of the filled
+    // triangles ABC and DEF. The walk needs the four given lines before AC
+    // and DF are joined, so AB, BC, DE, EF, AC, DF are solid slide twins,
+    // hidden at rest (initiallyHidden); the triangles trace and fill when
+    // the two sides and base are compared for I.8. The planes P and Q
+    // frame every slide but are never highlighted. Angle and triangle names
+    // collide (ABC, DEF): the triangles own them, the angle markers angB,
+    // angE take the display override.
+    //
+    // Draggables (checked against the bundle): X, Y, Z (far-off direction
+    // points), P0, Q0, A, B, C, E free; P1, P3 lineSliders. All are givens
+    // or plane frame, so none is deferred. D, F, P2, Q1-Q3 are derived and
+    // listed per slide.
+    var PLANES = ["P","P2","Q","Q1","Q2","Q3"];
+    var GIVEN  = PLANES.concat(["A","B","C","D","E","F","AB","BC","DE","EF"]);
+    var ANG    = GIVEN.concat(["angB","angE"]);
+    var JOIN   = GIVEN.concat(["AD","CF","BE","AC","DF"]);
+    var TRI    = JOIN.concat(["ABC","DEF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,21 +75,132 @@ I say that the angle *ABC* equals the angle *DEF.*
             "DEF;polygon;triangle;D,E,F;0;0;black;random",
             "AD;line;connect;A,D",
             "BE;line;connect;B,E",
-            "CF;line;connect;C,F"
+            "CF;line;connect;C,F",
+            // Slide twins, hidden at rest (see above).
+            "AB;line;connect;B,A",
+            "BC;line;connect;B,C",
+            "DE;line;connect;E,D",
+            "EF;line;connect;E,F",
+            "AC;line;connect;A,C",
+            "DF;line;connect;D,F",
+            "angB;sector;angleMarker;B,A,C",
+            "angE;sector;angleMarker;E,D,F"
         ],
+        initiallyHidden: ["AB","BC","DE","EF","AC","DF"],
+        aliases: { "BA": "AB", "ED": "DE" },
+        slides: [
+            { text: "“If two straight lines meeting one another”",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "“are parallel to two straight lines meeting one another not in the same plane,”",
+              visible: GIVEN,
+              highlighted: ["DE","EF"] },
+            { text: "“then they contain equal angles.”",
+              visible: ANG,
+              highlighted: ["angB","angE"],
+              justifications: [{ ref: "XI.10" }] },
+            { text: "Let the two straight lines {AB} and {BC} meeting one another",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "be parallel to the two straight lines {DE} and {EF} meeting one another not in the same plane.",
+              visible: GIVEN,
+              highlighted: ["DE","EF"] },
+            { text: "I say that the angle {ABC|angB} equals the angle {DEF|angE}.",
+              visible: ANG,
+              highlighted: ["angB","angE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angB", name: geomlib.A.Sector.sweep },
+                  { elem: "angE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Cut {BA}, {BC}, {ED}, and {EF} off equal to one another,",
+              visible: GIVEN,
+              highlighted: ["AB","BC","DE","EF"],
+              justifications: [{ ref: "I.3" }] },
+            { text: "and join {AD}, {CF}, {BE}, {AC}, and {DF}.",
+              visible: JOIN,
+              highlighted: ["AD","CF","BE","AC","DF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Now, since {BA} equals and is parallel to {ED}, therefore {AD} also equals and is parallel to {BE}.",
+              visible: JOIN,
+              highlighted: ["AB","DE","AD","BE"],
+              justifications: [{ claim: "joining equal parallels", ref: "I.33" }] },
+            { text: "For the same reason {CF} also equals and is parallel to {BE}.",
+              visible: JOIN,
+              highlighted: ["BC","EF","CF","BE"],
+              justifications: [{ claim: "joining equal parallels", ref: "I.33" }] },
+            { text: "Therefore each of the straight lines {AD} and {CF} equals and is parallel to {BE}.",
+              visible: JOIN,
+              highlighted: ["AD","CF","BE"] },
+            { text: "But straight lines which are parallel to the same straight line",
+              visible: JOIN,
+              highlighted: ["AD","CF","BE"] },
+            { text: "and are not in the same plane with it are parallel to one another,",
+              visible: JOIN,
+              highlighted: ["AD","CF"],
+              justifications: [{ claim: "parallels to one line, not in one plane", ref: "XI.9" }] },
+            { text: "therefore {AD} is parallel and equal to {CF}.",
+              visible: JOIN,
+              highlighted: ["AD","CF"] },
+            { text: "And {AC} and {DF} join them, therefore {AC} also equals and is parallel to {DF}.",
+              visible: JOIN,
+              highlighted: ["AC","DF","AD","CF"],
+              justifications: [{ claim: "joining equal parallels", ref: "I.33" }] },
+            { text: "Now, since the two sides {AB} and {BC} equal the two sides {DE} and {EF},",
+              visible: TRI,
+              highlighted: ["AB","BC","DE","EF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ABC", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DEF", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and the base {AC} equals the base {DF},",
+              visible: TRI,
+              highlighted: ["AC","DF"] },
+            { text: "therefore the angle {ABC|angB} equals the angle {DEF|angE}.",
+              visible: TRI.concat(["angB","angE"]),
+              highlighted: ["angB","angE"],
+              justifications: [{ claim: "three sides equal", ref: "I.8" }] },
+            { text: "Therefore, if two straight lines meeting one another",
+              visible: TRI,
+              highlighted: ["AB","BC"] },
+            { text: "are parallel to two straight lines meeting one another not in the same plane,",
+              visible: TRI,
+              highlighted: ["DE","EF"] },
+            { text: "then they contain equal angles.",
+              visible: TRI.concat(["angB","angE"]),
+              highlighted: ["angB","angE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.10") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.8":      "/elements/books/bookI/propositions/propI8/",
+        "I.33":     "/elements/books/bookI/propositions/propI33/",
+        "XI.9":     "/elements/books/bookXI/propositions/propXI9/"
     });
 </script>
 </figure>
 
-Cut *BA, BC, ED,* and *EF* off equal to one another, and join *AD, CF, BE, AC,* and *DF.* [!just I.3]
+Cut {BA}, {BC}, {ED}, and {EF} off equal to one another, and join {AD}, {CF}, {BE}, {AC}, and {DF}. [!just I.3]
 
-Now, since *BA* equals and is parallel to *ED,* therefore *AD* also equals and is parallel to *BE.* For the same reason *CF* also equals and is parallel to *BE.* [!just I.33]
+Now, since {BA} equals and is parallel to {ED}, therefore {AD} also equals and is parallel to {BE}. For the same reason {CF} also equals and is parallel to {BE}. [!just I.33]
 
-Therefore each of the straight lines *AD* and *CF* equals and is parallel to *BE.* But straight lines which are parallel to the same straight line and are not in the same plane with it are parallel to one another, therefore *AD* is parallel and equal to *CF.* [!just XI.9]
+Therefore each of the straight lines {AD} and {CF} equals and is parallel to {BE}. But straight lines which are parallel to the same straight line and are not in the same plane with it are parallel to one another, therefore {AD} is parallel and equal to {CF}. [!just XI.9]
 
-And *AC* and *DF* join them, therefore *AC* also equals and is parallel to *DF.* [!just I.33]
+And {AC} and {DF} join them, therefore {AC} also equals and is parallel to {DF}. [!just I.33]
 
-Now, since the two sides *AB* and *BC* equal the two sides *DE* and *EF,* and the base *AC* equals the base *DF,* therefore the angle *ABC* equals the angle *DEF.* [!just I.8]
+Now, since the two sides {AB} and {BC} equal the two sides {DE} and {EF}, and the base {AC} equals the base {DF}, therefore the angle {ABC|angB} equals the angle {DEF|angE}. [!just I.8]
 
 Therefore, *if two straight lines meeting one another are parallel to two straight lines meeting one another not in the same plane, then they contain equal angles.*
 

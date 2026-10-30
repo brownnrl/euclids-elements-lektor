@@ -15,14 +15,39 @@ statement: Straight lines which are parallel to the same straight line but do no
 ----
 proof:
 
-Let each of the straight lines *AB* and *CD* be parallel to *EF,* but not in the same plane with it.
+Let each of the straight lines {AB} and {CD} be parallel to {EF}, but not in the same plane with it.
 
-I say that *AB* is parallel to *CD.*
+I say that {AB} is parallel to {CD}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="200" tabindex="0"></canvas>
 <noscript><img alt="XI.9 diagram" src="propXI9.gif"/></noscript>
 <script type="text/javascript">
+    // AB and CD are each parallel to EF; G is taken on EF, GH is drawn at
+    // right angles to EF in the plane of EF and AB, GK likewise in the plane
+    // of EF and CD. XI.4 puts EF at right angles to the plane of HG and GK,
+    // XI.8 carries that to AB and CD, and XI.6 makes them parallel.
+    //
+    // In Joyce's oblique view H falls on AB and K on CD (H = A + G - E,
+    // K = C + G - E), which is where AB and CD meet the plane through HG and
+    // GK. Everything added is transparent: planeABFE and planeCDFE, the
+    // planes through EF and AB and through EF and CD; planeHGK, the plane
+    // through HG and GK. The right angles are angleMarkerRight squares:
+    // HGF and KGF by construction, AHG and CKG once AB and CD are proved
+    // at right angles to that plane (XI.Def.3). They draw in the projection.
+    //
+    // Draggables (checked against the bundle): A, B, C, E free; D, F, G
+    // lineSliders. G arrives with "Let a point G be taken", so it is
+    // deferred. H and K are derived and listed per slide.
+    var GIVEN = ["A","B","C","D","E","F","AB","CD","EF"];
+    var GPT   = GIVEN.concat(["G"]);
+    var GHv   = GPT.concat(["H","GH","planeABFE"]);
+    var GKv   = GHv.concat(["K","GK","planeCDFE"]);
+    var FIG   = GPT.concat(["H","GH","K","GK"]);
+    var RT    = FIG.concat(["angHGF","angKGF"]);
+    var PLN   = RT.concat(["planeHGK"]);
+    var ABr   = PLN.concat(["angAHG"]);
+    var BOTH  = ABr.concat(["angCKG"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -43,21 +68,123 @@ I say that *AB* is parallel to *CD.*
             "H;point;parallelogram;A,E,G",
             "K;point;parallelogram;C,E,G",
             "GH;line;connect;G,H",
-            "GK;line;connect;G,K"
+            "GK;line;connect;G,K",
+            // Transparent highlight targets.
+            "planeABFE;polygon;quadrilateral;A,B,F,E;0;0;0;0",
+            "planeCDFE;polygon;quadrilateral;C,D,F,E;0;0;0;0",
+            "planeHGK;polygon;triangle;H,G,K;0;0;0;0",
+            "angHGF;sector;angleMarkerRight;G,H,F",
+            "angKGF;sector;angleMarkerRight;G,K,F",
+            "angAHG;sector;angleMarkerRight;H,A,G",
+            "angCKG;sector;angleMarkerRight;K,C,G"
         ],
+        deferDraggables: ["G"],
+        aliases: { "HG": "GH", "FE": "EF" },
+        slides: [
+            { text: "“Straight lines which are parallel to the same straight line”",
+              visible: GIVEN,
+              highlighted: ["AB","CD","EF"] },
+            { text: "“but do not lie in the same plane with it”",
+              visible: GIVEN,
+              highlighted: ["EF"] },
+            { text: "“are also parallel to each other.”",
+              visible: GIVEN,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "XI.9" }] },
+            { text: "Let each of the straight lines {AB} and {CD} be parallel to {EF}, but not in the same plane with it.",
+              visible: GIVEN,
+              highlighted: ["AB","CD","EF"] },
+            { text: "I say that {AB} is parallel to {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "Let a point {G} be taken at random on {EF},",
+              visible: GPT,
+              highlighted: ["G","EF"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "and from it draw {GH} in the {plane|planeABFE} through {EF} and {AB} at right angles to {EF},",
+              visible: GHv.concat(["angHGF"]),
+              highlighted: ["GH","planeABFE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "GH",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",      name: geomlib.A.Point.appear },
+                  { elem: "angHGF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "GH at right angles to EF", ref: "I.11" }] },
+            { text: "and {GK} in the {plane|planeCDFE} through {EF} and {CD} again at right angles to {EF}.",
+              visible: GKv.concat(["angHGF","angKGF"]),
+              highlighted: ["GK","planeCDFE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "GK",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",      name: geomlib.A.Point.appear },
+                  { elem: "angKGF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "GK at right angles to EF", ref: "I.11" }] },
+            { text: "Now, since {EF} is at right angles to each of the straight lines {GH} and {GK},",
+              visible: RT,
+              highlighted: ["EF","GH","GK","angHGF","angKGF"] },
+            { text: "therefore {EF} is also at right angles to the {plane|planeHGK} through {GH} and {GK}.",
+              visible: PLN,
+              highlighted: ["EF","planeHGK"],
+              transition: { animations: [
+                  { elem: "planeHGK", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "at right angles to two lines at their section", ref: "XI.4" }] },
+            { text: "And {EF} is parallel to {AB},",
+              visible: PLN,
+              highlighted: ["EF","AB"] },
+            { text: "therefore {AB} is also at right angles to the {plane|planeHGK} through {HG} and {GK}.",
+              visible: ABr,
+              highlighted: ["AB","planeHGK","angAHG"],
+              transition: { animations: [
+                  { elem: "angAHG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "parallel to a line at right angles to a plane", ref: "XI.8" }] },
+            { text: "For the same reason {CD} is also at right angles to the {plane|planeHGK} through {HG} and {GK}.",
+              visible: BOTH,
+              highlighted: ["CD","planeHGK","angCKG"],
+              transition: { animations: [
+                  { elem: "angCKG", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore each of the straight lines {AB} and {CD} is at right angles to the {plane|planeHGK} through {HG} and {GK}.",
+              visible: BOTH,
+              highlighted: ["AB","CD","planeHGK"] },
+            { text: "But if two straight lines are at right angles to the same plane, then the straight lines are parallel.",
+              visible: BOTH,
+              highlighted: ["AB","CD","planeHGK"],
+              justifications: [{ claim: "two lines at right angles to one plane", ref: "XI.6" }] },
+            { text: "Therefore {AB} is parallel to {CD}.",
+              visible: BOTH,
+              highlighted: ["AB","CD"] },
+            { text: "Therefore, straight lines which are parallel to the same straight line",
+              visible: FIG,
+              highlighted: ["AB","CD","EF"] },
+            { text: "but do not lie in the same plane with it are also parallel to each other.",
+              visible: FIG,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.9") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.11": "/elements/books/bookI/propositions/propI11/",
+        "XI.4": "/elements/books/bookXI/propositions/propXI4/",
+        "XI.6": "/elements/books/bookXI/propositions/propXI6/",
+        "XI.8": "/elements/books/bookXI/propositions/propXI8/"
     });
 </script>
 </figure>
 
-Let a point *G* be taken at random on *EF,* and from it draw *GH* in the plane through *EF* and *AB* at right angles to *EF,* and *GK* in the plane through *EF* and *CD* again at right angles to *EF.* [!just I.11]
+Let a point {G} be taken at random on {EF}, and from it draw {GH} in the plane through {EF} and {AB} at right angles to {EF}, and {GK} in the plane through {EF} and {CD} again at right angles to {EF}. [!just I.11]
 
-Now, since *EF* is at right angles to each of the straight lines *GH* and *GK,* therefore *EF* is also at right angles to the plane through *GH* and *GK.* [!just XI.4]
+Now, since {EF} is at right angles to each of the straight lines {GH} and {GK}, therefore {EF} is also at right angles to the plane through {GH} and {GK}. [!just XI.4]
 
-And *EF* is parallel to *AB,* therefore *AB* is also at right angles to the plane through *HG* and *GK.* [!just XI.8]
+And {EF} is parallel to {AB}, therefore {AB} is also at right angles to the plane through {HG} and {GK}. [!just XI.8]
 
-For the same reason *CD* is also at right angles to the plane through *HG* and *GK.* Therefore each of the straight lines *AB* and *CD* is at right angles to the plane through *HG* and *GK.*
+For the same reason {CD} is also at right angles to the plane through {HG} and {GK}. Therefore each of the straight lines {AB} and {CD} is at right angles to the plane through {HG} and {GK}.
 
-But if two straight lines are at right angles to the same plane, then the straight lines are parallel. Therefore *AB* is parallel to *CD.* [!just XI.6]
+But if two straight lines are at right angles to the same plane, then the straight lines are parallel. Therefore {AB} is parallel to {CD}. [!just XI.6]
 
 Therefore, *straight lines which are parallel to the same straight line but do not lie in the same plane with it are also parallel to each other.*
 
@@ -73,6 +200,10 @@ Note that this proposition is the three-dimensional analogue to proposition @I.3
 <canvas id="canvas_1" width="270" height="250" tabindex="0"></canvas>
 <noscript><img alt="Varignon parallelogram" src="propXI9a.gif"/></noscript>
 <script type="text/javascript">
+    // Guide figure: hover refs only, no slides. The sides AB..DA, the
+    // parallelogram's sides EF..HE and the undrawn EG, FH are transparent
+    // targets; EFGHt is a faceless twin of the filled EFGH, which would be
+    // raised over AC and BD if highlighted (#140).
     geomlib.init({
         canvasid: "canvas_1",
         background: "0,0,100",
@@ -89,17 +220,30 @@ Note that this proposition is the three-dimensional analogue to proposition @I.3
             "H;point;midpoint;D,A",
             "EFGH;polygon;quadrilateral;E,F,G,H;0;0;black;random",
             "AC;line;connect;A,C;0;0;gray",
-            "BD;line;connect;B,D;0;0;gray"
+            "BD;line;connect;B,D;0;0;gray",
+            // Transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "DA;line;connect;D,A;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "HE;line;connect;H,E;0;0;0",
+            "EG;line;connect;E,G;0;0;0",
+            "FH;line;connect;F,H;0;0;0",
+            "EFGHt;polygon;quadrilateral;E,F,G,H;0;0;0;0"
         ],
+        aliases: { "HG": "GH", "EH": "HE" }
     });
 </script>
 </figure>
 
-Consider a quadrilateral *ABCD* whose four vertices may or may not lie in a plane. Let *E, F, G,* and *H* be the midpoints of the sides *AB, BC, CD,* and *DA,* respectively. Then the quadrilateral *EFGH* lies in a plane and is a parallelogram, called the Varignon parallelogram. Varignon (1654–1722) showed the area of a planar quadrilateral is twice the area of this parallelogram.
+Consider a quadrilateral {ABCD} whose four vertices may or may not lie in a plane. Let {E}, {F}, {G}, and {H} be the midpoints of the sides {AB}, {BC}, {CD}, and {DA}, respectively. Then the quadrilateral {EFGH|EFGHt} lies in a plane and is a parallelogram, called the Varignon parallelogram. Varignon (1654–1722) showed the area of a planar quadrilateral is twice the area of this parallelogram.
 
-The proof that *EFGH* is a parallelogram relies on this proposition XI.9 to show the sides are parallel, since it is readily shown that both *EF* and *HG* are parallel to the line *AC,* and both *FG* and *EH* are parallel to the line *BD.*
+The proof that {EFGH|EFGHt} is a parallelogram relies on this proposition XI.9 to show the sides are parallel, since it is readily shown that both {EF} and {HG} are parallel to the line {AC}, and both {FG} and {EH} are parallel to the line {BD}.
 
-As a corollary, it follows that the lines joining the midpoints of an arbitrary quadrilateral are concurrent and bisect each other, even if the four sides of the quadrilateral do not lie in a plane. (These are the lines *EG* and *FH* which are not drawn in the diagram.)
+As a corollary, it follows that the lines joining the midpoints of an arbitrary quadrilateral are concurrent and bisect each other, even if the four sides of the quadrilateral do not lie in a plane. (These are the lines {EG} and {FH} which are not drawn in the diagram.)
 
 #### Use of this proposition
 
