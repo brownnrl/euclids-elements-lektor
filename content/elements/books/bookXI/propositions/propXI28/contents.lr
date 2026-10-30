@@ -15,12 +15,31 @@ statement: If a parallelepipedal solid is cut by a plane through the diagonals o
 ----
 proof:
 
-Let the parallelepipedal solid *AB* be cut by the plane *CDEF* through the diagonals *CF* and *DE* of opposite planes.
+Let the parallelepipedal solid *AB* be cut by the plane {CDEF|planeCDEF} through the diagonals {CF} and {DE} of opposite planes.
 
 <figure class="diagram rdiagram">
 <canvas id="canvas_0" width="290" height="280" tabindex="0"></canvas>
 <noscript><img alt="XI.28 diagram" src="propXI28.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the solid AB with the cutting plane CDEF, the face
+    // AEFG and the triangle ADE filled, BCDH an outline.
+    //
+    // The plane is given, so the walk is highlight beats over the resting
+    // figure. Added, all transparent: the diagonals CF, DE and the edges CD,
+    // EF the guide names; faceless twins for the filled pieces the proof
+    // names, which would be raised over the figure if highlighted (#140) --
+    // planeCDEF (also Joyce's parallelogram CE), GE (AEFG) and ADEt (ADE);
+    // the triangles CGF, CFB, DEH and the parallelograms CA (ADCG) and EB
+    // (EHBF), explicit ;0 faces. CH is Joyce's own faceless BCDH, reached by
+    // the display override. AC and BE are aliases of CA and EB.
+    //
+    // Draggables (checked against the bundle): A, D lineSliders on the
+    // hidden D0-D3, G, H free -- all givens, so none is deferred. B, C, E,
+    // F are derived and listed in every slide.
+    var FIG    = ["A","B","C","D","E","F","G","H","CDEF","AEFG","ADE",
+                  "CG","BCDH","BF","HE"];
+    var PRISM1 = ["CGF","ADEt","GE","CA","planeCDEF"];
+    var PRISM2 = ["CFB","DEH","BCDH","EB","planeCDEF"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,17 +61,100 @@ Let the parallelepipedal solid *AB* be cut by the plane *CDEF* through the diago
             "CG;line;connect;C,G",
             "BCDH;polygon;quadrilateral;B,C,D,H;0;0;black;0",
             "BF;line;connect;B,F",
-            "HE;line;connect;H,E"
+            "HE;line;connect;H,E",
+            // Transparent highlight targets.
+            "CF;line;connect;C,F;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "planeCDEF;polygon;quadrilateral;C,D,E,F;0;0;0;0",
+            "GE;polygon;quadrilateral;A,G,F,E;0;0;0;0",
+            "ADEt;polygon;triangle;A,D,E;0;0;0;0",
+            "CGF;polygon;triangle;C,G,F;0;0;0;0",
+            "CFB;polygon;triangle;C,F,B;0;0;0;0",
+            "DEH;polygon;triangle;D,E,H;0;0;0;0",
+            "CA;polygon;quadrilateral;A,D,C,G;0;0;0;0",
+            "EB;polygon;quadrilateral;E,H,B,F;0;0;0;0"
         ],
+        aliases: { "AC": "CA", "BE": "EB", "CH": "BCDH" },
+        slides: [
+            { text: "“If a parallelepipedal solid is cut by a plane through the diagonals of the opposite planes,”",
+              visible: FIG,
+              highlighted: ["planeCDEF","CF","DE"],
+              justifications: [{ ref: "XI.28" }] },
+            { text: "“then the solid is bisected by the plane.”",
+              visible: FIG,
+              highlighted: ["planeCDEF"] },
+            { text: "Let the parallelepipedal solid AB be cut by the plane {CDEF|planeCDEF}",
+              visible: FIG,
+              highlighted: ["planeCDEF"] },
+            { text: "through the diagonals {CF} and {DE} of opposite planes.",
+              visible: FIG,
+              highlighted: ["CF","DE"] },
+            { text: "I say that the solid AB is bisected by the plane {CDEF|planeCDEF}.",
+              visible: FIG,
+              highlighted: ["planeCDEF"] },
+            { text: "Since the triangle {CGF} equals the triangle {CFB},",
+              visible: FIG,
+              highlighted: ["CGF","CFB"],
+              justifications: [{ claim: "a diagonal bisects a parallelogram", ref: "I.34" }] },
+            { text: "and {ADE|ADEt} equals {DEH},",
+              visible: FIG,
+              highlighted: ["ADEt","DEH"],
+              justifications: [{ claim: "a diagonal bisects a parallelogram", ref: "I.34" }] },
+            { text: "while the parallelogram {CA} equals the parallelogram {EB}, for they are opposite,",
+              visible: FIG,
+              highlighted: ["CA","EB"] },
+            { text: "and {GE} equals {CH|BCDH},",
+              visible: FIG,
+              highlighted: ["GE","BCDH"] },
+            { text: "therefore the prism contained by the two triangles {CGF} and {ADE|ADEt}",
+              visible: FIG,
+              highlighted: ["CGF","ADEt"] },
+            { text: "and the three parallelograms {GE}, {AC|CA}, and {CE|planeCDEF}",
+              visible: FIG,
+              highlighted: ["GE","CA","planeCDEF"] },
+            { text: "equals the prism contained by the two triangles {CFB} and {DEH}",
+              visible: FIG,
+              highlighted: ["CFB","DEH"] },
+            { text: "and the three parallelograms {CH|BCDH}, {BE|EB}, and {CE|planeCDEF},",
+              visible: FIG,
+              highlighted: ["BCDH","EB","planeCDEF"] },
+            { text: "for they are contained by planes equal both in multitude and in magnitude.",
+              visible: FIG,
+              highlighted: PRISM1.concat(PRISM2),
+              justifications: [{ claim: "equal solids", ref: "XI.Def.10" }] },
+            { text: "Hence the whole solid AB is bisected by the plane {CDEF|planeCDEF}.",
+              visible: FIG,
+              highlighted: ["planeCDEF"] },
+            { text: "Therefore, if a parallelepipedal solid is cut by a plane through the diagonals of the opposite planes,",
+              visible: FIG,
+              highlighted: ["planeCDEF","CF","DE"] },
+            { text: "then the solid is bisected by the plane.",
+              visible: FIG,
+              highlighted: ["planeCDEF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.28") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.34":      "/elements/books/bookI/propositions/propI34/",
+        "XI.Def.10": "/elements/books/bookXI/definitions/defXI10/"
     });
 </script>
 </figure>
 
-I say that the solid *AB* is bisected by the plane *CDEF.*
+I say that the solid *AB* is bisected by the plane {CDEF|planeCDEF}.
 
-Since the triangle *CGF* equals the triangle *CFB,* and *ADE* equals *DEH,* while the parallelogram *CA* equals the parallelogram *EB,* for they are opposite, and *GE* equals *CH,* therefore the prism contained by the two triangles *CGF* and *ADE* and the three parallelograms *GE, AC,* and *CE* equals the prism contained by the two triangles *CFB* and *DEH* and the three parallelograms *CH, BE,* and *CE,* for they are contained by planes equal both in multitude and in magnitude. [!just I.34; XI.Def.10]
+Since the triangle {CGF} equals the triangle {CFB}, and {ADE|ADEt} equals {DEH}, while the parallelogram {CA} equals the parallelogram {EB}, for they are opposite, and {GE} equals {CH}, therefore the prism contained by the two triangles {CGF} and {ADE|ADEt} and the three parallelograms {GE}, {AC}, and {CE|planeCDEF} equals the prism contained by the two triangles {CFB} and {DEH} and the three parallelograms {CH}, {BE}, and {CE|planeCDEF}, for they are contained by planes equal both in multitude and in magnitude. [!just I.34; XI.Def.10]
 
-Hence the whole solid *AB* is bisected by the plane *CDEF.*
+Hence the whole solid *AB* is bisected by the plane {CDEF|planeCDEF}.
 
 Therefore, *if a parallelepipedal solid is cut by a plane through the diagonals of the opposite planes, then the solid is bisected by the plane.*
 
@@ -63,7 +165,7 @@ guide:
 
 This is the second proposition concerning volumes. The first was @XI.25.
 
-A minor point missing from the beginning of the proof of is that the two diagonals *CF* and *DE* lie in one plane, but it is easy to show that the lines *CD* and *EF* are parallel, and therefore, by @XI.7, *CF* and *DE* lie in the plane spanned by *CD* and *EF.*
+A minor point missing from the beginning of the proof of is that the two diagonals {CF} and {DE} lie in one plane, but it is easy to show that the lines {CD} and {EF} are parallel, and therefore, by @XI.7, {CF} and {DE} lie in the plane spanned by {CD} and {EF}.
 
 The final conclusion of the proof here is justified by @XI.Def.10: since the faces of the two prisms are congruent, therefore the prisms are equal and similar (that is, congruent). Several authors have criticized this conclusion because the two prisms are mirror images of each other and cannot be applied to each other in the sense of moving one in space to coincide with the other.
 

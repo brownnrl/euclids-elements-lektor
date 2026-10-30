@@ -17,14 +17,45 @@ statement: To describe a parallelepipedal solid similar and similarly situated t
 ----
 proof:
 
-Let *AB* be the given straight line and *CD* the given parallelepipedal solid.
+Let {AB} be the given straight line and *CD* the given parallelepipedal solid.
 
-It is required to describe on the given straight line *AB* a parallelepipedal solid similar and similarly situated to the given parallelepipedal solid *CD.*
+It is required to describe on the given straight line {AB} a parallelepipedal solid similar and similarly situated to the given parallelepipedal solid *CD.*
 
 <figure class="diagram">
 <canvas id="canvas_0" width="600" height="220" tabindex="0"></canvas>
 <noscript><img alt="XI.27 diagram" src="propXI27.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the given solid CD (faces GF, GE and the top filled,
+    // FO, DO, EO the far edges) and the solid AL on AB (faces KH, KB and
+    // the top filled, HM, LM, BM the far edges).
+    //
+    // The walk builds AL: AB, AH, AK are solid slide twins, hidden at rest
+    // (initiallyHidden), AH and AK stroked from A; H and K appear with the
+    // XI.26 solid angle; HM, BM close the parallelogram HB, and AL's three
+    // filled faces trace and fill with LM. Added, all transparent: the edges
+    // CE, CG, CF, and a faceless quadrilateral for each of the twelve faces
+    // (GE, GF, FE, KB, KH, HB and the opposite faces, the o* twins), since a
+    // filled face is raised over the figure when highlighted (#140). Angle
+    // markers, hidden at rest: equal angles share a colour (BAH/ECF blue,
+    // BAK/ECG green, KAH/GCF purple).
+    //
+    // Draggables (checked against the bundle): A, B, C, E lineSliders on
+    // the hidden C0-C3, F, G free -- all givens, so none is deferred. N, O,
+    // P, D, H, K, M, Q, R, L are derived and listed per slide.
+    var CDS   = ["C","E","F","G","N","O","P","D","NFCG","NGPD","CEPG",
+                 "FO","DO","EO"];
+    var GIVEN = CDS.concat(["A","B","AB"]);
+    var CON   = GIVEN.concat(["AH","AK","H","K"]);
+    var ANGA  = ["angBAH","angKAH","angBAK"];
+    var ANGC  = ["angECF","angGCF","angECG"];
+    var HB1   = CON.concat(["M","HM","BM"]);
+    var ALL   = HB1.concat(["Q","R","L","QHAK","ABRK","QKRL","LM"]);
+    var CD3   = ["GE","GF","FE"];
+    var CDO   = ["oGE","oGF","oFE"];
+    var AL3   = ["KB","KH","HB"];
+    var ALO   = ["oKB","oKH","oHB"];
+    var CDF   = CD3.concat(CDO);
+    var ALF   = AL3.concat(ALO);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -59,23 +90,167 @@ It is required to describe on the given straight line *AB* a parallelepipedal so
             "QKRL;polygon;quadrilateral;Q,K,R,L;0;0;black;random",
             "HM;line;connect;H,M",
             "LM;line;connect;L,M",
-            "BM;line;connect;B,M"
+            "BM;line;connect;B,M",
+            // Slide twins, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            "AH;line;connect;A,H",
+            "AK;line;connect;A,K",
+            // Transparent highlight targets.
+            "CE;line;connect;C,E;0;0;0",
+            "CG;line;connect;C,G;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "GE;polygon;quadrilateral;C,E,P,G;0;0;0;0",
+            "GF;polygon;quadrilateral;C,F,N,G;0;0;0;0",
+            "FE;polygon;quadrilateral;C,E,O,F;0;0;0;0",
+            "oGE;polygon;quadrilateral;F,O,D,N;0;0;0;0",
+            "oGF;polygon;quadrilateral;E,O,D,P;0;0;0;0",
+            "oFE;polygon;quadrilateral;G,P,D,N;0;0;0;0",
+            "KB;polygon;quadrilateral;A,B,R,K;0;0;0;0",
+            "KH;polygon;quadrilateral;A,H,Q,K;0;0;0;0",
+            "HB;polygon;quadrilateral;A,H,M,B;0;0;0;0",
+            "oKB;polygon;quadrilateral;H,M,L,Q;0;0;0;0",
+            "oKH;polygon;quadrilateral;B,M,L,R;0;0;0;0",
+            "oHB;polygon;quadrilateral;K,R,L,Q;0;0;0;0",
+            "angBAH;sector;angleMarker;A,B,H;0;0;3b6ea5;9ec5e8",
+            "angECF;sector;angleMarker;C,E,F;0;0;3b6ea5;9ec5e8",
+            "angBAK;sector;angleMarker;A,B,K;0;0;3f8e4f;a8dbb0",
+            "angECG;sector;angleMarker;C,E,G;0;0;3f8e4f;a8dbb0",
+            "angKAH;sector;angleMarker;A,K,H;0;0;7a4fa3;cdb8e6",
+            "angGCF;sector;angleMarker;C,G,F;0;0;7a4fa3;cdb8e6"
         ],
+        initiallyHidden: ["AB","AH","AK"],
+        aliases: { "EC": "CE", "GC": "CG", "BA": "AB", "KA": "AK",
+                   "HAK": "angKAH", "KAB": "angBAK" },
+        slides: [
+            { text: "“To describe a parallelepipedal solid similar and similarly situated to a given parallelepipedal solid on a given straight line.”",
+              visible: ALL,
+              highlighted: ["AB"].concat(CDF, ALF),
+              justifications: [{ ref: "XI.27" }] },
+            { text: "Let {AB} be the given straight line and CD the given parallelepipedal solid.",
+              visible: GIVEN,
+              highlighted: ["AB"].concat(CDF) },
+            { text: "It is required to describe on the given straight line {AB} a parallelepipedal solid",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "similar and similarly situated to the given parallelepipedal solid CD.",
+              visible: GIVEN,
+              highlighted: CDF },
+            { text: "Construct the solid angle contained by the angles {BAH|angBAH}, {HAK|angKAH}, and {KAB|angBAK}",
+              visible: CON.concat(ANGA),
+              highlighted: ANGA,
+              transition: { mode: "cascade", animations: [
+                  { elem: "AH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear },
+                  { elem: "AK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",  name: geomlib.A.Point.appear },
+                  { elem: "angBAH", name: geomlib.A.Sector.sweep },
+                  { elem: "angKAH", name: geomlib.A.Sector.sweep },
+                  { elem: "angBAK", name: geomlib.A.Sector.sweep } ] } },
+            { text: "at the point {A} on the straight line {AB} equal to the solid angle {C}",
+              visible: CON.concat(ANGA, ANGC),
+              highlighted: ["A","AB","C"].concat(ANGA, ANGC),
+              transition: { mode: "parallel", animations: [
+                  { elem: "angECF", name: geomlib.A.Sector.sweep },
+                  { elem: "angGCF", name: geomlib.A.Sector.sweep },
+                  { elem: "angECG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "solid angle at A = solid angle at C", ref: "XI.26" }] },
+            { text: "so that the angle {BAH|angBAH} equals the angle {ECF|angECF},",
+              visible: CON.concat(ANGA, ANGC),
+              highlighted: ["angBAH","angECF"] },
+            { text: "the angle {BAK|angBAK} equals the angle {ECG|angECG}, and the angle {KAH|angKAH} equals the angle {GCF|angGCF},",
+              visible: CON.concat(ANGA, ANGC),
+              highlighted: ["angBAK","angECG","angKAH","angGCF"] },
+            { text: "so that {EC|CE} is to {CG} as {BA|AB} is to {AK},",
+              visible: CON,
+              highlighted: ["CE","CG","AB","AK"],
+              justifications: [{ claim: "EC : CG = BA : AK", ref: "VI.12" }] },
+            { text: "and {GC|CG} is to {CF} as {KA|AK} is to {AH}.",
+              visible: CON,
+              highlighted: ["CG","CF","AK","AH"],
+              justifications: [{ claim: "GC : CF = KA : AH", ref: "VI.12" }] },
+            { text: "Therefore, ex aequali, {EC|CE} is to {CF} as {BA|AB} is to {AH}.",
+              visible: CON,
+              highlighted: ["CE","CF","AB","AH"],
+              justifications: [{ claim: "EC : CF = BA : AH", ref: "V.22" }] },
+            { text: "Complete the parallelogram {HB}",
+              visible: HB1,
+              highlighted: ["HB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "HM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "M",  name: geomlib.A.Point.appear } ] } },
+            { text: "and the solid AL.",
+              visible: ALL,
+              transition: { mode: "cascade", animations: [
+                  { elem: "QHAK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "ABRK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "QKRL", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "LM",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "L",    name: geomlib.A.Point.appear } ] } },
+            { text: "Now since {EC|CE} is to {CG} as {BA|AB} is to {AK},",
+              visible: ALL,
+              highlighted: ["CE","CG","AB","AK"] },
+            { text: "and the sides about the equal angles {ECG|angECG} and {BAK|angBAK} are thus proportional,",
+              visible: ALL.concat(["angECG","angBAK"]),
+              highlighted: ["angECG","angBAK","CE","CG","AB","AK"] },
+            { text: "therefore the parallelogram {GE} is similar to the parallelogram {KB}.",
+              visible: ALL,
+              highlighted: ["GE","KB"] },
+            { text: "For the same reason the parallelogram {KH} is similar to the parallelogram {GF},",
+              visible: ALL,
+              highlighted: ["KH","GF"] },
+            { text: "and also {FE} is similar to {HB}.",
+              visible: ALL,
+              highlighted: ["FE","HB"] },
+            { text: "Therefore three parallelograms of the solid CD are similar to three parallelograms of the solid AL.",
+              visible: ALL,
+              highlighted: CD3.concat(AL3) },
+            { text: "But the former three are both equal and similar to the three opposite parallelograms,",
+              visible: ALL,
+              highlighted: CDF },
+            { text: "and the latter three are both equal and similar to the three opposite parallelograms,",
+              visible: ALL,
+              highlighted: ALF },
+            { text: "therefore the whole solid CD is similar to the whole solid AL.",
+              visible: ALL,
+              highlighted: CDF.concat(ALF),
+              justifications: [{ claim: "similar solids", ref: "XI.Def.9" }] },
+            { text: "Therefore on the given straight line {AB} there has been described AL",
+              visible: ALL,
+              highlighted: ["AB"].concat(ALF) },
+            { text: "similar and similarly situated to the given parallelepipedal solid CD.",
+              visible: ALL,
+              highlighted: CDF.concat(ALF),
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.27") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.22":     "/elements/books/bookV/propositions/propV22/",
+        "VI.12":    "/elements/books/bookVI/propositions/propVI12/",
+        "XI.26":    "/elements/books/bookXI/propositions/propXI26/",
+        "XI.Def.9": "/elements/books/bookXI/definitions/defXI9/"
     });
 </script>
 </figure>
 
-Construct the solid angle contained by the angles *BAH, HAK,* and *KAB* at the point *A* on the straight line *AB* equal to the solid angle *C* so that the angle *BAH* equals the angle *ECF,* the angle *BAK* equals the angle *ECG,* and the angle *KAH* equals the angle *GCF,* so that *EC* is to *CG* as *BA* is to *AK,* and *GC* is to *CF* as *KA* is to *AH.* [!just XI.26; VI.12]
+Construct the solid angle contained by the angles {BAH|angBAH}, {HAK|angKAH}, and {KAB|angBAK} at the point {A} on the straight line {AB} equal to the solid angle {C} so that the angle {BAH|angBAH} equals the angle {ECF|angECF}, the angle {BAK|angBAK} equals the angle {ECG|angECG}, and the angle {KAH|angKAH} equals the angle {GCF|angGCF}, so that {EC} is to {CG} as {BA} is to {AK}, and {GC} is to {CF} as {KA} is to {AH}. [!just XI.26; VI.12]
 
-Therefore, *ex aequali, EC* is to *CF* as *BA* is to *AH.* [!just V.22]
+Therefore, *ex aequali,* {EC} is to {CF} as {BA} is to {AH}. [!just V.22]
 
-Complete the parallelogram *HB* and the solid *AL.*
+Complete the parallelogram {HB} and the solid *AL.*
 
-Now since *EC* is to *CG* as *BA* is to *AK,* and the sides about the equal angles *ECG* and *BAK* are thus proportional, therefore the parallelogram *GE* is similar to the parallelogram *KB.* For the same reason the parallelogram *KH* is similar to the parallelogram *GF,* and also *FE* is similar to *HB.*
+Now since {EC} is to {CG} as {BA} is to {AK}, and the sides about the equal angles {ECG|angECG} and {BAK|angBAK} are thus proportional, therefore the parallelogram {GE} is similar to the parallelogram {KB}. For the same reason the parallelogram {KH} is similar to the parallelogram {GF}, and also {FE} is similar to {HB}.
 
 Therefore three parallelograms of the solid *CD* are similar to three parallelograms of the solid *AL.* But the former three are both equal and similar to the three opposite parallelograms, and the latter three are both equal and similar to the three opposite parallelograms, therefore the whole solid *CD* is similar to the whole solid *AL.* [!just XI.Def.9]
 
-Therefore on the given straight line *AB* there has been described *AL* similar and similarly situated to the given parallelepipedal solid *CD.*
+Therefore on the given straight line {AB} there has been described *AL* similar and similarly situated to the given parallelepipedal solid *CD.*
 
 <div class="qed">Q.E.F.</div>
 ----
