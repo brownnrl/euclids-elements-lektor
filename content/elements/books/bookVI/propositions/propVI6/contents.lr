@@ -15,14 +15,50 @@ statement: If two triangles have one angle equal to one angle and the sides abou
 ----
 proof:
 
-Let *ABC* and *DEF* be two triangles having one angle *BAC* equal to one angle *EDF* and the sides about the equal angles proportional, so that *BA* is to *AC* as *ED* is to *DF.*
+Let {ABC|ABCt} and {DEF|DEFt} be two triangles having one angle {BAC|angA} equal to one angle {EDF|angD} and the sides about the equal angles proportional, so that {BA} is to {AC} as {ED} is to {DF}.
 
-I say that the triangle *ABC* is equiangular with the triangle *DEF,* and has the angle *ABC* equal to the angle *DEF,* and the angle *ACB* equal to the angle *DFE.*
+I say that the triangle {ABC|ABCt} is equiangular with the triangle {DEF|DEFt}, and has the angle {ABC|angB} equal to the angle {DEF|angE}, and the angle {ACB|angC} equal to the angle {DFE|angDFE}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="420" height="260" tabindex="0"></canvas>
 <noscript><img alt="VI.6 diagram" src="propVI6.gif"/></noscript>
 <script type="text/javascript">
+    // The triangle DGF is set out on DF with its angles at D and F equal to
+    // those at A and C (I.23), so it is equiangular with ABC (I.32) and,
+    // through VI.4, V.11 and V.9, has GD equal to ED; I.4 then makes DEF and
+    // DGF congruent, and the angles carry back to ABC.
+    //
+    // Joyce's figure draws the three triangles; the original element for
+    // DGF is named EFG (D,F,G) and is kept as it stands. Everything added
+    // is transparent: the sides BA, AC, BC, ED, DF, EF (;0;0;0) and faceless
+    // twins of the triangles (ABCt, DEFt, DGF, explicit ;0 faces). A
+    // highlighted filled polygon is raised (#140) and would cover the angle
+    // markers, so captions and prose route "the triangle ABC" / "DEF" to the
+    // twins with the display override. The two constructed sides GD and GF
+    // are solid twins over the original's edges, hidden at rest
+    // (initiallyHidden), so the construction strokes them from D and F.
+    //
+    // Markers: equal angles share a colour — A, EDF, FDG orange; C, DFG,
+    // DFE green; B, G, E blue. The pairs side by side at D and F are pinned
+    // at 22 so they sit as adjacent angles rather than stepping into rings.
+    // Angle and triangle names collide (ABC, DEF, DGF): the triangles own
+    // them, the angles take the display override.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E, all free and
+    // all given on slide 1. F, G' and G are derived: F is listed from slide
+    // 1, G from the slide that constructs it, G' never.
+    var GIVEN = ["A","B","C","ABC","D","E","F","DEF",
+                 "BA","AC","BC","ED","DF","EF","ABCt","DEFt"];
+    var HYP   = GIVEN.concat(["angA","angD"]);
+    var ALL6  = HYP.concat(["angB","angE","angC","angDFE"]);
+    var SAY1  = HYP.concat(["angB","angE"]);
+    var SAY2  = SAY1.concat(["angC","angDFE"]);
+    var CON0  = HYP.concat(["angC"]);
+    var CON1  = CON0.concat(["angFDG","GD"]);
+    var CON2  = CON1.concat(["angDFG","GF","G","EFG","DGF"]);
+    var REM   = CON2.concat(["angB","angG"]);
+    var EQF   = REM.concat(["angDFE"]);
+    var EQE   = EQF.concat(["angE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -38,27 +74,207 @@ I say that the triangle *ABC* is equiangular with the triangle *DEF,* and has th
             "DEF;polygon;triangle;D,E,F;0;0;black;random",
             "G';point;similar;D,F,E,F,D;0;0",
             "G;point;cutoff;F,G',F,E",
-            "EFG;polygon;triangle;D,F,G;0;0;black;random"
+            "EFG;polygon;triangle;D,F,G;0;0;black;random",
+            // The sides, as transparent highlight targets.
+            "BA;line;connect;B,A;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "DF;line;connect;D,F;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            // Slide twins of the two constructed sides, hidden at rest.
+            "GD;line;connect;D,G",
+            "GF;line;connect;F,G",
+            // Faceless twins of the triangles. Explicit ;0 faces.
+            "ABCt;polygon;triangle;A,B,C;0;0;0;0",
+            "DEFt;polygon;triangle;D,E,F;0;0;0;0",
+            "DGF;polygon;triangle;D,G,F;0;0;0;0",
+            "angA;sector;angleMarker;A,B,C;0;0;c06a1b;f3c590",
+            "angD;sector;angleMarker;D,E,F,22;0;0;c06a1b;f3c590",
+            "angFDG;sector;angleMarker;D,F,G,22;0;0;c06a1b;f3c590",
+            "angC;sector;angleMarker;C,A,B;0;0;3f8e4f;a8dbb0",
+            "angDFG;sector;angleMarker;F,D,G,22;0;0;3f8e4f;a8dbb0",
+            "angDFE;sector;angleMarker;F,D,E,22;0;0;3f8e4f;a8dbb0",
+            "angB;sector;angleMarker;B,A,C;0;0;3b6ea5;9ec5e8",
+            "angG;sector;angleMarker;G,D,F;0;0;3b6ea5;9ec5e8",
+            "angE;sector;angleMarker;E,D,F;0;0;3b6ea5;9ec5e8"
         ],
+        initiallyHidden: ["GD","GF"],
+        aliases: { "AB": "BA", "CA": "AC", "CB": "BC", "DE": "ED", "FD": "DF",
+                   "FE": "EF", "DG": "GD", "FG": "GF",
+                   "BAC": "angA", "CAB": "angA", "EDF": "angD", "FDE": "angD",
+                   "FDG": "angFDG", "GDF": "angFDG",
+                   "ACB": "angC", "BCA": "angC", "DFG": "angDFG", "GFD": "angDFG",
+                   "DFE": "angDFE", "EFD": "angDFE", "CBA": "angB" },
+        slides: [
+            { text: "“If two triangles have one angle equal to one angle”",
+              visible: HYP,
+              highlighted: ["ABCt","DEFt","angA","angD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angA", name: geomlib.A.Sector.sweep },
+                  { elem: "angD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "VI.6" }] },
+            { text: "“and the sides about the equal angles proportional,”",
+              visible: HYP,
+              highlighted: ["BA","AC","ED","DF"] },
+            { text: "“then the triangles are equiangular and have those angles equal opposite the corresponding sides.”",
+              visible: ALL6,
+              highlighted: ["angB","angE","angC","angDFE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angB",   name: geomlib.A.Sector.sweep },
+                  { elem: "angE",   name: geomlib.A.Sector.sweep },
+                  { elem: "angC",   name: geomlib.A.Sector.sweep },
+                  { elem: "angDFE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Let {ABC|ABCt} and {DEF|DEFt} be two triangles having one angle {BAC|angA} equal to one angle {EDF|angD}",
+              visible: HYP,
+              highlighted: ["ABCt","DEFt","angA","angD"] },
+            { text: "and the sides about the equal angles proportional, so that {BA} is to {AC} as {ED} is to {DF}.",
+              visible: HYP,
+              highlighted: ["BA","AC","ED","DF"] },
+            { text: "I say that the triangle {ABC|ABCt} is equiangular with the triangle {DEF|DEFt},",
+              visible: HYP,
+              highlighted: ["ABCt","DEFt"] },
+            { text: "and has the angle {ABC|angB} equal to the angle {DEF|angE},",
+              visible: SAY1,
+              highlighted: ["angB","angE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angB", name: geomlib.A.Sector.sweep },
+                  { elem: "angE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the angle {ACB|angC} equal to the angle {DFE|angDFE}.",
+              visible: SAY2,
+              highlighted: ["angC","angDFE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angC",   name: geomlib.A.Sector.sweep },
+                  { elem: "angDFE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "On the straight line {DF} and at the points {D} and {F} on it,",
+              visible: CON0,
+              highlighted: ["DF","D","F"] },
+            { text: "construct the angle {FDG|angFDG} equal to either of the angles {BAC|angA} or {EDF|angD},",
+              visible: CON1,
+              highlighted: ["angFDG","angA","angD","GD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angFDG", name: geomlib.A.Sector.sweep },
+                  { elem: "GD",     name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "angles FDG and DFG on DF", ref: "I.23" }] },
+            { text: "and the angle {DFG|angDFG} equal to the angle {ACB|angC}.",
+              visible: CON2,
+              highlighted: ["angDFG","angC","GF","G"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angDFG", name: geomlib.A.Sector.sweep },
+                  { elem: "GF",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",      name: geomlib.A.Point.appear } ] } },
+            { text: "Therefore the remaining angle at {B|angB} equals the remaining angle at {G|angG}.",
+              visible: REM,
+              highlighted: ["angB","angG"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angB", name: geomlib.A.Sector.sweep },
+                  { elem: "angG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the angles of a triangle sum to two right angles", ref: "I.32" }] },
+            { text: "Therefore the triangle {ABC|ABCt} is equiangular with the triangle {DGF}.",
+              visible: REM,
+              highlighted: ["ABCt","DGF"] },
+            { text: "Therefore, proportionally {BA} is to {AC} as {GD} is to {DF}.",
+              visible: REM,
+              highlighted: ["BA","AC","GD","DF"],
+              justifications: [{ claim: "BA : AC = GD : DF", ref: "VI.4" }] },
+            { text: "But, by hypothesis, {BA} is to {AC} also as {ED} is to {DF},",
+              visible: REM,
+              highlighted: ["BA","AC","ED","DF"] },
+            { text: "therefore also {ED} is to {DF} as {GD} is to {DF}.",
+              visible: REM,
+              highlighted: ["ED","DF","GD"],
+              justifications: [{ claim: "ED : DF = GD : DF", ref: "V.11" }] },
+            { text: "Therefore {ED} equals {GD}.",
+              visible: REM,
+              highlighted: ["ED","GD"],
+              justifications: [{ claim: "ED = GD", ref: "V.9" }] },
+            { text: "And {DF} is common, therefore the two sides {ED} and {DF} equal the two sides {GD} and {DF},",
+              visible: REM,
+              highlighted: ["DF","ED","GD"] },
+            { text: "and the angle {EDF|angD} equals the angle {GDF|angFDG},",
+              visible: REM,
+              highlighted: ["angD","angFDG"] },
+            { text: "therefore the base {EF} equals the base {GF},",
+              visible: REM,
+              highlighted: ["EF","GF"],
+              justifications: [{ claim: "two sides and the included angle", ref: "I.4" }] },
+            { text: "the triangle {DEF|DEFt} equals the triangle {DGF},",
+              visible: REM,
+              highlighted: ["DEFt","DGF"] },
+            { text: "and the remaining angles equal the remaining angles, namely those opposite the equal sides.",
+              visible: REM,
+              highlighted: ["DEFt","DGF"] },
+            { text: "Therefore the angle {DFG|angDFG} equals the angle {DFE|angDFE},",
+              visible: EQF,
+              highlighted: ["angDFG","angDFE"],
+              transition: { animations: [
+                  { elem: "angDFE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the angle {DGF|angG} equals the angle {DEF|angE}.",
+              visible: EQE,
+              highlighted: ["angG","angE"],
+              transition: { animations: [
+                  { elem: "angE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But the angle {DFG|angDFG} equals the angle {ACB|angC},",
+              visible: EQE,
+              highlighted: ["angDFG","angC"] },
+            { text: "therefore the angle {ACB|angC} also equals the angle {DFE|angDFE}.",
+              visible: EQE,
+              highlighted: ["angC","angDFE"] },
+            { text: "And, by hypothesis, the angle {BAC|angA} also equals the angle {EDF|angD},",
+              visible: EQE,
+              highlighted: ["angA","angD"] },
+            { text: "therefore the remaining angle at {B|angB} also equals the remaining angle at {E|angE}.",
+              visible: EQE,
+              highlighted: ["angB","angE"],
+              justifications: [{ claim: "the angles of a triangle sum to two right angles", ref: "I.32" }] },
+            { text: "Therefore the triangle {ABC|ABCt} is equiangular with the triangle {DEF|DEFt}.",
+              visible: EQE,
+              highlighted: ["ABCt","DEFt"] },
+            { text: "Therefore, if two triangles have one angle equal to one angle",
+              visible: EQE,
+              highlighted: ["angA","angD"] },
+            { text: "and the sides about the equal angles proportional,",
+              visible: EQE,
+              highlighted: ["BA","AC","ED","DF"] },
+            { text: "then the triangles are equiangular and have those angles equal opposite the corresponding sides.",
+              visible: EQE,
+              highlighted: ["angB","angE","angC","angDFE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.6") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.4":  "/elements/books/bookI/propositions/propI4/",
+        "I.23": "/elements/books/bookI/propositions/propI23/",
+        "I.32": "/elements/books/bookI/propositions/propI32/",
+        "V.9":  "/elements/books/bookV/propositions/propV9/",
+        "V.11": "/elements/books/bookV/propositions/propV11/",
+        "VI.4": "/elements/books/bookVI/propositions/propVI4/"
     });
 </script>
 </figure>
 
-On the straight line *DF* and at the points *D* and *F* on it, construct the angle *FDG* equal to either of the angles *BAC* or *EDF,* and the angle *DFG* equal to the angle *ACB.* [!just I.23]
+On the straight line {DF} and at the points {D} and {F} on it, construct the angle {FDG|angFDG} equal to either of the angles {BAC|angA} or {EDF|angD}, and the angle {DFG|angDFG} equal to the angle {ACB|angC}. [!just I.23]
 
-Therefore the remaining angle at *B* equals the remaining angle at *G.* Therefore the triangle *ABC* is equiangular with the triangle *DGF.* [!just I.32]
+Therefore the remaining angle at {B|angB} equals the remaining angle at {G|angG}. Therefore the triangle {ABC|ABCt} is equiangular with the triangle {DGF}. [!just I.32]
 
-Therefore, proportionally *BA* is to *AC* as *GD* is to *DF.* [!just VI.4]
+Therefore, proportionally {BA} is to {AC} as {GD} is to {DF}. [!just VI.4]
 
-But, by hypothesis, *BA* is to *AC* also as *ED* is to *DF,* therefore also *ED* is to *DF* as *GD* is to *DF.* [!just V.11]
+But, by hypothesis, {BA} is to {AC} also as {ED} is to {DF}, therefore also {ED} is to {DF} as {GD} is to {DF}. [!just V.11]
 
-Therefore *ED* equals *GD.* And *DF* is common, therefore the two sides *ED* and *DF* equal the two sides *GD* and *DF,* and the angle *EDF* equals the angle *GDF,* therefore the base *EF* equals the base *GF,* the triangle *DEF* equals the triangle *DGF,* and the remaining angles equal the remaining angles, namely those opposite the equal sides. [!just V.9; I.4]
+Therefore {ED} equals {GD}. And {DF} is common, therefore the two sides {ED} and {DF} equal the two sides {GD} and {DF}, and the angle {EDF|angD} equals the angle {GDF|angFDG}, therefore the base {EF} equals the base {GF}, the triangle {DEF|DEFt} equals the triangle {DGF}, and the remaining angles equal the remaining angles, namely those opposite the equal sides. [!just V.9; I.4]
 
-Therefore the angle *DFG* equals the angle *DFE,* and the angle *DGF* equals the angle *DEF.*
+Therefore the angle {DFG|angDFG} equals the angle {DFE|angDFE}, and the angle {DGF|angG} equals the angle {DEF|angE}.
 
-But the angle *DFG* equals the angle *ACB,* therefore the angle *ACB* also equals the angle *DFE.*
+But the angle {DFG|angDFG} equals the angle {ACB|angC}, therefore the angle {ACB|angC} also equals the angle {DFE|angDFE}.
 
-And, by hypothesis, the angle *BAC* also equals the angle *EDF,* therefore the remaining angle at *B* also equals the remaining angle at *E.* Therefore the triangle *ABC* is equiangular with the triangle *DEF.* [!just I.32]
+And, by hypothesis, the angle {BAC|angA} also equals the angle {EDF|angD}, therefore the remaining angle at {B|angB} also equals the remaining angle at {E|angE}. Therefore the triangle {ABC|ABCt} is equiangular with the triangle {DEF|DEFt}. [!just I.32]
 
 Therefore, *if two triangles have one angle equal to one angle and the sides about the equal angles proportional, then the triangles are equiangular and have those angles equal opposite the corresponding sides.*
 
@@ -68,19 +284,19 @@ guide:
 
 This is a side-angle-side similarity theorem analogous to side-angle-side congruence theorem @I.4.
 
-Here's a summary of the proof. Construct a triangle *DGF* equiangular with triangle *ABC.* Then triangle *DGF* is similar to triangle *ABC* (@VI.4), and that gives us the proportion
+Here's a summary of the proof. Construct a triangle {DGF} equiangular with triangle {ABC|ABCt}. Then triangle {DGF} is similar to triangle {ABC|ABCt} (@VI.4), and that gives us the proportion
 
-<center><i>BA</i> : <i>AC</i> = <i>GD</i> : <i>DF.</i></center>
+<center><span class="elem-ref" data-elem="BA" data-canvas="canvas_0"><i>BA</i></span> : <span class="elem-ref" data-elem="AC" data-canvas="canvas_0"><i>AC</i></span> = <span class="elem-ref" data-elem="GD" data-canvas="canvas_0"><i>GD</i></span> : <span class="elem-ref" data-elem="DF" data-canvas="canvas_0"><i>DF.</i></span></center>
 
 But we have assumed the proportion
 
-<center><i>BA</i> : <i>AC</i> = <i>ED</i> : <i>DF,</i></center>
+<center><span class="elem-ref" data-elem="BA" data-canvas="canvas_0"><i>BA</i></span> : <span class="elem-ref" data-elem="AC" data-canvas="canvas_0"><i>AC</i></span> = <span class="elem-ref" data-elem="ED" data-canvas="canvas_0"><i>ED</i></span> : <span class="elem-ref" data-elem="DF" data-canvas="canvas_0"><i>DF,</i></span></center>
 
 and these two proportions together give us
 
-<center><i>GD</i> : <i>DF</i> = <i>ED</i> : <i>DF</i></center>
+<center><span class="elem-ref" data-elem="GD" data-canvas="canvas_0"><i>GD</i></span> : <span class="elem-ref" data-elem="DF" data-canvas="canvas_0"><i>DF</i></span> = <span class="elem-ref" data-elem="ED" data-canvas="canvas_0"><i>ED</i></span> : <span class="elem-ref" data-elem="DF" data-canvas="canvas_0"><i>DF</i></span></center>
 
-(@V.11), from which it follows that *GD* = *ED* (@V.9). Therefore triangles *DEF* and *DGF* are congruent, and the rest follows easily.
+(@V.11), from which it follows that {GD} = {ED} (@V.9). Therefore triangles {DEF|DEFt} and {DGF} are congruent, and the rest follows easily.
 
 #### Use of this proposition
 
