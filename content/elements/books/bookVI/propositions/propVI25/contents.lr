@@ -17,16 +17,41 @@ statement: To construct a figure similar to one given rectilinear figure and equ
 ----
 proof:
 
-Let *ABC* be the given rectilinear figure to which the figure to be constructed must be similar, and *D* that to which it must be equal.
+Let {ABC|ABCt} be the given rectilinear figure to which the figure to be constructed must be similar, and {D|Dt} that to which it must be equal.
 
-It is required to construct one figure similar to *ABC* and equal to *D.*
+It is required to construct one figure similar to {ABC|ABCt} and equal to {D|Dt}.
 
-Let there be applied to *BC* the parallelogram *BE* equal to the triangle *ABC,* and to *CE* the parallelogram *CM* equal to *D* in the angle *FCE* which equals the angle *CBL.* [!just I.44; I.45]
+Let there be applied to {BC} the parallelogram {BE} equal to the triangle {ABC|ABCt}, and to {CE} the parallelogram {CM} equal to {D|Dt} in the angle {FCE|angFCE} which equals the angle {CBL|angCBL}. [!just I.44; I.45]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="520" height="260" tabindex="0"></canvas>
 <noscript><img alt="VI.25 diagram" src="propVI25.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the given triangle ABC and figure D, the
+    // parallelogram BE (CBLE) applied to BC equal to ABC, the parallelogram
+    // CM (CEMF) applied to CE equal to D, and the triangle KGH on the mean
+    // proportional GH, all with random faces. The applications (I.44, I.45)
+    // are assumed: each parallelogram outlines and fills as one beat.
+    //
+    // GH is a solid slide twin over the triangle's base, hidden at rest
+    // (initiallyHidden), stroking from G as the mean proportional is taken;
+    // the triangle KGH then outlines and fills on it. Everything else added
+    // is transparent: faceless twins of the figures the argument names
+    // (ABCt, Dt, BE, CM, KGH — a highlighted filled polygon is raised over
+    // the figure, #140, so prose and captions reach them as {ABC|ABCt},
+    // {D|Dt}, {EF|CM}), and the segments BC, CE, CF, LE, EM. The equal
+    // angles FCE and CBL share a colour; neither is a right angle.
+    //
+    // Draggables (checked against the bundle): A, B, C, D0..D3, the
+    // invisible E' and the off-canvas track ends G0, G3 are givens; G, a
+    // lineSlider the proof introduces with the mean proportional, is
+    // deferred. L, E, M, F, H, K are derived and listed per slide.
+    var GIVEN = ["A","B","C","ABC","D","D0","D1","D2","D3"];
+    var APP1  = GIVEN.concat(["CBLE","L","E"]);
+    var APP2  = APP1.concat(["CEMF","M","F"]);
+    var ANG   = APP2.concat(["angCBL","angFCE"]);
+    var MP    = APP2.concat(["G","H","GH"]);
+    var SIM   = MP.concat(["GHK","K"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -54,25 +79,170 @@ Let there be applied to *BC* the parallelogram *BE* equal to the triangle *ABC,*
             "G;point;lineSlider;G0,G3,390,0",
             "H;point;meanProportional;B,C,C,F,G,G3",
             "K;point;similar;G,H,B,C,A",
-            "GHK;polygon;triangle;G,H,K;0;0;black;random"
+            "GHK;polygon;triangle;G,H,K;0;0;black;random",
+            // Slide twin, hidden at rest (see above).
+            "GH;line;connect;G,H",
+            // Transparent highlight targets; explicit ;0 faces.
+            "ABCt;polygon;triangle;A,B,C;0;0;0;0",
+            "Dt;polygon;quadrilateral;D0,D1,D2,D3;0;0;0;0",
+            "BE;polygon;quadrilateral;C,B,L,E;0;0;0;0",
+            "CM;polygon;quadrilateral;C,E,M,F;0;0;0;0",
+            "KGH;polygon;triangle;G,H,K;0;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CE;line;connect;C,E;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "LE;line;connect;L,E;0;0;0",
+            "EM;line;connect;E,M;0;0;0",
+            "angCBL;sector;angleMarker;B,C,L;0;0;3b6ea5;9ec5e8",
+            "angFCE;sector;angleMarker;C,F,E;0;0;3b6ea5;9ec5e8"
         ],
+        initiallyHidden: ["GH"],
+        deferDraggables: ["G"],
+        aliases: { "EF": "CM", "CB": "BC", "FC": "CF", "EC": "CE",
+                   "EL": "LE", "ME": "EM", "HG": "GH",
+                   "FCE": "angFCE", "ECF": "angFCE",
+                   "CBL": "angCBL", "LBC": "angCBL" },
+        slides: [
+            { text: "“To construct a figure similar to one given rectilinear figure and equal to another.”",
+              visible: GIVEN,
+              highlighted: ["ABCt","Dt"],
+              justifications: [{ ref: "VI.25" }] },
+            { text: "Let {ABC|ABCt} be the given rectilinear figure to which the figure to be constructed must be similar,",
+              visible: GIVEN,
+              highlighted: ["ABCt"] },
+            { text: "and {D|Dt} that to which it must be equal.",
+              visible: GIVEN,
+              highlighted: ["Dt"] },
+            { text: "It is required to construct one figure similar to {ABC|ABCt} and equal to {D|Dt}.",
+              visible: GIVEN,
+              highlighted: ["ABCt","Dt"] },
+            { text: "Let there be applied to {BC} the parallelogram {BE} equal to the triangle {ABC|ABCt},",
+              visible: APP1,
+              highlighted: ["BC","BE","ABCt"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CBLE", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "L",    name: geomlib.A.Point.appear },
+                  { elem: "E",    name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "BE = triangle ABC, applied to BC", ref: "I.44" }] },
+            { text: "and to {CE} the parallelogram {CM} equal to {D|Dt}",
+              visible: APP2,
+              highlighted: ["CE","CM","Dt"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CEMF", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "M",    name: geomlib.A.Point.appear },
+                  { elem: "F",    name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "CM = D, applied to CE", ref: "I.45" }] },
+            { text: "in the angle {FCE|angFCE} which equals the angle {CBL|angCBL}.",
+              visible: ANG,
+              highlighted: ["angFCE","angCBL"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angFCE", name: geomlib.A.Sector.sweep },
+                  { elem: "angCBL", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Then {BC} is in a straight line with {CF},",
+              visible: ANG,
+              highlighted: ["BC","CF"] },
+            { text: "and {LE} with {EM}.",
+              visible: ANG,
+              highlighted: ["LE","EM"] },
+            { text: "Take a mean proportional {GH} to {BC} and {CF},",
+              visible: MP,
+              highlighted: ["GH","BC","CF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "BC : GH = GH : CF", ref: "VI.13" }] },
+            { text: "and describe {KGH} similar and similarly situated to {ABC|ABCt} on {GH}.",
+              visible: SIM,
+              highlighted: ["KGH","ABCt","GH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "GHK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "K",   name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "KGH similar to ABC", ref: "VI.18" }] },
+            { text: "Then, since {BC} is to {GH} as {GH} is to {CF},",
+              visible: SIM,
+              highlighted: ["BC","GH","CF"] },
+            { text: "and, if three straight lines are proportional,",
+              visible: SIM,
+              highlighted: ["BC","GH","CF"] },
+            { text: "then the first is to the third as the figure on the first",
+              visible: SIM,
+              highlighted: ["BC","CF","ABCt"] },
+            { text: "is to the similar and similarly situated figure described on the second,",
+              visible: SIM,
+              highlighted: ["KGH","GH"] },
+            { text: "therefore {BC} is to {CF} as the triangle {ABC|ABCt} is to the triangle {KGH}.",
+              visible: SIM,
+              highlighted: ["BC","CF","ABCt","KGH"],
+              justifications: [{ claim: "BC : CF = ABC : KGH", ref: "V.19.Cor" }] },
+            { text: "But {BC} is to {CF} as the parallelogram {BE} is to the parallelogram {EF|CM}.",
+              visible: SIM,
+              highlighted: ["BC","CF","BE","CM"],
+              justifications: [{ claim: "BC : CF = BE : EF", ref: "VI.1" }] },
+            { text: "Therefore also the triangle {ABC|ABCt} is to the triangle {KGH} as the parallelogram {BE} is to the parallelogram {EF|CM}.",
+              visible: SIM,
+              highlighted: ["ABCt","KGH","BE","CM"],
+              justifications: [{ claim: "ABC : KGH = BE : EF", ref: "V.11" }] },
+            { text: "Therefore, alternately, the triangle {ABC|ABCt} is to the parallelogram {BE} as the triangle {KGH} is to the parallelogram {EF|CM}.",
+              visible: SIM,
+              highlighted: ["ABCt","BE","KGH","CM"],
+              justifications: [{ claim: "alternately, ABC : BE = KGH : EF", ref: "V.16" }] },
+            { text: "But the triangle {ABC|ABCt} equals the parallelogram {BE},",
+              visible: SIM,
+              highlighted: ["ABCt","BE"] },
+            { text: "therefore the triangle {KGH} also equals the parallelogram {EF|CM}.",
+              visible: SIM,
+              highlighted: ["KGH","CM"],
+              justifications: [{ claim: "KGH = EF", ref: "V.Def.5" }] },
+            { text: "And the parallelogram {EF|CM} equals {D|Dt}, therefore {KGH} also equals {D|Dt}.",
+              visible: SIM,
+              highlighted: ["CM","Dt","KGH"] },
+            { text: "And {KGH} is also similar to {ABC|ABCt}.",
+              visible: SIM,
+              highlighted: ["KGH","ABCt"] },
+            { text: "Therefore this figure {KGH} has been constructed similar to the given rectilinear figure {ABC|ABCt}",
+              visible: SIM,
+              highlighted: ["KGH","ABCt"] },
+            { text: "and equal to the other given figure {D|Dt}.",
+              visible: SIM,
+              highlighted: ["KGH","Dt"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.25") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.44":     "/elements/books/bookI/propositions/propI44/",
+        "I.45":     "/elements/books/bookI/propositions/propI45/",
+        "V.11":     "/elements/books/bookV/propositions/propV11/",
+        "V.16":     "/elements/books/bookV/propositions/propV16/",
+        "V.19.Cor": "/elements/books/bookV/propositions/propV19/#cor",
+        "V.Def.5":  "/elements/books/bookV/definitions/defV5/",
+        "VI.1":     "/elements/books/bookVI/propositions/propVI1/",
+        "VI.13":    "/elements/books/bookVI/propositions/propVI13/",
+        "VI.18":    "/elements/books/bookVI/propositions/propVI18/"
     });
 </script>
 </figure>
 
-Then *BC* is in a straight line with *CF,* and *LE* with *EM.*
+Then {BC} is in a straight line with {CF}, and {LE} with {EM}.
 
-Take a mean proportional *GH* to *BC* and *CF,* and describe *KGH* similar and similarly situated to *ABC* on *GH.* [!just VI.13, VI.18]
+Take a mean proportional {GH} to {BC} and {CF}, and describe {KGH} similar and similarly situated to {ABC|ABCt} on {GH}. [!just VI.13, VI.18]
 
-Then, since *BC* is to *GH* as *GH* is to *CF,* and, if three straight lines are proportional, then the first is to the third as the figure on the first is to the similar and similarly situated figure described on the second, therefore *BC* is to *CF* as the triangle *ABC* is to the triangle *KGH.* [!just V.19.Cor]
+Then, since {BC} is to {GH} as {GH} is to {CF}, and, if three straight lines are proportional, then the first is to the third as the figure on the first is to the similar and similarly situated figure described on the second, therefore {BC} is to {CF} as the triangle {ABC|ABCt} is to the triangle {KGH}. [!just V.19.Cor]
 
-But *BC* is to *CF* as the parallelogram *BE* is to the parallelogram *EF.* [!just VI.1]
+But {BC} is to {CF} as the parallelogram {BE} is to the parallelogram {EF|CM}. [!just VI.1]
 
-Therefore also the triangle *ABC* is to the triangle *KGH* as the parallelogram *BE* is to the parallelogram *EF.*  Therefore, alternately, the triangle *ABC* is to the parallelogram *BE* as the triangle *KGH* is to the parallelogram *EF.* [!just V.11; V.16]
+Therefore also the triangle {ABC|ABCt} is to the triangle {KGH} as the parallelogram {BE} is to the parallelogram {EF|CM}.  Therefore, alternately, the triangle {ABC|ABCt} is to the parallelogram {BE} as the triangle {KGH} is to the parallelogram {EF|CM}. [!just V.11; V.16]
 
-But the triangle *ABC* equals the parallelogram *BE,* therefore the triangle *KGH* also equals the parallelogram *EF.*  And the parallelogram *EF* equals *D,* therefore *KGH* also equals *D.* [!just V.Def.5]
+But the triangle {ABC|ABCt} equals the parallelogram {BE}, therefore the triangle {KGH} also equals the parallelogram {EF|CM}.  And the parallelogram {EF|CM} equals {D|Dt}, therefore {KGH} also equals {D|Dt}. [!just V.Def.5]
 
-And *KGH* is also similar to *ABC.* Therefore this figure *KGH* has been constructed similar to the given rectilinear figure *ABC* and equal to the other given figure *D.*
+And {KGH} is also similar to {ABC|ABCt}. Therefore this figure {KGH} has been constructed similar to the given rectilinear figure {ABC|ABCt} and equal to the other given figure {D|Dt}.
 
 <div class="qed">Q.E.F.</div>
 ----

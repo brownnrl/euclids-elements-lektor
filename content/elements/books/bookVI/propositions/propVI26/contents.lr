@@ -15,14 +15,39 @@ statement: If from a parallelogram there is taken away a parallelogram similar a
 ----
 proof:
 
-From the parallelogram *ABCD* let there be taken away the parallelogram *AF* similar and similarly situated to *ABCD,* and having the angle *DAB* common with it.
+From the parallelogram {ABCD|ABCDt} let there be taken away the parallelogram {AF} similar and similarly situated to {ABCD|ABCDt}, and having the angle {DAB|angDAB} common with it.
 
-I say that  *ABCD* is about the same diameter with *AF.*
+I say that  {ABCD|ABCDt} is about the same diameter with {AF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="330" height="250" tabindex="0"></canvas>
 <noscript><img alt="VI.26 diagram" src="propVI26.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the parallelogram ABCD with its diameter AC, the
+    // parallelogram AEFG (named AF and EG) taken away at A with F on AC,
+    // and the reductio's pieces: GF produced to H (FH), HK parallel to AD,
+    // and the supposed diameter drawn as the two lines AH, CH.
+    //
+    // The reductio is walked on its own figure: from "suppose it is not"
+    // AC is withdrawn and the supposed diameter AHC stands in its place
+    // (H appears, AH and CH join to it); GF is produced to H and HK drawn.
+    // At "cannot fail" the reductio figure is withdrawn and AC returns.
+    //
+    // Everything added is transparent: faceless twins ABCDt, AF (AEFG) and
+    // KG (AKHG) — a highlighted filled polygon is raised over the figure,
+    // #140, so prose and captions reach them as {ABCD|ABCDt}, {EG|AF} —
+    // the path AHC, and the segments DA, AB, GA, AK, AE, GF, BC. The
+    // common angle DAB is a sector; there are no right angles.
+    //
+    // Draggables (checked against the bundle): A, B, C free and E a
+    // lineSlider on AB are givens; H, a lineSlider on GF produced that the
+    // reductio introduces, is deferred. D, F, G, K are derived and listed
+    // per slide.
+    var GIVEN = ["A","B","C","D","E","F","G","ABCD","AEFG","AC"];
+    var ANG   = GIVEN.concat(["angDAB"]);
+    var SUP   = ["A","B","C","D","E","F","G","ABCD","AEFG","angDAB","H","AH","CH"];
+    var PROD  = SUP.concat(["FH"]);
+    var PAR   = PROD.concat(["HK","K"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -44,23 +69,139 @@ I say that  *ABCD* is about the same diameter with *AF.*
             "HK;line;parallel;H,G,A",
             "K;point;last;HK",
             "AH;line;connect;A,H",
-            "CH;line;connect;C,H"
+            "CH;line;connect;C,H",
+            // Transparent highlight targets; explicit ;0 faces.
+            "ABCDt;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            "AF;polygon;quadrilateral;A,E,F,G;0;0;0;0",
+            "KG;polygon;quadrilateral;A,K,H,G;0;0;0;0",
+            "AHC;line;path;A,H,C;0;0;0",
+            "DA;line;connect;D,A;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "GA;line;connect;G,A;0;0;0",
+            "AK;line;connect;A,K;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "GF;line;connect;G,F;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "angDAB;sector;angleMarker;A,D,B"
         ],
+        deferDraggables: ["H"],
+        aliases: { "EG": "AF", "AD": "DA", "BA": "AB", "AG": "GA",
+                   "KA": "AK", "EA": "AE", "FG": "GF", "CB": "BC",
+                   "DAB": "angDAB", "BAD": "angDAB" },
+        slides: [
+            { text: "“If from a parallelogram there is taken away a parallelogram similar and similarly situated to the whole",
+              visible: GIVEN,
+              highlighted: ["ABCDt","AF"],
+              justifications: [{ ref: "VI.26" }] },
+            { text: "and having a common angle with it,",
+              visible: ANG,
+              highlighted: ["angDAB"],
+              transition: { animations: [
+                  { elem: "angDAB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "then it is about the same diameter with the whole.”",
+              visible: ANG,
+              highlighted: ["ABCDt","AF","AC"] },
+            { text: "From the parallelogram {ABCD|ABCDt} let there be taken away the parallelogram {AF}",
+              visible: ANG,
+              highlighted: ["ABCDt","AF"] },
+            { text: "similar and similarly situated to {ABCD|ABCDt}, and having the angle {DAB|angDAB} common with it.",
+              visible: ANG,
+              highlighted: ["AF","ABCDt","angDAB"] },
+            { text: "I say that {ABCD|ABCDt} is about the same diameter with {AF}.",
+              visible: ANG,
+              highlighted: ["ABCDt","AF","AC"] },
+            { text: "For suppose it is not, but, if possible, let {AHC} be the diameter.",
+              visible: SUP,
+              highlighted: ["AHC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "H",  name: geomlib.A.Point.appear },
+                  { elem: "AH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CH", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Produce {GF} and carry it through to {H}.",
+              visible: PROD,
+              highlighted: ["GF","FH","H"],
+              transition: { animations: [
+                  { elem: "FH", name: geomlib.A.Line.straightEdgeExtend } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Draw {HK} through {H} parallel to either of the straight lines {AD|DA} or {BC}.",
+              visible: PAR,
+              highlighted: ["HK","DA","BC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "HK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "HK parallel to AD, BC", ref: "I.31" }] },
+            { text: "Since, then, {ABCD|ABCDt} is about the same diameter with {KG},",
+              visible: PAR,
+              highlighted: ["ABCDt","KG","AHC"] },
+            { text: "therefore {DA} is to {AB} as {GA} is to {AK}.",
+              visible: PAR,
+              highlighted: ["DA","AB","GA","AK"],
+              justifications: [{ claim: "DA : AB = GA : AK", ref: "VI.24" }] },
+            { text: "But also, since {ABCD|ABCDt} and {EG|AF} are similar,",
+              visible: PAR,
+              highlighted: ["ABCDt","AF"] },
+            { text: "therefore {DA} is to {AB} as {GA} is to {AE}.",
+              visible: PAR,
+              highlighted: ["DA","AB","GA","AE"],
+              justifications: [{ claim: "DA : AB = GA : AE", ref: "VI.Def.1" }] },
+            { text: "Therefore {GA} is to {AK} as {GA} is to {AE}.",
+              visible: PAR,
+              highlighted: ["GA","AK","AE"],
+              justifications: [{ claim: "GA : AK = GA : AE", ref: "V.11" }] },
+            { text: "Therefore {GA} has the same ratio to each of the straight lines {AK} and {AE}.",
+              visible: PAR,
+              highlighted: ["GA","AK","AE"] },
+            { text: "Therefore {AE} equals {AK} the less equals the greater, which is impossible.",
+              visible: PAR,
+              highlighted: ["AE","AK"],
+              justifications: [{ claim: "AE = AK", ref: "V.9" }] },
+            { text: "Therefore {ABCD|ABCDt} cannot fail to be about the same diameter with {AF}.",
+              visible: ANG,
+              highlighted: ["ABCDt","AF","AC"] },
+            { text: "Therefore the parallelogram {ABCD|ABCDt} is about the same diameter with the parallelogram {AF}.",
+              visible: ANG,
+              highlighted: ["ABCDt","AF","AC"] },
+            { text: "Therefore, if from a parallelogram there is taken away a parallelogram similar and similarly situated to the whole",
+              visible: ANG,
+              highlighted: ["ABCDt","AF"] },
+            { text: "and having a common angle with it,",
+              visible: ANG,
+              highlighted: ["angDAB"] },
+            { text: "then it is about the same diameter with the whole.",
+              visible: ANG,
+              highlighted: ["ABCDt","AF","AC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.26") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "V.9":      "/elements/books/bookV/propositions/propV9/",
+        "V.11":     "/elements/books/bookV/propositions/propV11/",
+        "VI.24":    "/elements/books/bookVI/propositions/propVI24/",
+        "VI.Def.1": "/elements/books/bookVI/definitions/defVI1/"
     });
 </script>
 </figure>
 
-For suppose it is not, but, if possible, let *AHC* be the diameter.  Produce *GF* and carry it through to *H.*  Draw *HK* through *H* parallel to either of the straight lines *AD* or *BC.* [!just I.31]
+For suppose it is not, but, if possible, let {AHC} be the diameter.  Produce {GF} and carry it through to {H}.  Draw {HK} through {H} parallel to either of the straight lines {AD|DA} or {BC}. [!just I.31]
 
-Since, then, *ABCD* is about the same diameter with *KG,* therefore *DA* is to *AB* as *GA* is to *AK.* [!just VI.24]
+Since, then, {ABCD|ABCDt} is about the same diameter with {KG}, therefore {DA} is to {AB} as {GA} is to {AK}. [!just VI.24]
 
-But also, since *ABCD* and *EG* are similar, therefore *DA* is to *AB* as *GA* is to *AE.*  Therefore  *GA* is to *AK* as *GA* is to *AE.* [!just VI.Def.1; V.11]
+But also, since {ABCD|ABCDt} and {EG|AF} are similar, therefore {DA} is to {AB} as {GA} is to {AE}.  Therefore  {GA} is to {AK} as {GA} is to {AE}. [!just VI.Def.1; V.11]
 
-Therefore *GA* has the same ratio to each of the straight lines *AK* and *AE.*
+Therefore {GA} has the same ratio to each of the straight lines {AK} and {AE}.
 
-Therefore *AE* equals *AK* the less equals the greater, which is impossible. [!just V.9]
+Therefore {AE} equals {AK} the less equals the greater, which is impossible. [!just V.9]
 
-Therefore *ABCD* cannot fail to be about the same diameter with *AF.*  Therefore the parallelogram *ABCD* is about the same diameter with the parallelogram *AF.*
+Therefore {ABCD|ABCDt} cannot fail to be about the same diameter with {AF}.  Therefore the parallelogram {ABCD|ABCDt} is about the same diameter with the parallelogram {AF}.
 
 Therefore, *if from a parallelogram there is taken away a parallelogram similar and similarly situated to the whole and having a common angle with it, then it is about the same diameter with the whole.*
 
