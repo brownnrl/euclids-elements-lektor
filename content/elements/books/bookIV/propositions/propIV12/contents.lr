@@ -17,20 +17,62 @@ statement: To circumscribe an equilateral and equiangular pentagon about a given
 ----
 proof:
 
-Let *ABCDE* be the given circle.
+Let {ABCDE|circc} be the given circle.
 
-It is required to circumscribe an equilateral and equiangular pentagon about the circle *ABCDE.*
+It is required to circumscribe an equilateral and equiangular pentagon about the circle {ABCDE|circc}.
 
-Let *A, B, C, D,* and *E* be conceived to be the angular points of the inscribed pentagon, so that the circumferences *AB, BC, CD,* *DE,* and *EA* are equal. [!just IV.11]
+Let {A}, {B}, {C}, {D}, and {E} be conceived to be the angular points of the inscribed pentagon, so that the circumferences {AB|arcAB}, {BC|arcBC}, {CD|arcCD}, {DE|arcDE}, and {EA|arcEA} are equal. [!just IV.11]
 
 <div class="just"><a href="/elements/books/bookIII/propositions/propIII16/#cor">III.16,Cor</a><br><a href="/elements/books/bookIII/propositions/propIII1/">III.1</a></div>
 
-Draw *GH, HK, KL, LM,* and *MG* through *A, B, C, D,* and *E* touching the circle.   Take the center *F* of the circle *ABCDE,* and join *FB, FK, FC, FL,* and *FD.*
+Draw {GH}, {HK}, {KL}, {LM}, and {MG} through {A}, {B}, {C}, {D}, and {E} touching the circle.   Take the center {F} of the circle {ABCDE|circc}, and join {FB}, {FK}, {FC}, {FL}, and {FD}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="300" tabindex="0"></canvas>
 <noscript><img alt="IV.12 diagram" src="propIV12.gif"/></noscript>
 <script type="text/javascript">
+    // The IV.11 pentagon's vertices conceived, the five tangents, the
+    // centre F and the radii; then III.18 (right angles at the points of
+    // contact), I.47 and I.8 at K, III.27 and I.26 at C, and the two
+    // halves of the argument — equilateral, then equiangular.
+    //
+    // Joyce's figure builds the inscribed pentagon on the free points A, B
+    // (transparent; only its vertices are drawn), takes the centre F, and
+    // finds G, H, K, L, M where the perpendiculars to the radii at the five
+    // vertices cross. The walk follows the proof's order, which the figure
+    // supports unchanged. IV.11 is not walked again: the vertices simply
+    // appear, and each tangent is drawn as one stroke.
+    //
+    // Everything added leaves the resting figure as it was: circc (a
+    // transparent twin of the circle, whose opaque face would cover the
+    // markers when lit, #140), the circumferences (sectors about F, which
+    // draw only their arc), the segments BK, CK, CL, the triangles FKC and
+    // FLC and the pentagon GHKLM are transparent; the markers are hidden at
+    // rest. The radii run B, C, D to F as Joyce declared them; no twins.
+    //
+    // Angle markers: the right angles at B, C, D (III.18) are red squares.
+    // The halves at F (BFK, KFC, CFL) are blue, the wholes BFC and CFD
+    // purple; the halves at K and L (BKF, FKC, FLC) green, and the angles
+    // of the pentagon (HKL = BKC, KLM = DLC, and those at G, H, M) orange.
+    // Halves and wholes share vertices side by side, so all are pinned:
+    // halves at 22 px (18 at K and L, whose arms are short), wholes at 34
+    // (30), right angles at 16.
+    var GIVEN = ["circ","circc"];
+    var PTS   = GIVEN.concat(["A","B","C","D","E","ABCDE"]);
+    var ARCS  = PTS.concat(["arcAB","arcBC","arcCD","arcDE","arcEA"]);
+    var TAN   = ARCS.concat(["GH","HK","KL","LM","MG","G","H","K","L","M","GHKLM"]);
+    var CEN   = TAN.concat(["F"]);
+    var JOIN  = CEN.concat(["BF","KF","CF","LF","DF","BK","CK","CL"]);
+    var RT1   = JOIN.concat(["rtFCK","rtFCL"]);
+    var RT    = RT1.concat(["rtFBK","rtFBH","rtFDL","rtFDM"]);
+    var I8    = RT.concat(["angBFK","angKFC","angBKF","angFKC"]);
+    var DBL   = I8.concat(["angBFC","angBKC"]);
+    var DBL2  = DBL.concat(["angCFD","angCFL","angDLC","angFLC"]);
+    var TRI   = DBL2.concat(["FKC","FLC"]);
+    // The equiangular half: the markers at F and the right angles are
+    // dropped, the angles of the pentagon arrive.
+    var EQ    = JOIN.concat(["angFKC","angFLC","angBKC","angDLC"]);
+    var FIN   = EQ.concat(["angH","angG","angM"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -64,49 +106,333 @@ Draw *GH, HK, KL, LM,* and *MG* through *A, B, C, D,* and *E* touching the circl
             "LM;line;connect;L,M",
             "MG;line;connect;M,G",
             "KF;line;connect;K,F",
-            "LF;line;connect;L,F"
+            "LF;line;connect;L,F",
+            // Transparent highlight targets (see above). Explicit ;0 faces.
+            "circc;circle;circumcircle;A,B,C;0;0;0;0",
+            "arcAB;sector;sector;F,A,B;0;0;0;0",
+            "arcBC;sector;sector;F,B,C;0;0;0;0",
+            "arcCD;sector;sector;F,C,D;0;0;0;0",
+            "arcDE;sector;sector;F,D,E;0;0;0;0",
+            "arcEA;sector;sector;F,E,A;0;0;0;0",
+            "BK;line;connect;B,K;0;0;0",
+            "CK;line;connect;C,K;0;0;0",
+            "CL;line;connect;C,L;0;0;0",
+            "FKC;polygon;triangle;F,K,C;0;0;0;0",
+            "FLC;polygon;triangle;F,L,C;0;0;0;0",
+            "GHKLM;polygon;pentagon;G,H,K,L,M;0;0;0;0",
+            "rtFCK;sector;angleMarkerRight;C,F,K,16;0;0;red;red",
+            "rtFCL;sector;angleMarkerRight;C,F,L,16;0;0;red;red",
+            "rtFBK;sector;angleMarkerRight;B,F,K,16;0;0;red;red",
+            "rtFBH;sector;angleMarkerRight;B,F,H,16;0;0;red;red",
+            "rtFDL;sector;angleMarkerRight;D,F,L,16;0;0;red;red",
+            "rtFDM;sector;angleMarkerRight;D,F,M,16;0;0;red;red",
+            "angBFK;sector;angleMarker;F,B,K,22;0;0;3b6ea5;9ec5e8",
+            "angKFC;sector;angleMarker;F,K,C,22;0;0;3b6ea5;9ec5e8",
+            "angCFL;sector;angleMarker;F,C,L,22;0;0;3b6ea5;9ec5e8",
+            "angBFC;sector;angleMarker;F,B,C,34;0;0;7a4fa3;cdb8e6",
+            "angCFD;sector;angleMarker;F,C,D,34;0;0;7a4fa3;cdb8e6",
+            "angBKF;sector;angleMarker;K,B,F,18;0;0;3f8e4f;a8dbb0",
+            "angFKC;sector;angleMarker;K,F,C,18;0;0;3f8e4f;a8dbb0",
+            "angFLC;sector;angleMarker;L,F,C,18;0;0;3f8e4f;a8dbb0",
+            "angBKC;sector;angleMarker;K,B,C,30;0;0;c06a1b;f3c590",
+            "angDLC;sector;angleMarker;L,D,C,30;0;0;c06a1b;f3c590",
+            "angH;sector;angleMarker;H,K,G,30;0;0;c06a1b;f3c590",
+            "angG;sector;angleMarker;G,H,M,30;0;0;c06a1b;f3c590",
+            "angM;sector;angleMarker;M,G,L,30;0;0;c06a1b;f3c590"
         ],
+        // Draggables (checked against the bundle): A and B free — vertices
+        // of the inscribed pentagon, which the proof only reaches on slide
+        // 4 — so both are deferred and follow `visible`. C, D, E (vertex),
+        // F (center) and G, H, K, L, M (intersection) are derived and listed
+        // per slide. The resting figure is unaffected.
+        deferDraggables: ["A","B"],
+        // The circle is {ABCDE|circc}; the circumferences {AB|arcAB} etc.
+        // The triangles own FKC and FLC; the angles take {FKC|angFKC} and
+        // {FLC|angFLC}.
+        aliases: { "FB": "BF", "FC": "CF", "FD": "DF", "FK": "KF", "FL": "LF",
+                   "KB": "BK", "KC": "CK", "LC": "CL",
+                   "HG": "GH", "GM": "MG", "ML": "LM", "KH": "HK", "LK": "KL",
+                   "FCK": "rtFCK", "KCF": "rtFCK", "FCL": "rtFCL", "LCF": "rtFCL",
+                   "BFK": "angBFK", "KFB": "angBFK",
+                   "KFC": "angKFC", "CFK": "angKFC",
+                   "CFL": "angCFL", "LFC": "angCFL",
+                   "BFC": "angBFC", "CFB": "angBFC",
+                   "CFD": "angCFD", "DFC": "angCFD",
+                   "BKF": "angBKF", "FKB": "angBKF",
+                   "BKC": "angBKC", "HKL": "angBKC", "LKH": "angBKC",
+                   "DLC": "angDLC", "KLM": "angDLC", "MLK": "angDLC",
+                   "KHG": "angH", "GHK": "angH",
+                   "HGM": "angG", "MGH": "angG",
+                   "GML": "angM", "LMG": "angM" },
+        slides: [
+            { text: "“To circumscribe an equilateral and equiangular pentagon about a given circle.”",
+              visible: GIVEN,
+              highlighted: ["circc"],
+              justifications: [{ ref: "IV.12" }] },
+            { text: "Let {ABCDE|circc} be the given circle.",
+              visible: GIVEN,
+              highlighted: ["circc"] },
+            { text: "It is required to circumscribe an equilateral and equiangular pentagon about the circle {ABCDE|circc}.",
+              visible: GIVEN,
+              highlighted: ["circc"] },
+            { text: "Let {A}, {B}, {C}, {D}, and {E} be conceived to be the angular points of {the inscribed pentagon|ABCDE},",
+              visible: PTS,
+              highlighted: ["ABCDE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "A", name: geomlib.A.Point.appear },
+                  { elem: "B", name: geomlib.A.Point.appear },
+                  { elem: "C", name: geomlib.A.Point.appear },
+                  { elem: "D", name: geomlib.A.Point.appear },
+                  { elem: "E", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the inscribed pentagon", ref: "IV.11" }] },
+            { text: "so that the circumferences {AB|arcAB}, {BC|arcBC}, {CD|arcCD}, {DE|arcDE}, and {EA|arcEA} are equal.",
+              visible: ARCS,
+              highlighted: ["arcAB","arcBC","arcCD","arcDE","arcEA"] },
+            { text: "Draw {GH}, {HK}, {KL}, {LM}, and {MG} through {A}, {B}, {C}, {D}, and {E} touching the circle.",
+              visible: TAN,
+              highlighted: ["GH","HK","KL","LM","MG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "LM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "MG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "at right angles to the radii at A, B, C, D, E", ref: "III.16,Cor" }] },
+            { text: "Take the center {F} of the circle {ABCDE|circc},",
+              visible: CEN,
+              highlighted: ["F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "III.1" }] },
+            { text: "and join {FB}, {FK}, {FC}, {FL}, and {FD}.",
+              visible: JOIN,
+              highlighted: ["BF","KF","CF","LF","DF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "LF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since the straight line {KL} touches the circle {ABCDE|circc} at {C},",
+              visible: JOIN,
+              highlighted: ["KL","circc","C"] },
+            { text: "and {FC} has been joined from the center {F} to the point of contact at {C},",
+              visible: JOIN,
+              highlighted: ["CF","F","C"] },
+            { text: "therefore {FC} is perpendicular to {KL}. Therefore each of the angles at {C} is right.",
+              visible: RT1,
+              highlighted: ["CF","KL","rtFCK","rtFCL"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtFCK", name: geomlib.A.Sector.sweep },
+                  { elem: "rtFCL", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "a radius to the point of contact is perpendicular to the tangent", ref: "III.18" }] },
+            { text: "For the same reason the angles at the points {B} and {D} are also right.",
+              visible: RT,
+              highlighted: ["rtFBK","rtFBH","rtFDL","rtFDM"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtFBK", name: geomlib.A.Sector.sweep },
+                  { elem: "rtFBH", name: geomlib.A.Sector.sweep },
+                  { elem: "rtFDL", name: geomlib.A.Sector.sweep },
+                  { elem: "rtFDM", name: geomlib.A.Sector.sweep } ] } },
+            { text: "And, since the angle {FCK} is right,",
+              visible: RT,
+              highlighted: ["rtFCK"] },
+            { text: "therefore the square on {FK} equals the sum of the squares on {FC} and {CK}.",
+              visible: RT,
+              highlighted: ["KF","CF","CK"],
+              justifications: [{ claim: "FK² = FC² + CK²", ref: "I.47" }] },
+            { text: "For the same reason the square on {FK} also equals the sum of the squares on {FB} and {BK},",
+              visible: RT,
+              highlighted: ["KF","BF","BK","rtFBK"],
+              justifications: [{ claim: "FK² = FB² + BK²", ref: "I.47" }] },
+            { text: "so that the sum of the squares on {FC} and {CK} equals the sum of the squares on {FB} and {BK},",
+              visible: RT,
+              highlighted: ["CF","CK","BF","BK"],
+              justifications: [{ claim: "each equals the square on FK", ref: "C.N.1" }] },
+            { text: "of which the square on {FC} equals the square on {FB},",
+              visible: RT,
+              highlighted: ["CF","BF"] },
+            { text: "therefore the remaining square on {CK} equals the square on {BK}.",
+              visible: RT,
+              highlighted: ["CK","BK"],
+              justifications: [{ claim: "take away the equal squares on FC and FB", ref: "C.N.3" }] },
+            { text: "Therefore {BK} equals {CK}.",
+              visible: RT,
+              highlighted: ["BK","CK"] },
+            { text: "And, since {FB} equals {FC}, and {FK} is common,",
+              visible: RT,
+              highlighted: ["BF","CF","KF"] },
+            { text: "the two sides {BF} and {FK} equal the two sides {CF} and {FK}, and the base {BK} equals the base {CK},",
+              visible: RT,
+              highlighted: ["BF","KF","CF","BK","CK"] },
+            { text: "therefore the angle {BFK} equals the angle {KFC}, and the angle {BKF} equals the angle {FKC|angFKC}.",
+              visible: I8,
+              highlighted: ["angBFK","angKFC","angBKF","angFKC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBFK", name: geomlib.A.Sector.sweep },
+                  { elem: "angKFC", name: geomlib.A.Sector.sweep },
+                  { elem: "angBKF", name: geomlib.A.Sector.sweep },
+                  { elem: "angFKC", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "three sides equal three sides", ref: "I.8" }] },
+            { text: "Therefore the angle {BFC} is double the angle {KFC}, and the angle {BKC} double the angle {FKC|angFKC}.",
+              visible: DBL,
+              highlighted: ["angBFC","angKFC","angBKC","angFKC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBFC", name: geomlib.A.Sector.sweep },
+                  { elem: "angBKC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "For the same reason the angle {CFD} is also double the angle {CFL}, and the angle {DLC} double the angle {FLC|angFLC}.",
+              visible: DBL2,
+              highlighted: ["angCFD","angCFL","angDLC","angFLC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCFD", name: geomlib.A.Sector.sweep },
+                  { elem: "angCFL", name: geomlib.A.Sector.sweep },
+                  { elem: "angDLC", name: geomlib.A.Sector.sweep },
+                  { elem: "angFLC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Now, since the circumference {BC|arcBC} equals {CD|arcCD}, the angle {BFC} also equals the angle {CFD}.",
+              visible: DBL2.concat(["arcBC","arcCD"]),
+              highlighted: ["arcBC","arcCD","angBFC","angCFD"],
+              justifications: [{ claim: "angles at the centre on equal circumferences", ref: "III.27" }] },
+            { text: "And the angle {BFC} is double the angle {KFC}, and the angle {DFC} double the angle {LFC},",
+              visible: DBL2,
+              highlighted: ["angBFC","angKFC","angCFD","angCFL"] },
+            { text: "therefore the angle {KFC} also equals the angle {LFC}.",
+              visible: DBL2,
+              highlighted: ["angKFC","angCFL"],
+              justifications: [{ claim: "halves of equal angles", ref: "C.N.5" }] },
+            { text: "But the angle {FCK} also equals the angle {FCL},",
+              visible: DBL2,
+              highlighted: ["rtFCK","rtFCL"],
+              justifications: [{ claim: "both are right", ref: "I.Post.4" }] },
+            { text: "therefore {FKC} and {FLC} are two triangles having two angles equal to two angles and one side equal to one side,",
+              visible: TRI,
+              highlighted: ["FKC","FLC","angKFC","angCFL","rtFCK","rtFCL"] },
+            { text: "namely {FC} which is common to them,",
+              visible: TRI,
+              highlighted: ["CF"] },
+            { text: "therefore they will also have the remaining sides equal to the remaining sides, and the remaining angle to the remaining angle,",
+              visible: TRI,
+              highlighted: ["FKC","FLC"],
+              justifications: [{ claim: "two angles and the side between them", ref: "I.26" }] },
+            { text: "therefore the straight line {KC} equals {CL}, and the angle {FKC|angFKC} equals the angle {FLC|angFLC}.",
+              visible: TRI,
+              highlighted: ["CK","CL","angFKC","angFLC"] },
+            { text: "And, since {KC} equals {CL}, therefore {KL} is double {KC}.",
+              visible: JOIN,
+              highlighted: ["CK","CL","KL"] },
+            { text: "For the same reason it can be proved that {HK} is also double {BK}.",
+              visible: JOIN,
+              highlighted: ["HK","BK"] },
+            { text: "And {BK} equals {KC}, therefore {HK} also equals {KL}.",
+              visible: JOIN,
+              highlighted: ["BK","CK","HK","KL"] },
+            { text: "Similarly each of the straight lines {HG}, {GM}, and {ML}",
+              visible: JOIN,
+              highlighted: ["GH","MG","LM"] },
+            { text: "can also be proved equal to each of the straight lines {HK} and {KL},",
+              visible: JOIN,
+              highlighted: ["GH","MG","LM","HK","KL"] },
+            { text: "therefore the pentagon {GHKLM} is equilateral.",
+              visible: JOIN,
+              highlighted: ["GHKLM"] },
+            { text: "I say next that it is also equiangular.",
+              visible: EQ,
+              highlighted: ["GHKLM"] },
+            { text: "For, since the angle {FKC|angFKC} equals the angle {FLC|angFLC},",
+              visible: EQ,
+              highlighted: ["angFKC","angFLC"] },
+            { text: "and the angle {HKL} was proved double the angle {FKC|angFKC}, and the angle {KLM} double the angle {FLC|angFLC},",
+              visible: EQ,
+              highlighted: ["angBKC","angFKC","angDLC","angFLC"] },
+            { text: "therefore the angle {HKL} also equals the angle {KLM}.",
+              visible: EQ,
+              highlighted: ["angBKC","angDLC"],
+              justifications: [{ claim: "doubles of equal angles", ref: "C.N.2" }] },
+            { text: "Similarly each of the angles {KHG}, {HGM}, and {GML} can also be proved equal to each of the angles {HKL} and {KLM}.",
+              visible: FIN,
+              highlighted: ["angH","angG","angM","angBKC","angDLC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angH", name: geomlib.A.Sector.sweep },
+                  { elem: "angG", name: geomlib.A.Sector.sweep },
+                  { elem: "angM", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the five angles {GHK}, {HKL}, {KLM}, {LMG}, and {MGH} equal one another.",
+              visible: FIN,
+              highlighted: ["angH","angBKC","angDLC","angM","angG"] },
+            { text: "Therefore the pentagon {GHKLM} is equiangular.",
+              visible: FIN,
+              highlighted: ["GHKLM"] },
+            { text: "And it was also proved equilateral, and it has been circumscribed about the circle {ABCDE|circc}.",
+              visible: FIN,
+              highlighted: ["GH","HK","KL","LM","MG","circc"],
+              justifications: [
+                  { claim: "each side of GHKLM touches the circle", ref: "IV.Def.4" },
+                  { ref: "Q.E.F." } ] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IV.12") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":   "/elements/books/bookI/postulates/post1/",
+        "I.Post.4":   "/elements/books/bookI/postulates/post4/",
+        "C.N.1":      "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2":      "/elements/books/bookI/commonnotions/cn2/",
+        "C.N.3":      "/elements/books/bookI/commonnotions/cn3/",
+        "C.N.5":      "/elements/books/bookI/commonnotions/cn5/",
+        "I.8":        "/elements/books/bookI/propositions/propI8/",
+        "I.26":       "/elements/books/bookI/propositions/propI26/",
+        "I.47":       "/elements/books/bookI/propositions/propI47/",
+        "III.1":      "/elements/books/bookIII/propositions/propIII1/",
+        "III.16,Cor": "/elements/books/bookIII/propositions/propIII16/#cor",
+        "III.18":     "/elements/books/bookIII/propositions/propIII18/",
+        "III.27":     "/elements/books/bookIII/propositions/propIII27/",
+        "IV.11":      "/elements/books/bookIV/propositions/propIV11/",
+        "IV.Def.4":   "/elements/books/bookIV/definitions/defIV4/"
     });
 </script>
 </figure>
 
-Then, since the straight line *KL* touches the circle *ABCDE* at *C,* and *FC* has been joined from the center *F* to the point of contact at *C,* therefore *FC* is perpendicular to *KL.*  Therefore each of the angles at *C* is right. [!just III.18]
+Then, since the straight line {KL} touches the circle {ABCDE|circc} at {C}, and {FC} has been joined from the center {F} to the point of contact at {C}, therefore {FC} is perpendicular to {KL}.  Therefore each of the angles at {C} is right. [!just III.18]
 
-For the same reason the angles at the points *B* and *D* are also right.
+For the same reason the angles at the points {B} and {D} are also right.
 
-And, since the angle *FCK* is right, therefore the square on *FK* equals the sum of the squares on *FC* and *CK.* [!just I.47]
+And, since the angle {FCK} is right, therefore the square on {FK} equals the sum of the squares on {FC} and {CK}. [!just I.47]
 
-For the same reason the square on *FK* also equals the sum of the squares on *FB* and *BK,* so that the sum of the squares on *FC* and *CK* equals the sum of the squares on *FB* and *BK,* of which the square on *FC* equals the square on *FB,* therefore the remaining square on *CK* equals the square on *BK.* [!just I.47]
+For the same reason the square on {FK} also equals the sum of the squares on {FB} and {BK}, so that the sum of the squares on {FC} and {CK} equals the sum of the squares on {FB} and {BK}, of which the square on {FC} equals the square on {FB}, therefore the remaining square on {CK} equals the square on {BK}. [!just I.47]
 
-Therefore *BK* equals *CK.*
+Therefore {BK} equals {CK}.
 
-And, since *FB* equals *FC,* and *FK* is common, the two sides *BF* and *FK* equal the two sides *CF* and *FK,* and the base *BK* equals the base *CK,* therefore the angle *BFK* equals the angle *KFC,* and the angle *BKF* equals the angle *FKC.* Therefore the angle *BFC* is double the angle *KFC,* and the angle *BKC* double the angle *FKC.* [!just I.8]
+And, since {FB} equals {FC}, and {FK} is common, the two sides {BF} and {FK} equal the two sides {CF} and {FK}, and the base {BK} equals the base {CK}, therefore the angle {BFK} equals the angle {KFC}, and the angle {BKF} equals the angle {FKC|angFKC}. Therefore the angle {BFC} is double the angle {KFC}, and the angle {BKC} double the angle {FKC|angFKC}. [!just I.8]
 
-For the same reason the angle *CFD* is also double the angle *CFL,* and the angle *DLC* double the angle *FLC.*
+For the same reason the angle {CFD} is also double the angle {CFL}, and the angle {DLC} double the angle {FLC|angFLC}.
 
-Now, since the circumference *BC* equals *CD,* the angle *BFC* also equals the angle *CFD.* [!just III.27]
+Now, since the circumference {BC|arcBC} equals {CD|arcCD}, the angle {BFC} also equals the angle {CFD}. [!just III.27]
 
-And the angle *BFC* is double the angle *KFC,* and the angle *DFC* double the angle *LFC,* therefore the angle *KFC* also equals the angle *LFC.*
+And the angle {BFC} is double the angle {KFC}, and the angle {DFC} double the angle {LFC}, therefore the angle {KFC} also equals the angle {LFC}.
 
-But the angle *FCK* also equals the angle *FCL,* therefore *FKC* and *FLC* are two triangles having two angles equal to two angles and one side equal to one side, namely *FC* which is common to them, therefore they will also have the remaining sides equal to the remaining sides, and the remaining angle to the remaining angle, therefore the straight line *KC* equals *CL,* and the angle *FKC* equals the angle *FLC.* [!just I.26]
+But the angle {FCK} also equals the angle {FCL}, therefore {FKC} and {FLC} are two triangles having two angles equal to two angles and one side equal to one side, namely {FC} which is common to them, therefore they will also have the remaining sides equal to the remaining sides, and the remaining angle to the remaining angle, therefore the straight line {KC} equals {CL}, and the angle {FKC|angFKC} equals the angle {FLC|angFLC}. [!just I.26]
 
-And, since *KC* equals *CL,* therefore *KL* is double *KC.*
+And, since {KC} equals {CL}, therefore {KL} is double {KC}.
 
-For the same reason it can be proved that *HK* is also double *BK.*
+For the same reason it can be proved that {HK} is also double {BK}.
 
-And *BK* equals *KC,* therefore *HK* also equals *KL.*
+And {BK} equals {KC}, therefore {HK} also equals {KL}.
 
-Similarly each of the straight lines *HG, GM,* and *ML* can also be proved equal to each of the straight lines *HK* and *KL,* therefore the pentagon *GHKLM* is equilateral.
+Similarly each of the straight lines {HG}, {GM}, and {ML} can also be proved equal to each of the straight lines {HK} and {KL}, therefore the pentagon {GHKLM} is equilateral.
 
 I say next that it is also equiangular.
 
-For, since the angle *FKC* equals the angle *FLC,* and the angle *HKL* was proved double the angle *FKC,* and the angle *KLM* double the angle *FLC,* therefore the angle *HKL* also equals the angle *KLM.*
+For, since the angle {FKC|angFKC} equals the angle {FLC|angFLC}, and the angle {HKL} was proved double the angle {FKC|angFKC}, and the angle {KLM} double the angle {FLC|angFLC}, therefore the angle {HKL} also equals the angle {KLM}.
 
-Similarly each of the angles *KHG, HGM,* and *GML* can also be proved equal to each of the angles *HKL* and *KLM.*  Therefore the five angles *GHK, HKL,* *KLM, LMG,* and *MGH* equal one another.
+Similarly each of the angles {KHG}, {HGM}, and {GML} can also be proved equal to each of the angles {HKL} and {KLM}.  Therefore the five angles {GHK}, {HKL}, {KLM}, {LMG}, and {MGH} equal one another.
 
-Therefore the pentagon *GHKLM* is equiangular.
+Therefore the pentagon {GHKLM} is equiangular.
 
-And it was also proved equilateral, and it has been circumscribed about the circle *ABCDE.*
+And it was also proved equilateral, and it has been circumscribed about the circle {ABCDE|circc}.
 
 <div class="qed">Q.E.F.</div>
 ----

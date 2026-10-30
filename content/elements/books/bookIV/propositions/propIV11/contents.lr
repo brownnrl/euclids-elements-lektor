@@ -17,18 +17,61 @@ statement: To inscribe an equilateral and equiangular pentagon in a given circle
 ----
 proof:
 
-Let *ABCDE* be the given circle.
+Let {ABCDE|circc} be the given circle.
 
-It is required to inscribe an equilateral and equiangular pentagon in the circle *ABCDE.*
+It is required to inscribe an equilateral and equiangular pentagon in the circle {ABCDE|circc}.
 
-Set out the isosceles triangle *FGH* having each of the angles at *G* and *H* double the angle at *F.* [!just IV.10]
+Set out the isosceles triangle {FGH} having each of the angles at {G|angG} and {H|angH} double the angle at {F|angF}. [!just IV.10]
 
-Inscribe in the circle *ABCDE* the triangle *ACD* equiangular with the triangle *FGH,* so that the angles *CAD,* *ACD,* and *CDA* equal the angles at *F,* *G,* and *H* respectively.   Therefore each of the angles *ACD* and *CDA* is also double the angle *CAD.* [!just IV.2]
+Inscribe in the circle {ABCDE|circc} the triangle {ACD} equiangular with the triangle {FGH}, so that the angles {CAD}, {ACD|angACD}, and {CDA} equal the angles at {F|angF}, {G|angG}, and {H|angH} respectively.   Therefore each of the angles {ACD|angACD} and {CDA} is also double the angle {CAD}. [!just IV.2]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="350" height="250" tabindex="0"></canvas>
 <noscript><img alt="IV.11 diagram" src="propIV11.gif"/></noscript>
 <script type="text/javascript">
+    // The IV.10 triangle FGH set out, the IV.2 triangle ACD inscribed, the
+    // I.9 bisections at C and D, the four joins; then III.26 and III.29
+    // for the sides and III.27 for the angles.
+    //
+    // Joyce's figure builds the pentagon first: A and B free, ABCDE the
+    // regular pentagon on AB, the circle its circumcircle, F the `similar`
+    // point making FGH equiangular with ACD. The walk follows the proof
+    // instead — circle given, FGH set out, ACD inscribed, E and B found by
+    // the bisectors — which the figure supports unchanged. Neither IV.10 nor
+    // IV.2 is walked again: FGH arrives traced, and ACD as its three sides.
+    //
+    // Everything added leaves the resting figure as it was. The sides AB,
+    // BC, CD, DE, EA and the bisector DB are solid black lines over the
+    // pentagon's edges and Joyce's BD, hidden at rest (initiallyHidden):
+    // the proof joins CD with the triangle and the other four sides later,
+    // and draws the bisector from D. The triangle ACD, the centre O and the
+    // circumferences (sectors about O, which draw only their arc) are
+    // transparent; circc is a transparent twin of the circle, whose opaque
+    // face would cover everything inside it when lit (#140).
+    //
+    // Angle markers: the angle at F and its equals CAD, ACE, ECD, CDB, BDA
+    // are purple; the double angles at G, H and ACD, CDA blue; the angles
+    // of the pentagon green. At C and D the halves lie side by side inside
+    // the whole angle, so halves are pinned at 22 px and wholes at 34 px;
+    // the pentagon's angles, shown after the halves are dropped, at 34 px.
+    // No angle is called right in this proof.
+    var GIVEN = ["circ","circc"];
+    var TRI   = GIVEN.concat(["FGH","F","G","H","angF","angG","angH"]);
+    var INS0  = TRI.concat(["A","C","D","AC","AD","CD","ACD"]);
+    var INS   = INS0.concat(["angCAD","angACD","angCDA"]);
+    var BIS   = INS.concat(["CE","E","DB","B","angACE","angECD","angCDB","angBDA"]);
+    var JOIN  = BIS.concat(["AB","BC","DE","EA"]);
+    var ARCS  = JOIN.concat(["arcAB","arcBC","arcCD","arcDE","arcEA"]);
+    var PENT  = ARCS.concat(["ABCDE"]);
+    // The halves and the angles of ACD are dropped for the equiangular part.
+    var EQ    = TRI.concat(["A","B","C","D","E","AC","AD","CD","CE","DB",
+                            "AB","BC","DE","EA","ACD","ABCDE",
+                            "arcAB","arcBC","arcCD","arcDE","arcEA",
+                            "arcBCD","arcABCD","arcEDCB"]);
+    var EQ1   = EQ.concat(["angAED"]);
+    var EQ2   = EQ1.concat(["angBAE"]);
+    var EQ3   = EQ2.concat(["angABC","angBCD","angCDE"]);
+    var DONE  = EQ3.concat(["dupABCDE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,27 +92,236 @@ Inscribe in the circle *ABCDE* the triangle *ACD* equiangular with the triangle 
             "G;point;free;210,220",
             "H;point;free;310,220",
             "F;point;similar;G,H,C,D,A",
-            "FGH;polygon;triangle;F,G,H;0;0;black;random"
+            "FGH;polygon;triangle;F,G,H;0;0;black;random",
+            // Slide twins of the pentagon's sides and of BD, hidden at rest.
+            "AB;line;connect;A,B",
+            "BC;line;connect;B,C",
+            "CD;line;connect;C,D",
+            "DE;line;connect;D,E",
+            "EA;line;connect;E,A",
+            "DB;line;connect;D,B",
+            // Transparent: the circle's twin, the triangle ACD, the centre,
+            // and the circumferences as sectors about it (arm order picks
+            // the side, euclid#172).
+            "circc;circle;circumcircle;A,B,C;0;0;0;0",
+            "ACD;polygon;triangle;A,C,D;0;0;0;0",
+            "O;point;center;circ;0;0",
+            "arcAB;sector;sector;O,A,B;0;0;0;0",
+            "arcBC;sector;sector;O,B,C;0;0;0;0",
+            "arcCD;sector;sector;O,C,D;0;0;0;0",
+            "arcDE;sector;sector;O,D,E;0;0;0;0",
+            "arcEA;sector;sector;O,E,A;0;0;0;0",
+            "arcBCD;sector;sector;O,B,D;0;0;0;0",
+            "arcABCD;sector;sector;O,A,D;0;0;0;0",
+            "arcEDCB;sector;sector;O,B,E;0;0;0;0",
+            "angF;sector;angleMarker;F,G,H;0;0;7a4fa3;cdb8e6",
+            "angG;sector;angleMarker;G,F,H;0;0;3b6ea5;9ec5e8",
+            "angH;sector;angleMarker;H,G,F;0;0;3b6ea5;9ec5e8",
+            "angCAD;sector;angleMarker;A,C,D,22;0;0;7a4fa3;cdb8e6",
+            "angACD;sector;angleMarker;C,A,D,34;0;0;3b6ea5;9ec5e8",
+            "angCDA;sector;angleMarker;D,C,A,34;0;0;3b6ea5;9ec5e8",
+            "angACE;sector;angleMarker;C,A,E,22;0;0;7a4fa3;cdb8e6",
+            "angECD;sector;angleMarker;C,E,D,22;0;0;7a4fa3;cdb8e6",
+            "angCDB;sector;angleMarker;D,C,B,22;0;0;7a4fa3;cdb8e6",
+            "angBDA;sector;angleMarker;D,B,A,22;0;0;7a4fa3;cdb8e6",
+            "angBAE;sector;angleMarker;A,B,E,34;0;0;3f8e4f;a8dbb0",
+            "angAED;sector;angleMarker;E,A,D,34;0;0;3f8e4f;a8dbb0",
+            "angABC;sector;angleMarker;B,A,C,34;0;0;3f8e4f;a8dbb0",
+            "angBCD;sector;angleMarker;C,B,D,34;0;0;3f8e4f;a8dbb0",
+            "angCDE;sector;angleMarker;D,C,E,34;0;0;3f8e4f;a8dbb0"
         ],
+        // Draggables (checked against the bundle): A, B, G, H free. G and H
+        // arrive with the triangle FGH, A with the inscribed triangle ACD,
+        // B where the bisector DB meets the circle, so all four are deferred
+        // and follow `visible`. C, D, E (vertex) and F (similar) are derived
+        // and listed per slide. The resting figure is unaffected.
+        deferDraggables: ["A","B","G","H"],
+        initiallyHidden: ["AB","BC","CD","DE","EA","DB"],
+        // The pentagon owns ABCDE; the circle takes {ABCDE|circc}, and the
+        // circumferences {AB|arcAB} and so on. The triangle owns ACD, the
+        // angle ACD answers to angACD.
+        aliases: { "BA": "AB", "CB": "BC", "DC": "CD", "ED": "DE", "AE": "EA",
+                   "CA": "AC", "DA": "AD", "EC": "CE",
+                   "CAD": "angCAD", "DAC": "angCAD",
+                   "CDA": "angCDA", "ADC": "angCDA",
+                   "ACE": "angACE", "ECA": "angACE",
+                   "ECD": "angECD", "DCE": "angECD",
+                   "CDB": "angCDB", "BDC": "angCDB",
+                   "BDA": "angBDA", "ADB": "angBDA",
+                   "BAE": "angBAE", "EAB": "angBAE",
+                   "AED": "angAED", "DEA": "angAED",
+                   "ABC": "angABC", "CBA": "angABC",
+                   "BCD": "angBCD", "DCB": "angBCD",
+                   "CDE": "angCDE", "EDC": "angCDE" },
+        slides: [
+            { text: "“To inscribe an equilateral and equiangular pentagon in a given circle.”",
+              visible: GIVEN,
+              highlighted: ["circc"],
+              justifications: [{ ref: "IV.11" }] },
+            { text: "Let {ABCDE|circc} be the given circle.",
+              visible: GIVEN,
+              highlighted: ["circc"] },
+            { text: "It is required to inscribe an equilateral and equiangular pentagon in the circle {ABCDE|circc}.",
+              visible: GIVEN,
+              highlighted: ["circc"] },
+            { text: "Set out the isosceles triangle {FGH} having each of the angles at {G|angG} and {H|angH} double the angle at {F|angF}.",
+              visible: TRI,
+              highlighted: ["FGH","angF","angG","angH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FGH",  name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "angF", name: geomlib.A.Sector.sweep },
+                  { elem: "angG", name: geomlib.A.Sector.sweep },
+                  { elem: "angH", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angles at G and H double the angle at F", ref: "IV.10" }] },
+            { text: "Inscribe in the circle {ABCDE|circc} the triangle {ACD} equiangular with the triangle {FGH},",
+              visible: INS0,
+              highlighted: ["ACD","circc"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "A",  name: geomlib.A.Point.appear },
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "C",  name: geomlib.A.Point.appear },
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",  name: geomlib.A.Point.appear },
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "triangle ACD equiangular with FGH", ref: "IV.2" }] },
+            { text: "so that the angles {CAD}, {ACD|angACD}, and {CDA} equal the angles at {F|angF}, {G|angG}, and {H|angH} respectively.",
+              visible: INS,
+              highlighted: ["angCAD","angACD","angCDA","angF","angG","angH"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCAD", name: geomlib.A.Sector.sweep },
+                  { elem: "angACD", name: geomlib.A.Sector.sweep },
+                  { elem: "angCDA", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore each of the angles {ACD|angACD} and {CDA} is also double the angle {CAD}.",
+              visible: INS,
+              highlighted: ["angACD","angCDA","angCAD"] },
+            { text: "Now bisect the angles {ACD|angACD} and {CDA} respectively by the straight lines {CE} and {DB},",
+              visible: BIS,
+              highlighted: ["CE","DB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CE",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E",      name: geomlib.A.Point.appear },
+                  { elem: "angACE", name: geomlib.A.Sector.sweep },
+                  { elem: "angECD", name: geomlib.A.Sector.sweep },
+                  { elem: "DB",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "B",      name: geomlib.A.Point.appear },
+                  { elem: "angCDB", name: geomlib.A.Sector.sweep },
+                  { elem: "angBDA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.9" }] },
+            { text: "and join {AB}, {BC}, {DE}, and {EA}.",
+              visible: JOIN,
+              highlighted: ["AB","BC","DE","EA"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EA", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since each of the angles {ACD|angACD} and {CDA} is double the angle {CAD},",
+              visible: JOIN,
+              highlighted: ["angACD","angCDA","angCAD"] },
+            { text: "and they are bisected by the straight lines {CE} and {DB},",
+              visible: JOIN,
+              highlighted: ["CE","DB","angACE","angECD","angCDB","angBDA"] },
+            { text: "therefore the five angles {DAC}, {ACE}, {ECD}, {CDB}, and {BDA} equal one another.",
+              visible: JOIN,
+              highlighted: ["angCAD","angACE","angECD","angCDB","angBDA"] },
+            { text: "But equal angles stand on equal circumferences, therefore the five circumferences {AB|arcAB}, {BC|arcBC}, {CD|arcCD}, {DE|arcDE}, and {EA|arcEA} equal one another.",
+              visible: ARCS,
+              highlighted: ["arcAB","arcBC","arcCD","arcDE","arcEA"],
+              justifications: [{ claim: "equal angles stand on equal circumferences", ref: "III.26" }] },
+            { text: "But straight lines that cut off equal circumferences are equal,",
+              visible: ARCS,
+              highlighted: ["arcAB","arcBC","arcCD","arcDE","arcEA"] },
+            { text: "therefore the five straight lines {AB}, {BC}, {CD}, {DE}, and {EA} equal one another.",
+              visible: ARCS,
+              highlighted: ["AB","BC","CD","DE","EA"],
+              justifications: [{ claim: "equal circumferences are cut off by equal straight lines", ref: "III.29" }] },
+            { text: "Therefore the pentagon {ABCDE} is equilateral.",
+              visible: PENT,
+              highlighted: ["ABCDE"] },
+            { text: "I say next that it is also equiangular.",
+              visible: EQ,
+              highlighted: ["ABCDE"] },
+            { text: "For, since the circumference {AB|arcAB} equals the circumference {DE|arcDE}, add {BCD|arcBCD} to each,",
+              visible: EQ,
+              highlighted: ["arcAB","arcDE","arcBCD"] },
+            { text: "therefore the whole circumference {ABCD|arcABCD} equals the whole circumference {EDCB|arcEDCB}.",
+              visible: EQ,
+              highlighted: ["arcABCD","arcEDCB"],
+              justifications: [{ claim: "equals added to equals", ref: "C.N.2" }] },
+            { text: "And the angle {AED} stands on the circumference {ABCD|arcABCD},",
+              visible: EQ1,
+              highlighted: ["angAED","arcABCD"],
+              transition: { animations: [
+                  { elem: "angAED", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the angle {BAE} on the circumference {EDCB|arcEDCB},",
+              visible: EQ2,
+              highlighted: ["angBAE","arcEDCB"],
+              transition: { animations: [
+                  { elem: "angBAE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the angle {BAE} also equals the angle {AED}.",
+              visible: EQ2,
+              highlighted: ["angBAE","angAED"],
+              justifications: [{ claim: "angles standing on equal circumferences are equal", ref: "III.27" }] },
+            { text: "For the same reason each of the angles {ABC}, {BCD}, and {CDE} also equals each of the angles {BAE} and {AED},",
+              visible: EQ3,
+              highlighted: ["angABC","angBCD","angCDE","angBAE","angAED"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep },
+                  { elem: "angBCD", name: geomlib.A.Sector.sweep },
+                  { elem: "angCDE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the pentagon {ABCDE} is equiangular.",
+              visible: EQ3,
+              highlighted: ["ABCDE"] },
+            { text: "But it was also proved equilateral,",
+              visible: EQ3,
+              highlighted: ["AB","BC","CD","DE","EA"] },
+            { text: "therefore an equilateral and equiangular pentagon has been inscribed in the given circle.",
+              visible: DONE,
+              highlighted: ["angABC","angBCD","angCDE","angBAE","angAED"],
+              transition: { animations: [
+                  { elem: "dupABCDE", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [
+                  { claim: "each angle of ABCDE lies on the circumference", ref: "IV.Def.3" },
+                  { ref: "Q.E.F." } ] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IV.11") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/",
+        "I.9":      "/elements/books/bookI/propositions/propI9/",
+        "III.26":   "/elements/books/bookIII/propositions/propIII26/",
+        "III.27":   "/elements/books/bookIII/propositions/propIII27/",
+        "III.29":   "/elements/books/bookIII/propositions/propIII29/",
+        "IV.2":     "/elements/books/bookIV/propositions/propIV2/",
+        "IV.10":    "/elements/books/bookIV/propositions/propIV10/",
+        "IV.Def.3": "/elements/books/bookIV/definitions/defIV3/"
     });
 </script>
 </figure>
 
-Now bisect the angles *ACD* and *CDA* respectively by the straight lines *CE* and *DB,* and join *AB,* *BC,*  *DE,* and *EA.* [!just I.9]
+Now bisect the angles {ACD|angACD} and {CDA} respectively by the straight lines {CE} and {DB}, and join {AB}, {BC},  {DE}, and {EA}. [!just I.9]
 
-Then, since each of the angles *ACD* and *CDA* is double the angle *CAD,* and they are bisected by the straight lines *CE* and *DB,* therefore the five angles *DAC,* *ACE,* *ECD,* *CDB,* and *BDA* equal one another.
+Then, since each of the angles {ACD|angACD} and {CDA} is double the angle {CAD}, and they are bisected by the straight lines {CE} and {DB}, therefore the five angles {DAC}, {ACE}, {ECD}, {CDB}, and {BDA} equal one another.
 
-But equal angles stand on equal circumferences, therefore the five circumferences *AB,* *BC,* *CD,* *DE,* and *EA* equal one another. [!just III.26]
+But equal angles stand on equal circumferences, therefore the five circumferences {AB|arcAB}, {BC|arcBC}, {CD|arcCD}, {DE|arcDE}, and {EA|arcEA} equal one another. [!just III.26]
 
-But straight lines that cut off equal circumferences are equal, therefore the five straight lines *AB,* *BC,* *CD,* *DE,* and *EA* equal one another.  Therefore the pentagon *ABCDE* is equilateral. [!just III.29]
+But straight lines that cut off equal circumferences are equal, therefore the five straight lines {AB}, {BC}, {CD}, {DE}, and {EA} equal one another.  Therefore the pentagon {ABCDE} is equilateral. [!just III.29]
 
 I say next that it is also equiangular.
 
-For, since the circumference *AB* equals the circumference *DE,* add *BCD* to each, therefore the whole circumference *ABCD* equals the whole circumference *EDCB.*
+For, since the circumference {AB|arcAB} equals the circumference {DE|arcDE}, add {BCD|arcBCD} to each, therefore the whole circumference {ABCD|arcABCD} equals the whole circumference {EDCB|arcEDCB}.
 
-And the angle *AED* stands on the circumference *ABCD,* and the angle *BAE* on the circumference *EDCB,* therefore the angle *BAE* also equals the angle *AED.* [!just III.27]
+And the angle {AED} stands on the circumference {ABCD|arcABCD}, and the angle {BAE} on the circumference {EDCB|arcEDCB}, therefore the angle {BAE} also equals the angle {AED}. [!just III.27]
 
-For the same reason each of the angles *ABC,* *BCD,* and *CDE* also equals each of the angles *BAE* and *AED,* therefore the pentagon *ABCDE* is equiangular.
+For the same reason each of the angles {ABC}, {BCD}, and {CDE} also equals each of the angles {BAE} and {AED}, therefore the pentagon {ABCDE} is equiangular.
 
 But it was also proved equilateral, therefore an equilateral and equiangular pentagon has been inscribed in the given circle.
 
@@ -109,15 +361,18 @@ guide:
             "FG;line;connect;F,G;0;0;gray",
             "H;point;similar;G,O,A,O,E;0;0",
             "GH;line;connect;G,H;0;0;gray",
-            "HA;line;connect;H,A;0;0;gray"
+            "HA;line;connect;H,A;0;0;gray",
+            // The angle the guide bisects (hidden at rest, lit on hover).
+            "angACO;sector;angleMarker;C,A,O;0;0;7a4fa3;cdb8e6"
         ],
+        aliases: { "OCA": "angACO", "ACO": "angACO" }
     });
 </script>
 </figure>
 
 The construction of this proposition is rather tedious to carry out. First, a line has to be cut according to the construction in @II.11. Next, that is used in @IV.10 for the construction of a 36°-72°-72° isosceles triangle.  Next, that triangle is fit into the given circle using the construction @IV.2.  Finally, a couple more lines are drawn to finish the pentagon.
 
-Various alternatives have have been given by others, such as Ptolemy.  One of the nicest was given in 1893 by H. W. Richmond. To inscribe a regular pentagon in a circle, first draw perpendicular radii *OA* and *OB* from the center *O* of a circle.  Let *C* be the midpoint of *OB* and draw *AC.*  Bisect angle *ACO* to meet *OA* at *D.*  Draw a perpendicular *DE* to *OA* to the circle.  Then *AE* is one side of the pentagon.  The remaining sides can then be constructed.
+Various alternatives have have been given by others, such as Ptolemy.  One of the nicest was given in 1893 by H. W. Richmond. To inscribe a regular pentagon in a circle, first draw perpendicular radii {OA} and {OB} from the center {O} of a circle.  Let {C} be the midpoint of {OB} and draw {AC}.  Bisect angle {ACO} to meet {OA} at {D}.  Draw a perpendicular {DE} to {OA} to the circle.  Then {AE} is one side of the pentagon.  The remaining sides can then be constructed.
 
 The easiest way to verify that Richmond's construction works is by means of trigonometry.
 
@@ -154,19 +409,28 @@ The easiest way to verify that Richmond's construction works is by means of trig
             "Q;point;intersection;L,G,H,F;0;0",
             "R;point;intersection;K,G,H,F;0;0",
             "MNPQR;polygon;pentagon;M,N,P,Q,R;0;0;0;random",
-            "MPRNQ;polygon;pentagon;M,P,R,N,Q;0;0;black;random"
+            "MPRNQ;polygon;pentagon;M,P,R,N,Q;0;0;black;random",
+            // Invisible highlight targets for the guide's refs: the
+            // parallels and the 36°-72°-72° triangles it names.
+            "CD;line;connect;C,D;0;0;0",
+            "BE;line;connect;B,E;0;0;0",
+            "LG;line;connect;L,G;0;0;0",
+            "ACD;polygon;triangle;A,C,D;0;0;0;0",
+            "ALG;polygon;triangle;A,L,G;0;0;0;0",
+            "FKH;polygon;triangle;F,K,H;0;0;0;0",
+            "EAK;polygon;triangle;E,A,K;0;0;0;0"
         ],
     });
 </script>
 </figure>
 
-Consider the regular pentagon *ABCDE* constructed in this proposition.
+Consider the regular pentagon {ABCDE} constructed in this proposition.
 
-Draw the diagonals of the pentagram to create a regular star pentagram *ACEBD* inside the pentagon. These diagonals meet forming a smaller regular pentagon in the center of the original pentagon.  The diagonals of that pentagon can be drawn to make an inscribed pentagram which, in turn, bound a yet smaller regular pentagon. And so forth.
+Draw the diagonals of the pentagram to create a regular star pentagram {ACEBD} inside the pentagon. These diagonals meet forming a smaller regular pentagon in the center of the original pentagon.  The diagonals of that pentagon can be drawn to make an inscribed pentagram which, in turn, bound a yet smaller regular pentagon. And so forth.
 
-For purposes of analysis, let *d*<sub>1</sub> and *s*<sub>1</sub> denote the diagonal and side of the first regular pentagon *ABCDE.* Also let *d*<sub>2</sub> and *s*<sub>2</sub> denote the diagonal and side of the second regular pentagon *FGHKL.*  And so forth.
+For purposes of analysis, let *d*<sub>1</sub> and *s*<sub>1</sub> denote the diagonal and side of the first regular pentagon {ABCDE}. Also let *d*<sub>2</sub> and *s*<sub>2</sub> denote the diagonal and side of the second regular pentagon {FGHKL}.  And so forth.
 
-It is evident that there are many lines parallel to the base *CD* of the triangle, namely *BE* and *LG,* as well as innumerable ones in the smaller pentagrams.  That means that there will be many 36°-72°-72° triangles besides the large one *ACD.* The next smaller one is *ALG,* then *FKH,* then many smaller ones.  Also, each of these various sized 36°-72°-72° triangles is congruent many others in the diagram.  For instance, triangles *ALG* and *EAK* are congruent.
+It is evident that there are many lines parallel to the base {CD} of the triangle, namely {BE} and {LG}, as well as innumerable ones in the smaller pentagrams.  That means that there will be many 36°-72°-72° triangles besides the large one {ACD}. The next smaller one is {ALG}, then {FKH}, then many smaller ones.  Also, each of these various sized 36°-72°-72° triangles is congruent many others in the diagram.  For instance, triangles {ALG} and {EAK} are congruent.
 
 There is also a series of obtuse 36°-36°-108° isosceles triangles of varying sizes.
 
