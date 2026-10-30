@@ -17,12 +17,32 @@ statement: To cut off a prescribed part from a given straight line.
 ----
 proof:
 
-Let *AB* be the given straight line.
+Let {AB} be the given straight line.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="250" tabindex="0"></canvas>
 <noscript><img alt="VI.9 diagram" src="propVI9.gif"/></noscript>
 <script type="text/javascript">
+    // AC is drawn at any angle, D taken on it, DE and EC made equal to AD
+    // (I.3, a bare point-appear per the fatigue rule), CB joined and DF
+    // drawn parallel to it (I.31); VI.2 then gives AD : DC = AF : FB.
+    //
+    // Joyce's figure draws AB, the line AG (A through D, E, C to his hidden
+    // point G), DF and CB; F' is his hidden parallelogram helper. The proof
+    // names AC, AD, DE, EC, DC, AF, FB and the triangle ABC: all added as
+    // transparent highlight targets (explicit ;0 face on the triangle), so
+    // the resting figure is unchanged. "Draw AC" strokes Joyce's AG from A,
+    // read as {AC|AG}. AG, CB and DF are declared from the ends the proof
+    // draws them from, so no solid twins. One marker for "any angle" at A
+    // (not a right angle); markers are hidden in the static figure.
+    //
+    // Draggables (checked against the bundle): A, B, D (free). D is taken
+    // only on slide 6, so it is deferred. E, C, F, F', G are derived.
+    var GIVEN = ["A","B","AB"];
+    var DRAW  = GIVEN.concat(["AG","C","AC","angA"]);
+    var TAKE  = DRAW.concat(["D","AD"]);
+    var CUT   = TAKE.concat(["E","DE","EC","DC"]);
+    var PAR   = CUT.concat(["CB","DF","F","ABC","AF","FB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -39,32 +59,116 @@ Let *AB* be the given straight line.
             "F';point;parallelogram;B,C,D;0;0",
             "F;point;intersection;A,B,D,F'",
             "DF;line;connect;D,F",
-            "CB;line;connect;C,B"
+            "CB;line;connect;C,B",
+            // Segments and the triangle, as transparent highlight targets.
+            "AC;line;connect;A,C;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "angA;sector;angleMarker;A,B,C"
         ],
+        deferDraggables: ["D"],
+        aliases: { "BA": "AB", "CA": "AC", "DA": "AD", "ED": "DE", "CE": "EC",
+                   "CD": "DC", "FA": "AF", "BF": "FB", "BC": "CB", "FD": "DF" },
+        slides: [
+            { text: "“To cut off a prescribed part from a given straight line.”",
+              visible: GIVEN,
+              highlighted: ["AB"],
+              justifications: [{ ref: "VI.9" }] },
+            { text: "Let {AB} be the given straight line.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "It is required to cut off from {AB} a prescribed part.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "Let the third part be that prescribed.",
+              visible: GIVEN },
+            { text: "Draw a straight line {AC|AG} through from {A} containing with {AB} any angle.",
+              visible: DRAW,
+              highlighted: ["AG","A","AB","angA"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AG",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angA", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Take a point {D} random on {AC},",
+              visible: TAKE,
+              highlighted: ["D","AC"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "and make {DE} and {EC} equal to {AD}.",
+              visible: CUT,
+              highlighted: ["DE","EC","AD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E", name: geomlib.A.Point.appear },
+                  { elem: "C", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "DE and EC equal to AD", ref: "I.3" }] },
+            { text: "Join {CB}, and draw {DF} through {D} parallel to it.",
+              visible: PAR,
+              highlighted: ["CB","DF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.1" },
+                               { claim: "DF through D parallel to CB", ref: "I.31" }] },
+            { text: "Then, since {DF} is parallel to a side {CB} of the triangle {ABC},",
+              visible: PAR,
+              highlighted: ["DF","CB","ABC"] },
+            { text: "therefore, proportionally, {AD} is to {DC} as {AF} is to {FB}.",
+              visible: PAR,
+              highlighted: ["AD","DC","AF","FB"],
+              justifications: [{ claim: "a parallel to a side cuts the sides proportionally", ref: "VI.2" }] },
+            { text: "But {DC} is double {AD},",
+              visible: PAR,
+              highlighted: ["DC","AD","DE","EC"] },
+            { text: "therefore {FB} is also double {AF}, therefore {AB} is triple of {AF}.",
+              visible: PAR,
+              highlighted: ["FB","AF","AB"] },
+            { text: "Therefore from the given straight line {AB} the prescribed third part {AF} has been cut off.",
+              visible: PAR,
+              highlighted: ["AB","AF"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.9") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "VI.2":     "/elements/books/bookVI/propositions/propVI2/"
     });
 </script>
 </figure>
 
-It is required to cut off from *AB* a prescribed part.
+It is required to cut off from {AB} a prescribed part.
 
 Let the third part be that prescribed.
 
-Draw a straight line *AC* through from *A* containing with *AB* any angle. Take a point *D* random on *AC,* and make *DE* and *EC* equal to *AD.* [!just I.3]
+Draw a straight line {AC} through from {A} containing with {AB} any angle. Take a point {D} random on {AC}, and make {DE} and {EC} equal to {AD}. [!just I.3]
 
-Join *CB,* and draw *DF* through *D* parallel to it. [!just I.31]
+Join {CB}, and draw {DF} through {D} parallel to it. [!just I.31]
 
-Then, since *DF* is parallel to a side *CB* of the triangle *ABC,* therefore, proportionally, *AD* is to *DC* as *AF* is to *FB.* [!just VI.2]
+Then, since {DF} is parallel to a side {CB} of the triangle {ABC}, therefore, proportionally, {AD} is to {DC} as {AF} is to {FB}. [!just VI.2]
 
-But *DC* is double *AD,* therefore *FB* is also double *AF,* therefore *AB* is triple of *AF.*
+But {DC} is double {AD}, therefore {FB} is also double {AF}, therefore {AB} is triple of {AF}.
 
-Therefore from the given straight line *AB* the prescribed third part *AF* has been cut off.
+Therefore from the given straight line {AB} the prescribed third part {AF} has been cut off.
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
 ----
 guide:
 
-The word "part" in this proposition means submultiple. The problem here is to divide a line *AB* into some given number *n* of equal parts, or actually, to find just one of these parts. Euclid takes the case *n* = 3 in his proof.
+The word "part" in this proposition means submultiple. The problem here is to divide a line {AB} into some given number *n* of equal parts, or actually, to find just one of these parts. Euclid takes the case *n* = 3 in his proof.
 
 Simson complained that proving the general case by using a specific case, the one-third part, "is not at all like Euclid's manner." But it is very much Euclid's manner throughout books V and VI to prove a general numerical statement with a specific numerical value.
 
@@ -107,7 +211,7 @@ Simson complained that proving the general case by using a specific case, the on
 </script>
 </figure>
 
-Abu'l-Abbas al-Fadl ibn al-Nayrizi (fl. c. 897, d. c. 922) wrote a commentary on the first ten books of the *Elements.* He gives another construction to divide a line *AB* into *n* equal parts. First, construct equal perpendiculars at *A* and *B* in opposite directions, mark off *n* – 1 equal parts on each of them, and connect the points as illustrated. The diagram shows *AB* divided into five equal parts.
+Abu'l-Abbas al-Fadl ibn al-Nayrizi (fl. c. 897, d. c. 922) wrote a commentary on the first ten books of the *Elements.* He gives another construction to divide a line {AB} into *n* equal parts. First, construct equal perpendiculars at {A} and {B} in opposite directions, mark off *n* – 1 equal parts on each of them, and connect the points as illustrated. The diagram shows {AB} divided into five equal parts.
 
 Al-Nayrizi's construction takes considerably less work than Euclid's. The proof that this construction is valid is about the same length as that for Euclid's construction.
 

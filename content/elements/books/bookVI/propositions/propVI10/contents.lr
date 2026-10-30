@@ -17,12 +17,37 @@ statement: To cut a given uncut straight line similarly to a given cut straight 
 ----
 proof:
 
-Let *AB* be the given uncut straight line, and *AC* the straight line cut at the points *D* and *E,* and let them be so placed as to contain any angle.
+Let {AB} be the given uncut straight line, and {AC} the straight line cut at the points {D} and {E}, and let them be so placed as to contain any angle.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="340" height="300" tabindex="0"></canvas>
 <noscript><img alt="VI.10 diagram" src="propVI10.gif"/></noscript>
 <script type="text/javascript">
+    // CB is joined, DF and EG drawn parallel to it and DHK parallel to AB
+    // (I.31); FH and HB are parallelograms (I.34), and VI.2 twice with V.7
+    // carries the cuts at D and E over to F and G.
+    //
+    // Joyce's figure draws the triangle ABC (random face), DF, EG and DK;
+    // F' and G' are his hidden parallelogram helpers. The given lines AB and
+    // AC stand alone until "Join CB", so they and CB are solid twins (ABs,
+    // ACs, CBs) hidden at rest (initiallyHidden); the filled triangle joins
+    // the slides once CB is drawn. DF, EG and DK are declared from D, E and
+    // D, so they stroke as drawn. The proof also names AB, AC, CB, the
+    // segments AD, DE, EC, AF, FG, GB, DH, HK, EH, CK, the parallelograms FH
+    // (FGHD) and HB (HGBK) and the triangles DCK and AEG: all transparent
+    // (;0;0;0 lines, ;0;0;0;0 polygons), so the resting figure is unchanged.
+    // Prose and caption refs go to these transparent targets, never to the
+    // filled triangle, which is not highlighted (#140). One marker for "any
+    // angle" at A (not a right angle); markers are hidden at rest.
+    //
+    // Draggables (checked against the bundle): A, B, C (free) and D, E
+    // (lineSlider on AC), all givens on slide 1. F', F, G', G, K, H are
+    // derived and listed from the slide that draws them.
+    var GIVEN = ["A","B","C","D","E","ABs","ACs","AB","AC","AD","DE","EC"];
+    var ANG   = GIVEN.concat(["angA"]);
+    var PAR1  = ANG.concat(["CBs","CB","DF","F","EG","G","AF","FG","GB"]);
+    var PAR2  = PAR1.concat(["ABC","DK","H","K","DH","HK","EH","CK",
+                             "FH","HB","DCK","AEG"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,25 +67,147 @@ Let *AB* be the given uncut straight line, and *AC* the straight line cut at the
             "EG;line;connect;E,G",
             "K;point;parallelogram;D,F,B",
             "DK;line;connect;D,K",
-            "H;point;intersection;D,K,E,G"
+            "H;point;intersection;D,K,E,G",
+            // Slide twins of the given lines and the join, hidden at rest.
+            "ABs;line;connect;A,B",
+            "ACs;line;connect;A,C",
+            "CBs;line;connect;C,B",
+            // Lines and segments, as transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "GB;line;connect;G,B;0;0;0",
+            "DH;line;connect;D,H;0;0;0",
+            "HK;line;connect;H,K;0;0;0",
+            "EH;line;connect;E,H;0;0;0",
+            "CK;line;connect;C,K;0;0;0",
+            // The parallelograms and triangles of the argument. Explicit ;0 faces.
+            "FH;polygon;quadrilateral;F,G,H,D;0;0;0;0",
+            "HB;polygon;quadrilateral;H,G,B,K;0;0;0;0",
+            "DCK;polygon;triangle;D,C,K;0;0;0;0",
+            "AEG;polygon;triangle;A,E,G;0;0;0;0",
+            "angA;sector;angleMarker;A,B,C"
         ],
+        initiallyHidden: ["ABs","ACs","CBs"],
+        aliases: { "DHK": "DK", "BA": "AB", "CA": "AC", "BC": "CB", "GF": "FG",
+                   "BG": "GB", "HD": "DH", "KH": "HK", "HE": "EH", "KC": "CK",
+                   "ED": "DE", "CE": "EC", "DA": "AD", "FA": "AF" },
+        slides: [
+            { text: "“To cut a given uncut straight line similarly to a given cut straight line.”",
+              visible: GIVEN,
+              highlighted: ["AB","AC","D","E"],
+              justifications: [{ ref: "VI.10" }] },
+            { text: "Let {AB} be the given uncut straight line,",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "and {AC} the straight line cut at the points {D} and {E},",
+              visible: GIVEN,
+              highlighted: ["AC","D","E"] },
+            { text: "and let them be so placed as to contain any angle.",
+              visible: ANG,
+              highlighted: ["AB","AC","angA"],
+              transition: { animations: [
+                  { elem: "angA", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Join {CB}, and draw {DF} and {EG} through {D} and {E} parallel to {CB},",
+              visible: PAR1,
+              highlighted: ["CB","DF","EG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CBs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DF",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F",   name: geomlib.A.Point.appear },
+                  { elem: "EG",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",   name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.1" },
+                               { claim: "DF and EG parallel to CB", ref: "I.31" }] },
+            { text: "and draw {DHK|DK} through {D} parallel to {AB}.",
+              visible: PAR2,
+              highlighted: ["DK","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear },
+                  { elem: "K",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "DHK parallel to AB", ref: "I.31" }] },
+            { text: "Therefore each of the figures {FH} and {HB} is a parallelogram.",
+              visible: PAR2,
+              highlighted: ["FH","HB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "FH", name: geomlib.A.Polygon.outline },
+                  { elem: "HB", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Therefore {DH} equals {FG} and {HK} equals {GB}.",
+              visible: PAR2,
+              highlighted: ["DH","FG","HK","GB"],
+              justifications: [{ claim: "opposite sides of a parallelogram are equal", ref: "I.34" }] },
+            { text: "Now, since the straight line {EH} is parallel to a side {CK} of the triangle {DCK},",
+              visible: PAR2,
+              highlighted: ["EH","CK","DCK"] },
+            { text: "therefore, proportionally, {DE} is to {EC} as {DH} is to {HK}.",
+              visible: PAR2,
+              highlighted: ["DE","EC","DH","HK"],
+              justifications: [{ claim: "a parallel to a side cuts the sides proportionally", ref: "VI.2" }] },
+            { text: "But {DH} equals {FG}, and {HK} equals {GB},",
+              visible: PAR2,
+              highlighted: ["DH","FG","HK","GB"] },
+            { text: "therefore {DE} is to {EC} as {FG} is to {GB}.",
+              visible: PAR2,
+              highlighted: ["DE","EC","FG","GB"],
+              justifications: [{ claim: "equals have the same ratio to the same", ref: "V.7" }] },
+            { text: "Again, since {DF} is parallel to a side {EG} of the triangle {AEG},",
+              visible: PAR2,
+              highlighted: ["DF","EG","AEG"] },
+            { text: "therefore, proportionally, {AD} is to {DE} as {AF} is to {FG}.",
+              visible: PAR2,
+              highlighted: ["AD","DE","AF","FG"],
+              justifications: [{ claim: "a parallel to a side cuts the sides proportionally", ref: "VI.2" }] },
+            { text: "But it was also proved that {DE} is to {EC} as {FG} is to {GB},",
+              visible: PAR2,
+              highlighted: ["DE","EC","FG","GB"] },
+            { text: "therefore {DE} is to {EC} as {FG} is to {GB},",
+              visible: PAR2,
+              highlighted: ["DE","EC","FG","GB"] },
+            { text: "and {AD} is to {DE} as {AF} is to {FG}.",
+              visible: PAR2,
+              highlighted: ["AD","DE","AF","FG"] },
+            { text: "Therefore the given uncut straight line {AB} has been cut similarly to the given cut straight line {AC}.",
+              visible: PAR2,
+              highlighted: ["AF","FG","GB","AD","DE","EC"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.10") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.31":     "/elements/books/bookI/propositions/propI31/",
+        "I.34":     "/elements/books/bookI/propositions/propI34/",
+        "V.7":      "/elements/books/bookV/propositions/propV7/",
+        "VI.2":     "/elements/books/bookVI/propositions/propVI2/"
     });
 </script>
 </figure>
 
-Join *CB,* and draw *DF* and *EG* through *D* and *E* parallel to *CB,* and draw *DHK* through *D* parallel to *AB.* [!just I.31]
+Join {CB}, and draw {DF} and {EG} through {D} and {E} parallel to {CB}, and draw {DHK} through {D} parallel to {AB}. [!just I.31]
 
-Therefore each of the figures *FH* and *HB* is a parallelogram. Therefore *DH* equals *FG* and *HK* equals *GB.* [!just I.34]
+Therefore each of the figures {FH} and {HB} is a parallelogram. Therefore {DH} equals {FG} and {HK} equals {GB}. [!just I.34]
 
-Now, since the straight line *EH* is parallel to a side *CK* of the triangle *DCK,* therefore, proportionally, *DE* is to *EC* as *DH* is to *HK.* [!just VI.2]
+Now, since the straight line {EH} is parallel to a side {CK} of the triangle {DCK}, therefore, proportionally, {DE} is to {EC} as {DH} is to {HK}. [!just VI.2]
 
-But *DH* equals *FG,* and *HK* equals *GB,* therefore *DE* is to *EC* as *FG* is to *GB.* [!just V.7]
+But {DH} equals {FG}, and {HK} equals {GB}, therefore {DE} is to {EC} as {FG} is to {GB}. [!just V.7]
 
-Again, since *DF* is parallel to a side *EG* of the triangle *AEG,* therefore, proportionally, *AD* is to *DE* as *AF* is to *FG.* [!just VI.2]
+Again, since {DF} is parallel to a side {EG} of the triangle {AEG}, therefore, proportionally, {AD} is to {DE} as {AF} is to {FG}. [!just VI.2]
 
-But it was also proved that *DE* is to *EC* as *FG* is to *GB,* therefore *DE* is to *EC* as *FG* is to *GB,* and *AD* is to *DE* as *AF* is to *FG.*
+But it was also proved that {DE} is to {EC} as {FG} is to {GB}, therefore {DE} is to {EC} as {FG} is to {GB}, and {AD} is to {DE} as {AF} is to {FG}.
 
-Therefore the given uncut straight line *AB* has been cut similarly to the given cut straight line *AC.*
+Therefore the given uncut straight line {AB} has been cut similarly to the given cut straight line {AC}.
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
