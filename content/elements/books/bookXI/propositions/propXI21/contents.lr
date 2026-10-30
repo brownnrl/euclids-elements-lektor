@@ -15,14 +15,43 @@ statement: Any solid angle is contained by plane angles whose sum is less than f
 ----
 proof:
 
-Let the angle at *A* be a solid angle contained by the plane angles *BAC, CAD,* and *DAB.*
+Let the angle at {A} be a solid angle contained by the plane angles {BAC|angBAC}, {CAD|angCAD}, and {DAB|angDAB}.
 
-I say that the sum of the angles *BAC, CAD,* and *DAB* is less than four right angles.
+I say that the sum of the angles {BAC|angBAC}, {CAD|angCAD}, and {DAB|angDAB} is less than four right angles.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="230" height="220" tabindex="0"></canvas>
 <noscript><img alt="XI.21 diagram" src="propXI21.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the solid angle at A drawn as the three filled faces
+    // ABC, ABD, ACD of a pyramid on the base BCD.
+    //
+    // Joyce draws AB, AC, AD and BC, CD, DB only as the edges of the
+    // filled triangles. The walk needs the three edges at A before BC, CD,
+    // DB are joined, so all six are solid slide twins, hidden at rest
+    // (initiallyHidden), stroked from the end they are drawn from; the
+    // triangles trace and fill when the proof turns to their angle sums.
+    // ABCt, ACDt, ADBt are faceless twins of the filled triangles (a
+    // highlighted face is raised over the markers, #140); the captions
+    // route the triangles to them. The twelve angle markers are named
+    // ang + Joyce's first spelling; triangle and angle names collide
+    // (ABC, ADB), so the angles take the display override. Markers are
+    // pinned to opt out of ring stepping: the three at A, and the two
+    // face angles at B, C, D, lie side by side at 22; the base angles
+    // CBD, BCD, CDB, which contain them, sit outside at 34.
+    //
+    // Draggables (checked against the bundle): A, B, C, D free. All four
+    // are named by the setting-out, so none is deferred.
+    var GIVEN = ["A","B","C","D","AB","AC","AD"];
+    var ATA   = ["angBAC","angCAD","angDAB"];
+    var JOIN  = GIVEN.concat(["BC","CD","DB"]);
+    var ATB   = ["angCBA","angABD","angCBD"];
+    var ATC   = ["angBCA","angACD","angBCD"];
+    var ATD   = ["angCDA","angADB","angCDB"];
+    var SIX   = ["angCBA","angABD","angBCA","angACD","angCDA","angADB"];
+    var THREE = ["angCBD","angBCD","angCDB"];
+    var TRI   = JOIN.concat(["ABC","ABD","ACD"]);
+    var TWINS = ["ABCt","ACDt","ADBt"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -34,21 +63,154 @@ I say that the sum of the angles *BAC, CAD,* and *DAB* is less than four right a
             "D;point;free;190,130",
             "ABC;polygon;triangle;A,B,C;0;0;black;random",
             "ABD;polygon;triangle;A,B,D;0;0;black;random",
-            "ACD;polygon;triangle;A,C,D;0;0;black;random"
+            "ACD;polygon;triangle;A,C,D;0;0;black;random",
+            // Slide twins, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            "AC;line;connect;A,C",
+            "AD;line;connect;A,D",
+            "BC;line;connect;B,C",
+            "CD;line;connect;C,D",
+            "DB;line;connect;D,B",
+            // Faceless highlight twins of the triangles. Explicit ;0 faces.
+            "ABCt;polygon;triangle;A,B,C;0;0;0;0",
+            "ACDt;polygon;triangle;A,C,D;0;0;0;0",
+            "ADBt;polygon;triangle;A,D,B;0;0;0;0",
+            "angBAC;sector;angleMarker;A,B,C,22",
+            "angCAD;sector;angleMarker;A,C,D,22",
+            "angDAB;sector;angleMarker;A,D,B,22",
+            "angCBA;sector;angleMarker;B,C,A,22",
+            "angABD;sector;angleMarker;B,A,D,22",
+            "angCBD;sector;angleMarker;B,C,D,34",
+            "angBCA;sector;angleMarker;C,B,A,22",
+            "angACD;sector;angleMarker;C,A,D,22",
+            "angBCD;sector;angleMarker;C,B,D,34",
+            "angCDA;sector;angleMarker;D,C,A,22",
+            "angADB;sector;angleMarker;D,A,B,22",
+            "angCDB;sector;angleMarker;D,C,B,34"
         ],
+        initiallyHidden: ["AB","AC","AD","BC","CD","DB"],
+        slides: [
+            { text: "“Any solid angle is contained by plane angles whose sum is less than four right angles.”",
+              visible: GIVEN.concat(ATA),
+              highlighted: ATA,
+              justifications: [{ ref: "XI.21" }] },
+            { text: "Let the angle at {A} be a solid angle contained by the plane angles {BAC|angBAC}, {CAD|angCAD}, and {DAB|angDAB}.",
+              visible: GIVEN.concat(ATA),
+              highlighted: ["A"].concat(ATA),
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "angCAD", name: geomlib.A.Sector.sweep },
+                  { elem: "angDAB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that the sum of the angles {BAC|angBAC}, {CAD|angCAD}, and {DAB|angDAB} is less than four right angles.",
+              visible: GIVEN.concat(ATA),
+              highlighted: ATA },
+            { text: "Take points {B}, {C}, and {D} at random on the straight lines {AB}, {AC}, and {AD} respectively,",
+              visible: GIVEN,
+              highlighted: ["B","C","D","AB","AC","AD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "B", name: geomlib.A.Point.appear },
+                  { elem: "C", name: geomlib.A.Point.appear },
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "and join {BC}, {CD}, and {DB}.",
+              visible: JOIN,
+              highlighted: ["BC","CD","DB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DB", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Now, since the solid angle at {B} is contained by the three plane angles {CBA|angCBA}, {ABD|angABD}, and {CBD|angCBD},",
+              visible: JOIN.concat(ATB),
+              highlighted: ["B"].concat(ATB),
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCBA", name: geomlib.A.Sector.sweep },
+                  { elem: "angABD", name: geomlib.A.Sector.sweep },
+                  { elem: "angCBD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the sum of any two is greater than the remaining one,",
+              visible: JOIN.concat(ATB),
+              highlighted: ATB },
+            { text: "therefore the sum of the angles {CBA|angCBA} and {ABD|angABD} is greater than the angle {CBD|angCBD}.",
+              visible: JOIN.concat(ATB),
+              highlighted: ATB,
+              justifications: [{ claim: "CBA + ABD > CBD", ref: "XI.20" }] },
+            { text: "For the same reason the sum of the angles {BCA|angBCA} and {ACD|angACD} is greater than the angle {BCD|angBCD},",
+              visible: JOIN.concat(ATC),
+              highlighted: ATC,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBCA", name: geomlib.A.Sector.sweep },
+                  { elem: "angACD", name: geomlib.A.Sector.sweep },
+                  { elem: "angBCD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "BCA + ACD > BCD", ref: "XI.20" }] },
+            { text: "and the sum of the angles {CDA|angCDA} and {ADB|angADB} is greater than the angle {CDB|angCDB}.",
+              visible: JOIN.concat(ATD),
+              highlighted: ATD,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCDA", name: geomlib.A.Sector.sweep },
+                  { elem: "angADB", name: geomlib.A.Sector.sweep },
+                  { elem: "angCDB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "CDA + ADB > CDB", ref: "XI.20" }] },
+            { text: "Therefore the sum of the six angles {CBA|angCBA}, {ABD|angABD}, {BCA|angBCA}, {ACD|angACD}, {CDA|angCDA}, and {ADB|angADB}",
+              visible: JOIN.concat(SIX, THREE),
+              highlighted: SIX },
+            { text: "is greater than the sum of the three angles {CBD|angCBD}, {BCD|angBCD}, and {CDB|angCDB}.",
+              visible: JOIN.concat(SIX, THREE),
+              highlighted: THREE },
+            { text: "But the sum of the three angles {CBD|angCBD}, {BDC|angCDB}, and {BCD|angBCD} equals two right angles,",
+              visible: JOIN.concat(THREE),
+              highlighted: ["BC","CD","DB"].concat(THREE),
+              justifications: [{ claim: "angles of triangle BCD = 2 rt", ref: "I.32" }] },
+            { text: "therefore the sum of the six angles {CBA|angCBA}, {ABD|angABD}, {BCA|angBCA}, {ACD|angACD}, {CDA|angCDA}, and {ADB|angADB} is greater than two right angles.",
+              visible: JOIN.concat(SIX),
+              highlighted: SIX },
+            { text: "And, since the each sum of the three angles of the triangles {ABC|ABCt}, {ACD|ACDt}, and {ADB|ADBt} equals two right angles,",
+              visible: TRI,
+              highlighted: TWINS,
+              transition: { mode: "parallel", animations: [
+                  { elem: "ABC", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "ACD", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "ABD", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "therefore the sum of the nine angles of the three triangles,",
+              visible: TRI.concat(ATA, SIX),
+              highlighted: TWINS },
+            { text: "the angles {CBA|angCBA}, {ACB|angBCA}, {BAC|angBAC}, {ACD|angACD}, {CDA|angCDA}, {CAD|angCAD}, {ADB|angADB}, {DBA|angABD}, and {BAD|angDAB} equals six right angles.",
+              visible: TRI.concat(ATA, SIX),
+              highlighted: ATA.concat(SIX) },
+            { text: "Of them the sum of the six angles {ABC|angCBA}, {BCA|angBCA}, {ACD|angACD}, {CDA|angCDA}, {ADB|angADB}, and {DBA|angABD} are greater than two right angles,",
+              visible: TRI.concat(ATA, SIX),
+              highlighted: SIX },
+            { text: "therefore the sum of the remaining three angles {BAC|angBAC}, {CAD|angCAD}, and {DAB|angDAB} containing the solid angle is less than four right angles.",
+              visible: TRI.concat(ATA),
+              highlighted: ATA },
+            { text: "Therefore, any solid angle is contained by plane angles whose sum is less than four right angles.",
+              visible: TRI.concat(ATA),
+              highlighted: ATA,
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.21") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.32":     "/elements/books/bookI/propositions/propI32/",
+        "XI.20":    "/elements/books/bookXI/propositions/propXI20/"
     });
 </script>
 </figure>
 
-Take points *B, C,* and *D* at random on the straight lines *AB, AC,* and *AD* respectively, and join *BC, CD,* and *DB.*
+Take points {B}, {C}, and {D} at random on the straight lines {AB}, {AC}, and {AD} respectively, and join {BC}, {CD}, and {DB}.
 
-Now, since the solid angle at *B* is contained by the three plane angles *CBA, ABD,* and *CBD,* and the sum of any two is greater than the remaining one, therefore the sum of the angles *CBA* and *ABD* is greater than the angle *CBD.* [!just XI.20]
+Now, since the solid angle at {B} is contained by the three plane angles {CBA|angCBA}, {ABD|angABD}, and {CBD|angCBD}, and the sum of any two is greater than the remaining one, therefore the sum of the angles {CBA|angCBA} and {ABD|angABD} is greater than the angle {CBD|angCBD}. [!just XI.20]
 
-For the same reason the sum of the angles *BCA* and *ACD* is greater than the angle *BCD,* and the sum of the angles *CDA* and *ADB* is greater than the angle *CDB.* Therefore the sum of the six angles *CBA, ABD, BCA, ACD, CDA,* and *ADB* is greater than the sum of the three angles *CBD, BCD,* and *CDB.*
+For the same reason the sum of the angles {BCA|angBCA} and {ACD|angACD} is greater than the angle {BCD|angBCD}, and the sum of the angles {CDA|angCDA} and {ADB|angADB} is greater than the angle {CDB|angCDB}. Therefore the sum of the six angles {CBA|angCBA}, {ABD|angABD}, {BCA|angBCA}, {ACD|angACD}, {CDA|angCDA}, and {ADB|angADB} is greater than the sum of the three angles {CBD|angCBD}, {BCD|angBCD}, and {CDB|angCDB}.
 
-But the sum of the three angles *CBD, BDC,* and *BCD* equals two right angles, therefore the sum of the six angles *CBA, ABD, BCA, ACD, CDA,* and *ADB* is greater than two right angles. [!just I.32]
+But the sum of the three angles {CBD|angCBD}, {BDC|angCDB}, and {BCD|angBCD} equals two right angles, therefore the sum of the six angles {CBA|angCBA}, {ABD|angABD}, {BCA|angBCA}, {ACD|angACD}, {CDA|angCDA}, and {ADB|angADB} is greater than two right angles. [!just I.32]
 
-And, since the each sum of the three angles of the triangles *ABC, ACD,* and *ADB* equals two right angles, therefore the sum of the nine angles of the three triangles, the angles *CBA, ACB, BAC, ACD, CDA, CAD, ADB, DBA,* and *BAD* equals six right angles. Of them the sum of the six angles *ABC, BCA, ACD, CDA, ADB,* and *DBA* are greater than two right angles, therefore the sum of the remaining three angles *BAC, CAD,* and *DAB* containing the solid angle is less than four right angles.
+And, since the each sum of the three angles of the triangles {ABC|ABCt}, {ACD|ACDt}, and {ADB|ADBt} equals two right angles, therefore the sum of the nine angles of the three triangles, the angles {CBA|angCBA}, {ACB|angBCA}, {BAC|angBAC}, {ACD|angACD}, {CDA|angCDA}, {CAD|angCAD}, {ADB|angADB}, {DBA|angABD}, and {BAD|angDAB} equals six right angles. Of them the sum of the six angles {ABC|angCBA}, {BCA|angBCA}, {ACD|angACD}, {CDA|angCDA}, {ADB|angADB}, and {DBA|angABD} are greater than two right angles, therefore the sum of the remaining three angles {BAC|angBAC}, {CAD|angCAD}, and {DAB|angDAB} containing the solid angle is less than four right angles.
 
 Therefore, *any solid angle is contained by plane angles whose sum is less than four right angles.*
 
