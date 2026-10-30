@@ -19,14 +19,33 @@ statement: To find the greatest common measure of two given numbers not relative
 ----
 proof:
 
-Let *AB* and *CD* be the two given numbers not relatively prime.
+Let {AB} and {CD} be the two given numbers not relatively prime.
 
-It is required to find the greatest common measure of *AB* and *CD.*
+It is required to find the greatest common measure of {AB} and {CD}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="120" height="280" tabindex="0"></canvas>
 <noscript><img alt="VII.2 diagram" src="propVII2.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as segments: AB and CD are the givens, E and F the remainders
+    // of the antenaresis (BE = CD, DF = 2·AE, AE = 2·CF), G the supposed
+    // greater common measure of the reductio. The walk is highlight beats:
+    // each "measures" lights the measuring and the measured segment.
+    //
+    // Added to Joyce's figure, all transparent (;0;0;0): the part segments
+    // BE, AE, DF and CF the proof names, so they can light.
+    //
+    // Draggables (checked against the bundle): A, C, F, G1 (lineSliders)
+    // and the off-canvas, colourless rail ends A0…G3. F (the last remainder
+    // CF) and G1 (the end of G) arrive mid-walk, so both are deferred. E, D
+    // and B are cutoffs and are listed per slide.
+    //
+    // Joyce's G is drawn equal to CF (G2 is cut off at CF's length), though
+    // the text supposes it greater; the figure is left as he drew it.
+    var GIVEN = ["A","B","C","D","AB","CD"];
+    var STEP1 = GIVEN.concat(["E","BE","AE"]);
+    var STEP2 = STEP1.concat(["F","DF","CF"]);
+    var WITH_G = STEP2.concat(["G","G1","G2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -50,37 +69,152 @@ It is required to find the greatest common measure of *AB* and *CD.*
             "AB;line;connect;A,B",
             "CD;line;connect;C,D",
             "G2;point;cutoff;G1,G3,C,F;0",
-            "G;line;connect;G1,G2;black"
+            "G;line;connect;G1,G2;black",
+            // Hover / highlight targets only — AB and CD draw these parts.
+            "BE;line;connect;B,E;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "DF;line;connect;D,F;0;0;0",
+            "CF;line;connect;C,F;0;0;0"
         ],
+        deferDraggables: ["F","G1"],
+        aliases: { "BA": "AB", "DC": "CD", "EA": "AE", "FC": "CF",
+                   "EB": "BE", "FD": "DF" },
+        slides: [
+            { text: "“To find the greatest common measure of two given numbers not relatively prime.”",
+              visible: GIVEN,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "VII.2" }] },
+            { text: "Let {AB} and {CD} be the two given numbers not relatively prime.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "It is required to find the greatest common measure of {AB} and {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "If now {CD} measures {AB}, since it also measures itself, then {CD} is a common measure of {CD} and {AB}.",
+              visible: GIVEN,
+              highlighted: ["CD","AB"] },
+            { text: "And it is clear that it is also the greatest, for no greater number than {CD} measures {CD}.",
+              visible: GIVEN,
+              highlighted: ["CD"] },
+            { text: "But, if {CD} does not measure {AB}, then, when the less of the numbers {AB} and {CD} being continually subtracted from the greater,",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "some number is left which measures the one before it.",
+              visible: GIVEN,
+              highlighted: [] },
+            { text: "For a unit is not left, otherwise {AB} and {CD} would be relatively prime, which is contrary to the hypothesis.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"],
+              justifications: [
+                  { claim: "relatively prime", ref: "VII.Def.12" },
+                  { claim: "a unit left makes them relatively prime", ref: "VII.1" } ] },
+            { text: "Therefore some number is left which measures the one before it.",
+              visible: GIVEN,
+              highlighted: [] },
+            { text: "Now let {CD}, measuring {BE}, leave {EA} less than itself,",
+              visible: STEP1,
+              highlighted: ["CD","BE","AE"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "let {EA}, measuring {DF}, leave {FC} less than itself,",
+              visible: STEP2,
+              highlighted: ["AE","DF","CF"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "and let {CF} measure {AE}.",
+              visible: STEP2,
+              highlighted: ["CF","AE"] },
+            { text: "Since then, {CF} measures {AE}, and {AE} measures {DF}, therefore {CF} also measures {DF}.",
+              visible: STEP2,
+              highlighted: ["CF","AE","DF"] },
+            { text: "But it measures itself, therefore it also measures the whole {CD}.",
+              visible: STEP2,
+              highlighted: ["CF","DF","CD"] },
+            { text: "But {CD} measures {BE}, therefore {CF} also measures {BE}.",
+              visible: STEP2,
+              highlighted: ["CD","BE","CF"] },
+            { text: "And it also measures {EA}, therefore it measures the whole {BA}.",
+              visible: STEP2,
+              highlighted: ["CF","BE","AE","AB"] },
+            { text: "But it also measures {CD}, therefore {CF} measures {AB} and {CD}.",
+              visible: STEP2,
+              highlighted: ["CF","AB","CD"] },
+            { text: "Therefore {CF} is a common measure of {AB} and {CD}.",
+              visible: STEP2,
+              highlighted: ["CF","AB","CD"] },
+            { text: "I say next that it is also the greatest.",
+              visible: STEP2,
+              highlighted: ["CF"] },
+            { text: "If {CF} is not the greatest common measure of {AB} and {CD},",
+              visible: STEP2,
+              highlighted: ["CF","AB","CD"] },
+            { text: "then some number {G}, which is greater than {CF}, measures the numbers {AB} and {CD}.",
+              visible: WITH_G,
+              highlighted: ["G","CF","AB","CD"] },
+            { text: "Now, since {G} measures {CD}, and {CD} measures {BE}, therefore {G} also measures {BE}.",
+              visible: WITH_G,
+              highlighted: ["G","CD","BE"] },
+            { text: "But it also measures the whole {BA}, therefore it measures the remainder {AE}.",
+              visible: WITH_G,
+              highlighted: ["G","AB","AE"] },
+            { text: "But {AE} measures {DF}, therefore {G} also measures {DF}.",
+              visible: WITH_G,
+              highlighted: ["G","AE","DF"] },
+            { text: "And it measures the whole {DC}, therefore it also measures the remainder {CF},",
+              visible: WITH_G,
+              highlighted: ["G","CD","CF"] },
+            { text: "that is, the greater measures the less, which is impossible.",
+              visible: WITH_G,
+              highlighted: ["G","CF"] },
+            // The reductio is closed: the supposed measure G is withdrawn.
+            { text: "Therefore no number which is greater than {CF} measures the numbers {AB} and {CD}.",
+              visible: STEP2,
+              highlighted: ["CF","AB","CD"] },
+            { text: "Therefore {CF} is the greatest common measure of {AB} and {CD}.",
+              visible: STEP2,
+              highlighted: ["CF","AB","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.2") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.12": "/elements/books/bookVII/definitions/defVII12/",
+        "VII.1":      "/elements/books/bookVII/propositions/propVII1/"
     });
 </script>
 </figure>
 
-If now *CD* measures *AB,* since it also measures itself, then *CD* is a common measure of *CD* and *AB.* And it is clear that it is also the greatest, for no greater number than *CD* measures *CD.*
+If now {CD} measures {AB}, since it also measures itself, then {CD} is a common measure of {CD} and {AB}. And it is clear that it is also the greatest, for no greater number than {CD} measures {CD}.
 
-But, if *CD* does not measure *AB,* then, when the less of the numbers *AB* and *CD* being continually subtracted from the greater, some number is left which measures the one before it.
+But, if {CD} does not measure {AB}, then, when the less of the numbers {AB} and {CD} being continually subtracted from the greater, some number is left which measures the one before it.
 
-For a unit is not left, otherwise *AB* and *CD* would be relatively prime, which is contrary to the hypothesis. [!just VII.Def.12; VII.1]
+For a unit is not left, otherwise {AB} and {CD} would be relatively prime, which is contrary to the hypothesis. [!just VII.Def.12; VII.1]
 
 Therefore some number is left which measures the one before it.
 
-Now let *CD,* measuring *BE,* leave *EA* less than itself, let *EA,* measuring *DF,* leave *FC* less than itself, and let *CF* measure *AE.*
+Now let {CD}, measuring {BE}, leave {EA} less than itself, let {EA}, measuring {DF}, leave {FC} less than itself, and let {CF} measure {AE}.
 
-Since then, *CF* measures *AE,* and *AE* measures *DF,* therefore *CF* also measures *DF.* But it measures itself, therefore it also measures the whole *CD.*
+Since then, {CF} measures {AE}, and {AE} measures {DF}, therefore {CF} also measures {DF}. But it measures itself, therefore it also measures the whole {CD}.
 
-But *CD* measures *BE,* therefore *CF* also measures *BE.* And it also measures *EA,* therefore it measures the whole *BA.*
+But {CD} measures {BE}, therefore {CF} also measures {BE}. And it also measures {EA}, therefore it measures the whole {BA}.
 
-But it also measures *CD,* therefore *CF* measures *AB* and *CD.* Therefore *CF* is a common measure of *AB* and *CD.*
+But it also measures {CD}, therefore {CF} measures {AB} and {CD}. Therefore {CF} is a common measure of {AB} and {CD}.
 
 I say next that it is also the greatest.
 
-If *CF* is not the greatest common measure of *AB* and *CD,* then some number *G,* which is greater than *CF,* measures the numbers *AB* and *CD.*
+If {CF} is not the greatest common measure of {AB} and {CD}, then some number {G}, which is greater than {CF}, measures the numbers {AB} and {CD}.
 
-Now, since *G* measures *CD,* and *CD* measures *BE,* therefore *G* also measures *BE.* But it also measures the whole *BA,* therefore it measures the remainder *AE.*
+Now, since {G} measures {CD}, and {CD} measures {BE}, therefore {G} also measures {BE}. But it also measures the whole {BA}, therefore it measures the remainder {AE}.
 
-But *AE* measures *DF,* therefore *G* also measures *DF.* And it measures the whole *DC,* therefore it also measures the remainder *CF,* that is, the greater measures the less, which is impossible.
+But {AE} measures {DF}, therefore {G} also measures {DF}. And it measures the whole {DC}, therefore it also measures the remainder {CF}, that is, the greater measures the less, which is impossible.
 
-Therefore no number which is greater than *CF* measures the numbers *AB* and *CD.* Therefore *CF* is the greatest common measure of *AB* and *CD.*
+Therefore no number which is greater than {CF} measures the numbers {AB} and {CD}. Therefore {CF} is the greatest common measure of {AB} and {CD}.
 
 <div class="qed">Q.E.D.</div>
 ----
@@ -104,7 +238,7 @@ The stages of the algorithm are the same as in @VII.1 except that the final rema
 <br><i>a</i><sub><i>n</i>-1</sub> – <i>m</i><sub><i>n</i>-1</sub> <i>a</i><sub><i>n</i></sub> = <i>a</i><sub><i>n</i>+1</sub>.
 </center>
 
-(In Euclid's proof *a*<sub>1</sub> is *AB, a*<sub>2</sub> is *CD, a*<sub>3</sub> is *AE,* and *a*<sub>4</sub> = *a*<sub>*n*+1</sub> is *CF.*)
+(In Euclid's proof *a*<sub>1</sub> is {AB}, *a*<sub>2</sub> is {CD}, *a*<sub>3</sub> is {AE}, and *a*<sub>4</sub> = *a*<sub>*n*+1</sub> is {CF}.)
 
 In the first part of the proof, Euclid shows that since *a*<sub>*n*+1</sub> divides *a*<sub>*n*</sub>, it also divides *a*<sub>*n*-1</sub>, ... , *a*<sub>2</sub>, and *a*<sub>1</sub>. Therefore *a*<sub>*n*+1</sub> is a common divisor of *a*<sub>2</sub> and *a*<sub>1</sub>. In the last part of the proof, Euclid shows that if any number *d* divides both *a*<sub>2</sub> and *a*<sub>1</sub>, then it also divides *a*<sub>3</sub>, ... , *a*<sub>*n*</sub>, and *a*<sub>*n*+1</sub>. Therefore *a*<sub>*n*+1</sub> is the greatest common divisor. The last part of the proof also shows that every common divisor divides the greatest common divisor as noted in the corollary.
 

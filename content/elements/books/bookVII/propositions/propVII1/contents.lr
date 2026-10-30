@@ -15,12 +15,31 @@ statement: When two unequal numbers are set out, and the less is continually sub
 ----
 proof:
 
-The less of two unequal numbers *AB* and *CD* being continually subtracted from the greater, let the number which is left never measure the one before it until a unit is left.
+The less of two unequal numbers {AB} and {CD} being continually subtracted from the greater, let the number which is left never measure the one before it until a unit is left.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="140" height="270" tabindex="0"></canvas>
 <noscript><img alt="VII.1 diagram" src="propVII1.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as segments: AB and CD are the givens, F, G, H the remainders
+    // of the antenaresis (BF = CD, DG = 2·AF, FH = CG, HA the unit), E the
+    // supposed common measure of the reductio. The walk is highlight beats:
+    // each "measures" lights the measuring and the measured segment.
+    //
+    // Added to Joyce's figure, all transparent (;0;0;0): the part segments
+    // BF, AF, DG, CG, FH and AH the proof names, so they can light.
+    //
+    // Draggables (checked against the bundle): A, C, H, E1 (lineSliders)
+    // and the off-canvas, colourless rail ends A0…E3. H (the unit HA) and
+    // E1 (the end of E) arrive mid-walk, so both are deferred. F, G, D and
+    // B are cutoffs and are listed per slide.
+    var GIVEN = ["A","B","C","D","AB","CD"];
+    var WITH_E = GIVEN.concat(["E","E1","E2"]);
+    var STEP1 = WITH_E.concat(["F","BF","AF"]);
+    var STEP2 = STEP1.concat(["G","DG","CG"]);
+    var STEP3 = STEP2.concat(["H","FH","AH"]);
+    // The reductio closed: E withdrawn, the antenaresis stays.
+    var CLOSED = GIVEN.concat(["F","BF","AF","G","DG","CG","H","FH","AH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -45,23 +64,113 @@ The less of two unequal numbers *AB* and *CD* being continually subtracted from 
             "AB;line;connect;A,B",
             "CD;line;connect;C,D",
             "E2;point;cutoff;E1,E3,A,H;0",
-            "E;line;connect;E1,E2;black"
+            "E;line;connect;E1,E2;black",
+            // Hover / highlight targets only — AB and CD draw these parts.
+            "BF;line;connect;B,F;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            "DG;line;connect;D,G;0;0;0",
+            "CG;line;connect;C,G;0;0;0",
+            "FH;line;connect;F,H;0;0;0",
+            "AH;line;connect;A,H;0;0;0"
         ],
+        deferDraggables: ["H","E1"],
+        aliases: { "BA": "AB", "DC": "CD", "FA": "AF", "GC": "CG",
+                   "HA": "AH", "FB": "BF", "GD": "DG", "HF": "FH" },
+        slides: [
+            // The deck opens on the proposition's statement over the givens
+            // (process.md "Open on the statement"), split at its seams.
+            { text: "“When two unequal numbers are set out, and the less is continually subtracted in turn from the greater,”",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "“if the number which is left never measures the one before it until a unit is left,”",
+              visible: GIVEN,
+              highlighted: [] },
+            { text: "“then the original numbers are relatively prime.”",
+              visible: GIVEN,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "VII.1" }] },
+            { text: "The less of two unequal numbers {AB} and {CD} being continually subtracted from the greater,",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "let the number which is left never measure the one before it until a unit is left.",
+              visible: GIVEN,
+              highlighted: [] },
+            { text: "I say that {AB} and {CD} are relatively prime, that is, that a unit alone measures {AB} and {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"],
+              justifications: [{ claim: "relatively prime: measured by a unit alone", ref: "VII.Def.12" }] },
+            { text: "If {AB} and {CD} are not relatively prime, then some number {E} measures them.",
+              visible: WITH_E,
+              highlighted: ["AB","CD","E"] },
+            { text: "Let {CD}, measuring {BF}, leave {FA} less than itself,",
+              visible: STEP1,
+              highlighted: ["CD","BF","AF"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "let {AF}, measuring {DG}, leave {GC} less than itself,",
+              visible: STEP2,
+              highlighted: ["AF","DG","CG"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "and let {GC}, measuring {FH}, leave a unit {HA}.",
+              visible: STEP3,
+              highlighted: ["CG","FH","AH"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Point.appear } ] } },
+            { text: "Since, then, {E} measures {CD}, and {CD} measures {BF}, therefore {E} also measures {BF}.",
+              visible: STEP3,
+              highlighted: ["E","CD","BF"] },
+            { text: "But it also measures the whole {BA}, therefore it measures the remainder {AF}.",
+              visible: STEP3,
+              highlighted: ["E","AB","AF"] },
+            { text: "But {AF} measures {DG}, therefore {E} also measures {DG}.",
+              visible: STEP3,
+              highlighted: ["E","AF","DG"] },
+            { text: "But it also measures the whole {DC}, therefore it also measures the remainder {CG}.",
+              visible: STEP3,
+              highlighted: ["E","CD","CG"] },
+            { text: "But {CG} measures {FH}, therefore {E} also measures {FH}.",
+              visible: STEP3,
+              highlighted: ["E","CG","FH"] },
+            { text: "But it also measures the whole {FA}, therefore it measures the remainder, the unit {AH},",
+              visible: STEP3,
+              highlighted: ["E","AF","AH"] },
+            { text: "though it is a number, which is impossible.",
+              visible: STEP3,
+              highlighted: ["E","AH"] },
+            // The reductio is closed: the supposed measure E is withdrawn.
+            { text: "Therefore no number measures the numbers {AB} and {CD}. Therefore {AB} and {CD} are relatively prime.",
+              visible: CLOSED,
+              highlighted: ["AB","CD"],
+              justifications: [
+                  { claim: "relatively prime", ref: "VII.Def.12" },
+                  { ref: "Q.E.D." } ] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.1") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.12": "/elements/books/bookVII/definitions/defVII12/"
     });
 </script>
 </figure>
 
-I say that *AB* and *CD* are relatively prime, that is, that a unit alone measures *AB* and *CD.* [!just VII.Def.12]
+I say that {AB} and {CD} are relatively prime, that is, that a unit alone measures {AB} and {CD}. [!just VII.Def.12]
 
-If *AB* and *CD* are not relatively prime, then some number *E* measures them. Let *CD,* measuring *BF,* leave *FA* less than itself, let *AF,* measuring *DG,* leave *GC* less than itself, and let *GC,* measuring *FH,* leave a unit *HA.*
+If {AB} and {CD} are not relatively prime, then some number {E} measures them. Let {CD}, measuring {BF}, leave {FA} less than itself, let {AF}, measuring {DG}, leave {GC} less than itself, and let {GC}, measuring {FH}, leave a unit {HA}.
 
-Since, then, *E* measures *CD,* and *CD* measures *BF,* therefore *E* also measures *BF.*
+Since, then, {E} measures {CD}, and {CD} measures {BF}, therefore {E} also measures {BF}.
 
-But it also measures the whole *BA,* therefore it measures the remainder *AF.* But *AF* measures *DG,* therefore *E* also measures *DG.* But it also measures the whole *DC,* therefore it also measures the remainder *CG.*
+But it also measures the whole {BA}, therefore it measures the remainder {AF}. But {AF} measures {DG}, therefore {E} also measures {DG}. But it also measures the whole {DC}, therefore it also measures the remainder {CG}.
 
-But *CG* measures *FH,* therefore *E* also measures *FH.* But it also measures the whole *FA,* therefore it measures the remainder, the unit *AH,* though it is a number, which is impossible.
+But {CG} measures {FH}, therefore {E} also measures {FH}. But it also measures the whole {FA}, therefore it measures the remainder, the unit {AH}, though it is a number, which is impossible.
 
-Therefore no number measures the numbers *AB* and *CD.* Therefore *AB* and *CD* are relatively prime. [!just VII.Def.12]
+Therefore no number measures the numbers {AB} and {CD}. Therefore {AB} and {CD} are relatively prime. [!just VII.Def.12]
 
 Therefore, *when two unequal numbers are set out, and the less is continually subtracted in turn from the greater, if the number which is left never measures the one before it until a unit is left, then the original numbers are relatively prime.*
 
@@ -86,13 +195,13 @@ Modern terminology uses the word "divides" rather than "measures," and the notat
 
 This proposition assumes that 1 is the result of an antenaresis process. *Antenaresis,* also called the *Euclidean algorithm,* is a kind of reciprocal subtraction. Beginning with two numbers, the smaller, whichever it is, is repeatedly subtracted from the larger.
 
-If the initial two numbers are *a*<sub>1</sub> (*AB* in the proof) and *a*<sub>2</sub> (*CD*), with *a*<sub>1</sub> greater than *a*<sub>2</sub>, then the first stage is to repeatedly subtract *a*<sub>2</sub> from *a*<sub>1</sub> until a remainder *a*<sub>3</sub> (*AF*) less than *a*<sub>2</sub> is found. That can be stated algebraically as
+If the initial two numbers are *a*<sub>1</sub> ({AB} in the proof) and *a*<sub>2</sub> ({CD}), with *a*<sub>1</sub> greater than *a*<sub>2</sub>, then the first stage is to repeatedly subtract *a*<sub>2</sub> from *a*<sub>1</sub> until a remainder *a*<sub>3</sub> ({AF}) less than *a*<sub>2</sub> is found. That can be stated algebraically as
 
 <center><i>a</i><sub>1</sub> – <i>m</i><sub>1</sub> <i>a</i><sub>2</sub> = <i>a</i><sub>3</sub></center>
 
 where *m*<sub>1</sub> is the number of times that *a*<sub>2</sub> was subtracted from *a*<sub>1</sub>.
 
-The next stage repeatedly subtracts *a*<sub>3</sub> from *a*<sub>2</sub> leaving a remainder *a*<sub>4</sub> (*CG*):
+The next stage repeatedly subtracts *a*<sub>3</sub> from *a*<sub>2</sub> leaving a remainder *a*<sub>4</sub> ({CG}):
 
 <center><i>a</i><sub>2</sub> – <i>m</i><sub>2</sub> <i>a</i><sub>3</sub> = <i>a</i><sub>4</sub>.</center>
 
@@ -100,7 +209,7 @@ For the hypotheses of this proposition, the algorithm stops when a remainder of 
 
 <center><i>a</i><sub><i>n</i>-1</sub> – <i>m</i><sub><i>n</i>-1</sub> <i>a</i><sub><i>n</i></sub> = 1.</center>
 
-(In Euclid's proof, *a*<sub>*n*</sub> is *a*<sub>5</sub> which is *AH.*) The conclusion is that *a*<sub>1</sub> and *a*<sub>2</sub> are relatively prime.
+(In Euclid's proof, *a*<sub>*n*</sub> is *a*<sub>5</sub> which is {AH}.) The conclusion is that *a*<sub>1</sub> and *a*<sub>2</sub> are relatively prime.
 
 The proof is not difficult. It depends on the observation that if *b* divides (that is, measures) both *c* and *d,* then *b* divides their difference *c* – *d.* So, if some number *b* divides both *a*<sub>1</sub> and *a*<sub>2</sub>, then it divides the remainder *a*<sub>3</sub>, too. And since it divides both *a*<sub>2</sub> and *a*<sub>3</sub>, it divides the remainder *a*<sub>4</sub>. And so forth, with the final conclusion that *b* divides the last remainder 1.
 
