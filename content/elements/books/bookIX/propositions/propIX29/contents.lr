@@ -15,12 +15,17 @@ statement: If an odd number is multiplied by an odd number, then the product is 
 ----
 proof:
 
-Let the odd number *A* multiplied by the odd number *B* make *C.*
+Let the odd number {A} multiplied by the odd number {B} make {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="140" tabindex="0"></canvas>
 <noscript><img alt="IX.29 diagram" src="propIX29.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines; the unit (U1-U2) sits off-canvas and is not drawn.
+    // C, the product, arrives with the proof's first sentence, so its
+    // slider end is deferred.
+    var GIVEN = ["A","B"];
+    var ALL   = GIVEN.concat(["C"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -44,13 +49,63 @@ Let the odd number *A* multiplied by the odd number *B* make *C.*
             "C2;point;proportion;U1,U2,A1,A2,B1,B2,C1,C3;0",
             "C;line;connect;C1,C2;black"
         ],
+        deferDraggables: ["C1"],
+        slides: [
+            { text: "“If an odd number is multiplied by an odd number, then the product is odd.”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "IX.29" }] },
+            { text: "Let the odd number {A} multiplied by the odd number {B} make {C}.",
+              visible: ALL,
+              highlighted: ["A","B","C"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that {C} is odd.",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "Since {A} multiplied by {B} makes {C},",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "therefore {C} is made up of as many numbers equal to {B} as there are units in {A}.",
+              visible: ALL,
+              highlighted: ["C","B","A"],
+              justifications: [{ claim: "C is A times B", ref: "VII.Def.15" }] },
+            { text: "And each of the numbers {A} and {B} is odd,",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "therefore {C} is made up of odd numbers, the multitude of which is odd.",
+              visible: ALL,
+              highlighted: ["C","B","A"] },
+            { text: "Thus {C} is odd.",
+              visible: ALL,
+              highlighted: ["C"],
+              justifications: [{ claim: "odd multitude of odd numbers sums to odd", ref: "IX.23" }] },
+            { text: "Therefore, if an odd number is multiplied by an odd number,",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "then the product is odd.",
+              visible: ALL,
+              highlighted: ["C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.29") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.15": "/elements/books/bookVII/definitions/defVII15/",
+        "IX.23": "/elements/books/bookIX/propositions/propIX23/"
     });
 </script>
 </figure>
 
-I say that *C* is odd.
+I say that {C} is odd.
 
-Since *A* multiplied by *B* makes *C,* therefore *C* is made up of as many numbers equal to *B* as there are units in *A.* And each of the numbers *A* and *B* is odd, therefore *C* is made up of odd numbers, the multitude of which is odd. Thus *C* is odd. [!just VII.Def.15; IX.23]
+Since {A} multiplied by {B} makes {C}, therefore {C} is made up of as many numbers equal to {B} as there are units in {A}. And each of the numbers {A} and {B} is odd, therefore {C} is made up of odd numbers, the multitude of which is odd. Thus {C} is odd. [!just VII.Def.15; IX.23]
 
 Therefore, *if an odd number is multiplied by an odd number, then the product is odd.*
 

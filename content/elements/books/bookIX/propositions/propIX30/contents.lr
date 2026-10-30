@@ -15,7 +15,7 @@ statement: If an odd number measures an even number, then it also measures half 
 ----
 proof:
 
-Let the odd number *A* measure the even number *B.*
+Let the odd number {A} measure the even number {B}.
 
 I say that it also measures the half of it.
 
@@ -23,6 +23,13 @@ I say that it also measures the half of it.
 <canvas id="canvas_0" width="230" height="140" tabindex="0"></canvas>
 <noscript><img alt="IX.30 diagram" src="propIX30.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines; the unit (U1-U2) sits off-canvas and is not drawn.
+    // C, the number of times A measures B, arrives with "according to C",
+    // so its slider end is deferred. Bh, the half of B, is a transparent
+    // twin from B1 to B's (hidden) midpoint Bm, lit by the half-of-it
+    // captions.
+    var GIVEN = ["A","B","Bh"];
+    var ALL   = GIVEN.concat(["C"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -44,19 +51,81 @@ I say that it also measures the half of it.
             "B;line;connect;B1,B2;black",
             "C1;point;lineSlider;C0,C3,30,0;0",
             "C2;point;proportion;A1,A2,B1,B2,U1,U2,C1,C3;0",
-            "C;line;connect;C1,C2;black"
+            "C;line;connect;C1,C2;black",
+            "Bm;point;midpoint;B1,B2;0",
+            "Bh;line;connect;B1,Bm;0;0;0"
         ],
+        deferDraggables: ["C1"],
+        slides: [
+            { text: "“If an odd number measures an even number, then it also measures half of it.”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "IX.30" }] },
+            { text: "Let the odd number {A} measure the even number {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that {it|A} also measures {the half of it|Bh}.",
+              visible: GIVEN,
+              highlighted: ["A","Bh"] },
+            { text: "Since {A} measures {B}, let it measure it according to {C}.",
+              visible: ALL,
+              highlighted: ["A","B","C"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that {C} is not odd.",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "If possible, let it be so.",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "Then, since {A} measures {B} according to {C}, therefore {A} multiplied by {C} makes {B}.",
+              visible: ALL,
+              highlighted: ["A","C","B"] },
+            { text: "Therefore {B} is made up of odd numbers the multitude of which is odd.",
+              visible: ALL,
+              highlighted: ["B","A","C"] },
+            { text: "Therefore {B} is odd, which is absurd, for by hypothesis it is even.",
+              visible: ALL,
+              highlighted: ["B"],
+              justifications: [{ claim: "odd multitude of odd numbers sums to odd", ref: "IX.23" }] },
+            { text: "Therefore {C} is not odd, therefore {C} is even.",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "Thus {A} measures {B} an even number of times.",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "For this reason then {it|A} also measures {the half of it|Bh}.",
+              visible: ALL,
+              highlighted: ["A","Bh"] },
+            { text: "Therefore, if an odd number measures an even number,",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "then it also measures half of it.",
+              visible: ALL,
+              highlighted: ["A","Bh"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.30") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "IX.23": "/elements/books/bookIX/propositions/propIX23/"
     });
 </script>
 </figure>
 
-Since *A* measures *B,* let it measure it according to *C.*
+Since {A} measures {B}, let it measure it according to {C}.
 
-I say that *C* is not odd.
+I say that {C} is not odd.
 
-If possible, let it be so. Then, since *A* measures *B* according to *C,* therefore *A* multiplied by *C* makes *B.* Therefore *B* is made up of odd numbers the multitude of which is odd. Therefore *B* is odd, which is absurd, for by hypothesis it is even. Therefore *C* is not odd, therefore *C* is even. [!just IX.23]
+If possible, let it be so. Then, since {A} measures {B} according to {C}, therefore {A} multiplied by {C} makes {B}. Therefore {B} is made up of odd numbers the multitude of which is odd. Therefore {B} is odd, which is absurd, for by hypothesis it is even. Therefore {C} is not odd, therefore {C} is even. [!just IX.23]
 
-Thus *A* measures *B* an even number of times. For this reason then it also measures the half of it.
+Thus {A} measures {B} an even number of times. For this reason then it also measures the half of it.
 
 Therefore, *if an odd number measures an even number, then it also measures half of it.*
 
