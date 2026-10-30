@@ -15,14 +15,37 @@ statement: If the side of the hexagon and that of the decagon inscribed in the s
 ----
 proof:
 
-Let *ABC* be a circle, and of the figures inscribed in the circle *ABC* let *BC* be the side of a decagon, and *CD* that of a hexagon, and let them be in a straight line.
+Let {ABC|circT} be a circle, and of the figures inscribed in the circle {ABC|circT} let {BC} be the side of a decagon, and {CD} that of a hexagon, and let them be in a straight line.
 
-I say that the whole straight line *BD* is cut in extreme and mean ratio, and *CD* is its greater segment.
+I say that the whole straight line {BD} is cut in extreme and mean ratio, and {CD} is its greater segment.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="240" height="260" tabindex="0"></canvas>
 <noscript><img alt="XIII.9 diagram" src="propXIII9.gif"/></noscript>
 <script type="text/javascript">
+    // The walk lights the arcs ACB, AC, CB and the angles at E, B, C, D in
+    // the order the proof compares them; the equiangular triangles BEC and
+    // BED carry VI.4 to the extreme-and-mean-ratio proportion.
+    //
+    // Joyce's AB, CE and DE are single lines; the proof joins EB, EC, ED from
+    // the centre and carries BE through to A, so EB, EC, ED and EA are solid
+    // slide twins, hidden at rest (initiallyHidden), and Joyce's lines stay
+    // out of the slide sets. Transparent targets: BC, CD (the two sides on
+    // BD), the triangles BEC, BED (explicit ;0 faces), the arcs, and circT,
+    // a faceless twin of the filled circle ABC that the refs light instead.
+    // The arc helpers mBC/mAC are uncoloured points on the circle.
+    //
+    // Draggables (checked against the bundle): A and B, free — A is a letter
+    // of the given circle ABC, so both stand from slide 1. E, C, D, F are
+    // derived and listed per slide; nothing to defer.
+    var GIVEN = ["ABC","A","B","C","D","BD","BC","CD"];
+    var CEN   = GIVEN.concat(["E"]);
+    var JOIN  = CEN.concat(["EB","EC","ED","F"]);
+    var DIAM  = JOIN.concat(["EA"]);
+    var A1    = DIAM.concat(["angAEC","angCEB"]);
+    var A2    = A1.concat(["angEBC","angECB"]);
+    var A3    = A2.concat(["angCED","angCDE"]);
+    var A4    = A3.concat(["angBED"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,31 +65,224 @@ I say that the whole straight line *BD* is cut in extreme and mean ratio, and *C
             "D;point;extend;B,C,A,E",
             "BD;line;connect;B,D",
             "DE;line;connect;D,E",
-            "F;point;cutoff;E,D,E,A;black;0"
+            "F;point;cutoff;E,D,E,A;black;0",
+            // Slide twins, hidden at rest (see above).
+            "EB;line;connect;E,B",
+            "EC;line;connect;E,C",
+            "ED;line;connect;E,D",
+            "EA;line;extend;B,E,E,A",
+            // Transparent highlight targets.
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "BEC;polygon;triangle;B,E,C;0;0;0;0",
+            "BED;polygon;triangle;B,E,D;0;0;0;0",
+            "circT;circle;radius;E,A;0;0;0;0",
+            "mBC0;point;midpoint;B,C;0;0",
+            "mBC;point;cutoff;E,mBC0,E,A;0;0",
+            "mAC0;point;midpoint;A,C;0;0",
+            "mAC;point;cutoff;E,mAC0,E,A;0;0",
+            "arcACB;sector;arc;A,C,B;0;0;0;0",
+            "arcAC;sector;arc;A,mAC,C;0;0;0;0",
+            "arcBC;sector;arc;B,mBC,C;0;0;0;0",
+            // Angle markers.
+            "angAEC;sector;angleMarker;E,A,C",
+            "angCEB;sector;angleMarker;E,C,B",
+            "angCED;sector;angleMarker;E,C,D",
+            "angBED;sector;angleMarker;E,B,D",
+            "angEBC;sector;angleMarker;B,E,C",
+            "angECB;sector;angleMarker;C,E,B",
+            "angCDE;sector;angleMarker;D,C,E"
         ],
+        initiallyHidden: ["EB","EC","ED","EA"],
+        // Angle and triangle names collide (BEC, BED, EBC, EBD): the
+        // triangles own them, the angles take the display override.
+        aliases: { "BE": "EB", "DB": "BD", "DC": "CD", "CB": "BC",
+                   "EBC": "BEC", "EBD": "BED",
+                   "AEC": "angAEC", "CEB": "angCEB",
+                   "ECB": "angECB", "CED": "angCED",
+                   "CDE": "angCDE", "EDC": "angCDE" },
+        slides: [
+            { text: "“If the side of the hexagon and that of the decagon inscribed in the same circle are added together,”",
+              visible: GIVEN,
+              highlighted: ["CD","BC","circT"],
+              justifications: [{ ref: "XIII.9" }] },
+            { text: "“then the whole straight line has been cut in extreme and mean ratio,”",
+              visible: GIVEN,
+              highlighted: ["BD","C"] },
+            { text: "“and its greater segment is the side of the hexagon.”",
+              visible: GIVEN,
+              highlighted: ["CD"] },
+            { text: "Let {ABC|circT} be a circle,",
+              visible: GIVEN,
+              highlighted: ["circT"] },
+            { text: "and of the figures inscribed in the circle {ABC|circT} let {BC} be the side of a decagon,",
+              visible: GIVEN,
+              highlighted: ["BC"] },
+            { text: "and {CD} that of a hexagon, and let them be in a straight line.",
+              visible: GIVEN,
+              highlighted: ["CD","BC"] },
+            { text: "I say that the whole straight line {BD} is cut in extreme and mean ratio,",
+              visible: GIVEN,
+              highlighted: ["BD","C"] },
+            { text: "and {CD} is its greater segment.",
+              visible: GIVEN,
+              highlighted: ["CD"] },
+            { text: "Take the center {E} of the circle,",
+              visible: CEN,
+              highlighted: ["E"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "III.1" }] },
+            { text: "join {EB}, {EC}, and {ED},",
+              visible: JOIN,
+              highlighted: ["EB","EC","ED"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ED", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "and carry {BE} through to {A}.",
+              visible: DIAM,
+              highlighted: ["EA","A"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EA", name: geomlib.A.Line.straightEdgeExtend } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Since {BC} is the side of an equilateral decagon,",
+              visible: DIAM,
+              highlighted: ["BC"] },
+            { text: "therefore the circumference {ACB|arcACB} is five times the circumference {BC|arcBC}.",
+              visible: DIAM,
+              highlighted: ["arcACB","arcBC"] },
+            { text: "Therefore the circumference {AC|arcAC} is quadruple {CB|arcBC}.",
+              visible: DIAM,
+              highlighted: ["arcAC","arcBC"] },
+            { text: "But the circumference {AC|arcAC} is to {CB|arcBC} as the angle {AEC} is to the angle {CEB}.",
+              visible: A1,
+              highlighted: ["arcAC","arcBC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angAEC", name: geomlib.A.Sector.sweep },
+                  { elem: "angCEB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the angle {AEC} is quadruple the angle {CEB}.",
+              visible: A1,
+              highlighted: ["angAEC","angCEB"],
+              justifications: [{ ref: "VI.33" }] },
+            { text: "And, since the angle {EBC|angEBC} equals the angle {ECB},",
+              visible: A2,
+              highlighted: ["angEBC","angECB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angEBC", name: geomlib.A.Sector.sweep },
+                  { elem: "angECB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle EBC = angle ECB", ref: "I.5" }] },
+            { text: "therefore the angle {AEC} is double the angle {ECB}.",
+              visible: A2,
+              highlighted: ["angAEC","angECB"],
+              justifications: [{ claim: "angle AEC = angle EBC + angle ECB", ref: "I.32" }] },
+            { text: "And, since the straight line {EC} equals {CD},",
+              visible: A2,
+              highlighted: ["EC","CD"] },
+            { text: "for each of them equals the side of the hexagon inscribed in the circle {ABC|circT}.",
+              visible: A2,
+              highlighted: ["EC","CD","circT"],
+              justifications: [{ ref: "IV.15.Cor" }] },
+            { text: "Therefore the angle {CED} also equals the angle {CDE}.",
+              visible: A3,
+              highlighted: ["angCED","angCDE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCED", name: geomlib.A.Sector.sweep },
+                  { elem: "angCDE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.5" }] },
+            { text: "Therefore the angle {ECB} is double the angle {EDC}.",
+              visible: A3,
+              highlighted: ["angECB","angCDE"],
+              justifications: [{ claim: "angle ECB = angle CED + angle CDE", ref: "I.32" }] },
+            { text: "But the angle {AEC} was proved double the angle {ECB}, therefore the angle {AEC} is quadruple the angle {EDC}.",
+              visible: A3,
+              highlighted: ["angAEC","angECB","angCDE"] },
+            { text: "And the angle {AEC} was also proved quadruple the angle {BEC|angCEB},",
+              visible: A3,
+              highlighted: ["angAEC","angCEB"] },
+            { text: "therefore the angle {EDC} equals the angle {BEC|angCEB}.",
+              visible: A3,
+              highlighted: ["angCDE","angCEB"] },
+            { text: "But the angle {EBD|angEBC} is common to the two triangles {BEC} and {BED},",
+              visible: A3,
+              highlighted: ["angEBC","BEC","BED"] },
+            { text: "therefore the remaining angle {BED|angBED} equals the remaining angle {ECB}.",
+              visible: A4,
+              highlighted: ["angBED","angECB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angBED", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.32" }] },
+            { text: "Therefore the triangle {EBD} is equiangular with the triangle {EBC}.",
+              visible: A4,
+              highlighted: ["BED","BEC"] },
+            { text: "Therefore, proportionally {DB} is to {BE} as {EB} is to {BC}.",
+              visible: A4,
+              highlighted: ["BD","EB","BC"],
+              justifications: [{ ref: "VI.4" }] },
+            { text: "But {EB} equals {CD}.",
+              visible: A4,
+              highlighted: ["EB","CD"] },
+            { text: "Therefore {BD} is to {DC} as {DC} is to {CB}.",
+              visible: A4,
+              highlighted: ["BD","CD","BC"] },
+            { text: "And {BD} is greater than {DC}, therefore {DC} is also greater than {CB}.",
+              visible: A4,
+              highlighted: ["BD","CD","BC"] },
+            { text: "Therefore the straight line {BD} is cut in extreme and mean ratio, and {DC} is its greater segment.",
+              visible: A4,
+              highlighted: ["BD","CD"] },
+            { text: "Therefore, if the side of the hexagon and that of the decagon inscribed in the same circle are added together,",
+              visible: A4,
+              highlighted: ["CD","BC","circT"] },
+            { text: "then the whole straight line has been cut in extreme and mean ratio,",
+              visible: A4,
+              highlighted: ["BD","C"] },
+            { text: "and its greater segment is the side of the hexagon.",
+              visible: A4,
+              highlighted: ["CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.9") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "I.Post.2":  "/elements/books/bookI/postulates/post2/",
+        "I.5":       "/elements/books/bookI/propositions/propI5/",
+        "I.32":      "/elements/books/bookI/propositions/propI32/",
+        "III.1":     "/elements/books/bookIII/propositions/propIII1/",
+        "IV.15.Cor": "/elements/books/bookIV/propositions/propIV15/#cor",
+        "VI.4":      "/elements/books/bookVI/propositions/propVI4/",
+        "VI.33":     "/elements/books/bookVI/propositions/propVI33/"
     });
 </script>
 </figure>
 
-Take the center *E* of the circle, join *EB, EC,* and *ED,* and carry *BE* through to *A.* [!just III.1]
+Take the center {E} of the circle, join {EB}, {EC}, and {ED}, and carry {BE} through to {A}. [!just III.1]
 
-Since *BC* is the side of an equilateral decagon, therefore the circumference *ACB* is five times the circumference *BC.* Therefore the circumference *AC* is quadruple *CB.*
+Since {BC} is the side of an equilateral decagon, therefore the circumference {ACB|arcACB} is five times the circumference {BC|arcBC}. Therefore the circumference {AC|arcAC} is quadruple {CB|arcBC}.
 
-But the circumference *AC* is to *CB* as the angle *AEC* is to the angle *CEB.* Therefore the angle *AEC* is quadruple the angle *CEB.* [!just VI.33]
+But the circumference {AC|arcAC} is to {CB|arcBC} as the angle {AEC} is to the angle {CEB}. Therefore the angle {AEC} is quadruple the angle {CEB}. [!just VI.33]
 
-And, since the angle *EBC* equals the angle *ECB,* therefore the angle *AEC* is double the angle *ECB.* [!just I.5; I.32]
+And, since the angle {EBC|angEBC} equals the angle {ECB}, therefore the angle {AEC} is double the angle {ECB}. [!just I.5; I.32]
 
-And, since the straight line *EC* equals *CD,* for each of them equals the side of the hexagon inscribed in the circle *ABC.* Therefore the angle *CED* also equals the angle *CDE.* Therefore the angle *ECB* is double the angle *EDC.* [!just IV.15.Cor; I.5, I.32]
+And, since the straight line {EC} equals {CD}, for each of them equals the side of the hexagon inscribed in the circle {ABC|circT}. Therefore the angle {CED} also equals the angle {CDE}. Therefore the angle {ECB} is double the angle {EDC}. [!just IV.15.Cor; I.5, I.32]
 
-But the angle *AEC* was proved double the angle *ECB,* therefore the angle *AEC* is quadruple the angle *EDC.* And the angle *AEC* was also proved quadruple the angle *BEC,* therefore the angle *EDC* equals the angle *BEC.*
+But the angle {AEC} was proved double the angle {ECB}, therefore the angle {AEC} is quadruple the angle {EDC}. And the angle {AEC} was also proved quadruple the angle {BEC|angCEB}, therefore the angle {EDC} equals the angle {BEC|angCEB}.
 
-But the angle *EBD* is common to the two triangles *BEC* and *BED,* therefore the remaining angle *BED* equals the remaining angle *ECB.* Therefore the triangle *EBD* is equiangular with the triangle *EBC.* [!just I.32]
+But the angle {EBD|angEBC} is common to the two triangles {BEC} and {BED}, therefore the remaining angle {BED|angBED} equals the remaining angle {ECB}. Therefore the triangle {EBD} is equiangular with the triangle {EBC}. [!just I.32]
 
-Therefore, proportionally *DB* is to *BE* as *EB* is to *BC.* [!just VI.4]
+Therefore, proportionally {DB} is to {BE} as {EB} is to {BC}. [!just VI.4]
 
-But *EB* equals *CD.* Therefore *BD* is to *DC* as *DC* is to *CB.* And *BD* is greater than *DC,* therefore *DC* is also greater than *CB.*
+But {EB} equals {CD}. Therefore {BD} is to {DC} as {DC} is to {CB}. And {BD} is greater than {DC}, therefore {DC} is also greater than {CB}.
 
-Therefore the straight line *BD* is cut in extreme and mean ratio, and *DC* is its greater segment.
+Therefore the straight line {BD} is cut in extreme and mean ratio, and {DC} is its greater segment.
 
 Therefore, *if the side of the hexagon and that of the decagon inscribed in the same circle are added together, then the whole straight line has been cut in extreme and mean ratio, and its greater segment is the side of the hexagon.*
 
