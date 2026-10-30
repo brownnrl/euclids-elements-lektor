@@ -15,7 +15,7 @@ statement: If an equilateral pentagon is inscribed in a circle which has its dia
 ----
 proof:
 
-In the circle *ABCDE* which has its diameter rational let the equilateral pentagon *ABCDE* be inscribed.
+In the circle {ABCDE|circT} which has its diameter rational let the equilateral pentagon {ABCDE|CDEAB} be inscribed.
 
 I say that the side of the pentagon is the irrational straight line called minor.
 
@@ -23,6 +23,44 @@ I say that the side of the pentagon is the irrational straight line called minor
 <canvas id="canvas_0" width="310" height="270" tabindex="0"></canvas>
 <noscript><img alt="XIII.11 diagram" src="propXIII11.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's pentagon CDEAB is already faceless; the prose reaches it as
+    // {ABCDE|CDEAB}. His circle circ has a random face, which a highlight
+    // would raise over the pentagon (#140), so the prose reaches the circle
+    // through circT, a faceless twin, as {ABCDE|circT}.
+    //
+    // His AG, BH, AC are held back until the construction sentence and drawn
+    // there; his line N waits for "Let the square on N be equal to". The two
+    // joins the proof makes in passing, AD and AH, are solid twins hidden at
+    // rest (initiallyHidden), so the resting figure is unchanged.
+    //
+    // Transparent targets: the segments AF, FB, FK, BK, MK, MB, MF, CM, CL,
+    // CD and the side AB; the triangles ACL, AMF, ABH, ABM (explicit ;0
+    // faces); the circumferences ACG, ADG, ABC, AED, CG, GD as arcs. CG and
+    // GD have no lettered point between their ends, so Xcg / Xgd
+    // (uncoloured) are cut off on the ray from the centre F through each
+    // chord's midpoint at the radius.
+    //
+    // Angle markers: the right angles at L (ALC, ALD) and at M (AMB, AMF) are
+    // red squares pinned at 12 so the pairs sit side by side. LAC blue;
+    // ACL = MFA green. Angle and triangle names collide (ACL, AMF): the
+    // triangles own them, the angles take the display override.
+    //
+    // Draggables (checked against the bundle): C and D, free — the given
+    // pentagon's base, standing from slide 1; N1, N4 (free, uncoloured,
+    // off-canvas) and N2, the lineSlider end of N. N2 is deferred until N is
+    // introduced. Every other point is derived and listed per slide.
+    var GIVEN = ["circ","circT","CDEABdup","CDEAB","A","B","C","D","E","AB"];
+    var CEN   = GIVEN.concat(["F"]);
+    var DIAM  = CEN.concat(["AG","BH","G","H","AF","FB"]);
+    var SETK  = DIAM.concat(["AC","K","FK","BK"]);
+    var ARCS  = SETK.concat(["arcACG","arcADG","arcABC","arcAED","arcCG","arcGD"]);
+    var JAD   = ARCS.concat(["AD"]);
+    var LR    = JAD.concat(["L","CD","CL","angALC","angALD"]);
+    var MR    = LR.concat(["M","CM","MF","MK","MB","angAMB","angAMF"]);
+    var TRI   = MR.concat(["angLAC","ACL","AMF"]);
+    var EQ    = TRI.concat(["angACL","angMFA"]);
+    var NN    = EQ.concat(["N","N2","N3"]);
+    var AHJ   = NN.concat(["AH","ABH","ABM"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -56,63 +94,414 @@ I say that the side of the pentagon is the irrational straight line called minor
             "N4;point;free;40,1000;0;0",
             "N2;point;lineSlider;N1,N4,40,60;0",
             "N3;point;cutoff;N2,N4,B,W;0",
-            "N;line;connect;N2,N3;black"
+            "N;line;connect;N2,N3;black",
+            // Faceless twin of the circle (see above).
+            "circT;circle;circumcircle;C,D,A;0;0;0;0",
+            // Slide twins, hidden at rest (see above).
+            "AD;line;connect;A,D",
+            "AH;line;connect;A,H",
+            // Transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "FK;line;connect;F,K;0;0;0",
+            "BK;line;connect;B,K;0;0;0",
+            "MK;line;connect;M,K;0;0;0",
+            "MB;line;connect;M,B;0;0;0",
+            "MF;line;connect;M,F;0;0;0",
+            "CM;line;connect;C,M;0;0;0",
+            "CL;line;connect;C,L;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "ACL;polygon;triangle;A,C,L;0;0;0;0",
+            "AMF;polygon;triangle;A,M,F;0;0;0;0",
+            "ABH;polygon;triangle;A,B,H;0;0;0;0",
+            "ABM;polygon;triangle;A,B,M;0;0;0;0",
+            "Mcg;point;midpoint;C,G;0;0",
+            "Xcg;point;cutoff;F,Mcg,F,A;0;0",
+            "Mgd;point;midpoint;G,D;0;0",
+            "Xgd;point;cutoff;F,Mgd,F,A;0;0",
+            "arcACG;sector;arc;A,C,G;0;0;0;0",
+            "arcADG;sector;arc;A,D,G;0;0;0;0",
+            "arcABC;sector;arc;A,B,C;0;0;0;0",
+            "arcAED;sector;arc;A,E,D;0;0;0;0",
+            "arcCG;sector;arc;C,Xcg,G;0;0;0;0",
+            "arcGD;sector;arc;G,Xgd,D;0;0;0;0",
+            // Angle markers.
+            "angALC;sector;angleMarkerRight;L,A,C,12;0;0;red;red",
+            "angALD;sector;angleMarkerRight;L,A,D,12;0;0;red;red",
+            "angAMB;sector;angleMarkerRight;M,A,B,12;0;0;red;red",
+            "angAMF;sector;angleMarkerRight;M,A,F,12;0;0;red;red",
+            "angLAC;sector;angleMarker;A,L,C;0;0;3b6ea5;9ec5e8",
+            "angACL;sector;angleMarker;C,A,L;0;0;3f8e4f;a8dbb0",
+            "angMFA;sector;angleMarker;F,M,A;0;0;3f8e4f;a8dbb0"
         ],
+        initiallyHidden: ["AD","AH"],
+        deferDraggables: ["N2"],
+        aliases: { "BA": "AB", "FA": "AF", "BF": "FB", "KF": "FK", "KB": "BK",
+                   "KM": "MK", "BM": "MB", "FM": "MF", "MC": "CM", "LC": "CL",
+                   "DC": "CD", "CA": "AC", "HB": "BH", "DA": "AD", "HA": "AH" },
+        slides: [
+            { text: "“If an equilateral pentagon is inscribed in a circle which has its diameter rational,”",
+              visible: GIVEN,
+              highlighted: ["CDEAB","circT"],
+              justifications: [{ ref: "XIII.11" }] },
+            { text: "“then the side of the pentagon is the irrational straight line called minor.”",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "In the circle {ABCDE|circT} which has its diameter rational let the equilateral pentagon {ABCDE|CDEAB} be inscribed.",
+              visible: GIVEN,
+              highlighted: ["circT","CDEAB"] },
+            { text: "I say that the side of the pentagon is the irrational straight line called minor.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "Take the center {F} of the circle,",
+              visible: CEN,
+              highlighted: ["F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the center F", ref: "III.1" }] },
+            { text: "join {AF} and {FB} and carry them through to the points {G} and {H},",
+              visible: DIAM,
+              highlighted: ["AG","BH","G","H"],
+              transition: { animations: [
+                  { elem: "AG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BH", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "join {AC}, and make {FK} a fourth part of {AF}.",
+              visible: SETK,
+              highlighted: ["AC","FK","AF"],
+              transition: { animations: [
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "FK a fourth part of AF", ref: "VI.9" }] },
+            { text: "Now {AF} is rational, therefore {FK} is also rational.",
+              visible: SETK,
+              highlighted: ["AF","FK"] },
+            { text: "But {BF} is also rational, therefore the whole {BK} is rational.",
+              visible: SETK,
+              highlighted: ["FB","BK"] },
+            { text: "And, since the circumference {ACG|arcACG} equals the circumference {ADG|arcADG},",
+              visible: ARCS,
+              highlighted: ["arcACG","arcADG"] },
+            { text: "and in them {ABC|arcABC} equals {AED|arcAED},",
+              visible: ARCS,
+              highlighted: ["arcABC","arcAED"] },
+            { text: "therefore the remainder {CG|arcCG} equals the remainder {GD|arcGD}.",
+              visible: ARCS,
+              highlighted: ["arcCG","arcGD"] },
+            { text: "And, if we join {AD},",
+              visible: JAD,
+              highlighted: ["AD"],
+              transition: { animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "then we conclude that the angles at {L} are right, and {CD} is double {CL}.",
+              visible: LR,
+              highlighted: ["L","angALC","angALD","CD","CL"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angALC", name: geomlib.A.Sector.sweep },
+                  { elem: "angALD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "For the same reason the angles at {M} are also right, and {AC} is double {CM}.",
+              visible: MR,
+              highlighted: ["M","angAMB","angAMF","AC","CM"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angAMB", name: geomlib.A.Sector.sweep },
+                  { elem: "angAMF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Since then the angle {ALC|angALC} equals the angle {AMF|angAMF},",
+              visible: MR,
+              highlighted: ["angALC","angAMF"] },
+            { text: "and the angle {LAC|angLAC} is common to the two triangles {ACL} and {AMF},",
+              visible: TRI,
+              highlighted: ["angLAC","ACL","AMF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angLAC", name: geomlib.A.Sector.sweep },
+                  { elem: "ACL", name: geomlib.A.Polygon.outline },
+                  { elem: "AMF", name: geomlib.A.Polygon.outline } ] } },
+            { text: "therefore the remaining angle {ACL|angACL} equals the remaining angle {MFA|angMFA}.",
+              visible: EQ,
+              highlighted: ["angACL","angMFA"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angACL", name: geomlib.A.Sector.sweep },
+                  { elem: "angMFA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "remaining angles of the triangles", ref: "I.32" }] },
+            { text: "Therefore the triangle {ACL} is equiangular with the triangle {AMF}.",
+              visible: EQ,
+              highlighted: ["ACL","AMF"] },
+            { text: "Therefore, proportionally {LC} is to {CA} as {MF} is to {FA}.",
+              visible: EQ,
+              highlighted: ["CL","AC","MF","AF"] },
+            { text: "Taking the doubles of the antecedents, therefore double {LC} is to {CA} as double {MF} to {FA}.",
+              visible: EQ,
+              highlighted: ["CL","AC","MF","AF"] },
+            { text: "But double {MF} is to {FA} as {MF} is to the half of {FA},",
+              visible: EQ,
+              highlighted: ["MF","AF"] },
+            { text: "therefore also double {LC} is to {CA} as {MF} is to the half of {FA}.",
+              visible: EQ,
+              highlighted: ["CL","AC","MF","AF"] },
+            { text: "Taking the halves of the consequents,",
+              visible: EQ,
+              highlighted: ["AC","AF"] },
+            { text: "therefore double {LC} is to the half of {CA} as {MF} to the fourth of {FA}.",
+              visible: EQ,
+              highlighted: ["CL","AC","MF","AF"] },
+            { text: "And {DC} is double {LC}, {CM} is half of {CA}, and {FK} is a fourth part of {FA},",
+              visible: EQ,
+              highlighted: ["CD","CL","CM","AC","FK","AF"] },
+            { text: "therefore {DC} is to {CM} as {MF} to {FK}.",
+              visible: EQ,
+              highlighted: ["CD","CM","MF","FK"] },
+            { text: "Taken together, the sum of {DC} and {CM} is to {CM} as {MK} to {KF}.",
+              visible: EQ,
+              highlighted: ["CD","CM","MK","FK"],
+              justifications: [{ claim: "taken together", ref: "V.18" }] },
+            { text: "Therefore the square on the sum of {DC} and {CM} is to the square on {CM}",
+              visible: EQ,
+              highlighted: ["CD","CM"] },
+            { text: "as the square on {MK} is to the square on {KF}.",
+              visible: EQ,
+              highlighted: ["MK","FK"] },
+            { text: "And since, when the straight line opposite two sides of the pentagon {AC} is cut in extreme and mean ratio,",
+              visible: EQ,
+              highlighted: ["AC"] },
+            { text: "the greater segment equals the side of the pentagon, that is, {DC},",
+              visible: EQ,
+              highlighted: ["CD"],
+              justifications: [{ claim: "greater segment = side of the pentagon", ref: "XIII.8" }] },
+            { text: "while the square on the greater segment added to the half of the whole",
+              visible: EQ,
+              highlighted: ["CD"] },
+            { text: "is five times the square on the half of the whole,",
+              visible: EQ,
+              highlighted: ["AC"],
+              justifications: [{ ref: "XIII.1" }] },
+            { text: "and {CM} is half of the whole {AC},",
+              visible: EQ,
+              highlighted: ["CM","AC"] },
+            { text: "therefore the square on {DC} and {CM} taken as one straight line is five times the square on {CM}.",
+              visible: EQ,
+              highlighted: ["CD","CM"] },
+            { text: "But it was proved that the square on {DC} and {CM} taken as one straight line",
+              visible: EQ,
+              highlighted: ["CD","CM"] },
+            { text: "is to the square on {CM} as the square on {MK} to the square on {KF},",
+              visible: EQ,
+              highlighted: ["CM","MK","FK"] },
+            { text: "therefore the square on {MK} is five times the square on {KF}.",
+              visible: EQ,
+              highlighted: ["MK","FK"] },
+            { text: "But the square on {KF} is rational, for the diameter is rational,",
+              visible: EQ,
+              highlighted: ["FK","AG"] },
+            { text: "therefore the square on {MK} is also rational. Therefore {MK} is rational.",
+              visible: EQ,
+              highlighted: ["MK"] },
+            { text: "And, since {BF} is quadruple {FK}, therefore {BK} is five times {KF}.",
+              visible: EQ,
+              highlighted: ["FB","FK","BK"] },
+            { text: "Therefore the square on {BK} is twenty-five times the square on {KF}.",
+              visible: EQ,
+              highlighted: ["BK","FK"] },
+            { text: "But the square on {MK} is five times the square on {KF},",
+              visible: EQ,
+              highlighted: ["MK","FK"] },
+            { text: "therefore the square on {BK} is five times the square on {KM}.",
+              visible: EQ,
+              highlighted: ["BK","MK"] },
+            { text: "Therefore the square on {BK} has not to the square on {KM}",
+              visible: EQ,
+              highlighted: ["BK","MK"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: EQ,
+              highlighted: ["BK","MK"] },
+            { text: "Therefore {BK} is incommensurable in length with {KM}.",
+              visible: EQ,
+              highlighted: ["BK","MK"],
+              justifications: [{ ref: "X.9" }] },
+            { text: "And each of them is rational. Therefore {BK} and {KM} are rational straight lines commensurable in square only.",
+              visible: EQ,
+              highlighted: ["BK","MK"] },
+            { text: "But, if from a rational straight line there is subtracted a rational straight line",
+              visible: EQ,
+              highlighted: ["BK","MK"] },
+            { text: "which is commensurable with the whole in square only,",
+              visible: EQ,
+              highlighted: ["BK","MK"] },
+            { text: "then the remainder is irrational, namely an apotome,",
+              visible: EQ,
+              highlighted: ["MB"],
+              justifications: [{ ref: "X.73" }] },
+            { text: "therefore {MB} is an apotome and {MK} the annex to it.",
+              visible: EQ,
+              highlighted: ["MB","MK"] },
+            { text: "I say next that {MB} is also a fourth apotome.",
+              visible: EQ,
+              highlighted: ["MB"] },
+            { text: "Let the square on {N} be equal to",
+              visible: NN,
+              highlighted: ["N"],
+              transition: { animations: [
+                  { elem: "N", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "that by which the square on {BK} is greater than the square on {KM}.",
+              visible: NN,
+              highlighted: ["BK","MK"] },
+            { text: "Therefore the square on {BK} is greater than the square on {KM} by the square on {N}.",
+              visible: NN,
+              highlighted: ["BK","MK","N"] },
+            { text: "And, since {KF} is commensurable with {FB}, taken together, {KB} is commensurable with {FB}.",
+              visible: NN,
+              highlighted: ["FK","FB","BK"],
+              justifications: [{ ref: "X.15" }] },
+            { text: "But {BF} is commensurable with {BH}, therefore {BK} is also commensurable with {BH}.",
+              visible: NN,
+              highlighted: ["FB","BH","BK"],
+              justifications: [{ ref: "X.12" }] },
+            { text: "And, since the square on {BK} is five times the square on {KM},",
+              visible: NN,
+              highlighted: ["BK","MK"] },
+            { text: "therefore the square on {BK} has to the square on {KM} the ratio which 5 has to 1.",
+              visible: NN,
+              highlighted: ["BK","MK"] },
+            { text: "Therefore, in conversion, the square on {BK} has to the square on {N} the ratio which 5 has to 4,",
+              visible: NN,
+              highlighted: ["BK","N"],
+              justifications: [{ claim: "in conversion", ref: "V.19.Cor" }] },
+            { text: "and this is not the ratio which a square number has to a square number.",
+              visible: NN,
+              highlighted: ["BK","N"] },
+            { text: "Therefore {BK} is incommensurable with {N}.",
+              visible: NN,
+              highlighted: ["BK","N"],
+              justifications: [{ ref: "X.9" }] },
+            { text: "Therefore the square on {BK} is greater than the square on {KM}",
+              visible: NN,
+              highlighted: ["BK","MK"] },
+            { text: "by the square on a straight line incommensurable with {BK}.",
+              visible: NN,
+              highlighted: ["N","BK"] },
+            { text: "Since then the square on the whole {BK} is greater than the square on the annex {KM}",
+              visible: NN,
+              highlighted: ["BK","MK"] },
+            { text: "by the square on a straight line incommensurable with {BK},",
+              visible: NN,
+              highlighted: ["N","BK"] },
+            { text: "and the whole {BK} is commensurable with the rational straight line, {BH}, set out,",
+              visible: NN,
+              highlighted: ["BK","BH"] },
+            { text: "therefore {MB} is a fourth apotome.",
+              visible: NN,
+              highlighted: ["MB"],
+              justifications: [{ ref: "X.Def.III.4" }] },
+            { text: "But the rectangle contained by a rational straight line and a fourth apotome is irrational,",
+              visible: NN,
+              highlighted: ["BH","MB"] },
+            { text: "and its square root is irrational, and is called minor.",
+              visible: NN,
+              highlighted: ["BH","MB"],
+              justifications: [{ ref: "X.94" }] },
+            { text: "But the square on {AB} equals the rectangle {HB} by {BM},",
+              visible: NN,
+              highlighted: ["AB","BH","MB"] },
+            { text: "because, when {AH} is joined,",
+              visible: AHJ,
+              highlighted: ["AH"],
+              transition: { animations: [
+                  { elem: "AH", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "the triangle {ABH} is equiangular with the triangle {ABM},",
+              visible: AHJ,
+              highlighted: ["ABH","ABM"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "ABH", name: geomlib.A.Polygon.outline },
+                  { elem: "ABM", name: geomlib.A.Polygon.outline } ] } },
+            { text: "and {HB} is to {BA} as {AB} is to {BM}.",
+              visible: AHJ,
+              highlighted: ["BH","AB","MB"] },
+            { text: "Therefore the side {AB} of the pentagon is the irrational straight line called minor.",
+              visible: AHJ,
+              highlighted: ["AB"] },
+            { text: "Therefore, if an equilateral pentagon is inscribed in a circle which has its diameter rational,",
+              visible: AHJ,
+              highlighted: ["CDEAB","circT"] },
+            { text: "then the side of the pentagon is the irrational straight line called minor.",
+              visible: AHJ,
+              highlighted: ["AB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.11") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.32":        "/elements/books/bookI/propositions/propI32/",
+        "III.1":       "/elements/books/bookIII/propositions/propIII1/",
+        "V.18":        "/elements/books/bookV/propositions/propV18/",
+        "V.19.Cor":    "/elements/books/bookV/propositions/propV19/#cor",
+        "VI.9":        "/elements/books/bookVI/propositions/propVI9/",
+        "X.Def.III.4": "/elements/books/bookX/definitions/defX.III.4/",
+        "X.9":         "/elements/books/bookX/propositions/propX9/",
+        "X.12":        "/elements/books/bookX/propositions/propX12/",
+        "X.15":        "/elements/books/bookX/propositions/propX15/",
+        "X.73":        "/elements/books/bookX/propositions/propX73/",
+        "X.94":        "/elements/books/bookX/propositions/propX94/",
+        "XIII.1":      "/elements/books/bookXIII/propositions/propXIII1/",
+        "XIII.8":      "/elements/books/bookXIII/propositions/propXIII8/"
     });
 </script>
 </figure>
 
-Take the center *F* of the circle, join *AF* and *FB* and carry them through to the points  *G* and *H,* join *AC,* and make *FK*  a fourth part of *AF.* [!just III.1; VI.9]
+Take the center {F} of the circle, join {AF} and {FB} and carry them through to the points  {G} and {H}, join {AC}, and make {FK}  a fourth part of {AF}. [!just III.1; VI.9]
 
-Now *AF* is rational,  therefore *FK* is also rational.  But *BF* is also rational, therefore the whole *BK* is rational.
+Now {AF} is rational,  therefore {FK} is also rational.  But {BF} is also rational, therefore the whole {BK} is rational.
 
-And, since the circumference *ACG* equals the circumference *ADG,* and in them *ABC* equals *AED,* therefore the remainder *CG* equals the remainder *GD.*
+And, since the circumference {ACG|arcACG} equals the circumference {ADG|arcADG}, and in them {ABC|arcABC} equals {AED|arcAED}, therefore the remainder {CG|arcCG} equals the remainder {GD|arcGD}.
 
-And, if we join *AD,* then we conclude that the angles at *L* are right, and *CD* is double *CL.*
+And, if we join {AD}, then we conclude that the angles at {L} are right, and {CD} is double {CL}.
 
-For the same reason the angles at *M* are also right, and *AC* is double *CM.*
+For the same reason the angles at {M} are also right, and {AC} is double {CM}.
 
-Since then the angle *ALC* equals the angle *AMF,* and the angle *LAC* is common to the two triangles *ACL* and *AMF,* therefore the remaining angle *ACL* equals the remaining angle *MFA.* [!just I.32]
+Since then the angle {ALC|angALC} equals the angle {AMF|angAMF}, and the angle {LAC|angLAC} is common to the two triangles {ACL} and {AMF}, therefore the remaining angle {ACL|angACL} equals the remaining angle {MFA|angMFA}. [!just I.32]
 
-Therefore the triangle *ACL* is equiangular with the triangle *AMF.* Therefore, proportionally *LC* is to *CA* as *MF* is to *FA.* Taking the doubles of the antecedents, therefore double *LC* is to *CA* as double *MF* to *FA.*
+Therefore the triangle {ACL} is equiangular with the triangle {AMF}. Therefore, proportionally {LC} is to {CA} as {MF} is to {FA}. Taking the doubles of the antecedents, therefore double {LC} is to {CA} as double {MF} to {FA}.
 
-But double *MF* is to *FA* as *MF* is to the half of *FA,* therefore also double *LC* is to *CA* as *MF* is to the half of *FA.*
+But double {MF} is to {FA} as {MF} is to the half of {FA}, therefore also double {LC} is to {CA} as {MF} is to the half of {FA}.
 
-Taking the halves of the consequents, therefore double *LC* is to the half of *CA* as *MF* to the fourth of *FA.*
+Taking the halves of the consequents, therefore double {LC} is to the half of {CA} as {MF} to the fourth of {FA}.
 
-And *DC* is double *LC, CM* is half of *CA,* and *FK* is a fourth part of *FA,* therefore *DC* is to *CM* as *MF* to *FK.*
+And {DC} is double {LC}, {CM} is half of {CA}, and {FK} is a fourth part of {FA}, therefore {DC} is to {CM} as {MF} to {FK}.
 
-Taken together, the sum of *DC* and *CM* is to *CM* as *MK* to *KF.* Therefore the square on the sum of *DC* and *CM* is to the square on *CM* as the square on *MK* is to the square on *KF.* [!just V.18]
+Taken together, the sum of {DC} and {CM} is to {CM} as {MK} to {KF}. Therefore the square on the sum of {DC} and {CM} is to the square on {CM} as the square on {MK} is to the square on {KF}. [!just V.18]
 
-And since, when the straight line opposite two sides of the pentagon *AC* is cut in extreme and mean ratio, the greater segment equals the side of the pentagon, that is, *DC,* while the square on the greater segment added to the half of the whole is five times the square on the half of the whole, and *CM* is half of the whole *AC,* therefore the square on *DC* and *CM* taken as one straight line is five times the square on *CM.* [!just XIII.8; XIII.1]
+And since, when the straight line opposite two sides of the pentagon {AC} is cut in extreme and mean ratio, the greater segment equals the side of the pentagon, that is, {DC}, while the square on the greater segment added to the half of the whole is five times the square on the half of the whole, and {CM} is half of the whole {AC}, therefore the square on {DC} and {CM} taken as one straight line is five times the square on {CM}. [!just XIII.8; XIII.1]
 
-But it was proved that the square on *DC* and *CM* taken as one straight line is to the square on *CM* as the square on *MK* to the square on *KF,* therefore the square on *MK* is five times the square on *KF.*
+But it was proved that the square on {DC} and {CM} taken as one straight line is to the square on {CM} as the square on {MK} to the square on {KF}, therefore the square on {MK} is five times the square on {KF}.
 
-But the square on *KF* is rational, for the diameter is rational, therefore the square on *MK* is also rational. Therefore *MK* is rational.
+But the square on {KF} is rational, for the diameter is rational, therefore the square on {MK} is also rational. Therefore {MK} is rational.
 
-And, since *BF* is quadruple *FK,* therefore *BK* is five times *KF.* Therefore the square on *BK* is twenty-five times the square on *KF.*
+And, since {BF} is quadruple {FK}, therefore {BK} is five times {KF}. Therefore the square on {BK} is twenty-five times the square on {KF}.
 
-But the square on *MK* is five times the square on *KF,* therefore the square on *BK* is five times the square on *KM.* Therefore the square on *BK* has not to the square on *KM* the ratio which a square number has to a square number. Therefore *BK* is incommensurable in length with *KM.* [!just X.9]
+But the square on {MK} is five times the square on {KF}, therefore the square on {BK} is five times the square on {KM}. Therefore the square on {BK} has not to the square on {KM} the ratio which a square number has to a square number. Therefore {BK} is incommensurable in length with {KM}. [!just X.9]
 
-And each of them is rational. Therefore *BK* and *KM* are rational straight lines commensurable in square only.
+And each of them is rational. Therefore {BK} and {KM} are rational straight lines commensurable in square only.
 
-But, if from a rational straight line there is subtracted a rational straight line which is commensurable with the whole in square only, then the remainder is irrational, namely an apotome, therefore *MB* is an apotome and *MK* the annex to it. [!just X.73]
+But, if from a rational straight line there is subtracted a rational straight line which is commensurable with the whole in square only, then the remainder is irrational, namely an apotome, therefore {MB} is an apotome and {MK} the annex to it. [!just X.73]
 
-I say next that *MB* is also a fourth apotome.
+I say next that {MB} is also a fourth apotome.
 
-Let the square on *N* be equal to that by which the square on *BK* is greater than the square on *KM.* Therefore the square on *BK* is greater than the square on *KM* by the square on *N.*
+Let the square on {N} be equal to that by which the square on {BK} is greater than the square on {KM}. Therefore the square on {BK} is greater than the square on {KM} by the square on {N}.
 
-And, since *KF* is commensurable with *FB,* taken together, *KB* is commensurable with *FB.* But *BF* is commensurable with *BH,* therefore *BK* is also commensurable with *BH.* [!just X.15; X.12]
+And, since {KF} is commensurable with {FB}, taken together, {KB} is commensurable with {FB}. But {BF} is commensurable with {BH}, therefore {BK} is also commensurable with {BH}. [!just X.15; X.12]
 
-And, since the square on *BK* is five times the square on *KM,* therefore the square on *BK* has to the square on *KM* the ratio which 5 has to 1. Therefore, in conversion, the square on *BK* has to the square on *N* the ratio which 5 has to 4, and this is not the ratio which a square number has to a square number. Therefore *BK* is incommensurable with *N.* Therefore the square on *BK* is greater than the square on *KM* by the square on a straight line incommensurable with *BK.* [!just V.19.Cor; X.9]
+And, since the square on {BK} is five times the square on {KM}, therefore the square on {BK} has to the square on {KM} the ratio which 5 has to 1. Therefore, in conversion, the square on {BK} has to the square on {N} the ratio which 5 has to 4, and this is not the ratio which a square number has to a square number. Therefore {BK} is incommensurable with {N}. Therefore the square on {BK} is greater than the square on {KM} by the square on a straight line incommensurable with {BK}. [!just V.19.Cor; X.9]
 
-Since then the square on the whole *BK* is greater than the square on the annex *KM* by the square on a straight line incommensurable with *BK,* and the whole *BK* is commensurable with the rational straight line, *BH,* set out, therefore *MB* is a fourth apotome. [!just X.Def.III.4]
+Since then the square on the whole {BK} is greater than the square on the annex {KM} by the square on a straight line incommensurable with {BK}, and the whole {BK} is commensurable with the rational straight line, {BH}, set out, therefore {MB} is a fourth apotome. [!just X.Def.III.4]
 
 But the rectangle contained by a rational straight line and a fourth apotome is irrational, and its square root is irrational, and is called minor. [!just X.94]
 
-But the square on *AB* equals the rectangle *HB* by *BM,* because, when *AH* is joined, the triangle *ABH* is equiangular with the triangle *ABM,* and *HB* is to *BA* as *AB* is to *BM.*
+But the square on {AB} equals the rectangle {HB} by {BM}, because, when {AH} is joined, the triangle {ABH} is equiangular with the triangle {ABM}, and {HB} is to {BA} as {AB} is to {BM}.
 
-Therefore the side *AB* of the pentagon is the irrational straight line called minor.
+Therefore the side {AB} of the pentagon is the irrational straight line called minor.
 
 Therefore, *if an equilateral pentagon is inscribed in a circle which has its diameter rational, then the side of the pentagon is the irrational straight line called minor.*
 

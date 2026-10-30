@@ -15,14 +15,36 @@ statement: If an equilateral triangle is inscribed in a circle, then the square 
 ----
 proof:
 
-Let *ABC* be a circle, and let the equilateral triangle *ABC* be inscribed in it.
+Let {ABC|circT} be a circle, and let the equilateral triangle {ABC|BCA} be inscribed in it.
 
-I say that the square on one side of the triangle *ABC* is triple the square on the radius of the circle.
+I say that the square on one side of the triangle {ABC|BCA} is triple the square on the radius of the circle.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="245" height="245" tabindex="0"></canvas>
 <noscript><img alt="XIII.12 diagram" src="propXIII12.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's triangle BCA is already faceless, so the prose reaches the
+    // triangle as {ABC|BCA}; his circle has a random face, which a highlight
+    // would raise over the triangle (#140), so the prose reaches the circle
+    // through circT, a faceless twin, as {ABC|circT}.
+    //
+    // Transparent targets: the sides AB, the radius pieces AD, DE of AE, and
+    // the circumferences BEC and BE as arcs. BE has no lettered point
+    // between its ends, so Xbe (uncoloured) is cut off on the ray from the
+    // centre D through the midpoint of BE at the radius.
+    //
+    // Joyce's AE and BE are held back until "join AD and carry it through to
+    // E, and join BE", and drawn there. The angle ABE is right (III.31,
+    // cited with I.47): a red square at B, revealed where the squares on
+    // AB and BE are summed.
+    //
+    // Draggables (checked against the bundle): B and C, free — the given
+    // triangle's base, standing from slide 1. A, D, E are derived and listed
+    // per slide; nothing to defer.
+    var GIVEN = ["circ","circT","BCAdup","BCA","A","B","C","AB"];
+    var CEN   = GIVEN.concat(["D"]);
+    var JOIN  = CEN.concat(["AE","BE","E","AD","DE","arcBEC","arcBE"]);
+    var RT    = JOIN.concat(["angABE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,21 +59,124 @@ I say that the square on one side of the triangle *ABC* is triple the square on 
             "D;point;center;circ",
             "E;point;extend;A,D,A,D",
             "AE;line;connect;A,E",
-            "BE;line;connect;B,E"
+            "BE;line;connect;B,E",
+            // Faceless twin of the circle (see above).
+            "circT;circle;circumcircle;A,B,C;0;0;0;0",
+            // Transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "Mbe;point;midpoint;B,E;0;0",
+            "Xbe;point;cutoff;D,Mbe,D,A;0;0",
+            "arcBEC;sector;arc;B,E,C;0;0;0;0",
+            "arcBE;sector;arc;B,Xbe,E;0;0;0;0",
+            // The right angle in the semicircle.
+            "angABE;sector;angleMarkerRight;B,A,E,12;0;0;red;red"
         ],
+        aliases: { "BA": "AB", "ED": "DE", "EB": "BE", "EA": "AE", "DA": "AD" },
+        slides: [
+            { text: "“If an equilateral triangle is inscribed in a circle,”",
+              visible: GIVEN,
+              highlighted: ["BCA","circT"],
+              justifications: [{ ref: "XIII.12" }] },
+            { text: "“then the square on the side of the triangle is triple the square on the radius of the circle.”",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "Let {ABC|circT} be a circle, and let the equilateral triangle {ABC|BCA} be inscribed in it.",
+              visible: GIVEN,
+              highlighted: ["circT","BCA"] },
+            { text: "I say that the square on one side of the triangle {ABC|BCA}",
+              visible: GIVEN,
+              highlighted: ["AB","BCA"] },
+            { text: "is triple the square on the radius of the circle.",
+              visible: GIVEN,
+              highlighted: ["circT"] },
+            { text: "Take the center {D} of the circle {ABC|circT},",
+              visible: CEN,
+              highlighted: ["D","circT"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the center D", ref: "III.1" }] },
+            { text: "join {AD} and carry it through to {E}, and join {BE}.",
+              visible: JOIN,
+              highlighted: ["AD","E","BE"],
+              transition: { animations: [
+                  { elem: "AE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E",  name: geomlib.A.Point.appear },
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since the triangle {ABC|BCA} is equilateral,",
+              visible: JOIN,
+              highlighted: ["BCA"] },
+            { text: "therefore the circumference {BEC|arcBEC} is a third part of the circumference of the circle {ABC|circT}.",
+              visible: JOIN,
+              highlighted: ["arcBEC","circT"] },
+            { text: "Therefore the circumference {BE|arcBE} is a sixth part of the circumference of the circle.",
+              visible: JOIN,
+              highlighted: ["arcBE"] },
+            { text: "Therefore the straight line {BE} belongs to a hexagon. Therefore it equals the radius {DE}.",
+              visible: JOIN,
+              highlighted: ["BE","DE"],
+              justifications: [{ claim: "side of the hexagon = radius", ref: "IV.15.Cor" }] },
+            { text: "And, since {AE} is double {DE}, therefore the square on {AE} is quadruple the square on {ED},",
+              visible: JOIN,
+              highlighted: ["AE","DE"] },
+            { text: "that is, of the square on {BE}.",
+              visible: JOIN,
+              highlighted: ["AE","BE"] },
+            { text: "But the square on {AE} equals the sum of the squares on {AB} and {BE}.",
+              visible: RT,
+              highlighted: ["AE","AB","BE","angABE"],
+              transition: { animations: [
+                  { elem: "angABE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "angle ABE in a semicircle is right", ref: "III.31" },
+                  { claim: "square on AE = squares on AB, BE", ref: "I.47" } ] },
+            { text: "Therefore the sum of the squares on {AB} and {BE} is quadruple the square on {BE}.",
+              visible: RT,
+              highlighted: ["AB","BE"] },
+            { text: "Therefore, taken separately, the square on {AB} is triple the square on {BE}.",
+              visible: RT,
+              highlighted: ["AB","BE"] },
+            { text: "But {BE} equals {DE}, therefore the square on {AB} is triple the square on {DE}.",
+              visible: RT,
+              highlighted: ["BE","DE","AB"] },
+            { text: "Therefore the square on the side of the triangle is triple the square on the radius.",
+              visible: RT,
+              highlighted: ["AB","DE"] },
+            { text: "Therefore, if an equilateral triangle is inscribed in a circle,",
+              visible: RT,
+              highlighted: ["BCA","circT"] },
+            { text: "then the square on the side of the triangle is triple the square on the radius of the circle.",
+              visible: RT,
+              highlighted: ["AB","DE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.12") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.47":      "/elements/books/bookI/propositions/propI47/",
+        "III.1":     "/elements/books/bookIII/propositions/propIII1/",
+        "III.31":    "/elements/books/bookIII/propositions/propIII31/",
+        "IV.15.Cor": "/elements/books/bookIV/propositions/propIV15/#cor"
     });
 </script>
 </figure>
 
-Take the center *D* of the circle *ABC,* join *AD* and carry it through to *E,* and join *BE.* [!just III.1]
+Take the center {D} of the circle {ABC|circT}, join {AD} and carry it through to {E}, and join {BE}. [!just III.1]
 
-Then, since the triangle *ABC* is equilateral, therefore the circumference *BEC* is a third part of the circumference of the circle *ABC.*  Therefore the circumference *BE* is a sixth part of the circumference of the circle. Therefore the straight line *BE* belongs to a hexagon. Therefore it equals the radius *DE.* [!just IV.15.Cor]
+Then, since the triangle {ABC|BCA} is equilateral, therefore the circumference {BEC|arcBEC} is a third part of the circumference of the circle {ABC|circT}.  Therefore the circumference {BE|arcBE} is a sixth part of the circumference of the circle. Therefore the straight line {BE} belongs to a hexagon. Therefore it equals the radius {DE}. [!just IV.15.Cor]
 
-And, since *AE* is double *DE,* therefore the square on *AE* is quadruple the square on *ED,* that is, of the square on *BE.*
+And, since {AE} is double {DE}, therefore the square on {AE} is quadruple the square on {ED}, that is, of the square on {BE}.
 
-But the square on *AE* equals the sum of the squares on *AB* and *BE.*  Therefore the sum of the squares on *AB* and *BE* is quadruple the square on *BE.* [!just III.31; I.47]
+But the square on {AE} equals the sum of the squares on {AB} and {BE}.  Therefore the sum of the squares on {AB} and {BE} is quadruple the square on {BE}. [!just III.31; I.47]
 
-Therefore, taken separately, the square on *AB* is triple the square on *BE.* But *BE* equals *DE,* therefore the square on *AB* is triple the square on *DE.*
+Therefore, taken separately, the square on {AB} is triple the square on {BE}. But {BE} equals {DE}, therefore the square on {AB} is triple the square on {DE}.
 
 Therefore the square on the side of the triangle is triple the square on the radius.
 
