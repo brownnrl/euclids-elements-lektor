@@ -15,16 +15,34 @@ statement: If two medial straight lines commensurable in square only and contain
 ----
 proof:
 
-Let two medial straight lines *AB* and *BC* commensurable in square only and containing a medial rectangle be added together.
+Let two medial straight lines {AB} and {BC} commensurable in square only and containing a medial rectangle be added together.
 
-I say that *AC* is irrational.
+I say that {AC} is irrational.
 
-Set out a rational straight line *DE,* and apply parallelogram *DF* to *DE* equal to the square on *AC,* producing *DG* as breadth. [!just I.41]
+Set out a rational straight line {DE}, and apply parallelogram {DF|DFh} to {DE} equal to the square on {AC}, producing {DG} as breadth. [!just I.41]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="250" tabindex="0"></canvas>
 <noscript><img alt="X.38 diagram" src="propX38.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: AC with B on it, and the parallelogram DF (declared
+    // DEFG) applied to the rational line DE with EH (random face) applied
+    // inside it, leaving HF. Added, hidden at rest: a solid twin DE
+    // (initiallyHidden) so the rational line stands before the
+    // parallelogram; transparent targets AB, BC, DG, DH, HG (;0;0;0);
+    // faceless, strokeless twins DFh, EHh, HFh that carry the highlights of
+    // DF, EH and the remainder HF, so a highlight never raises a face over
+    // the figure (#140); prose and captions reach them with the display
+    // override ({DF|DFh}, {EH|EHh}, {HF|HFh}). Resting figure unchanged.
+    //
+    // Draggables (checked against the bundle): A, B, C (given), D, E and
+    // the offscreen frees. D and E arrive with "Set out a rational straight
+    // line DE", so they are deferred; G, F, H are derived and listed per
+    // slide.
+    var GIVEN = ["A","B","C","AC","AB","BC"];
+    var DES   = GIVEN.concat(["D","E","DE"]);
+    var DFS   = DES.concat(["G","F","DEFG","DFh","DG"]);
+    var ALL   = DFS.concat(["H","EH","EHh","HFh","DH","HG"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,33 +65,183 @@ Set out a rational straight line *DE,* and apply parallelogram *DF* to *DE* equa
             "DEFG;polygon;quadrilateral;D,E,F,G;0;0;black;random",
             "H';point;proportion;D,E,A,B,A,B,D,G;0;0",
             "H;point;proportion;D,E,B,C,B,C,H',G",
-            "EH;polygon;parallelogram;E,D,H;0;0;black;random"
+            "EH;polygon;parallelogram;E,D,H;0;0;black;random",
+            // Slide-only twin and highlight targets.
+            "DE;line;connect;D,E",
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DG;line;connect;D,G;0;0;0",
+            "DH;line;connect;D,H;0;0;0",
+            "HG;line;connect;H,G;0;0;0",
+            "DFh;polygon;quadrilateral;D,E,F,G;0;0;0;0",
+            "EHh;polygon;parallelogram;E,D,H;0;0;0;0",
+            "HFh;polygon;parallelogram;H,G,F;0;0;0;0"
         ],
+        initiallyHidden: ["DE"],
+        deferDraggables: ["D","E"],
+        slides: [
+            { text: "“If two medial straight lines commensurable in square only and containing a medial rectangle are added together,",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "X.38" }] },
+            { text: "then the whole is irrational; let it be called the second bimedial straight line.”",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Let two medial straight lines {AB} and {BC} commensurable in square only and containing a medial rectangle be added together.",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "I say that {AC} is irrational.",
+              visible: GIVEN,
+              highlighted: ["AC"] },
+            { text: "Set out a rational straight line {DE},",
+              visible: DES,
+              highlighted: ["DE"],
+              transition: { animations: [
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and apply parallelogram {DF|DFh} to {DE} equal to the square on {AC}, producing {DG} as breadth.",
+              visible: DFS,
+              highlighted: ["DFh","DE","AC","DG"],
+              transition: { animations: [
+                  { elem: "DEFG", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "DF = square on AC", ref: "I.41" }] },
+            { text: "Since the square on {AC} equals the sum of the squares on {AB} and {BC} and twice the rectangle {AB} by {BC},",
+              visible: DFS,
+              highlighted: ["AC","AB","BC"],
+              justifications: [{ claim: "AC² = AB² + BC² + 2 AB·BC", ref: "II.4" }] },
+            { text: "apply {EH|EHh}, equal to the sum of the squares on {AB} and {BC}, to {DE}.",
+              visible: ALL,
+              highlighted: ["EHh","AB","BC","DE"],
+              transition: { animations: [
+                  { elem: "EH", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Then the remainder {HF|HFh} equals twice the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["HFh","AB","BC"] },
+            { text: "Since each of the straight lines {AB} and {BC} is medial, therefore the squares on {AB} and {BC} are also medial.",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "But, by hypothesis, twice the rectangle {AB} by {BC} is also medial.",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "And {EH|EHh} equals the sum of the squares on {AB} and {BC},",
+              visible: ALL,
+              highlighted: ["EHh","AB","BC"] },
+            { text: "while {FH|HFh} equals twice the rectangle {AB} by {BC},",
+              visible: ALL,
+              highlighted: ["HFh","AB","BC"] },
+            { text: "therefore each of the rectangles {EH|EHh} and {HF|HFh} is medial.",
+              visible: ALL,
+              highlighted: ["EHh","HFh"] },
+            { text: "And they are applied to the rational straight line {DE},",
+              visible: ALL,
+              highlighted: ["EHh","HFh","DE"] },
+            { text: "therefore each of the straight lines {DH} and {HG} is rational and incommensurable in length with {DE}.",
+              visible: ALL,
+              highlighted: ["DH","HG","DE"],
+              justifications: [{ claim: "DH, HG rational, incommensurable in length with DE", ref: "X.22" }] },
+            { text: "Since {AB} is incommensurable in length with {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "and {AB} is to {BC} as the square on {AB} is to the rectangle {AB} by {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the square on {AB} is incommensurable with the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "AB², AB·BC incommensurable", ref: "X.11" }] },
+            { text: "But the sum of the squares on {AB} and {BC} is commensurable with the square on {AB},",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "AB² + BC², AB² commensurable", ref: "X.15" }] },
+            { text: "and twice the rectangle {AB} by {BC} is commensurable with the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "2 AB·BC, AB·BC commensurable", ref: "X.6" }] },
+            { text: "Therefore the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "AB² + BC², 2 AB·BC incommensurable", ref: "X.13" }] },
+            { text: "But {EH|EHh} equals the sum of the squares on {AB} and {BC},",
+              visible: ALL,
+              highlighted: ["EHh","AB","BC"] },
+            { text: "and {HF|HFh} equals twice the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["HFh","AB","BC"] },
+            { text: "Therefore {EH|EHh} is incommensurable with {HF|HFh},",
+              visible: ALL,
+              highlighted: ["EHh","HFh"] },
+            { text: "so that {DH} is also incommensurable in length with {HG}.",
+              visible: ALL,
+              highlighted: ["DH","HG"],
+              justifications: [{ claim: "EH : HF = DH : HG", ref: "VI.1" },
+                               { claim: "DH, HG incommensurable in length", ref: "X.11" }] },
+            { text: "Therefore {DH} and {HG} are rational straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["DH","HG"] },
+            { text: "so that {DG} is irrational.",
+              visible: ALL,
+              highlighted: ["DG"],
+              justifications: [{ claim: "DG irrational", ref: "X.36" }] },
+            { text: "But {DE} is rational, and the rectangle contained by an irrational and a rational straight line is irrational,",
+              visible: ALL,
+              highlighted: ["DE","DG"] },
+            { text: "therefore the area {DF|DFh} is irrational, and the side of the square equal to it is irrational.",
+              visible: ALL,
+              highlighted: ["DFh"],
+              justifications: [{ claim: "DF irrational", ref: "cf. X.20" },
+                               { claim: "its side irrational", ref: "X.Def.I.4" }] },
+            { text: "But {AC} is the side of the square equal to {DF|DFh}, therefore {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC","DFh"] },
+            { text: "Let it be called a second bimedial straight line.",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.38") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.41":      "/elements/books/bookI/propositions/propI41/",
+        "II.4":      "/elements/books/bookII/propositions/propII4/",
+        "VI.1":      "/elements/books/bookVI/propositions/propVI1/",
+        "X.6":       "/elements/books/bookX/propositions/propX6/",
+        "X.11":      "/elements/books/bookX/propositions/propX11/",
+        "X.13":      "/elements/books/bookX/propositions/propX13/",
+        "X.15":      "/elements/books/bookX/propositions/propX15/",
+        "X.22":      "/elements/books/bookX/propositions/propX22/",
+        "X.36":      "/elements/books/bookX/propositions/propX36/",
+        "cf. X.20":  "/elements/books/bookX/propositions/propX20/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-Since the square on *AC* equals the sum of the squares on *AB* and *BC* and twice the rectangle *AB* by *BC,* apply *EH,* equal to the sum of the squares on *AB* and *BC,* to *DE.* Then the remainder *HF* equals twice the rectangle *AB* by *BC.* [!just II.4]
+Since the square on {AC} equals the sum of the squares on {AB} and {BC} and twice the rectangle {AB} by {BC}, apply {EH|EHh}, equal to the sum of the squares on {AB} and {BC}, to {DE}. Then the remainder {HF|HFh} equals twice the rectangle {AB} by {BC}. [!just II.4]
 
-Since each of the straight lines *AB* and *BC* is medial, therefore the squares on *AB* and *BC* are also medial. But, by hypothesis, twice the rectangle *AB* by *BC* is also medial. And *EH* equals the sum of the squares on *AB* and *BC,* while *FH* equals twice the rectangle *AB* by *BC,* therefore each of the rectangles *EH* and *HF* is medial.
+Since each of the straight lines {AB} and {BC} is medial, therefore the squares on {AB} and {BC} are also medial. But, by hypothesis, twice the rectangle {AB} by {BC} is also medial. And {EH|EHh} equals the sum of the squares on {AB} and {BC}, while {FH|HFh} equals twice the rectangle {AB} by {BC}, therefore each of the rectangles {EH|EHh} and {HF|HFh} is medial.
 
-And they are applied to the rational straight line *DE,* therefore each of the straight lines *DH* and *HG* is rational and incommensurable in length with *DE.* [!just X.22]
+And they are applied to the rational straight line {DE}, therefore each of the straight lines {DH} and {HG} is rational and incommensurable in length with {DE}. [!just X.22]
 
-Since *AB* is incommensurable in length with *BC,* and *AB* is to *BC* as the square on *AB* is to the rectangle *AB* by *BC,* therefore the square on *AB* is incommensurable with the rectangle *AB* by *BC.* [!just X.11]
+Since {AB} is incommensurable in length with {BC}, and {AB} is to {BC} as the square on {AB} is to the rectangle {AB} by {BC}, therefore the square on {AB} is incommensurable with the rectangle {AB} by {BC}. [!just X.11]
 
-But the sum of the squares on *AB* and *BC* is commensurable with the square on *AB,* and twice the rectangle *AB* by *BC* is commensurable with the rectangle *AB* by *BC.* [!just X.15; X.6]
+But the sum of the squares on {AB} and {BC} is commensurable with the square on {AB}, and twice the rectangle {AB} by {BC} is commensurable with the rectangle {AB} by {BC}. [!just X.15; X.6]
 
-Therefore the sum of the squares on *AB* and *BC* is incommensurable with twice the rectangle *AB* by *BC.* [!just X.13]
+Therefore the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC}. [!just X.13]
 
-But *EH* equals the sum of the squares on *AB* and *BC,* and *HF* equals twice the rectangle *AB* by *BC.*
+But {EH|EHh} equals the sum of the squares on {AB} and {BC}, and {HF|HFh} equals twice the rectangle {AB} by {BC}.
 
-Therefore *EH* is incommensurable with *HF,* so that *DH* is also incommensurable in length with *HG.* [!just VI.1; X.11]
+Therefore {EH|EHh} is incommensurable with {HF|HFh}, so that {DH} is also incommensurable in length with {HG}. [!just VI.1; X.11]
 
-Therefore *DH* and *HG* are rational straight lines commensurable in square only, so that *DG* is irrational. [!just X.36]
+Therefore {DH} and {HG} are rational straight lines commensurable in square only, so that {DG} is irrational. [!just X.36]
 
-But *DE* is rational, and the rectangle contained by an irrational and a rational straight line is irrational, therefore the area *DF* is irrational, and the side of the square equal to it is irrational. <div class="just">cf. <a href="/elements/books/bookX/propositions/propX20/">X.20</a><br><a href="/elements/books/bookX/definitions/defX.I.4">X.Def.I.4</a></div>
+But {DE} is rational, and the rectangle contained by an irrational and a rational straight line is irrational, therefore the area {DF|DFh} is irrational, and the side of the square equal to it is irrational. <div class="just">cf. <a href="/elements/books/bookX/propositions/propX20/">X.20</a><br><a href="/elements/books/bookX/definitions/defX.I.4">X.Def.I.4</a></div>
 
-But *AC* is the side of the square equal to *DF,* therefore *AC* is irrational. Let it be called a *second bimedial* straight line.
+But {AC} is the side of the square equal to {DF|DFh}, therefore {AC} is irrational. Let it be called a *second bimedial* straight line.
 
 <div class="qed">Q.E.D.</div>
 ----

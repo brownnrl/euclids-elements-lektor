@@ -15,14 +15,21 @@ statement: If two medial straight lines commensurable in square only and contain
 ----
 proof:
 
-Let two medial straight lines *AB* and *BC* commensurable in square only and containing a rational rectangle be added together.
+Let two medial straight lines {AB} and {BC} commensurable in square only and containing a rational rectangle be added together.
 
-I say that the whole *AC* is irrational.
+I say that the whole {AC} is irrational.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="230" height="80" tabindex="0"></canvas>
 <noscript><img alt="X.37 diagram" src="propX36.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the line AC with B on it. Added, invisible at rest:
+    // transparent highlight targets AB and BC (;0;0;0). Resting figure
+    // unchanged.
+    //
+    // Draggables (checked against the bundle): A, B, C (line sliders, all
+    // givens) and the offscreen frees X0, X1. Nothing is deferred.
+    var ALL = ["A","B","C","AC","AB","BC"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -33,15 +40,78 @@ I say that the whole *AC* is irrational.
             "A;point;lineSlider;X0,X1,30,0",
             "B;point;lineSlider;X0,X1,100,0",
             "C;point;lineSlider;X0,X1,200,0",
-            "AC;line;connect;A,C"
+            "AC;line;connect;A,C",
+            // Highlight targets only — the figure already draws these.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0"
         ],
+        slides: [
+            { text: "“If two medial straight lines commensurable in square only and containing a rational rectangle are added together,",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "X.37" }] },
+            { text: "the whole is irrational; let it be called the first bimedial straight line.”",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Let two medial straight lines {AB} and {BC} commensurable in square only and containing a rational rectangle be added together.",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "I say that the whole {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Since {AB} is incommensurable in length with {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the sum of the squares on {AB} and {BC} is also incommensurable with twice the rectangle {AB} by {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "AB² + BC², 2 AB·BC incommensurable", ref: "X.36" }] },
+            { text: "and, taken jointly, the sum of the squares on {AB} and {BC} together with twice the rectangle {AB} by {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "that is, the square on {AC}, is incommensurable with the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["AC","AB","BC"],
+              justifications: [{ claim: "AC² = AB² + BC² + 2 AB·BC", ref: "II.4" },
+                               { claim: "AC², AB·BC incommensurable", ref: "X.16" }] },
+            { text: "But the rectangle {AB} by {BC} is rational,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "for, by hypothesis, {AB} and {BC} are straight lines containing a rational rectangle,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the square on {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Therefore {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ claim: "AC irrational", ref: "X.Def.I.4" }] },
+            { text: "And let it be called a first bimedial straight line.",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.37") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.4":      "/elements/books/bookII/propositions/propII4/",
+        "X.16":      "/elements/books/bookX/propositions/propX16/",
+        "X.36":      "/elements/books/bookX/propositions/propX36/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-Since *AB* is incommensurable in length with *BC,* therefore the sum of the squares on *AB* and *BC* is also incommensurable with twice the rectangle *AB* by *BC,* and, taken jointly, the sum of the squares on *AB* and *BC* together with twice the rectangle *AB* by *BC,* that is, the square on *AC,* is incommensurable with the rectangle *AB* by *BC.* [!just X.36; II.4; X.16]
+Since {AB} is incommensurable in length with {BC}, therefore the sum of the squares on {AB} and {BC} is also incommensurable with twice the rectangle {AB} by {BC}, and, taken jointly, the sum of the squares on {AB} and {BC} together with twice the rectangle {AB} by {BC}, that is, the square on {AC}, is incommensurable with the rectangle {AB} by {BC}. [!just X.36; II.4; X.16]
 
-But the rectangle *AB* by *BC* is rational, for, by hypothesis, *AB* and *BC* are straight lines containing a rational rectangle, therefore the square on *AC* is irrational. Therefore *AC* is irrational. And let it be called a *first bimedial* straight line. [!just X.Def.I.4]
+But the rectangle {AB} by {BC} is rational, for, by hypothesis, {AB} and {BC} are straight lines containing a rational rectangle, therefore the square on {AC} is irrational. Therefore {AC} is irrational. And let it be called a *first bimedial* straight line. [!just X.Def.I.4]
 
 <div class="qed">Q.E.D.</div>
 ----
