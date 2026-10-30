@@ -15,14 +15,19 @@ statement: If a cubic number multiplied by any number makes a cubic number, then
 ----
 proof:
 
-Let the cubic number *A* multiplied by any number *B* make the cubic number *C.*
+Let the cubic number {A} multiplied by any number {B} make the cubic number {C}.
 
-I say that *B* is cubic.
+I say that {B} is cubic.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="200" tabindex="0"></canvas>
 <noscript><img alt="IX.5 diagram" src="propIX5.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: the walk is highlight beats over Joyce's four lines.
+    // D is the only thing the proof makes, so it is the only animation.
+    // Its slider end D1 is deferred so D stays off the canvas until then.
+    var GIVEN = ["A1","A2","A","B1","B2","B","C1","C2","C"];
+    var ALL   = GIVEN.concat(["D1","D2","D"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,17 +56,79 @@ I say that *B* is cubic.
             "D2;point;proportion;U1,U2,A1,A2,A1,A2,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        deferDraggables: ["D1"],
+        slides: [
+            { text: "If a cubic number multiplied by any number makes a cubic number, then the multiplied number is also cubic.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "IX.5" }] },
+            { text: "Let the cubic number {A} multiplied by any number {B} make the cubic number {C}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "I say that {B} is cubic.",
+              visible: GIVEN,
+              highlighted: ["B"] },
+            { text: "Multiply {A} by itself to make {D}. Then {D} is a cube.",
+              visible: ALL,
+              highlighted: ["A","D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "D, the product of the cube A by itself, is a cube", ref: "IX.3" }] },
+            { text: "Now, since {A} multiplied by itself makes {D}, and multiplied by {B} makes {C},",
+              visible: ALL,
+              highlighted: ["A","D","B","C"] },
+            { text: "therefore {A} is to {B} as {D} is to {C}.",
+              visible: ALL,
+              highlighted: ["A","B","D","C"],
+              justifications: [{ claim: "A : B = D : C", ref: "VII.17" }] },
+            { text: "And since {D} and {C} are cubes, therefore they are similar solid numbers.",
+              visible: ALL,
+              highlighted: ["D","C"] },
+            { text: "Therefore two mean proportional numbers fall between {D} and {C}.",
+              visible: ALL,
+              highlighted: ["D","C"],
+              justifications: [{ claim: "two means between the similar solids D and C", ref: "VIII.19" }] },
+            { text: "And {D} is to {C} as {A} is to {B},",
+              visible: ALL,
+              highlighted: ["D","C","A","B"] },
+            { text: "therefore two mean proportional numbers fall between {A} and {B}, too.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "as many means between A and B", ref: "VIII.8" }] },
+            { text: "And {A} is a cube, therefore {B} is also a cube.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "B is a cube", ref: "VIII.23" }] },
+            { text: "Therefore, if a cubic number multiplied by any number makes a cubic number, then the multiplied number is also cubic.",
+              visible: ALL,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.5") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.17":  "/elements/books/bookVII/propositions/propVII17/",
+        "VIII.8":  "/elements/books/bookVIII/propositions/propVIII8/",
+        "VIII.19": "/elements/books/bookVIII/propositions/propVIII19/",
+        "VIII.23": "/elements/books/bookVIII/propositions/propVIII23/",
+        "IX.3":    "/elements/books/bookIX/propositions/propIX3/"
     });
 </script>
 </figure>
 
-Multiply *A* by itself to make *D.* Then *D* is a cube. [!just IX.3]
+Multiply {A} by itself to make {D}. Then {D} is a cube. [!just IX.3]
 
-Now, since *A* multiplied by itself makes *D,* and multiplied by *B* makes *C,* therefore *A* is to *B* as *D* is to *C.* [!just VII.17]
+Now, since {A} multiplied by itself makes {D}, and multiplied by {B} makes {C}, therefore {A} is to {B} as {D} is to {C}. [!just VII.17]
 
-And since *D* and *C* are cubes, therefore they are similar solid numbers. Therefore two mean proportional numbers fall between *D* and *C.* And *D* is to *C* as *A* is to *B,* therefore two mean proportional numbers fall between *A* and *B,* too. [!just VIII.19; VIII.8]
+And since {D} and {C} are cubes, therefore they are similar solid numbers. Therefore two mean proportional numbers fall between {D} and {C}. And {D} is to {C} as {A} is to {B}, therefore two mean proportional numbers fall between {A} and {B}, too. [!just VIII.19; VIII.8]
 
-And *A* is a cube, therefore *B* is also a cube. [!just VIII.23]
+And {A} is a cube, therefore {B} is also a cube. [!just VIII.23]
 
 Therefore, *if a cubic number multiplied by any number makes a cubic number, then the multiplied number is also cubic.*
 
