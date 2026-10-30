@@ -17,22 +17,34 @@ statement: To find the greatest common measure of three given commensurable magn
 ----
 proof:
 
-Let *A, B,* and *C* be the three given commensurable magnitudes.
+Let {A}, {B}, and {C} be the three given commensurable magnitudes.
 
-It is required to find the greatest common measure of *A, B,* and *C.*
+It is required to find the greatest common measure of {A}, {B}, and {C}.
 
-Take the greatest common measure *D* of the two magnitudes *A* and *B.* [!just X.3]
+Take the greatest common measure {D} of the two magnitudes {A} and {B}. [!just X.3]
 
-Either *D* measures *C,* or it does not measure it.
+Either {D} measures {C}, or it does not measure it.
 
 First, let it measure it.
 
-Since then *D* measures *C,* while it also measures *A* and *B,* therefore *D* is a common measure of *A, B,* and *C.* And it is manifest that it is also the greatest, for a greater magnitude than the magnitude *D* does not measure *A* and *B.*
+Since then {D} measures {C}, while it also measures {A} and {B}, therefore {D} is a common measure of {A}, {B}, and {C}. And it is manifest that it is also the greatest, for a greater magnitude than the magnitude {D} does not measure {A} and {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="165" tabindex="0"></canvas>
 <noscript><img alt="X.4 diagram" src="propX4.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure is six bare magnitudes, A to F, each a line between two
+    // endpoint sliders. Nothing is added; the walk is highlight beats, with
+    // D, E and F stroked in as the proof takes or supposes them.
+    //
+    // Draggables (checked against the bundle): every endpoint A1..F2 and the
+    // hidden far points. D, E and F are introduced mid-walk, so their ends
+    // are deferred; F, the hypothesis of the reductio, is withdrawn again
+    // once the contradiction is reached.
+    var GIVEN = ["A1","A2","A","B1","B2","B","C1","C2","C"];
+    var WD    = GIVEN.concat(["D1","D2","D"]);
+    var WE    = WD.concat(["E1","E2","E"]);
+    var WF    = WE.concat(["F1","F2","F"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -65,33 +77,157 @@ Since then *D* measures *C,* while it also measures *A* and *B,* therefore *D* i
             "F2;point;lineSlider;D0,D3,195,0;0",
             "F;line;connect;F1,F2;black"
         ],
+        deferDraggables: ["D1","D2","E1","E2","F1","F2"],
+        slides: [
+            { text: "“To find the greatest common measure of three given commensurable magnitudes.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "X.4" }] },
+            { text: "Let {A}, {B}, and {C} be the three given commensurable magnitudes.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "It is required to find the greatest common measure of {A}, {B}, and {C}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "Take the greatest common measure {D} of the two magnitudes {A} and {B}.",
+              visible: WD,
+              highlighted: ["D","A","B"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "the greatest common measure of A and B", ref: "X.3" }] },
+            { text: "Either {D} measures {C}, or it does not measure it.",
+              visible: WD,
+              highlighted: ["D","C"] },
+            { text: "First, let it measure it.",
+              visible: WD,
+              highlighted: ["D","C"] },
+            { text: "Since then {D} measures {C}, while it also measures {A} and {B},",
+              visible: WD,
+              highlighted: ["D","C","A","B"] },
+            { text: "therefore {D} is a common measure of {A}, {B}, and {C}.",
+              visible: WD,
+              highlighted: ["D","A","B","C"] },
+            { text: "And it is manifest that it is also the greatest,",
+              visible: WD,
+              highlighted: ["D"] },
+            { text: "for a greater magnitude than the magnitude {D} does not measure {A} and {B}.",
+              visible: WD,
+              highlighted: ["D","A","B"] },
+            { text: "Next, let {D} not measure {C}.",
+              visible: WD,
+              highlighted: ["D","C"] },
+            { text: "I say first that {C} and {D} are commensurable.",
+              visible: WD,
+              highlighted: ["C","D"] },
+            { text: "Since {A}, {B}, and {C} are commensurable, some magnitude measures them,",
+              visible: WD,
+              highlighted: ["A","B","C"] },
+            { text: "and this of course measures {A} and {B} also,",
+              visible: WD,
+              highlighted: ["A","B"] },
+            { text: "so that it also measures the greatest common measure of {A} and {B}, namely {D}.",
+              visible: WD,
+              highlighted: ["A","B","D"],
+              justifications: [{ claim: "it measures the greatest common measure of A and B", ref: "X.3.Cor" }] },
+            { text: "But it also measures {C}, so that the said magnitude measures {C} and {D}, therefore {C} and {D} are commensurable.",
+              visible: WD,
+              highlighted: ["C","D"] },
+            { text: "Now take their greatest common measure {E}.",
+              visible: WE,
+              highlighted: ["E","C","D"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "the greatest common measure of C and D", ref: "X.3" }] },
+            { text: "Since {E} measures {D}, while {D} measures {A} and {B}, therefore {E} also measures {A} and {B}.",
+              visible: WE,
+              highlighted: ["E","D","A","B"] },
+            { text: "But it measures {C} also, therefore {E} measures {A}, {B}, and {C}.",
+              visible: WE,
+              highlighted: ["E","C","A","B"] },
+            { text: "Therefore {E} is a common measure of {A}, {B}, and {C}.",
+              visible: WE,
+              highlighted: ["E","A","B","C"] },
+            { text: "I say next that it is also the greatest.",
+              visible: WE,
+              highlighted: ["E"] },
+            { text: "For, if possible, let there be some magnitude {F} greater than {E}, and let it measure {A}, {B}, and {C}.",
+              visible: WF,
+              highlighted: ["F","E","A","B","C"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since {F} measures {A}, {B}, and {C}, it also measures {A} and {B},",
+              visible: WF,
+              highlighted: ["F","A","B"] },
+            { text: "and therefore measures the greatest common measure of {A} and {B}.",
+              visible: WF,
+              highlighted: ["F","A","B"],
+              justifications: [{ claim: "F measures the greatest common measure of A and B", ref: "X.3.Cor" }] },
+            { text: "But the greatest common measure of {A} and {B} is {D}, therefore {F} measures {D}.",
+              visible: WF,
+              highlighted: ["A","B","D","F"] },
+            { text: "But it measures {C} also, therefore {F} measures {C} and {D}.",
+              visible: WF,
+              highlighted: ["F","C","D"] },
+            { text: "Therefore {F} also measures the greatest common measure of {C} and {D}.",
+              visible: WF,
+              highlighted: ["F","C","D"],
+              justifications: [{ claim: "F measures the greatest common measure of C and D", ref: "X.3.Cor" }] },
+            { text: "But that is {E}, therefore {F} measures {E}, the greater the less, which is impossible.",
+              visible: WF,
+              highlighted: ["E","F"] },
+            // The hypothesis is withdrawn: F leaves the figure.
+            { text: "Therefore no magnitude greater than the magnitude {E} measures {A}, {B}, and {C}.",
+              visible: WE,
+              highlighted: ["E","A","B","C"] },
+            { text: "Therefore {E} is the greatest common measure of {A}, {B}, and {C} if {D} does not measure {C},",
+              visible: WE,
+              highlighted: ["E","A","B","C"] },
+            { text: "but if it measures it, then {D} is itself the greatest common measure.",
+              visible: WE,
+              highlighted: ["D"] },
+            { text: "Therefore the greatest common measure of the three given commensurable magnitudes has been found.",
+              visible: WE,
+              highlighted: ["E"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.4") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.3":     "/elements/books/bookX/propositions/propX3/",
+        "X.3.Cor": "/elements/books/bookX/propositions/propX3/#cor"
     });
 </script>
 </figure>
 
-Next, let *D* not measure *C.*
+Next, let {D} not measure {C}.
 
-I say first that *C* and *D* are commensurable.
+I say first that {C} and {D} are commensurable.
 
-Since *A, B,* and *C* are commensurable, some magnitude measures them, and this of course measures *A* and *B* also, so that it also measures the greatest common measure of *A* and *B,* namely *D.* [!just X.3.Cor]
+Since {A}, {B}, and {C} are commensurable, some magnitude measures them, and this of course measures {A} and {B} also, so that it also measures the greatest common measure of {A} and {B}, namely {D}. [!just X.3.Cor]
 
-But it also measures *C,* so that the said magnitude measures *C* and *D,* therefore *C* and *D* are commensurable.
+But it also measures {C}, so that the said magnitude measures {C} and {D}, therefore {C} and {D} are commensurable.
 
-Now take their greatest common measure *E.* [!just X.3]
+Now take their greatest common measure {E}. [!just X.3]
 
-Since *E* measures *D,* while *D* measures *A* and *B,* therefore *E* also measures *A* and *B.* But it measures *C* also, therefore *E* measures *A, B,* and *C.* Therefore *E* is a common measure of *A, B,* and *C.*
+Since {E} measures {D}, while {D} measures {A} and {B}, therefore {E} also measures {A} and {B}. But it measures {C} also, therefore {E} measures {A}, {B}, and {C}. Therefore {E} is a common measure of {A}, {B}, and {C}.
 
 I say next that it is also the greatest.
 
-For, if possible, let there be some magnitude *F* greater than *E,* and let it measure *A, B,* and *C.*
+For, if possible, let there be some magnitude {F} greater than {E}, and let it measure {A}, {B}, and {C}.
 
-Now, since *F* measures *A, B,* and *C,* it also measures *A* and *B,* and therefore measures the greatest common measure of *A* and *B.* [!just X.3.Cor]
+Now, since {F} measures {A}, {B}, and {C}, it also measures {A} and {B}, and therefore measures the greatest common measure of {A} and {B}. [!just X.3.Cor]
 
-But the greatest common measure of *A* and *B* is *D,* therefore *F* measures *D.*
+But the greatest common measure of {A} and {B} is {D}, therefore {F} measures {D}.
 
-But it measures *C* also, therefore *F* measures *C* and *D.* Therefore *F* also measures the greatest common measure of *C* and *D.* But that is *E,* therefore *F* measures *E,* the greater the less, which is impossible. [!just X.3.Cor]
+But it measures {C} also, therefore {F} measures {C} and {D}. Therefore {F} also measures the greatest common measure of {C} and {D}. But that is {E}, therefore {F} measures {E}, the greater the less, which is impossible. [!just X.3.Cor]
 
-Therefore no magnitude greater than the magnitude *E* measures *A, B,* and *C.* Therefore *E* is the greatest common measure of *A, B,* and *C* if *D* does not measure *C,* but if it measures it, then *D* is itself the greatest common measure.
+Therefore no magnitude greater than the magnitude {E} measures {A}, {B}, and {C}. Therefore {E} is the greatest common measure of {A}, {B}, and {C} if {D} does not measure {C}, but if it measures it, then {D} is itself the greatest common measure.
 
 Therefore the greatest common measure of the three given commensurable magnitudes has been found.
 

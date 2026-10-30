@@ -17,18 +17,33 @@ statement: To find the greatest common measure of two given commensurable magnit
 ----
 proof:
 
-Let the two given commensurable magnitudes be *AB* and *CD* with *AB* the less.
+Let the two given commensurable magnitudes be {AB} and {CD} with {AB} the less.
 
-It is required to find the greatest common measure of *AB* and *CD.*
+It is required to find the greatest common measure of {AB} and {CD}.
 
-Now the magnitude *AB* either measures *CD* or it does not.
+Now the magnitude {AB} either measures {CD} or it does not.
 
-If it measures it, and it does measures itself, then *AB* is a common measure of *AB* and *CD.* And it is manifest that it is also the greatest, for a greater magnitude than the magnitude *AB* does not measure *AB.*
+If it measures it, and it does measures itself, then {AB} is a common measure of {AB} and {CD}. And it is manifest that it is also the greatest, for a greater magnitude than the magnitude {AB} does not measure {AB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="100" tabindex="0"></canvas>
 <noscript><img alt="X.3 diagram" src="propX3.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws AB, CD and G. The proof works with the pieces the
+    // subtraction leaves — ED, EC on CD and FB, AF on AB — so those are added
+    // as transparent highlight targets (;0;0;0); the resting figure is
+    // unchanged. The walk is highlight beats only: each "measures" step
+    // lights the two magnitudes it compares.
+    //
+    // Draggables (checked against the bundle): A, B, C, D (the givens,
+    // standing from slide 1), G1, G2 (G's ends), and the hidden far points
+    // A0/A3/C0/C3. G enters only in the reductio, so G1/G2 are deferred and
+    // withdrawn again once the contradiction is reached. E and F are cutoff
+    // points, listed per slide.
+    var GIVEN = ["A","B","AB","C","D","CD"];
+    var SUB   = GIVEN.concat(["E","ED","EC"]);
+    var REM   = SUB.concat(["F","FB","AF"]);
+    var HYP   = REM.concat(["G","G1","G2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -50,33 +65,144 @@ If it measures it, and it does measures itself, then *AB* is a common measure of
             "F;point;cutoff;F1,A,C,E",
             "G1;point;lineSlider;A0,A3,30,0;0",
             "G2;point;lineSlider;A0,A3,80,0;0",
-            "G;line;connect;G1,G2;black"
+            "G;line;connect;G1,G2;black",
+            // Highlight targets only — AB and CD already draw these.
+            "ED;line;connect;E,D;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            "FB;line;connect;F,B;0;0;0",
+            "AF;line;connect;A,F;0;0;0"
         ],
+        deferDraggables: ["G1","G2"],
+        aliases: { "DE": "ED", "CE": "EC", "BF": "FB", "FA": "AF",
+                   "BA": "AB", "DC": "CD" },
+        slides: [
+            { text: "“To find the greatest common measure of two given commensurable magnitudes.”",
+              visible: GIVEN,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "X.3" }] },
+            { text: "Let the two given commensurable magnitudes be {AB} and {CD} with {AB} the less.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "It is required to find the greatest common measure of {AB} and {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "Now the magnitude {AB} either measures {CD} or it does not.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "If it measures it, and it does measures itself, then {AB} is a common measure of {AB} and {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "And it is manifest that it is also the greatest,",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "for a greater magnitude than the magnitude {AB} does not measure {AB}.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "Next, let {AB} not measure {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "Then, if the less is continually subtracted in turn from the greater,",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "then that which is left over will sometime measure the one before it, because {AB} and {CD} are not incommensurable.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"],
+              justifications: [{ claim: "the remainder will sometime measure the one before it", ref: "X.2" }] },
+            { text: "Let {AB}, measuring {ED}, leave {EC} less than itself,",
+              visible: SUB,
+              highlighted: ["AB","ED","EC","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "let {EC}, measuring {FB}, leave {AF} less than itself, and let {AF} measure {CE|EC}.",
+              visible: REM,
+              highlighted: ["EC","FB","AF","F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "Since, then, {AF} measures {CE|EC}, while {CE|EC} measures {FB}, therefore {AF} also measures {FB}.",
+              visible: REM,
+              highlighted: ["AF","EC","FB"] },
+            { text: "But it measures itself also, therefore {AF} also measures the whole {AB}.",
+              visible: REM,
+              highlighted: ["AF","AB"] },
+            { text: "But {AB} measures {DE|ED}, therefore {AF} also measures {ED}.",
+              visible: REM,
+              highlighted: ["AB","ED","AF"] },
+            { text: "But it measures {CE|EC} also, therefore it also measures the whole {CD}.",
+              visible: REM,
+              highlighted: ["AF","EC","CD"] },
+            { text: "Therefore {AF} is a common measure of {AB} and {CD}.",
+              visible: REM,
+              highlighted: ["AF","AB","CD"] },
+            { text: "I say next that it is also the greatest.",
+              visible: REM,
+              highlighted: ["AF"] },
+            { text: "If not, then there there is some magnitude {G} greater than {AF} which measures {AB} and {CD}.",
+              visible: HYP,
+              highlighted: ["G","AF","AB","CD"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since then {G} measures {AB}, while {AB} measures {ED}, therefore {G} also measures {ED}.",
+              visible: HYP,
+              highlighted: ["G","AB","ED"] },
+            { text: "But it measures the whole {CD} also, therefore {G} measures the remainder {CE|EC}.",
+              visible: HYP,
+              highlighted: ["G","CD","EC"] },
+            { text: "But {CE|EC} measures {FB}, therefore {G} also measures {FB}.",
+              visible: HYP,
+              highlighted: ["G","EC","FB"] },
+            { text: "But it measures the whole {AB} also, and it therefore measures the remainder {AF},",
+              visible: HYP,
+              highlighted: ["G","AB","AF"] },
+            { text: "the greater the less, which is impossible.",
+              visible: HYP,
+              highlighted: ["G","AF"] },
+            // The hypothesis is withdrawn: G leaves the figure.
+            { text: "Therefore no magnitude greater than {AF} measures {AB} and {CD}.",
+              visible: REM,
+              highlighted: ["AF","AB","CD"] },
+            { text: "Therefore {AF} is the greatest common measure of {AB} and {CD}.",
+              visible: REM,
+              highlighted: ["AF","AB","CD"] },
+            { text: "Therefore the greatest common measure of the two given commensurable magnitudes {AB} and {CD} has been found.",
+              visible: REM,
+              highlighted: ["AF","AB","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.3") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.2": "/elements/books/bookX/propositions/propX2/"
     });
 </script>
 </figure>
 
-Next, let *AB* not measure *CD.*
+Next, let {AB} not measure {CD}.
 
-Then, if the less is continually subtracted in turn from the greater, then that which is left over will sometime measure the one before it, because *AB* and *CD* are not incommensurable. [!just X.2]
+Then, if the less is continually subtracted in turn from the greater, then that which is left over will sometime measure the one before it, because {AB} and {CD} are not incommensurable. [!just X.2]
 
-Let *AB,* measuring *ED,* leave *EC* less than itself, let *EC,* measuring *FB,* leave *AF* less than itself, and let *AF* measure *CE.*
+Let {AB}, measuring {ED}, leave {EC} less than itself, let {EC}, measuring {FB}, leave {AF} less than itself, and let {AF} measure {CE}.
 
-Since, then, *AF* measures *CE,* while *CE* measures *FB,* therefore *AF* also measures *FB.* But it measures itself also, therefore *AF* also measures the whole *AB.* But *AB* measures *DE,* therefore *AF* also measures *ED.* But it measures *CE* also, therefore it also measures the whole *CD.*
+Since, then, {AF} measures {CE}, while {CE} measures {FB}, therefore {AF} also measures {FB}. But it measures itself also, therefore {AF} also measures the whole {AB}. But {AB} measures {DE}, therefore {AF} also measures {ED}. But it measures {CE} also, therefore it also measures the whole {CD}.
 
-Therefore *AF* is a common measure of *AB* and *CD.*
+Therefore {AF} is a common measure of {AB} and {CD}.
 
 I say next that it is also the greatest.
 
-If not, then there there is some magnitude *G* greater than *AF* which measures *AB* and *CD.* Since then *G* measures *AB,* while *AB* measures *ED,* therefore *G* also measures *ED.*
+If not, then there there is some magnitude {G} greater than {AF} which measures {AB} and {CD}. Since then {G} measures {AB}, while {AB} measures {ED}, therefore {G} also measures {ED}.
 
-But it measures the whole *CD* also, therefore *G* measures the remainder *CE.* But *CE* measures *FB,* therefore *G* also measures *FB.*
+But it measures the whole {CD} also, therefore {G} measures the remainder {CE}. But {CE} measures {FB}, therefore {G} also measures {FB}.
 
-But it measures the whole *AB* also, and it therefore measures the remainder *AF,* the greater the less, which is impossible.
+But it measures the whole {AB} also, and it therefore measures the remainder {AF}, the greater the less, which is impossible.
 
-Therefore no magnitude greater than *AF* measures *AB* and *CD.* Therefore *AF* is the greatest common measure of *AB* and *CD.*
+Therefore no magnitude greater than {AF} measures {AB} and {CD}. Therefore {AF} is the greatest common measure of {AB} and {CD}.
 
-Therefore the greatest common measure of the two given commensurable magnitudes *AB* and *CD* has been found.
+Therefore the greatest common measure of the two given commensurable magnitudes {AB} and {CD} has been found.
 
 <div class="qed">Q.E.D.</div>
 ----
