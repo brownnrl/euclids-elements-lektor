@@ -17,14 +17,59 @@ statement: To construct an octahedron and comprehend it in a sphere, as in the p
 ----
 proof:
 
-Set out the diameter *AB* of the given sphere, bisect it at *C,* describe the semicircle *ADB* on *AB,* draw *CD* from *C* at right angles to *AB,* and join *DB.* [!just I.11]
+Set out the diameter {AB} of the given sphere, bisect it at {C}, describe the semicircle {ADB|semiT} on {AB}, draw {CD} from {C} at right angles to {AB}, and join {DB}. [!just I.11]
 
-Set out the square *EFGH,* having each of its sides equal to *DB,* join *HF* and *EG,* set up the straight line *KL* from the point *K* at right angles to the plane of the square *EFGH,* and  carry it through to the other side of the plane *KM.* [!just I.46; XI.12]
+Set out the square {EFGH}, having each of its sides equal to {DB}, join {HF} and {EG}, set up the straight line {KL} from the point {K} at right angles to the plane of the square {EFGH}, and  carry it through to the other side of the plane {KM}. [!just I.46; XI.12]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="540" height="320" tabindex="0"></canvas>
 <noscript><img alt="XIII.14 diagram" src="propXIII14.gif"/></noscript>
 <script type="text/javascript">
+    // The walk builds the octahedron in the order the proof does: the
+    // semicircle on AB bisected at C with CD and DB, the square EFGH on DB
+    // with its diagonals, KL and KM through K at right angles to the square,
+    // the eight joins to L and M; then the semicircle on LM through E,
+    // carried round to sweep out the sphere through F, G and H.
+    //
+    // Joyce's figure draws the square only as the bases of the two pyramids
+    // Lpyr and Mpyr, the joins only as their edges, and KL, KM only as the
+    // one line LM, so the square outline EFGHs, the joins LE … MH, and KL,
+    // KM are solid slide twins, hidden at rest (initiallyHidden); the
+    // pyramids join the walk once the octahedron is constructed and LM once
+    // the semicircle is described on it. A polyhedron and a sphere draw no
+    // highlight, so the octahedron is lit as two faceless octagons that
+    // between them walk its twelve edges (oct1, oct2), and the sphere as a
+    // faceless circle on its outline (sphT); semiT is a faceless twin of the
+    // filled semicircle ADB (#140). A sector draws only in the screen plane,
+    // so the semicircle on LM is lit as the great circle it lies on, in the
+    // plane through E (LEMc). Everything else added is transparent.
+    //
+    // Draggables (checked against the bundle): A, B (lineSliders, givens),
+    // K (free; the centre), E (sphereSlider), F (circleSlider). K, E and F
+    // arrive mid-walk and are deferred. C, D, G, H, L, M are derived and
+    // listed per slide.
+    var GIVEN = ["A","B","AB"];
+    var BIS   = GIVEN.concat(["C","AC","CB"]);
+    var SEMI  = BIS.concat(["BDA","semiT"]);
+    var PERP  = SEMI.concat(["D","CD","BD","angBCD"]);
+    var SQ    = PERP.concat(["E","F","G","H","EFGHs","EFGH","EF","FG","GH","HE"]);
+    var DIAG  = SQ.concat(["HF","EG"]);
+    var UP    = DIAG.concat(["K","L","KL"]);
+    var DOWN  = UP.concat(["M","KM"]);
+    var CUT   = DOWN.concat(["KE","KF","KG","KH"]);
+    var JL    = CUT.concat(["LE","LF","LG","LH"]);
+    var JM    = JL.concat(["ME","MF","MG","MH"]);
+    var R1    = JM.concat(["angEKH"]);
+    var R2    = R1.concat(["angLKE"]);
+    var TRI   = R2.concat(["LEH","LEF","LFG","LGH","MEF","MFG","MGH","MHE"]);
+    var OCT   = TRI.concat(["Lpyr","Mpyr","oct1","oct2"]);
+    var LMS   = OCT.concat(["LM","LEMc"]);
+    var SPH   = LMS.concat(["Ksphere","sphT"]);
+    var R3    = SPH.concat(["angEKM"]);
+    var R4    = R3.concat(["angLEM"]);
+    var REST  = ["A","B","AB","C","BDA","semiT","D","CD","BD","K","Ksphere","sphT",
+                 "E","G","F","H","EFGH","HF","EG","L","M","LM","Lpyr","Mpyr",
+                 "oct1","oct2","LE"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -55,37 +100,307 @@ Set out the square *EFGH,* having each of its sides equal to *DB,* join *HF* and
             "M;point;extend;L,K,K,E",
             "LM;line;connect;L,M",
             "Lpyr;polyhedron;pyramid;EFGH,L;0;0;black;random",
-            "Mpyr;polyhedron;pyramid;EFGH,M;0;0;black;random"
+            "Mpyr;polyhedron;pyramid;EFGH,M;0;0;black;random",
+            // Slide twins, hidden at rest (see above).
+            "EFGHs;polygon;quadrilateral;E,F,G,H;0;0;black;0",
+            "KL;line;connect;K,L",
+            "KM;line;connect;K,M",
+            "LE;line;connect;L,E",
+            "LF;line;connect;L,F",
+            "LG;line;connect;L,G",
+            "LH;line;connect;L,H",
+            "ME;line;connect;M,E",
+            "MF;line;connect;M,F",
+            "MG;line;connect;M,G",
+            "MH;line;connect;M,H",
+            // Transparent highlight targets.
+            "semiT;sector;sector;C,B,A;0;0;0;0",
+            "sphT;circle;radius;K,C,A;0;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "HE;line;connect;H,E;0;0;0",
+            "KE;line;connect;K,E;0;0;0",
+            "KF;line;connect;K,F;0;0;0",
+            "KG;line;connect;K,G;0;0;0",
+            "KH;line;connect;K,H;0;0;0",
+            "LEH;polygon;triangle;L,E,H;0;0;0;0",
+            "LEF;polygon;triangle;L,E,F;0;0;0;0",
+            "LFG;polygon;triangle;L,F,G;0;0;0;0",
+            "LGH;polygon;triangle;L,G,H;0;0;0;0",
+            "MEF;polygon;triangle;M,E,F;0;0;0;0",
+            "MFG;polygon;triangle;M,F,G;0;0;0;0",
+            "MGH;polygon;triangle;M,G,H;0;0;0;0",
+            "MHE;polygon;triangle;M,H,E;0;0;0;0",
+            "EMGL;polygon;quadrilateral;E,M,G,L;0;0;0;0",
+            "FMHL;polygon;quadrilateral;F,M,H,L;0;0;0;0",
+            // Octahedron wireframe: oct1 walks EF FG GH HE EL LG GM ME,
+            // oct2 the remaining FL LH HM MF.
+            "oct1;polygon;octagon;E,F,G,H,E,L,G,M;0;0;0;0",
+            "oct2;polygon;octagon;F,L,H,M,F,L,H,M;0;0;0;0",
+            "LEMpl;plane;3points;L,E,M;0;0;0;0",
+            "LEMc;circle;radius;K,L,LEMpl;0;0;0;0",
+            // Right angles.
+            "angBCD;sector;angleMarkerRight;C,B,D",
+            "angEKH;sector;angleMarkerRight;K,E,H",
+            "angLKE;sector;angleMarkerRight;K,L,E",
+            "angEKM;sector;angleMarkerRight;K,E,M",
+            "angLEM;sector;angleMarkerRight;E,L,M"
         ],
+        initiallyHidden: ["EFGHs","KL","KM","LE","LF","LG","LH","ME","MF","MG","MH"],
+        deferDraggables: ["K","E","F"],
+        aliases: { "DB": "BD", "BC": "CB", "EH": "HE", "EL": "LE", "LK": "KL",
+                   "EK": "KE", "FK": "KF", "GK": "KG", "HK": "KH", "EM": "ME",
+                   "EKH": "angEKH", "LKE": "angLKE", "LEM": "angLEM" },
+        slides: [
+            { text: "“To construct an octahedron and comprehend it in a sphere, as in the preceding case;”",
+              visible: REST,
+              highlighted: ["oct1","oct2","sphT"],
+              justifications: [{ ref: "XIII.14" }] },
+            { text: "“and to prove that the square on the diameter of the sphere”",
+              visible: REST,
+              highlighted: ["LM"] },
+            { text: "“is double the square on the side of the octahedron.”",
+              visible: REST,
+              highlighted: ["LM","LE"] },
+            { text: "Set out the diameter {AB} of the given sphere, bisect it at {C},",
+              visible: BIS,
+              highlighted: ["AB","C"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "C", name: geomlib.A.Point.appear } ] } },
+            { text: "describe the semicircle {ADB|semiT} on {AB},",
+              visible: SEMI,
+              highlighted: ["semiT","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BDA", name: geomlib.A.Sector.sweep } ] } },
+            { text: "draw {CD} from {C} at right angles to {AB}, and join {DB}.",
+              visible: PERP,
+              highlighted: ["CD","BD","angBCD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D", name: geomlib.A.Point.appear },
+                  { elem: "angBCD", name: geomlib.A.Sector.sweep },
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "CD at right angles to AB", ref: "I.11" }] },
+            { text: "Set out the square {EFGH}, having each of its sides equal to {DB},",
+              visible: SQ,
+              highlighted: ["EFGH","BD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EFGHs", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "I.46" }] },
+            { text: "join {HF} and {EG},",
+              visible: DIAG,
+              highlighted: ["HF","EG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "HF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "set up the straight line {KL} from the point {K} at right angles to the plane of the square {EFGH},",
+              visible: UP,
+              highlighted: ["KL","K","EFGH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "KL", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "XI.12" }] },
+            { text: "and carry it through to the other side of the plane {KM}.",
+              visible: DOWN,
+              highlighted: ["KM"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "KM", name: geomlib.A.Line.straightEdgeExtend } ] },
+              justifications: [{ ref: "I.Post.2" }] },
+            { text: "Cut off {KL} and {KM} from the straight lines {KL} and {KM} respectively",
+              visible: DOWN,
+              highlighted: ["KL","KM","L","M"] },
+            { text: "equal to one of the straight lines {EK}, {FK}, {GK}, or {HK},",
+              visible: CUT,
+              highlighted: ["KE","KF","KG","KH"],
+              justifications: [{ ref: "I.3" }] },
+            { text: "and join {LE}, {LF}, {LG}, {LH},",
+              visible: JL,
+              highlighted: ["LE","LF","LG","LH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "LE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "LF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "LG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "LH", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "{ME}, {MF}, {MG}, and {MH}.",
+              visible: JM,
+              highlighted: ["ME","MF","MG","MH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ME", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "MF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "MG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "MH", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since {KE} equals {KH}, and the angle {EKH} is right,",
+              visible: R1,
+              highlighted: ["KE","KH","angEKH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angEKH", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the square on {HE} is double the square on {EK}.",
+              visible: R1,
+              highlighted: ["HE","KE"],
+              justifications: [{ ref: "I.47" }] },
+            { text: "Again, since {LK} equals {KE}, and the angle {LKE} is right,",
+              visible: R2,
+              highlighted: ["KL","KE","angLKE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angLKE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the square on {EL} is double the square on {EK}.",
+              visible: R2,
+              highlighted: ["LE","KE"],
+              justifications: [{ ref: "I.47" }] },
+            { text: "But the square on {HE} was also proved double the square on {EK},",
+              visible: R2,
+              highlighted: ["HE","KE"] },
+            { text: "therefore the square on {LE} equals the square on {EH}. Therefore {LE} equals {EH}.",
+              visible: R2,
+              highlighted: ["LE","HE"] },
+            { text: "For the same reason {LH} also equals {HE}.",
+              visible: R2,
+              highlighted: ["LH","HE"] },
+            { text: "Therefore the triangle {LEH} is equilateral.",
+              visible: TRI,
+              highlighted: ["LEH"] },
+            { text: "Similarly we can prove that each of the remaining triangles",
+              visible: TRI,
+              highlighted: ["LEF","LFG","LGH","MEF","MFG","MGH","MHE"] },
+            { text: "of which the sides of the square {EFGH} are the bases and the points {L} and {M} are the vertices,",
+              visible: TRI,
+              highlighted: ["EFGH","L","M"] },
+            { text: "is equilateral, therefore an octahedron has been constructed which is contained by eight equilateral triangles.",
+              visible: OCT,
+              highlighted: ["oct1","oct2"],
+              justifications: [{ ref: "XI.Def.26" }] },
+            { text: "It is next required to comprehend it in the given sphere,",
+              visible: OCT,
+              highlighted: ["oct1","oct2","AB"] },
+            { text: "and to prove that the square on the diameter of the sphere",
+              visible: OCT,
+              highlighted: ["AB"] },
+            { text: "is double the square on the side of the octahedron.",
+              visible: OCT,
+              highlighted: ["AB","LE"] },
+            { text: "Since the three straight lines {LK}, {KM}, and {KE} equal one another,",
+              visible: OCT,
+              highlighted: ["KL","KM","KE"] },
+            { text: "therefore the semicircle described on {LM} passes through {E}.",
+              visible: LMS,
+              highlighted: ["LM","LEMc","E"] },
+            { text: "And for the same reason, if, {LM} remaining fixed, the semicircle be carried round",
+              visible: LMS,
+              highlighted: ["LM","LEMc"] },
+            { text: "and restored to the same position from which it began to be moved,",
+              visible: SPH,
+              highlighted: ["sphT"] },
+            { text: "then it also passes through the points {F}, {G}, and {H}, and the octahedron will be comprehended in a sphere.",
+              visible: SPH,
+              highlighted: ["F","G","H","sphT"] },
+            { text: "I say next that it is also comprehended in the given sphere.",
+              visible: SPH,
+              highlighted: ["sphT","AB"] },
+            { text: "For, since {LK} equals {KM}, while {KE} is common, and they contain right angles,",
+              visible: R3,
+              highlighted: ["KL","KM","KE","angLKE","angEKM"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angEKM", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the base {LE} equals the base {EM}.",
+              visible: R3,
+              highlighted: ["LE","ME"],
+              justifications: [{ claim: "base LE = base EM", ref: "I.4" }] },
+            { text: "And, since the angle {LEM} is right, for it is in a semicircle,",
+              visible: R4,
+              highlighted: ["angLEM","LEMc"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angLEM", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle LEM right", ref: "III.31" }] },
+            { text: "therefore the square on {LM} is double the square on {LE}.",
+              visible: R4,
+              highlighted: ["LM","LE"],
+              justifications: [{ ref: "I.47" }] },
+            { text: "Again, since {AC} equals {CB}, therefore {AB} is double {BC}.",
+              visible: R4,
+              highlighted: ["AC","CB","AB"] },
+            { text: "But {AB} is to {BC} as the square on {AB} is to the square on {BD},",
+              visible: R4,
+              highlighted: ["AB","CB","BD"] },
+            { text: "therefore the square on {AB} is double the square on {BD}.",
+              visible: R4,
+              highlighted: ["AB","BD"] },
+            { text: "But the square on {LM} was also proved double the square on {LE}.",
+              visible: R4,
+              highlighted: ["LM","LE"] },
+            { text: "And the square on {DB} equals the square on {LE}, for {EH} was made equal to {DB}.",
+              visible: R4,
+              highlighted: ["BD","LE","HE"] },
+            { text: "Therefore the square on {AB} equals the square on {LM}. Therefore {AB} equals {LM}.",
+              visible: R4,
+              highlighted: ["AB","LM"] },
+            { text: "And {AB} is the diameter of the given sphere, therefore {LM} equals the diameter of the given sphere.",
+              visible: R4,
+              highlighted: ["AB","LM","sphT"] },
+            { text: "Therefore the octahedron has been comprehended in the given sphere,",
+              visible: R4,
+              highlighted: ["oct1","oct2","sphT"] },
+            { text: "and it has been demonstrated at the same time that the square on the diameter of the sphere",
+              visible: R4,
+              highlighted: ["LM"] },
+            { text: "is double the square on the side of the octahedron.",
+              visible: R4,
+              highlighted: ["LM","LE"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.14") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "I.Post.2":  "/elements/books/bookI/postulates/post2/",
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "I.4":       "/elements/books/bookI/propositions/propI4/",
+        "I.11":      "/elements/books/bookI/propositions/propI11/",
+        "I.46":      "/elements/books/bookI/propositions/propI46/",
+        "I.47":      "/elements/books/bookI/propositions/propI47/",
+        "III.31":    "/elements/books/bookIII/propositions/propIII31/",
+        "XI.Def.26": "/elements/books/bookXI/definitions/defXI26/",
+        "XI.12":     "/elements/books/bookXI/propositions/propXI12/"
     });
 </script>
 </figure>
 
-Cut off *KL* and *KM*  from the straight lines *KL* and *KM* respectively equal to one of the straight lines *EK, FK, GK,* or *HK,* and join *LE, LF, LG, LH, ME, MF, MG,* and *MH.* [!just I.3]
+Cut off {KL} and {KM}  from the straight lines {KL} and {KM} respectively equal to one of the straight lines {EK}, {FK}, {GK}, or {HK}, and join {LE}, {LF}, {LG}, {LH}, {ME}, {MF}, {MG}, and {MH}. [!just I.3]
 
-Then, since *KE* equals *KH,* and the angle *EKH* is right, therefore the square on *HE* is double the square on *EK.* Again, since *LK* equals *KE,* and the angle *LKE* is right, therefore the square on *EL* is double the square on *EK.* [!just I.47]
+Then, since {KE} equals {KH}, and the angle {EKH} is right, therefore the square on {HE} is double the square on {EK}. Again, since {LK} equals {KE}, and the angle {LKE} is right, therefore the square on {EL} is double the square on {EK}. [!just I.47]
 
-But the square on *HE* was also proved double the square on *EK,* therefore the square on *LE* equals the square on *EH.*  Therefore *LE* equals *EH.*  For the same reason *LH* also equals *HE.*
+But the square on {HE} was also proved double the square on {EK}, therefore the square on {LE} equals the square on {EH}.  Therefore {LE} equals {EH}.  For the same reason {LH} also equals {HE}.
 
-Therefore the triangle *LEH* is equilateral.
+Therefore the triangle {LEH} is equilateral.
 
-Similarly we can prove that each of the remaining triangles of which the sides of the square *EFGH* are the bases and the points *L* and *M* are the vertices, is equilateral, therefore an octahedron has been constructed which is contained by eight equilateral triangles. [!just XI.Def.26]
+Similarly we can prove that each of the remaining triangles of which the sides of the square {EFGH} are the bases and the points {L} and {M} are the vertices, is equilateral, therefore an octahedron has been constructed which is contained by eight equilateral triangles. [!just XI.Def.26]
 
 It is next required to comprehend it in the given sphere, and to prove that the square on the diameter of the sphere is double the square on the side of the octahedron.
 
-Since the three straight lines *LK, KM,* and *KE* equal one another, therefore the semicircle described on *LM*  passes through *E.*  And for the same reason, if, *LM* remaining fixed, the semicircle be carried round and restored to the same position from which it began to be moved, then  it also passes through the points *F, G,* and *H,* and the octahedron will be comprehended in a sphere.
+Since the three straight lines {LK}, {KM}, and {KE} equal one another, therefore the semicircle described on {LM}  passes through {E}.  And for the same reason, if, {LM} remaining fixed, the semicircle be carried round and restored to the same position from which it began to be moved, then  it also passes through the points {F}, {G}, and {H}, and the octahedron will be comprehended in a sphere.
 
 I say next that it is also comprehended in the given sphere.
 
-For, since *LK* equals *KM,* while *KE* is common, and they contain right angles, therefore the base *LE* equals the base *EM.* [!just I.4]
+For, since {LK} equals {KM}, while {KE} is common, and they contain right angles, therefore the base {LE} equals the base {EM}. [!just I.4]
 
-And, since the angle *LEM* is right, for it is in a semicircle,  therefore the square on *LM* is double the square on *LE.* [!just III.31, I.47]
+And, since the angle {LEM} is right, for it is in a semicircle,  therefore the square on {LM} is double the square on {LE}. [!just III.31, I.47]
 
-Again, since *AC* equals *CB,* therefore *AB* is double *BC.* But *AB* is to *BC* as the square on *AB* is to the square on *BD,* therefore the square on *AB* is double the square on *BD.*
+Again, since {AC} equals {CB}, therefore {AB} is double {BC}. But {AB} is to {BC} as the square on {AB} is to the square on {BD}, therefore the square on {AB} is double the square on {BD}.
 
-But the square on *LM* was also proved double the square on *LE.*  And the square on *DB* equals the square on *LE,* for *EH* was made equal to *DB.* Therefore the square on *AB* equals the square on *LM.* Therefore *AB* equals *LM.*
+But the square on {LM} was also proved double the square on {LE}.  And the square on {DB} equals the square on {LE}, for {EH} was made equal to {DB}. Therefore the square on {AB} equals the square on {LM}. Therefore {AB} equals {LM}.
 
-And *AB* is the diameter of the given sphere, therefore *LM* equals the diameter of the given sphere.
+And {AB} is the diameter of the given sphere, therefore {LM} equals the diameter of the given sphere.
 
 Therefore the octahedron has been comprehended in the given sphere, and it has been demonstrated at the same time that the square on the diameter of the sphere is double the square on the side of the octahedron.
 
@@ -93,9 +408,9 @@ Therefore the octahedron has been comprehended in the given sphere, and it has b
 ----
 guide:
 
-Of the five regular polyhedra to be constructed in a sphere, the octahedron has the easiest construction. Relative to the center of the sphere *K,* the lines to the six verices *KE, KF, KG, KH, KL,* and *KM* form three mutually perpendicular diameters. Also, the 12 sides group into three groups of four lines, each group forming the vertices of a square—*EFGH, EMGL,* and *FMHL.*
+Of the five regular polyhedra to be constructed in a sphere, the octahedron has the easiest construction. Relative to the center of the sphere {K}, the lines to the six verices {KE}, {KF}, {KG}, {KH}, {KL}, and {KM} form three mutually perpendicular diameters. Also, the 12 sides group into three groups of four lines, each group forming the vertices of a square—{EFGH}, {EMGL}, and {FMHL}.
 
-Since the center of each square is the center of the sphere, therefore two sides, *EF* and *FG,* along with the one diameter *EG* of the octahedron form a 45°-45°-90° triangle. Thus, the square on the diameter of the sphere is twice the square on the side of the octahedron.
+Since the center of each square is the center of the sphere, therefore two sides, {EF} and {FG}, along with the one diameter {EG} of the octahedron form a 45°-45°-90° triangle. Thus, the square on the diameter of the sphere is twice the square on the side of the octahedron.
 
 #### Coordinates for the vertices of the octahedron
 

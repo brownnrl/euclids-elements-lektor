@@ -17,16 +17,66 @@ statement: To construct a pyramid, to comprehend it in a given sphere; and to pr
 ----
 proof:
 
-Set out the diameter *AB* of the given sphere, cut it at the point *C* so that *AC* is double *CB,* describe the semicircle *ADB* on *AB,* draw *CD* from the point *C* at right angles to *AB,* and join *DA.* [!just VI.9; I.11]
+Set out the diameter {AB} of the given sphere, cut it at the point {C} so that {AC} is double {CB}, describe the semicircle {ADB|semiT} on {AB}, draw {CD} from the point {C} at right angles to {AB}, and join {DA}. [!just VI.9; I.11]
 
-Set out the circle *EFG* with radius equal to *DC,* inscribe the equilateral triangle *EFG* in the circle *EFG,* take the center *H* of the circle, and join *EH, HF,* and *HG.* [!just I.1; IV.2]
+Set out the circle {EFG|EFGc} with radius equal to {DC}, inscribe the equilateral triangle {EFG} in the circle {EFG|EFGc}, take the center {H} of the circle, and join {EH}, {HF}, and {HG}. [!just I.1; IV.2]
 
-Set *HK* up from the point *H* at right angles to the plane of the circle *EFG,* cut off *HK* equal to the straight line *AC* from *HK,* and join *KE, KF,* and *KG.* [!just XI.12; I.3]
+Set {HK} up from the point {H} at right angles to the plane of the circle {EFG|EFGc}, cut off {HK} equal to the straight line {AC} from {HK}, and join {KE}, {KF}, and {KG}. [!just XI.12; I.3]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="440" height="280" tabindex="0"></canvas>
 <noscript><img alt="XIII.13 diagram" src="propXIII13.gif"/></noscript>
 <script type="text/javascript">
+    // The walk builds the tetrahedron in the order the proof does: the
+    // semicircle on AB with C, D, then the circle EFG on radius DC with its
+    // inscribed triangle, HK up from the plane and the joins to K; then HL
+    // produced, the semicircle on KL through E, carried round to sweep out
+    // the sphere through F and G.
+    //
+    // Joyce's figure draws the triangle EFG and the joins KE, KF, KG only as
+    // edges of the polyhedron EFGK, and HK, HL only as the one line KL, so
+    // EFG (faceless outline), KE, KF, KG, HK and HL are solid slide twins,
+    // hidden at rest (initiallyHidden); EFGK joins the walk once the pyramid
+    // is constructed and KL once HL is produced. A polyhedron and a sphere draw no highlight,
+    // so pEFGK is a faceless octagon wireframe walking the six edges and sphT
+    // a faceless circle on the sphere's outline. The circle EFG carries the
+    // default opaque face, so the walk draws EFGc, a solid faceless twin
+    // hidden at rest, and keeps EFGcirc out of the slide sets; semiT is a
+    // faceless twin of the filled semicircle ADB (#140). A sector
+    // draws only in the screen plane, so the semicircle on KL is lit as the
+    // great circle it lies on, in the plane through E (KELc), and through F
+    // and G once it is carried round (KFLc, KGLc).
+    // Everything else added is transparent.
+    //
+    // Draggables (checked against the bundle): A, B (lineSliders, givens),
+    // M (free; the sphere's centre), K (sphereSlider), E (circleSlider).
+    // M, K and E arrive mid-walk and are deferred. C, D, H, L, F, G are
+    // derived and listed per slide.
+    var GIVEN = ["A","B","AB"];
+    var CUT   = GIVEN.concat(["C","AC","CB"]);
+    var SEMI  = CUT.concat(["semi","semiT"]);
+    var PERP  = SEMI.concat(["D","CD","angACD"]);
+    var JDA   = PERP.concat(["AD"]);
+    var CIRC  = JDA.concat(["EFGc"]);
+    var TRI   = CIRC.concat(["E","F","G","EFG","EF","FG","GE"]);
+    var CEN   = TRI.concat(["H","HE","HF","HG"]);
+    var UP    = CEN.concat(["K","HK"]);
+    var JK    = UP.concat(["KE","KF","KG"]);
+    var RT    = JK.concat(["angKHE","angKHF","angKHG"]);
+    var FOUR  = RT.concat(["KEF","KFG","KEG","pEFGK"]);
+    var PYR   = FOUR.concat(["EFGK"]);
+    // The sphere half: the markers at H other than KHE have done their work.
+    var BASE  = JK.concat(["angKHE","KEF","KFG","KEG","pEFGK","EFGK"]);
+    var PROD  = BASE.concat(["L","HL"]);
+    var DIAM  = PROD.concat(["KL"]);
+    var RT2   = DIAM.concat(["angEHL"]);
+    var ARC   = RT2.concat(["KELc"]);
+    var SPH   = ARC.concat(["M","Msphere","sphT"]);
+    var ROUND = SPH.concat(["KFLc","KGLc","FL","LG","angKFL","angKGL"]);
+    var FIN   = SPH;
+    var REST  = ["A","B","AB","semi","semiT","C","D","CD","AD","M","Msphere","sphT",
+                 "K","L","H","KL","EFGcirc","EFGc","E","F","G","EFGK","pEFGK",
+                 "HE","HF","HG","EF"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -66,43 +116,349 @@ Set *HK* up from the point *H* at right angles to the plane of the circle *EFG,*
             "EFGK;polyhedron;tetrahedron;E,F,G,K;0;0;black;random",
             "HE;line;connect;H,E",
             "HF;line;connect;H,F",
-            "HG;line;connect;H,G"
+            "HG;line;connect;H,G",
+            // Slide twins, hidden at rest (see above).
+            "EFG;polygon;triangle;E,F,G;0;0;black;0",
+            "HK;line;connect;H,K",
+            "KE;line;connect;K,E",
+            "KF;line;connect;K,F",
+            "KG;line;connect;K,G",
+            "HL;line;connect;H,L",
+            "EFGc;circle;radius;H,D,C,EFGplane;0;0;black;0",
+            // Transparent highlight targets.
+            "semiT;sector;sector;ABmid,B,A;0;0;0;0",
+                        "sphT;circle;radius;M,ABmid,A;0;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "GE;line;connect;G,E;0;0;0",
+            "FL;line;connect;F,L;0;0;0",
+            "LG;line;connect;L,G;0;0;0",
+            "KEF;polygon;triangle;K,E,F;0;0;0;0",
+            "KFG;polygon;triangle;K,F,G;0;0;0;0",
+            "KEG;polygon;triangle;K,E,G;0;0;0;0",
+            "HKE;polygon;triangle;H,K,E;0;0;0;0",
+            "pEFGK;polygon;octagon;E,F,G,K,E,G,K,F;0;0;0;0",
+            "KELpl;plane;3points;K,E,L;0;0;0;0",
+            "KFLpl;plane;3points;K,F,L;0;0;0;0",
+            "KGLpl;plane;3points;K,G,L;0;0;0;0",
+            "KELc;circle;radius;M,K,KELpl;0;0;0;0",
+            "KFLc;circle;radius;M,K,KFLpl;0;0;0;0",
+            "KGLc;circle;radius;M,K,KGLpl;0;0;0;0",
+            // Right angles.
+            "angACD;sector;angleMarkerRight;C,A,D",
+            "angKHE;sector;angleMarkerRight;H,K,E",
+            "angKHF;sector;angleMarkerRight;H,K,F",
+            "angKHG;sector;angleMarkerRight;H,K,G",
+            "angEHL;sector;angleMarkerRight;H,E,L",
+            "angKFL;sector;angleMarkerRight;F,K,L",
+            "angKGL;sector;angleMarkerRight;G,K,L"
         ],
+        initiallyHidden: ["EFGc","EFG","HK","KE","KF","KG","HL"],
+        deferDraggables: ["M","K","E"],
+        aliases: { "DA": "AD", "DC": "CD", "BA": "AB", "BC": "CB", "KH": "HK",
+                   "EH": "HE", "FE": "EF",
+                   "KHE": "angKHE", "EHL": "angEHL" },
+        slides: [
+            { text: "“To construct a pyramid,”",
+              visible: REST,
+              highlighted: ["pEFGK"],
+              justifications: [{ ref: "XIII.13" }] },
+            { text: "“to comprehend it in a given sphere;”",
+              visible: REST,
+              highlighted: ["pEFGK","sphT"] },
+            { text: "“and to prove that the square on the diameter of the sphere”",
+              visible: REST,
+              highlighted: ["KL"] },
+            { text: "“is one and a half times the square on the side of the pyramid.”",
+              visible: REST,
+              highlighted: ["KL","EF"] },
+            { text: "Set out the diameter {AB} of the given sphere,",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "cut it at the point {C} so that {AC} is double {CB},",
+              visible: CUT,
+              highlighted: ["AC","CB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "C", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AC double CB", ref: "VI.9" }] },
+            { text: "describe the semicircle {ADB|semiT} on {AB},",
+              visible: SEMI,
+              highlighted: ["semiT","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "semi", name: geomlib.A.Sector.sweep } ] } },
+            { text: "draw {CD} from the point {C} at right angles to {AB},",
+              visible: PERP,
+              highlighted: ["CD","angACD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D", name: geomlib.A.Point.appear },
+                  { elem: "angACD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "CD at right angles to AB", ref: "I.11" }] },
+            { text: "and join {DA}.",
+              visible: JDA,
+              highlighted: ["AD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Set out the circle {EFG|EFGc} with radius equal to {DC},",
+              visible: CIRC,
+              highlighted: ["EFGc","CD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EFGc", name: geomlib.A.Circle.compass } ] },
+              justifications: [{ ref: "I.1" }] },
+            { text: "inscribe the equilateral triangle {EFG} in the circle {EFG|EFGc},",
+              visible: TRI,
+              highlighted: ["EFG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EFG", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "IV.2" }] },
+            { text: "take the center {H} of the circle, and join {EH}, {HF}, and {HG}.",
+              visible: CEN,
+              highlighted: ["H","HE","HF","HG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "H", name: geomlib.A.Point.appear },
+                  { elem: "HE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HG", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Set {HK} up from the point {H} at right angles to the plane of the circle {EFG|EFGc},",
+              visible: UP,
+              highlighted: ["HK","EFGc"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "HK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K", name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "XI.12" }] },
+            { text: "cut off {HK} equal to the straight line {AC} from {HK},",
+              visible: UP,
+              highlighted: ["HK","AC"],
+              justifications: [{ ref: "I.3" }] },
+            { text: "and join {KE}, {KF}, and {KG}.",
+              visible: JK,
+              highlighted: ["KE","KF","KG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "KE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Now, since {KH} is at right angles to the plane of the circle {EFG|EFGc},",
+              visible: JK,
+              highlighted: ["HK","EFGc"] },
+            { text: "therefore it makes right angles with all the straight lines which meet it",
+              visible: JK,
+              highlighted: ["HK"] },
+            { text: "and are in the plane of the circle {EFG|EFGc}.",
+              visible: JK,
+              highlighted: ["HK","EFGc"] },
+            { text: "But each of the straight lines {HE}, {HF}, and {HG} meets it,",
+              visible: JK,
+              highlighted: ["HE","HF","HG","HK"] },
+            { text: "therefore {HK} is at right angles to each of the straight lines {HE}, {HF}, and {HG}.",
+              visible: RT,
+              highlighted: ["HK","HE","HF","HG"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angKHE", name: geomlib.A.Sector.sweep },
+                  { elem: "angKHF", name: geomlib.A.Sector.sweep },
+                  { elem: "angKHG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "XI.Def.3" }] },
+            { text: "And, since {AC} equals {HK}, and {CD} equals {HE}, and they contain right angles,",
+              visible: RT,
+              highlighted: ["AC","HK","CD","HE","angACD","angKHE"] },
+            { text: "therefore the base {DA} equals the base {KE}.",
+              visible: RT,
+              highlighted: ["AD","KE"],
+              justifications: [{ claim: "base DA = base KE", ref: "I.4" }] },
+            { text: "For the same reason each of the straight lines {KF} and {KG} also equals {DA}.",
+              visible: RT,
+              highlighted: ["KF","KG","AD"] },
+            { text: "Therefore the three straight lines {KE}, {KF}, and {KG} equal one another.",
+              visible: RT,
+              highlighted: ["KE","KF","KG"] },
+            { text: "And, since {AC} is double {CB}, therefore {AB} is triple {BC}.",
+              visible: RT,
+              highlighted: ["AC","CB","AB"] },
+            { text: "But that {AB} is to {BC} as the square on {AD} is to the square on {DC} will be proved afterwards.",
+              visible: RT,
+              highlighted: ["AB","CB","AD","CD"],
+              justifications: [{ ref: "Lemma" }] },
+            { text: "Therefore the square on {AD} is triple the square on {DC}.",
+              visible: RT,
+              highlighted: ["AD","CD"] },
+            { text: "But the square on {FE} is also triple the square on {EH},",
+              visible: RT,
+              highlighted: ["EF","HE"],
+              justifications: [{ ref: "XIII.12" }] },
+            { text: "and {DC} equals {EH}, therefore {DA} also equals {EF}.",
+              visible: RT,
+              highlighted: ["CD","HE","AD","EF"] },
+            { text: "But {DA} was proved equal to each of the straight lines {KE}, {KF}, and {KG},",
+              visible: RT,
+              highlighted: ["AD","KE","KF","KG"] },
+            { text: "therefore each of the straight lines {EF}, {FG}, and {GE}",
+              visible: RT,
+              highlighted: ["EF","FG","GE"] },
+            { text: "also equals each of the straight lines {KE}, {KF}, and {KG}.",
+              visible: RT,
+              highlighted: ["EF","FG","GE","KE","KF","KG"] },
+            { text: "Therefore the four triangles {EFG}, {KEF}, {KFG}, and {KEG} are equilateral.",
+              visible: FOUR,
+              highlighted: ["EFG","KEF","KFG","KEG"] },
+            { text: "Therefore a pyramid has been constructed out of four equilateral triangles,",
+              visible: PYR,
+              highlighted: ["pEFGK"] },
+            { text: "the triangle {EFG} being its base and the point {K} its vertex.",
+              visible: PYR,
+              highlighted: ["EFG","K"] },
+            { text: "It is next required to comprehend it in the given sphere",
+              visible: BASE,
+              highlighted: ["pEFGK","AB"] },
+            { text: "and to prove that the square on the diameter of the sphere",
+              visible: BASE,
+              highlighted: ["AB"] },
+            { text: "is one and a half times the square on the side of the pyramid.",
+              visible: BASE,
+              highlighted: ["AB","EF"] },
+            { text: "Produce the straight line {HL} in a straight line with {KH}, and make {HL} equal to {CB}.",
+              visible: PROD,
+              highlighted: ["HL","HK","CB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "HL", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "L", name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.3" }] },
+            { text: "Now, since {AC} is to {CD} as {CD} is to {CB},",
+              visible: DIAM,
+              highlighted: ["AC","CD","CB"],
+              justifications: [{ ref: "VI.8.Cor" }] },
+            { text: "while {AC} equals {KH}, {CD} equals {HE}, and {CB} equals {HL},",
+              visible: DIAM,
+              highlighted: ["AC","HK","CD","HE","CB","HL"] },
+            { text: "therefore {KH} is to {HE} as {EH} is to {HL}.",
+              visible: DIAM,
+              highlighted: ["HK","HE","HL"] },
+            { text: "Therefore the rectangle {KH} by {HL} equals the square on {EH}.",
+              visible: DIAM,
+              highlighted: ["HK","HL","HE"],
+              justifications: [{ ref: "VI.17" }] },
+            { text: "And each of the angles {KHE}, {EHL} is right,",
+              visible: RT2,
+              highlighted: ["angKHE","angEHL"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angEHL", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the semicircle described on {KL} passes through {E} also.",
+              visible: ARC,
+              highlighted: ["KELc","KL","E"],
+              justifications: [{ ref: "VI.8" }, { ref: "III.31" }] },
+            { text: "If then, {KL} remaining fixed, the semicircle is carried round",
+              visible: ARC,
+              highlighted: ["KL","KELc"] },
+            { text: "and restored to the same position from which it began to be moved,",
+              visible: SPH,
+              highlighted: ["sphT"] },
+            { text: "then it also passes through the points {F} and {G},",
+              visible: SPH,
+              highlighted: ["F","G","KFLc","KGLc"] },
+            { text: "since, if {FL} and {LG} are joined, then the angles at {F} and {G} similarly become right angles,",
+              visible: ROUND,
+              highlighted: ["FL","LG","angKFL","angKGL"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angKFL", name: geomlib.A.Sector.sweep },
+                  { elem: "angKGL", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the pyramid is comprehended in the given sphere.",
+              visible: FIN,
+              highlighted: ["pEFGK","sphT"] },
+            { text: "For {KL}, the diameter of the sphere, equals the diameter {AB} of the given sphere,",
+              visible: FIN,
+              highlighted: ["KL","AB"] },
+            { text: "since {KH} was made equal to {AC}, and {HL} to {CB}.",
+              visible: FIN,
+              highlighted: ["HK","AC","HL","CB"] },
+            { text: "I say next that the square on the diameter of the sphere",
+              visible: FIN,
+              highlighted: ["KL"] },
+            { text: "is one and a half times the square on the side of the pyramid.",
+              visible: FIN,
+              highlighted: ["KL","EF"] },
+            { text: "Since {AC} is double {CB}, therefore {AB} is triple {BC},",
+              visible: FIN,
+              highlighted: ["AC","CB","AB"] },
+            { text: "and, in conversion, {BA} is one and a half times {AC}.",
+              visible: FIN,
+              highlighted: ["AB","AC"] },
+            { text: "But {BA} is to {AC} as the square on {BA} is to the square on {AD}.",
+              visible: FIN,
+              highlighted: ["AB","AC","AD"] },
+            { text: "Therefore the square on {BA} is also one and a half times the square on {AD}.",
+              visible: FIN,
+              highlighted: ["AB","AD"] },
+            { text: "And {BA} is the diameter of the given sphere, and {AD} equals the side of the pyramid.",
+              visible: FIN,
+              highlighted: ["AB","AD","EF"] },
+            { text: "Therefore the square on the diameter of the sphere",
+              visible: FIN,
+              highlighted: ["KL","AB"] },
+            { text: "is one and a half times the square on the side of the pyramid.",
+              visible: FIN,
+              highlighted: ["KL","EF","AD"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.13") return "#prop";
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.1":      "/elements/books/bookI/propositions/propI1/",
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.11":     "/elements/books/bookI/propositions/propI11/",
+        "III.31":   "/elements/books/bookIII/propositions/propIII31/",
+        "IV.2":     "/elements/books/bookIV/propositions/propIV2/",
+        "VI.8":     "/elements/books/bookVI/propositions/propVI8/",
+        "VI.8.Cor": "/elements/books/bookVI/propositions/propVI8/#cor",
+        "VI.9":     "/elements/books/bookVI/propositions/propVI9/",
+        "VI.17":    "/elements/books/bookVI/propositions/propVI17/",
+        "XI.Def.3": "/elements/books/bookXI/definitions/defXI3/",
+        "XI.12":    "/elements/books/bookXI/propositions/propXI12/",
+        "XIII.12":  "/elements/books/bookXIII/propositions/propXIII12/"
     });
 </script>
 </figure>
 
-Now, since *KH* is at right angles to the plane of the circle *EFG,* therefore it makes right angles with all the straight lines which meet it and are in the plane of the circle *EFG.*  But each of the straight lines *HE, HF,* and *HG* meets it, therefore *HK* is at right angles to each of the straight lines *HE, HF,* and *HG.* [!just XI.Def.3]
+Now, since {KH} is at right angles to the plane of the circle {EFG|EFGc}, therefore it makes right angles with all the straight lines which meet it and are in the plane of the circle {EFG|EFGc}.  But each of the straight lines {HE}, {HF}, and {HG} meets it, therefore {HK} is at right angles to each of the straight lines {HE}, {HF}, and {HG}. [!just XI.Def.3]
 
-And, since *AC* equals *HK,* and *CD* equals *HE,* and they contain right angles, therefore the base *DA* equals the base *KE.*  For the same reason each of the straight lines *KF* and *KG* also equals *DA.* Therefore the three straight lines *KE, KF,* and *KG* equal one another. [!just I.4]
+And, since {AC} equals {HK}, and {CD} equals {HE}, and they contain right angles, therefore the base {DA} equals the base {KE}.  For the same reason each of the straight lines {KF} and {KG} also equals {DA}. Therefore the three straight lines {KE}, {KF}, and {KG} equal one another. [!just I.4]
 
-And, since *AC* is double *CB,* therefore *AB* is triple *BC.*
+And, since {AC} is double {CB}, therefore {AB} is triple {BC}.
 
-But that *AB* is to *BC* as the square on *AD* is to the square on *DC* will be proved afterwards.
+But that {AB} is to {BC} as the square on {AD} is to the square on {DC} will be proved afterwards.
 
-Therefore the square on *AD* is triple the square on *DC.* But the square on *FE* is also triple the square on *EH,* and *DC* equals *EH,* therefore *DA* also equals *EF.* [!just XIII.12]
+Therefore the square on {AD} is triple the square on {DC}. But the square on {FE} is also triple the square on {EH}, and {DC} equals {EH}, therefore {DA} also equals {EF}. [!just XIII.12]
 
-But *DA* was proved equal to each of the straight lines *KE, KF,* and *KG,* therefore each of the straight lines *EF, FG,* and *GE* also equals each of the straight lines *KE, KF,* and *KG.*  Therefore the four triangles *EFG, KEF, KFG,* and *KEG* are equilateral.
+But {DA} was proved equal to each of the straight lines {KE}, {KF}, and {KG}, therefore each of the straight lines {EF}, {FG}, and {GE} also equals each of the straight lines {KE}, {KF}, and {KG}.  Therefore the four triangles {EFG}, {KEF}, {KFG}, and {KEG} are equilateral.
 
-Therefore a pyramid has been constructed out of four equilateral triangles, the triangle *EFG* being its base and the point *K* its vertex.
+Therefore a pyramid has been constructed out of four equilateral triangles, the triangle {EFG} being its base and the point {K} its vertex.
 
 It is next required to comprehend it in the given sphere and to prove that the square on the diameter of the sphere is one and a half times the square on the side of the pyramid.
 
-Produce the straight line *HL* in a straight line with *KH,* and make *HL* equal to *CB.* [!just I.3]
+Produce the straight line {HL} in a straight line with {KH}, and make {HL} equal to {CB}. [!just I.3]
 
-Now, since *AC* is to *CD* as *CD* is to *CB,* while *AC* equals *KH, CD* equals *HE,* and *CB* equals *HL,* therefore *KH* is to *HE* as *EH* is to *HL.* Therefore the rectangle *KH* by *HL* equals the square on *EH.* [!just VI.8.Cor; VI.17]
+Now, since {AC} is to {CD} as {CD} is to {CB}, while {AC} equals {KH}, {CD} equals {HE}, and {CB} equals {HL}, therefore {KH} is to {HE} as {EH} is to {HL}. Therefore the rectangle {KH} by {HL} equals the square on {EH}. [!just VI.8.Cor; VI.17]
 
-And each of the angles *KHE, EHL* is right, therefore the semicircle described on *KL* passes through *E* also. <div class="just">cf. <a href="/elements/books/bookVI/propositions/propVI8/">VI.8</a>, <a href="/elements/books/bookIII/propositions/propIII31/">III.31</a></div>
+And each of the angles {KHE}, {EHL} is right, therefore the semicircle described on {KL} passes through {E} also. <div class="just">cf. <a href="/elements/books/bookVI/propositions/propVI8/">VI.8</a>, <a href="/elements/books/bookIII/propositions/propIII31/">III.31</a></div>
 
-If then, *KL* remaining fixed, the semicircle is carried round and restored to the same position from which it began to be moved, then it also passes  through the points *F* and *G,* since, if *FL* and *LG* are joined, then the angles at *F* and *G* similarly become right angles, and the pyramid is comprehended in the given sphere. For *KL,* the diameter of the sphere, equals the diameter *AB* of the given sphere, since *KH* was made equal to *AC,* and *HL* to *CB.*
+If then, {KL} remaining fixed, the semicircle is carried round and restored to the same position from which it began to be moved, then it also passes  through the points {F} and {G}, since, if {FL} and {LG} are joined, then the angles at {F} and {G} similarly become right angles, and the pyramid is comprehended in the given sphere. For {KL}, the diameter of the sphere, equals the diameter {AB} of the given sphere, since {KH} was made equal to {AC}, and {HL} to {CB}.
 
 <hr width="50%">
 
 I say next that the square on the diameter of the sphere is one and a half times the square on the side of the pyramid.
 
-Since *AC* is double *CB,* therefore *AB* is triple *BC,* and, in conversion, *BA* is one and a half times *AC.*
+Since {AC} is double {CB}, therefore {AB} is triple {BC}, and, in conversion, {BA} is one and a half times {AC}.
 
-But *BA* is to *AC* as the square on *BA* is to the square on *AD.* Therefore the square on *BA* is also one and a half times the square on *AD.* And *BA* is the diameter of the given sphere, and *AD* equals the side of the pyramid. Therefore the square on the diameter of the sphere is one and a half times the square on the side of the pyramid.
+But {BA} is to {AC} as the square on {BA} is to the square on {AD}. Therefore the square on {BA} is also one and a half times the square on {AD}. And {BA} is the diameter of the given sphere, and {AD} equals the side of the pyramid. Therefore the square on the diameter of the sphere is one and a half times the square on the side of the pyramid.
 
 <div class="qed">Q.E.F.</div>
 
@@ -136,17 +492,19 @@ This figure is usually called a regular tetrahedron, that is, a solid figure con
             "EH;line;connect;E,H",
             "FH;line;connect;F,H",
             "GH;line;connect;G,H",
-            "EE'';line;connect;E,E''"
+            "EE'';line;connect;E,E''",
+            // Faceless twin of the filled circle, for the guide's hover (#140).
+            "circT;circle;radius;H,E;0;0;0;0"
         ],
     });
 </script>
 </figure>
 
-Standardize the radius of the sphere at 1 unit, so that *AB* = 2. Then cut *AB* at *C* so that *AC* = 4/3 and *BC* = 2/3. Let *DC* be their mean proportional (2/3)√2. Then *AD* = (2/3)√6. This line *AD* will end up being the length of the side of the tetrahedron. Note that it has the correct value so that "the square on the diameter of the sphere is one and a half times the square on the side of the pyramid."
+Standardize the radius of the sphere at 1 unit, so that {AB:canvas_0} = 2. Then cut {AB:canvas_0} at {C:canvas_0} so that {AC:canvas_0} = 4/3 and {BC:canvas_0} = 2/3. Let {DC:canvas_0} be their mean proportional (2/3)√2. Then {AD:canvas_0} = (2/3)√6. This line {AD:canvas_0} will end up being the length of the side of the tetrahedron. Note that it has the correct value so that "the square on the diameter of the sphere is one and a half times the square on the side of the pyramid."
 
-Set out the circle *EFG* of radius *EH* = (2/3)√2, and inscribe in that circle an equilateral triangle. Then each side of the triangle will be (2/3)√6, the same as *AD* (@XIII.12).
+Set out the circle {EFG|circT} of radius {EH} = (2/3)√2, and inscribe in that circle an equilateral triangle. Then each side of the triangle will be (2/3)√6, the same as {AD:canvas_0} (@XIII.12).
 
-Make *HK*  of length 4/3 and perpendicular to the plane of the triangle, and connect *KE, KF,* and *KG.* Then *K* lies on the surface of the sphere. And since the triangle *HKE* is a right triangle, therefore its hypotenuse *KE* = (2/3)√6, the same as *AD.* Likewise *KF* and *KG* have the same length. That constructs the tetrahedron in the sphere.
+Make {HK:canvas_0}  of length 4/3 and perpendicular to the plane of the triangle, and connect {KE:canvas_0}, {KF:canvas_0}, and {KG:canvas_0}. Then {K:canvas_0} lies on the surface of the sphere. And since the triangle {HKE:canvas_0} is a right triangle, therefore its hypotenuse {KE:canvas_0} = (2/3)√6, the same as {AD:canvas_0}. Likewise {KF:canvas_0} and {KG:canvas_0} have the same length. That constructs the tetrahedron in the sphere.
 
 #### Coordinates for the vertices of the tetrahedron
 
@@ -173,12 +531,30 @@ toc_summary: <i>AB</i> is to <i>BC</i> as the square on <i>AD</i> is to the squa
 ----
 proof:
 
-It is to be proved that *AB* is to *BC* as the square on *AD* is to the square on *DC.*
+It is to be proved that {AB:canvas_1} is to {BC:canvas_1} as the square on {AD:canvas_1} is to the square on {DC:canvas_1}.
 
 <figure class="diagram">
 <canvas id="canvas_1" width="240" height="260" tabindex="0"></canvas>
 <noscript><img alt="XIII.13 lemma diagram" src="propXIII13l.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's lemma figure: the semicircle ADB with C, D, the joins AD, BD,
+    // the line DF through C, and the filled rectangle EB on BA by AE = AC.
+    // Added: CD, a solid twin of the upper part of DF (hidden at rest) so
+    // the figure of the semicircle can stand before F is set out; EC and FB,
+    // solid outlines of the square and the parallelogram (hidden at rest) so
+    // they stroke in turn; EBt and semiT, faceless twins of the filled EB
+    // and semicircle that carry their highlights (#140); the triangles DAB,
+    // DAC, the lines AC, CB, EA, and the right angles at D and C.
+    //
+    // Draggables (checked against the bundle): A and B, lineSliders, both
+    // givens. C, D, E, F and X are derived and listed per slide.
+    var L_GIVEN = ["A","B","AB","semi","semiT","C","D","AD","CD","AC","CB"];
+    var L_JOIN  = L_GIVEN.concat(["BD","DAB","DAC"]);
+    var L_SQ    = L_JOIN.concat(["E","F","EC","EA"]);
+    var L_PAR   = L_SQ.concat(["X","FB","BE","EBt","DF"]);
+    var L_RT    = L_PAR.concat(["angADB","angDCA"]);
+    var L_REST  = ["A","B","AB","semi","semiT","C","D","AD","BD","E","F","BE","EBt","DF",
+                   "CD","AC","CB"];
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -204,18 +580,123 @@ It is to be proved that *AB* is to *BC* as the square on *AD* is to the square o
             "F;point;perpendicular;C,A",
             "E;point;parallelogram;A,C,F",
             "BE;polygon;parallelogram;B,A,E;0;0;black;random",
-            "DF;line;connect;D,F"
+            "DF;line;connect;D,F",
+            // Slide twins, hidden at rest (see above).
+            "CD;line;connect;C,D",
+            "X;point;vertex;BE,4;0;0",
+            "EC;polygon;quadrilateral;A,C,F,E;0;0;black;0",
+            "FB;polygon;quadrilateral;C,B,X,F;0;0;black;0",
+            // Transparent highlight targets.
+            "semiT;sector;sector;ABmid,B,A;0;0;0;0",
+            "EBt;polygon;parallelogram;B,A,E;0;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "EA;line;connect;E,A;0;0;0",
+            "DAB;polygon;triangle;D,A,B;0;0;0;0",
+            "DAC;polygon;triangle;D,A,C;0;0;0;0",
+            "angADB;sector;angleMarkerRight;D,A,B",
+            "angDCA;sector;angleMarkerRight;C,A,D"
         ],
+        initiallyHidden: ["CD","EC","FB"],
+        aliases: { "BA": "AB", "DA": "AD", "DB": "BD", "BC": "CB", "DC": "CD",
+                   "EB": "EBt", "BF": "FB", "ADB": "angADB" },
+        slides: [
+            { text: "It is to be proved that {AB} is to {BC} as the square on {AD} is to the square on {DC}.",
+              visible: L_REST,
+              highlighted: ["AB","CB","AD","CD"],
+              justifications: [{ ref: "Lemma" }] },
+            { text: "Set out the figure of the semicircle,",
+              visible: L_GIVEN,
+              highlighted: ["semiT","CD","AD"] },
+            { text: "join {DB},",
+              visible: L_JOIN,
+              highlighted: ["BD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "describe the square {EC} on {AC},",
+              visible: L_SQ,
+              highlighted: ["EC","AC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EC", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ ref: "I.46" }] },
+            { text: "and complete the parallelogram {FB}.",
+              visible: L_PAR,
+              highlighted: ["FB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FB", name: geomlib.A.Polygon.outline },
+                  { elem: "BE", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Since the triangle {DAB} is equiangular with the triangle {DAC},",
+              visible: L_RT,
+              highlighted: ["DAB","DAC","angADB","angDCA"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angADB", name: geomlib.A.Sector.sweep },
+                  { elem: "angDCA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "VI.8" }] },
+            { text: "therefore {BA} is to {AD} as {DA} is to {AC}.",
+              visible: L_RT,
+              highlighted: ["AB","AD","AC"],
+              justifications: [{ ref: "VI.4" }] },
+            { text: "Therefore the rectangle {BA} by {AC} equals the square on {AD}.",
+              visible: L_RT,
+              highlighted: ["AB","AC","AD"],
+              justifications: [{ ref: "VI.17" }] },
+            { text: "And since {AB} is to {BC} as {EB} is to {BF},",
+              visible: L_RT,
+              highlighted: ["AB","CB","EBt","FB"],
+              justifications: [{ ref: "VI.1" }] },
+            { text: "and {EB} is the rectangle {BA} by {AC}, for {EA} equals {AC},",
+              visible: L_RT,
+              highlighted: ["EBt","EA","AC"] },
+            { text: "and {BF} is the rectangle {AC} by {CB},",
+              visible: L_RT,
+              highlighted: ["FB","AC","CB"] },
+            { text: "therefore {AB} is to {BC} as the rectangle {BA} by {AC} is to the rectangle {AC} by {CB}.",
+              visible: L_RT,
+              highlighted: ["AB","CB","EBt","FB"] },
+            { text: "And the rectangle {BA} by {AC} equals the square on {AD},",
+              visible: L_RT,
+              highlighted: ["EBt","AD"] },
+            { text: "and the rectangle {AC} by {CB} equals the square on {DC},",
+              visible: L_RT,
+              highlighted: ["FB","CD"] },
+            { text: "for the perpendicular {DC} is a mean proportional between the segments {AC} and {CB} of the base,",
+              visible: L_RT,
+              highlighted: ["CD","AC","CB"],
+              justifications: [{ ref: "VI.8.Cor" }] },
+            { text: "because the angle {ADB} is right.",
+              visible: L_RT,
+              highlighted: ["angADB"] },
+            { text: "Therefore {AB} is to {BC} as the square on {AD} is to the square on {DC}.",
+              visible: L_RT,
+              highlighted: ["AB","CB","AD","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.46":     "/elements/books/bookI/propositions/propI46/",
+        "VI.1":     "/elements/books/bookVI/propositions/propVI1/",
+        "VI.4":     "/elements/books/bookVI/propositions/propVI4/",
+        "VI.8":     "/elements/books/bookVI/propositions/propVI8/",
+        "VI.8.Cor": "/elements/books/bookVI/propositions/propVI8/#cor",
+        "VI.17":    "/elements/books/bookVI/propositions/propVI17/"
     });
 </script>
 </figure>
 
-Set out the figure of the semicircle, join *DB,* describe the square *EC* on *AC,*  and complete the parallelogram *FB.* [!just I.46]
+Set out the figure of the semicircle, join {DB}, describe the square {EC} on {AC},  and complete the parallelogram {FB}. [!just I.46]
 
-Since  the triangle *DAB* is equiangular with the triangle *DAC,* therefore *BA* is to *AD* as *DA* is to *AC.*  Therefore the rectangle *BA* by *AC* equals the square on *AD.* [!just VI.8, VI.4; VI.17]
+Since  the triangle {DAB} is equiangular with the triangle {DAC}, therefore {BA} is to {AD} as {DA} is to {AC}.  Therefore the rectangle {BA} by {AC} equals the square on {AD}. [!just VI.8, VI.4; VI.17]
 
-And since *AB* is to *BC* as *EB* is to *BF,* and *EB* is the rectangle *BA* by *AC,* for *EA* equals *AC,* and *BF* is the rectangle *AC* by *CB,* therefore *AB* is to *BC* as the rectangle *BA* by *AC* is to the rectangle *AC* by *CB.* [!just VI.1]
+And since {AB} is to {BC} as {EB} is to {BF}, and {EB} is the rectangle {BA} by {AC}, for {EA} equals {AC}, and {BF} is the rectangle {AC} by {CB}, therefore {AB} is to {BC} as the rectangle {BA} by {AC} is to the rectangle {AC} by {CB}. [!just VI.1]
 
-And the rectangle *BA* by *AC* equals the square on *AD,* and the rectangle *AC* by *CB* equals the square on *DC,* for the perpendicular *DC* is a mean proportional between the segments *AC* and *CB* of the base, because the angle *ADB* is right.  Therefore *AB* is to *BC* as the square on *AD* is to the square on *DC.* [!just VI.8.Cor]
+And the rectangle {BA} by {AC} equals the square on {AD}, and the rectangle {AC} by {CB} equals the square on {DC}, for the perpendicular {DC} is a mean proportional between the segments {AC} and {CB} of the base, because the angle {ADB} is right.  Therefore {AB} is to {BC} as the square on {AD} is to the square on {DC}. [!just VI.8.Cor]
 
 <div class="qed">Q.E.D.</div>
