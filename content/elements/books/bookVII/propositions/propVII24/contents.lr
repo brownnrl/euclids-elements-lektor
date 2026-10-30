@@ -15,14 +15,27 @@ statement: If two numbers are relatively prime to any number, then their product
 ----
 proof:
 
-Let the two numbers *A* and *B* [each] be relatively prime to a number *C,* and let *A* multiplied by *B* make *D.*
+Let the two numbers {A} and {B} [each] be relatively prime to a number {C}, and let {A} multiplied by {B} make {D}.
 
-I say that *C* and *D* are relatively prime.
+I say that {C} and {D} are relatively prime.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="200" height="270" tabindex="0"></canvas>
 <noscript><img alt="VII.24 diagram" src="propVII24.gif"/></noscript>
 <script type="text/javascript">
+    // A and B are each relatively prime to C, and D is their product; E is
+    // the supposed common measure of C and D, and F the number of times E
+    // measures D. Line segments only, so the walk is highlight beats. The
+    // reductio's E and F are withdrawn once the contradiction is reached.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2, D1, E1, E2, F1, F2 and the off-canvas, colourless rail
+    // and unit ends. D1, E1, E2, F1 and F2 arrive mid-walk, so they are
+    // deferred; D2 (proportion) is derived and listed per slide.
+    var GIVEN  = ["A","B","C"];
+    var WITH_D = GIVEN.concat(["D","D1","D2"]);
+    var WITH_E = WITH_D.concat(["E","E1","E2"]);
+    var WITH_F = WITH_E.concat(["F","F1","F2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -61,25 +74,133 @@ I say that *C* and *D* are relatively prime.
             "F2;point;lineSlider;F0,F3,180,55;0;black",
             "F;line;connect;F1,F2;black"
         ],
+        deferDraggables: ["D1","E1","E2","F1","F2"],
+        slides: [
+            { text: "“If two numbers are relatively prime to any number,",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "VII.24" }] },
+            { text: "then their product is also relatively prime to the same.”",
+              visible: WITH_D,
+              highlighted: ["D","C"],
+              justifications: [{ ref: "VII.24" }] },
+            { text: "Let the two numbers {A} and {B} [each] be relatively prime to a number {C},",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "and let {A} multiplied by {B} make {D}.",
+              visible: WITH_D,
+              highlighted: ["A","B","D"] },
+            { text: "I say that {C} and {D} are relatively prime.",
+              visible: WITH_D,
+              highlighted: ["C","D"] },
+            { text: "If {C} and {D} are not relatively prime, then some number {E} measures {C} and {D}.",
+              visible: WITH_E,
+              highlighted: ["E","C","D"] },
+            { text: "Now, since {C} and {A} are relatively prime, and a certain number {E} measures {C},",
+              visible: WITH_E,
+              highlighted: ["C","A","E"] },
+            { text: "therefore {A} and {E} are relatively prime.",
+              visible: WITH_E,
+              highlighted: ["A","E"],
+              justifications: [{ ref: "VII.23" }] },
+            { text: "Let there be as many units in {F} as the times that {E} measures {D}.",
+              visible: WITH_F,
+              highlighted: ["F","E","D"] },
+            { text: "Then {F} also measures {D} according to the units in {E}.",
+              visible: WITH_F,
+              highlighted: ["F","D","E"],
+              justifications: [{ ref: "VII.16" }] },
+            { text: "Therefore {E} multiplied by {F} makes {D}.",
+              visible: WITH_F,
+              highlighted: ["E","F","D"],
+              justifications: [{ ref: "VII.Def.15" }] },
+            { text: "Also, {A} multiplied by {B} makes {D},",
+              visible: WITH_F,
+              highlighted: ["A","B","D"] },
+            { text: "therefore the product of {E} and {F} equals the product of {A} and {B}.",
+              visible: WITH_F,
+              highlighted: ["E","F","A","B"] },
+            { text: "But, if the product of the extremes equal that of the means, then the four numbers are proportional.",
+              visible: WITH_F,
+              highlighted: [] },
+            { text: "Therefore {E} is to {A} as {B} is to {F}.",
+              visible: WITH_F,
+              highlighted: ["E","A","B","F"],
+              justifications: [{ ref: "VII.19" }] },
+            { text: "But {A} and {E} are relatively prime,",
+              visible: WITH_F,
+              highlighted: ["A","E"] },
+            { text: "numbers which are relatively prime are also the least of those which have the same ratio,",
+              visible: WITH_F,
+              highlighted: [],
+              justifications: [{ ref: "VII.21" }] },
+            { text: "and the least numbers of those which have the same ratio with them measure those which have the same ratio",
+              visible: WITH_F,
+              highlighted: [] },
+            { text: "the same number of times, the greater the greater, and the less the less,",
+              visible: WITH_F,
+              highlighted: [] },
+            { text: "that is, the antecedent the antecedent and the consequent the consequent,",
+              visible: WITH_F,
+              highlighted: [] },
+            { text: "therefore {E} measures {B}.",
+              visible: WITH_F,
+              highlighted: ["E","B"],
+              justifications: [{ ref: "VII.20" }] },
+            { text: "But it also measures {C}, therefore {E} measures {B} and {C} which are relatively prime, which is impossible.",
+              visible: WITH_F,
+              highlighted: ["E","B","C"],
+              justifications: [{ ref: "VII.Def.12" }] },
+            // The reductio is closed: the supposed E and F are withdrawn.
+            { text: "Therefore no number measures the numbers {C} and {D}.",
+              visible: WITH_D,
+              highlighted: ["C","D"] },
+            { text: "Therefore {C} and {D} are relatively prime.",
+              visible: WITH_D,
+              highlighted: ["C","D"] },
+            { text: "Therefore, if two numbers are relatively prime to any number,",
+              visible: WITH_D,
+              highlighted: ["A","B","C"] },
+            { text: "then their product is also relatively prime to the same.",
+              visible: WITH_D,
+              highlighted: ["D","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.24") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.23":     "/elements/books/bookVII/propositions/propVII23/",
+        "VII.16":     "/elements/books/bookVII/propositions/propVII16/",
+        "VII.Def.15": "/elements/books/bookVII/definitions/defVII15/",
+        "VII.19":     "/elements/books/bookVII/propositions/propVII19/",
+        "VII.21":     "/elements/books/bookVII/propositions/propVII21/",
+        "VII.20":     "/elements/books/bookVII/propositions/propVII20/",
+        "VII.Def.12": "/elements/books/bookVII/definitions/defVII12/"
     });
 </script>
 </figure>
 
-If *C* and *D* are not relatively prime, then some number *E* measures *C* and *D.*
+If {C} and {D} are not relatively prime, then some number {E} measures {C} and {D}.
 
-Now, since *C* and *A* are relatively prime, and a certain number *E* measures *C,* therefore *A* and *E* are relatively prime. [!just VII.23]
+Now, since {C} and {A} are relatively prime, and a certain number {E} measures {C}, therefore {A} and {E} are relatively prime. [!just VII.23]
 
-Let there be as many units in *F* as the times that *E* measures *D.* Then *F* also measures *D* according to the units in *E.* [!just VII.16]
+Let there be as many units in {F} as the times that {E} measures {D}. Then {F} also measures {D} according to the units in {E}. [!just VII.16]
 
-Therefore *E* multiplied by *F* makes *D.* Also, *A* multiplied by *B* makes *D,* therefore the product of *E* and *F* equals the product of *A* and *B.* [!just VII.Def.15]
+Therefore {E} multiplied by {F} makes {D}. Also, {A} multiplied by {B} makes {D}, therefore the product of {E} and {F} equals the product of {A} and {B}. [!just VII.Def.15]
 
-But, if the product of the extremes equal that of the means, then the four numbers are proportional. Therefore *E* is to *A* as *B* is to *F.* [!just VII.19]
+But, if the product of the extremes equal that of the means, then the four numbers are proportional. Therefore {E} is to {A} as {B} is to {F}. [!just VII.19]
 
-But *A* and *E* are relatively prime, numbers which are relatively prime are also the least of those which have the same ratio, and the least numbers of those which have the same ratio with them measure those which have the same ratio the same number of times, the greater the greater, and the less the less, that is, the antecedent the antecedent and the consequent the consequent, therefore *E* measures *B.* [!just VII.21; VII.20]
+But {A} and {E} are relatively prime, numbers which are relatively prime are also the least of those which have the same ratio, and the least numbers of those which have the same ratio with them measure those which have the same ratio the same number of times, the greater the greater, and the less the less, that is, the antecedent the antecedent and the consequent the consequent, therefore {E} measures {B}. [!just VII.21; VII.20]
 
-But it also measures *C,* therefore *E* measures *B* and *C* which are relatively prime, which is impossible. [!just VII.Def.12]
+But it also measures {C}, therefore {E} measures {B} and {C} which are relatively prime, which is impossible. [!just VII.Def.12]
 
-Therefore no number measures the numbers *C* and *D.* Therefore *C* and *D* are relatively prime.
+Therefore no number measures the numbers {C} and {D}. Therefore {C} and {D} are relatively prime.
 
 Therefore, *if two numbers are relatively prime to any number, then their product is also relatively prime to the same.*
 
