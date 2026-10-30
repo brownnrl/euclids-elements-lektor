@@ -15,20 +15,31 @@ statement: Prime numbers are more than any assigned multitude of prime numbers.
 ----
 proof:
 
-Let *A, B,* and *C* be the assigned prime numbers.
+Let {A}, {B}, and {C} be the assigned prime numbers.
 
-I say that there are more prime numbers than *A, B,* and *C.*
+I say that there are more prime numbers than {A}, {B}, and {C}.
 
-Take the least number *DE* measured by *A, B,* and *C.* Add the unit *DF* to *DE.*
+Take the least number {DE} measured by {A}, {B}, and {C}. Add the unit {DF} to {DE}.
 
-Then *EF* is either prime or not.
+Then {EF} is either prime or not.
 
-First, let it be prime. Then the prime numbers *A, B, C,* and *EF* have been found which are more than *A, B,* and *C.*
+First, let it be prime. Then the prime numbers {A}, {B}, {C}, and {EF} have been found which are more than {A}, {B}, and {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="170" tabindex="0"></canvas>
 <noscript><img alt="IX.20 diagram" src="propIX20.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: the walk is highlight beats over Joyce's four lines.
+    // The one number the proof makes is EF, the least common measure DE of
+    // A, B, C with the unit DF added; DE and DF are solid twins over Joyce's
+    // EF, hidden at rest (initiallyHidden), so each strokes as it is taken.
+    // E, the slider end of DE, is deferred until then. Joyce's figure has no
+    // line for the prime G, so G is left as plain text. B4 (the product of A
+    // and B) and the unit (U1-U2) are off-figure helpers.
+    var GIVEN = ["A1","A2","A","B1","B2","B","C1","C2","C","B4"];
+    var WITHDE = GIVEN.concat(["E","D","DE"]);
+    var WITHDF = WITHDE.concat(["F","DF"]);
+    var ALL    = WITHDF.concat(["EF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -57,19 +68,102 @@ First, let it be prime. Then the prime numbers *A, B, C,* and *EF* have been fou
             "B4;point;proportion;U1,U2,A1,A2,B1,B2,B1,B3;0;0",
             "D;point;proportion;U1,U2,B1,B4,C1,C2,E,E3",
             "F;point;extend;E,D,U1,U2",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // Slide twins over EF, hidden at rest (see above).
+            "DE;line;connect;E,D",
+            "DF;line;connect;D,F"
         ],
+        initiallyHidden: ["DE","DF"],
+        deferDraggables: ["E"],
+        slides: [
+            { text: "“Prime numbers are more than any assigned multitude of prime numbers.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "IX.20" }] },
+            { text: "Let {A}, {B}, and {C} be the assigned prime numbers.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "I say that there are more prime numbers than {A}, {B}, and {C}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "Take the least number {DE} measured by {A}, {B}, and {C}.",
+              visible: WITHDE,
+              highlighted: ["DE","A","B","C"],
+              transition: { animations: [
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Add the unit {DF} to {DE}.",
+              visible: WITHDF,
+              highlighted: ["DF","DE"],
+              transition: { animations: [
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {EF} is either prime or not.",
+              visible: ALL,
+              highlighted: ["EF"] },
+            { text: "First, let it be prime.",
+              visible: ALL,
+              highlighted: ["EF"] },
+            { text: "Then the prime numbers {A}, {B}, {C}, and {EF} have been found which are more than {A}, {B}, and {C}.",
+              visible: ALL,
+              highlighted: ["A","B","C","EF"] },
+            { text: "Next, let {EF} not be prime.",
+              visible: ALL,
+              highlighted: ["EF"] },
+            { text: "Therefore it is measured by some prime number. Let it be measured by the prime number G.",
+              visible: ALL,
+              highlighted: ["EF"],
+              justifications: [{ claim: "a composite number is measured by some prime", ref: "VII.31" }] },
+            { text: "I say that G is not the same with any of the numbers {A}, {B}, and {C}.",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "If possible, let it be so.",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "Now {A}, {B}, and {C} measure {DE}, therefore G also measures {DE}.",
+              visible: ALL,
+              highlighted: ["A","B","C","DE"] },
+            { text: "But it also measures {EF}.",
+              visible: ALL,
+              highlighted: ["EF"] },
+            { text: "Therefore G, being a number, measures the remainder, the unit {DF}, which is absurd.",
+              visible: ALL,
+              highlighted: ["DF"] },
+            { text: "Therefore G is not the same with any one of the numbers {A}, {B}, and {C}.",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "And by hypothesis it is prime.",
+              visible: ALL },
+            { text: "Therefore the prime numbers {A}, {B}, {C}, and G have been found",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "which are more than the assigned multitude of {A}, {B}, and {C}.",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "Therefore, prime numbers are more than any assigned multitude of prime numbers.",
+              visible: ALL,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.20") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.31": "/elements/books/bookVII/propositions/propVII31/"
     });
 </script>
 </figure>
 
-Next, let *EF* not be prime. Therefore it is measured by some prime number. Let it be measured by the prime number *G.* [!just VII.31]
+Next, let {EF} not be prime. Therefore it is measured by some prime number. Let it be measured by the prime number *G.* [!just VII.31]
 
-I say that *G* is not the same with any of the numbers *A, B,* and *C.*
+I say that *G* is not the same with any of the numbers {A}, {B}, and {C}.
 
-If possible, let it be so. Now *A, B,* and *C* measure *DE,* therefore *G* also measures *DE.* But it also measures *EF.* Therefore *G,* being a number, measures the remainder, the unit *DF,* which is absurd.
+If possible, let it be so. Now {A}, {B}, and {C} measure {DE}, therefore *G* also measures {DE}. But it also measures {EF}. Therefore *G,* being a number, measures the remainder, the unit {DF}, which is absurd.
 
-Therefore *G* is not the same with any one of the numbers *A, B,* and *C.* And by hypothesis it is prime. Therefore the prime numbers *A, B, C,* and *G* have been found which are more than the assigned multitude of *A, B,* and *C.*
+Therefore *G* is not the same with any one of the numbers {A}, {B}, and {C}. And by hypothesis it is prime. Therefore the prime numbers {A}, {B}, {C}, and *G* have been found which are more than the assigned multitude of {A}, {B}, and {C}.
 
 Therefore, *prime numbers are more than any assigned multitude of prime numbers.*
 

@@ -19,6 +19,11 @@ proof:
 <canvas id="canvas_0" width="170" height="120" tabindex="0"></canvas>
 <noscript><img alt="IX.19 diagram" src="propIX19.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: the walk is highlight beats over Joyce's three lines.
+    // The proof is lost from the Greek, so nothing is constructed; the fourth
+    // proportional is named but never found, and Joyce's figure has no line
+    // for it (the D0-D3 row stays empty). The unit (U1-U2) is off-figure.
+    var GIVEN = ["A1","A2","A","B1","B2","B","C1","C2","C"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -44,13 +49,45 @@ proof:
             "C2;point;lineSlider;C0,C3,130,0;0",
             "C;line;connect;C1,C2;black"
         ],
+        slides: [
+            { text: "“Given three numbers, to investigate when it is possible to find a fourth proportional to them.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "IX.19" }] },
+            { text: "Let {A}, {B}, and {C} be the given three numbers.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "It is required to investigate when it is possible to find a fourth proportional to them.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "[The Greek text of this Proposition is corrupt.]",
+              visible: GIVEN },
+            { text: "[However, analogously to Proposition 18 the condition that a fourth proportional to {A}, {B}, and {C} exists",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "IX.18" }] },
+            { text: "is that {A} measure the product of {B} and {C}.]",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.19") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "IX.18": "/elements/books/bookIX/propositions/propIX18/"
     });
 </script>
 </figure>
 
-Let *A, B,* and *C* be the given three numbers. It is required to investigate when it is possible to find a fourth proportional to them.
+Let {A}, {B}, and {C} be the given three numbers. It is required to investigate when it is possible to find a fourth proportional to them.
 
-[The Greek text of this Proposition is corrupt. However, analogously to Proposition 18 the condition that a fourth proportional to *A, B,* and *C* exists is that *A* measure the product of *B* and *C.* ]
+[The Greek text of this Proposition is corrupt. However, analogously to Proposition 18 the condition that a fourth proportional to {A}, {B}, and {C} exists is that {A} measure the product of {B} and {C}. ]
 
 <div class="qed">Q.E.D.</div>
 <br clear="all">
