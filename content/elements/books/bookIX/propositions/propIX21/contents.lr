@@ -15,12 +15,15 @@ statement: If as many even numbers as we please are added together, then the sum
 ----
 proof:
 
-Let as many even numbers as we please, *AB, BC, CD,* and *DE,* be added together.
+Let as many even numbers as we please, {AB}, {BC}, {CD}, and {DE}, be added together.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="70" tabindex="0"></canvas>
 <noscript><img alt="IX.21 diagram" src="propIX21.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: AE is the sum, its parts AB, BC, CD, DE are
+    // transparent twins so each lights on its own.
+    var ALL = ["A","B","C","D","E","AE","AB","BC","CD","DE"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -33,15 +36,58 @@ Let as many even numbers as we please, *AB, BC, CD,* and *DE,* be added together
             "C;point;lineSlider;A0,A3,120,0",
             "D;point;lineSlider;A0,A3,194,0",
             "E;point;lineSlider;A0,A3,220,0",
-            "AE;line;connect;A,E"
+            "AE;line;connect;A,E",
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0"
         ],
+        slides: [
+            { text: "“If as many even numbers as we please are added together, then the sum is even.”",
+              visible: ALL,
+              highlighted: ["AB","BC","CD","DE"],
+              justifications: [{ ref: "IX.21" }] },
+            { text: "Let as many even numbers as we please, {AB}, {BC}, {CD}, and {DE}, be added together.",
+              visible: ALL,
+              highlighted: ["AB","BC","CD","DE"] },
+            { text: "I say that the sum {AE} is even.",
+              visible: ALL,
+              highlighted: ["AE"] },
+            { text: "Since each of the numbers {AB}, {BC}, {CD}, and {DE} is even, therefore each has a half part,",
+              visible: ALL,
+              highlighted: ["AB","BC","CD","DE"] },
+            { text: "so that the sum {AE} also has a half part.",
+              visible: ALL,
+              highlighted: ["AE"] },
+            { text: "But an even number is that which is divisible into two equal parts, therefore {AE} is even.",
+              visible: ALL,
+              highlighted: ["AE"],
+              justifications: [{ claim: "AE even", ref: "VII.Def.6" }] },
+            { text: "Therefore, if as many even numbers as we please are added together,",
+              visible: ALL,
+              highlighted: ["AB","BC","CD","DE"] },
+            { text: "then the sum is even.",
+              visible: ALL,
+              highlighted: ["AE"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.21") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.6": "/elements/books/bookVII/definitions/defVII6/"
     });
 </script>
 </figure>
 
-I say that the sum *AE* is even.
+I say that the sum {AE} is even.
 
-Since each of the numbers *AB, BC, CD,* and *DE* is even, therefore each has a half part, so that the sum *AE* also has a half part. But an even number is that which is divisible into two equal parts, therefore *AE* is even. [!just VII.Def.6]
+Since each of the numbers {AB}, {BC}, {CD}, and {DE} is even, therefore each has a half part, so that the sum {AE} also has a half part. But an even number is that which is divisible into two equal parts, therefore {AE} is even. [!just VII.Def.6]
 
 Therefore, *if as many even numbers as we please are added together, then the sum is even.*
 
