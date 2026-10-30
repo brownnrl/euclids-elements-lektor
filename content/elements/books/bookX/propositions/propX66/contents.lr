@@ -15,14 +15,25 @@ statement: A straight line commensurable with a binomial straight line is itself
 ----
 proof:
 
-Let *AB* be binomial, and let *CD* be commensurable in length with *AB*.
+Let {AB} be binomial, and let {CD} be commensurable in length with {AB}.
 
-I say that *CD* is binomial and the same in order with *AB*.
+I say that {CD} is binomial and the same in order with {AB}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="95" tabindex="0"></canvas>
 <noscript><img alt="X.66 diagram" src="propX66.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the binomial AB divided into its terms at E, and CD
+    // commensurable with it, cut at F so that AB : CD = AE : CF.
+    // Added, all hidden at rest: transparent targets AE, EB, CF, FD
+    // (;0;0;0). No angles in the figure.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E (line sliders)
+    // and the offscreen frees. E arrives with "divide it into its terms at
+    // E", so it is deferred. F is derived and listed from its slide on.
+    var GIVEN = ["A","B","C","D","AB","CD"];
+    var TERMS = GIVEN.concat(["E","AE","EB"]);
+    var ALL   = TERMS.concat(["F","CF","FD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -39,45 +50,237 @@ I say that *CD* is binomial and the same in order with *AB*.
             "D;point;lineSlider;C0,C3,210,0",
             "CD;line;connect;C,D",
             "E;point;lineSlider;A0,A3,130,0",
-            "F;point;proportion;A,B,C,D,A,E,C,C3"
+            "F;point;proportion;A,B,C,D,A,E,C,C3",
+            // Slide-only highlight targets.
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "FD;line;connect;F,D;0;0;0"
         ],
+        deferDraggables: ["E"],
+        slides: [
+            { text: "“A straight line commensurable with a binomial straight line is itself also binomial and the same in order.”",
+              visible: ALL,
+              highlighted: ["CD","AB"],
+              justifications: [{ ref: "X.66" }] },
+            { text: "Let {AB} be binomial, and let {CD} be commensurable in length with {AB}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "I say that {CD} is binomial and the same in order with {AB}.",
+              visible: GIVEN,
+              highlighted: ["CD","AB"] },
+            { text: "Since {AB} is binomial, divide it into its terms at {E}, and let {AE} be the greater term,",
+              visible: TERMS,
+              highlighted: ["E","AE"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "therefore {AE} and {EB} are rational straight lines commensurable in square only.",
+              visible: TERMS,
+              highlighted: ["AE","EB"],
+              justifications: [{ claim: "AE, EB rational, commensurable in square only", ref: "X.36" }] },
+            { text: "Let it be contrived that {AB} is to {CD} as {AE} is to {CF}.",
+              visible: ALL,
+              highlighted: ["AB","CD","AE","CF"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AB : CD = AE : CF", ref: "VI.12" }] },
+            { text: "Then the remainder {EB} is to the remainder {FD} as {AB} is to {CD}.",
+              visible: ALL,
+              highlighted: ["EB","FD","AB","CD"],
+              justifications: [{ claim: "EB : FD = AB : CD", ref: "V.19" }] },
+            { text: "But {AB} is commensurable in length with {CD},",
+              visible: ALL,
+              highlighted: ["AB","CD"] },
+            { text: "therefore {AE} is also commensurable with {CF}, and {EB} with {FD}.",
+              visible: ALL,
+              highlighted: ["AE","CF","EB","FD"],
+              justifications: [{ claim: "AE, CF and EB, FD commensurable", ref: "X.11" }] },
+            { text: "And {AE} and {EB} are rational, therefore {CF} and {FD} are also rational.",
+              visible: ALL,
+              highlighted: ["AE","EB","CF","FD"] },
+            { text: "And {AE} is to {CF} as {EB} is to {FD}.",
+              visible: ALL,
+              highlighted: ["AE","CF","EB","FD"],
+              justifications: [{ claim: "AE : CF = EB : FD", ref: "V.11" }] },
+            { text: "Therefore, alternately, {AE} is to {EB} as {CF} is to {FD}.",
+              visible: ALL,
+              highlighted: ["AE","EB","CF","FD"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "But {AE} and {EB} are commensurable in square only,",
+              visible: ALL,
+              highlighted: ["AE","EB"] },
+            { text: "therefore {CF} and {FD} are also commensurable in square only.",
+              visible: ALL,
+              highlighted: ["CF","FD"],
+              justifications: [{ claim: "CF, FD commensurable in square only", ref: "X.11" }] },
+            { text: "And they are rational, therefore {CD} is binomial.",
+              visible: ALL,
+              highlighted: ["CD"],
+              justifications: [{ claim: "CD binomial", ref: "X.36" }] },
+            { text: "I say next that it is the same in order with {AB}.",
+              visible: ALL,
+              highlighted: ["CD","AB"] },
+            { text: "For the square on {AE} is greater than the square on {EB}",
+              visible: ALL,
+              highlighted: ["AE","EB"] },
+            { text: "either by the square on a straight line commensurable with {AE}",
+              visible: ALL,
+              highlighted: ["AE"] },
+            { text: "or by the square on a straight line incommensurable with it.",
+              visible: ALL,
+              highlighted: ["AE"] },
+            { text: "If then the square on {AE} is greater than the square on {EB}",
+              visible: ALL,
+              highlighted: ["AE","EB"] },
+            { text: "by the square on a straight line commensurable with {AE},",
+              visible: ALL,
+              highlighted: ["AE"] },
+            { text: "then the square on {CF} is also greater than the square on {FD}",
+              visible: ALL,
+              highlighted: ["CF","FD"] },
+            { text: "by the square on a straight line commensurable with {CF}.",
+              visible: ALL,
+              highlighted: ["CF"],
+              justifications: [{ claim: "CF² − FD² commensurable with CF", ref: "X.14" }] },
+            { text: "And, if {AE} is commensurable with the rational straight line set out, then {CF} is also commensurable with it,",
+              visible: ALL,
+              highlighted: ["AE","CF"],
+              justifications: [{ claim: "CF commensurable with the rational", ref: "X.12" }] },
+            { text: "and for this reason each of the straight lines {AB} and {CD} is a first binomial,",
+              visible: ALL,
+              highlighted: ["AB","CD"] },
+            { text: "that is, the same in order.",
+              visible: ALL,
+              highlighted: ["AB","CD"],
+              justifications: [{ claim: "first binomials", ref: "X.Def.II.1" }] },
+            { text: "But, if {EB} is commensurable with the rational straight line set out, then {FD} is also commensurable with it,",
+              visible: ALL,
+              highlighted: ["EB","FD"],
+              justifications: [{ claim: "FD commensurable with the rational", ref: "X.12" }] },
+            { text: "and for this reason again {CD} is the same in order with {AB}, for each of them is a second binomial.",
+              visible: ALL,
+              highlighted: ["CD","AB"],
+              justifications: [{ claim: "second binomials", ref: "X.Def.II.2" }] },
+            { text: "But, if neither of the straight lines {AE} nor {EB} is commensurable with the rational straight line set out,",
+              visible: ALL,
+              highlighted: ["AE","EB"] },
+            { text: "then neither of the straight lines {CF} nor {FD} is commensurable with it,",
+              visible: ALL,
+              highlighted: ["CF","FD"],
+              justifications: [{ claim: "CF, FD incommensurable with the rational", ref: "X.13" }] },
+            { text: "and each of the straight lines {AB} and {CD} is a third binomial.",
+              visible: ALL,
+              highlighted: ["AB","CD"],
+              justifications: [{ claim: "third binomials", ref: "X.Def.II.3" }] },
+            { text: "But, if the square on {AE} is greater than the square on {EB}",
+              visible: ALL,
+              highlighted: ["AE","EB"] },
+            { text: "by the square on a straight line incommensurable with {AE},",
+              visible: ALL,
+              highlighted: ["AE"] },
+            { text: "then the square on {CF} is also greater than the square on {FD}",
+              visible: ALL,
+              highlighted: ["CF","FD"] },
+            { text: "by the square on a straight line incommensurable with {CF}.",
+              visible: ALL,
+              highlighted: ["CF"],
+              justifications: [{ claim: "CF² − FD² incommensurable with CF", ref: "X.14" }] },
+            { text: "And, if {AE} is commensurable with the rational straight line set out, then {CF} is also commensurable with it,",
+              visible: ALL,
+              highlighted: ["AE","CF"] },
+            { text: "and each of the straight lines {AB} and {CD} is a fourth binomial.",
+              visible: ALL,
+              highlighted: ["AB","CD"],
+              justifications: [{ claim: "fourth binomials", ref: "X.Def.II.4" }] },
+            { text: "But, if {EB} is so commensurable, then {FD} is also,",
+              visible: ALL,
+              highlighted: ["EB","FD"] },
+            { text: "and each of the straight lines {AB} and {CD} is a fifth binomial.",
+              visible: ALL,
+              highlighted: ["AB","CD"],
+              justifications: [{ claim: "fifth binomials", ref: "X.Def.II.5" }] },
+            { text: "But, if neither of the straight lines {AE} or {EB} is so commensurable,",
+              visible: ALL,
+              highlighted: ["AE","EB"] },
+            { text: "then neither of the straight lines {CF} or {FD} is commensurable with the rational straight line set out,",
+              visible: ALL,
+              highlighted: ["CF","FD"] },
+            { text: "and each of the straight lines {AB} and {CD} is a sixth binomial.",
+              visible: ALL,
+              highlighted: ["AB","CD"],
+              justifications: [{ claim: "sixth binomials", ref: "X.Def.II.6" }] },
+            { text: "Hence a straight line commensurable in length with a binomial straight line is binomial and the same in order.",
+              visible: ALL,
+              highlighted: ["CD","AB"] },
+            { text: "Therefore, a straight line commensurable in length with a binomial straight line",
+              visible: ALL,
+              highlighted: ["CD","AB"] },
+            { text: "is itself also binomial and the same in order.",
+              visible: ALL,
+              highlighted: ["CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.66") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.36":       "/elements/books/bookX/propositions/propX36/",
+        "VI.12":      "/elements/books/bookVI/propositions/propVI12/",
+        "V.19":       "/elements/books/bookV/propositions/propV19/",
+        "X.11":       "/elements/books/bookX/propositions/propX11/",
+        "V.11":       "/elements/books/bookV/propositions/propV11/",
+        "V.16":       "/elements/books/bookV/propositions/propV16/",
+        "X.12":       "/elements/books/bookX/propositions/propX12/",
+        "X.13":       "/elements/books/bookX/propositions/propX13/",
+        "X.14":       "/elements/books/bookX/propositions/propX14/",
+        "X.Def.II.1": "/elements/books/bookX/definitions/defX.II.1/",
+        "X.Def.II.2": "/elements/books/bookX/definitions/defX.II.2/",
+        "X.Def.II.3": "/elements/books/bookX/definitions/defX.II.3/",
+        "X.Def.II.4": "/elements/books/bookX/definitions/defX.II.4/",
+        "X.Def.II.5": "/elements/books/bookX/definitions/defX.II.5/",
+        "X.Def.II.6": "/elements/books/bookX/definitions/defX.II.6/"
     });
 </script>
 </figure>
 
-Since *AB* is binomial, divide it into its terms at *E*, and let *AE* be the greater term, therefore *AE* and *EB* are rational straight lines commensurable in square only. [!just X.36]
+Since {AB} is binomial, divide it into its terms at {E}, and let {AE} be the greater term, therefore {AE} and {EB} are rational straight lines commensurable in square only. [!just X.36]
 
-Let it be contrived that *AB* is to *CD* as *AE* is to *CF*. Then the remainder *EB* is to the remainder *FD* as *AB* is to *CD*. [!just VI.12, V.19]
+Let it be contrived that {AB} is to {CD} as {AE} is to {CF}. Then the remainder {EB} is to the remainder {FD} as {AB} is to {CD}. [!just VI.12, V.19]
 
-But *AB* is commensurable in length with *CD*, therefore *AE* is also commensurable with *CF*, and *EB* with *FD*. [!just X.11]
+But {AB} is commensurable in length with {CD}, therefore {AE} is also commensurable with {CF}, and {EB} with {FD}. [!just X.11]
 
-And *AE* and *EB* are rational, therefore *CF* and *FD* are also rational.
+And {AE} and {EB} are rational, therefore {CF} and {FD} are also rational.
 
-And *AE* is to *CF* as *EB* is to *FD*. Therefore, alternately, *AE* is to *EB* as *CF* is to *FD*. [!just V.11, V.16]
+And {AE} is to {CF} as {EB} is to {FD}. Therefore, alternately, {AE} is to {EB} as {CF} is to {FD}. [!just V.11, V.16]
 
-But *AE* and *EB* are commensurable in square only, therefore *CF* and *FD* are also commensurable in square only. [!just X.11]
+But {AE} and {EB} are commensurable in square only, therefore {CF} and {FD} are also commensurable in square only. [!just X.11]
 
-And they are rational, therefore *CD* is binomial. [!just X.36]
+And they are rational, therefore {CD} is binomial. [!just X.36]
 
-I say next that it is the same in order with *AB*.
+I say next that it is the same in order with {AB}.
 
-For the square on *AE* is greater than the square on *EB* either by the square on a straight line commensurable with *AE* or by the square on a straight line incommensurable with it.
+For the square on {AE} is greater than the square on {EB} either by the square on a straight line commensurable with {AE} or by the square on a straight line incommensurable with it.
 
-If then the square on *AE* is greater than the square on *EB* by the square on a straight line commensurable with *AE*, then the square on *CF* is also greater than the square on *FD* by the square on a straight line commensurable with *CF*. [!just X.14]
+If then the square on {AE} is greater than the square on {EB} by the square on a straight line commensurable with {AE}, then the square on {CF} is also greater than the square on {FD} by the square on a straight line commensurable with {CF}. [!just X.14]
 
-And, if *AE* is commensurable with the rational straight line set out, then *CF* is also commensurable with it, and for this reason each of the straight lines *AB* and *CD* is a first binomial, that is, the same in order. [!just X.12; X.Def.II.1]
+And, if {AE} is commensurable with the rational straight line set out, then {CF} is also commensurable with it, and for this reason each of the straight lines {AB} and {CD} is a first binomial, that is, the same in order. [!just X.12; X.Def.II.1]
 
-But, if *EB* is commensurable with the rational straight line set out, then *FD* is also commensurable with it, and for this reason again *CD* is the same in order with *AB*, for each of them is a second binomial. [!just X.12; X.Def.II.2]
+But, if {EB} is commensurable with the rational straight line set out, then {FD} is also commensurable with it, and for this reason again {CD} is the same in order with {AB}, for each of them is a second binomial. [!just X.12; X.Def.II.2]
 
-But, if neither of the straight lines *AE* nor *EB* is commensurable with the rational straight line set out, then neither of the straight lines *CF* nor *FD* is commensurable with it, and each of the straight lines *AB* and *CD* is a third binomial. [!just X.13; X.Def.II.3]
+But, if neither of the straight lines {AE} nor {EB} is commensurable with the rational straight line set out, then neither of the straight lines {CF} nor {FD} is commensurable with it, and each of the straight lines {AB} and {CD} is a third binomial. [!just X.13; X.Def.II.3]
 
-But, if the square on *AE* is greater than the square on *EB* by the square on a straight line incommensurable with *AE*, then the square on *CF* is also greater than the square on *FD* by the square on a straight line incommensurable with *CF*. [!just X.14]
+But, if the square on {AE} is greater than the square on {EB} by the square on a straight line incommensurable with {AE}, then the square on {CF} is also greater than the square on {FD} by the square on a straight line incommensurable with {CF}. [!just X.14]
 
-And, if *AE* is commensurable with the rational straight line set out, then *CF* is also commensurable with it, and each of the straight lines *AB* and *CD* is a fourth binomial. [!just X.Def.II.4]
+And, if {AE} is commensurable with the rational straight line set out, then {CF} is also commensurable with it, and each of the straight lines {AB} and {CD} is a fourth binomial. [!just X.Def.II.4]
 
-But, if *EB* is so commensurable, then *FD* is also, and each of the straight lines *AB* and *CD* is a fifth binomial. [!just X.Def.II.5]
+But, if {EB} is so commensurable, then {FD} is also, and each of the straight lines {AB} and {CD} is a fifth binomial. [!just X.Def.II.5]
 
-But, if neither of the straight lines *AE* or *EB* is so commensurable, then neither of the straight lines *CF* or *FD* is commensurable with the rational straight line set out, and each of the straight lines *AB* and *CD* is a sixth binomial. [!just X.Def.II.6]
+But, if neither of the straight lines {AE} or {EB} is so commensurable, then neither of the straight lines {CF} or {FD} is commensurable with the rational straight line set out, and each of the straight lines {AB} and {CD} is a sixth binomial. [!just X.Def.II.6]
 
 Hence a straight line commensurable in length with a binomial straight line is binomial and the same in order.
 
