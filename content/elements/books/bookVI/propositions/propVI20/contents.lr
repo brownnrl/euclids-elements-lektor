@@ -17,16 +17,56 @@ statement: Similar polygons are divided into similar triangles, and into triangl
 ----
 proof:
 
-Let *ABCDE* and *FGHKL* be similar polygons, and let *AB* correspond to *FG.*
+Let {ABCDE|ABCDEt} and {FGHKL|FGHKLt} be similar polygons, and let {AB} correspond to {FG}.
 
-I say that the polygons *ABCDE* and *FGHKL* are divided into similar triangles, and into triangles equal in multitude and in the same ratio as the wholes, and the polygon *ABCDE* has to the polygon *FGHKL* a ratio duplicate of that which *AB* has to *FG.*
+I say that the polygons {ABCDE|ABCDEt} and {FGHKL|FGHKLt} are divided into similar triangles, and into triangles equal in multitude and in the same ratio as the wholes, and the polygon {ABCDE|ABCDEt} has to the polygon {FGHKL|FGHKLt} a ratio duplicate of that which {AB} has to {FG}.
 
-Join *BE, CE, GL,* and *HL.*
+Join {BE}, {CE}, {GL}, and {HL}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="400" height="250" tabindex="0"></canvas>
 <noscript><img alt="VI.20 diagram" src="propVI20.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the similar pentagons ABCDE and FGHKL (random
+    // faces; F, G, L derived), the joins BE, CE, GL, HL, AC, FH, BD, GK,
+    // and M, N where AC meets BE and FH meets GL.
+    //
+    // All eight joins are Joyce's own lines, each declared from the end the
+    // text joins from, so they are withheld until their slide and stroke as
+    // declared; no twins. BD and GK arrive with "if BD and GK are joined",
+    // M and N with "Join AC and FH". Everything else added is transparent
+    // (;0;0;0 lines, ;0;0;0;0 polygons), so the resting figure is unchanged:
+    // the sides AB, AE, BC, FG, FL, GH, the segments AM, BM, MC, FN, GN, NH,
+    // the triangles ABE, EBC, ECD, FGL, LGH, LHK, ABC, FGH, ABM, BMC, FGN,
+    // GNH, AME, EMC, and faceless twins ABCDEt / FGHKLt for the filled
+    // pentagons (a highlighted filled polygon is raised, #140). Joyce's
+    // letter permutations (BEC, CBE, GLH, AMB, MBC, MB, NG, GF, and the
+    // angles BAM, GFN, ABM, FGN) take display overrides.
+    //
+    // Markers: equal angles share a colour; none is a right angle. The
+    // first half's markers are dropped when AC and FH are joined; the second
+    // half's are dropped once the argument turns to ratios.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E, H, K free —
+    // all givens on slide 1. F, G, L, M, N are derived and listed per
+    // slide; nothing to defer.
+    var PTS   = ["A","B","C","D","E","F","G","H","K","L"];
+    var GIVEN = PTS.concat(["ABCDE","FGHKL","ABCDEt","FGHKLt","AB","FG"]);
+    var JOIN1 = GIVEN.concat(["BE","CE","GL","HL"]);
+    var TRI   = JOIN1.concat(["AE","FL","BC","GH",
+                              "ABE","FGL","EBC","LGH","ECD","LHK"]);
+    var SIX   = ["ABE","EBC","ECD","FGL","LGH","LHK"];
+    var A1    = ["angBAE","angGFL"];
+    var A2    = A1.concat(["angABE","angFGL"]);
+    var A3    = A2.concat(["angABC","angFGH"]);
+    var A4    = A3.concat(["angEBC","angLGH"]);
+    var SEC   = TRI.concat(["AC","FH","M","N","AM","BM","MC","FN","GN","NH",
+                            "ABC","FGH","ABM","FGN","BMC","GNH","AME","EMC"]);
+    var B1    = ["angABC","angFGH"];
+    var B2    = B1.concat(["angBAC","angGFH","angBCA","angGHF"]);
+    var B3    = B2.concat(["angABE","angFGL"]);
+    var B4    = B3.concat(["angAMB","angFNG"]);
+    var FULL  = SEC.concat(["BD","GK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -53,53 +93,385 @@ Join *BE, CE, GL,* and *HL.*
             "GK;line;connect;G,K",
             "HL;line;connect;H,L",
             "M;point;intersection;AC,BE",
-            "N;point;intersection;FH,GL"
+            "N;point;intersection;FH,GL",
+            // Highlight targets, all transparent.
+            "AB;line;connect;A,B;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "FL;line;connect;F,L;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "AM;line;connect;A,M;0;0;0",
+            "BM;line;connect;B,M;0;0;0",
+            "MC;line;connect;M,C;0;0;0",
+            "FN;line;connect;F,N;0;0;0",
+            "GN;line;connect;G,N;0;0;0",
+            "NH;line;connect;N,H;0;0;0",
+            "ABCDEt;polygon;pentagon;A,B,C,D,E;0;0;0;0",
+            "FGHKLt;polygon;pentagon;F,G,H,K,L;0;0;0;0",
+            "ABE;polygon;triangle;A,B,E;0;0;0;0",
+            "EBC;polygon;triangle;E,B,C;0;0;0;0",
+            "ECD;polygon;triangle;E,C,D;0;0;0;0",
+            "FGL;polygon;triangle;F,G,L;0;0;0;0",
+            "LGH;polygon;triangle;L,G,H;0;0;0;0",
+            "LHK;polygon;triangle;L,H,K;0;0;0;0",
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "FGH;polygon;triangle;F,G,H;0;0;0;0",
+            "ABM;polygon;triangle;A,B,M;0;0;0;0",
+            "BMC;polygon;triangle;B,M,C;0;0;0;0",
+            "FGN;polygon;triangle;F,G,N;0;0;0;0",
+            "GNH;polygon;triangle;G,N,H;0;0;0;0",
+            "AME;polygon;triangle;A,M,E;0;0;0;0",
+            "EMC;polygon;triangle;E,M,C;0;0;0;0",
+            // Angle markers; equal angles share a colour.
+            "angBAE;sector;angleMarker;A,B,E;0;0;7a4fa3;cdb8e6",
+            "angGFL;sector;angleMarker;F,G,L;0;0;7a4fa3;cdb8e6",
+            "angABE;sector;angleMarker;B,A,E;0;0;3b6ea5;9ec5e8",
+            "angFGL;sector;angleMarker;G,F,L;0;0;3b6ea5;9ec5e8",
+            "angABC;sector;angleMarker;B,A,C;0;0;3f8e4f;a8dbb0",
+            "angFGH;sector;angleMarker;G,F,H;0;0;3f8e4f;a8dbb0",
+            "angEBC;sector;angleMarker;B,E,C;0;0;c06a1b;f3c590",
+            "angLGH;sector;angleMarker;G,L,H;0;0;c06a1b;f3c590",
+            "angBAC;sector;angleMarker;A,B,C;0;0;b5446e;f0b6cb",
+            "angGFH;sector;angleMarker;F,G,H;0;0;b5446e;f0b6cb",
+            "angBCA;sector;angleMarker;C,B,A;0;0;2a8a8a;a6dede",
+            "angGHF;sector;angleMarker;H,G,F;0;0;2a8a8a;a6dede",
+            "angAMB;sector;angleMarker;M,A,B;0;0;8a6d3b;e0cfa8",
+            "angFNG;sector;angleMarker;N,F,G;0;0;8a6d3b;e0cfa8"
         ],
+        slides: [
+            { text: "“Similar polygons are divided into similar triangles,”",
+              visible: GIVEN,
+              highlighted: ["ABCDEt","FGHKLt"] },
+            { text: "“and into triangles equal in multitude and in the same ratio as the wholes,”",
+              visible: GIVEN,
+              highlighted: ["ABCDEt","FGHKLt"] },
+            { text: "“and the polygon has to the polygon a ratio duplicate”",
+              visible: GIVEN,
+              highlighted: ["ABCDEt","FGHKLt"] },
+            { text: "“of that which the corresponding side has to the corresponding side.”",
+              visible: GIVEN,
+              highlighted: ["AB","FG"],
+              justifications: [{ ref: "VI.20" }] },
+            { text: "Let {ABCDE|ABCDEt} and {FGHKL|FGHKLt} be similar polygons, and let {AB} correspond to {FG}.",
+              visible: GIVEN,
+              highlighted: ["ABCDEt","FGHKLt","AB","FG"] },
+            { text: "I say that the polygons {ABCDE|ABCDEt} and {FGHKL|FGHKLt} are divided into similar triangles,",
+              visible: GIVEN,
+              highlighted: ["ABCDEt","FGHKLt"] },
+            { text: "and into triangles equal in multitude and in the same ratio as the wholes,",
+              visible: GIVEN,
+              highlighted: ["ABCDEt","FGHKLt"] },
+            { text: "and the polygon {ABCDE|ABCDEt} has to the polygon {FGHKL|FGHKLt} a ratio duplicate of that which {AB} has to {FG}.",
+              visible: GIVEN,
+              highlighted: ["ABCDEt","FGHKLt","AB","FG"] },
+            { text: "Join {BE}, {CE}, {GL}, and {HL}.",
+              visible: JOIN1,
+              highlighted: ["BE","CE","GL","HL"],
+              transition: { animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HL", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Now, since the polygon {ABCDE|ABCDEt} is similar to the polygon {FGHKL|FGHKLt},",
+              visible: JOIN1,
+              highlighted: ["ABCDEt","FGHKLt"] },
+            { text: "therefore the angle {BAE|angBAE} equals the angle {GFL|angGFL}, and {AB} is to {AE} as {GF|FG} is to {FL}.",
+              visible: TRI.concat(A1),
+              highlighted: ["angBAE","angGFL","AB","AE","FG","FL"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAE", name: geomlib.A.Sector.sweep },
+                  { elem: "angGFL", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "similar polygons", ref: "VI.Def.1" }] },
+            { text: "Since then {ABE} and {FGL} are two triangles having one angle equal to one angle",
+              visible: TRI.concat(A1),
+              highlighted: ["ABE","FGL","angBAE","angGFL"] },
+            { text: "and the sides about the equal angles proportional,",
+              visible: TRI.concat(A1),
+              highlighted: ["AB","AE","FG","FL"] },
+            { text: "therefore the triangle {ABE} is equiangular with the triangle {FGL}, so that it is also similar,",
+              visible: TRI.concat(A1),
+              highlighted: ["ABE","FGL"],
+              justifications: [
+                  { claim: "ABE equiangular with FGL", ref: "VI.6" },
+                  { claim: "so similar", ref: "VI.4" },
+                  { ref: "VI.Def.1" } ] },
+            { text: "therefore the angle {ABE|angABE} equals the angle {FGL|angFGL}.",
+              visible: TRI.concat(A2),
+              highlighted: ["angABE","angFGL"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABE", name: geomlib.A.Sector.sweep },
+                  { elem: "angFGL", name: geomlib.A.Sector.sweep } ] } },
+            { text: "But the whole angle {ABC|angABC} also equals the whole angle {FGH|angFGH} because of the similarity of the polygons,",
+              visible: TRI.concat(A3),
+              highlighted: ["angABC","angFGH"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep },
+                  { elem: "angFGH", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the remaining angle {EBC|angEBC} equals the angle {LGH|angLGH}.",
+              visible: TRI.concat(A4),
+              highlighted: ["angEBC","angLGH"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angEBC", name: geomlib.A.Sector.sweep },
+                  { elem: "angLGH", name: geomlib.A.Sector.sweep } ] } },
+            { text: "And, since the triangles {ABE} and {FGL} are similar, {BE} is to {AB} as {GL} is to {GF|FG}.",
+              visible: TRI.concat(A4),
+              highlighted: ["ABE","FGL","BE","AB","GL","FG"] },
+            { text: "Also, since the polygons are similar, {AB} is to {BC} as {FG} is to {GH}.",
+              visible: TRI.concat(A4),
+              highlighted: ["ABCDEt","FGHKLt","AB","BC","FG","GH"] },
+            { text: "Therefore, ex aequali, {BE} is to {BC} as {GL} is to {GH},",
+              visible: TRI.concat(A4),
+              highlighted: ["BE","BC","GL","GH"],
+              justifications: [{ claim: "ex aequali", ref: "V.22" }] },
+            { text: "that is, the sides about the equal angles {EBC|angEBC} and {LGH|angLGH} are proportional.",
+              visible: TRI.concat(A4),
+              highlighted: ["angEBC","angLGH","BE","BC","GL","GH"] },
+            { text: "Therefore the triangle {EBC} is equiangular with the triangle {LGH},",
+              visible: TRI.concat(A4),
+              highlighted: ["EBC","LGH"],
+              justifications: [{ claim: "EBC equiangular with LGH", ref: "VI.6" }] },
+            { text: "so that the triangle {EBC} is also similar to the triangle {LGH}.",
+              visible: TRI.concat(A4),
+              highlighted: ["EBC","LGH"],
+              justifications: [{ ref: "VI.4" }, { ref: "VI.Def.1" }] },
+            { text: "For the same reason the triangle {ECD} is also similar to the triangle {LHK}.",
+              visible: TRI,
+              highlighted: ["ECD","LHK"] },
+            { text: "Therefore the similar polygons {ABCDE|ABCDEt} and {FGHKL|FGHKLt} have been divided into similar triangles, and into triangles equal in multitude.",
+              visible: TRI,
+              highlighted: SIX },
+            { text: "I say that they are also in the same ratio as the wholes,",
+              visible: TRI,
+              highlighted: ["ABCDEt","FGHKLt"] },
+            { text: "that is, in such manner that the triangles are proportional,",
+              visible: TRI,
+              highlighted: SIX },
+            { text: "and {ABE}, {EBC}, and {ECD} are antecedents, while {FGL}, {LGH}, and {LHK} are their consequents,",
+              visible: TRI,
+              highlighted: SIX },
+            { text: "and that the polygon {ABCDE|ABCDEt} has to the polygon {FGHKL|FGHKLt}",
+              visible: TRI,
+              highlighted: ["ABCDEt","FGHKLt"] },
+            { text: "a ratio duplicate of that which the corresponding side has to the corresponding side, that is {AB} to {FG}.",
+              visible: TRI,
+              highlighted: ["AB","FG"] },
+            { text: "Join {AC} and {FH}.",
+              visible: SEC,
+              highlighted: ["AC","FH"],
+              transition: { animations: [
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "M",  name: geomlib.A.Point.appear },
+                  { elem: "N",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then since the polygons are similar, the angle {ABC|angABC} equals the angle {FGH|angFGH},",
+              visible: SEC.concat(B1),
+              highlighted: ["angABC","angFGH"] },
+            { text: "and {AB} is to {BC} as {FG} is to {GH},",
+              visible: SEC.concat(B1),
+              highlighted: ["AB","BC","FG","GH"] },
+            { text: "the triangle {ABC} is equiangular with the triangle {FGH},",
+              visible: SEC.concat(B1),
+              highlighted: ["ABC","FGH"],
+              justifications: [{ claim: "ABC equiangular with FGH", ref: "VI.6" }] },
+            { text: "therefore the angle {BAC|angBAC} equals the angle {GFH|angGFH}, and the angle {BCA|angBCA} to the angle {GHF|angGHF}.",
+              visible: SEC.concat(B2),
+              highlighted: ["angBAC","angGFH","angBCA","angGHF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "angGFH", name: geomlib.A.Sector.sweep },
+                  { elem: "angBCA", name: geomlib.A.Sector.sweep },
+                  { elem: "angGHF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "And, since the angle {BAM|angBAC} equals the angle {GFN|angGFH},",
+              visible: SEC.concat(B2),
+              highlighted: ["angBAC","angGFH"] },
+            { text: "and the angle {ABM|angABE} also equals the angle {FGN|angFGL},",
+              visible: SEC.concat(B3),
+              highlighted: ["angABE","angFGL"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABE", name: geomlib.A.Sector.sweep },
+                  { elem: "angFGL", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the remaining angle {AMB|angAMB} also equals the remaining angle {FNG|angFNG}.",
+              visible: SEC.concat(B4),
+              highlighted: ["angAMB","angFNG"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angAMB", name: geomlib.A.Sector.sweep },
+                  { elem: "angFNG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "remaining angle AMB = FNG", ref: "I.32" }] },
+            { text: "Therefore the triangle {ABM} is equiangular with the triangle {FGN}.",
+              visible: SEC.concat(B4),
+              highlighted: ["ABM","FGN"] },
+            { text: "Similarly we can prove that the triangle {BMC} is also equiangular with the triangle {GNH}.",
+              visible: SEC.concat(B4),
+              highlighted: ["BMC","GNH"] },
+            { text: "Therefore, proportionally, {AM} is to {MB|BM} as {FN} is to {NG|GN}, and {BM} is to {MC} as {GN} is to {NH}.",
+              visible: SEC,
+              highlighted: ["AM","BM","FN","GN","MC","NH"] },
+            { text: "So that, in addition, ex aequali, {AM} is to {MC} as {FN} is to {NH}.",
+              visible: SEC,
+              highlighted: ["AM","MC","FN","NH"],
+              justifications: [{ claim: "ex aequali", ref: "V.22" }] },
+            { text: "But {AM} is to {MC} as the triangle {ABM} is to {MBC|BMC}, and as {AME} is to {EMC},",
+              visible: SEC,
+              highlighted: ["AM","MC","ABM","BMC","AME","EMC"] },
+            { text: "for they are to one another as their bases.",
+              visible: SEC,
+              highlighted: ["AM","MC"],
+              justifications: [{ claim: "triangles under the same height are as their bases", ref: "VI.1" }] },
+            { text: "Therefore also one of the antecedents is to one of the consequents",
+              visible: SEC,
+              highlighted: ["ABM","BMC"] },
+            { text: "as are all the antecedents to all the consequents,",
+              visible: SEC,
+              highlighted: ["ABE","EBC"] },
+            { text: "therefore the triangle {AMB|ABM} is to {BMC} as {ABE} is to {CBE|EBC}.",
+              visible: SEC,
+              highlighted: ["ABM","BMC","ABE","EBC"],
+              justifications: [{ claim: "one antecedent to one consequent as all to all", ref: "V.12" }] },
+            { text: "But {AMB|ABM} is to {BMC} as {AM} is to {MC},",
+              visible: SEC,
+              highlighted: ["ABM","BMC","AM","MC"] },
+            { text: "therefore {AM} is to {MC} as the triangle {ABE} is to the triangle {EBC}.",
+              visible: SEC,
+              highlighted: ["AM","MC","ABE","EBC"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "For the same reason also {FN} is to {NH} as the triangle {FGL} is to the triangle {GLH|LGH}.",
+              visible: SEC,
+              highlighted: ["FN","NH","FGL","LGH"] },
+            { text: "And {AM} is to {MC} as {FN} is to {NH},",
+              visible: SEC,
+              highlighted: ["AM","MC","FN","NH"] },
+            { text: "therefore the triangle {ABE} is to the triangle {BEC|EBC} as the triangle {FGL} is to the triangle {GLH|LGH},",
+              visible: SEC,
+              highlighted: ["ABE","EBC","FGL","LGH"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "and, alternately, the triangle {ABE} is to the triangle {FGL} as the triangle {BEC|EBC} is to the triangle {GLH|LGH}.",
+              visible: SEC,
+              highlighted: ["ABE","FGL","EBC","LGH"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "Similarly we can prove, if {BD} and {GK} are joined,",
+              visible: FULL,
+              highlighted: ["BD","GK"],
+              transition: { animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GK", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "that the triangle {BEC|EBC} is to the triangle {LGH} as the triangle {ECD} is to the triangle {LHK}.",
+              visible: FULL,
+              highlighted: ["EBC","LGH","ECD","LHK"] },
+            { text: "And since the triangle {ABE} is to the triangle {FGL} as {EBC} is to {LGH},",
+              visible: FULL,
+              highlighted: ["ABE","FGL","EBC","LGH"] },
+            { text: "and further as {ECD} is to {LHK},",
+              visible: FULL,
+              highlighted: ["ECD","LHK"] },
+            { text: "therefore also one of the antecedents is to one of the consequents",
+              visible: FULL,
+              highlighted: ["ABE","FGL"] },
+            { text: "as the sum of the antecedents to the sum of the consequents.",
+              visible: FULL,
+              highlighted: SIX },
+            { text: "Therefore the triangle {ABE} is to the triangle {FGL} as the polygon {ABCDE|ABCDEt} is to the polygon {FGHKL|FGHKLt}.",
+              visible: FULL,
+              highlighted: ["ABE","FGL","ABCDEt","FGHKLt"],
+              justifications: [{ claim: "one antecedent to one consequent as the sum to the sum", ref: "V.12" }] },
+            { text: "But the triangle {ABE} has to the triangle {FGL} a ratio duplicate",
+              visible: FULL,
+              highlighted: ["ABE","FGL"] },
+            { text: "of that which the corresponding side {AB} has to the corresponding side {FG},",
+              visible: FULL,
+              highlighted: ["AB","FG"] },
+            { text: "for similar triangles are in the duplicate ratio of the corresponding sides.",
+              visible: FULL,
+              highlighted: ["ABE","FGL","AB","FG"],
+              justifications: [{ ref: "VI.19" }] },
+            { text: "Therefore the polygon {ABCDE|ABCDEt} also has to the polygon {FGHKL|FGHKLt} a ratio duplicate",
+              visible: FULL,
+              highlighted: ["ABCDEt","FGHKLt"] },
+            { text: "of that which the corresponding side {AB} has to the corresponding side {FG}.",
+              visible: FULL,
+              highlighted: ["AB","FG"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Therefore, similar polygons are divided into similar triangles,",
+              visible: FULL,
+              highlighted: SIX },
+            { text: "and into triangles equal in multitude and in the same ratio as the wholes,",
+              visible: FULL,
+              highlighted: SIX.concat(["ABCDEt","FGHKLt"]) },
+            { text: "and the polygon has to the polygon a ratio duplicate",
+              visible: FULL,
+              highlighted: ["ABCDEt","FGHKLt"] },
+            { text: "of that which the corresponding side has to the corresponding side.",
+              visible: FULL,
+              highlighted: ["AB","FG"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.20") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.32":     "/elements/books/bookI/propositions/propI32/",
+        "V.11":     "/elements/books/bookV/propositions/propV11/",
+        "V.12":     "/elements/books/bookV/propositions/propV12/",
+        "V.16":     "/elements/books/bookV/propositions/propV16/",
+        "V.22":     "/elements/books/bookV/propositions/propV22/",
+        "VI.1":     "/elements/books/bookVI/propositions/propVI1/",
+        "VI.4":     "/elements/books/bookVI/propositions/propVI4/",
+        "VI.6":     "/elements/books/bookVI/propositions/propVI6/",
+        "VI.19":    "/elements/books/bookVI/propositions/propVI19/",
+        "VI.Def.1": "/elements/books/bookVI/definitions/defVI1/"
     });
 </script>
 </figure>
 
-Now, since the polygon *ABCDE* is similar to the polygon *FGHKL,* therefore the angle *BAE* equals the angle *GFL,* and *AB* is to *AE* as *GF* is to *FL.* [!just VI.Def.1]
+Now, since the polygon {ABCDE|ABCDEt} is similar to the polygon {FGHKL|FGHKLt}, therefore the angle {BAE|angBAE} equals the angle {GFL|angGFL}, and {AB} is to {AE} as {GF|FG} is to {FL}. [!just VI.Def.1]
 
-Since then *ABE* and *FGL* are two triangles having one angle equal to one angle and the sides about the equal angles proportional, therefore the triangle *ABE* is equiangular with the triangle *FGL,* so that it is also similar,  therefore the angle *ABE* equals the angle *FGL.* [!just VI.6; VI.4; VI.Def.1]
+Since then {ABE} and {FGL} are two triangles having one angle equal to one angle and the sides about the equal angles proportional, therefore the triangle {ABE} is equiangular with the triangle {FGL}, so that it is also similar,  therefore the angle {ABE|angABE} equals the angle {FGL|angFGL}. [!just VI.6; VI.4; VI.Def.1]
 
-But the whole angle *ABC* also equals the whole angle *FGH* because of the similarity of the polygons, therefore the remaining angle *EBC* equals the angle *LGH.*
+But the whole angle {ABC|angABC} also equals the whole angle {FGH|angFGH} because of the similarity of the polygons, therefore the remaining angle {EBC|angEBC} equals the angle {LGH|angLGH}.
 
-And, since the triangles *ABE* and *FGL* are similar, *BE* is to *AB* as *GL* is to *GF.*  Also, since the polygons are similar, *AB* is to *BC* as *FG* is to *GH.*  Therefore, *ex aequali, BE* is to *BC* as *GL* is to *GH,* that is, the sides about the equal angles *EBC* and *LGH* are proportional.  Therefore the triangle *EBC* is equiangular with the triangle *LGH,* so that the triangle *EBC* is also similar to the triangle *LGH.* [!just V.22; VI.6; VI.4; VI.Def.1]
+And, since the triangles {ABE} and {FGL} are similar, {BE} is to {AB} as {GL} is to {GF|FG}.  Also, since the polygons are similar, {AB} is to {BC} as {FG} is to {GH}.  Therefore, *ex aequali,* {BE} is to {BC} as {GL} is to {GH}, that is, the sides about the equal angles {EBC|angEBC} and {LGH|angLGH} are proportional.  Therefore the triangle {EBC} is equiangular with the triangle {LGH}, so that the triangle {EBC} is also similar to the triangle {LGH}. [!just V.22; VI.6; VI.4; VI.Def.1]
 
-For the same reason the triangle *ECD* is also similar to the triangle *LHK.*
+For the same reason the triangle {ECD} is also similar to the triangle {LHK}.
 
-Therefore the similar polygons *ABCDE* and *FGHKL* have been divided into similar triangles, and into triangles equal in multitude.
+Therefore the similar polygons {ABCDE|ABCDEt} and {FGHKL|FGHKLt} have been divided into similar triangles, and into triangles equal in multitude.
 
-I say that  they are also in the same ratio as the wholes, that is, in such manner that the triangles are proportional, and *ABE, EBC,* and *ECD* are antecedents, while *FGL, LGH,* and *LHK* are their consequents, and that the polygon *ABCDE* has to the polygon *FGHKL* a ratio duplicate of that which the corresponding side has to the corresponding side, that is *AB* to *FG.*
+I say that  they are also in the same ratio as the wholes, that is, in such manner that the triangles are proportional, and {ABE}, {EBC}, and {ECD} are antecedents, while {FGL}, {LGH}, and {LHK} are their consequents, and that the polygon {ABCDE|ABCDEt} has to the polygon {FGHKL|FGHKLt} a ratio duplicate of that which the corresponding side has to the corresponding side, that is {AB} to {FG}.
 
-Join *AC* and *FH.*
+Join {AC} and {FH}.
 
-Then since the polygons are similar, the angle *ABC* equals the angle *FGH,* and *AB* is to *BC* as *FG* is to *GH,* the triangle *ABC* is equiangular with the triangle *FGH,*  therefore the angle *BAC* equals the angle *GFH,* and the angle *BCA* to the angle *GHF.* [!just VI.6]
+Then since the polygons are similar, the angle {ABC|angABC} equals the angle {FGH|angFGH}, and {AB} is to {BC} as {FG} is to {GH}, the triangle {ABC} is equiangular with the triangle {FGH},  therefore the angle {BAC|angBAC} equals the angle {GFH|angGFH}, and the angle {BCA|angBCA} to the angle {GHF|angGHF}. [!just VI.6]
 
-And, since the angle *BAM* equals the angle *GFN,* and the angle *ABM* also equals the angle *FGN,* therefore the remaining angle *AMB* also equals the remaining angle *FNG.*  Therefore the triangle *ABM* is equiangular with the triangle *FGN.* [!just I.32]
+And, since the angle {BAM|angBAC} equals the angle {GFN|angGFH}, and the angle {ABM|angABE} also equals the angle {FGN|angFGL}, therefore the remaining angle {AMB|angAMB} also equals the remaining angle {FNG|angFNG}.  Therefore the triangle {ABM} is equiangular with the triangle {FGN}. [!just I.32]
 
-Similarly we can prove that the triangle *BMC* is also equiangular with the triangle *GNH.*
+Similarly we can prove that the triangle {BMC} is also equiangular with the triangle {GNH}.
 
-Therefore, proportionally, *AM* is to *MB* as *FN* is to *NG,* and *BM* is to *MC* as *GN* is to *NH.*  So that, in addition, *ex aequali, AM* is to *MC* as *FN* is to *NH.* [!just V.22]
+Therefore, proportionally, {AM} is to {MB|BM} as {FN} is to {NG|GN}, and {BM} is to {MC} as {GN} is to {NH}.  So that, in addition, *ex aequali,* {AM} is to {MC} as {FN} is to {NH}. [!just V.22]
 
-But *AM* is to *MC* as the triangle *ABM* is to *MBC,* and as *AME* is to *EMC,* for they are to one another as their bases. [!just VI.1]
+But {AM} is to {MC} as the triangle {ABM} is to {MBC|BMC}, and as {AME} is to {EMC}, for they are to one another as their bases. [!just VI.1]
 
-Therefore also one of the antecedents is to one of the consequents as are all the antecedents to all the consequents,  therefore the triangle *AMB* is to *BMC* as *ABE* is to *CBE.* [!just V.12]
+Therefore also one of the antecedents is to one of the consequents as are all the antecedents to all the consequents,  therefore the triangle {AMB|ABM} is to {BMC} as {ABE} is to {CBE|EBC}. [!just V.12]
 
-But *AMB* is to *BMC* as *AM* is to *MC,* therefore *AM* is to *MC* as the triangle *ABE* is to the triangle *EBC.* [!just V.11]
+But {AMB|ABM} is to {BMC} as {AM} is to {MC}, therefore {AM} is to {MC} as the triangle {ABE} is to the triangle {EBC}. [!just V.11]
 
-For the same reason also *FN* is to *NH* as the triangle *FGL* is to the triangle *GLH.*
+For the same reason also {FN} is to {NH} as the triangle {FGL} is to the triangle {GLH|LGH}.
 
-And *AM* is to *MC* as *FN* is to *NH,* therefore the triangle *ABE* is to the triangle *BEC* as the triangle *FGL* is to the triangle *GLH,* and, alternately, the triangle *ABE* is to the triangle *FGL* as the triangle *BEC* is to the triangle *GLH.* [!just V.11; V.16]
+And {AM} is to {MC} as {FN} is to {NH}, therefore the triangle {ABE} is to the triangle {BEC|EBC} as the triangle {FGL} is to the triangle {GLH|LGH}, and, alternately, the triangle {ABE} is to the triangle {FGL} as the triangle {BEC|EBC} is to the triangle {GLH|LGH}. [!just V.11; V.16]
 
-Similarly we can prove, if *BD* and *GK* are joined, that the triangle *BEC* is to the triangle *LGH* as the triangle *ECD* is to the triangle *LHK.*
+Similarly we can prove, if {BD} and {GK} are joined, that the triangle {BEC|EBC} is to the triangle {LGH} as the triangle {ECD} is to the triangle {LHK}.
 
-And since the triangle *ABE* is to the triangle *FGL* as *EBC* is to *LGH,* and further as *ECD* is to *LHK,* therefore also one of the antecedents is to one of the consequents as the sum of the antecedents to the sum of the consequents.  Therefore the triangle *ABE* is to the triangle *FGL* as the polygon *ABCDE* is to the polygon *FGHKL.* [!just V.12]
+And since the triangle {ABE} is to the triangle {FGL} as {EBC} is to {LGH}, and further as {ECD} is to {LHK}, therefore also one of the antecedents is to one of the consequents as the sum of the antecedents to the sum of the consequents.  Therefore the triangle {ABE} is to the triangle {FGL} as the polygon {ABCDE|ABCDEt} is to the polygon {FGHKL|FGHKLt}. [!just V.12]
 
-But the triangle *ABE* has to the triangle *FGL* a ratio duplicate of that which the corresponding side *AB* has to the corresponding side *FG,* for similar triangles are in the duplicate ratio of the corresponding sides. [!just VI.19]
+But the triangle {ABE} has to the triangle {FGL} a ratio duplicate of that which the corresponding side {AB} has to the corresponding side {FG}, for similar triangles are in the duplicate ratio of the corresponding sides. [!just VI.19]
 
-Therefore the polygon *ABCDE* also has to the polygon *FGHKL* a ratio duplicate of that which the corresponding side *AB* has to the corresponding side *FG.* [!just V.11]
+Therefore the polygon {ABCDE|ABCDEt} also has to the polygon {FGHKL|FGHKLt} a ratio duplicate of that which the corresponding side {AB} has to the corresponding side {FG}. [!just V.11]
 
 Therefore, *similar polygons are divided into similar triangles, and into triangles equal in multitude and in the same ratio as the wholes, and the polygon has to the polygon a ratio duplicate of that which the corresponding side has to the corresponding side.*
 

@@ -17,14 +17,37 @@ statement: Similar triangles are to one another in the duplicate ratio of the co
 ----
 proof:
 
-Let *ABC* and *DEF* be similar triangles having the angle at *B* equal to the angle at *E,* and such that *AB* is to *BC* as *DE* is to *EF,* so that *BC* corresponds to *EF.* [!just V.Def.11]
+Let {ABC|ABCt} and {DEF|DEFt} be similar triangles having the angle at {B|angB} equal to the angle at {E|angE}, and such that {AB} is to {BC} as {DE} is to {EF}, so that {BC} corresponds to {EF}. [!just V.Def.11]
 
-I say that  the triangle *ABC* has to the triangle *DEF* a ratio duplicate of that which *BC* has to *EF.*
+I say that  the triangle {ABC|ABCt} has to the triangle {DEF|DEFt} a ratio duplicate of that which {BC} has to {EF}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="330" height="220" tabindex="0"></canvas>
 <noscript><img alt="VI.19 diagram" src="propVI19.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the similar triangles ABC and DEF (random faces)
+    // with B, C, E, F on one line, the third proportional BG (G derived,
+    // proportion) and the join AG.
+    //
+    // AG is Joyce's own line, declared A to G, so it strokes from A when
+    // joined and is simply withheld until then. Everything else added is
+    // transparent (;0;0;0 lines, ;0;0;0;0 polygons), so the resting figure
+    // is unchanged: the sides AB, BC, DE, EF, BG, the triangle ABG, and
+    // faceless twins ABCt / DEFt for the filled triangles (a highlighted
+    // filled polygon is raised over the markers inside it, #140), reached
+    // through display overrides.
+    //
+    // Markers: the equal angles at B and E share a colour; neither is a
+    // right angle. G lies on BC, so angB is also the angle of ABG.
+    //
+    // Draggables (checked against the bundle): A free, the off-canvas track
+    // ends B0, B3, and the lineSliders B, C, E, F — all givens on slide 1.
+    // D and G are derived and listed per slide; nothing to defer.
+    var GIVEN = ["A","B","C","D","E","F","ABC","DEF","ABCt","DEFt",
+                 "AB","BC","DE","EF","angB","angE"];
+    var THIRD = GIVEN.concat(["G","BG"]);
+    var JOIN  = THIRD.concat(["AG"]);
+    var ALL   = JOIN.concat(["ABG"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -41,27 +64,155 @@ I say that  the triangle *ABC* has to the triangle *DEF* a ratio duplicate of th
             "ABC;polygon;triangle;A,B,C;0;0;black;random",
             "DEF;polygon;triangle;D,E,F;0;0;black;random",
             "G;point;proportion;B,C,E,F,E,F,B,C",
-            "AG;line;connect;A,G"
+            "AG;line;connect;A,G",
+            // Highlight targets, all transparent.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "BG;line;connect;B,G;0;0;0",
+            "ABCt;polygon;triangle;A,B,C;0;0;0;0",
+            "DEFt;polygon;triangle;D,E,F;0;0;0;0",
+            "ABG;polygon;triangle;A,B,G;0;0;0;0",
+            // Angle markers; the equal angles share a colour.
+            "angB;sector;angleMarker;B,A,C;0;0;3b6ea5;9ec5e8",
+            "angE;sector;angleMarker;E,D,F;0;0;3b6ea5;9ec5e8"
         ],
+        slides: [
+            { text: "“Similar triangles are to one another in the duplicate ratio of the corresponding sides.”",
+              visible: GIVEN,
+              highlighted: ["ABCt","DEFt","BC","EF"],
+              justifications: [{ ref: "VI.19" }] },
+            { text: "Let {ABC|ABCt} and {DEF|DEFt} be similar triangles having the angle at {B|angB} equal to the angle at {E|angE},",
+              visible: GIVEN,
+              highlighted: ["ABCt","DEFt","angB","angE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angB", name: geomlib.A.Sector.sweep },
+                  { elem: "angE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and such that {AB} is to {BC} as {DE} is to {EF}, so that {BC} corresponds to {EF}.",
+              visible: GIVEN,
+              highlighted: ["AB","BC","DE","EF"],
+              justifications: [{ claim: "BC corresponds to EF", ref: "V.Def.11" }] },
+            { text: "I say that the triangle {ABC|ABCt} has to the triangle {DEF|DEFt}",
+              visible: GIVEN,
+              highlighted: ["ABCt","DEFt"] },
+            { text: "a ratio duplicate of that which {BC} has to {EF}.",
+              visible: GIVEN,
+              highlighted: ["BC","EF"] },
+            { text: "Take a third proportional {BG} to {BC} and {EF}",
+              visible: THIRD,
+              highlighted: ["BG","BC","EF"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "third proportional BG", ref: "VI.11" }] },
+            { text: "so that {BC} is to {EF} as {EF} is to {BG},",
+              visible: THIRD,
+              highlighted: ["BC","EF","BG"] },
+            { text: "and join {AG}.",
+              visible: JOIN,
+              highlighted: ["AG"],
+              transition: { animations: [
+                  { elem: "AG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Since {AB} is to {BC} as {DE} is to {EF},",
+              visible: JOIN,
+              highlighted: ["AB","BC","DE","EF"] },
+            { text: "therefore, alternately, {AB} is to {DE} as {BC} is to {EF}.",
+              visible: JOIN,
+              highlighted: ["AB","DE","BC","EF"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "But {BC} is to {EF} as {EF} is to {BG},",
+              visible: JOIN,
+              highlighted: ["BC","EF","BG"] },
+            { text: "therefore also {AB} is to {DE} as {EF} is to {BG}.",
+              visible: JOIN,
+              highlighted: ["AB","DE","EF","BG"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Therefore in the triangles {ABG} and {DEF|DEFt} the sides about the equal angles are reciprocally proportional.",
+              visible: ALL,
+              highlighted: ["ABG","DEFt","AB","BG","DE","EF","angB","angE"],
+              transition: { animations: [
+                  { elem: "ABG", name: geomlib.A.Polygon.outline } ] } },
+            { text: "But those triangles which have one angle equal to one angle,",
+              visible: ALL,
+              highlighted: ["ABG","DEFt","angB","angE"] },
+            { text: "and in which the sides about the equal angles are reciprocally proportional, are equal.",
+              visible: ALL,
+              highlighted: ["AB","BG","DE","EF"] },
+            { text: "Therefore the triangle {ABG} equals the triangle {DEF|DEFt}.",
+              visible: ALL,
+              highlighted: ["ABG","DEFt"],
+              justifications: [{ claim: "triangle ABG = triangle DEF", ref: "VI.15" }] },
+            { text: "Now since {BC} is to {EF} as {EF} is to {BG},",
+              visible: ALL,
+              highlighted: ["BC","EF","BG"] },
+            { text: "and, if three straight lines are proportional,",
+              visible: ALL,
+              highlighted: ["BC","EF","BG"] },
+            { text: "the first has to the third a ratio duplicate of that which it has to the second,",
+              visible: ALL,
+              highlighted: ["BC","BG"],
+              justifications: [{ claim: "duplicate ratio", ref: "V.Def.9" }] },
+            { text: "therefore {BC} has to {BG} a ratio duplicate of that which {BC} has to {EF}.",
+              visible: ALL,
+              highlighted: ["BC","BG","EF"] },
+            { text: "But {BC} is to {BG} as the triangle {ABC|ABCt} is to the triangle {ABG},",
+              visible: ALL,
+              highlighted: ["BC","BG","ABCt","ABG"],
+              justifications: [{ claim: "triangles under the same height are as their bases", ref: "VI.1" }] },
+            { text: "therefore the triangle {ABC|ABCt} also has to the triangle {ABG} a ratio duplicate of that which {BC} has to {EF}.",
+              visible: ALL,
+              highlighted: ["ABCt","ABG","BC","EF"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "But the triangle {ABG} equals the triangle {DEF|DEFt},",
+              visible: ALL,
+              highlighted: ["ABG","DEFt"] },
+            { text: "therefore the triangle {ABC|ABCt} also has to the triangle {DEF|DEFt} a ratio duplicate of that which {BC} has to {EF}.",
+              visible: ALL,
+              highlighted: ["ABCt","DEFt","BC","EF"],
+              justifications: [{ claim: "equals have the same ratio to the same", ref: "V.7" }] },
+            { text: "Therefore, similar triangles are to one another in the duplicate ratio of the corresponding sides.",
+              visible: ALL,
+              highlighted: ["ABCt","DEFt","BC","EF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.19") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "V.Def.9":  "/elements/books/bookV/definitions/defV9/",
+        "V.Def.11": "/elements/books/bookV/definitions/defV11/",
+        "V.7":      "/elements/books/bookV/propositions/propV7/",
+        "V.11":     "/elements/books/bookV/propositions/propV11/",
+        "V.16":     "/elements/books/bookV/propositions/propV16/",
+        "VI.1":     "/elements/books/bookVI/propositions/propVI1/",
+        "VI.11":    "/elements/books/bookVI/propositions/propVI11/",
+        "VI.15":    "/elements/books/bookVI/propositions/propVI15/"
     });
 </script>
 </figure>
 
-Take a third proportional *BG* to *BC* and *EF* so that *BC* is to *EF* as *EF* is to *BG,*  and join *AG.* [!just VI.11]
+Take a third proportional {BG} to {BC} and {EF} so that {BC} is to {EF} as {EF} is to {BG},  and join {AG}. [!just VI.11]
 
-Since *AB* is to *BC* as *DE* is to *EF,* therefore, alternately, *AB* is to *DE* as *BC* is to *EF.* [!just V.16]
+Since {AB} is to {BC} as {DE} is to {EF}, therefore, alternately, {AB} is to {DE} as {BC} is to {EF}. [!just V.16]
 
-But *BC* is to *EF* as *EF* is to *BG,* therefore also *AB* is to *DE* as *EF* is to *BG.* [!just V.11]
+But {BC} is to {EF} as {EF} is to {BG}, therefore also {AB} is to {DE} as {EF} is to {BG}. [!just V.11]
 
-Therefore in the triangles *ABG* and *DEF* the sides about the equal angles are reciprocally proportional.
+Therefore in the triangles {ABG} and {DEF|DEFt} the sides about the equal angles are reciprocally proportional.
 
-But those triangles which have one angle equal to one angle, and in which the sides about the equal angles are reciprocally proportional, are equal.  Therefore the triangle *ABG* equals the triangle *DEF.* [!just VI.15]
+But those triangles which have one angle equal to one angle, and in which the sides about the equal angles are reciprocally proportional, are equal.  Therefore the triangle {ABG} equals the triangle {DEF|DEFt}. [!just VI.15]
 
-Now since *BC* is to *EF* as *EF* is to *BG,* and, if three straight lines are proportional, the first has to the third a ratio duplicate of that which it has to the second, therefore *BC* has to *BG* a ratio duplicate of that which *BC* has to *EF.* [!just V.Def.9]
+Now since {BC} is to {EF} as {EF} is to {BG}, and, if three straight lines are proportional, the first has to the third a ratio duplicate of that which it has to the second, therefore {BC} has to {BG} a ratio duplicate of that which {BC} has to {EF}. [!just V.Def.9]
 
-But *BC* is to *BG* as the triangle *ABC* is to the triangle *ABG,*  therefore the triangle *ABC* also has to the triangle *ABG* a ratio duplicate of that which *BC* has to *EF.* [!just VI.1; V.11]
+But {BC} is to {BG} as the triangle {ABC|ABCt} is to the triangle {ABG},  therefore the triangle {ABC|ABCt} also has to the triangle {ABG} a ratio duplicate of that which {BC} has to {EF}. [!just VI.1; V.11]
 
-But the triangle *ABG* equals the triangle *DEF,* therefore the triangle *ABC* also has to the triangle *DEF* a ratio duplicate of that which *BC* has to *EF.* [!just V.7]
+But the triangle {ABG} equals the triangle {DEF|DEFt}, therefore the triangle {ABC|ABCt} also has to the triangle {DEF|DEFt} a ratio duplicate of that which {BC} has to {EF}. [!just V.7]
 
 Therefore, *similar triangles are to one another in the duplicate ratio of the corresponding sides.*
 
