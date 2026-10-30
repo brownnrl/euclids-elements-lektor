@@ -15,14 +15,33 @@ statement: If there are two prisms of equal height, and one has a parallelogram 
 ----
 proof:
 
-Let *ABCDEF* and *GHKLMN* be two prisms of equal height, let one have the parallelogram *AF* as base, and the other the triangle *GHK,* and let the parallelogram *AF* be double the triangle *GHK.*
+Let {ABCDEF|sABCDEF} and {GHKLMN|sGHKLMN} be two prisms of equal height, let one have the parallelogram {AF|pAF} as base, and the other the triangle {GHK}, and let the parallelogram {AF|pAF} be double the triangle {GHK}.
 
-I say that the prism *ABCDEF* equals the prism *GHKLMN.*
+I say that the prism {ABCDEF|sABCDEF} equals the prism {GHKLMN|sGHKLMN}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="400" height="230" tabindex="0"></canvas>
 <noscript><img alt="XI.39 diagram" src="propXI39.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the prism ABCDEF on the parallelogram AF (ACFE) and
+    // the prism GHKLMN on the triangle GHK, with the solids AO and GP
+    // completed on them.
+    //
+    // Added, all transparent: faceless outlines for the two prisms
+    // (sABCDEF, sGHKLMN, pentagons) and the two solids (sAO, sGP,
+    // hexagons), since a polyhedron draws none, and for the parallelograms
+    // AF (pAF) and HK (pHK). Joyce's ABE and GHK are already faceless. The
+    // completing pieces (BDOa, Ea, OF; HMPb, NP, bK) stay off the walk
+    // until "Complete the solids".
+    //
+    // Draggables (checked against the bundle): A, B, E, C, H, M, G on the
+    // given prisms, and the unlettered b, which only fixes the completed
+    // solid GP -- deferred. Every other point is derived and listed per
+    // slide.
+    var GIVEN = ["A","B","E","C","D","F","ABE","ABCDEF","H","M","G","K","L","N",
+                 "GHK","GHKLMN","sABCDEF","sGHKLMN","pAF"];
+    var SOL   = GIVEN.concat(["O","a","BDOa","Ea","OF","b","P","HMPb","NP","bK",
+                              "sAO","sGP","pHK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -64,19 +83,114 @@ I say that the prism *ABCDEF* equals the prism *GHKLMN.*
             "GHKLMN;polyhedron;prism;GHK,G,L;0;0;black;random",
             "HMPb;polygon;quadrilateral;H,M,P,b;0;0;black;0",
             "NP;line;connect;N,P",
-            "bK;line;connect;b,K"
+            "bK;line;connect;b,K",
+            // Transparent highlight targets.
+            "sABCDEF;polygon;pentagon;A,E,F,D,B;0;0;0;0",
+            "sGHKLMN;polygon;pentagon;H,G,K,N,M;0;0;0;0",
+            "sAO;polygon;hexagon;A,E,F,O,D,B;0;0;0;0",
+            "sGP;polygon;hexagon;H,G,K,N,P,M;0;0;0;0",
+            "pAF;polygon;quadrilateral;A,C,F,E;0;0;0;0",
+            "pHK;polygon;quadrilateral;H,G,K,b;0;0;0;0"
         ],
+        deferDraggables: ["b"],
+        slides: [
+            { text: "“If there are two prisms of equal height,”",
+              visible: GIVEN,
+              highlighted: ["sABCDEF","sGHKLMN"],
+              justifications: [{ ref: "XI.39" }] },
+            { text: "“and one has a parallelogram as base and the other a triangle,”",
+              visible: GIVEN,
+              highlighted: ["pAF","GHK"] },
+            { text: "“and if the parallelogram is double the triangle,”",
+              visible: GIVEN,
+              highlighted: ["pAF","GHK"] },
+            { text: "“then the prisms are equal.”",
+              visible: GIVEN,
+              highlighted: ["sABCDEF","sGHKLMN"] },
+            { text: "Let {ABCDEF|sABCDEF} and {GHKLMN|sGHKLMN} be two prisms of equal height,",
+              visible: GIVEN,
+              highlighted: ["sABCDEF","sGHKLMN"] },
+            { text: "let one have the parallelogram {AF|pAF} as base, and the other the triangle {GHK},",
+              visible: GIVEN,
+              highlighted: ["pAF","GHK"] },
+            { text: "and let the parallelogram {AF|pAF} be double the triangle {GHK}.",
+              visible: GIVEN,
+              highlighted: ["pAF","GHK"] },
+            { text: "I say that the prism {ABCDEF|sABCDEF} equals the prism {GHKLMN|sGHKLMN}.",
+              visible: GIVEN,
+              highlighted: ["sABCDEF","sGHKLMN"] },
+            { text: "Complete the solids {AO|sAO} and {GP|sGP}.",
+              visible: SOL,
+              highlighted: ["sAO","sGP"],
+              transition: { animations: [
+                  { elem: "BDOa", name: geomlib.A.Polygon.outline },
+                  { elem: "OF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "Ea", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "bK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HMPb", name: geomlib.A.Polygon.outline },
+                  { elem: "NP", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since the parallelogram {AF|pAF} is double the triangle {GHK},",
+              visible: SOL,
+              highlighted: ["pAF","GHK"] },
+            { text: "and the parallelogram {HK|pHK} is also double the triangle {GHK},",
+              visible: SOL,
+              highlighted: ["pHK","GHK"],
+              justifications: [{ claim: "HK double GHK", ref: "I.34" }] },
+            { text: "therefore the parallelogram {AF|pAF} equals the parallelogram {HK|pHK}.",
+              visible: SOL,
+              highlighted: ["pAF","pHK"] },
+            { text: "But parallelepipedal solids on equal bases of the same height equal one another,",
+              visible: SOL,
+              highlighted: ["pAF","pHK"] },
+            { text: "therefore the solid {AO|sAO} equals the solid {GP|sGP}.",
+              visible: SOL,
+              highlighted: ["sAO","sGP"],
+              justifications: [{ claim: "solid AO = solid GP", ref: "XI.31" }] },
+            { text: "And the prism {ABCDEF|sABCDEF} is half of the solid {AO|sAO},",
+              visible: SOL,
+              highlighted: ["sABCDEF","sAO"],
+              justifications: [{ claim: "prism ABCDEF half of AO", ref: "XI.28" }] },
+            { text: "and the prism {GHKLMN|sGHKLMN} is half of the solid {GP|sGP},",
+              visible: SOL,
+              highlighted: ["sGHKLMN","sGP"],
+              justifications: [{ claim: "prism GHKLMN half of GP", ref: "XI.28" }] },
+            { text: "therefore the prism {ABCDEF|sABCDEF} equals the prism GMKLMN.",
+              visible: SOL,
+              highlighted: ["sABCDEF","sGHKLMN"] },
+            { text: "Therefore, if there are two prisms of equal height,",
+              visible: SOL,
+              highlighted: ["sABCDEF","sGHKLMN"] },
+            { text: "and one has a parallelogram as base and the other a triangle,",
+              visible: SOL,
+              highlighted: ["pAF","GHK"] },
+            { text: "and if the parallelogram is double the triangle, then the prisms are equal.",
+              visible: SOL,
+              highlighted: ["sABCDEF","sGHKLMN"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.39") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.34":  "/elements/books/bookI/propositions/propI34/",
+        "XI.28": "/elements/books/bookXI/propositions/propXI28/",
+        "XI.31": "/elements/books/bookXI/propositions/propXI31/"
     });
 </script>
 </figure>
 
-Complete the solids *AO* and *GP.*
+Complete the solids {AO|sAO} and {GP|sGP}.
 
-Since the parallelogram *AF* is double the triangle *GHK,* and the parallelogram *HK* is also double the triangle *GHK,* therefore the parallelogram *AF* equals the parallelogram *HK.* [!just I.34]
+Since the parallelogram {AF|pAF} is double the triangle {GHK}, and the parallelogram {HK|pHK} is also double the triangle {GHK}, therefore the parallelogram {AF|pAF} equals the parallelogram {HK|pHK}. [!just I.34]
 
-But parallelepipedal solids on equal bases of the same height equal one another, therefore the solid *AO* equals the solid *GP.* [!just XI.31]
+But parallelepipedal solids on equal bases of the same height equal one another, therefore the solid {AO|sAO} equals the solid {GP|sGP}. [!just XI.31]
 
-And the prism *ABCDEF* is half of the solid *AO,* and the prism *GHKLMN* is half of the solid *GP,* therefore the prism *ABCDEF* equals the prism *GMKLMN.* [!just XI.28]
+And the prism {ABCDEF|sABCDEF} is half of the solid {AO|sAO}, and the prism {GHKLMN|sGHKLMN} is half of the solid {GP|sGP}, therefore the prism {ABCDEF|sABCDEF} equals the prism *GMKLMN.* [!just XI.28]
 
 Therefore, *if there are two prisms of equal height, and one has a parallelogram as base and the other a triangle, and if the parallelogram is double the triangle, then the prisms are equal.*
 
@@ -86,6 +200,6 @@ guide:
 
 This proposition is designed specifically to take care of a situation that occurs in propositions @XII.3 and @XII.4 on the way to proving @XII.5 concerning the volume of a pyramid.
 
-Both of the prisms in this proposition are triangular, but the base of the first is taken to be one of the parallelograms *ACFE* on its side while the base of the second is a triangular end *GHK.* To say that they have the height means the distance from the vertex *B* to the plane of the parallelogram *ACEF* is the same as the distance from the vertex *M* to the plane of the triangle *GHK.*
+Both of the prisms in this proposition are triangular, but the base of the first is taken to be one of the parallelograms {ACFE|pAF} on its side while the base of the second is a triangular end {GHK}. To say that they have the height means the distance from the vertex {B} to the plane of the parallelogram {ACEF|pAF} is the same as the distance from the vertex {M} to the plane of the triangle {GHK}.
 
 When the solids are completed, they are doubled to create two parallelepipeds of the same height and equal bases, which therefore are equal, and so are their halves, the original prisms.

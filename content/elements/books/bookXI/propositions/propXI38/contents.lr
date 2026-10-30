@@ -15,16 +15,45 @@ statement: If the sides of the opposite planes of a cube are bisected, and the p
 ----
 proof:
 
-Let the sides of the opposite planes *CF* and *AH* of the cube *AF* be bisected at the points *K, L, M, N, O, Q, P,* and *R,* and through the points of section let the planes *KN* and *OR* be carried. Let *US* be the common section of the planes, and *DG* the diameter of the cube *AF.*
+Let the sides of the opposite planes {CF|pCF} and {AH|pAH} of the cube {AF|cubeAF} be bisected at the points {K}, {L}, {M}, {N}, {O}, {Q}, {P}, and {R}, and through the points of section let the planes {KN|KLNM} and {OR|OPRQ} be carried. Let {US|SU} be the common section of the planes, and {DG} the diameter of the cube {AF|cubeAF}.
 
-I say that *UT* equals *TS,* and *DT* equals *TG.*
+I say that {UT} equals {TS}, and {DT} equals {TG}.
 
-Join *DU, UE, BS,* and *SG.*
+Join {DU}, {UE}, {BS}, and {SG}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="360" height="340" tabindex="0"></canvas>
 <noscript><img alt="XI.38 diagram" src="propXI38.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the cube AF, the planes KN (KLNM) and OR (OPRQ)
+    // through the midpoints of the sides of the opposite planes CF and AH,
+    // their common section SU, the diameter DG, and DE, BG through U, S.
+    //
+    // Added, all transparent unless noted: faceless twins for the cube's
+    // outline (cubeAF), the planes CF and AH (pCF, pAH) and the triangles
+    // DOU, PUE, DTU, GTS; the lines the proof names (DO, PE, OU, UP, CA,
+    // DB, EG, DT, TG, UT, TS, and the guide's KL, MN). DU, UE, BS, SG are
+    // solid slide twins over Joyce's DE and BG, hidden at rest
+    // (initiallyHidden), so the join can be drawn; DE, BG, SU and DG stay
+    // off the walk until the proof reaches them. The angles DOU, UPE, OUD,
+    // PUE, EDT, BGT, DTU, GTS are markers (none is treated as right).
+    //
+    // Draggables (checked against the bundle): C, B, on the given cube --
+    // none is deferred. Every other point is derived and listed per slide.
+    var CUBE = ["A","B","C","D","E","F","G","H","BDFH","BDEG","GHFE","ACEG",
+                "AB","CD","cubeAF","pCF","pAH"];
+    var PTS  = CUBE.concat(["K","L","M","N","O","P","Q","R"]);
+    var PLN  = PTS.concat(["KLNM","OPRQ","KL","MN"]);
+    var SUd  = PLN.concat(["S","U","SU"]);
+    var DGd  = SUd.concat(["DG"]);
+    var Td   = DGd.concat(["T","UT","TS","DT","TG"]);
+    var JN   = Td.concat(["DU","UE","BS","SG"]);
+    var W1   = JN.concat(["DO","PE","OU","UP","angDOU","angUPE"]);
+    var W2   = W1.concat(["DOU","PUE","angOUD","angPUE"]);
+    var W3   = W2.concat(["DE","BG"]);
+    var W4   = W3.concat(["CA","DB","EG"]);
+    var W5   = W4.concat(["angEDT","angBGT","angDTU","angGTS","DTU","GTS"]);
+    var FULL = W5;
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -66,25 +95,227 @@ Join *DU, UE, BS,* and *SG.*
             "BG;line;connect;B,G",
             "SU;line;connect;S,U",
             "DG;line;connect;D,G",
-            "T;point;midpoint;D,G;black;green"
+            "T;point;midpoint;D,G;black;green",
+            // Transparent highlight targets.
+            "cubeAF;polygon;hexagon;A,G,E,F,D,B;0;0;0;0",
+            "pCF;polygon;quadrilateral;C,D,F,E;0;0;0;0",
+            "pAH;polygon;quadrilateral;A,B,H,G;0;0;0;0",
+            "DOU;polygon;triangle;D,O,U;0;0;0;0",
+            "PUE;polygon;triangle;P,U,E;0;0;0;0",
+            "DTU;polygon;triangle;D,T,U;0;0;0;0",
+            "GTS;polygon;triangle;G,T,S;0;0;0;0",
+            "DO;line;connect;D,O;0;0;0",
+            "PE;line;connect;P,E;0;0;0",
+            "OU;line;connect;O,U;0;0;0",
+            "UP;line;connect;U,P;0;0;0",
+            "CA;line;connect;C,A;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "EG;line;connect;E,G;0;0;0",
+            "DT;line;connect;D,T;0;0;0",
+            "TG;line;connect;T,G;0;0;0",
+            "UT;line;connect;U,T;0;0;0",
+            "TS;line;connect;T,S;0;0;0",
+            "KL;line;connect;K,L;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            // Slide twins over DE and BG, hidden at rest (see above).
+            "DU;line;connect;D,U",
+            "UE;line;connect;U,E",
+            "BS;line;connect;B,S",
+            "SG;line;connect;S,G",
+            // Angle markers, hidden at rest.
+            "angDOU;sector;angleMarker;O,D,U",
+            "angUPE;sector;angleMarker;P,U,E",
+            "angOUD;sector;angleMarker;U,O,D",
+            "angPUE;sector;angleMarker;U,P,E",
+            "angEDT;sector;angleMarker;D,E,T",
+            "angBGT;sector;angleMarker;G,B,T",
+            "angDTU;sector;angleMarker;T,D,U",
+            "angGTS;sector;angleMarker;T,G,S"
         ],
+        initiallyHidden: ["DU","UE","BS","SG"],
+        aliases: { "US": "SU", "GS": "SG", "AC": "CA" },
+        slides: [
+            { text: "“If the sides of the opposite planes of a cube are bisected,”",
+              visible: FULL,
+              highlighted: ["pCF","pAH"],
+              justifications: [{ ref: "XI.38" }] },
+            { text: "“and the planes are carried through the points of section,”",
+              visible: FULL,
+              highlighted: ["KLNM","OPRQ"] },
+            { text: "“then the intersection of the planes and the diameter of the cube bisect one another.”",
+              visible: FULL,
+              highlighted: ["SU","DG","T"] },
+            { text: "Let the sides of the opposite planes {CF|pCF} and {AH|pAH} of the cube {AF|cubeAF} be bisected",
+              visible: CUBE,
+              highlighted: ["pCF","pAH"] },
+            { text: "at the points {K}, {L}, {M}, {N}, {O}, {Q}, {P}, and {R},",
+              visible: PTS,
+              highlighted: ["K","L","M","N","O","Q","P","R"],
+              transition: { animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "L", name: geomlib.A.Point.appear },
+                  { elem: "M", name: geomlib.A.Point.appear },
+                  { elem: "N", name: geomlib.A.Point.appear },
+                  { elem: "O", name: geomlib.A.Point.appear },
+                  { elem: "Q", name: geomlib.A.Point.appear },
+                  { elem: "P", name: geomlib.A.Point.appear },
+                  { elem: "R", name: geomlib.A.Point.appear } ] } },
+            { text: "and through the points of section let the planes {KN|KLNM} and {OR|OPRQ} be carried.",
+              visible: PLN,
+              highlighted: ["KLNM","OPRQ"],
+              transition: { animations: [
+                  { elem: "KLNM", name: geomlib.A.Polygon.outline },
+                  { elem: "OPRQ", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Let {US|SU} be the common section of the planes,",
+              visible: SUd,
+              highlighted: ["SU"],
+              transition: { animations: [
+                  { elem: "U", name: geomlib.A.Point.appear },
+                  { elem: "S", name: geomlib.A.Point.appear },
+                  { elem: "SU", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and {DG} the diameter of the cube {AF|cubeAF}.",
+              visible: DGd,
+              highlighted: ["DG"],
+              transition: { animations: [
+                  { elem: "DG", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that {UT} equals {TS}, and {DT} equals {TG}.",
+              visible: Td,
+              highlighted: ["UT","TS","DT","TG"],
+              transition: { animations: [
+                  { elem: "T", name: geomlib.A.Point.appear } ] } },
+            { text: "Join {DU}, {UE}, {BS}, and {SG}.",
+              visible: JN,
+              highlighted: ["DU","UE","BS","SG"],
+              transition: { animations: [
+                  { elem: "DU", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "UE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BS", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "SG", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Then, since {DO} is parallel to {PE},",
+              visible: JN.concat(["DO","PE","OU","UP"]),
+              highlighted: ["DO","PE"] },
+            { text: "therefore the alternate angles {DOU|angDOU} and {UPE|angUPE} equal one another.",
+              visible: W1,
+              highlighted: ["angDOU","angUPE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angDOU", name: geomlib.A.Sector.sweep },
+                  { elem: "angUPE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle DOU = angle UPE", ref: "I.29" }] },
+            { text: "Since {DO} equals {PE}, and {OU} equals {UP}, and they contain equal angles,",
+              visible: W1,
+              highlighted: ["DO","PE","OU","UP","angDOU","angUPE"] },
+            { text: "therefore the base {DU} equals the base {UE},",
+              visible: W1.concat(["DOU","PUE"]),
+              highlighted: ["DU","UE"] },
+            { text: "the triangle {DOU} equals the triangle {PUE}, and the remaining angles equal the remaining angles.",
+              visible: W1.concat(["DOU","PUE"]),
+              highlighted: ["DOU","PUE"],
+              justifications: [{ claim: "DU = UE, triangle DOU = triangle PUE", ref: "I.4" }] },
+            { text: "Therefore the angle {OUD|angOUD} equals the angle {PUE|angPUE}.",
+              visible: W2,
+              highlighted: ["angOUD","angPUE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angOUD", name: geomlib.A.Sector.sweep },
+                  { elem: "angPUE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle OUD = angle PUE", ref: "I.4" }] },
+            { text: "Therefore {DUE|DE} is a straight line.",
+              visible: W3,
+              highlighted: ["DE"],
+              justifications: [{ claim: "DUE is straight", ref: "I.14" }] },
+            { text: "For the same reason {BSG|BG} is also a straight line, and {BS} equals {SG}.",
+              visible: W3,
+              highlighted: ["BG","BS","SG"],
+              justifications: [{ claim: "BSG is straight", ref: "I.14" }] },
+            { text: "Now, since {CA} equals and is parallel to {DB},",
+              visible: W4,
+              highlighted: ["CA","DB"] },
+            { text: "while {CA} also equals and is parallel to {EG},",
+              visible: W4,
+              highlighted: ["CA","EG"] },
+            { text: "therefore {DB} equals and is parallel to {EG}.",
+              visible: W4,
+              highlighted: ["DB","EG"],
+              justifications: [{ claim: "DB equal and parallel to EG", ref: "XI.9" }] },
+            { text: "And the straight lines {DE} and {BG} join their ends, therefore {DE} is parallel to {BG}.",
+              visible: W4,
+              highlighted: ["DE","BG","DB","EG"],
+              justifications: [{ claim: "DE parallel to BG", ref: "I.33" }] },
+            { text: "Therefore the angle {EDT|angEDT} equals the angle {BGT|angBGT}, for they are alternate,",
+              visible: W4.concat(["angEDT","angBGT"]),
+              highlighted: ["angEDT","angBGT"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angEDT", name: geomlib.A.Sector.sweep },
+                  { elem: "angBGT", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle EDT = angle BGT", ref: "I.29" }] },
+            { text: "and the angle {DTU|angDTU} equals the angle {GTS|angGTS}.",
+              visible: W4.concat(["angEDT","angBGT","angDTU","angGTS"]),
+              highlighted: ["angDTU","angGTS"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angDTU", name: geomlib.A.Sector.sweep },
+                  { elem: "angGTS", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle DTU = angle GTS", ref: "I.15" }] },
+            { text: "Therefore {DTU} and {GTS} are two triangles which have two angles equal to two angles",
+              visible: W5,
+              highlighted: ["DTU","GTS","angEDT","angBGT","angDTU","angGTS"] },
+            { text: "and one side equal to one side, namely that opposite one of the equal angles,",
+              visible: W5,
+              highlighted: ["DU","SG"] },
+            { text: "that is, {DU} equals {GS|SG}, for they are the halves of {DE} and {BG},",
+              visible: W5,
+              highlighted: ["DU","SG","DE","BG"] },
+            { text: "therefore the remaining sides equal the remaining sides.",
+              visible: W5,
+              highlighted: ["DTU","GTS"],
+              justifications: [{ claim: "triangle DTU = triangle GTS", ref: "I.26" }] },
+            { text: "Therefore {DT} equals {TG}, and {UT} equals {TS}.",
+              visible: W5,
+              highlighted: ["DT","TG","UT","TS"] },
+            { text: "Therefore, if the sides of the opposite planes of a cube are bisected,",
+              visible: W5,
+              highlighted: ["pCF","pAH"] },
+            { text: "and the planes are carried through the points of section,",
+              visible: W5,
+              highlighted: ["KLNM","OPRQ"] },
+            { text: "then the intersection of the planes and the diameter of the cube bisect one another.",
+              visible: W5,
+              highlighted: ["SU","DG","T"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.38") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.14":     "/elements/books/bookI/propositions/propI14/",
+        "I.15":     "/elements/books/bookI/propositions/propI15/",
+        "I.26":     "/elements/books/bookI/propositions/propI26/",
+        "I.29":     "/elements/books/bookI/propositions/propI29/",
+        "I.33":     "/elements/books/bookI/propositions/propI33/",
+        "XI.9":     "/elements/books/bookXI/propositions/propXI9/"
     });
 </script>
 </figure>
 
-Then, since *DO* is parallel to *PE,* therefore the alternate angles *DOU* and *UPE* equal one another. [!just I.29]
+Then, since {DO} is parallel to {PE}, therefore the alternate angles {DOU|angDOU} and {UPE|angUPE} equal one another. [!just I.29]
 
-Since *DO* equals *PE,* and *OU* equals *UP,* and they contain equal angles, therefore the base *DU* equals the base *UE,* the triangle *DOU* equals the triangle *PUE,* and the remaining angles equal the remaining angles. Therefore the angle *OUD* equals the angle *PUE.* [!just I.4]
+Since {DO} equals {PE}, and {OU} equals {UP}, and they contain equal angles, therefore the base {DU} equals the base {UE}, the triangle {DOU} equals the triangle {PUE}, and the remaining angles equal the remaining angles. Therefore the angle {OUD|angOUD} equals the angle {PUE|angPUE}. [!just I.4]
 
-Therefore *DUE* is a straight line. For the same reason *BSG* is also a straight line, and *BS* equals *SG.* [!just I.14]
+Therefore {DUE|DE} is a straight line. For the same reason {BSG|BG} is also a straight line, and {BS} equals {SG}. [!just I.14]
 
-Now, since *CA* equals and is parallel to *DB,* while *CA* also equals and is parallel to *EG,* therefore *DB* equals and is parallel to *EG.* [!just XI.9]
+Now, since {CA} equals and is parallel to {DB}, while {CA} also equals and is parallel to {EG}, therefore {DB} equals and is parallel to {EG}. [!just XI.9]
 
-And the straight lines *DE* and *BG* join their ends, therefore *DE* is parallel to *BG.* [!just I.33]
+And the straight lines {DE} and {BG} join their ends, therefore {DE} is parallel to {BG}. [!just I.33]
 
-Therefore the angle *EDT* equals the angle *BGT,* for they are alternate, and the angle *DTU* equals the angle *GTS.* [!just I.29; I.15]
+Therefore the angle {EDT|angEDT} equals the angle {BGT|angBGT}, for they are alternate, and the angle {DTU|angDTU} equals the angle {GTS|angGTS}. [!just I.29; I.15]
 
-Therefore *DTU* and *GTS* are two triangles which have two angles equal to two angles and one side equal to one side, namely that opposite one of the equal angles, that is, *DU* equals *GS,* for they are the halves of *DE* and *BG,* therefore the remaining sides equal the remaining sides. Therefore *DT* equals *TG,* and *UT* equals *TS.* [!just I.26]
+Therefore {DTU} and {GTS} are two triangles which have two angles equal to two angles and one side equal to one side, namely that opposite one of the equal angles, that is, {DU} equals {GS|SG}, for they are the halves of {DE} and {BG}, therefore the remaining sides equal the remaining sides. Therefore {DT} equals {TG}, and {UT} equals {TS}. [!just I.26]
 
 Therefore, *if the sides of the opposite planes of a cube are bisected, and the planes are carried through the points of section, then the intersection of the planes and the diameter of the cube bisect one another.*
 
@@ -92,6 +323,6 @@ Therefore, *if the sides of the opposite planes of a cube are bisected, and the 
 ----
 guide:
 
-This proposition takes care of a specific situation that occurs in proposition @XIII.17. In XIII.17 a dodecahedron is constructed based on a cube, and the fact proven here in XI.38 is needed to show that the point *T* where *SU* intersects *DG* is the center of a sphere circumscribing the cube.
+This proposition takes care of a specific situation that occurs in proposition @XIII.17. In XIII.17 a dodecahedron is constructed based on a cube, and the fact proven here in XI.38 is needed to show that the point {T} where {SU} intersects {DG} is the center of a sphere circumscribing the cube.
 
-There are a couple of details missing from this proof. For instance, it is not shown that *KL* and *MN* actually lie in one plane, and that the line *SU* actually intersects the line *DG.*
+There are a couple of details missing from this proof. For instance, it is not shown that {KL} and {MN} actually lie in one plane, and that the line {SU} actually intersects the line {DG}.

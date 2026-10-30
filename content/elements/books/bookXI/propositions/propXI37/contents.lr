@@ -15,14 +15,32 @@ statement: If four straight lines are proportional, then parallelepipedal solids
 ----
 proof:
 
-Let *AB, CD, EF,* and *GH* be four straight lines in proportion, so that *AB* is to *CD* as *EF* is to *GH,* and let there be described on *AB, CD, EF,* and *GH* the similar and similarly situated parallelepipedal solids *KA, LC, ME, NG.*
+Let {AB}, {CD}, {EF}, and {GH} be four straight lines in proportion, so that {AB} is to {CD} as {EF} is to {GH}, and let there be described on {AB}, {CD}, {EF}, and {GH} the similar and similarly situated parallelepipedal solids {KA|sKA}, {LC|sLC}, {ME|sME}, {NG|sNG}.
 
-I say that *KA* is to *LC* as *ME* is to *NG.*
+I say that {KA|sKA} is to {LC|sLC} as {ME|sME} is to {NG|sNG}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="550" height="290" tabindex="0"></canvas>
 <noscript><img alt="XI.37 diagram" src="propXI37.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the four lines AB, CD, EF, GH in proportion along one
+    // straight line, with the similar solids KA, LC, ME, NG on them.
+    //
+    // The figure is all given, so the walk is highlight beats over the
+    // resting figure. Added, all transparent: the lines AB, CD, EF, GH,
+    // which are edges of the solids; the far corners of each solid (KA1,
+    // KA2, ...) and a faceless hexagon on each solid's outline (sKA, sLC,
+    // sME, sNG) to carry the solid's highlight, since a polyhedron draws
+    // none. Joyce's AK is the same solid as KA.
+    //
+    // Draggables (checked against the bundle): A, C, D, E, F, G on the line,
+    // and the unlettered b, c on the first solid -- all givens, so none is
+    // deferred. Every other point is derived and listed per slide.
+    var FIG = ["B","A","b","c","K","AK","C","D","E","F","G","H","d","f","h",
+               "e","g","i","CL","EM","GN","L","M","N",
+               "AB","CD","EF","GH","sKA","sLC","sME","sNG"];
+    var LINES  = ["AB","CD","EF","GH"];
+    var SOLIDS = ["sKA","sLC","sME","sNG"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -59,21 +77,128 @@ I say that *KA* is to *LC* as *ME* is to *NG.*
             "GN;polyhedron;parallelepiped;H,G,h,i;0;0;black;random",
             "L;point;parallelogram;d,D,e",
             "M;point;parallelogram;f,F,g",
-            "N;point;parallelogram;h,H,i"
+            "N;point;parallelogram;h,H,i",
+            // Transparent highlight targets: the lines and the solids' outlines.
+            "AB;line;connect;A,B;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "KA1;point;parallelogram;K,B,A;0;0",
+            "KA2;point;parallelogram;A,B,c;0;0",
+            "LC1;point;parallelogram;L,D,C;0;0",
+            "LC2;point;parallelogram;C,D,e;0;0",
+            "ME1;point;parallelogram;M,F,E;0;0",
+            "ME2;point;parallelogram;E,F,g;0;0",
+            "NG1;point;parallelogram;N,H,G;0;0",
+            "NG2;point;parallelogram;G,H,i;0;0",
+            "sKA;polygon;hexagon;A,B,b,K,KA1,KA2;0;0;0;0",
+            "sLC;polygon;hexagon;C,D,d,L,LC1,LC2;0;0;0;0",
+            "sME;polygon;hexagon;E,F,f,M,ME1,ME2;0;0;0;0",
+            "sNG;polygon;hexagon;G,H,h,N,NG1,NG2;0;0;0;0"
         ],
+        slides: [
+            { text: "“If four straight lines are proportional,”",
+              visible: FIG,
+              highlighted: LINES,
+              justifications: [{ ref: "XI.37" }] },
+            { text: "“then parallelepipedal solids on them which are similar and similarly described are also proportional;”",
+              visible: FIG,
+              highlighted: SOLIDS },
+            { text: "“and, if the parallelepipedal solids on them which are similar and similarly described are proportional,”",
+              visible: FIG,
+              highlighted: SOLIDS },
+            { text: "“then the straight lines themselves are also proportional.”",
+              visible: FIG,
+              highlighted: LINES },
+            { text: "Let {AB}, {CD}, {EF}, and {GH} be four straight lines in proportion,",
+              visible: FIG,
+              highlighted: LINES },
+            { text: "so that {AB} is to {CD} as {EF} is to {GH},",
+              visible: FIG,
+              highlighted: LINES },
+            { text: "and let there be described on {AB}, {CD}, {EF}, and {GH}",
+              visible: FIG,
+              highlighted: LINES },
+            { text: "the similar and similarly situated parallelepipedal solids {KA|sKA}, {LC|sLC}, {ME|sME}, {NG|sNG}.",
+              visible: FIG,
+              highlighted: SOLIDS },
+            { text: "I say that {KA|sKA} is to {LC|sLC} as {ME|sME} is to {NG|sNG}.",
+              visible: FIG,
+              highlighted: SOLIDS },
+            { text: "Since the parallelepipedal solid {KA|sKA} is similar to {LC|sLC},",
+              visible: FIG,
+              highlighted: ["sKA","sLC"] },
+            { text: "therefore {KA|sKA} has to {LC|sLC} the ratio triplicate of that which {AB} has to {CD}.",
+              visible: FIG,
+              highlighted: ["sKA","sLC","AB","CD"],
+              justifications: [{ claim: "KA : LC triplicate of AB : CD", ref: "XI.33" }] },
+            { text: "For the same reason {ME|sME} has to {NG|sNG} the ratio triplicate of that which {EF} has to {GH}.",
+              visible: FIG,
+              highlighted: ["sME","sNG","EF","GH"],
+              justifications: [{ claim: "ME : NG triplicate of EF : GH", ref: "XI.33" }] },
+            { text: "And {AB} is to {CD} as {EF} is to {GH}.",
+              visible: FIG,
+              highlighted: LINES },
+            { text: "Therefore {AK|sKA} is to {LC|sLC} as {ME|sME} is to {NG|sNG}.",
+              visible: FIG,
+              highlighted: SOLIDS },
+            { text: "Next as the solid {AK|sKA} is to the solid {LC|sLC}, so let the solid {ME|sME} be to the solid {NG|sNG}.",
+              visible: FIG,
+              highlighted: SOLIDS },
+            { text: "I say that the straight line {AB} is to {CD} as {EF} is to {GH}.",
+              visible: FIG,
+              highlighted: LINES },
+            { text: "Since, again, {KA|sKA} has to {LC|sLC} the ratio triplicate of that which {AB} has to {CD},",
+              visible: FIG,
+              highlighted: ["sKA","sLC","AB","CD"],
+              justifications: [{ claim: "KA : LC triplicate of AB : CD", ref: "XI.33" }] },
+            { text: "and {ME|sME} also has to {NG|sNG} the ratio triplicate of that which {EF} has to {GH},",
+              visible: FIG,
+              highlighted: ["sME","sNG","EF","GH"],
+              justifications: [{ claim: "ME : NG triplicate of EF : GH", ref: "XI.33" }] },
+            { text: "and {KA|sKA} is to {LC|sLC} as {ME|sME} is to {NG|sNG},",
+              visible: FIG,
+              highlighted: SOLIDS },
+            { text: "therefore {AB} is to {CD} as {EF} is to {GH}.",
+              visible: FIG,
+              highlighted: LINES },
+            { text: "Therefore, if four straight lines are proportional,",
+              visible: FIG,
+              highlighted: LINES },
+            { text: "then parallelepipedal solids on them which are similar and similarly described are also proportional;",
+              visible: FIG,
+              highlighted: SOLIDS },
+            { text: "and, if the parallelepipedal solids on them which are similar and similarly described are proportional,",
+              visible: FIG,
+              highlighted: SOLIDS },
+            { text: "then the straight lines themselves are also proportional.",
+              visible: FIG,
+              highlighted: LINES,
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.37") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "XI.33": "/elements/books/bookXI/propositions/propXI33/"
     });
 </script>
 </figure>
 
-Since the parallelepipedal solid *KA* is similar to *LC,* therefore *KA* has to *LC* the ratio triplicate of that which *AB* has to *CD.* For the same reason *ME* has to *NG* the ratio triplicate of that which *EF* has to *GH.* [!just XI.33]
+Since the parallelepipedal solid {KA|sKA} is similar to {LC|sLC}, therefore {KA|sKA} has to {LC|sLC} the ratio triplicate of that which {AB} has to {CD}. For the same reason {ME|sME} has to {NG|sNG} the ratio triplicate of that which {EF} has to {GH}. [!just XI.33]
 
-And *AB* is to *CD* as *EF* is to *GH.* Therefore *AK* is to *LC* as *ME* is to *NG.*
+And {AB} is to {CD} as {EF} is to {GH}. Therefore {AK|sKA} is to {LC|sLC} as {ME|sME} is to {NG|sNG}.
 
 <hr width="50%">
 
-Next as the solid *AK* is to the solid *LC,* so let the solid *ME* be to the solid *NG.*
+Next as the solid {AK|sKA} is to the solid {LC|sLC}, so let the solid {ME|sME} be to the solid {NG|sNG}.
 
-I say that the straight line *AB* is to *CD* as *EF* is to *GH.* Since, again, *KA* has to *LC* the ratio triplicate of that which *AB* has to *CD,* and *ME* also has to *NG* the ratio triplicate of that which *EF* has to *GH,* and *KA* is to *LC* as *ME* is to *NG,* therefore *AB* is to *CD* as *EF* is to *GH.* [!just XI.33]
+I say that the straight line {AB} is to {CD} as {EF} is to {GH}. Since, again, {KA|sKA} has to {LC|sLC} the ratio triplicate of that which {AB} has to {CD}, and {ME|sME} also has to {NG|sNG} the ratio triplicate of that which {EF} has to {GH}, and {KA|sKA} is to {LC|sLC} as {ME|sME} is to {NG|sNG}, therefore {AB} is to {CD} as {EF} is to {GH}. [!just XI.33]
 
 Therefore, *if four straight lines are proportional, then parallelepipedal solids on them which are similar and similarly described are also proportional; and, if the parallelepipedal solids on them which are similar and similarly described are proportional, then the straight lines themselves are also proportional.*
 
