@@ -15,14 +15,20 @@ statement: If an odd number is subtracted from an odd number, then the remainder
 ----
 proof:
 
-Let the odd number *BC* be subtracted from the odd number *AB.*
+Let the odd number {BC} be subtracted from the odd number {AB}.
 
-I say that the remainder *CA* is even.
+I say that the remainder {CA} is even.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="220" height="60" tabindex="0"></canvas>
 <noscript><img alt="IX.26 diagram" src="propIX26.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: AB is Joyce's one drawn line. The parts BC, CA, BD,
+    // AD, CD are transparent twins so each lights on its own. D, the end of
+    // the unit BD cut off from B toward A, is derived and joins the visible
+    // set when the unit is subtracted.
+    var GIVEN = ["A","B","C","AB","BC","CA"];
+    var ALL   = GIVEN.concat(["D","BD","AD","CD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -36,13 +42,66 @@ I say that the remainder *CA* is even.
             "B;point;lineSlider;A0,A3,200,0",
             "C;point;lineSlider;A0,A3,130,0",
             "D;point;cutoff;B,A,U1,U2",
-            "AB;line;connect;A,B"
+            "AB;line;connect;A,B",
+            // Highlight twins over AB (transparent).
+            "BC;line;connect;B,C;0;0;0",
+            "CA;line;connect;C,A;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "CD;line;connect;C,D;0;0;0"
         ],
+        slides: [
+            { text: "“If an odd number is subtracted from an odd number, then the remainder is even.”",
+              visible: GIVEN,
+              highlighted: ["BC","AB"],
+              justifications: [{ ref: "IX.26" }] },
+            { text: "Let the odd number {BC} be subtracted from the odd number {AB}.",
+              visible: GIVEN,
+              highlighted: ["BC","AB"] },
+            { text: "I say that the remainder {CA} is even.",
+              visible: GIVEN,
+              highlighted: ["CA"] },
+            { text: "Since {AB} is odd, subtract the unit {BD},",
+              visible: ALL,
+              highlighted: ["AB","BD"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "therefore the remainder {AD} is even.",
+              visible: ALL,
+              highlighted: ["AD"],
+              justifications: [{ claim: "odd less a unit is even", ref: "VII.Def.7" }] },
+            { text: "For the same reason {CD} is also even,",
+              visible: ALL,
+              highlighted: ["BC","BD","CD"],
+              justifications: [{ claim: "odd less a unit is even", ref: "VII.Def.7" }] },
+            { text: "so that the remainder {CA} is also even.",
+              visible: ALL,
+              highlighted: ["AD","CD","CA"],
+              justifications: [{ claim: "even less even is even", ref: "IX.24" }] },
+            { text: "Therefore, if an odd number is subtracted from an odd number,",
+              visible: ALL,
+              highlighted: ["BC","AB"] },
+            { text: "then the remainder is even.",
+              visible: ALL,
+              highlighted: ["CA"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.26") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.7": "/elements/books/bookVII/definitions/defVII7/",
+        "IX.24": "/elements/books/bookIX/propositions/propIX24/"
     });
 </script>
 </figure>
 
-Since *AB* is odd, subtract the unit *BD,* therefore the remainder *AD* is even. For the same reason *CD* is also even, so that the remainder *CA* is also even. [!just VII.Def.7; IX.24]
+Since {AB} is odd, subtract the unit {BD}, therefore the remainder {AD} is even. For the same reason {CD} is also even, so that the remainder {CA} is also even. [!just VII.Def.7; IX.24]
 
 Therefore, *if an odd number is subtracted from an odd number, then the remainder is even.*
 
