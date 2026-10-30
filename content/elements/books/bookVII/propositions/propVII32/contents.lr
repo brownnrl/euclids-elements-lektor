@@ -15,14 +15,21 @@ statement: Any number is either prime or is measured by some prime number.
 ----
 proof:
 
-Let *A* be a number.
+Let {A} be a number.
 
-I say that *A* either is prime or is measured by some prime number.
+I say that {A} either is prime or is measured by some prime number.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="60" tabindex="0"></canvas>
 <noscript><img alt="VII.32 diagram" src="propVII32.gif"/></noscript>
 <script type="text/javascript">
+    // A the given number, the only element. Line segment only, so the walk
+    // is highlight beats.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2
+    // and the off-canvas, colourless rail ends. A is given, so nothing is
+    // deferred.
+    var GIVEN = ["A"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -34,11 +41,44 @@ I say that *A* either is prime or is measured by some prime number.
             "A2;point;lineSlider;A0,A3,220,0;0",
             "A;line;connect;A1,A2;black"
         ],
+        slides: [
+            { text: "“Any number is either prime or is measured by some prime number.”",
+              visible: GIVEN,
+              highlighted: ["A"],
+              justifications: [{ ref: "VII.32" }] },
+            { text: "Let {A} be a number.",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "I say that {A} either is prime or is measured by some prime number.",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "If now {A} is prime, then that which was proposed is done.",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "But if it is composite, then some prime number measures it.",
+              visible: GIVEN,
+              highlighted: ["A"],
+              justifications: [{ ref: "VII.31" }] },
+            { text: "Therefore any number either is prime or is measured by some prime number.",
+              visible: GIVEN,
+              highlighted: ["A"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.32") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.31": "/elements/books/bookVII/propositions/propVII31/"
     });
 </script>
 </figure>
 
-If now *A* is prime, then that which was proposed is done.
+If now {A} is prime, then that which was proposed is done.
 
 But if it is composite, then some prime number measures it. [!just VII.31]
 

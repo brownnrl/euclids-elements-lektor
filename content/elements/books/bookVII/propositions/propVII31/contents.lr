@@ -15,14 +15,25 @@ statement: Any composite number is measured by some prime number.
 ----
 proof:
 
-Let *A* be a composite number.
+Let {A} be a composite number.
 
-I say that *A* is measured by some prime number.
+I say that {A} is measured by some prime number.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="140" tabindex="0"></canvas>
 <noscript><img alt="VII.31 diagram" src="propVII31.gif"/></noscript>
 <script type="text/javascript">
+    // A the composite number; B a number measuring it, and C a number
+    // measuring B, each less than the one before. Line segments only, so
+    // the walk is highlight beats.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2 and the off-canvas, colourless rail ends. B arrives with
+    // "some number B measures it" and C with "let a number C measure it", so
+    // B1, B2, C1 and C2 are deferred.
+    var GIVEN  = ["A"];
+    var WITH_B = GIVEN.concat(["B"]);
+    var WITH_C = WITH_B.concat(["C"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -44,19 +55,82 @@ I say that *A* is measured by some prime number.
             "C2;point;lineSlider;C0,C3,73,0;0",
             "C;line;connect;C1,C2;black"
         ],
+        deferDraggables: ["B1","B2","C1","C2"],
+        slides: [
+            { text: "“Any composite number is measured by some prime number.”",
+              visible: GIVEN,
+              highlighted: ["A"],
+              justifications: [{ ref: "VII.31" }] },
+            { text: "Let {A} be a composite number.",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "I say that {A} is measured by some prime number.",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "Since {A} is composite, therefore some number {B} measures it.",
+              visible: WITH_B,
+              highlighted: ["B","A"],
+              justifications: [{ ref: "VII.Def.13" }] },
+            { text: "Now, if {B} is prime, then that which was proposed is done.",
+              visible: WITH_B,
+              highlighted: ["B"] },
+            { text: "But if it is composite, some number measures it. Let a number {C} measure it.",
+              visible: WITH_C,
+              highlighted: ["C","B"],
+              justifications: [{ ref: "VII.Def.11" }, { ref: "VII.Def.13" }] },
+            { text: "Then, since {C} measures {B}, and {B} measures {A}, therefore {C} also measures {A}.",
+              visible: WITH_C,
+              highlighted: ["C","B","A"] },
+            { text: "And, if {C} is prime, then that which was proposed is done.",
+              visible: WITH_C,
+              highlighted: ["C"] },
+            { text: "But if it is composite, some number measures it.",
+              visible: WITH_C,
+              highlighted: ["C"] },
+            { text: "Thus, if the investigation is continued in this way,",
+              visible: WITH_C,
+              highlighted: ["A","B","C"] },
+            { text: "then some prime number will be found which measures the number before it, which also measures {A}.",
+              visible: WITH_C,
+              highlighted: ["A"] },
+            { text: "If it is not found, then an infinite sequence of numbers measures the number {A},",
+              visible: WITH_C,
+              highlighted: ["A"] },
+            { text: "each of which is less than the other, which is impossible in numbers.",
+              visible: WITH_C,
+              highlighted: ["A","B","C"] },
+            { text: "Therefore some prime number will be found which measures the one before it, which also measures {A}.",
+              visible: WITH_C,
+              highlighted: ["A"] },
+            { text: "Therefore any composite number is measured by some prime number.",
+              visible: WITH_C,
+              highlighted: ["A"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.31") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.11": "/elements/books/bookVII/definitions/defVII11/",
+        "VII.Def.13": "/elements/books/bookVII/definitions/defVII13/"
     });
 </script>
 </figure>
 
-Since *A* is composite, therefore some number *B* measures it. [!just VII.Def.13]
+Since {A} is composite, therefore some number {B} measures it. [!just VII.Def.13]
 
-Now, if *B* is prime, then that which was proposed is done.
+Now, if {B} is prime, then that which was proposed is done.
 
-But if it is composite, some number measures it. Let a number *C* measure it. [!just VII.Def.11, VII.Def.13]
+But if it is composite, some number measures it. Let a number {C} measure it. [!just VII.Def.11, VII.Def.13]
 
-Then, since *C* measures *B,* and *B* measures *A,* therefore *C* also measures *A.* And, if *C* is prime, then that which was proposed is done. But if it is composite, some number measures it. Thus, if the investigation is continued in this way, then some prime number will be found which measures the number before it, which also measures *A.* If it is not found, then an infinite sequence of numbers measures the number *A,* each of which is less than the other, which is impossible in numbers.
+Then, since {C} measures {B}, and {B} measures {A}, therefore {C} also measures {A}. And, if {C} is prime, then that which was proposed is done. But if it is composite, some number measures it. Thus, if the investigation is continued in this way, then some prime number will be found which measures the number before it, which also measures {A}. If it is not found, then an infinite sequence of numbers measures the number {A}, each of which is less than the other, which is impossible in numbers.
 
-Therefore some prime number will be found which measures the one before it, which also measures *A.*
+Therefore some prime number will be found which measures the one before it, which also measures {A}.
 
 Therefore any composite number is measured by some prime number.
 
