@@ -15,14 +15,44 @@ statement: If an area is contained by a rational straight line and a fourth apot
 ----
 proof:
 
-Let the area be contained by the rational straight line *AC* and the fourth apotome *AD*.
+Let the area be contained by the rational straight line {AC} and the fourth apotome {AD}.
 
-I say that the side of the area *AB* is minor.
+I say that the side of the area {AB} is minor.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="410" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.94 diagram" src="propX94.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the area AB (ACBD) on the rational AC and the fourth
+    // apotome AD, with the annex DG, E bisecting DG, F from the application
+    // to AG, the parallels EH, FI, GK, the rectangles DFIB and IFGK, and the
+    // squares LM (RMPL) and NO (PNQO) about the diameter PR, with SQ, TQ and
+    // the gnomon arc UVW.
+    // Added, all hidden at rest: solid twins FI, GK (initiallyHidden) so the
+    // parallels stroke down from F and G; transparent segment targets
+    // (;0;0;0); faceless twins ABh, LM, NO of the filled ACBD, RMPL, PNQO,
+    // since a lit filled square would be raised over NO and the lines inside
+    // it (#140); faceless targets AI, FK, DH, EK, DK, AK, the rectangles MN
+    // (N,P,M,T) and LO (L,P,O,S), the square ST (R,S,Q,T), and the gnomon
+    // UVWg (L,P,M,T,Q,S), reached as {UVW|UVWg} because the arc owns UVW;
+    // a right-angle marker angLPM for "the angle LPM", the corner of the
+    // square LM.
+    //
+    // Draggables (checked against the bundle): A, D, C (the givens), G and R
+    // (line sliders) and the offscreen frees. G arrives with the annex and R
+    // with the square LM, so both are deferred. E, F, H, I, K, M, P, L, N, Q,
+    // O, S, T, U, V, W are derived and listed per slide.
+    var GIVEN = ["A","C","D","B","ACBD","ABh","AC","AD"];
+    var ANNEX = GIVEN.concat(["G","DG","AG"]);
+    var BIS   = ANNEX.concat(["E","DE","EG"]);
+    var APPL  = BIS.concat(["F","AF","FG"]);
+    var PAR   = APPL.concat(["H","I","K","EH","FI","GK","DFIB","IFGK","BD",
+                             "AI","FK","DH","EK","DK","AK"]);
+    var SQ1   = PAR.concat(["R","M","P","L","RMPL","LM","LP"]);
+    var SQ2   = SQ1.concat(["N","Q","O","PNQO","NO","PN","angLPM"]);
+    var DIAM  = SQ2.concat(["RP"]);
+    var ALL   = DIAM.concat(["S","T","SQ","TQ","U","V","W","UVW",
+                             "MN","LO","ST","LN","UVWg"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -71,53 +101,294 @@ I say that the side of the area *AB* is minor.
             "U;point;cutoff;Q,S,Q,Z",
             "V;point;cutoff;Q,P,Q,Z",
             "W;point;cutoff;Q,T,Q,Z",
-            "UVW;sector;arc;W,V,U;0;0;gray;0"
+            "UVW;sector;arc;W,V,U;0;0;gray;0",
+            // Slide-only twins, highlight targets and marker.
+            "FI;line;connect;F,I",
+            "GK;line;connect;G,K",
+            "AC;line;connect;A,C;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "DG;line;connect;D,G;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EG;line;connect;E,G;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "LP;line;connect;L,P;0;0;0",
+            "PN;line;connect;P,N;0;0;0",
+            "LN;line;connect;L,N;0;0;0",
+            "ABh;polygon;quadrilateral;A,C,B,D;0;0;0;0",
+            "AI;polygon;quadrilateral;A,C,I,F;0;0;0;0",
+            "FK;polygon;quadrilateral;F,I,K,G;0;0;0;0",
+            "DH;polygon;quadrilateral;D,B,H,E;0;0;0;0",
+            "EK;polygon;quadrilateral;E,H,K,G;0;0;0;0",
+            "DK;polygon;quadrilateral;D,B,K,G;0;0;0;0",
+            "AK;polygon;quadrilateral;A,C,K,G;0;0;0;0",
+            "LM;polygon;quadrilateral;R,M,P,L;0;0;0;0",
+            "NO;polygon;quadrilateral;P,N,Q,O;0;0;0;0",
+            "MN;polygon;quadrilateral;N,P,M,T;0;0;0;0",
+            "LO;polygon;quadrilateral;L,P,O,S;0;0;0;0",
+            "ST;polygon;quadrilateral;R,S,Q,T;0;0;0;0",
+            "UVWg;polygon;hexagon;L,P,M,T,Q,S;0;0;0;0",
+            "angLPM;sector;angleMarkerRight;P,L,M"
         ],
+        initiallyHidden: ["FI","GK"],
+        deferDraggables: ["G","R"],
+        aliases: { "AB": "ABh", "GD": "DG", "PR": "RP" },
+        slides: [
+            { text: "“If an area is contained by a rational straight line and a fourth apotome,",
+              visible: ALL,
+              highlighted: ["ABh","AC","AD"],
+              justifications: [{ ref: "X.94" }] },
+            { text: "then the side of the area is minor.”",
+              visible: ALL,
+              highlighted: ["LN"] },
+            { text: "Let the area be contained by the rational straight line {AC} and the fourth apotome {AD}.",
+              visible: GIVEN,
+              highlighted: ["ABh","AC","AD"] },
+            { text: "I say that the side of the area {AB} is minor.",
+              visible: GIVEN,
+              highlighted: ["ABh"] },
+            { text: "Let {DG} be the annex to {AD},",
+              visible: ANNEX,
+              highlighted: ["DG","AD"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "therefore {AG} and {GD} are rational straight lines commensurable in square only,",
+              visible: ANNEX,
+              highlighted: ["AG","DG"] },
+            { text: "{AG} is commensurable in length with the rational straight line {AC} set out,",
+              visible: ANNEX,
+              highlighted: ["AG","AC"] },
+            { text: "and the square on the whole {AG} is greater than the square on the annex {DG}",
+              visible: ANNEX,
+              highlighted: ["AG","DG"] },
+            { text: "by the square on a straight line incommensurable in length with {AG}.",
+              visible: ANNEX,
+              highlighted: ["AG"],
+              justifications: [{ claim: "AD a fourth apotome", ref: "X.Def.III.4" }] },
+            { text: "Since the square on {AG} is greater than the square on {GD}",
+              visible: ANNEX,
+              highlighted: ["AG","DG"] },
+            { text: "by the square on a straight line incommensurable in length with {AG},",
+              visible: ANNEX,
+              highlighted: ["AG"] },
+            { text: "therefore, if there is applied to {AG} a parallelogram equal to the fourth part of the square on {DG}",
+              visible: ANNEX,
+              highlighted: ["AG","DG"] },
+            { text: "and deficient by a square figure, then it divides it into incommensurable parts.",
+              visible: ANNEX,
+              highlighted: ["AG"],
+              justifications: [{ claim: "the parts are incommensurable", ref: "X.18" }] },
+            { text: "Bisect {DG} at {E},",
+              visible: BIS,
+              highlighted: ["DG","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "apply to {AG} a parallelogram equal to the square on {EG} and deficient by a square figure,",
+              visible: BIS,
+              highlighted: ["AG","EG"] },
+            { text: "and let it be the rectangle {AF} by {FG}.",
+              visible: APPL,
+              highlighted: ["AF","FG"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "Then {AF} is incommensurable in length with {FG}.",
+              visible: APPL,
+              highlighted: ["AF","FG"] },
+            { text: "Draw {EH}, {FI}, and {GK} through {E}, {F}, and {G} parallel to {AC} and {BD}.",
+              visible: PAR,
+              highlighted: ["EH","FI","GK","AC","BD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EH",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FI",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GK",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DFIB", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "IFGK", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Since {AG} is rational and commensurable in length with {AC}, therefore the whole {AK} is rational.",
+              visible: PAR,
+              highlighted: ["AG","AC","AK"],
+              justifications: [{ claim: "AK rational", ref: "X.19" }] },
+            { text: "Again, since {DG} is incommensurable in length with {AC}, and both are rational, therefore {DK} is medial.",
+              visible: PAR,
+              highlighted: ["DG","AC","DK"],
+              justifications: [{ claim: "DK medial", ref: "X.21" }] },
+            { text: "Again, since {AF} is incommensurable in length with {FG}, therefore {AI} is incommensurable with {FK}.",
+              visible: PAR,
+              highlighted: ["AF","FG","AI","FK"],
+              justifications: [{ claim: "AF : FG = AI : FK", ref: "VI.1" },
+                               { claim: "AI, FK incommensurable", ref: "X.11" }] },
+            { text: "Now construct the square {LM} equal to {AI},",
+              visible: SQ1,
+              highlighted: ["LM","AI"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "R",    name: geomlib.A.Point.appear },
+                  { elem: "RMPL", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and subtract {NO}, equal to {FK}, about the same angle, the angle {LPM|angLPM}.",
+              visible: SQ2,
+              highlighted: ["NO","FK","angLPM"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "PNQO",   name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "angLPM", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the squares {LM} and {NO} are about the same diameter.",
+              visible: SQ2,
+              highlighted: ["LM","NO"],
+              justifications: [{ claim: "about the same diameter", ref: "VI.26" }] },
+            { text: "Let {PR} be their diameter,",
+              visible: DIAM,
+              highlighted: ["RP"],
+              transition: { animations: [
+                  { elem: "RP", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and draw the figure.",
+              visible: ALL,
+              transition: { mode: "cascade", animations: [
+                  { elem: "SQ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "TQ", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since the rectangle {AF} by {FG} equals the square on {EG},",
+              visible: ALL,
+              highlighted: ["AF","FG","EG"] },
+            { text: "therefore, {AF} is to {EG} as {EG} is to {FG}.",
+              visible: ALL,
+              highlighted: ["AF","EG","FG"],
+              justifications: [{ claim: "AF : EG = EG : FG", ref: "VI.17" }] },
+            { text: "But {AF} is to {EG} as {AI} is to {EK}, and {EG} is to {FG} as {EK} is to {FK},",
+              visible: ALL,
+              highlighted: ["AI","EK","FK"] },
+            { text: "therefore {EK} is a mean proportional between {AI} and {FK}.",
+              visible: ALL,
+              highlighted: ["EK","AI","FK"],
+              justifications: [{ claim: "AF : EG = AI : EK, EG : FG = EK : FK", ref: "VI.1" },
+                               { claim: "AI : EK = EK : FK", ref: "V.11" }] },
+            { text: "But {MN} is also a mean proportional between the squares {LM} and {NO},",
+              visible: ALL,
+              highlighted: ["MN","LM","NO"] },
+            { text: "and {AI} equals {LM}, and {FK} equals {NO} therefore {EK} also equals {MN}.",
+              visible: ALL,
+              highlighted: ["AI","LM","FK","NO","EK","MN"] },
+            { text: "But {DH} equals {EK}, and {LO} equals {MN},",
+              visible: ALL,
+              highlighted: ["DH","EK","LO","MN"] },
+            { text: "therefore the whole {DK} equals the gnomon {UVW|UVWg} and {NO}.",
+              visible: ALL,
+              highlighted: ["DK","UVWg","NO"] },
+            { text: "Since, then, the whole {AK} equals the sum of the squares {LM} and {NO},",
+              visible: ALL,
+              highlighted: ["AK","LM","NO"] },
+            { text: "and, in these, {DK} equals the gnomon {UVW|UVWg} and the square {NO},",
+              visible: ALL,
+              highlighted: ["DK","UVWg","NO"] },
+            { text: "therefore the remainder {AB} equals {ST}, that is, to the square on {LN}.",
+              visible: ALL,
+              highlighted: ["ABh","ST","LN"] },
+            { text: "Therefore {LN} is the side of the area {AB}.",
+              visible: ALL,
+              highlighted: ["LN","ABh"] },
+            { text: "I say that {LN} is the irrational straight line called minor.",
+              visible: ALL,
+              highlighted: ["LN"] },
+            { text: "Since {AK} is rational and equals the sum of the squares on {LP} and {PN},",
+              visible: ALL,
+              highlighted: ["AK","LP","PN","LM","NO"] },
+            { text: "therefore the sum of the squares on {LP} and {PN} is rational.",
+              visible: ALL,
+              highlighted: ["LP","PN","LM","NO"] },
+            { text: "Again, since {DK} is medial, and {DK} equals twice the rectangle {LP} by {PN},",
+              visible: ALL,
+              highlighted: ["DK","LP","PN","MN","LO"] },
+            { text: "therefore twice the rectangle {LP} by {PN} is medial.",
+              visible: ALL,
+              highlighted: ["LP","PN","MN","LO"] },
+            { text: "And, since {AI} was proved incommensurable with {FK},",
+              visible: ALL,
+              highlighted: ["AI","FK"] },
+            { text: "therefore the square on {LP} is also incommensurable with the square on {PN}.",
+              visible: ALL,
+              highlighted: ["LP","PN","LM","NO"] },
+            { text: "Therefore {LP} and {PN} are straight lines incommensurable in square",
+              visible: ALL,
+              highlighted: ["LP","PN"] },
+            { text: "which make the sum of the squares on them rational, but twice the rectangle contained by them medial.",
+              visible: ALL,
+              highlighted: ["LM","NO","MN","LO"] },
+            { text: "Therefore {LN} is the irrational straight line called minor, and it is the side of the area {AB}.",
+              visible: ALL,
+              highlighted: ["LN","ABh"],
+              justifications: [{ claim: "LN minor", ref: "X.76" }] },
+            { text: "Therefore the side of the area {AB} is minor.",
+              visible: ALL,
+              highlighted: ["ABh","LN"] },
+            { text: "Therefore, if an area is contained by a rational straight line and a fourth apotome,",
+              visible: ALL,
+              highlighted: ["ABh","AC","AD"] },
+            { text: "then the side of the area is minor.",
+              visible: ALL,
+              highlighted: ["LN"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.94") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.11":        "/elements/books/bookV/propositions/propV11/",
+        "VI.1":        "/elements/books/bookVI/propositions/propVI1/",
+        "VI.17":       "/elements/books/bookVI/propositions/propVI17/",
+        "VI.26":       "/elements/books/bookVI/propositions/propVI26/",
+        "X.Def.III.4": "/elements/books/bookX/definitions/defX.III.4/",
+        "X.11":        "/elements/books/bookX/propositions/propX11/",
+        "X.18":        "/elements/books/bookX/propositions/propX18/",
+        "X.19":        "/elements/books/bookX/propositions/propX19/",
+        "X.21":        "/elements/books/bookX/propositions/propX21/",
+        "X.76":        "/elements/books/bookX/propositions/propX76/"
     });
 </script>
 </figure>
 
-Let *DG* be the annex to *AD*, therefore *AG* and *GD* are rational straight lines commensurable in square only, *AG* is commensurable in length with the rational straight line *AC* set out, and the square on the whole *AG* is greater than the square on the annex *DG* by the square on a straight line incommensurable in length with *AG*. [!just X.Def.III.4]
+Let {DG} be the annex to {AD}, therefore {AG} and {GD} are rational straight lines commensurable in square only, {AG} is commensurable in length with the rational straight line {AC} set out, and the square on the whole {AG} is greater than the square on the annex {DG} by the square on a straight line incommensurable in length with {AG}. [!just X.Def.III.4]
 
-Since the square on *AG* is greater than the square on *GD* by the square on a straight line incommensurable in length with *AG*, therefore, if there is applied to *AG* a parallelogram equal to the fourth part of the square on *DG* and deficient by a square figure, then it divides it into incommensurable parts. [!just X.18]
+Since the square on {AG} is greater than the square on {GD} by the square on a straight line incommensurable in length with {AG}, therefore, if there is applied to {AG} a parallelogram equal to the fourth part of the square on {DG} and deficient by a square figure, then it divides it into incommensurable parts. [!just X.18]
 
-Bisect *DG* at *E*, apply to *AG* a parallelogram equal to the square on *EG* and deficient by a square figure, and let it be the rectangle *AF* by *FG*. Then *AF* is incommensurable in length with *FG*.
+Bisect {DG} at {E}, apply to {AG} a parallelogram equal to the square on {EG} and deficient by a square figure, and let it be the rectangle {AF} by {FG}. Then {AF} is incommensurable in length with {FG}.
 
-Draw *EH*, *FI*, and *GK* through *E*, *F*, and *G* parallel to *AC* and *BD*.
+Draw {EH}, {FI}, and {GK} through {E}, {F}, and {G} parallel to {AC} and {BD}.
 
-Since *AG* is rational and commensurable in length with *AC*, therefore the whole *AK* is rational. [!just X.19]
+Since {AG} is rational and commensurable in length with {AC}, therefore the whole {AK} is rational. [!just X.19]
 
-Again, since *DG* is incommensurable in length with *AC*, and both are rational, therefore *DK* is medial. [!just X.21]
+Again, since {DG} is incommensurable in length with {AC}, and both are rational, therefore {DK} is medial. [!just X.21]
 
-Again, since *AF* is incommensurable in length with *FG*, therefore *AI* is incommensurable with *FK*. [!just VI.1, X.11]
+Again, since {AF} is incommensurable in length with {FG}, therefore {AI} is incommensurable with {FK}. [!just VI.1, X.11]
 
-Now construct the square *LM* equal to *AI*, and subtract *NO*, equal to *FK*, about the same angle, the angle *LPM*.
+Now construct the square {LM} equal to {AI}, and subtract {NO}, equal to {FK}, about the same angle, the angle {LPM|angLPM}.
 
-Therefore the squares *LM* and *NO* are about the same diameter. Let *PR* be their diameter, and draw the figure. [!just VI.26]
+Therefore the squares {LM} and {NO} are about the same diameter. Let {PR} be their diameter, and draw the figure. [!just VI.26]
 
-Since the rectangle *AF* by *FG* equals the square on *EG*, therefore, *AF* is to *EG* as *EG* is to *FG*. [!just VI.17]
+Since the rectangle {AF} by {FG} equals the square on {EG}, therefore, {AF} is to {EG} as {EG} is to {FG}. [!just VI.17]
 
-But *AF* is to *EG* as *AI* is to *EK*, and *EG* is to *FG* as *EK* is to *FK*, therefore *EK* is a mean proportional between *AI* and *FK*. [!just VI.1, V.11]
+But {AF} is to {EG} as {AI} is to {EK}, and {EG} is to {FG} as {EK} is to {FK}, therefore {EK} is a mean proportional between {AI} and {FK}. [!just VI.1, V.11]
 
-But *MN* is also a mean proportional between the squares *LM* and *NO*, and *AI* equals *LM*, and *FK* equals *NO* therefore *EK* also equals *MN*.
+But {MN} is also a mean proportional between the squares {LM} and {NO}, and {AI} equals {LM}, and {FK} equals {NO} therefore {EK} also equals {MN}.
 
-But *DH* equals *EK*, and *LO* equals *MN*, therefore the whole *DK* equals the gnomon *UVW* and *NO*.
+But {DH} equals {EK}, and {LO} equals {MN}, therefore the whole {DK} equals the gnomon {UVW|UVWg} and {NO}.
 
-Since, then, the whole *AK* equals the sum of the squares *LM* and *NO*, and, in these, *DK* equals the gnomon *UVW* and the square *NO*, therefore the remainder *AB* equals *ST*, that is, to the square on *LN*. Therefore *LN* is the side of the area *AB*.
+Since, then, the whole {AK} equals the sum of the squares {LM} and {NO}, and, in these, {DK} equals the gnomon {UVW|UVWg} and the square {NO}, therefore the remainder {AB} equals {ST}, that is, to the square on {LN}. Therefore {LN} is the side of the area {AB}.
 
-I say that *LN* is the irrational straight line called minor.
+I say that {LN} is the irrational straight line called minor.
 
-Since *AK* is rational and equals the sum of the squares on *LP* and *PN*, therefore the sum of the squares on *LP* and *PN* is rational.
+Since {AK} is rational and equals the sum of the squares on {LP} and {PN}, therefore the sum of the squares on {LP} and {PN} is rational.
 
-Again, since *DK* is medial, and *DK* equals twice the rectangle *LP* by *PN*, therefore twice the rectangle *LP* by *PN* is medial.
+Again, since {DK} is medial, and {DK} equals twice the rectangle {LP} by {PN}, therefore twice the rectangle {LP} by {PN} is medial.
 
-And, since *AI* was proved incommensurable with *FK*, therefore the square on *LP* is also incommensurable with the square on *PN*.
+And, since {AI} was proved incommensurable with {FK}, therefore the square on {LP} is also incommensurable with the square on {PN}.
 
-Therefore *LP* and *PN* are straight lines incommensurable in square which make the sum of the squares on them rational, but twice the rectangle contained by them medial.
+Therefore {LP} and {PN} are straight lines incommensurable in square which make the sum of the squares on them rational, but twice the rectangle contained by them medial.
 
-Therefore *LN* is the irrational straight line called minor, and it is the side of the area *AB*. [!just X.76]
+Therefore {LN} is the irrational straight line called minor, and it is the side of the area {AB}. [!just X.76]
 
-Therefore the side of the area *AB* is minor.
+Therefore the side of the area {AB} is minor.
 
 Therefore, *if an area is contained by a rational straight line and a fourth apotome, then the side of the area is minor.*
 

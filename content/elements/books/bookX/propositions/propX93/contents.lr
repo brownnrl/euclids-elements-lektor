@@ -15,14 +15,43 @@ statement: If an area is contained by a rational straight line and a third apoto
 ----
 proof:
 
-Let the area *AB* be contained by the rational straight line *AC* and the third apotome *AD*.
+Let the area {AB} be contained by the rational straight line {AC} and the third apotome {AD}.
 
-I say that the side of the area *AB* is a second apotome of a medial straight line.
+I say that the side of the area {AB} is a second apotome of a medial straight line.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="410" height="190" tabindex="0"></canvas>
 <noscript><img alt="X.93 diagram" src="propX93.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the area AB (ACBD) on the rational AC and the third
+    // apotome AD, with the annex DG, E bisecting DG, F from the application
+    // to AG, the parallels EH, FI, GK, the rectangles DFIB and IFGK, and the
+    // squares LM (RMPL) and NO (PNQO) about the diameter PR, with SQ, TQ and
+    // the gnomon arc UVW.
+    // Added, all hidden at rest: solid twins FI, GK (initiallyHidden) so the
+    // parallels stroke down from F and G; transparent segment targets
+    // (;0;0;0); faceless twins ABh, LM, NO of the filled ACBD, RMPL, PNQO,
+    // since a lit filled square would be raised over NO and the lines inside
+    // it (#140); faceless targets AI, FK, DH, EK, DK, AK, the rectangles MN
+    // (N,P,M,T) and LO (L,P,O,S), the square ST (R,S,Q,T), and the gnomon
+    // UVWg (L,P,M,T,Q,S), reached as {UVW|UVWg} because the arc owns UVW.
+    // No angle is called right in the text, so no markers.
+    //
+    // Draggables (checked against the bundle): A, D, C (the givens), G and R
+    // (line sliders) and the offscreen frees. G arrives with the annex and R
+    // with the square LM, so both are deferred. E, F, H, I, K, M, P, L, N, Q,
+    // O, S, T, U, V, W are derived and listed per slide.
+    var GIVEN = ["A","C","D","B","ACBD","ABh","AC","AD"];
+    var ANNEX = GIVEN.concat(["G","DG","AG"]);
+    var BIS   = ANNEX.concat(["E","DE","EG"]);
+    var APPL  = BIS.concat(["F","AF","FG"]);
+    var PAR   = APPL.concat(["H","I","K","EH","FI","GK","DFIB","IFGK",
+                             "AI","FK","DH","EK","DK","AK"]);
+    var SQ1   = PAR.concat(["R","M","P","L","RMPL","LM","LP"]);
+    var SQ2   = SQ1.concat(["N","Q","O","PNQO","NO","PN"]);
+    var DIAM  = SQ2.concat(["RP"]);
+    var ALL   = DIAM.concat(["S","T","SQ","TQ","U","V","W","UVW",
+                             "MN","LO","ST","LN","UVWg"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -71,67 +100,362 @@ I say that the side of the area *AB* is a second apotome of a medial straight li
             "U;point;cutoff;Q,S,Q,Z",
             "V;point;cutoff;Q,P,Q,Z",
             "W;point;cutoff;Q,T,Q,Z",
-            "UVW;sector;arc;W,V,U;0;0;gray;0"
+            "UVW;sector;arc;W,V,U;0;0;gray;0",
+            // Slide-only twins and highlight targets.
+            "FI;line;connect;F,I",
+            "GK;line;connect;G,K",
+            "AC;line;connect;A,C;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DG;line;connect;D,G;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EG;line;connect;E,G;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "LP;line;connect;L,P;0;0;0",
+            "PN;line;connect;P,N;0;0;0",
+            "LN;line;connect;L,N;0;0;0",
+            "ABh;polygon;quadrilateral;A,C,B,D;0;0;0;0",
+            "AI;polygon;quadrilateral;A,C,I,F;0;0;0;0",
+            "FK;polygon;quadrilateral;F,I,K,G;0;0;0;0",
+            "DH;polygon;quadrilateral;D,B,H,E;0;0;0;0",
+            "EK;polygon;quadrilateral;E,H,K,G;0;0;0;0",
+            "DK;polygon;quadrilateral;D,B,K,G;0;0;0;0",
+            "AK;polygon;quadrilateral;A,C,K,G;0;0;0;0",
+            "LM;polygon;quadrilateral;R,M,P,L;0;0;0;0",
+            "NO;polygon;quadrilateral;P,N,Q,O;0;0;0;0",
+            "MN;polygon;quadrilateral;N,P,M,T;0;0;0;0",
+            "LO;polygon;quadrilateral;L,P,O,S;0;0;0;0",
+            "ST;polygon;quadrilateral;R,S,Q,T;0;0;0;0",
+            "UVWg;polygon;hexagon;L,P,M,T,Q,S;0;0;0;0"
         ],
+        initiallyHidden: ["FI","GK"],
+        deferDraggables: ["G","R"],
+        aliases: { "AB": "ABh", "GD": "DG", "PR": "RP" },
+        slides: [
+            { text: "“If an area is contained by a rational straight line and a third apotome,",
+              visible: ALL,
+              highlighted: ["ABh","AC","AD"],
+              justifications: [{ ref: "X.93" }] },
+            { text: "then the side of the area is a second apotome of a medial straight line.”",
+              visible: ALL,
+              highlighted: ["LN"] },
+            { text: "Let the area {AB} be contained by the rational straight line {AC} and the third apotome {AD}.",
+              visible: GIVEN,
+              highlighted: ["ABh","AC","AD"] },
+            { text: "I say that the side of the area {AB} is a second apotome of a medial straight line.",
+              visible: GIVEN,
+              highlighted: ["ABh"] },
+            { text: "Let {DG} be the annex to {AD}.",
+              visible: ANNEX,
+              highlighted: ["DG","AD"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "Then {AG} and {GD} are rational straight lines commensurable in square only,",
+              visible: ANNEX,
+              highlighted: ["AG","DG"] },
+            { text: "and neither of the straight lines {AG} and {GD} is commensurable in length with the rational straight line {AC} set out,",
+              visible: ANNEX,
+              highlighted: ["AG","DG","AC"] },
+            { text: "while the square on the whole {AG} is greater than the square on the annex {DG}",
+              visible: ANNEX,
+              highlighted: ["AG","DG"] },
+            { text: "by the square on a straight line commensurable with {AG}.",
+              visible: ANNEX,
+              highlighted: ["AG"],
+              justifications: [{ claim: "AD a third apotome", ref: "X.Def.III.3" }] },
+            { text: "Since, then, the square on {AG} is greater than the square on {GD}",
+              visible: ANNEX,
+              highlighted: ["AG","DG"] },
+            { text: "by the square on a straight line commensurable with {AG},",
+              visible: ANNEX,
+              highlighted: ["AG"] },
+            { text: "therefore, if there is applied to {AG} a parallelogram equal to the fourth part of the square on {DG}",
+              visible: ANNEX,
+              highlighted: ["AG","DG"] },
+            { text: "and deficient by a square figure, then it divides it into commensurable parts.",
+              visible: ANNEX,
+              highlighted: ["AG"],
+              justifications: [{ claim: "the parts are commensurable", ref: "X.17" }] },
+            { text: "Bisect {DG} at {E},",
+              visible: BIS,
+              highlighted: ["DG","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "apply to {AG} a parallelogram equal to the square on {EG} and deficient by a square figure,",
+              visible: BIS,
+              highlighted: ["AG","EG"] },
+            { text: "and let it be the rectangle {AF} by {FG}.",
+              visible: APPL,
+              highlighted: ["AF","FG"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "Draw {EH}, {FI}, and {GK} through the points {E}, {F}, and {G} parallel to {AC}.",
+              visible: PAR,
+              highlighted: ["EH","FI","GK","AC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EH",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FI",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GK",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DFIB", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "IFGK", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Then {AF} and {FG} are commensurable.",
+              visible: PAR,
+              highlighted: ["AF","FG"] },
+            { text: "Therefore {AI} is also commensurable with {FK}.",
+              visible: PAR,
+              highlighted: ["AI","FK"],
+              justifications: [{ claim: "AF : FG = AI : FK", ref: "VI.1" },
+                               { claim: "AI, FK commensurable", ref: "X.11" }] },
+            { text: "Since {AF} and {FG} are commensurable in length,",
+              visible: PAR,
+              highlighted: ["AF","FG"] },
+            { text: "therefore {AG} is also commensurable in length with each of the straight lines {AF} and {FG}.",
+              visible: PAR,
+              highlighted: ["AG","AF","FG"],
+              justifications: [{ claim: "AG commensurable with AF, FG", ref: "X.15" }] },
+            { text: "But {AG} is rational and incommensurable in length with {AC}, so that {AF} and {FG} are so also.",
+              visible: PAR,
+              highlighted: ["AG","AC","AF","FG"],
+              justifications: [{ claim: "AF, FG incommensurable with AC", ref: "X.13" }] },
+            { text: "Therefore each of the rectangles {AI} and {FK} is medial.",
+              visible: PAR,
+              highlighted: ["AI","FK"],
+              justifications: [{ claim: "AI, FK medial", ref: "X.21" }] },
+            { text: "Again, since {DE} is commensurable in length with {EG},",
+              visible: PAR,
+              highlighted: ["DE","EG"] },
+            { text: "therefore {DG} is also commensurable in length with each of the straight lines {DE} and {EG}.",
+              visible: PAR,
+              highlighted: ["DG","DE","EG"],
+              justifications: [{ claim: "DG commensurable with DE, EG", ref: "X.15" }] },
+            { text: "But {GD} is rational and incommensurable in length with {AC},",
+              visible: PAR,
+              highlighted: ["DG","AC"] },
+            { text: "therefore each of the straight lines {DE} and {EG} is also rational and incommensurable in length with {AC}.",
+              visible: PAR,
+              highlighted: ["DE","EG","AC"],
+              justifications: [{ claim: "DE, EG incommensurable with AC", ref: "X.13" }] },
+            { text: "Therefore each of the rectangles {DH} and {EK} is medial.",
+              visible: PAR,
+              highlighted: ["DH","EK"],
+              justifications: [{ claim: "DH, EK medial", ref: "X.21" }] },
+            { text: "Since {AG} and {GD} are commensurable in square only, therefore {AG} is incommensurable in length with {GD}.",
+              visible: PAR,
+              highlighted: ["AG","DG"] },
+            { text: "But {AG} is commensurable in length with {AF}, and {DG} with {EG},",
+              visible: PAR,
+              highlighted: ["AG","AF","DG","EG"] },
+            { text: "therefore {AF} is incommensurable in length with {EG}.",
+              visible: PAR,
+              highlighted: ["AF","EG"],
+              justifications: [{ claim: "AF, EG incommensurable", ref: "X.13" }] },
+            { text: "But {AF} is to {EG} as {AI} is to {EK}, therefore {AI} is incommensurable with {EK}.",
+              visible: PAR,
+              highlighted: ["AF","EG","AI","EK"],
+              justifications: [{ claim: "AF : EG = AI : EK", ref: "VI.1" },
+                               { claim: "AI, EK incommensurable", ref: "X.11" }] },
+            { text: "Now construct the square {LM} equal to {AI},",
+              visible: SQ1,
+              highlighted: ["LM","AI"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "R",    name: geomlib.A.Point.appear },
+                  { elem: "RMPL", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and subtract {NO}, equal to {FK}, about the same angle with {LM}.",
+              visible: SQ2,
+              highlighted: ["NO","FK","LM"],
+              transition: { animations: [
+                  { elem: "PNQO", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Then {LM} and {NO} are about the same diameter.",
+              visible: SQ2,
+              highlighted: ["LM","NO"],
+              justifications: [{ claim: "about the same diameter", ref: "VI.26" }] },
+            { text: "Let {PR} be their diameter,",
+              visible: DIAM,
+              highlighted: ["RP"],
+              transition: { animations: [
+                  { elem: "RP", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and draw the figure.",
+              visible: ALL,
+              transition: { mode: "cascade", animations: [
+                  { elem: "SQ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "TQ", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since the rectangle {AF} by {FG} equals the square on {EG},",
+              visible: ALL,
+              highlighted: ["AF","FG","EG"] },
+            { text: "therefore {AF} is to {EG} as {EG} is to {FG}.",
+              visible: ALL,
+              highlighted: ["AF","EG","FG"],
+              justifications: [{ claim: "AF : EG = EG : FG", ref: "VI.17" }] },
+            { text: "But {AF} is to {EG} as {AI} is to {EK}, and {EG} is to {FG} as {EK} is to {FK},",
+              visible: ALL,
+              highlighted: ["AI","EK","FK"] },
+            { text: "therefore {AI} is to {EK} as {EK} is to {FK}.",
+              visible: ALL,
+              highlighted: ["AI","EK","FK"] },
+            { text: "Therefore {EK} is a mean proportional between {AI} and {FK}.",
+              visible: ALL,
+              highlighted: ["EK","AI","FK"],
+              justifications: [{ claim: "AF : EG = AI : EK, EG : FG = EK : FK", ref: "VI.1" },
+                               { claim: "AI : EK = EK : FK", ref: "VI.11" }] },
+            { text: "But {MN} is also a mean proportional between the squares {LM} and {NO},",
+              visible: ALL,
+              highlighted: ["MN","LM","NO"] },
+            { text: "and {AI} equals {LM}, and {FK} equals {NO}, therefore {EK} also equals {MN}.",
+              visible: ALL,
+              highlighted: ["AI","LM","FK","NO","EK","MN"] },
+            { text: "But {MN} equals {LO}, and {EK} equals {DH},",
+              visible: ALL,
+              highlighted: ["MN","LO","EK","DH"] },
+            { text: "therefore the whole {DK} also equals the gnomon {UVW|UVWg} and {NO}.",
+              visible: ALL,
+              highlighted: ["DK","UVWg","NO"] },
+            { text: "But {AK} equals the sum of {LM} and {NO},",
+              visible: ALL,
+              highlighted: ["AK","LM","NO"] },
+            { text: "therefore the remainder {AB} equals {ST}, that is, to the square on {LN}.",
+              visible: ALL,
+              highlighted: ["ABh","ST","LN"] },
+            { text: "Therefore {LN} is the side of the area {AB}.",
+              visible: ALL,
+              highlighted: ["LN","ABh"] },
+            { text: "I say that {LN} is a second apotome of a medial straight line.",
+              visible: ALL,
+              highlighted: ["LN"] },
+            { text: "Since {AI} and {FK} were proved medial, and equal the squares on {LP},",
+              visible: ALL,
+              highlighted: ["AI","FK","LM","NO"] },
+            { text: "therefore each of the squares on {LP} and {PN} is also medial.",
+              visible: ALL,
+              highlighted: ["LP","PN","LM","NO"] },
+            { text: "Therefore each of the straight lines {LP} and {PN} is medial.",
+              visible: ALL,
+              highlighted: ["LP","PN"] },
+            { text: "Since {AI} is commensurable with {FK}, therefore the square on {LP} is also commensurable with the square on {PN}.",
+              visible: ALL,
+              highlighted: ["AI","FK","LM","NO"],
+              justifications: [{ ref: "VI.1" },
+                               { claim: "squares on LP, PN commensurable", ref: "X.11" }] },
+            { text: "Again, since {AI} was proved incommensurable with {EK}, therefore {LM} is also incommensurable with {MN},",
+              visible: ALL,
+              highlighted: ["AI","EK","LM","MN"] },
+            { text: "that is, the square on {LP} with the rectangle {LP} by {PN},",
+              visible: ALL,
+              highlighted: ["LM","MN","LP","PN"] },
+            { text: "so that {LP} is also incommensurable in length with {PN}.",
+              visible: ALL,
+              highlighted: ["LP","PN"],
+              justifications: [{ claim: "LM : MN = LP : PN", ref: "VI.1" },
+                               { claim: "LP, PN incommensurable", ref: "X.11" }] },
+            { text: "Therefore {LP} and {PN} are medial straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["LP","PN"] },
+            { text: "I say next that they also contain a medial rectangle.",
+              visible: ALL,
+              highlighted: ["MN"] },
+            { text: "Since {EK} was proved medial, and equals the rectangle {LP} by {PN},",
+              visible: ALL,
+              highlighted: ["EK","MN","LP","PN"] },
+            { text: "therefore the rectangle {LP} by {PN} is also medial,",
+              visible: ALL,
+              highlighted: ["MN","LP","PN"] },
+            { text: "so that {LP} and {PN} are medial straight lines commensurable in square only which contain a medial rectangle.",
+              visible: ALL,
+              highlighted: ["LP","PN","MN"] },
+            { text: "Therefore {LN} is a second apotome of a medial straight line, and it is the side of the area {AB}.",
+              visible: ALL,
+              highlighted: ["LN","ABh"],
+              justifications: [{ claim: "LN a second apotome of a medial", ref: "X.75" }] },
+            { text: "Therefore the side of the area {AB} is a second apotome of a medial straight line.",
+              visible: ALL,
+              highlighted: ["ABh","LN"] },
+            { text: "Therefore, if an area is contained by a rational straight line and a third apotome,",
+              visible: ALL,
+              highlighted: ["ABh","AC","AD"] },
+            { text: "then the side of the area is a second apotome of a medial straight line.",
+              visible: ALL,
+              highlighted: ["LN"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.93") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VI.1":        "/elements/books/bookVI/propositions/propVI1/",
+        "VI.11":       "/elements/books/bookVI/propositions/propVI11/",
+        "VI.17":       "/elements/books/bookVI/propositions/propVI17/",
+        "VI.26":       "/elements/books/bookVI/propositions/propVI26/",
+        "X.Def.III.3": "/elements/books/bookX/definitions/defX.III.3/",
+        "X.11":        "/elements/books/bookX/propositions/propX11/",
+        "X.13":        "/elements/books/bookX/propositions/propX13/",
+        "X.15":        "/elements/books/bookX/propositions/propX15/",
+        "X.17":        "/elements/books/bookX/propositions/propX17/",
+        "X.21":        "/elements/books/bookX/propositions/propX21/",
+        "X.75":        "/elements/books/bookX/propositions/propX75/"
     });
 </script>
 </figure>
 
-Let *DG* be the annex to *AD*. Then *AG* and *GD* are rational straight lines commensurable in square only, and neither of the straight lines *AG* and *GD* is commensurable in length with the rational straight line *AC* set out, while the square on the whole *AG* is greater than the square on the annex *DG* by the square on a straight line commensurable with *AG*. [!just X.Def.III.3]
+Let {DG} be the annex to {AD}. Then {AG} and {GD} are rational straight lines commensurable in square only, and neither of the straight lines {AG} and {GD} is commensurable in length with the rational straight line {AC} set out, while the square on the whole {AG} is greater than the square on the annex {DG} by the square on a straight line commensurable with {AG}. [!just X.Def.III.3]
 
-Since, then, the square on *AG* is greater than the square on *GD* by the square on a straight line commensurable with *AG*, therefore, if there is applied to *AG* a parallelogram equal to the fourth part of the square on *DG* and deficient by a square figure, then it divides it into commensurable parts. [!just X.17]
+Since, then, the square on {AG} is greater than the square on {GD} by the square on a straight line commensurable with {AG}, therefore, if there is applied to {AG} a parallelogram equal to the fourth part of the square on {DG} and deficient by a square figure, then it divides it into commensurable parts. [!just X.17]
 
-Bisect *DG* at *E*, apply to *AG* a parallelogram equal to the square on *EG* and deficient by a square figure, and let it be the rectangle *AF* by *FG*. Draw *EH*, *FI*, and *GK* through the points *E*, *F*, and *G* parallel to *AC*.
+Bisect {DG} at {E}, apply to {AG} a parallelogram equal to the square on {EG} and deficient by a square figure, and let it be the rectangle {AF} by {FG}. Draw {EH}, {FI}, and {GK} through the points {E}, {F}, and {G} parallel to {AC}.
 
-Then *AF* and *FG* are commensurable. Therefore *AI* is also commensurable with *FK*. [!just VI.1, X.11]
+Then {AF} and {FG} are commensurable. Therefore {AI} is also commensurable with {FK}. [!just VI.1, X.11]
 
-Since *AF* and *FG* are commensurable in length, therefore *AG* is also commensurable in length with each of the straight lines *AF* and *FG*. [!just X.15]
+Since {AF} and {FG} are commensurable in length, therefore {AG} is also commensurable in length with each of the straight lines {AF} and {FG}. [!just X.15]
 
-But *AG* is rational and incommensurable in length with *AC*, so that *AF* and *FG* are so also. [!just X.13]
+But {AG} is rational and incommensurable in length with {AC}, so that {AF} and {FG} are so also. [!just X.13]
 
-Therefore each of the rectangles *AI* and *FK* is medial. [!just X.21]
+Therefore each of the rectangles {AI} and {FK} is medial. [!just X.21]
 
-Again, since *DE* is commensurable in length with *EG*, therefore *DG* is also commensurable in length with each of the straight lines *DE* and *EG*. [!just X.15]
+Again, since {DE} is commensurable in length with {EG}, therefore {DG} is also commensurable in length with each of the straight lines {DE} and {EG}. [!just X.15]
 
-But *GD* is rational and incommensurable in length with *AC*, therefore each of the straight lines *DE* and *EG* is also rational and incommensurable in length with *AC*. Therefore each of the rectangles *DH* and *EK* is medial. [!just X.13; X.21]
+But {GD} is rational and incommensurable in length with {AC}, therefore each of the straight lines {DE} and {EG} is also rational and incommensurable in length with {AC}. Therefore each of the rectangles {DH} and {EK} is medial. [!just X.13; X.21]
 
-Since *AG* and *GD* are commensurable in square only, therefore *AG* is incommensurable in length with *GD*.
+Since {AG} and {GD} are commensurable in square only, therefore {AG} is incommensurable in length with {GD}.
 
-But *AG* is commensurable in length with *AF*, and *DG* with *EG*, therefore *AF* is incommensurable in length with *EG*. [!just X.13]
+But {AG} is commensurable in length with {AF}, and {DG} with {EG}, therefore {AF} is incommensurable in length with {EG}. [!just X.13]
 
-But *AF* is to *EG* as *AI* is to *EK*, therefore *AI* is incommensurable with *EK*. [!just VI.1, X.11]
+But {AF} is to {EG} as {AI} is to {EK}, therefore {AI} is incommensurable with {EK}. [!just VI.1, X.11]
 
-Now construct the square *LM* equal to *AI*, and subtract *NO*, equal to *FK*, about the same angle with *LM*. Then *LM* and *NO* are about the same diameter. [!just VI.26]
+Now construct the square {LM} equal to {AI}, and subtract {NO}, equal to {FK}, about the same angle with {LM}. Then {LM} and {NO} are about the same diameter. [!just VI.26]
 
-Let *PR* be their diameter, and draw the figure.
+Let {PR} be their diameter, and draw the figure.
 
-Now, since the rectangle *AF* by *FG* equals the square on *EG*, therefore *AF* is to *EG* as *EG* is to *FG*. [!just VI.17]
+Now, since the rectangle {AF} by {FG} equals the square on {EG}, therefore {AF} is to {EG} as {EG} is to {FG}. [!just VI.17]
 
-But *AF* is to *EG* as *AI* is to *EK*, and *EG* is to *FG* as *EK* is to *FK*, therefore *AI* is to *EK* as *EK* is to *FK*. Therefore *EK* is a mean proportional between *AI* and *FK*. [!just VI.1; VI.11]
+But {AF} is to {EG} as {AI} is to {EK}, and {EG} is to {FG} as {EK} is to {FK}, therefore {AI} is to {EK} as {EK} is to {FK}. Therefore {EK} is a mean proportional between {AI} and {FK}. [!just VI.1; VI.11]
 
-But *MN* is also a mean proportional between the squares *LM* and *NO*, and *AI* equals *LM*, and *FK* equals *NO*, therefore *EK* also equals *MN*.
+But {MN} is also a mean proportional between the squares {LM} and {NO}, and {AI} equals {LM}, and {FK} equals {NO}, therefore {EK} also equals {MN}.
 
-But *MN* equals *LO*, and *EK* equals *DH*, therefore the whole *DK* also equals the gnomon *UVW* and *NO*.
+But {MN} equals {LO}, and {EK} equals {DH}, therefore the whole {DK} also equals the gnomon {UVW|UVWg} and {NO}.
 
-But *AK* equals the sum of *LM* and *NO*, therefore the remainder *AB* equals *ST*, that is, to the square on *LN*. Therefore *LN* is the side of the area *AB*.
+But {AK} equals the sum of {LM} and {NO}, therefore the remainder {AB} equals {ST}, that is, to the square on {LN}. Therefore {LN} is the side of the area {AB}.
 
-I say that *LN* is a second apotome of a medial straight line.
+I say that {LN} is a second apotome of a medial straight line.
 
-Since *AI* and *FK* were proved medial, and equal the squares on *LP*, therefore each of the squares on *LP* and *PN* is also medial. Therefore each of the straight lines *LP* and *PN* is medial.
+Since {AI} and {FK} were proved medial, and equal the squares on {LP}, therefore each of the squares on {LP} and {PN} is also medial. Therefore each of the straight lines {LP} and {PN} is medial.
 
-Since *AI* is commensurable with *FK*, therefore the square on *LP* is also commensurable with the square on *PN*. [!just VI.1, X.11]
+Since {AI} is commensurable with {FK}, therefore the square on {LP} is also commensurable with the square on {PN}. [!just VI.1, X.11]
 
-Again, since *AI* was proved incommensurable with *EK*, therefore *LM* is also incommensurable with *MN*, that is, the square on *LP* with the rectangle *LP* by *PN*, so that *LP* is also incommensurable in length with *PN*. [!just VI.1; X.11]
+Again, since {AI} was proved incommensurable with {EK}, therefore {LM} is also incommensurable with {MN}, that is, the square on {LP} with the rectangle {LP} by {PN}, so that {LP} is also incommensurable in length with {PN}. [!just VI.1; X.11]
 
-Therefore *LP* and *PN* are medial straight lines commensurable in square only.
+Therefore {LP} and {PN} are medial straight lines commensurable in square only.
 
 I say next that they also contain a medial rectangle.
 
-Since *EK* was proved medial, and equals the rectangle *LP* by *PN*, therefore the rectangle *LP* by *PN* is also medial, so that *LP* and *PN* are medial straight lines commensurable in square only which contain a medial rectangle.
+Since {EK} was proved medial, and equals the rectangle {LP} by {PN}, therefore the rectangle {LP} by {PN} is also medial, so that {LP} and {PN} are medial straight lines commensurable in square only which contain a medial rectangle.
 
-Therefore *LN* is a second apotome of a medial straight line, and it is the side of the area *AB*. [!just X.75]
+Therefore {LN} is a second apotome of a medial straight line, and it is the side of the area {AB}. [!just X.75]
 
-Therefore the side of the area *AB* is a second apotome of a medial straight line.
+Therefore the side of the area {AB} is a second apotome of a medial straight line.
 
 Therefore, *if an area is contained by a rational straight line and a third apotome, then the side of the area is a second apotome of a medial straight line.*
 
