@@ -15,12 +15,28 @@ statement: If two straight lines are parallel and points are taken at random on 
 ----
 proof:
 
-Let *AB* and *CD* be two parallel straight lines, and let points *E* and *F* be taken at random on them respectively.
+Let {AB} and {CD} be two parallel straight lines, and let points {E} and {F} be taken at random on them respectively.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="200" tabindex="0"></canvas>
 <noscript><img alt="XI.7 diagram" src="propXI7.gif"/></noscript>
 <script type="text/javascript">
+    // The parallels AB and CD, the points E and F on them, the joining
+    // line EF, and the arc EGF, the "more elevated" line the reductio
+    // supposes. H is Joyce's construction point for G (the midpoint of EF);
+    // the proof never names it, so the walk leaves it out and it stands only
+    // in the resting figure. The supposed line EGF is withdrawn once the
+    // contradiction is reached. Nothing is added to the figure.
+    //
+    // Draggables (checked against the bundle): A, B, C, Z free; D, E, F
+    // lineSliders. Z is a far-off direction point. E and F are "taken at
+    // random" on slide 4, so both are deferred. G (cutoff) is derived and
+    // listed per slide.
+    var GIVEN = ["A","B","C","D","AB","CD"];
+    var PTS   = GIVEN.concat(["E","F"]);
+    var SUPP  = PTS.concat(["G","FGE"]);
+    var SECT  = SUPP.concat(["EF"]);
+    var DONE  = PTS.concat(["EF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,15 +58,81 @@ Let *AB* and *CD* be two parallel straight lines, and let points *E* and *F* be 
             "G;point;cutoff;H,Z,E,M",
             "FGE;sector;arc;F,G,E;0;0;black;0"
         ],
+        deferDraggables: ["E","F"],
+        aliases: { "BA": "AB", "DC": "CD", "FE": "EF", "EGF": "FGE" },
+        slides: [
+            { text: "“If two straight lines are parallel and points are taken at random on each of them,”",
+              visible: GIVEN,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "XI.7" }] },
+            { text: "“then the straight line joining the points is in the same plane with the parallel straight lines.”",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "Let {AB} and {CD} be two parallel straight lines,",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "and let points {E} and {F} be taken at random on them respectively.",
+              visible: PTS,
+              highlighted: ["E","F"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "E", name: geomlib.A.Point.appear },
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "I say that the straight line joining the points {E} and {F}",
+              visible: PTS,
+              highlighted: ["E","F"] },
+            { text: "lies in the same plane with the parallel straight lines.",
+              visible: PTS,
+              highlighted: ["AB","CD"] },
+            { text: "For suppose it is not, but, if possible, let it be in a more elevated plane as {EGF|FGE}.",
+              visible: SUPP,
+              highlighted: ["FGE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FGE", name: geomlib.A.Sector.sweep, args: { reverse: true } },
+                  { elem: "G",   name: geomlib.A.Point.appear } ] } },
+            { text: "Draw a plane through {EGF|FGE}.",
+              visible: SUPP,
+              highlighted: ["FGE"] },
+            { text: "Its intersection with the plane of reference is a straight line. Let it be {EF}.",
+              visible: SECT,
+              highlighted: ["EF"],
+              transition: { animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "the common section of two planes is a straight line", ref: "XI.3" }] },
+            { text: "Therefore the two straight lines {EGF|FGE} and {EF} enclose an area, which is impossible.",
+              visible: SECT,
+              highlighted: ["FGE","EF"] },
+            { text: "Therefore the straight line joined from {E} to {F} is not in a plane more elevated.",
+              visible: DONE,
+              highlighted: ["E","F"] },
+            { text: "Therefore the straight line joined from {E} to {F} lies in the plane through the parallel straight lines {AB} and {CD}.",
+              visible: DONE,
+              highlighted: ["EF","AB","CD"] },
+            { text: "Therefore, if two straight lines are parallel and points are taken at random on each of them,",
+              visible: DONE,
+              highlighted: ["AB","CD","E","F"] },
+            { text: "then the straight line joining the points is in the same plane with the parallel straight lines.",
+              visible: DONE,
+              highlighted: ["EF","AB","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.7") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "XI.3": "/elements/books/bookXI/propositions/propXI3/"
     });
 </script>
 </figure>
 
-I say that the straight line joining the points *E* and *F* lies in the same plane with the parallel straight lines.
+I say that the straight line joining the points {E} and {F} lies in the same plane with the parallel straight lines.
 
-For suppose it is not, but, if possible, let it be in a more elevated plane as *EGF.* Draw a plane through *EGF.* Its intersection with the plane of reference is a straight line. Let it be *EF.* [!just XI.3]
+For suppose it is not, but, if possible, let it be in a more elevated plane as {EGF|FGE}. Draw a plane through {EGF|FGE}. Its intersection with the plane of reference is a straight line. Let it be {EF}. [!just XI.3]
 
-Therefore the two straight lines *EGF* and *EF* enclose an area, which is impossible. Therefore the straight line joined from *E* to *F* is not in a plane more elevated. Therefore the straight line joined from *E* to *F* lies in the plane through the parallel straight lines *AB* and *CD.*
+Therefore the two straight lines {EGF|FGE} and {EF} enclose an area, which is impossible. Therefore the straight line joined from {E} to {F} is not in a plane more elevated. Therefore the straight line joined from {E} to {F} lies in the plane through the parallel straight lines {AB} and {CD}.
 
 Therefore, *if two straight lines are parallel and points are taken at random on each of them, then the straight line joining the points is in the same plane with the parallel straight lines.*
 
