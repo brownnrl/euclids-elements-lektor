@@ -19,6 +19,9 @@ proof:
 <canvas id="canvas_0" width="150" height="230" tabindex="0"></canvas>
 <noscript><img alt="VII.12 diagram" src="propVII12.gif"/></noscript>
 <script type="text/javascript">
+    // A : B = C : D, with D placed by proportion. The numbers are the lines
+    // A, B, C, D; their end points are colourless handles.
+    var GIVEN = ["A","B","C","D"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -45,17 +48,86 @@ proof:
             "D2;point;proportion;A1,A2,B1,B2,C1,C2,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        // Draggables (checked against the bundle): the colourless lineSlider
+        // end handles A1, A2, B1, B2, C1, C2, D1 of the numbers A, B, C, D and
+        // their off-canvas rail ends —
+        // all givens, standing from slide 1. D2 is derived by proportion.
+        // Line segments only, so the walk is highlight beats; no animations.
+        slides: [
+            { text: "“If any number of numbers are proportional,”",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "“then one of the antecedents is to one of the consequents”",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "“as the sum of the antecedents is to the sum of the consequents.”",
+              visible: GIVEN,
+              highlighted: ["A","C","B","D"],
+              justifications: [{ ref: "VII.12" }] },
+            { text: "Let {A}, {B}, {C}, and {D} be as many numbers as we please in proportion,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "so that {A} is to {B} as {C} is to {D}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "I say that {A} is to {B}",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "as the sum of {A} and {C} is to the sum of {B} and {D}.",
+              visible: GIVEN,
+              highlighted: ["A","C","B","D"] },
+            { text: "Since {A} is to {B} as {C} is to {D},",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "therefore {A} is the same part or parts of {B} as {C} is of {D}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "VII.Def.20" }] },
+            { text: "Therefore the sum of {A} and {C} is the same part or parts of the sum of {B} and {D}",
+              visible: GIVEN,
+              highlighted: ["A","C","B","D"] },
+            { text: "that {A} is of {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VII.5" }, { ref: "VII.6" }] },
+            { text: "Therefore {A} is to {B} as the sum of {A} and {C} is to the sum of {B} and {D}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "VII.Def.20" }] },
+            { text: "Therefore, if any number of numbers are proportional,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "then one of the antecedents is to one of the consequents",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "as the sum of the antecedents is to the sum of the consequents.",
+              visible: GIVEN,
+              highlighted: ["A","C","B","D"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.12") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "VII.5": "/elements/books/bookVII/propositions/propVII5/",
+        "VII.6": "/elements/books/bookVII/propositions/propVII6/"
     });
 </script>
 </figure>
 
-Let *A, B, C,* and *D* be as many numbers as we please in proportion, so that *A* is to *B* as *C* is to *D.*
+Let {A}, {B}, {C}, and {D} be as many numbers as we please in proportion, so that {A} is to {B} as {C} is to {D}.
 
-I say that *A* is to *B* as the sum of *A* and *C* is to the sum of *B* and *D.*
+I say that {A} is to {B} as the sum of {A} and {C} is to the sum of {B} and {D}.
 
-Since *A* is to *B* as *C* is to *D,* therefore *A* is the same part or parts of *B* as *C* is of *D.* Therefore the sum of *A* and *C* is the same part or parts of the sum of *B* and *D* that *A* is of *B.* [!just VII.Def.20; VII.5, VII.6]
+Since {A} is to {B} as {C} is to {D}, therefore {A} is the same part or parts of {B} as {C} is of {D}. Therefore the sum of {A} and {C} is the same part or parts of the sum of {B} and {D} that {A} is of {B}. [!just VII.Def.20; VII.5, VII.6]
 
-Therefore *A* is to *B* as the sum of *A* and *C* is to the sum of *B* and *D.* [!just VII.Def.20]
+Therefore {A} is to {B} as the sum of {A} and {C} is to the sum of {B} and {D}. [!just VII.Def.20]
 
 Therefore, *if any number of numbers are proportional, then one of the antecedents is to one of the consequents as the sum of the antecedents is to the sum of the consequents.*
 

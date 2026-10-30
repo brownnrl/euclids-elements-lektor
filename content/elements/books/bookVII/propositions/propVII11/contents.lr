@@ -15,12 +15,22 @@ statement: If a whole is to a whole as a subtracted number is to a subtracted nu
 ----
 proof:
 
-Let the whole *AB* be to the whole *CD* as *AE* subtracted is to *CF* subtracted.
+Let the whole {AB} be to the whole {CD} as {AE} subtracted is to {CF} subtracted.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="100" height="210" tabindex="0"></canvas>
 <noscript><img alt="VII.11 diagram" src="propVII11.gif"/></noscript>
 <script type="text/javascript">
+    // AB : CD = AE : CF, with F placed on CD by proportion. Line segments
+    // only, so the walk is highlight beats; no animations.
+    //
+    // Added to Joyce's figure, all transparent (;0;0;0): the segments AE,
+    // EB, CF and FD the proof names, so they can light.
+    //
+    // Draggables (checked against the bundle): the lineSliders A, B, C, D,
+    // E and the colourless off-canvas rail ends. All are givens and stand
+    // from slide 1. F is derived and is listed in the visible set.
+    var GIVEN = ["A","B","E","AB","AE","EB","C","D","F","CD","CF","FD"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -36,17 +46,77 @@ Let the whole *AB* be to the whole *CD* as *AE* subtracted is to *CF* subtracted
             "D;point;lineSlider;C0,C3,60,180",
             "CD;line;connect;C,D",
             "E;point;lineSlider;A,B,30,80",
-            "F;point;proportion;A,B,A,E,C,D,C,D"
+            "F;point;proportion;A,B,A,E,C,D,C,D",
+            // Invisible highlight targets. Zero-colour: nothing changes at rest.
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "FD;line;connect;F,D;0;0;0"
         ],
+        slides: [
+            { text: "“If a whole is to a whole as a subtracted number is to a subtracted number,”",
+              visible: GIVEN,
+              highlighted: ["AB","CD","AE","CF"] },
+            { text: "“then the remainder is to the remainder as the whole is to the whole.”",
+              visible: GIVEN,
+              highlighted: ["EB","FD","AB","CD"],
+              justifications: [{ ref: "VII.11" }] },
+            { text: "Let the whole {AB} be to the whole {CD}",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "as {AE} subtracted is to {CF} subtracted.",
+              visible: GIVEN,
+              highlighted: ["AE","CF"] },
+            { text: "I say that the remainder {EB} is to the remainder {FD}",
+              visible: GIVEN,
+              highlighted: ["EB","FD"] },
+            { text: "as the whole {AB} is to the whole {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "Since {AB} is to {CD} as {AE} is to {CF},",
+              visible: GIVEN,
+              highlighted: ["AB","CD","AE","CF"] },
+            { text: "therefore {AE} is the same part or parts of {CF} as {AB} is of {CD}.",
+              visible: GIVEN,
+              highlighted: ["AE","CF","AB","CD"],
+              justifications: [{ ref: "VII.Def.20" }] },
+            { text: "Therefore the remainder {EB} is the same part or parts of {FD} that {AB} is of {CD}.",
+              visible: GIVEN,
+              highlighted: ["EB","FD","AB","CD"],
+              justifications: [{ ref: "VII.7" }, { ref: "VII.8" }] },
+            { text: "Therefore {EB} is to {FD} as {AB} is to {CD}.",
+              visible: GIVEN,
+              highlighted: ["EB","FD","AB","CD"],
+              justifications: [{ ref: "VII.Def.20" }] },
+            { text: "Therefore, if a whole is to a whole as a subtracted number is to a subtracted number,",
+              visible: GIVEN,
+              highlighted: ["AB","CD","AE","CF"] },
+            { text: "then the remainder is to the remainder as the whole is to the whole.",
+              visible: GIVEN,
+              highlighted: ["EB","FD","AB","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.11") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "VII.7": "/elements/books/bookVII/propositions/propVII7/",
+        "VII.8": "/elements/books/bookVII/propositions/propVII8/"
     });
 </script>
 </figure>
 
-I say that the remainder *EB* is to the remainder *FD* as the whole *AB* is to the whole *CD.*
+I say that the remainder {EB} is to the remainder {FD} as the whole {AB} is to the whole {CD}.
 
-Since *AB* is to *CD* as *AE* is to *CF,* therefore *AE* is the same part or parts of *CF* as *AB* is of *CD.* Therefore the remainder *EB* is the same part or parts of *FD* that *AB* is of *CD.* [!just VII.Def.20; VII.7, VII.8]
+Since {AB} is to {CD} as {AE} is to {CF}, therefore {AE} is the same part or parts of {CF} as {AB} is of {CD}. Therefore the remainder {EB} is the same part or parts of {FD} that {AB} is of {CD}. [!just VII.Def.20; VII.7, VII.8]
 
-Therefore *EB* is to *FD* as *AB* is to *CD.* [!just VII.Def.20]
+Therefore {EB} is to {FD} as {AB} is to {CD}. [!just VII.Def.20]
 
 Therefore, *if a whole is to a whole as a subtracted number is to a subtracted number, then the remainder is to the remainder as the whole is to the whole.*
 
