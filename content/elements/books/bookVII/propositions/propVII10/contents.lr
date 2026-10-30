@@ -15,12 +15,18 @@ statement: If a number is a parts of a number, and another is the same parts of 
 ----
 proof:
 
-Let the number *AB* be parts of the number *C,* and another number *DE* be the same parts of another number *F.*
+Let the number {AB} be parts of the number {C}, and another number {DE} be the same parts of another number {F}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="150" height="270" tabindex="0"></canvas>
 <noscript><img alt="VII.10 diagram" src="propVII10.gif"/></noscript>
 <script type="text/javascript">
+    // AB is two thirds of C and DE two thirds of F; AG, GB and DH, HE are
+    // the parts. Line segments only, so the walk is highlight beats, with
+    // G and H appearing when AB and DE are divided.
+    var GIVEN = ["A","B","AB","C","D","E","DE","F"];
+    var DIV1  = GIVEN.concat(["G","AG","GB"]);
+    var DIV2  = DIV1.concat(["H","DH","HE"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,21 +57,110 @@ Let the number *AB* be parts of the number *C,* and another number *DE* be the s
             "F2;point;cutoff;F1,F5,D,H;0;0",
             "F3;point;cutoff;F2,F5,D,H;0;0",
             "F4;point;cutoff;F3,F5,D,H;0",
-            "F;line;connect;F1,F4;black"
+            "F;line;connect;F1,F4;black",
+            // Invisible highlight targets for the parts AB and DE are
+            // divided into. Zero-colour: nothing changes at rest.
+            "AG;line;connect;A,G;0;0;0",
+            "GB;line;connect;G,B;0;0;0",
+            "DH;line;connect;D,H;0;0;0",
+            "HE;line;connect;H,E;0;0;0"
         ],
+        // Draggables (checked against the bundle): the lineSliders A, B, D,
+        // E and the end handles C1, F1 — all givens, standing from slide 1.
+        // G and H are derived midpoints and follow the visible sets,
+        // arriving with "Divide".
+        aliases: { "BA": "AB", "ED": "DE", "GA": "AG", "BG": "GB",
+                   "HD": "DH", "EH": "HE" },
+        slides: [
+            { text: "“If a number is a parts of a number, and another is the same parts of another,”",
+              visible: GIVEN,
+              highlighted: ["AB","C","DE","F"] },
+            { text: "“then alternately, whatever part of parts the first is of the third,”",
+              visible: GIVEN,
+              highlighted: ["AB","DE"] },
+            { text: "“the same part, or the same parts, the second is of the fourth.”",
+              visible: GIVEN,
+              highlighted: ["C","F"],
+              justifications: [{ ref: "VII.10" }] },
+            { text: "Let the number {AB} be parts of the number {C},",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "and another number {DE} be the same parts of another number {F}.",
+              visible: GIVEN,
+              highlighted: ["DE","F"] },
+            { text: "I say that, alternately, {C} is the same parts or part of {F} that {AB} is of {DE}.",
+              visible: GIVEN,
+              highlighted: ["C","F","AB","DE"] },
+            { text: "Since {DE} is the same parts of {F} as {AB} is of {C},",
+              visible: GIVEN,
+              highlighted: ["DE","F","AB","C"] },
+            { text: "therefore {F} is the same parts of {DE} as {C} is of {AB}.",
+              visible: GIVEN,
+              highlighted: ["F","DE","C","AB"] },
+            { text: "Divide {AB} into the parts of {C}, namely {AG} and {GB},",
+              visible: DIV1,
+              highlighted: ["AG","GB","G"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "and divide {DE} into the parts of {F}, namely {DH} and {HE}.",
+              visible: DIV2,
+              highlighted: ["DH","HE","H"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Point.appear } ] } },
+            { text: "Then the multitude of {AG} and {GB} equals the multitude of {DH} and {HE}.",
+              visible: DIV2,
+              highlighted: ["AG","GB","DH","HE"] },
+            { text: "Now since {DH} is the same part of {F} as {AG} is of {C},",
+              visible: DIV2,
+              highlighted: ["DH","F","AG","C"] },
+            { text: "therefore, alternately, {C} is the same part or the same parts of {F} as {AG} is of {DH}.",
+              visible: DIV2,
+              highlighted: ["C","F","AG","DH"],
+              justifications: [{ ref: "VII.9" }] },
+            { text: "For the same reason, {C} is the same part or the same parts of {F} as {GB} is of {HE},",
+              visible: DIV2,
+              highlighted: ["C","F","GB","HE"],
+              justifications: [{ ref: "VII.9" }] },
+            { text: "so that, in addition, {C} is the same part or the same parts of {F} as {AB} is of {DE}.",
+              visible: DIV2,
+              highlighted: ["C","F","AB","DE"],
+              justifications: [{ ref: "VII.5" }, { ref: "VII.6" }] },
+            { text: "Therefore, if a number is parts of a number, and another is the same parts of another,",
+              visible: DIV2,
+              highlighted: ["AB","C","DE","F"] },
+            { text: "then alternately, whatever part of parts the first is of the third,",
+              visible: DIV2,
+              highlighted: ["AB","DE"] },
+            { text: "the same part, or the same parts, the second is of the fourth.",
+              visible: DIV2,
+              highlighted: ["C","F"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.10") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.5": "/elements/books/bookVII/propositions/propVII5/",
+        "VII.6": "/elements/books/bookVII/propositions/propVII6/",
+        "VII.9": "/elements/books/bookVII/propositions/propVII9/"
     });
 </script>
 </figure>
 
-I say that, alternately, *C* is the same parts or part of *F* that *AB* is of *DE.*
+I say that, alternately, {C} is the same parts or part of {F} that {AB} is of {DE}.
 
-Since *DE* is the same parts of *F* as *AB* is of *C,* therefore *F* is the same parts of *DE* as *C* is of *AB.*
+Since {DE} is the same parts of {F} as {AB} is of {C}, therefore {F} is the same parts of {DE} as {C} is of {AB}.
 
-Divide *AB* into the parts of *C,* namely *AG* and *GB,* and divide *DE* into the parts of *F,* namely *DH* and *HE.* Then the multitude of *AG* and *GB* equals the multitude of *DH* and *HE.*
+Divide {AB} into the parts of {C}, namely {AG} and {GB}, and divide {DE} into the parts of {F}, namely {DH} and {HE}. Then the multitude of {AG} and {GB} equals the multitude of {DH} and {HE}.
 
-Now since *DH* is the same part of *F* as *AG* is of *C,* therefore, alternately, *C* is the same part or the same parts of *F* as *AG* is of *DH.* [!just VII.9]
+Now since {DH} is the same part of {F} as {AG} is of {C}, therefore, alternately, {C} is the same part or the same parts of {F} as {AG} is of {DH}. [!just VII.9]
 
-For the same reason, *C* is the same part or the same parts of *F* as *GB* is of *HE,* so that, in addition, *C* is the same part or the same parts of *F* as *AB* is of *DE.* [!just VII.9, VII.5; VII.6]
+For the same reason, {C} is the same part or the same parts of {F} as {GB} is of {HE}, so that, in addition, {C} is the same part or the same parts of {F} as {AB} is of {DE}. [!just VII.9, VII.5; VII.6]
 
 Therefore, *if a number is parts of a number, and another is the same parts of another, then alternately, whatever part of parts the first is of the third, the same part, or the same parts, the second is of the fourth.*
 

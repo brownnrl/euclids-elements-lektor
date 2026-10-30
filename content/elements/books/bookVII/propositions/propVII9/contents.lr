@@ -15,14 +15,20 @@ statement: If a number is a part of a number, and another is the same part of an
 ----
 proof:
 
-Let the number *A* be a part of the number *BC,* and another number *D* be the same part of another number *EF* that *A* is of *BC.*
+Let the number {A} be a part of the number {BC}, and another number {D} be the same part of another number {EF} that {A} is of {BC}.
 
-I say that, alternately, *BC* is the same part or parts of *EF* that *A* is of *D.*
+I say that, alternately, {BC} is the same part or parts of {EF} that {A} is of {D}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="150" height="250" tabindex="0"></canvas>
 <noscript><img alt="VII.9 diagram" src="propVII9.gif"/></noscript>
 <script type="text/javascript">
+    // A is one half of BC and D one half of EF; BG, GC and EH, HF are the
+    // halves. Line segments only, so the walk is highlight beats, with G and
+    // H appearing when BC and EF are divided.
+    var GIVEN = ["A","BC","B","C","D","EF","E","F"];
+    var DIV1  = GIVEN.concat(["G","BG","GC"]);
+    var DIV2  = DIV1.concat(["H","EH","HF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,19 +55,113 @@ I say that, alternately, *BC* is the same part or parts of *EF* that *A* is of *
             "D;line;connect;D1,D2;black",
             "H;point;cutoff;E,E3,D1,D2",
             "F;point;cutoff;H,E3,D1,D2",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // Invisible highlight targets for the numbers BC and EF are
+            // divided into. Zero-colour: nothing changes at rest.
+            "BG;line;connect;B,G;0;0;0",
+            "GC;line;connect;G,C;0;0;0",
+            "EH;line;connect;E,H;0;0;0",
+            "HF;line;connect;H,F;0;0;0"
         ],
+        // Draggables (checked against the bundle): the lineSliders B and E
+        // and the end handles A1, A2, D1, D2 of A and D — all givens,
+        // standing from slide 1. G, C, H, F are derived cutoffs and follow
+        // the visible sets: G and H arrive with "Divide".
+        aliases: { "GB": "BG", "CG": "GC", "HE": "EH", "FH": "HF" },
+        slides: [
+            { text: "“If a number is a part of a number, and another is the same part of another,”",
+              visible: GIVEN,
+              highlighted: ["A","BC","D","EF"] },
+            { text: "“then alternately, whatever part or parts the first is of the third,”",
+              visible: GIVEN,
+              highlighted: ["A","D"] },
+            { text: "“the same part, or the same parts, the second is of the fourth.”",
+              visible: GIVEN,
+              highlighted: ["BC","EF"],
+              justifications: [{ ref: "VII.9" }] },
+            { text: "Let the number {A} be a part of the number {BC},",
+              visible: GIVEN,
+              highlighted: ["A","BC"] },
+            { text: "and another number {D} be the same part of another number {EF} that {A} is of {BC}.",
+              visible: GIVEN,
+              highlighted: ["D","EF"] },
+            { text: "I say that, alternately, {BC} is the same part or parts of {EF} that {A} is of {D}.",
+              visible: GIVEN,
+              highlighted: ["BC","EF","A","D"] },
+            { text: "Since {D} is the same part of {EF} that {A} is of {BC},",
+              visible: GIVEN,
+              highlighted: ["D","EF","A","BC"] },
+            { text: "therefore there are as many numbers {BC} equal to {A} as there are also in {EF} equal to {D}.",
+              visible: GIVEN,
+              highlighted: ["BC","A","EF","D"] },
+            { text: "Divide {BC} into the numbers equal to {A}, namely {BG} and {GC},",
+              visible: DIV1,
+              highlighted: ["A","BG","GC","G"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "and divide {EF} into those equal to {D}, namely {EH} and {HF}.",
+              visible: DIV2,
+              highlighted: ["D","EH","HF","H"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Point.appear } ] } },
+            { text: "Then the multitude of {BG} and {GC} equals the multitude of {EH} and {HF}.",
+              visible: DIV2,
+              highlighted: ["BG","GC","EH","HF"] },
+            { text: "Now, since the numbers {BG} and {GC} equal one another,",
+              visible: DIV2,
+              highlighted: ["BG","GC"] },
+            { text: "and the numbers {EH} and {HF} also equal one another,",
+              visible: DIV2,
+              highlighted: ["EH","HF"] },
+            { text: "while the multitude of {BG} and {GC} equals the multitude of {EH} and {HF},",
+              visible: DIV2,
+              highlighted: ["BG","GC","EH","HF"] },
+            { text: "therefore {GC} is the same part or parts of {HF} that {BG} is of {EH},",
+              visible: DIV2,
+              highlighted: ["GC","HF","BG","EH"] },
+            { text: "so that, in addition, the sum {BC} is the same part or parts of the sum {EF} that {BG} is of {EH}.",
+              visible: DIV2,
+              highlighted: ["BC","EF","BG","EH"],
+              justifications: [{ ref: "VII.5" }, { ref: "VII.6" }] },
+            { text: "But {BG} equals {A}, and {EH} equals {D},",
+              visible: DIV2,
+              highlighted: ["BG","A","EH","D"] },
+            { text: "therefore {BC} is the same part or parts of {EF} that {A} is of {D}.",
+              visible: DIV2,
+              highlighted: ["BC","EF","A","D"] },
+            { text: "Therefore, if a number is a part of a number, and another is the same part of another,",
+              visible: DIV2,
+              highlighted: ["A","BC","D","EF"] },
+            { text: "then alternately, whatever part of parts the first is of the third,",
+              visible: DIV2,
+              highlighted: ["A","D"] },
+            { text: "the same part, or the same parts, the second is of the fourth.",
+              visible: DIV2,
+              highlighted: ["BC","EF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.9") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.5": "/elements/books/bookVII/propositions/propVII5/",
+        "VII.6": "/elements/books/bookVII/propositions/propVII6/"
     });
 </script>
 </figure>
 
-Since *D* is the same part of *EF* that *A* is of *BC,* therefore there are as many numbers *BC* equal to *A* as there are also in *EF* equal to *D.*
+Since {D} is the same part of {EF} that {A} is of {BC}, therefore there are as many numbers {BC} equal to {A} as there are also in {EF} equal to {D}.
 
-Divide *BC* into the numbers equal to *A,* namely *BG* and *GC,* and divide *EF* into those equal to *D,* namely *EH* and *HF.* Then the multitude of *BG* and *GC* equals the multitude of *EH* and *HF.*
+Divide {BC} into the numbers equal to {A}, namely {BG} and {GC}, and divide {EF} into those equal to {D}, namely {EH} and {HF}. Then the multitude of {BG} and {GC} equals the multitude of {EH} and {HF}.
 
-Now, since the numbers *BG* and *GC* equal one another, and the numbers *EH* and *HF* also equal one another, while the multitude of *BG* and *GC* equals the multitude of *EH* and *HF,* therefore *GC* is the same part or parts of *HF* that *BG* is of *EH,* so that, in addition, the sum *BC* is the same part or parts of the sum *EF* that *BG* is of *EH.* [!just VII.5; VII.6]
+Now, since the numbers {BG} and {GC} equal one another, and the numbers {EH} and {HF} also equal one another, while the multitude of {BG} and {GC} equals the multitude of {EH} and {HF}, therefore {GC} is the same part or parts of {HF} that {BG} is of {EH}, so that, in addition, the sum {BC} is the same part or parts of the sum {EF} that {BG} is of {EH}. [!just VII.5; VII.6]
 
-But *BG* equals *A,* and *EH* equals *D,* therefore *BC* is the same part or parts of *EF* that *A* is of *D.*
+But {BG} equals {A}, and {EH} equals {D}, therefore {BC} is the same part or parts of {EF} that {A} is of {D}.
 
 Therefore, *if a number is a part of a number, and another is the same part of another, then alternately, whatever part of parts the first is of the third, the same part, or the same parts, the second is of the fourth.*
 
