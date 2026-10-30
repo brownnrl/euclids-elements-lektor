@@ -15,14 +15,27 @@ statement: Magnitudes commensurable with the same magnitude are also commensurab
 ----
 proof:
 
-Let each of the magnitudes *A* and *B* be commensurable with *C.*
+Let each of the magnitudes {A} and {B} be commensurable with {C}.
 
-I say that *A* is also commensurable with *B.*
+I say that {A} is also commensurable with {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="320" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.12 diagram" src="propX12.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the magnitudes A, B, C (black) on one line; the numbers
+    // D, E, F, G, H, K, L (blue) drawn as lines, E, G, K, L made proportional.
+    // Nothing added; the numbers stroke in as the proof takes them.
+    //
+    // Draggables (checked against the bundle): every lineSlider (A1, A2, B1,
+    // B2, C1, C2, D1, D2, E1, F1, F2, G1, H1, H2, K1, L1) and the offscreen
+    // frees. A, B, C are given; D1, D2, E1, F1, F2, G1 are deferred to "let it
+    // have the ratio", H1, H2, K1, L1 to the VIII.4 step. E2, G2, K2, L2 are
+    // derived and listed per slide.
+    var GIVEN = ["A","A1","A2","B","B1","B2","C","C1","C2"];
+    var DE    = GIVEN.concat(["D","D1","D2","E","E1","E2"]);
+    var FG    = DE.concat(["F","F1","F2","G","G1","G2"]);
+    var ALL   = FG.concat(["H","H1","H2","K","K1","K2","L","L1","L2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -71,19 +84,121 @@ I say that *A* is also commensurable with *B.*
             "L2;point;proportion;F1,F2,G1,G2,K1,K2,L1,G3;0",
             "L;line;connect;L1,L2;black;0;blue"
         ],
+        deferDraggables: ["D1","D2","E1","F1","F2","G1","H1","H2","K1","L1"],
+        slides: [
+            { text: "“Magnitudes commensurable with the same magnitude are also commensurable with one another.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "X.12" }] },
+            { text: "Let each of the magnitudes {A} and {B} be commensurable with {C}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "I say that {A} is also commensurable with {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Since {A} is commensurable with {C},",
+              visible: GIVEN,
+              highlighted: ["A","C"] },
+            { text: "therefore {A} has to {C} the ratio which a number has to a number.",
+              visible: GIVEN,
+              highlighted: ["A","C"],
+              justifications: [{ claim: "commensurables have a numeric ratio", ref: "X.5" }] },
+            { text: "Let it have the ratio which {D} has to {E}.",
+              visible: DE,
+              highlighted: ["D","E"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Again, since {C} is commensurable with {B},",
+              visible: DE,
+              highlighted: ["C","B"] },
+            { text: "therefore {C} has to {B} the ratio which a number has to a number.",
+              visible: DE,
+              highlighted: ["C","B"],
+              justifications: [{ claim: "commensurables have a numeric ratio", ref: "X.5" }] },
+            { text: "Let it have the ratio which {F} has to {G}.",
+              visible: FG,
+              highlighted: ["F","G"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "And, given any number of ratios we please,",
+              visible: FG,
+              highlighted: ["D","E","F","G"] },
+            { text: "namely the ratio which {D} has to {E} and that which {F} has to {G},",
+              visible: FG,
+              highlighted: ["D","E","F","G"] },
+            { text: "take the numbers {H}, {K}, and {L} continuously in the given ratios,",
+              visible: ALL,
+              highlighted: ["H","K","L"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "L", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "numbers continuously in given ratios", ref: "VIII.4" }] },
+            { text: "so that {D} is to {E} as {H} is to {K}, and {F} is to {G} as {K} is to {L}.",
+              visible: ALL,
+              highlighted: ["D","E","F","G","H","K","L"] },
+            { text: "Since {A} is to {C} as {D} is to {E}, while {D} is to {E} as {H} is to {K},",
+              visible: ALL,
+              highlighted: ["A","C","D","E","H","K"] },
+            { text: "therefore {A} is to {C} as {H} is to {K}.",
+              visible: ALL,
+              highlighted: ["A","C","H","K"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Again, since {C} is to {B} as {F} is to {G}, while {F} is to {G} as {K} is to {L},",
+              visible: ALL,
+              highlighted: ["C","B","F","G","K","L"] },
+            { text: "therefore {C} is to {B} as {K} is to {L}.",
+              visible: ALL,
+              highlighted: ["C","B","K","L"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "But {A} is to {C} as {H} is to {K},",
+              visible: ALL,
+              highlighted: ["A","C","H","K"] },
+            { text: "therefore, ex aequali, {A} is to {B} as {H} is to {L}.",
+              visible: ALL,
+              highlighted: ["A","B","H","L"],
+              justifications: [{ claim: "ex aequali", ref: "V.22" }] },
+            { text: "Therefore {A} has to {B} the ratio which a number has to a number.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "Therefore {A} is commensurable with {B}.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "a numeric ratio makes them commensurable", ref: "X.6" }] },
+            { text: "Therefore, magnitudes commensurable with the same magnitude are also commensurable with one another.",
+              visible: ALL,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.12") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.11":   "/elements/books/bookV/propositions/propV11/",
+        "V.22":   "/elements/books/bookV/propositions/propV22/",
+        "VIII.4": "/elements/books/bookVIII/propositions/propVIII4/",
+        "X.5":    "/elements/books/bookX/propositions/propX5/",
+        "X.6":    "/elements/books/bookX/propositions/propX6/"
     });
 </script>
 </figure>
 
-Since *A* is commensurable with *C,* therefore *A* has to *C* the ratio which a number has to a number. Let it have the ratio which *D* has to *E.* Again, since *C* is commensurable with *B,* therefore *C* has to *B* the ratio which a number has to a number. Let it have the ratio which *F* has to *G.* [!just X.5]
+Since {A} is commensurable with {C}, therefore {A} has to {C} the ratio which a number has to a number. Let it have the ratio which {D} has to {E}. Again, since {C} is commensurable with {B}, therefore {C} has to {B} the ratio which a number has to a number. Let it have the ratio which {F} has to {G}. [!just X.5]
 
-And, given any number of ratios we please, namely the ratio which *D* has to *E* and that which *F* has to *G,* take the numbers *H, K,* and *L* continuously in the given ratios, so that *D* is to *E* as *H* is to *K,* and *F* is to *G* as *K* is to *L.* [!just VIII.4]
+And, given any number of ratios we please, namely the ratio which {D} has to {E} and that which {F} has to {G}, take the numbers {H}, {K}, and {L} continuously in the given ratios, so that {D} is to {E} as {H} is to {K}, and {F} is to {G} as {K} is to {L}. [!just VIII.4]
 
-Since *A* is to *C* as *D* is to *E,* while *D* is to *E* as *H* is to *K,* therefore *A* is to *C* as *H* is to *K.* Again, since *C* is to *B* as *F* is to *G,* while *F* is to *G* as *K* is to *L,* therefore *C* is to *B* as *K* is to *L.* [!just V.11]
+Since {A} is to {C} as {D} is to {E}, while {D} is to {E} as {H} is to {K}, therefore {A} is to {C} as {H} is to {K}. Again, since {C} is to {B} as {F} is to {G}, while {F} is to {G} as {K} is to {L}, therefore {C} is to {B} as {K} is to {L}. [!just V.11]
 
-But *A* is to *C* as *H* is to *K,* therefore, *ex aequali,* *A* is to *B* as *H* is to *L.* [!just V.22]
+But {A} is to {C} as {H} is to {K}, therefore, *ex aequali,* {A} is to {B} as {H} is to {L}. [!just V.22]
 
-Therefore *A* has to *B* the ratio which a number has to a number. Therefore *A* is commensurable with *B.* [!just X.6]
+Therefore {A} has to {B} the ratio which a number has to a number. Therefore {A} is commensurable with {B}. [!just X.6]
 
 Therefore, *magnitudes commensurable with the same magnitude are also commensurable with one another.*
 

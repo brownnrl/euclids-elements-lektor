@@ -15,14 +15,21 @@ statement: If four magnitudes are proportional, and the first is commensurable w
 ----
 proof:
 
-Let *A, B, C,* and *D* be four magnitudes in proportion, so that *A* is to *B* as *C* is to *D,* and let *A* be commensurable with *B.*
+Let {A}, {B}, {C}, and {D} be four magnitudes in proportion, so that {A} is to {B} as {C} is to {D}, and let {A} be commensurable with {B}.
 
-I say that *C* is also commensurable with *D.*
+I say that {C} is also commensurable with {D}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="100" tabindex="0"></canvas>
 <noscript><img alt="X.11 diagram" src="propX11.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: four magnitudes A, B, C, D drawn as lines, D made
+    // proportional (A : B = C : D). Nothing added; the walk is highlights.
+    //
+    // Draggables (checked against the bundle): the lineSliders A1, A2, B1,
+    // B2, C1, C2, D1 and the offscreen frees. All four magnitudes are given
+    // on slide 1, so nothing is deferred. D2 is derived and listed.
+    var ALL = ["A","A1","A2","B","B1","B2","C","C1","C2","D","D1","D2"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -45,21 +52,117 @@ I say that *C* is also commensurable with *D.*
             "D2;point;proportion;A1,A2,B1,B2,C1,C2,D1,B3;0",
             "D;line;connect;D1,D2;black"
         ],
+        slides: [
+            // The statement, split at its seams, each clause lit on the figure.
+            { text: "“If four magnitudes are proportional, and {the first|A} is commensurable with {the second|B},”",
+              visible: ALL,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "X.11" }] },
+            { text: "“then {the third|C} also is commensurable with {the fourth|D};”",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "“but, if {the first|A} is incommensurable with {the second|B},”",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "“then {the third|C} also is incommensurable with {the fourth|D}.”",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            // The proof.
+            { text: "Let {A}, {B}, {C}, and {D} be four magnitudes in proportion,",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "so that {A} is to {B} as {C} is to {D}, and let {A} be commensurable with {B}.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "I say that {C} is also commensurable with {D}.",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "Since {A} is commensurable with {B},",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "therefore {A} has to {B} the ratio which a number has to a number.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "commensurables have a numeric ratio", ref: "X.5" }] },
+            { text: "And {A} is to {B} as {C} is to {D},",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "therefore {C} also has to {D} the ratio which a number has to a number.",
+              visible: ALL,
+              highlighted: ["C","D"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Therefore {C} is commensurable with {D}.",
+              visible: ALL,
+              highlighted: ["C","D"],
+              justifications: [{ claim: "a numeric ratio makes them commensurable", ref: "X.6" }] },
+            { text: "Next, let {A} be incommensurable with {B}.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "I say that {C} is also incommensurable with {D}.",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "Since {A} is incommensurable with {B},",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "therefore {A} does not have to {B} the ratio which a number has to a number.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "incommensurables have no numeric ratio", ref: "X.7" }] },
+            { text: "And {A} is to {B} as {C} is to {D},",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "therefore neither has {C} to {D} the ratio which a number has to a number.",
+              visible: ALL,
+              highlighted: ["C","D"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Therefore {C} is incommensurable with {D}.",
+              visible: ALL,
+              highlighted: ["C","D"],
+              justifications: [{ claim: "no numeric ratio, so incommensurable", ref: "X.8" }] },
+            // The closing restatement, split like the statement.
+            { text: "Therefore, if four magnitudes are proportional, and {the first|A} is commensurable with {the second|B},",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "then {the third|C} also is commensurable with {the fourth|D};",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "but, if {the first|A} is incommensurable with {the second|B},",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "then {the third|C} also is incommensurable with {the fourth|D}.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.11") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.11": "/elements/books/bookV/propositions/propV11/",
+        "X.5":  "/elements/books/bookX/propositions/propX5/",
+        "X.6":  "/elements/books/bookX/propositions/propX6/",
+        "X.7":  "/elements/books/bookX/propositions/propX7/",
+        "X.8":  "/elements/books/bookX/propositions/propX8/"
     });
 </script>
 </figure>
 
-Since *A* is commensurable with *B,* therefore *A* has to *B* the ratio which a number has to a number. [!just X.5]
+Since {A} is commensurable with {B}, therefore {A} has to {B} the ratio which a number has to a number. [!just X.5]
 
-And *A* is to *B* as *C* is to *D,* therefore *C* also has to *D* the ratio which a number has to a number. Therefore *C* is commensurable with *D.* [!just V.11; X.6]
+And {A} is to {B} as {C} is to {D}, therefore {C} also has to {D} the ratio which a number has to a number. Therefore {C} is commensurable with {D}. [!just V.11; X.6]
 
-Next, let *A* be incommensurable with *B.*
+Next, let {A} be incommensurable with {B}.
 
-I say that *C* is also incommensurable with *D.*
+I say that {C} is also incommensurable with {D}.
 
-Since *A* is incommensurable with *B,* therefore *A* does not have to *B* the ratio which a number has to a number. [!just X.7]
+Since {A} is incommensurable with {B}, therefore {A} does not have to {B} the ratio which a number has to a number. [!just X.7]
 
-And *A* is to *B* as *C* is to *D,* therefore neither has *C* to *D* the ratio which a number has to a number. Therefore *C* is incommensurable with *D.* [!just V.11, X.8]
+And {A} is to {B} as {C} is to {D}, therefore neither has {C} to {D} the ratio which a number has to a number. Therefore {C} is incommensurable with {D}. [!just V.11, X.8]
 
 Therefore, *if four magnitudes are proportional, and the first is commensurable with the second, then the third also is commensurable with the fourth; but, if the first is incommensurable with the second, then the third also is incommensurable with the fourth.*
 
@@ -67,6 +170,6 @@ Therefore, *if four magnitudes are proportional, and the first is commensurable 
 ----
 guide:
 
-The proof if very direct. If *A* : *B* = *C* : *D,* and the first ratio equals a numeric ratio, then the second equals that, too, but if the first is not a numeric ratio, then neither is the second.
+The proof if very direct. If {A} : {B} = {C} : {D}, and the first ratio equals a numeric ratio, then the second equals that, too, but if the first is not a numeric ratio, then neither is the second.
 
 This proposition is used in repeatedly in Book X starting with @X.14. It is also used in the previous proposition which was, no doubt, not in the original *Elements.*
