@@ -15,14 +15,24 @@ statement: If two straight lines incommensurable in square which make the sum of
 ----
 proof:
 
-Let two straight lines *AB* and *BC* incommensurable in square, and fulfilling the given conditions, be added together. [!just X.34]
+Let two straight lines {AB} and {BC} incommensurable in square, and fulfilling the given conditions, be added together. [!just X.34]
 
-I say that *AC* is irrational.
+I say that {AC} is irrational.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="230" height="80" tabindex="0"></canvas>
 <noscript><img alt="X.40 diagram" src="propX40.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the line AC with B between A and C. Added, hidden at
+    // rest: transparent highlight targets AB and BC (;0;0;0), which stroke
+    // gold from A and from B when the two lines are "added together". The
+    // proof's rectangles and squares are not drawn; captions light the
+    // lines that contain them.
+    //
+    // Draggables (checked against the bundle): A, B, C (line sliders) — all
+    // given in the opening sentence — and the offscreen X0, X1. Nothing is
+    // deferred.
+    var ALL = ["A","B","C","AC","AB","BC"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -33,15 +43,75 @@ I say that *AC* is irrational.
             "A;point;lineSlider;X0,X1,30,0",
             "B;point;lineSlider;X0,X1,100,0",
             "C;point;lineSlider;X0,X1,200,0",
-            "AC;line;connect;A,C"
+            "AC;line;connect;A,C",
+            // Highlight targets only — AC already draws them.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0"
         ],
+        slides: [
+            { text: "“If two straight lines incommensurable in square",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "X.40" }] },
+            { text: "which make the sum of the squares on them medial but the rectangle contained by them rational",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "are added together, then the whole straight line is irrational;",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "let it be called the side of a rational plus a medial area.”",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Let two straight lines {AB} and {BC} incommensurable in square, and fulfilling the given conditions, be added together.",
+              visible: ALL,
+              transition: { mode: "cascade", animations: [
+                  { elem: "AB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "X.34" }] },
+            { text: "I say that {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Since the sum of the squares on {AB} and {BC} is medial, while twice the rectangle {AB} by {BC} is rational,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "so that the square on {AC} is also incommensurable with twice the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["AC","AB","BC"],
+              justifications: [{ claim: "AC² incommensurable with 2·AB·BC", ref: "X.16" }] },
+            { text: "But twice the rectangle {AB} by {BC} is rational, therefore the square on {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AB","BC","AC"] },
+            { text: "Therefore {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ claim: "AC irrational", ref: "X.Def.I.4" }] },
+            { text: "Let it be called the side of a rational plus a medial area.",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.40") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.16":      "/elements/books/bookX/propositions/propX16/",
+        "X.34":      "/elements/books/bookX/propositions/propX34/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-Since the sum of the squares on *AB* and *BC* is medial, while twice the rectangle *AB* by *BC* is rational, therefore the sum of the squares on *AB* and *BC* is incommensurable with twice the rectangle *AB* by *BC*, so that the square on *AC* is also incommensurable with twice the rectangle *AB* by *BC*. [!just X.16]
+Since the sum of the squares on {AB} and {BC} is medial, while twice the rectangle {AB} by {BC} is rational, therefore the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC}, so that the square on {AC} is also incommensurable with twice the rectangle {AB} by {BC}. [!just X.16]
 
-But twice the rectangle *AB* by *BC* is rational, therefore the square on *AC* is irrational. Therefore *AC* is irrational. Let it be called the *side of a rational plus a medial area.* [!just X.Def.I.4]
+But twice the rectangle {AB} by {BC} is rational, therefore the square on {AC} is irrational. Therefore {AC} is irrational. Let it be called the *side of a rational plus a medial area.* [!just X.Def.I.4]
 
 <div class="qed">Q.E.D.</div>
 ----
