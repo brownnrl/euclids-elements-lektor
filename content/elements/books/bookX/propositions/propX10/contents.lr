@@ -17,16 +17,31 @@ statement: To find two straight lines incommensurable, the one in length only, a
 ----
 proof:
 
-Let *A* be the assigned straight line.
+Let {A} be the assigned straight line.
 
-It is required to find two straight lines incommensurable, the one in length only, and the other in square also, with *A.*
+It is required to find two straight lines incommensurable, the one in length only, and the other in square also, with {A}.
 
-Set out two numbers *B* and *C* which do not have to one another the ratio which a square number has to a square number, that is, which are not similar plane numbers, and let it be contrived that *B* is to *C* as the square on *A* is to the square on *D,* for we have learned how to do this. [!just X.6.Cor]
+Set out two numbers {B} and {C} which do not have to one another the ratio which a square number has to a square number, that is, which are not similar plane numbers, and let it be contrived that {B} is to {C} as the square on {A} is to the square on {D}, for we have learned how to do this. [!just X.6.Cor]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="180" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.10 diagram" src="propX10.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure, unchanged: the assigned line A on the top row; D and E
+    // below it; the numbers B and C in blue at the bottom. D is drawn so that
+    // B : C = sq. A : sq. D (the hidden fourth proportional D* and the mean
+    // proportional D2), and E is the mean proportional between A and D (E2).
+    // The squares are not drawn in Joyce's figure, so "the square on A"
+    // lights A itself. Nothing is added.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2, D1, E1 and the offscreen frees. A is given on slide 1;
+    // B1, B2, C1, C2, D1, E1 are deferred so B, C, D and E arrive with their
+    // captions. D2 and E2 are derived and listed per slide.
+    var GIVEN = ["A","A1","A2"];
+    var NUMS  = GIVEN.concat(["B","B1","B2","C","C1","C2"]);
+    var DLINE = NUMS.concat(["D","D1","D2"]);
+    var ALL   = DLINE.concat(["E","E1","E2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -61,27 +76,118 @@ Set out two numbers *B* and *C* which do not have to one another the ratio which
             "E2;point;meanProportional;A1,A2,D1,D2,E1,E3;0",
             "E;line;connect;E1,E2;black"
         ],
+        deferDraggables: ["B1","B2","C1","C2","D1","E1"],
+        slides: [
+            { text: "“To find two straight lines incommensurable,",
+              visible: GIVEN,
+              highlighted: ["A"],
+              justifications: [{ ref: "X.10" }] },
+            { text: "the one in length only, and the other in square also, with {an assigned straight line|A}.”",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "Let {A} be the assigned straight line.",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "It is required to find two straight lines incommensurable, the one in length only, and the other in square also, with {A}.",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "Set out two numbers {B} and {C}",
+              visible: NUMS,
+              highlighted: ["B","C"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "B", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "which do not have to one another the ratio which a square number has to a square number,",
+              visible: NUMS,
+              highlighted: ["B","C"] },
+            { text: "that is, which are not similar plane numbers,",
+              visible: NUMS,
+              highlighted: ["B","C"] },
+            { text: "and let it be contrived that {B} is to {C} as the square on {A} is to the square on {D},",
+              visible: DLINE,
+              highlighted: ["B","C","A","D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "for we have learned how to do this.",
+              visible: DLINE,
+              highlighted: ["A","D"],
+              justifications: [{ ref: "X.6.Cor" }] },
+            { text: "Therefore the square on {A} is commensurable with the square on {D}.",
+              visible: DLINE,
+              highlighted: ["A","D"],
+              justifications: [{ claim: "numeric ratio → commensurable", ref: "X.6" }] },
+            { text: "And, since {B} does not have to {C} the ratio which a square number has to a square number,",
+              visible: DLINE,
+              highlighted: ["B","C"] },
+            { text: "therefore neither has the square on {A} to the square on {D} the ratio which a square number has to a square number,",
+              visible: DLINE,
+              highlighted: ["A","D"] },
+            { text: "therefore {A} is incommensurable in length with {D}.",
+              visible: DLINE,
+              highlighted: ["A","D"],
+              justifications: [{ claim: "squares not as square to square", ref: "X.9" }] },
+            { text: "Take a mean proportional {E} between {A} and {D}.",
+              visible: ALL,
+              highlighted: ["E","A","D"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {A} is to {D} as the square on {A} is to the square on {E}.",
+              visible: ALL,
+              highlighted: ["A","D","E"],
+              justifications: [{ claim: "duplicate ratio", ref: "V.Def.9" }] },
+            { text: "But {A} is incommensurable in length with {D},",
+              visible: ALL,
+              highlighted: ["A","D"] },
+            { text: "therefore the square on {A} is also incommensurable with the square on {E}.",
+              visible: ALL,
+              highlighted: ["A","E"],
+              justifications: [{ ref: "X.11" }] },
+            { text: "Therefore {A} is incommensurable in square with {E}.",
+              visible: ALL,
+              highlighted: ["A","E"] },
+            { text: "Therefore two straight lines {D} and {E} have been found incommensurable,",
+              visible: ALL,
+              highlighted: ["D","E"] },
+            { text: "{D} in length only, and {E} in square and of course in length also, with the assigned straight line {A}.",
+              visible: ALL,
+              highlighted: ["D","E","A"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.10") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.Def.9": "/elements/books/bookV/definitions/defV9/",
+        "X.6":     "/elements/books/bookX/propositions/propX6/",
+        "X.6.Cor": "/elements/books/bookX/propositions/propX6/#cor",
+        "X.9":     "/elements/books/bookX/propositions/propX9/",
+        "X.11":    "/elements/books/bookX/propositions/propX11/"
     });
 </script>
 </figure>
 
-Therefore the square on *A* is commensurable with the square on *D.* [!just X.6]
+Therefore the square on {A} is commensurable with the square on {D}. [!just X.6]
 
-And, since *B* does not have to *C* the ratio which a square number has to a square number, therefore neither has the square on *A* to the square on *D* the ratio which a square number has to a square number, therefore *A* is incommensurable in length with *D.* [!just X.9]
+And, since {B} does not have to {C} the ratio which a square number has to a square number, therefore neither has the square on {A} to the square on {D} the ratio which a square number has to a square number, therefore {A} is incommensurable in length with {D}. [!just X.9]
 
-Take a mean proportional *E* between *A* and *D.* Then *A* is to *D* as the square on *A* is to the square on *E.* [!just V.Def.9]
+Take a mean proportional {E} between {A} and {D}. Then {A} is to {D} as the square on {A} is to the square on {E}. [!just V.Def.9]
 
-But *A* is incommensurable in length with *D,* therefore the square on *A* is also incommensurable with the square on *E.* Therefore *A* is incommensurable in square with *E.* [!just X.11]
+But {A} is incommensurable in length with {D}, therefore the square on {A} is also incommensurable with the square on {E}. Therefore {A} is incommensurable in square with {E}. [!just X.11]
 
-Therefore two straight lines *D* and *E* have been found incommensurable, *D* in length only, and *E* in square and of course in length also, with the assigned straight line *A.*
+Therefore two straight lines {D} and {E} have been found incommensurable, {D} in length only, and {E} in square and of course in length also, with the assigned straight line {A}.
 
 <div class="qed">Q.E.D.</div>
 ----
 guide:
 
-This proposition exhibits the lines promised in @X.Def.I.3. Just take a line *D* so that the square on *A* to the square on *D* is the ratio of two numbers which are not a square number to a square number. For instance, if *A* is the side of a square and *D* the diagonal of that square, then the square on *A* to the square on *D* is in the ratio 1:2, which is not the ratio of square number to a square number. Therefore *D* is commensurable in square only with *A.* (The ratio *D* : *A* is the square root of 2.)
+This proposition exhibits the lines promised in @X.Def.I.3. Just take a line {D} so that the square on {A} to the square on {D} is the ratio of two numbers which are not a square number to a square number. For instance, if {A} is the side of a square and {D} the diagonal of that square, then the square on {A} to the square on {D} is in the ratio 1:2, which is not the ratio of square number to a square number. Therefore {D} is commensurable in square only with {A}. (The ratio {D} : {A} is the square root of 2.)
 
-Next, if *E* is the mean proportional between *A* and *D,* then *E* is incommensurable in square with *A.* (The ratio *E* : *A* is the fourth root of 2.)
+Next, if {E} is the mean proportional between {A} and {D}, then {E} is incommensurable in square with {A}. (The ratio {E} : {A} is the fourth root of 2.)
 
 It is certain that this proposition is not genuine. For one thing, its proof uses the next proposition. Also, the phrase "for we have learned how to do this" is the sort of thing a student would write. Finally, in the manuscript P (the primary one used by Peyrard and Heiberg) this proposition is not numbered and the next one is numbered 10.
 

@@ -15,14 +15,27 @@ statement: The squares on straight lines commensurable in length have to one ano
 ----
 proof:
 
-Let *A* and *B* be commensurable in length.
+Let {A} and {B} be commensurable in length.
 
-I say that the square on *A* has to the square on *B* the ratio which a square number has to a square number.
+I say that the square on {A} has to the square on {B} the ratio which a square number has to a square number.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="240" height="90" tabindex="0"></canvas>
 <noscript><img alt="X.9 diagram" src="propX9.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure, unchanged: the magnitudes A and B in black on the top
+    // row, the numbers C and D in blue below, D drawn so that A : B = C : D
+    // (the proportion point D2). The proof's squares are not drawn in
+    // Joyce's figure, so "the square on A" lights A itself. Nothing is
+    // added; the walk is highlight beats plus the strokes of C and D.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2, D1 and the offscreen frees. A and B are given on
+    // slide 1; C1, C2, D1 are deferred so C and D arrive with their caption.
+    // D2 is derived (proportion) and listed per slide. The third and fourth
+    // parts argue from A and B alone, so C and D are withdrawn there.
+    var GIVEN = ["A","A1","A2","B","B1","B2"];
+    var ALL   = GIVEN.concat(["C","C1","C2","D","D1","D2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,47 +60,221 @@ I say that the square on *A* has to the square on *B* the ratio which a square n
             "D2;point;proportion;A1,A2,B1,B2,C1,C2,D1,C3;0",
             "D;line;connect;D1,D2;black;0;blue"
         ],
+        deferDraggables: ["C1","C2","D1"],
+        slides: [
+            { text: "“The squares on straight lines commensurable in length",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "X.9" }] },
+            { text: "have to one another the ratio which a square number has to a square number;",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and squares which have to one another the ratio which a square number has to a square number",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "also have their sides commensurable in length.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "But the squares on straight lines incommensurable in length",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "do not have to one another the ratio which a square number has to a square number;",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and squares which do not have to one another the ratio which a square number has to a square number",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "also do not have their sides commensurable in length either.”",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Let {A} and {B} be commensurable in length.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that the square on {A} has to the square on {B}",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Since {A} is commensurable in length with {B}, therefore {A} has to {B} the ratio which a number has to a number.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "A : B as a number to a number", ref: "X.5" }] },
+            { text: "Let it have to it the ratio which {C} has to {D}.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since then {A} is to {B} as {C} is to {D},",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "while the ratio of the square on {A} to the square on {B} is duplicate of the ratio of {A} to {B},",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "for similar figures are in the duplicate ratio of their corresponding sides,",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "similar figures in the duplicate ratio of their sides", ref: "VI.20.Cor" }] },
+            { text: "and the ratio of the square on {C} to the square on {D} is duplicate of the ratio of {C} to {D},",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "for between two square numbers there is one mean proportional number,",
+              visible: ALL,
+              highlighted: ["C","D"],
+              justifications: [{ claim: "one mean between two square numbers", ref: "VIII.11" }] },
+            { text: "and the square number has to the square number the ratio duplicate of that which the side has to the side,",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "therefore the square on {A} is to the square on {B} as the square on {C} is to the square on {D}.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "Next, as the square on {A} is to the square on {B}, so let the square on {C} be to the square on {D}.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "I say that {A} is commensurable in length with {B}.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "Since the square on {A} is to the square on {B} as the square on {C} is to the square on {D},",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "while the ratio of the square on {A} to the square on {B} is duplicate of the ratio of {A} to {B},",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "and the ratio of the square on {C} to the square on {D} is duplicate of the ratio of {C} to {D},",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "therefore {A} is to {B} as {C} is to {D}.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "Therefore {A} has to {B} the ratio which the number {C} has to the number {D}.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "Therefore {A} is commensurable in length with {B}.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "numeric ratio → commensurable", ref: "X.6" }] },
+            { text: "Next, let {A} be incommensurable in length with {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that the square on {A} does not have to the square on {B}",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "If the square on {A} does have to the square on {B} the ratio which a square number has to a square number,",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "Above" }] },
+            { text: "then {A} is commensurable with {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "But it is not, therefore the square on {A} does not have to the square on {B}",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Finally, let the square on {A} not have to the square on {B}",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that {A} is incommensurable in length with {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "For, if {A} is commensurable with {B},",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "Above" }] },
+            { text: "then the square on {A} has to the square on {B} the ratio which a square number has to a square number.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "But it does not, therefore {A} is not commensurable in length with {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Therefore, the squares on straight lines commensurable in length",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "have to one another the ratio which a square number has to a square number;",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "and squares which have to one another the ratio which a square number has to a square number",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "also have their sides commensurable in length.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "But the squares on straight lines incommensurable in length",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "do not have to one another the ratio which a square number has to a square number;",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "and squares which do not have to one another the ratio which a square number has to a square number",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "also do not have their sides commensurable in length either.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.9") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.5":       "/elements/books/bookX/propositions/propX5/",
+        "X.6":       "/elements/books/bookX/propositions/propX6/",
+        "VI.20.Cor": "/elements/books/bookVI/propositions/propVI20/#cor",
+        "VIII.11":   "/elements/books/bookVIII/propositions/propVIII11/"
     });
 </script>
 </figure>
 
-Since *A* is commensurable in length with *B,* therefore *A* has to *B* the ratio which a number has to a number. Let it have to it the ratio which *C* has to *D.* [!just X.5]
+Since {A} is commensurable in length with {B}, therefore {A} has to {B} the ratio which a number has to a number. Let it have to it the ratio which {C} has to {D}. [!just X.5]
 
-Since then *A* is to *B* as *C* is to *D,* while the ratio of the square on *A* to the square on *B* is duplicate of the ratio of *A* to *B,* for similar figures are in the duplicate ratio of their corresponding sides, and the ratio of the square on *C* to the square on *D* is duplicate of the ratio of *C* to *D,* for between two square numbers there is one mean proportional number, and the square number has to the square number the ratio duplicate of that which the side has to the side, therefore the square on *A* is to the square on *B* as the square on *C* is to the square on *D.* [!just VI.20.Cor; VIII.11]
-
-<hr width="50%">
-
-Next, as the square on *A* is to the square on *B,* so let the square on *C* be to the square on *D.*
-
-I say that *A* is commensurable in length with *B.*
-
-Since the square on *A* is to the square on *B* as the square on *C* is to the square on *D,* while the ratio of the square on *A* to the square on *B* is duplicate of the ratio of *A* to *B,* and the ratio of the square on *C* to the square on *D* is duplicate of the ratio of *C* to *D,* therefore *A* is to *B* as *C* is to *D.*
-
-Therefore *A* has to *B* the ratio which the number *C* has to the number *D.* Therefore *A* is commensurable in length with *B.* [!just X.6]
+Since then {A} is to {B} as {C} is to {D}, while the ratio of the square on {A} to the square on {B} is duplicate of the ratio of {A} to {B}, for similar figures are in the duplicate ratio of their corresponding sides, and the ratio of the square on {C} to the square on {D} is duplicate of the ratio of {C} to {D}, for between two square numbers there is one mean proportional number, and the square number has to the square number the ratio duplicate of that which the side has to the side, therefore the square on {A} is to the square on {B} as the square on {C} is to the square on {D}. [!just VI.20.Cor; VIII.11]
 
 <hr width="50%">
 
-Next, let *A* be incommensurable in length with *B.*
+Next, as the square on {A} is to the square on {B}, so let the square on {C} be to the square on {D}.
 
-I say that the square on *A* does not have to the square on *B* the ratio which a square number has to a square number.
+I say that {A} is commensurable in length with {B}.
+
+Since the square on {A} is to the square on {B} as the square on {C} is to the square on {D}, while the ratio of the square on {A} to the square on {B} is duplicate of the ratio of {A} to {B}, and the ratio of the square on {C} to the square on {D} is duplicate of the ratio of {C} to {D}, therefore {A} is to {B} as {C} is to {D}.
+
+Therefore {A} has to {B} the ratio which the number {C} has to the number {D}. Therefore {A} is commensurable in length with {B}. [!just X.6]
+
+<hr width="50%">
+
+Next, let {A} be incommensurable in length with {B}.
+
+I say that the square on {A} does not have to the square on {B} the ratio which a square number has to a square number.
 
 <div class="just">Above</div>
 
-If the square on *A* does have to the square on *B* the ratio which a square number has to a square number, then *A* is commensurable with *B.*
+If the square on {A} does have to the square on {B} the ratio which a square number has to a square number, then {A} is commensurable with {B}.
 
-But it is not, therefore the square on *A* does not have to the square on *B* the ratio which a square number has to a square number.
+But it is not, therefore the square on {A} does not have to the square on {B} the ratio which a square number has to a square number.
 
 <hr width="50%">
 
-Finally, let the square on *A* not have to the square on *B* the ratio which a square number has to a square number.
+Finally, let the square on {A} not have to the square on {B} the ratio which a square number has to a square number.
 
-I say that *A* is incommensurable in length with *B.*
+I say that {A} is incommensurable in length with {B}.
 
 <div class="just">Above</div>
 
-For, if *A* is commensurable with *B,* then the square on *A* has to the square on *B* the ratio which a square number has to a square number.
+For, if {A} is commensurable with {B}, then the square on {A} has to the square on {B} the ratio which a square number has to a square number.
 
-But it does not, therefore *A* is not commensurable in length with *B.*
+But it does not, therefore {A} is not commensurable in length with {B}.
 
 Therefore, *the squares on straight lines commensurable in length have to one another the ratio which a square number has to a square number; and squares which have to one another the ratio which a square number has to a square number also have their sides commensurable in length. But the squares on straight lines incommensurable in length do not have to one another the ratio which a square number has to a square number; and squares which do not have to one another the ratio which a square number has to a square number also do not have their sides commensurable in length either.*
 
@@ -101,11 +288,11 @@ For example, the diagonal of a square and the side of the square are not commens
 
 #### Numbers as magnitudes
 
-As in the proof of X.5, again there is the assumption that numbers are magnitudes. For example, toward the beginning of the proof there is the following argument: Since the ratio of magnitudes *A* : *B* equals the ratio of numbers *C* : *D,* and the ratio of the square on *A* to the square on *B* (a ratio of two plane figures) is duplicate of the ratio *A* : *B,* and the ratio of the square on *C* to the square on *D* (a ratio of two numbers) is duplicate of the ratio *C* : *D,* therefore the ratio of the square on *A* to the square on *B* equals the ratio of the square on *C* to the square on *D.*
+As in the proof of X.5, again there is the assumption that numbers are magnitudes. For example, toward the beginning of the proof there is the following argument: Since the ratio of magnitudes {A} : {B} equals the ratio of numbers {C} : {D}, and the ratio of the square on {A} to the square on {B} (a ratio of two plane figures) is duplicate of the ratio {A} : {B}, and the ratio of the square on {C} to the square on {D} (a ratio of two numbers) is duplicate of the ratio {C} : {D}, therefore the ratio of the square on {A} to the square on {B} equals the ratio of the square on {C} to the square on {D}.
 
 Such a conclusion is warranted if numbers are magnitudes, but if they are, then several of the propositions in Book V fail since they rely on the existence of fourth proportionals.
 
-In the second stage of the proof of the proposition, the converse is argued: Since the squares are proportional, therefore *A* : *B* = *C* : *D.* A separate proposition should be supplied with a proof to justify that step.
+In the second stage of the proof of the proposition, the converse is argued: Since the squares are proportional, therefore {A} : {B} = {C} : {D}. A separate proposition should be supplied with a proof to justify that step.
 
 #### Use of this proposition
 
