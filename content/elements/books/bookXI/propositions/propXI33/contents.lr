@@ -17,16 +17,44 @@ statement: Similar parallelepipedal solids are to one another in the triplicate 
 ----
 proof:
 
-Let *AB* and *CD* be similar parallelepipedal solids, and let *AE* be the side corresponding to *CF.*
+Let {AB|sAB} and {CD|sCD} be similar parallelepipedal solids, and let {AE} be the side corresponding to {CF}.
 
-I say that the solid *AB* has to the solid *CD* the ratio triplicate of that which *AE* has to *CF.*
+I say that the solid {AB|sAB} has to the solid {CD|sCD} the ratio triplicate of that which {AE} has to {CF}.
 
-Produce *EK, EL,* and *EM* in a straight line with *AE, GE,* and *HE.* Make *EK* equal to *CF, EL* equal to *FN,* and *EM* equal to *FR.* Complete the parallelogram *KL* and the solid *KP.* [!just I.3; I.31]
+Produce {EK}, {EL}, and {EM} in a straight line with {AE}, {GE}, and {HE}. Make {EK} equal to {CF}, {EL} equal to {FN}, and {EM} equal to {FR}. Complete the parallelogram {KL|pKL} and the solid {KP|sKP}. [!just I.3; I.31]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="500" height="350" tabindex="0"></canvas>
 <noscript><img alt="XI.33 diagram" src="propXI33.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the similar solids CD and AB, the solid KP built at E
+    // on EK, EL, EM equal to CF, FN, FR, and the solids EO and LQ completed
+    // on GK and KL with the height of AB.
+    //
+    // Added, all transparent unless noted: faceless hexagons on the solids'
+    // outlines (sAB, sCD, sKP, sEO, sLQ) to carry the solid's highlight,
+    // since a polyhedron draws none; faceless quadrilaterals for the
+    // parallelograms the proof names (pKL, pCN, pKM, pCR, pEP, pDF, pGK,
+    // pAG, pQE), since a filled face would be raised over the figure (#140);
+    // the sides AE, CF, GE, HE, FN, FR. EK, EL, jK and HQ are solid slide
+    // twins over edges of Joyce's faces, hidden at rest (initiallyHidden),
+    // so they can be drawn as the construction reaches them. The angles
+    // KEL, AEG, CFN are markers, hidden at rest.
+    //
+    // Draggables (checked against the bundle): C0, C3 (off-canvas), C, F,
+    // N, R, d (unlettered), H, all on the given solids. Every other point
+    // is derived and listed per slide.
+    var CDs = ["C","F","N","R","D","a","b","c","aCFN","FNDR","bCFR","ac","bc","Dc"];
+    var ABs = ["d","H","B","e","E","A","G","f","edHB","HBGE","AdHE","ef","Af","Gf"];
+    var GIVEN = CDs.concat(ABs, ["sAB","sCD","AE","CF","GE","HE","FN","FR"]);
+    var PRO = GIVEN.concat(["K","L","M","EK","EL","EM"]);
+    var KLd = PRO.concat(["g","ELgK","pKL"]);
+    var KPd = KLd.concat(["P","h","i","gKhi","PLgi","PM","hM",
+                          "sKP","pKM","pEP","pCN","pCR","pDF"]);
+    var ANG = KPd.concat(["angKEL","angCFN","angAEG"]);
+    var GKd = KPd.concat(["j","Gj","jK","pGK"]);
+    var SOL = GKd.concat(["Q","O","KjOQ","BO","HQ","k","l","HQlk","kL","lg",
+                          "sEO","sLQ","pQE","pAG"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -87,29 +115,249 @@ Produce *EK, EL,* and *EM* in a straight line with *AE, GE,* and *HE.* Make *EK*
             "HQlk;polygon;quadrilateral;H,Q,l,k;0;0;black;0",
             "kL;line;connect;k,L",
             "lg;line;connect;l,g",
-            "BO;line;connect;B,O"
+            "BO;line;connect;B,O",
+            // Transparent highlight targets: the solids' outlines.
+            "sCD;polygon;hexagon;C,a,N,D,R,b;0;0;0;0",
+            "sAB;polygon;hexagon;e,B,G,E,A,d;0;0;0;0",
+            "sKP;polygon;hexagon;E,K,h,i,P,L;0;0;0;0",
+            "sEO;polygon;hexagon;H,B,O,j,K,E;0;0;0;0",
+            "sLQ;polygon;hexagon;H,Q,K,g,L,k;0;0;0;0",
+            // Parallelograms the proof names.
+            "pCN;polygon;quadrilateral;C,F,N,a;0;0;0;0",
+            "pCR;polygon;quadrilateral;C,F,R,b;0;0;0;0",
+            "pDF;polygon;quadrilateral;F,N,D,R;0;0;0;0",
+            "pKL;polygon;quadrilateral;E,L,g,K;0;0;0;0",
+            "pKM;polygon;quadrilateral;E,K,h,M;0;0;0;0",
+            "pEP;polygon;quadrilateral;E,L,P,M;0;0;0;0",
+            "pGK;polygon;quadrilateral;E,G,j,K;0;0;0;0",
+            "pAG;polygon;quadrilateral;A,E,G,f;0;0;0;0",
+            "pQE;polygon;quadrilateral;E,H,Q,K;0;0;0;0",
+            // Sides the proof names.
+            "AE;line;connect;A,E;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "GE;line;connect;G,E;0;0;0",
+            "HE;line;connect;H,E;0;0;0",
+            "FN;line;connect;F,N;0;0;0",
+            "FR;line;connect;F,R;0;0;0",
+            // Slide twins, hidden at rest (see above).
+            "EK;line;connect;E,K",
+            "EL;line;connect;E,L",
+            "jK;line;connect;j,K",
+            "HQ;line;connect;H,Q",
+            "angKEL;sector;angleMarker;E,K,L",
+            "angAEG;sector;angleMarker;E,A,G",
+            "angCFN;sector;angleMarker;F,C,N"
         ],
+        initiallyHidden: ["EK","EL","jK","HQ"],
+        aliases: { "KE": "EK", "EG": "GE", "EH": "HE" },
+        slides: [
+            { text: "“Similar parallelepipedal solids are to one another in the triplicate ratio of their corresponding sides.”",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD"],
+              justifications: [{ ref: "XI.33" }] },
+            { text: "Let {AB|sAB} and {CD|sCD} be similar parallelepipedal solids,",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD"] },
+            { text: "and let {AE} be the side corresponding to {CF}.",
+              visible: GIVEN,
+              highlighted: ["AE","CF"] },
+            { text: "I say that the solid {AB|sAB} has to the solid {CD|sCD} the ratio triplicate of that which {AE} has to {CF}.",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD","AE","CF"] },
+            { text: "Produce {EK}, {EL}, and {EM} in a straight line with {AE}, {GE}, and {HE}.",
+              visible: PRO,
+              highlighted: ["AE","GE","HE"],
+              transition: { animations: [
+                  { elem: "EK", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "EL", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "EM", name: geomlib.A.Line.straightEdgeExtend } ] } },
+            { text: "Make {EK} equal to {CF}, {EL} equal to {FN}, and {EM} equal to {FR}.",
+              visible: PRO,
+              highlighted: ["EK","CF","EL","FN","EM","FR"],
+              justifications: [{ claim: "EK, EL, EM cut off", ref: "I.3" }] },
+            { text: "Complete the parallelogram {KL|pKL}",
+              visible: KLd,
+              highlighted: ["pKL"],
+              transition: { animations: [
+                  { elem: "ELgK", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "parallels completing KL", ref: "I.31" }] },
+            { text: "and the solid {KP|sKP}.",
+              visible: KPd,
+              highlighted: ["sKP"],
+              transition: { animations: [
+                  { elem: "gKhi", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "PLgi", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "hM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "PM", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "parallels completing KP", ref: "I.31" }] },
+            { text: "Now, since the two sides {KE|EK} and {EL} equal the two sides {CF} and {FN},",
+              visible: KPd,
+              highlighted: ["EK","EL","CF","FN"] },
+            { text: "while the angle {KEL|angKEL} equals the angle {CFN|angCFN},",
+              visible: ANG,
+              highlighted: ["angKEL","angCFN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angKEL", name: geomlib.A.Sector.sweep },
+                  { elem: "angCFN", name: geomlib.A.Sector.sweep } ] } },
+            { text: "for the angle {AEG|angAEG} also equals the angle {CFN|angCFN} because {AB|sAB} and {CD|sCD} are similar solids,",
+              visible: ANG,
+              highlighted: ["angAEG","angCFN"],
+              transition: { animations: [
+                  { elem: "angAEG", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the parallelogram {KL|pKL} equals and is similar to the parallelogram {CN|pCN}.",
+              visible: KPd,
+              highlighted: ["pKL","pCN"] },
+            { text: "For the same reason the parallelogram {KM|pKM} equals and is similar to {CR|pCR},",
+              visible: KPd,
+              highlighted: ["pKM","pCR"] },
+            { text: "and {EP|pEP} equals and is similar to {DF|pDF}.",
+              visible: KPd,
+              highlighted: ["pEP","pDF"] },
+            { text: "Therefore three parallelograms of the solid {KP|sKP} equal and are similar to three parallelograms of the solid {CD|sCD}.",
+              visible: KPd,
+              highlighted: ["pKL","pKM","pEP","pCN","pCR","pDF"] },
+            { text: "But the former three parallelograms equal and are similar to their opposites,",
+              visible: KPd,
+              highlighted: ["sKP"],
+              justifications: [{ claim: "opposite planes equal", ref: "XI.24" }] },
+            { text: "and the latter three equal and are similar to their opposites,",
+              visible: KPd,
+              highlighted: ["sCD"] },
+            { text: "therefore the whole solid {KP|sKP} equals and is similar to the whole solid {CD|sCD}.",
+              visible: KPd,
+              highlighted: ["sKP","sCD"],
+              justifications: [{ claim: "solid KP = solid CD", ref: "XI.Def.10" }] },
+            { text: "Complete the parallelogram {GK|pGK},",
+              visible: GKd,
+              highlighted: ["pGK"],
+              transition: { animations: [
+                  { elem: "Gj", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "jK", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "parallels completing GK", ref: "I.31" }] },
+            { text: "and complete the solids {EO|sEO} and {LQ|sLQ} on the parallelograms {GK|pGK} and {KL|pKL} as bases",
+              visible: SOL,
+              highlighted: ["sEO","sLQ","pGK","pKL"],
+              transition: { animations: [
+                  { elem: "KjOQ", name: geomlib.A.Polygon.outline },
+                  { elem: "BO", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HQ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HQlk", name: geomlib.A.Polygon.outline },
+                  { elem: "kL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "lg", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "with the same height as that of {AB|sAB}.",
+              visible: SOL,
+              highlighted: ["sAB","HE"] },
+            { text: "Then since the solids {AB|sAB} and {CD|sCD} are similar,",
+              visible: SOL,
+              highlighted: ["sAB","sCD"] },
+            { text: "therefore {AE} is to {CF} as {EG|GE} is to {FN}, and as {EH|HE} is to {FR}.",
+              visible: SOL,
+              highlighted: ["AE","CF","GE","FN","HE","FR"],
+              justifications: [{ claim: "AE : CF = EG : FN = EH : FR", ref: "XI.Def.9" }] },
+            { text: "And {CF} equals {EK}, {FN} equals {EL}, and {FR} equals {EM},",
+              visible: SOL,
+              highlighted: ["CF","EK","FN","EL","FR","EM"] },
+            { text: "therefore {AE} is to {EK} as {GE} is to {EL}, and as {HE} is to {EM}.",
+              visible: SOL,
+              highlighted: ["AE","EK","GE","EL","HE","EM"] },
+            { text: "But {AE} is to {EK} as {AG|pAG} is to the parallelogram {GK|pGK},",
+              visible: SOL,
+              highlighted: ["AE","EK","pAG","pGK"],
+              justifications: [{ claim: "AE : EK = AG : GK", ref: "VI.1" }] },
+            { text: "therefore {GE} is to {EL} as {GK|pGK} is to {KL|pKL},",
+              visible: SOL,
+              highlighted: ["GE","EL","pGK","pKL"] },
+            { text: "and {HE} is to {EM} as {QE|pQE} is to {KM|pKM}.",
+              visible: SOL,
+              highlighted: ["HE","EM","pQE","pKM"] },
+            { text: "Therefore the parallelogram {AG|pAG} is to {GK|pGK} as {GK|pGK} to is {KL|pKL}, and as {QE|pQE} is to {KM|pKM}.",
+              visible: SOL,
+              highlighted: ["pAG","pGK","pKL","pQE","pKM"] },
+            { text: "But {AG|pAG} is to {GK|pGK} as the solid {AB|sAB} is to the solid {EO|sEO},",
+              visible: SOL,
+              highlighted: ["pAG","pGK","sAB","sEO"],
+              justifications: [{ claim: "AG : GK = solid AB : solid EO", ref: "XI.32" }] },
+            { text: "{GK|pGK} is to {KL|pKL} as the solid {OE|sEO} is to the solid {QL|sLQ},",
+              visible: SOL,
+              highlighted: ["pGK","pKL","sEO","sLQ"] },
+            { text: "and {QE|pQE} is to {KM|pKM} as the solid {QL|sLQ} is to the solid {KP|sKP},",
+              visible: SOL,
+              highlighted: ["pQE","pKM","sLQ","sKP"] },
+            { text: "therefore the solid {AB|sAB} is to {EO|sEO} as {EO|sEO} is to {QL|sLQ}, and as {QL|sLQ} is to {KP|sKP}.",
+              visible: SOL,
+              highlighted: ["sAB","sEO","sLQ","sKP"] },
+            { text: "But, if four magnitudes are continuously proportional,",
+              visible: SOL,
+              highlighted: ["sAB","sEO","sLQ","sKP"] },
+            { text: "then the first has to the fourth the ratio triplicate of that which it has to the second,",
+              visible: SOL,
+              highlighted: ["sAB","sKP"],
+              justifications: [{ claim: "triplicate ratio", ref: "V.Def.10" }] },
+            { text: "therefore the solid {AB|sAB} has to {KP|sKP} the ratio triplicate of that which {AB|sAB} has to {EO|sEO}.",
+              visible: SOL,
+              highlighted: ["sAB","sKP","sEO"] },
+            { text: "But {AB|sAB} is to {EO|sEO} as the parallelogram {AG|pAG} is to {GK|pGK},",
+              visible: SOL,
+              highlighted: ["sAB","sEO","pAG","pGK"] },
+            { text: "and as the straight line {AE} is to {EK},",
+              visible: SOL,
+              highlighted: ["AE","EK"],
+              justifications: [{ claim: "AG : GK = AE : EK", ref: "VI.1" }] },
+            { text: "hence the solid {AB|sAB} also has to {KP|sKP} the ratio triplicate of that which {AE} has to {EK}.",
+              visible: SOL,
+              highlighted: ["sAB","sKP","AE","EK"] },
+            { text: "But the solid {KP|sKP} equals the solid {CD|sCD}, and the straight line {EK} equals {CF},",
+              visible: SOL,
+              highlighted: ["sKP","sCD","EK","CF"] },
+            { text: "therefore the solid {AB|sAB} has also to the solid {CD|sCD} the ratio triplicate",
+              visible: SOL,
+              highlighted: ["sAB","sCD"] },
+            { text: "of that which the corresponding side of it, {AE}, has to the corresponding side {CF}.",
+              visible: SOL,
+              highlighted: ["AE","CF"] },
+            { text: "Therefore, similar parallelepipedal solids are to one another in the triplicate ratio of their corresponding sides.",
+              visible: SOL,
+              highlighted: ["sAB","sCD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.33") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "V.Def.10":  "/elements/books/bookV/definitions/defV10/",
+        "VI.1":      "/elements/books/bookVI/propositions/propVI1/",
+        "XI.24":     "/elements/books/bookXI/propositions/propXI24/",
+        "XI.32":     "/elements/books/bookXI/propositions/propXI32/",
+        "XI.Def.9":  "/elements/books/bookXI/definitions/defXI9/",
+        "XI.Def.10": "/elements/books/bookXI/definitions/defXI10/"
     });
 </script>
 </figure>
 
-Now, since the two sides *KE* and *EL* equal the two sides *CF* and *FN,* while the angle *KEL* equals the angle *CFN,* for the angle *AEG* also equals the angle *CFN* because *AB* and *CD* are similar solids, therefore the parallelogram *KL* equals and is similar to the parallelogram *CN.* For the same reason the parallelogram *KM* equals and is similar to *CR,* and *EP* equals and is similar to *DF.*
+Now, since the two sides {KE|EK} and {EL} equal the two sides {CF} and {FN}, while the angle {KEL|angKEL} equals the angle {CFN|angCFN}, for the angle {AEG|angAEG} also equals the angle {CFN|angCFN} because {AB|sAB} and {CD|sCD} are similar solids, therefore the parallelogram {KL|pKL} equals and is similar to the parallelogram {CN|pCN}. For the same reason the parallelogram {KM|pKM} equals and is similar to {CR|pCR}, and {EP|pEP} equals and is similar to {DF|pDF}.
 
-Therefore three parallelograms of the solid *KP* equal and are similar to three parallelograms of the solid *CD.* But the former three parallelograms equal and are similar to their opposites, and the latter three equal and are similar to their opposites, therefore the whole solid *KP* equals and is similar to the whole solid *CD.* [!just XI.24; XI.Def.10]
+Therefore three parallelograms of the solid {KP|sKP} equal and are similar to three parallelograms of the solid {CD|sCD}. But the former three parallelograms equal and are similar to their opposites, and the latter three equal and are similar to their opposites, therefore the whole solid {KP|sKP} equals and is similar to the whole solid {CD|sCD}. [!just XI.24; XI.Def.10]
 
-Complete the parallelogram *GK,* and complete the solids *EO* and *LQ* on the parallelograms *GK* and *KL* as bases with the same height as that of *AB.* [!just I.31]
+Complete the parallelogram {GK|pGK}, and complete the solids {EO|sEO} and {LQ|sLQ} on the parallelograms {GK|pGK} and {KL|pKL} as bases with the same height as that of {AB|sAB}. [!just I.31]
 
-Then since the solids *AB* and *CD* are similar, therefore *AE* is to *CF* as *EG* is to *FN,* and as *EH* is to *FR.* And *CF* equals *EK, FN* equals *EL,* and *FR* equals *EM,* therefore *AE* is to *EK* as *GE* is to *EL,* and as *HE* is to *EM.* [!just XI.Def.9]
+Then since the solids {AB|sAB} and {CD|sCD} are similar, therefore {AE} is to {CF} as {EG|GE} is to {FN}, and as {EH|HE} is to {FR}. And {CF} equals {EK}, {FN} equals {EL}, and {FR} equals {EM}, therefore {AE} is to {EK} as {GE} is to {EL}, and as {HE} is to {EM}. [!just XI.Def.9]
 
-But *AE* is to *EK* as *AG* is to the parallelogram *GK,* therefore *GE* is to *EL* as *GK* is to *KL,* and *HE* is to *EM* as *QE* is to *KM.* Therefore the parallelogram *AG* is to *GK* as *GK* to is *KL,* and as *QE* is to *KM.* [!just VI.1]
+But {AE} is to {EK} as {AG|pAG} is to the parallelogram {GK|pGK}, therefore {GE} is to {EL} as {GK|pGK} is to {KL|pKL}, and {HE} is to {EM} as {QE|pQE} is to {KM|pKM}. Therefore the parallelogram {AG|pAG} is to {GK|pGK} as {GK|pGK} to is {KL|pKL}, and as {QE|pQE} is to {KM|pKM}. [!just VI.1]
 
-But *AG* is to *GK* as the solid *AB* is to the solid *EO, GK* is to *KL* as the solid *OE* is to the solid *QL,* and *QE* is to *KM* as the solid *QL* is to the solid *KP,* therefore the solid *AB* is to *EO* as *EO* is *to QL,* and as *QL* is to *KP.* [!just XI.32]
+But {AG|pAG} is to {GK|pGK} as the solid {AB|sAB} is to the solid {EO|sEO}, {GK|pGK} is to {KL|pKL} as the solid {OE|sEO} is to the solid {QL|sLQ}, and {QE|pQE} is to {KM|pKM} as the solid {QL|sLQ} is to the solid {KP|sKP}, therefore the solid {AB|sAB} is to {EO|sEO} as {EO|sEO} is to {QL|sLQ}, and as {QL|sLQ} is to {KP|sKP}. [!just XI.32]
 
-But, if four magnitudes are continuously proportional, then the first has to the fourth the ratio triplicate of that which it has to the second, therefore the solid *AB* has to *KP* the ratio triplicate of that which *AB* has to *EO.* [!just V.Def.10]
+But, if four magnitudes are continuously proportional, then the first has to the fourth the ratio triplicate of that which it has to the second, therefore the solid {AB|sAB} has to {KP|sKP} the ratio triplicate of that which {AB|sAB} has to {EO|sEO}. [!just V.Def.10]
 
-But *AB* is to *EO* as the parallelogram *AG* is to *GK,* and as the straight line *AE* is to *EK,* hence the solid *AB* also has to *KP* the ratio triplicate of that which *AE* has to *EK.* [!just VI.1]
+But {AB|sAB} is to {EO|sEO} as the parallelogram {AG|pAG} is to {GK|pGK}, and as the straight line {AE} is to {EK}, hence the solid {AB|sAB} also has to {KP|sKP} the ratio triplicate of that which {AE} has to {EK}. [!just VI.1]
 
-But the solid *KP* equals the solid *CD,* and the straight line *EK* equals *CF,* therefore the solid *AB* has also to the solid *CD* the ratio triplicate of that which the corresponding side of it, *AE,* has to the corresponding side *CF.*
+But the solid {KP|sKP} equals the solid {CD|sCD}, and the straight line {EK} equals {CF}, therefore the solid {AB|sAB} has also to the solid {CD|sCD} the ratio triplicate of that which the corresponding side of it, {AE}, has to the corresponding side {CF}.
 
 Therefore, *Similar parallelepipedal solids are to one another in the triplicate ratio of their corresponding sides.*
 

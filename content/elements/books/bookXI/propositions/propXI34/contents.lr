@@ -15,18 +15,40 @@ statement: In equal parallelepipedal solids the bases are reciprocally proportio
 ----
 proof:
 
-Let *AB* and *CD* be equal parallelepipedal solids.
+Let {AB|sAB} and {CD|sCD} be equal parallelepipedal solids.
 
-I say that in the parallelepipedal solids *AB* and *CD* the bases are reciprocally proportional to the heights, that is the base *EH* is to the base *NQ* as the height of the solid *CD* is to the height of the solid *AB.*
+I say that in the parallelepipedal solids {AB|sAB} and {CD|sCD} the bases are reciprocally proportional to the heights, that is the base {EH|pEH} is to the base {NQ|pNQ} as the height of the solid {CD|sCD} is to the height of the solid {AB|sAB}.
 
-First, let the sides which stand up, namely *AG, EF, LB, HK, CM, NO, PD,* and *QR,* be at right angles to their bases.
+First, let the sides which stand up, namely {AG}, {EF}, {LB}, {HK}, {CM}, {NO}, {PD}, and {QR}, be at right angles to their bases.
 
-I say that the base *EH* is to the base *NQ* as *CM* is to *AG.*
+I say that the base {EH|pEH} is to the base {NQ|pNQ} as {CM} is to {AG}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="400" height="280" tabindex="0"></canvas>
 <noscript><img alt="XI.34 diagram" src="propXI34a.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure for the first case: the solids AB and CD with their
+    // sides standing at right angles to the bases, CT cut off equal to AG,
+    // and the solid CV on NQ with height CT.
+    //
+    // Added, all transparent unless noted: faceless hexagons on the solids'
+    // outlines (sAB, sCD, sCV) to carry the solid's highlight, since a
+    // polyhedron draws none; faceless quadrilaterals for the bases EH, NQ
+    // and the faces MQ, TQ (pEH, pNQ, pMQ, pTQ), since a filled face would
+    // be raised over the figure (#140); the standing sides AG, EF, LB, CM,
+    // NO, PD, QR and the cut-off CT (HK is Joyce's). The right angles at A
+    // and C are markers, hidden at rest.
+    //
+    // Draggables (checked against the bundle): A, K, F, R, M, O, all on the
+    // given solids. T is a derived cut-off; every other point is derived
+    // and listed per slide.
+    var AB0 = ["G","A","K","F","H","E","L","B","floor","AGFE","EFBL","GFBK","HK"];
+    var CD0 = ["R","M","O","D","RMOD","C","N","P","Q","CMON","NODP","CQ","PQ","RQ"];
+    var GIVEN = AB0.concat(CD0, ["sAB","sCD","pEH","pNQ",
+                                 "AG","EF","LB","CM","NO","PD","QR"]);
+    var HYP = GIVEN.concat(["rtA","rtC"]);
+    var CTd = HYP.concat(["T","CT"]);
+    var CVd = CTd.concat(["V","a","b","aTbV","sCV","pMQ","pTQ"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -73,58 +95,300 @@ I say that the base *EH* is to the base *NQ* as *CM* is to *AG.*
             "V;point;parallelogram;D,M,T",
             "a;point;parallelogram;R,M,T;0",
             "b;point;parallelogram;O,M,T;0",
-            "aTbV;polygon;quadrilateral;a,T,b,V;0;0;black;0"
+            "aTbV;polygon;quadrilateral;a,T,b,V;0;0;black;0",
+            // Transparent highlight targets: the solids' outlines.
+            "sAB;polygon;hexagon;A,E,L,B,K,G;0;0;0;0",
+            "sCD;polygon;hexagon;C,N,P,D,R,M;0;0;0;0",
+            "sCV;polygon;hexagon;C,N,P,V,a,T;0;0;0;0",
+            // Bases and faces the proof names.
+            "pEH;polygon;quadrilateral;A,E,L,H;0;0;0;0",
+            "pNQ;polygon;quadrilateral;C,N,P,Q;0;0;0;0",
+            "pMQ;polygon;quadrilateral;C,M,R,Q;0;0;0;0",
+            "pTQ;polygon;quadrilateral;C,T,a,Q;0;0;0;0",
+            // Standing sides and the cut-off.
+            "AG;line;connect;A,G;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "LB;line;connect;L,B;0;0;0",
+            "CM;line;connect;C,M;0;0;0",
+            "NO;line;connect;N,O;0;0;0",
+            "PD;line;connect;P,D;0;0;0",
+            "QR;line;connect;Q,R;0;0;0",
+            "CT;line;connect;C,T;0;0;0",
+            "rtA;sector;angleMarkerRight;A,G,E,12;0;0;red;red",
+            "rtC;sector;angleMarkerRight;C,M,N,12;0;0;red;red"
         ],
+        slides: [
+            { text: "“In equal parallelepipedal solids the bases are reciprocally proportional to the heights;",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD","pEH","pNQ"],
+              justifications: [{ ref: "XI.34" }] },
+            { text: "and those parallelepipedal solids in which the bases are reciprocally proportional to the heights are equal.”",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD"],
+              justifications: [{ ref: "XI.34" }] },
+            { text: "Let {AB|sAB} and {CD|sCD} be equal parallelepipedal solids.",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD"] },
+            { text: "I say that in the parallelepipedal solids {AB|sAB} and {CD|sCD} the bases are reciprocally proportional to the heights,",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD"] },
+            { text: "that is the base {EH|pEH} is to the base {NQ|pNQ} as the height of the solid {CD|sCD} is to the height of the solid {AB|sAB}.",
+              visible: GIVEN,
+              highlighted: ["pEH","pNQ","CM","AG"] },
+            { text: "First, let the sides which stand up, namely {AG}, {EF}, {LB}, {HK}, {CM}, {NO}, {PD}, and {QR},",
+              visible: GIVEN,
+              highlighted: ["AG","EF","LB","HK","CM","NO","PD","QR"] },
+            { text: "be at right angles to their bases.",
+              visible: HYP,
+              highlighted: ["pEH","pNQ","AG","CM"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtA", name: geomlib.A.Sector.sweep },
+                  { elem: "rtC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "I say that the base {EH|pEH} is to the base {NQ|pNQ} as {CM} is to {AG}.",
+              visible: HYP,
+              highlighted: ["pEH","pNQ","CM","AG"] },
+            { text: "If now the base {EH|pEH} equals the base {NQ|pNQ}, and the solid {AB|sAB} equals the solid {CD|sCD}, then {CM} equal {AG}.",
+              visible: HYP,
+              highlighted: ["pEH","pNQ","CM","AG"] },
+            { text: "For parallelepipedal solids of the same height are to one another as the bases,",
+              visible: HYP,
+              highlighted: ["sAB","sCD"],
+              justifications: [{ claim: "same height: solids as bases", ref: "XI.32" }] },
+            { text: "and the base {EH|pEH} is to {NQ|pNQ} as {CM} is to {AG},",
+              visible: HYP,
+              highlighted: ["pEH","pNQ","CM","AG"] },
+            { text: "and it is clear that in the parallelepipedal solids {AB|sAB} and {CD|sCD} the bases are reciprocally proportional to the heights.",
+              visible: HYP,
+              highlighted: ["sAB","sCD"] },
+            { text: "Next, let the base {EH|pEH} not be equal to the base {NQ|pNQ}, but let {EH|pEH} be greater.",
+              visible: HYP,
+              highlighted: ["pEH","pNQ"] },
+            { text: "Now the solid {AB|sAB} equals the solid {CD|sCD}, therefore {CM} is also greater than {AG}.",
+              visible: HYP,
+              highlighted: ["CM","AG"] },
+            { text: "Make {CT} equal to {AG},",
+              visible: CTd,
+              highlighted: ["CT","AG"],
+              transition: { animations: [
+                  { elem: "T", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "CT = AG", ref: "I.3" }] },
+            { text: "complete the parallelepipedal solid {VC|sCV} on {NQ|pNQ} as base with {CT} as height.",
+              visible: CVd,
+              highlighted: ["sCV","pNQ","CT"],
+              transition: { animations: [
+                  { elem: "aTbV", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "parallels completing CV", ref: "I.31" }] },
+            { text: "Now, since the solid {AB|sAB} equals the solid {CD|sCD}, and {CV|sCV} is outside them,",
+              visible: CVd,
+              highlighted: ["sAB","sCD","sCV"] },
+            { text: "and equals have to the same the same ratio,",
+              visible: CVd,
+              highlighted: ["sAB","sCD","sCV"],
+              justifications: [{ claim: "AB : CV = CD : CV", ref: "V.7" }] },
+            { text: "therefore the solid {AB|sAB} is to the solid {CV|sCV} as the solid {CD|sCD} is to the solid {CV|sCV}.",
+              visible: CVd,
+              highlighted: ["sAB","sCV","sCD"] },
+            { text: "But the solid {AB|sAB} is to the solid CY as the base {EH|pEH} is to the base {NQ|pNQ},",
+              visible: CVd,
+              highlighted: ["sAB","sCV","pEH","pNQ"] },
+            { text: "for the solids {AB|sAB} and {CV|sCV} are of equal height,",
+              visible: CVd,
+              highlighted: ["AG","CT"],
+              justifications: [{ claim: "AB : CV = EH : NQ", ref: "XI.32" }] },
+            { text: "and the solid {CD|sCD} is to the solid {CV|sCV} as the base {MQ|pMQ} is to the base {TQ|pTQ}",
+              visible: CVd,
+              highlighted: ["sCD","sCV","pMQ","pTQ"],
+              justifications: [{ claim: "CD : CV = MQ : TQ", ref: "XI.25" }] },
+            { text: "and {CM} is to {CT},",
+              visible: CVd,
+              highlighted: ["CM","CT"],
+              justifications: [{ claim: "MQ : TQ = CM : CT", ref: "VI.1" }] },
+            { text: "therefore the base {EH|pEH} is to the base {NQ|pNQ} as {MC|CM} is to {CT}.",
+              visible: CVd,
+              highlighted: ["pEH","pNQ","CM","CT"] },
+            { text: "But {CT} equals {AG}, therefore the base {EH|pEH} is to the base {NQ|pNQ} as {MC|CM} is to {AG}.",
+              visible: CVd,
+              highlighted: ["CT","AG","pEH","pNQ","CM"] },
+            { text: "Therefore in the parallelepipedal solids {AB|sAB} and {CD|sCD} the bases are reciprocally proportional to the heights.",
+              visible: CVd,
+              highlighted: ["sAB","sCD"] },
+            { text: "Again, in the parallelepipedal solids {AB|sAB} and {CD|sCD} let the bases be reciprocally proportional to the heights,",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD"] },
+            { text: "that is the base {EH|pEH} is to the base {NQ|pNQ},",
+              visible: GIVEN,
+              highlighted: ["pEH","pNQ"] },
+            { text: "so let the height of the solid {CD|sCD} be to the height of the solid {AB|sAB}.",
+              visible: GIVEN,
+              highlighted: ["CM","AG"] },
+            { text: "I say that the solid {AB|sAB} equals the solid {CD|sCD}.",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD"] },
+            { text: "Let the sides which stand up be at right angles to the bases.",
+              visible: HYP,
+              highlighted: ["AG","EF","LB","HK","CM","NO","PD","QR"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtA", name: geomlib.A.Sector.sweep },
+                  { elem: "rtC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Now, if the base {EH|pEH} equals the base {NQ|pNQ},",
+              visible: HYP,
+              highlighted: ["pEH","pNQ"] },
+            { text: "and the base {EH|pEH} is to the base {NQ|pNQ} as the height of the solid {CD|sCD} is to the height of the solid {AB|sAB},",
+              visible: HYP,
+              highlighted: ["pEH","pNQ","CM","AG"] },
+            { text: "therefore the height of the solid {CD|sCD} also equals the height of the solid {AB|sAB}.",
+              visible: HYP,
+              highlighted: ["CM","AG"] },
+            { text: "But parallelepipedal solids on equal bases and of the same height equal one another,",
+              visible: HYP,
+              highlighted: ["pEH","pNQ","CM","AG"],
+              justifications: [{ claim: "equal bases, same height", ref: "XI.31" }] },
+            { text: "therefore the solid {AB|sAB} equals the solid {CD|sCD}.",
+              visible: HYP,
+              highlighted: ["sAB","sCD"] },
+            { text: "Next, let the base {EH|pEH} not be equal to the base {NQ|pNQ}, but let {EH|pEH} be greater.",
+              visible: HYP,
+              highlighted: ["pEH","pNQ"] },
+            { text: "Therefore the height of the solid {CD|sCD} is also greater than the height of the solid {AB|sAB},",
+              visible: HYP,
+              highlighted: ["CM","AG"] },
+            { text: "that is, {CM} is greater than {AG}.",
+              visible: HYP,
+              highlighted: ["CM","AG"] },
+            { text: "Make {CT} equal to {AG} again,",
+              visible: CTd,
+              highlighted: ["CT","AG"],
+              transition: { animations: [
+                  { elem: "T", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "CT = AG", ref: "I.3" }] },
+            { text: "and complete the solid {CV|sCV}.",
+              visible: CVd,
+              highlighted: ["sCV"],
+              transition: { animations: [
+                  { elem: "aTbV", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "parallels completing CV", ref: "I.31" }] },
+            { text: "Since the base {EH|pEH} is to the base {NQ|pNQ} as {MC|CM} is to {AG}, and {AG} equals {CT},",
+              visible: CVd,
+              highlighted: ["pEH","pNQ","CM","AG","CT"] },
+            { text: "therefore the base {EH|pEH} is to the base {NQ|pNQ} as {CM} is to {CT}.",
+              visible: CVd,
+              highlighted: ["pEH","pNQ","CM","CT"] },
+            { text: "But the base {EH|pEH} is to the base {NQ|pNQ} as the solid {AB|sAB} is to the solid {CV|sCV},",
+              visible: CVd,
+              highlighted: ["pEH","pNQ","sAB","sCV"] },
+            { text: "for the solids {AB|sAB} and {CV|sCV} are of equal height,",
+              visible: CVd,
+              highlighted: ["AG","CT"],
+              justifications: [{ claim: "EH : NQ = AB : CV", ref: "XI.32" }] },
+            { text: "and {CM} is to {CT} as the base {MQ|pMQ} is to the base {QT|pTQ}",
+              visible: CVd,
+              highlighted: ["CM","CT","pMQ","pTQ"],
+              justifications: [{ claim: "CM : CT = MQ : QT", ref: "VI.1" }] },
+            { text: "and as the solid {CD|sCD} is to the solid {CV|sCV}.",
+              visible: CVd,
+              highlighted: ["sCD","sCV"],
+              justifications: [{ claim: "MQ : QT = CD : CV", ref: "XI.25" }] },
+            { text: "Therefore the solid {AB|sAB} is to the solid {CV|sCV} as the solid {CD|sCD} to the solid {CV|sCV}.",
+              visible: CVd,
+              highlighted: ["sAB","sCV","sCD"] },
+            { text: "Therefore each of the solids {AB|sAB} and {CD|sCD} has to {CV|sCV} the same ratio.",
+              visible: CVd,
+              highlighted: ["sAB","sCD","sCV"] },
+            { text: "Therefore the solid {AB|sAB} equals the solid {CD|sCD}.",
+              visible: CVd,
+              highlighted: ["sAB","sCD"],
+              justifications: [{ claim: "solid AB = solid CD", ref: "V.9" }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.34") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshows' resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":   "/elements/books/bookI/propositions/propI3/",
+        "I.31":  "/elements/books/bookI/propositions/propI31/",
+        "V.7":   "/elements/books/bookV/propositions/propV7/",
+        "V.9":   "/elements/books/bookV/propositions/propV9/",
+        "VI.1":  "/elements/books/bookVI/propositions/propVI1/",
+        "XI.11": "/elements/books/bookXI/propositions/propXI11/",
+        "XI.25": "/elements/books/bookXI/propositions/propXI25/",
+        "XI.29": "/elements/books/bookXI/propositions/propXI29/",
+        "XI.30": "/elements/books/bookXI/propositions/propXI30/",
+        "XI.31": "/elements/books/bookXI/propositions/propXI31/",
+        "XI.32": "/elements/books/bookXI/propositions/propXI32/"
     });
 </script>
 </figure>
 
-If now the base *EH* equals the base *NQ,* and the solid *AB* equals the solid *CD,* then *CM* equal *AG.* For parallelepipedal solids of the same height are to one another as the bases, and the base *EH* is to *NQ* as *CM* is to *AG,* and it is clear that in the parallelepipedal solids *AB* and *CD* the bases are reciprocally proportional to the heights. [!just XI.32]
+If now the base {EH|pEH} equals the base {NQ|pNQ}, and the solid {AB|sAB} equals the solid {CD|sCD}, then {CM} equal {AG}. For parallelepipedal solids of the same height are to one another as the bases, and the base {EH|pEH} is to {NQ|pNQ} as {CM} is to {AG}, and it is clear that in the parallelepipedal solids {AB|sAB} and {CD|sCD} the bases are reciprocally proportional to the heights. [!just XI.32]
 
-Next, let the base *EH* not be equal to the base *NQ,* but let *EH* be greater.
+Next, let the base {EH|pEH} not be equal to the base {NQ|pNQ}, but let {EH|pEH} be greater.
 
-Now the solid *AB* equals the solid *CD,* therefore *CM* is also greater than *AG.*
+Now the solid {AB|sAB} equals the solid {CD|sCD}, therefore {CM} is also greater than {AG}.
 
-Make *CT* equal to *AG,* complete the parallelepipedal solid *VC* on *NQ* as base with *CT* as height. [!just I.3, I.31]
+Make {CT} equal to {AG}, complete the parallelepipedal solid {VC|sCV} on {NQ|pNQ} as base with {CT} as height. [!just I.3, I.31]
 
-Now, since the solid *AB* equals the solid *CD,* and *CV* is outside them, and equals have to the same the same ratio, therefore the solid *AB* is to the solid *CV* as the solid *CD* is to the solid *CV.* [!just V.7]
+Now, since the solid {AB|sAB} equals the solid {CD|sCD}, and {CV|sCV} is outside them, and equals have to the same the same ratio, therefore the solid {AB|sAB} is to the solid {CV|sCV} as the solid {CD|sCD} is to the solid {CV|sCV}. [!just V.7]
 
-But the solid *AB* is to the solid *CY* as the base *EH* is to the base *NQ,* for the solids *AB* and *CV* are of equal height, and the solid *CD* is to the solid *CV* as the base *MQ* is to the base *TQ* and *CM* is to *CT,* therefore the base *EH* is to the base *NQ* as *MC* is to *CT.* [!just XI.32; XI.25; VI.1]
+But the solid {AB|sAB} is to the solid *CY* as the base {EH|pEH} is to the base {NQ|pNQ}, for the solids {AB|sAB} and {CV|sCV} are of equal height, and the solid {CD|sCD} is to the solid {CV|sCV} as the base {MQ|pMQ} is to the base {TQ|pTQ} and {CM} is to {CT}, therefore the base {EH|pEH} is to the base {NQ|pNQ} as {MC|CM} is to {CT}. [!just XI.32; XI.25; VI.1]
 
-But *CT* equals *AG,* therefore the base *EH* is to the base *NQ* as *MC* is to *AG.*
+But {CT} equals {AG}, therefore the base {EH|pEH} is to the base {NQ|pNQ} as {MC|CM} is to {AG}.
 
-Therefore in the parallelepipedal solids *AB* and *CD* the bases are reciprocally proportional to the heights.
+Therefore in the parallelepipedal solids {AB|sAB} and {CD|sCD} the bases are reciprocally proportional to the heights.
 
-Again, in the parallelepipedal solids *AB* and *CD* let the bases be reciprocally proportional to the heights, that is the base *EH* is to the base *NQ,* so let the height of the solid *CD* be to the height of the solid *AB.*
+Again, in the parallelepipedal solids {AB|sAB} and {CD|sCD} let the bases be reciprocally proportional to the heights, that is the base {EH|pEH} is to the base {NQ|pNQ}, so let the height of the solid {CD|sCD} be to the height of the solid {AB|sAB}.
 
-I say that the solid *AB* equals the solid *CD.*
+I say that the solid {AB|sAB} equals the solid {CD|sCD}.
 
 Let the sides which stand up be at right angles to the bases.
 
-Now, if the base *EH* equals the base *NQ,* and the base *EH* is to the base *NQ* as the height of the solid *CD* is to the height of the solid *AB,* therefore the height of the solid *CD* also equals the height of the solid *AB.*
+Now, if the base {EH|pEH} equals the base {NQ|pNQ}, and the base {EH|pEH} is to the base {NQ|pNQ} as the height of the solid {CD|sCD} is to the height of the solid {AB|sAB}, therefore the height of the solid {CD|sCD} also equals the height of the solid {AB|sAB}.
 
-But parallelepipedal solids on equal bases and of the same height equal one another, therefore the solid *AB* equals the solid *CD.* [!just XI.31]
+But parallelepipedal solids on equal bases and of the same height equal one another, therefore the solid {AB|sAB} equals the solid {CD|sCD}. [!just XI.31]
 
-Next, let the base *EH* not be equal to the base *NQ,* but let *EH* be greater.
+Next, let the base {EH|pEH} not be equal to the base {NQ|pNQ}, but let {EH|pEH} be greater.
 
-Therefore the height of the solid *CD* is also greater than the height of the solid *AB,* that is, *CM* is greater than *AG.*
+Therefore the height of the solid {CD|sCD} is also greater than the height of the solid {AB|sAB}, that is, {CM} is greater than {AG}.
 
-Make *CT* equal to *AG* again, and complete the solid *CV.* [!just I.3, I.31]
+Make {CT} equal to {AG} again, and complete the solid {CV|sCV}. [!just I.3, I.31]
 
-Since the base *EH* is to the base *NQ* as *MC* is to *AG,* and *AG* equals *CT,* therefore the base *EH* is to the base *NQ* as *CM* is to *CT.*
+Since the base {EH|pEH} is to the base {NQ|pNQ} as {MC|CM} is to {AG}, and {AG} equals {CT}, therefore the base {EH|pEH} is to the base {NQ|pNQ} as {CM} is to {CT}.
 
-But the base *EH* is to the base *NQ* as the solid *AB* is to the solid *CV,* for the solids *AB* and *CV* are of equal height, and *CM* is to *CT* as the base *MQ* is to the base *QT* and as the solid *CD* is to the solid *CV.* [!just XI.32, VI.1; XI.25]
+But the base {EH|pEH} is to the base {NQ|pNQ} as the solid {AB|sAB} is to the solid {CV|sCV}, for the solids {AB|sAB} and {CV|sCV} are of equal height, and {CM} is to {CT} as the base {MQ|pMQ} is to the base {QT|pTQ} and as the solid {CD|sCD} is to the solid {CV|sCV}. [!just XI.32, VI.1; XI.25]
 
-Therefore the solid *AB* is to the solid *CV* as the solid *CD* to the solid *CV.* Therefore each of the solids *AB* and *CD* has to *CV* the same ratio. Therefore the solid *AB* equals the solid *CD.* [!just V.9]
+Therefore the solid {AB|sAB} is to the solid {CV|sCV} as the solid {CD|sCD} to the solid {CV|sCV}. Therefore each of the solids {AB|sAB} and {CD|sCD} has to {CV|sCV} the same ratio. Therefore the solid {AB|sAB} equals the solid {CD|sCD}. [!just V.9]
 
 <hr width="40%">
 
-Now let the sides which stand up, *FE, BL, GA, HK, ON, DP, MC,* and *RQ,* not be at right angles to their bases. Draw perpendiculars from the points *F, G, B, K, O, M, D,* and *R* to the planes through *EH* and *NQ,* and let them meet the planes at *S, T, U, V, W, X, Y,* and *a.* Complete the solids *FV* and *Oa.* [!just XI.11]
+Now let the sides which stand up, {FE|EF:canvas_1}, {BL:canvas_1}, {GA|AG:canvas_1}, {HK:canvas_1}, {ON:canvas_1}, {DP:canvas_1}, {MC|CM:canvas_1}, and {RQ|QR:canvas_1}, not be at right angles to their bases. Draw perpendiculars from the points {F:canvas_1}, {G:canvas_1}, {B:canvas_1}, {K:canvas_1}, {O:canvas_1}, {M:canvas_1}, {D:canvas_1}, and {R:canvas_1} to the planes through {EH|pEH:canvas_1} and {NQ|pNQ:canvas_1}, and let them meet the planes at {S:canvas_1}, {T:canvas_1}, {U:canvas_1}, {V:canvas_1}, {W:canvas_1}, {X:canvas_1}, {Y:canvas_1}, and {a:canvas_1}. Complete the solids {FV|sFV:canvas_1} and {Oa|sOa:canvas_1}. [!just XI.11]
 
 <figure class="diagram">
 <canvas id="canvas_1" width="400" height="280" tabindex="0"></canvas>
 <noscript><img alt="XI.34 diagram" src="propXI34b.gif"/></noscript>
 <script type="text/javascript">
+    // The second case: the standing sides oblique. Perpendiculars from the
+    // eight upper corners meet the planes of the bases at S, T, U, V, W, X,
+    // Y, a, making the upright solids FV (also BT) and Oa (also DX).
+    //
+    // Added, all transparent: faceless hexagons on the solids' outlines
+    // (sAB, sCD, sFV, sOa), faceless quadrilaterals for the bases EH, NQ and
+    // for FK, RO (twins of Joyce's filled top faces, which would be raised
+    // over the figure if highlighted, #140), and the standing sides EF, AG,
+    // HK, ON, DP, CM, QR (BL is Joyce's). The right angles at T and X are
+    // markers, hidden at rest.
+    //
+    // Draggables (checked against the bundle): T, A, K, F, R, Q, C, P. T is
+    // the foot of GT, which the proof draws mid-walk, so it is deferred.
+    var AB1 = ["G","A","K","F","H","E","L","B","AGFE","AHKG","GFBK","BL","EL","HL"];
+    var CD1 = ["R","Q","C","P","N","D","O","M","ODPN","RMOD","CMON","RMCQ","QP"];
+    var GIVEN1 = AB1.concat(CD1, ["sAB","sCD","pEH","pNQ",
+                                  "EF","AG","HK","ON","DP","CM","QR"]);
+    var PERP1 = GIVEN1.concat(["GT","FS","BU","KV","Ra","MX","DY","OW"]);
+    var FEET1 = PERP1.concat(["S","T","U","V","W","X","Y","a","rtT","rtX"]);
+    var SOL1 = FEET1.concat(["TSUV","aYWX","sFV","sOa","pFK","pRO"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -186,39 +450,190 @@ Now let the sides which stand up, *FE, BL, GA, HK, ON, DP, MC,* and *RQ,* not be
             "Ra;line;connect;R,a",
             "MX;line;connect;M,X",
             "DY;line;connect;D,Y",
-            "OW;line;connect;O,W"
+            "OW;line;connect;O,W",
+            // Transparent highlight targets.
+            "sAB;polygon;hexagon;A,E,F,B,K,H;0;0;0;0",
+            "sCD;polygon;hexagon;C,N,P,D,R,M;0;0;0;0",
+            "sFV;polygon;hexagon;K,B,F,S,T,V;0;0;0;0",
+            "sOa;polygon;hexagon;R,D,Y,W,X,M;0;0;0;0",
+            "pEH;polygon;quadrilateral;A,E,L,H;0;0;0;0",
+            "pNQ;polygon;quadrilateral;C,N,P,Q;0;0;0;0",
+            "pFK;polygon;quadrilateral;G,F,B,K;0;0;0;0",
+            "pRO;polygon;quadrilateral;R,M,O,D;0;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "HK;line;connect;H,K;0;0;0",
+            "ON;line;connect;O,N;0;0;0",
+            "DP;line;connect;D,P;0;0;0",
+            "CM;line;connect;C,M;0;0;0",
+            "QR;line;connect;Q,R;0;0;0",
+            "rtT;sector;angleMarkerRight;T,G,S,12;0;0;red;red",
+            "rtX;sector;angleMarkerRight;X,M,W,12;0;0;red;red"
         ],
+        deferDraggables: ["T"],
+        slides: [
+            { text: "Now let the sides which stand up, {FE|EF}, {BL}, {GA|AG}, {HK}, {ON}, {DP}, {MC|CM}, and {RQ|QR},",
+              visible: GIVEN1,
+              highlighted: ["EF","BL","AG","HK","ON","DP","CM","QR"] },
+            { text: "not be at right angles to their bases.",
+              visible: GIVEN1,
+              highlighted: ["pEH","pNQ"] },
+            { text: "Draw perpendiculars from the points {F}, {G}, {B}, {K}, {O}, {M}, {D}, and {R} to the planes through {EH|pEH} and {NQ|pNQ},",
+              visible: PERP1,
+              highlighted: ["GT","FS","BU","KV","Ra","MX","DY","OW"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "GT", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FS", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BU", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KV", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "Ra", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "MX", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DY", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "OW", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "perpendiculars to a plane", ref: "XI.11" }] },
+            { text: "and let them meet the planes at {S}, {T}, {U}, {V}, {W}, {X}, {Y}, and {a}.",
+              visible: FEET1,
+              highlighted: ["S","T","U","V","W","X","Y","a"],
+              transition: { animations: [
+                  { elem: "rtT", name: geomlib.A.Sector.sweep },
+                  { elem: "rtX", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Complete the solids {FV|sFV} and {Oa|sOa}.",
+              visible: SOL1,
+              highlighted: ["sFV","sOa"],
+              transition: { animations: [
+                  { elem: "TSUV", name: geomlib.A.Polygon.outline },
+                  { elem: "aYWX", name: geomlib.A.Polygon.outline } ] } },
+            { text: "I say that, in this case too, if the solids {AB|sAB} and {CD|sCD} are equal,",
+              visible: SOL1,
+              highlighted: ["sAB","sCD"] },
+            { text: "then the bases are reciprocally proportional to the heights,",
+              visible: SOL1,
+              highlighted: ["pEH","pNQ","GT","MX"] },
+            { text: "that is, the base {EH|pEH} is to the base {NQ|pNQ} as the height of the solid {CD|sCD} to the height of the solid {AB|sAB}.",
+              visible: SOL1,
+              highlighted: ["pEH","pNQ","MX","GT"] },
+            { text: "Since the solid {AB|sAB} equals the solid {CD|sCD}, and {AB|sAB} equals {BT|sFV},",
+              visible: SOL1,
+              highlighted: ["sAB","sCD","sFV"] },
+            { text: "for they are on the same base {FK|pFK} and of the same height,",
+              visible: SOL1,
+              highlighted: ["pFK","GT"] },
+            { text: "and the solid {CD|sCD} equals {DX|sOa}, for they are again on the same base {RO|pRO} and of the same height,",
+              visible: SOL1,
+              highlighted: ["sCD","sOa","pRO","MX"],
+              justifications: [{ claim: "AB = BT, CD = DX", ref: "XI.29" }, { ref: "XI.30" }] },
+            { text: "therefore the solid {BT|sFV} also equals the solid {DX|sOa}.",
+              visible: SOL1,
+              highlighted: ["sFV","sOa"] },
+            { text: "Therefore the base {FK|pFK} is to the base {OR|pRO} as the height of the solid {DX|sOa} is to the height of the solid {BT|sFV}.",
+              visible: SOL1,
+              highlighted: ["pFK","pRO","MX","GT"],
+              justifications: [{ claim: "FK : OR = height DX : height BT", ref: "Above" }] },
+            { text: "But the base {FK|pFK} equals the base {EH|pEH}, and the base {OR|pRO} equals the base {NQ|pNQ},",
+              visible: SOL1,
+              highlighted: ["pFK","pEH","pRO","pNQ"] },
+            { text: "therefore the base {EH|pEH} is to the base {NQ|pNQ} as the height of the solid {DX|sOa} is to the height of the solid {BT|sFV}.",
+              visible: SOL1,
+              highlighted: ["pEH","pNQ","MX","GT"] },
+            { text: "But the solids {DX|sOa} and {BT|sFV} and the solids {DC|sCD} and {BA|sAB} have the same heights respectively,",
+              visible: SOL1,
+              highlighted: ["sOa","sFV","sCD","sAB","MX","GT"] },
+            { text: "therefore the base {EH|pEH} is to the base {NQ|pNQ} as the height of the solid {DC|sCD} is to the height of the solid {AB|sAB}.",
+              visible: SOL1,
+              highlighted: ["pEH","pNQ","MX","GT"] },
+            { text: "Therefore in the parallelepipedal solids {AB|sAB} and {CD|sCD} the bases are reciprocally proportional to the heights.",
+              visible: SOL1,
+              highlighted: ["sAB","sCD"] },
+            { text: "Next, in the parallelepipedal solids {AB|sAB} and {CD|sCD} let the bases be reciprocally proportional to the heights,",
+              visible: SOL1,
+              highlighted: ["sAB","sCD"] },
+            { text: "that is, as the base {EH|pEH} is to the base {NQ|pNQ},",
+              visible: SOL1,
+              highlighted: ["pEH","pNQ"] },
+            { text: "so let the height of the solid {CD|sCD} be to the height of the solid {AB|sAB}.",
+              visible: SOL1,
+              highlighted: ["MX","GT"] },
+            { text: "I say that the solid {AB|sAB} equals the solid {CD|sCD}.",
+              visible: SOL1,
+              highlighted: ["sAB","sCD"] },
+            { text: "With the same construction, since the base {EH|pEH} is to the base {NQ|pNQ}",
+              visible: SOL1,
+              highlighted: ["pEH","pNQ"] },
+            { text: "as the height of the solid {CD|sCD} is to the height of the solid {AB|sAB},",
+              visible: SOL1,
+              highlighted: ["MX","GT"] },
+            { text: "and the base {EH|pEH} equals the base {FK|pFK}, and {NQ|pNQ} equals {OR|pRO},",
+              visible: SOL1,
+              highlighted: ["pEH","pFK","pNQ","pRO"] },
+            { text: "therefore the base {FK|pFK} is to the base {OR|pRO} as the height of the solid {CD|sCD} is to the height of the solid {AB|sAB}.",
+              visible: SOL1,
+              highlighted: ["pFK","pRO","MX","GT"] },
+            { text: "But the solids {AB|sAB} and {CD|sCD} and the solids {BT|sFV} and {DX|sOa} have the same heights respectively,",
+              visible: SOL1,
+              highlighted: ["sAB","sCD","sFV","sOa","GT","MX"] },
+            { text: "therefore the base {FK|pFK} is to the base {OR|pRO} as the height of the solid {DX|sOa} is to the height of the solid {BT|sFV}.",
+              visible: SOL1,
+              highlighted: ["pFK","pRO","MX","GT"] },
+            { text: "Therefore in the parallelepipedal solids {BT|sFV} and {DX|sOa} the bases are reciprocally proportional to the heights.",
+              visible: SOL1,
+              highlighted: ["sFV","sOa"] },
+            { text: "Therefore the solid {BT|sFV} equals the solid {DX|sOa}.",
+              visible: SOL1,
+              highlighted: ["sFV","sOa"],
+              justifications: [{ claim: "solid BT = solid DX", ref: "Above" }] },
+            { text: "But {BT|sFV} equals {BA|sAB}, for they are on the same base {FK|pFK} and of the same height,",
+              visible: SOL1,
+              highlighted: ["sFV","sAB","pFK"] },
+            { text: "and the solid {DX|sOa} equals the solid {DC|sCD}.",
+              visible: SOL1,
+              highlighted: ["sOa","sCD"],
+              justifications: [{ claim: "BT = BA, DX = DC", ref: "XI.29" }, { ref: "XI.30" }] },
+            { text: "Therefore the solid {AB|sAB} also equals the solid {CD|sCD}.",
+              visible: SOL1,
+              highlighted: ["sAB","sCD"] },
+            { text: "Therefore, in equal parallelepipedal solids the bases are reciprocally proportional to the heights;",
+              visible: SOL1,
+              highlighted: ["pEH","pNQ","GT","MX"] },
+            { text: "and those parallelepipedal solids in which the bases are reciprocally proportional to the heights are equal.",
+              visible: SOL1,
+              highlighted: ["sAB","sCD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.34") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-I say that, in this case too, if the solids *AB* and *CD* are equal, then the bases are reciprocally proportional to the heights, that is, the base *EH* is to the base *NQ* as the height of the solid *CD* to the height of the solid *AB.*
+I say that, in this case too, if the solids {AB|sAB} and {CD|sCD} are equal, then the bases are reciprocally proportional to the heights, that is, the base {EH|pEH} is to the base {NQ|pNQ} as the height of the solid {CD|sCD} to the height of the solid {AB|sAB}.
 
-Since the solid *AB* equals the solid *CD,* and *AB* equals *BT,* for they are on the same base *FK* and of the same height, and the solid *CD* equals *DX,* for they are again on the same base *RO* and of the same height, therefore the solid *BT* also equals the solid *DX.* [!just XI.29, XI.30]
+Since the solid {AB|sAB} equals the solid {CD|sCD}, and {AB|sAB} equals {BT|sFV}, for they are on the same base {FK|pFK} and of the same height, and the solid {CD|sCD} equals {DX|sOa}, for they are again on the same base {RO|pRO} and of the same height, therefore the solid {BT|sFV} also equals the solid {DX|sOa}. [!just XI.29, XI.30]
 
 <div class="just">Above</div>
 
-Therefore the base *FK* is to the base *OR* as the height of the solid *DX* is to the height of the solid *BT.* But the base *FK* equals the base *EH,* and the base *OR* equals the base *NQ,* therefore the base *EH* is to the base *NQ* as the height of the solid *DX* is to the height of the solid *BT.*
+Therefore the base {FK|pFK} is to the base {OR|pRO} as the height of the solid {DX|sOa} is to the height of the solid {BT|sFV}. But the base {FK|pFK} equals the base {EH|pEH}, and the base {OR|pRO} equals the base {NQ|pNQ}, therefore the base {EH|pEH} is to the base {NQ|pNQ} as the height of the solid {DX|sOa} is to the height of the solid {BT|sFV}.
 
-But the solids *DX* and *BT* and the solids *DC* and *BA* have the same heights respectively, therefore the base *EH* is to the base *NQ* as the height of the solid *DC* is to the height of the solid *AB.*
+But the solids {DX|sOa} and {BT|sFV} and the solids {DC|sCD} and {BA|sAB} have the same heights respectively, therefore the base {EH|pEH} is to the base {NQ|pNQ} as the height of the solid {DC|sCD} is to the height of the solid {AB|sAB}.
 
-Therefore in the parallelepipedal solids *AB* and *CD* the bases are reciprocally proportional to the heights.
+Therefore in the parallelepipedal solids {AB|sAB} and {CD|sCD} the bases are reciprocally proportional to the heights.
 
 <hr width="40%">
 
-Next, in the parallelepipedal solids *AB* and *CD* let the bases be reciprocally proportional to the heights, that is, as the base *EH* is to the base *NQ,* so let the height of the solid *CD* be to the height of the solid *AB.*
+Next, in the parallelepipedal solids {AB|sAB} and {CD|sCD} let the bases be reciprocally proportional to the heights, that is, as the base {EH|pEH} is to the base {NQ|pNQ}, so let the height of the solid {CD|sCD} be to the height of the solid {AB|sAB}.
 
-I say that the solid *AB* equals the solid *CD.*
+I say that the solid {AB|sAB} equals the solid {CD|sCD}.
 
-With the same construction, since the base *EH* is to the base *NQ* as the height of the solid *CD* is to the height of the solid *AB,* and the base *EH* equals the base *FK,* and *NQ* equals *OR,* therefore the base *FK* is to the base *OR* as the height of the solid *CD* is to the height of the solid *AB.*
+With the same construction, since the base {EH|pEH} is to the base {NQ|pNQ} as the height of the solid {CD|sCD} is to the height of the solid {AB|sAB}, and the base {EH|pEH} equals the base {FK|pFK}, and {NQ|pNQ} equals {OR|pRO}, therefore the base {FK|pFK} is to the base {OR|pRO} as the height of the solid {CD|sCD} is to the height of the solid {AB|sAB}.
 
-But the solids *AB* and *CD* and the solids *BT* and *DX* have the same heights respectively, therefore the base *FK* is to the base *OR* as the height of the solid *DX* is to the height of the solid *BT.*
+But the solids {AB|sAB} and {CD|sCD} and the solids {BT|sFV} and {DX|sOa} have the same heights respectively, therefore the base {FK|pFK} is to the base {OR|pRO} as the height of the solid {DX|sOa} is to the height of the solid {BT|sFV}.
 
 <div class="just">Above</div>
 
-Therefore in the parallelepipedal solids *BT* and *DX* the bases are reciprocally proportional to the heights. Therefore the solid *BT* equals the solid *DX.*
+Therefore in the parallelepipedal solids {BT|sFV} and {DX|sOa} the bases are reciprocally proportional to the heights. Therefore the solid {BT|sFV} equals the solid {DX|sOa}.
 
-But *BT* equals *BA,* for they are on the same base *FK* and of the same height, and the solid *DX* equals the solid *DC.* Therefore the solid *AB* also equals the solid *CD.* [!just XI.29, XI.30]
+But {BT|sFV} equals {BA|sAB}, for they are on the same base {FK|pFK} and of the same height, and the solid {DX|sOa} equals the solid {DC|sCD}. Therefore the solid {AB|sAB} also equals the solid {CD|sCD}. [!just XI.29, XI.30]
 
 Therefore, *in equal parallelepipedal solids the bases are reciprocally proportional to the heights; and those parallelepipedal solids in which the bases are reciprocally proportional to the heights are equal.*
 
