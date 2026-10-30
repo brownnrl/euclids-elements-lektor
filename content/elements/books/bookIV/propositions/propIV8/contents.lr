@@ -17,16 +17,37 @@ statement: To inscribe a circle in a given square.
 ----
 proof:
 
-Let *ABCD* be the given square.
+Let {ABCD} be the given square.
 
-It is required to inscribe a circle in the given square *ABCD.*
+It is required to inscribe a circle in the given square {ABCD}.
 
-Bisect the straight lines *AD* and *AB* at the points *E* and *F* respectively. Draw *EH* through *E* parallel to either *AB* or *CD,* and draw *FK* through *F* parallel to either *AD* or *BC.* [!just I.10; I.31]
+Bisect the straight lines {AD} and {AB} at the points {E} and {F} respectively. Draw {EH} through {E} parallel to either {AB} or {CD}, and draw {FK} through {F} parallel to either {AD} or {BC}. [!just I.10; I.31]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="280" tabindex="0"></canvas>
 <noscript><img alt="IV.8 diagram" src="propIV8.gif"/></noscript>
 <script type="text/javascript">
+    // The bisections of AD and AB, the parallels EH and FK, the eight
+    // parallelograms they make, then the equal radii GE, GF, GH, GK, the
+    // circle, and the III.16 argument that it touches the four sides.
+    //
+    // Everything added leaves the resting figure as it was. The four sides
+    // AB, BC, CD, AD, the half-sides AE and AF, and the four radii GE, GF,
+    // GH, GK (parts of EH and FK) are transparent highlight targets, as are
+    // the eight parallelograms the proof names by their diagonals: AK, KB,
+    // AH, HD (the halves) and AG, GC, BG, GD (the quarters). Explicit ;0
+    // faces throughout.
+    //
+    // The right angles at E, F, H, K (between each side and the radius to
+    // it) are red squares, swept where the proof says they are right.
+    var GIVEN = ["ABCD","A","B","C","D","AB","BC","CD","AD"];
+    var BIS   = GIVEN.concat(["E","F","AE","AF"]);
+    var PAR1  = BIS.concat(["EH","H"]);
+    var PAR2  = PAR1.concat(["FK","K"]);
+    var PGM   = PAR2.concat(["G","AK","KB","AH","HD","AG","GC","BG","GD"]);
+    var RAD   = PGM.concat(["GE","GF","GH","GK"]);
+    var CIRC  = RAD.concat(["EFHK"]);
+    var RT    = CIRC.concat(["rtE","rtF","rtH","rtK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -45,25 +66,170 @@ Bisect the straight lines *AD* and *AB* at the points *E* and *F* respectively. 
             "EH;line;connect;E,H",
             "FK;line;connect;F,K",
             "G;point;intersection;EH,FK;black;green",
-            "EFHK;circle;radius;G,E;0;0;black;random"
+            "EFHK;circle;radius;G,E;0;0;black;random",
+            // The sides and half-sides the proof argues over.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "AF;line;connect;A,F;0;0;0",
+            // The four radii, drawn from the center.
+            "GE;line;connect;G,E;0;0;0",
+            "GF;line;connect;G,F;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "GK;line;connect;G,K;0;0;0",
+            // The eight parallelograms, named by their diagonals.
+            "AK;polygon;quadrilateral;A,F,K,D;0;0;0;0",
+            "KB;polygon;quadrilateral;F,B,C,K;0;0;0;0",
+            "AH;polygon;quadrilateral;A,B,H,E;0;0;0;0",
+            "HD;polygon;quadrilateral;E,H,C,D;0;0;0;0",
+            "AG;polygon;quadrilateral;A,F,G,E;0;0;0;0",
+            "GC;polygon;quadrilateral;G,H,C,K;0;0;0;0",
+            "BG;polygon;quadrilateral;F,B,H,G;0;0;0;0",
+            "GD;polygon;quadrilateral;E,G,K,D;0;0;0;0",
+            "rtE;sector;angleMarkerRight;E,A,G;0;0;red;red",
+            "rtF;sector;angleMarkerRight;F,A,G;0;0;red;red",
+            "rtH;sector;angleMarkerRight;H,B,G;0;0;red;red",
+            "rtK;sector;angleMarkerRight;K,C,G;0;0;red;red"
         ],
+        // Draggables (checked against the bundle): A and B, free, the side
+        // the square stands on; they are the given square and stand from
+        // slide 1. C, D (vertex), E, F, H, K (midpoint) and G (intersection)
+        // are derived and listed per slide. Nothing to defer.
+        aliases: { "DA": "AD", "BA": "AB", "DC": "CD", "CB": "BC",
+                   "HE": "EH", "KF": "FK",
+                   "EG": "GE", "FG": "GF", "HG": "GH", "KG": "GK",
+                   "FHKE": "EFHK" },
+        slides: [
+            { text: "“To inscribe a circle in a given square.”",
+              visible: GIVEN,
+              highlighted: ["ABCD"],
+              justifications: [{ ref: "IV.8" }] },
+            { text: "Let {ABCD} be the given square.",
+              visible: GIVEN,
+              highlighted: ["ABCD"] },
+            { text: "It is required to inscribe a circle in the given square {ABCD}.",
+              visible: GIVEN,
+              highlighted: ["ABCD"] },
+            { text: "Bisect the straight lines {AD} and {AB} at the points {E} and {F} respectively.",
+              visible: BIS,
+              highlighted: ["AD","AB","E","F"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "E", name: geomlib.A.Point.appear },
+                  { elem: "F", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AD and AB bisected at E and F", ref: "I.10" }] },
+            { text: "Draw {EH} through {E} parallel to either {AB} or {CD},",
+              visible: PAR1,
+              highlighted: ["EH","AB","CD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "EH parallel to AB", ref: "I.31" }] },
+            { text: "and draw {FK} through {F} parallel to either {AD} or {BC}.",
+              visible: PAR2,
+              highlighted: ["FK","AD","BC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "FK parallel to AD", ref: "I.31" }] },
+            { text: "Therefore each of the figures {AK}, {KB}, {AH}, {HD}, {AG}, {GC}, {BG}, and {GD} is a parallelogram,",
+              visible: PGM,
+              highlighted: ["AK","KB","AH","HD","AG","GC","BG","GD"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "and their opposite sides are evidently equal.",
+              visible: PGM,
+              highlighted: ["AG","GC","BG","GD"],
+              justifications: [{ claim: "opposite sides of a parallelogram are equal", ref: "I.34" }] },
+            { text: "Now, since {AD} equals {AB}, and {AE} is half of {AD}, and {AF} half of {AB},",
+              visible: RAD,
+              highlighted: ["AD","AB","AE","AF"] },
+            { text: "therefore {AE} equals {AF}, so that the opposite sides are also equal, therefore {FG} equals {GE}.",
+              visible: RAD,
+              highlighted: ["AE","AF","GF","GE","AG"] },
+            { text: "Similarly we can prove that each of the straight lines {GH} and {GK}",
+              visible: RAD,
+              highlighted: ["GH","GK"] },
+            { text: "equals each of the straight lines {FG} and {GE}.",
+              visible: RAD,
+              highlighted: ["GH","GK","GF","GE"] },
+            { text: "Therefore the four straight lines {GE}, {GF}, {GH}, and {GK} equal one another.",
+              visible: RAD,
+              highlighted: ["GE","GF","GH","GK"] },
+            { text: "Therefore the circle described with center {G} and radius one of the straight lines {GE}, {GF}, {GH}, or {GK}",
+              visible: CIRC,
+              highlighted: ["G","GE"],
+              transition: { animations: [
+                  { elem: "EFHK", name: geomlib.A.Circle.compass } ] } },
+            { text: "also passes through the remaining points.",
+              visible: CIRC,
+              highlighted: ["EFHK","E","F","H","K"] },
+            { text: "And it touches the straight lines {AB}, {BC}, {CD}, and {DA},",
+              visible: CIRC,
+              highlighted: ["EFHK","AB","BC","CD","AD"] },
+            { text: "because the angles at {E}, {F}, {H}, and {K} are right.",
+              visible: RT,
+              highlighted: ["rtE","rtF","rtH","rtK"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtE", name: geomlib.A.Sector.sweep },
+                  { elem: "rtF", name: geomlib.A.Sector.sweep },
+                  { elem: "rtH", name: geomlib.A.Sector.sweep },
+                  { elem: "rtK", name: geomlib.A.Sector.sweep } ] } },
+            { text: "For, if the circle cuts {AB}, {BC}, {CD}, or {DA},",
+              visible: RT,
+              highlighted: ["AB","BC","CD","AD"] },
+            { text: "{the straight line|AD} drawn {at right angles|rtE} to {the diameter of the circle|EH} from {its end|E}",
+              visible: RT,
+              highlighted: ["AD","rtE","EH","E"] },
+            { text: "will fall within the circle, which was proved absurd.",
+              visible: RT,
+              highlighted: ["AD","EFHK","rtE"],
+              justifications: [{ claim: "the line at right angles to a diameter at its end falls outside the circle", ref: "III.16" }] },
+            { text: "Therefore the circle described with center {G} and radius one of the straight lines {GE}, {GF}, {GH}, or {GK}",
+              visible: RT,
+              highlighted: ["G","GE","GF","GH","GK"] },
+            { text: "does not cut the straight lines {AB}, {BC}, {CD}, and {DA}.",
+              visible: RT,
+              highlighted: ["AB","BC","CD","AD"] },
+            { text: "Therefore it touches them, and has been inscribed in the square {ABCD}.",
+              visible: RT,
+              highlighted: ["EFHK","ABCD","rtE","rtF","rtH","rtK"] },
+            { text: "Therefore a circle has been inscribed in the given square.",
+              visible: RT,
+              highlighted: ["EFHK","rtE","rtF","rtH","rtK"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IV.8") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.10":   "/elements/books/bookI/propositions/propI10/",
+        "I.31":   "/elements/books/bookI/propositions/propI31/",
+        "I.34":   "/elements/books/bookI/propositions/propI34/",
+        "III.16": "/elements/books/bookIII/propositions/propIII16/"
     });
 </script>
 </figure>
 
-Therefore each of the figures *AK, KB, AH, HD, AG, GC, BG,* and *GD* is a parallelogram, and their opposite sides are evidently equal. [!just I.34]
+Therefore each of the figures {AK}, {KB}, {AH}, {HD}, {AG}, {GC}, {BG}, and {GD} is a parallelogram, and their opposite sides are evidently equal. [!just I.34]
 
-Now, since *AD* equals *AB,* and *AE* is half of *AD,* and *AF* half of *AB,* therefore *AE* equals *AF,* so that the opposite sides are also equal, therefore *FG* equals *GE.*
+Now, since {AD} equals {AB}, and {AE} is half of {AD}, and {AF} half of {AB}, therefore {AE} equals {AF}, so that the opposite sides are also equal, therefore {FG} equals {GE}.
 
-Similarly we can prove that each of the straight lines *GH* and *GK* equals each of the straight lines *FG* and *GE.* Therefore the four straight lines *GE, GF,* *GH,* and *GK* equal one another.
+Similarly we can prove that each of the straight lines {GH} and {GK} equals each of the straight lines {FG} and {GE}. Therefore the four straight lines {GE}, {GF}, {GH}, and {GK} equal one another.
 
-Therefore the circle described with center *G* and radius one of the straight lines *GE,* *GF, GH,* or *GK* also passes through the remaining points.
+Therefore the circle described with center {G} and radius one of the straight lines {GE}, {GF}, {GH}, or {GK} also passes through the remaining points.
 
-And it touches the straight lines *AB, BC, CD,* and *DA,* because the angles at *E, F, H,* and *K* are right.
+And it touches the straight lines {AB}, {BC}, {CD}, and {DA}, because the angles at {E}, {F}, {H}, and {K} are right.
 
-For, if the circle cuts *AB, BC, CD,* or *DA,* the straight line drawn at right angles to the diameter of the circle from its end will fall within the circle, which was proved absurd. Therefore the circle described with center *G* and radius one of the straight lines *GE, GF, GH,* or *GK* does not cut the straight lines *AB, BC, CD,* and *DA.* [!just III.16]
+For, if the circle cuts {AB}, {BC}, {CD}, or {DA}, the straight line drawn at right angles to the diameter of the circle from its end will fall within the circle, which was proved absurd. Therefore the circle described with center {G} and radius one of the straight lines {GE}, {GF}, {GH}, or {GK} does not cut the straight lines {AB}, {BC}, {CD}, and {DA}. [!just III.16]
 
-Therefore it touches them, and has been inscribed in the square *ABCD.*
+Therefore it touches them, and has been inscribed in the square {ABCD}.
 
 Therefore a circle has been inscribed in the given square.
 

@@ -19,14 +19,31 @@ statement: To circumscribe a circle about a given triangle.
 ----
 proof:
 
-Let *ABC* be the given triangle.
+Let {ABC} be the given triangle.
 
-It is required to circumscribe a circle about the given triangle *ABC.*
+It is required to circumscribe a circle about the given triangle {ABC}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="230" tabindex="0"></canvas>
 <noscript><img alt="IV.5a diagram" src="propIV5a.gif"/></noscript>
 <script type="text/javascript">
+    // First case, F within the triangle. The two bisections, the two
+    // perpendiculars at D and E, the joins from F, the I.4 argument on the
+    // halves at D ("similarly" at E), and the circle.
+    //
+    // Everything added leaves the resting figure as it was. The sides AB,
+    // AC, BC and the halves AD, DB, AE, EC are transparent highlight
+    // targets. The right angles at D and E (two at each, one for each
+    // triangle of the I.4 argument) are red squares, pinned small side by
+    // side. angBAC is for the corollary's hover only; no slide shows it.
+    var GIVEN = ["triABC","A","B","C","AB","AC","BC"];
+    var BIS   = GIVEN.concat(["D","E","AD","DB","AE","EC"]);
+    var PERP  = BIS.concat(["DF","EF","rtADF","rtAEF"]);
+    var MEET  = PERP.concat(["F"]);
+    var JOIN  = MEET.concat(["BF","CF","AF"]);
+    var HALF1 = JOIN.concat(["rtBDF"]);
+    var HALF2 = HALF1.concat(["rtCEF"]);
+    var CIRC  = HALF2.concat(["circABC","circABCo"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -45,24 +62,153 @@ It is required to circumscribe a circle about the given triangle *ABC.*
             "BF;line;connect;B,F",
             "CF;line;connect;C,F",
             "DF;line;connect;D,F",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // A faceless twin of the circle for highlights and hovers: the
+            // circle's own face is under the triangle at rest, and would
+            // cover it if a highlight promoted it.
+            "circABCo;circle;circumcircle;A,B,C;0;0;0;0",
+            // The sides and the halves the proof argues over.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            "rtADF;sector;angleMarkerRight;D,A,F,12;0;0;red;red",
+            "rtBDF;sector;angleMarkerRight;D,B,F,12;0;0;red;red",
+            "rtAEF;sector;angleMarkerRight;E,A,F,12;0;0;red;red",
+            "rtCEF;sector;angleMarkerRight;E,C,F,12;0;0;red;red",
+            "angBAC;sector;angleMarker;A,B,C;0;0;3b6ea5;9ec5e8"
         ],
+        // Draggables (checked against the bundle): A, B, C, free; they are
+        // the given triangle and stand from slide 1. D, E (midpoint) and F
+        // (center) are derived and listed per slide. Nothing to defer.
+        //
+        // The triangle owns ABC in prose; the circle takes {ABC|circABCo}.
+        aliases: { "ABC": "triABC", "BA": "AB", "CA": "AC", "CB": "BC",
+                   "BD": "DB", "CE": "EC",
+                   "FA": "AF", "FB": "BF", "FC": "CF",
+                   "FD": "DF", "FE": "EF" },
+        slides: [
+            { text: "“To circumscribe a circle about a given triangle.”",
+              visible: GIVEN,
+              highlighted: ["triABC"],
+              justifications: [{ ref: "IV.5" }] },
+            { text: "Let {ABC} be the given triangle.",
+              visible: GIVEN,
+              highlighted: ["triABC"] },
+            { text: "It is required to circumscribe a circle about the given triangle {ABC}.",
+              visible: GIVEN,
+              highlighted: ["triABC"] },
+            { text: "Bisect the straight lines {AB} and {AC} at the points {D} and {E}.",
+              visible: BIS,
+              highlighted: ["AB","AC","D","E"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "D", name: geomlib.A.Point.appear },
+                  { elem: "E", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AB and AC bisected at D and E", ref: "I.10" }] },
+            { text: "Draw {DF} and {EF} from the points {D} and {E} at right angles to {AB} and {AC}.",
+              visible: PERP,
+              highlighted: ["DF","EF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "rtADF", name: geomlib.A.Sector.sweep },
+                  { elem: "EF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "rtAEF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "at right angles to AB and AC", ref: "I.11" }] },
+            { text: "They will then meet within the triangle {ABC}, or on the straight line {BC}, or outside {BC}.",
+              visible: PERP,
+              highlighted: ["triABC","BC"] },
+            { text: "First let them meet within at {F}.",
+              visible: MEET,
+              highlighted: ["DF","EF","F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "Join {FB}, {FC}, and {FA}.",
+              visible: JOIN,
+              highlighted: ["BF","CF","AF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since {AD} equals {DB}, and {DF} is common and at right angles,",
+              visible: HALF1,
+              highlighted: ["AD","DB","DF","rtADF","rtBDF"],
+              transition: { animations: [
+                  { elem: "rtBDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the base {AF} equals the base {FB}.",
+              visible: HALF1,
+              highlighted: ["AF","BF"],
+              justifications: [{ claim: "two sides and the included angle", ref: "I.4" }] },
+            { text: "Similarly we can prove that {CF} also equals {AF},",
+              visible: HALF2,
+              highlighted: ["CF","AF","AE","EC","EF","rtAEF","rtCEF"],
+              transition: { animations: [
+                  { elem: "rtCEF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "so that {FB} also equals {FC},",
+              visible: HALF2,
+              highlighted: ["BF","CF"],
+              justifications: [{ claim: "each equals AF", ref: "C.N.1" }] },
+            { text: "therefore the three straight lines {FA} and {FB} and {FC} equal one another.",
+              visible: HALF2,
+              highlighted: ["AF","BF","CF"] },
+            { text: "Therefore the circle described with center {F} and radius one of the straight lines {FA}, {FB}, or {FC}",
+              visible: CIRC,
+              highlighted: ["F","AF"],
+              transition: { animations: [
+                  { elem: "circABC", name: geomlib.A.Circle.compass } ] } },
+            { text: "also passes through the remaining points, and the circle is circumscribed about the triangle {ABC}.",
+              visible: CIRC,
+              highlighted: ["circABCo","A","B","C"],
+              justifications: [{ claim: "the circle passes through each angle of ABC", ref: "IV.Def.6" }] },
+            { text: "Let it be circumscribed as {ABC|circABCo}.",
+              visible: CIRC,
+              highlighted: ["circABCo"] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IV.5") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.10":     "/elements/books/bookI/propositions/propI10/",
+        "I.11":     "/elements/books/bookI/propositions/propI11/",
+        "IV.Def.6": "/elements/books/bookIV/definitions/defIV6/"
     });
 </script>
 </figure>
 
-Bisect the straight lines *AB* and *AC* at the points *D* and *E.* Draw *DF* and *EF* from the points *D* and *E* at right angles to *AB* and *AC.* They will then meet within the triangle *ABC,* or on the straight line *BC,* or outside *BC.* [!just I.10; I.11]
+Bisect the straight lines {AB} and {AC} at the points {D} and {E}. Draw {DF} and {EF} from the points {D} and {E} at right angles to {AB} and {AC}. They will then meet within the triangle {ABC}, or on the straight line {BC}, or outside {BC}. [!just I.10; I.11]
 
-First let them meet within at *F.* Join *FB, FC,* and *FA.*
+First let them meet within at {F}. Join {FB}, {FC}, and {FA}.
 
-Then, since *AD* equals *DB,* and *DF* is common and at right angles, therefore the base *AF* equals the base *FB.* [!just I.4]
+Then, since {AD} equals {DB}, and {DF} is common and at right angles, therefore the base {AF} equals the base {FB}. [!just I.4]
 
-Similarly we can prove that *CF* also equals *AF,* so that *FB* also equals *FC,* therefore the three straight lines *FA* and *FB* and *FC* equal one another.
+Similarly we can prove that {CF} also equals {AF}, so that {FB} also equals {FC}, therefore the three straight lines {FA} and {FB} and {FC} equal one another.
 
 <figure class="diagram rdiagram">
 <canvas id="canvas_1" width="240" height="220" tabindex="0"></canvas>
 <noscript><img alt="IV.5b diagram" src="propIV5b.gif"/></noscript>
 <script type="text/javascript">
+    // Second case, F on BC. The perpendiculars at D and E meeting on BC,
+    // the join AF, and the circle. Joyce's figure builds the triangle from
+    // the circle on BC as diameter (A slides on it), so F is the midpoint
+    // of BC.
+    //
+    // Everything added leaves the resting figure as it was. AB and AC are
+    // transparent highlight targets; the right angles at D and E are red
+    // squares. angBAC (right, since the triangle is in a semicircle) is
+    // for the corollary's hover only; no slide shows it.
+    var GIVEN1 = ["triABC","A","B","C","BC","AB","AC","D","E"];
+    var PERP1  = GIVEN1.concat(["DF","EF","F","rtADF","rtAEF"]);
+    var JOIN1  = PERP1.concat(["AF"]);
+    var CIRC1  = JOIN1.concat(["circABC","circABCo"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -80,26 +226,83 @@ Similarly we can prove that *CF* also equals *AF,* so that *FB* also equals *FC,
             "E;point;midpoint;A,C",
             "AF;line;connect;A,F",
             "DF;line;connect;D,F",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // A faceless twin of the circle for highlights and hovers: the
+            // circle's own face is under the triangle at rest, and would
+            // cover it if a highlight promoted it.
+            "circABCo;circle;radius;F,B;0;0;0;0",
+            // The two sides the perpendiculars stand on.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "rtADF;sector;angleMarkerRight;D,A,F;0;0;red;red",
+            "rtAEF;sector;angleMarkerRight;E,A,F;0;0;red;red",
+            "angBAC;sector;angleMarkerRight;A,B,C;0;0;red;red"
         ],
+        // Draggables (checked against the bundle): B, C, free, and A, a
+        // circleSlider on the circle; all three are the given triangle and
+        // stand from slide 1. F, D, E (midpoint) are derived and listed per
+        // slide. Nothing to defer.
+        aliases: { "ABC": "triABC", "FA": "AF", "FD": "DF", "FE": "EF",
+                   "CB": "BC" },
+        slides: [
+            { text: "Next, let {DF} and {EF} meet on the straight line {BC} at {F},",
+              visible: PERP1,
+              highlighted: ["DF","EF","BC","F"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "rtADF", name: geomlib.A.Sector.sweep },
+                  { elem: "EF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "rtAEF", name: geomlib.A.Sector.sweep },
+                  { elem: "F",     name: geomlib.A.Point.appear } ] } },
+            { text: "as is the case in the second figure.",
+              visible: PERP1,
+              highlighted: ["triABC","F"] },
+            { text: "Join {AF}.",
+              visible: JOIN1,
+              highlighted: ["AF"],
+              transition: { animations: [
+                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, similarly, we can prove that the point {F} is the center of the circle circumscribed about the triangle {ABC}.",
+              visible: CIRC1,
+              highlighted: ["F","circABCo"],
+              transition: { animations: [
+                  { elem: "circABC", name: geomlib.A.Circle.compass } ] } }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-Therefore the circle described with center *F* and radius one of the straight lines *FA, FB,* or *FC* also passes through the remaining points, and the circle is circumscribed about the triangle *ABC.* [!just IV.Def.6]
+Therefore the circle described with center {F:canvas_0} and radius one of the straight lines {FA:canvas_0}, {FB:canvas_0}, or {FC:canvas_0} also passes through the remaining points, and the circle is circumscribed about the triangle {ABC:canvas_0}. [!just IV.Def.6]
 
-Let it be circumscribed as *ABC.*
+Let it be circumscribed as {ABC|circABCo:canvas_0}.
 
 <hr width="30%">
 
-Next, let *DF* and *EF* meet on the straight line *BC* at *F,* as is the case in the second figure. Join *AF.*
+Next, let {DF} and {EF} meet on the straight line {BC} at {F}, as is the case in the second figure. Join {AF}.
 
-Then, similarly, we can prove that the point *F* is the center of the circle circumscribed about the triangle *ABC.*
+Then, similarly, we can prove that the point {F} is the center of the circle circumscribed about the triangle {ABC}.
 
 <figure class="diagram">
 <canvas id="canvas_2" width="250" height="230" tabindex="0"></canvas>
 <noscript><img alt="IV.5c diagram" src="propIV5c.gif"/></noscript>
 <script type="text/javascript">
+    // Third case, F outside the triangle. The perpendiculars at D and E
+    // meeting below BC, the joins, the I.4 argument again, and the circle.
+    //
+    // Everything added leaves the resting figure as it was. The sides AB,
+    // AC, BC and the halves AD, DB, AE, EC are transparent highlight
+    // targets; the right angles at D and E are red squares, pinned small
+    // side by side. angBAC (obtuse) is for the corollary's hover only; no
+    // slide shows it.
+    var GIVEN2 = ["triABC","A","B","C","AB","AC","BC","D","E","AD","DB","AE","EC"];
+    var PERP2  = GIVEN2.concat(["DF","EF","F","rtADF","rtAEF"]);
+    var JOIN2  = PERP2.concat(["AF","BF","CF"]);
+    var HALF2a = JOIN2.concat(["rtBDF"]);
+    var HALF2b = HALF2a.concat(["rtCEF"]);
+    var CIRC2  = HALF2b.concat(["circABC","circABCo"]);
     geomlib.init({
         canvasid: "canvas_2",
         background: "35,19,100",
@@ -118,19 +321,92 @@ Then, similarly, we can prove that the point *F* is the center of the circle cir
             "BF;line;connect;B,F",
             "CF;line;connect;C,F",
             "DF;line;connect;D,F",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // A faceless twin of the circle for highlights and hovers: the
+            // circle's own face is under the triangle at rest, and would
+            // cover it if a highlight promoted it.
+            "circABCo;circle;circumcircle;A,B,C;0;0;0;0",
+            // The sides and the halves the proof argues over.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            "rtADF;sector;angleMarkerRight;D,A,F,12;0;0;red;red",
+            "rtBDF;sector;angleMarkerRight;D,B,F,12;0;0;red;red",
+            "rtAEF;sector;angleMarkerRight;E,A,F,12;0;0;red;red",
+            "rtCEF;sector;angleMarkerRight;E,C,F,12;0;0;red;red",
+            "angBAC;sector;angleMarker;A,B,C;0;0;3b6ea5;9ec5e8"
         ],
+        // Draggables (checked against the bundle): A, B, C, free; they are
+        // the given triangle and stand from slide 1. D, E (midpoint) and F
+        // (center) are derived and listed per slide. Nothing to defer.
+        aliases: { "ABC": "triABC", "CA": "AC", "CB": "BC",
+                   "BD": "DB", "CE": "EC",
+                   "FA": "AF", "FB": "BF", "FC": "CF",
+                   "FD": "DF", "FE": "EF" },
+        slides: [
+            { text: "Next, let {DF} and {EF} meet outside the triangle {ABC} at {F}, as is the case in the third figure.",
+              visible: PERP2,
+              highlighted: ["DF","EF","F","triABC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "rtADF", name: geomlib.A.Sector.sweep },
+                  { elem: "EF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "rtAEF", name: geomlib.A.Sector.sweep },
+                  { elem: "F",     name: geomlib.A.Point.appear } ] } },
+            { text: "Join {AF}, {BF}, and {CF}.",
+              visible: JOIN2,
+              highlighted: ["AF","BF","CF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then again, since {AD} equals {DB}, and {DF} is common and at right angles,",
+              visible: HALF2a,
+              highlighted: ["AD","DB","DF","rtADF","rtBDF"],
+              transition: { animations: [
+                  { elem: "rtBDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the base {AF} equals the base {BF}.",
+              visible: HALF2a,
+              highlighted: ["AF","BF"],
+              justifications: [{ claim: "two sides and the included angle", ref: "I.4" }] },
+            { text: "Similarly we can prove that {CF} also equals {AF}, so that {BF} also equals {FC}.",
+              visible: HALF2b,
+              highlighted: ["CF","AF","BF","rtAEF","rtCEF"],
+              transition: { animations: [
+                  { elem: "rtCEF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "BF and FC each equal AF", ref: "C.N.1" }] },
+            { text: "Therefore the circle described with center {F} and radius one of the straight lines {FA}, {FB}, or {FC}",
+              visible: CIRC2,
+              highlighted: ["F","AF"],
+              transition: { animations: [
+                  { elem: "circABC", name: geomlib.A.Circle.compass } ] } },
+            { text: "also passes through the remaining points, and is circumscribed about the triangle {ABC}.",
+              visible: CIRC2,
+              highlighted: ["circABCo","A","B","C"],
+              justifications: [{ claim: "the circle passes through each angle of ABC", ref: "IV.Def.6" }] },
+            { text: "Therefore a circle has been circumscribed about the given triangle.",
+              visible: CIRC2,
+              highlighted: ["circABCo","triABC"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
 <hr width="30%">
 
-Next, let *DF* and *EF* meet outside the triangle *ABC* at *F,* as is the case in the third figure. Join *AF, BF,* and *CF.*
+Next, let {DF} and {EF} meet outside the triangle {ABC} at {F}, as is the case in the third figure. Join {AF}, {BF}, and {CF}.
 
-Then again, since *AD* equals *DB,* and *DF* is common and at right angles, therefore the base *AF* equals the base *BF.* [!just I.4]
+Then again, since {AD} equals {DB}, and {DF} is common and at right angles, therefore the base {AF} equals the base {BF}. [!just I.4]
 
-Similarly we can prove that *CF* also equals *AF,* so that *BF* also equals *FC.* Therefore the circle described with center *F* and radius one of the straight lines *FA, FB,* or *FC* also passes through the remaining points, and is circumscribed about the triangle *ABC.* [!just IV.Def.6]
+Similarly we can prove that {CF} also equals {AF}, so that {BF} also equals {FC}. Therefore the circle described with center {F} and radius one of the straight lines {FA}, {FB}, or {FC} also passes through the remaining points, and is circumscribed about the triangle {ABC}. [!just IV.Def.6]
 
 Therefore a circle has been circumscribed about the given triangle.
 
@@ -140,7 +416,7 @@ Therefore a circle has been circumscribed about the given triangle.
 ----
 guide:
 
-As noted by Simson and others, Euclid does not justify the intersection of the perpendicular bisectors *DF* and *EF.* Such a justification is necessary but easy to supply.
+As noted by Simson and others, Euclid does not justify the intersection of the perpendicular bisectors {DF:canvas_0,canvas_1,canvas_2} and {EF:canvas_0,canvas_1,canvas_2}. Such a justification is necessary but easy to supply.
 
 The note following the proposition is not actually called a corollary in the Greek text. It is just a remark following the proposition.
 
@@ -169,8 +445,21 @@ The note following the proposition is not actually called a corollary in the Gre
             "CF;line;connect;C,F",
             "DF;line;connect;D,F",
             "EF;line;connect;E,F",
-            "AFE;polygon;triangle;A,F,E;0;0;black;random"
+            "AFE;polygon;triangle;A,F,E;0;0;black;random",
+            // Transparent highlight targets for the guide's hovers: the
+            // sides AE and AC, the triangle CFE, and the angles AFC, AFE
+            // and the angle at B.
+            "AE;line;connect;A,E;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CFE;polygon;triangle;C,F,E;0;0;0;0",
+            "angAFC;sector;angleMarker;F,A,C;0;0;3f8e4f;a8dbb0",
+            "angAFE;sector;angleMarker;F,A,E;0;0;3b6ea5;9ec5e8",
+            "angB;sector;angleMarker;B,A,C;0;0;3b6ea5;9ec5e8"
         ],
+        // The triangle owns AFE; the angle AFE takes {AFE|angAFE}.
+        aliases: { "AF": "R", "FA": "R", "CA": "AC", "EA": "AE",
+                   "AFC": "angAFC", "CFA": "angAFC", "EFA": "angAFE",
+                   "ECF": "CFE", "FEC": "CFE", "EFC": "CFE" },
     });
 </script>
 </figure>
@@ -181,9 +470,9 @@ The ratio that appears in the law of sines in trigonometry is the diameter of th
 
 <center>2<i>R</i> = <i>BC</i> / sin <i>A</i> = <i>CA</i> / sin <i>B</i> = <i>AB</i> / sin <i>C</i></center>
 
-where *R* is the circumradius.
+where {R} is the circumradius.
 
-This relation is easy to derive from the figure. Angle *AFC* is twice the angle at *B* [@III.20], but it is also twice angle *AFE* since the triangles *AFE* and *CFE* are congruent. Therefore angle *AFE* equals the angle at *B.* Then the sine of *B* can be found in the right triangle *AFE* as the ratio of the side *AE* opposite angle *AFE* to the hypotenuse *AF.* Since *AE* is half of *AC,* it follows that sin *B* = *AC*/(2*R*) which yields one of the three equations for the law of sines.
+This relation is easy to derive from the figure. Angle {AFC} is twice the angle at {B|angB} [@III.20], but it is also twice angle {AFE|angAFE} since the triangles {AFE} and {CFE} are congruent. Therefore angle {AFE|angAFE} equals the angle at {B|angB}. Then the sine of {B} can be found in the right triangle {AFE} as the ratio of the side {AE} opposite angle {AFE|angAFE} to the hypotenuse {AF}. Since {AE} is half of {AC}, it follows that sin *B* = *AC*/(2*R*) which yields one of the three equations for the law of sines.
 
 There is also an equation relating the circumradius *R,* the inradius *r,* and the three exradii *r<sub>A</sub>, r<sub>B</sub>,* and *r<sub>C</sub>*:
 
@@ -198,4 +487,4 @@ kind: corollary
 toc_summary: When the center of the circle falls within the triangle, the triangle is acute-angled; when the center falls on a side, the triangle is right-angled; and when the center of the circle falls outside the triangle, the triangle is obtuse-angled.
 ----
 ----
-proof: And it is clear that when the center of the circle falls within the triangle, the angle *BAC,* being in a segment greater than the semicircle, is less than a right angle, when the center falls on the straight line *BC,* the angle *BAC,* being in a semicircle, is right, and when the center of the circle falls outside the triangle, the angle *BAC,* being in a segment less than the semicircle, is greater than a right angle. [!just III.31]
+proof: And it is clear that when the center of the circle falls within the triangle, the angle {BAC|angBAC:canvas_0}, being in a segment greater than the semicircle, is less than a right angle, when the center falls on the straight line {BC:canvas_1}, the angle {BAC|angBAC:canvas_1}, being in a semicircle, is right, and when the center of the circle falls outside the triangle, the angle {BAC|angBAC:canvas_2}, being in a segment less than the semicircle, is greater than a right angle. [!just III.31]

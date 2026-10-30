@@ -17,14 +17,42 @@ statement: To inscribe a circle in a given triangle.
 ----
 proof:
 
-Let *ABC* be the given triangle.
+Let {ABC} be the given triangle.
 
-It is required to inscribe a circle in the triangle *ABC.*
+It is required to inscribe a circle in the triangle {ABC}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="320" height="260" tabindex="0"></canvas>
 <noscript><img alt="IV.4 diagram" src="propIV4.gif"/></noscript>
 <script type="text/javascript">
+    // The two angle bisectors meeting at D, the three perpendiculars, the
+    // I.26 argument on the triangles EBD and FBD ("for the same reason" on
+    // GCD and FCD), the circle, and the III.16 argument that it touches
+    // the three sides.
+    //
+    // Everything added leaves the resting figure as it was. The sides AB,
+    // BC, CA, the triangles EBD, FBD, GCD, FCD and the diameter through E
+    // (out to Eopp, the far end, for the reductio) are transparent
+    // highlight targets with explicit ;0 faces. DE, DF and DG are solid
+    // black lines over Joyce's ED, FD and GD, hidden at rest
+    // (initiallyHidden) and used by the slides instead: they run from D,
+    // the way the proof draws the perpendiculars.
+    //
+    // Angle markers: the halves at B (ABD, CBD) blue, the halves at C
+    // (ACD, BCD) green, pinned at 22 px side by side; the whole angles ABC
+    // and ACB orange at 34 px, outside the halves, shown only while they
+    // are bisected. The right angles at E, F, G (two at F, one for each
+    // pair of triangles) are red squares, pinned small side by side.
+    var GIVEN = ["ABC","A","B","C","AB","BC","CA"];
+    var BIS   = GIVEN.concat(["BD","CD"]);
+    var MEET  = BIS.concat(["D"]);
+    var PERP  = MEET.concat(["DE","DF","DG","E","F","G","rtBED","rtBFD","rtCGD"]);
+    var HALF  = PERP.concat(["angABD","angCBD"]);
+    var TRI   = HALF.concat(["EBD","FBD"]);
+    var SAME  = TRI.concat(["angACD","angBCD","rtCFD","GCD","FCD"]);
+    var CIRC  = SAME.concat(["EFG"]);
+    var DIAM  = CIRC.concat(["diamE"]);
+    // diamE was transitory: dropped once the reductio has been stated.
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -46,31 +74,202 @@ It is required to inscribe a circle in the triangle *ABC.*
             "CD;line;connect;C,D",
             "ED;line;connect;E,D",
             "FD;line;connect;F,D",
-            "GD;line;connect;G,D"
+            "GD;line;connect;G,D",
+            // The three sides.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CA;line;connect;C,A;0;0;0",
+            // The perpendiculars, from D; hidden at rest (see above).
+            "DE;line;connect;D,E",
+            "DF;line;connect;D,F",
+            "DG;line;connect;D,G",
+            // The triangles of the two I.26 arguments.
+            "EBD;polygon;triangle;E,B,D;0;0;0;0",
+            "FBD;polygon;triangle;F,B,D;0;0;0;0",
+            "GCD;polygon;triangle;G,C,D;0;0;0;0",
+            "FCD;polygon;triangle;F,C,D;0;0;0;0",
+            // The diameter through E, for the III.16 reductio.
+            "Eopp;point;extend;E,D,D,E;0;0",
+            "diamE;line;connect;E,Eopp;0;0;0",
+            "angB;sector;angleMarker;B,A,C,34;0;0;c06a1b;f3c590",
+            "angC;sector;angleMarker;C,B,A,34;0;0;c06a1b;f3c590",
+            "angABD;sector;angleMarker;B,A,D,22;0;0;3b6ea5;9ec5e8",
+            "angCBD;sector;angleMarker;B,C,D,22;0;0;3b6ea5;9ec5e8",
+            "angACD;sector;angleMarker;C,A,D,22;0;0;3f8e4f;a8dbb0",
+            "angBCD;sector;angleMarker;C,B,D,22;0;0;3f8e4f;a8dbb0",
+            "rtBED;sector;angleMarkerRight;E,B,D,12;0;0;red;red",
+            "rtBFD;sector;angleMarkerRight;F,B,D,12;0;0;red;red",
+            "rtCFD;sector;angleMarkerRight;F,C,D,12;0;0;red;red",
+            "rtCGD;sector;angleMarkerRight;G,C,D,12;0;0;red;red"
         ],
+        // Draggables (checked against the bundle): A, B, C, free; they are
+        // the given triangle and stand from slide 1. D (intersection), E, F,
+        // G (foot) and Eopp (extend) are derived and listed per slide.
+        // Nothing to defer.
+        initiallyHidden: ["DE","DF","DG"],
+        //
+        // The triangle owns ABC; the angle ABC takes {ABC|angB}.
+        aliases: { "BA": "AB", "CB": "BC", "AC": "CA",
+                   "DB": "BD", "DC": "CD",
+                   "ED": "DE", "FD": "DF", "GD": "DG",
+                   "FGE": "EFG",
+                   "ACB": "angC", "BCA": "angC",
+                   "ABD": "angABD", "DBA": "angABD",
+                   "CBD": "angCBD", "DBC": "angCBD",
+                   "BED": "rtBED", "DEB": "rtBED",
+                   "BFD": "rtBFD", "DFB": "rtBFD" },
+        slides: [
+            { text: "“To inscribe a circle in a given triangle.”",
+              visible: GIVEN,
+              highlighted: ["ABC"],
+              justifications: [{ ref: "IV.4" }] },
+            { text: "Let {ABC} be the given triangle.",
+              visible: GIVEN,
+              highlighted: ["ABC"] },
+            { text: "It is required to inscribe a circle in the triangle {ABC}.",
+              visible: GIVEN,
+              highlighted: ["ABC"] },
+            { text: "Bisect the angles {ABC|angB} and {ACB} by the straight lines {BD} and {CD},",
+              visible: BIS.concat(["angB","angC"]),
+              highlighted: ["angB","angC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angB", name: geomlib.A.Sector.sweep },
+                  { elem: "BD",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "CD",   name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "angles ABC and ACB bisected", ref: "I.9" }] },
+            { text: "and let these meet one another at the point {D}.",
+              visible: MEET,
+              highlighted: ["BD","CD","D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "Draw {DE}, {DF}, and {DG} from {D} perpendicular to the straight lines {AB}, {BC}, and {CA}.",
+              visible: PERP,
+              highlighted: ["AB","BC","CA"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DE",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E",     name: geomlib.A.Point.appear },
+                  { elem: "DF",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F",     name: geomlib.A.Point.appear },
+                  { elem: "DG",    name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",     name: geomlib.A.Point.appear },
+                  { elem: "rtBED", name: geomlib.A.Sector.sweep },
+                  { elem: "rtBFD", name: geomlib.A.Sector.sweep },
+                  { elem: "rtCGD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "perpendiculars from D to the sides", ref: "I.12" }] },
+            { text: "Now, since the angle {ABD} equals the angle {CBD},",
+              visible: HALF,
+              highlighted: ["angABD","angCBD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABD", name: geomlib.A.Sector.sweep },
+                  { elem: "angCBD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the right angle {BED} also equals the right angle {BFD},",
+              visible: HALF,
+              highlighted: ["rtBED","rtBFD"] },
+            { text: "{EBD} and {FBD} are two triangles having two angles equal to two angles and one side equal to one side,",
+              visible: TRI,
+              highlighted: ["EBD","FBD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "EBD", name: geomlib.A.Polygon.outline },
+                  { elem: "FBD", name: geomlib.A.Polygon.outline } ] } },
+            { text: "namely that opposite one of the equal angles, which is {BD} common to the triangles,",
+              visible: TRI,
+              highlighted: ["BD","rtBED","rtBFD"] },
+            { text: "therefore they will also have the remaining sides equal to the remaining sides, therefore {DE} equals {DF}.",
+              visible: TRI,
+              highlighted: ["DE","DF"],
+              justifications: [{ claim: "two angles and a side opposite one of them", ref: "I.26" }] },
+            { text: "For the same reason {DG} also equals {DF}.",
+              visible: SAME,
+              highlighted: ["DG","DF","GCD","FCD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angACD", name: geomlib.A.Sector.sweep },
+                  { elem: "angBCD", name: geomlib.A.Sector.sweep },
+                  { elem: "rtCFD",  name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the three straight lines {DE}, {DF}, and {DG} equal one another.",
+              visible: SAME,
+              highlighted: ["DE","DF","DG"] },
+            { text: "Therefore the circle described with center {D} and radius one of the straight lines {DE}, {DF}, or {DG}",
+              visible: CIRC,
+              highlighted: ["D","DE"],
+              transition: { animations: [
+                  { elem: "EFG", name: geomlib.A.Circle.compass } ] } },
+            { text: "also passes through the remaining points",
+              visible: CIRC,
+              highlighted: ["EFG","E","F","G"] },
+            { text: "and touches the straight lines {AB}, {BC}, and {CA},",
+              visible: CIRC,
+              highlighted: ["AB","BC","CA"] },
+            { text: "because the angles at the points {E}, {F}, and {G} are right.",
+              visible: CIRC,
+              highlighted: ["rtBED","rtBFD","rtCFD","rtCGD"] },
+            { text: "For, if it cuts them,",
+              visible: CIRC,
+              highlighted: ["AB","BC","CA"] },
+            { text: "{the straight line|AB} drawn {at right angles|rtBED} to {the diameter of the circle|diamE} from {its end|E}",
+              visible: DIAM,
+              highlighted: ["AB","rtBED","diamE","E"],
+              transition: { animations: [
+                  { elem: "diamE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "will be found to fall within the circle, which was proved absurd,",
+              visible: DIAM,
+              highlighted: ["AB","diamE","rtBED"],
+              justifications: [{ claim: "the line at right angles to a diameter at its end falls outside the circle", ref: "III.16" }] },
+            { text: "therefore the circle described with center {D} and radius one of the straight lines {DE}, {DF}, or {DG}",
+              visible: CIRC,
+              highlighted: ["D","DE","DF","DG"] },
+            { text: "does not cut the straight lines {AB}, {BC}, and {CA}",
+              visible: CIRC,
+              highlighted: ["AB","BC","CA"] },
+            { text: "Therefore it touches them, and is the circle inscribed in the triangle {ABC}.",
+              visible: CIRC,
+              highlighted: ["EFG","ABC"],
+              justifications: [{ claim: "the circle touches each side of ABC", ref: "IV.Def.5" }] },
+            { text: "Let it be inscribed as {FGE}.",
+              visible: CIRC,
+              highlighted: ["EFG"] },
+            { text: "Therefore the circle {EFG} has been inscribed in the given triangle {ABC}.",
+              visible: CIRC,
+              highlighted: ["EFG","ABC"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IV.4") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.9":      "/elements/books/bookI/propositions/propI9/",
+        "I.12":     "/elements/books/bookI/propositions/propI12/",
+        "I.26":     "/elements/books/bookI/propositions/propI26/",
+        "III.16":   "/elements/books/bookIII/propositions/propIII16/",
+        "IV.Def.5": "/elements/books/bookIV/definitions/defIV5/"
     });
 </script>
 </figure>
 
-Bisect the angles *ABC* and *ACB* by the straight lines *BD* and *CD,* and let these meet one another at the point *D.* Draw *DE, DF,* and *DG* from *D* perpendicular to the straight lines *AB, BC,* and *CA.* [!just I.9; I.12]
+Bisect the angles {ABC|angB} and {ACB} by the straight lines {BD} and {CD}, and let these meet one another at the point {D}. Draw {DE}, {DF}, and {DG} from {D} perpendicular to the straight lines {AB}, {BC}, and {CA}. [!just I.9; I.12]
 
-Now, since the angle *ABD* equals the angle *CBD,* and the right angle *BED* also equals the right angle *BFD, EBD* and *FBD* are two triangles having two angles equal to two angles and one side equal to one side, namely that opposite one of the equal angles, which is *BD* common to the triangles, therefore they will also have the remaining sides equal to the remaining sides, therefore *DE* equals *DF.* [!just I.26]
+Now, since the angle {ABD} equals the angle {CBD}, and the right angle {BED} also equals the right angle {BFD}, {EBD} and {FBD} are two triangles having two angles equal to two angles and one side equal to one side, namely that opposite one of the equal angles, which is {BD} common to the triangles, therefore they will also have the remaining sides equal to the remaining sides, therefore {DE} equals {DF}. [!just I.26]
 
-For the same reason *DG* also equals *DF.*
+For the same reason {DG} also equals {DF}.
 
-Therefore the three straight lines *DE, DF,* and *DG* equal one another. Therefore the circle described with center *D* and radius one of the straight lines *DE, DF,* or *DG* also passes through the remaining points and touches the straight lines *AB, BC,* and *CA,* because the angles at the points *E, F,* and *G* are right.
+Therefore the three straight lines {DE}, {DF}, and {DG} equal one another. Therefore the circle described with center {D} and radius one of the straight lines {DE}, {DF}, or {DG} also passes through the remaining points and touches the straight lines {AB}, {BC}, and {CA}, because the angles at the points {E}, {F}, and {G} are right.
 
-For, if it cuts them, the straight line drawn at right angles to the diameter of the circle from its end will be found to fall within the circle, which was proved absurd, therefore the circle described with center *D* and radius one of the straight lines *DE, DF,* or *DG* does not cut the straight lines *AB, BC,* and *CA* Therefore it touches them, and is the circle inscribed in the triangle *ABC.* [!just III.16; IV.Def.5]
+For, if it cuts them, the straight line drawn at right angles to the diameter of the circle from its end will be found to fall within the circle, which was proved absurd, therefore the circle described with center {D} and radius one of the straight lines {DE}, {DF}, or {DG} does not cut the straight lines {AB}, {BC}, and {CA} Therefore it touches them, and is the circle inscribed in the triangle {ABC}. [!just III.16; IV.Def.5]
 
-Let it be inscribed as *FGE.*
+Let it be inscribed as {FGE}.
 
-Therefore the circle *EFG* has been inscribed in the given triangle *ABC.*
+Therefore the circle {EFG} has been inscribed in the given triangle {ABC}.
 
 <div class="qed">Q.E.F.</div>
 ----
 guide:
 
-It is easy to supply the missing argument that the angle bisectors *BD* and *CD* do meet.
+It is easy to supply the missing argument that the angle bisectors {BD} and {CD} do meet.
 
 #### Incircles and excircles
 
@@ -118,17 +317,25 @@ It is easy to supply the missing argument that the angle bisectors *BD* and *CD*
             "C'foot;point;foot;C',A,B;0;0",
             "A'circ;circle;radius;A',A'foot;0;0;black;random",
             "B'circ;circle;radius;B',B'foot;0;0;black;random",
-            "C'circ;circle;radius;C',C'foot;0;0;black;random"
+            "C'circ;circle;radius;C',C'foot;0;0;black;random",
+            // Transparent highlight targets for the guide's hovers: the
+            // internal bisector AD, the external bisector B'C' at A, and the
+            // external bisectors AB' and CB' meeting at B'.
+            "AD;line;connect;A,D;0;0;0",
+            "B'C';line;connect;B',C';0;0;0",
+            "AB';line;connect;A,B';0;0;0",
+            "CB';line;connect;C,B';0;0;0"
         ],
+        aliases: { "BC": "CB", "CA": "AC", "BA": "AB", "C'B'": "B'C'" },
     });
 </script>
 </figure>
 
 This circle inscribed in a triangle has come to be known as the *incircle* of the triangle, its center the *incenter* of the triangle, and its radius the *inradius* of the triangle.
 
-The incircle is a circle tangent to the three lines *AB, BC,* and *AC.* If these three lines are extended, then there are three other circles also tangent to them, but outside the triangle. They are called the *excircles.*
+The incircle is a circle tangent to the three lines {AB}, {BC}, and {AC}. If these three lines are extended, then there are three other circles also tangent to them, but outside the triangle. They are called the *excircles.*
 
-The points on the internal angle bisector *AD* are equidistant from the two sides of the triangle *AB* and *AC.* The line *KL* is perpendicular to *AD* at *A,* and the points on it are also equidistant from the extended sides *AB* and *AC.* The line *B'C'* is called the *external angle bisector* at *A.* Whereas the incenter *D* lies at the confluence of the three internal angle bisectors, the excenter *B'* lies at the confluence of two external angle bisectors *AB'* and *CB'* and one internal angle bisector *BB'.* Likewise for the other two excenters *A'* and *C'.*
+The points on the internal angle bisector {AD} are equidistant from the two sides of the triangle {AB} and {AC}. The line *KL* is perpendicular to {AD} at {A}, and the points on it are also equidistant from the extended sides {AB} and {AC}. The line {B'C'} is called the *external angle bisector* at {A}. Whereas the incenter {D} lies at the confluence of the three internal angle bisectors, the excenter {B'} lies at the confluence of two external angle bisectors {AB'} and {CB'} and one internal angle bisector {BB'}. Likewise for the other two excenters {A'} and {C'}.
 
 <small>(Drag around the points *A*, *B*, and *C* to see how the figure changes.)</small>
 
@@ -159,15 +366,23 @@ The points on the internal angle bisector *AD* are equidistant from the two side
             "ED;line;connect;E,D",
             "FD;line;connect;F,D",
             "GD;line;connect;G,D",
-            "incircle;circle;radius;D,E;0;0;lightGray;0"
+            "incircle;circle;radius;D,E;0;0;lightGray;0",
+            // Transparent highlight targets for the guide's hovers: the
+            // triangle and its three sides.
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0"
         ],
+        aliases: { "CA": "AC", "DE": "ED", "DF": "FD", "DG": "GD",
+                   "ABD": "ADB", "BCD": "CDB", "CAD": "CDA" },
     });
 </script>
 </figure>
 
-Heron of Alexandria (first century C.E.) was an important Greek mathematician who wrote, among other things, a commentary on the *Elements* which is lost now but was known to Proclus and an-Nairizi. In Heron's *Metrica,* which was rediscovered in 1896, there appears a proof of what is called Heron's formula. It states that the area of a triangle is the square root of *s*(*s* – *a*)(*s* – *b*)(*s* – *c*) where *a* = *BC, b* = *AC,* and *c* = *AB,* the sides of the triangle, and *s* is the semiperimeter (*a* + *b* + *c*)/2. Archimedes may have known this formula, but but we don't have his proof. Heath gives Heron's complete proof, but here we'll just look at the first part that involves the incircle.
+Heron of Alexandria (first century C.E.) was an important Greek mathematician who wrote, among other things, a commentary on the *Elements* which is lost now but was known to Proclus and an-Nairizi. In Heron's *Metrica,* which was rediscovered in 1896, there appears a proof of what is called Heron's formula. It states that the area of a triangle is the square root of *s*(*s* – *a*)(*s* – *b*)(*s* – *c*) where *a* = {BC}, *b* = {AC}, and *c* = {AB}, the sides of the triangle, and *s* is the semiperimeter (*a* + *b* + *c*)/2. Archimedes may have known this formula, but but we don't have his proof. Heath gives Heron's complete proof, but here we'll just look at the first part that involves the incircle.
 
-Let *D* be the incenter of the triangle *ABC,* and let *DE, DF,* and *DG* be perpendicular lines drawn to the sides as in Euclid's proof. These three lines are radii of the incircle, and therefore have length *r,* the inradius. The triangle *ABD* has base *AB* and height *r,* so its area is *r AB*/2. Likewise, the area of triangle *BCD* is *r BC*/2, and the area of triangle *CAD* is *r CA*/2. Adding these together we find the area of triangle *ABC* is *r* (*AB* + *BC* + *CA*)/2. Therefore we have
+Let {D} be the incenter of the triangle {ABC}, and let {DE}, {DF}, and {DG} be perpendicular lines drawn to the sides as in Euclid's proof. These three lines are radii of the incircle, and therefore have length *r,* the inradius. The triangle {ABD} has base {AB} and height *r,* so its area is *r AB*/2. Likewise, the area of triangle {BCD} is *r BC*/2, and the area of triangle {CAD} is *r CA*/2. Adding these together we find the area of triangle {ABC} is *r* (*AB* + *BC* + *CA*)/2. Therefore we have
 
 <center>Area(<i>ABC</i>) = <i>rs</i></center>
 
@@ -208,11 +423,14 @@ We'll leave Heron's proof now and consider the corresponding statement for excir
             "G'A';line;connect;G',A'",
             "excircle;circle;radius;A',E';0;0;lightGray;0"
         ],
+        aliases: { "A'E'": "E'A'", "A'F'": "F'A'", "A'G'": "G'A'",
+                   "ABA'": "AA'B", "BCA'": "CA'B",
+                   "CAA'": "CA'A", "ACA'": "CA'A" },
     });
 </script>
 </figure>
 
-Now let *A'* be the excenter on the bisector of the internal angle at *A.* Let *A'E', A'F',* and *A'G'* be the perpendiculars drawn from *A'* to the sides of the triangle. They are radii of the excircle of length *r<sub>A</sub>.* Triangle *ABA'* has base *AB* and height *A'E',* so its area is *r<sub>A</sub> AB*/2. Likewise, the area of triangle *BCA'* is *r<sub>A</sub> BC*/2, and the area of triangle *CAA'* is *r<sub>A</sub> CA*/2. Triangle *ABC* is the sum of triangles *ABA'* and *ACA'* minus triangle *BCA',* so its area is *r<sub>A</sub>* (*AB* + *AC* – *CA*)/2 which equals *r<sub>A</sub>*(*s* – *A*).
+Now let {A'} be the excenter on the bisector of the internal angle at {A}. Let {A'E'}, {A'F'}, and {A'G'} be the perpendiculars drawn from {A'} to the sides of the triangle. They are radii of the excircle of length *r<sub>A</sub>.* Triangle {ABA'} has base {AB} and height {A'E'}, so its area is *r<sub>A</sub> AB*/2. Likewise, the area of triangle {BCA'} is *r<sub>A</sub> BC*/2, and the area of triangle {CAA'} is *r<sub>A</sub> CA*/2. Triangle {ABC} is the sum of triangles {ABA'} and {ACA'} minus triangle {BCA'}, so its area is *r<sub>A</sub>* (*AB* + *AC* – *CA*)/2 which equals *r<sub>A</sub>*(*s* – *A*).
 
 From the other excircles we get two more equations. We then have
 

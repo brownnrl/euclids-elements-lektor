@@ -17,20 +17,50 @@ statement: To circumscribe a square about a given circle.
 ----
 proof:
 
-Let *ABCD* be the given circle.
+Let {ABCD} be the given circle.
 
-It is required to circumscribe a square about the circle *ABCD.*
+It is required to circumscribe a square about the circle {ABCD}.
 
-Draw two diameters *AC* and *BD* of the circle *ABCD* at right angles to one another. [!just III.1, I.11]
+Draw two diameters {AC} and {BD} of the circle {ABCD} at right angles to one another. [!just III.1, I.11]
 
 <div class="just"><a href="/elements/books/bookIII/propositions/propIII16/#cor">III.16,Cor</a></div>
 
-Draw *FG, GH, HK,* and *KF* through the points *A, B, C,* and *D* touching the circle *ABCD.*
+Draw {FG}, {GH}, {HK}, and {KF} through the points {A}, {B}, {C}, and {D} touching the circle {ABCD}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="290" tabindex="0"></canvas>
 <noscript><img alt="IV.7 diagram" src="propIV7.gif"/></noscript>
 <script type="text/javascript">
+    // The two diameters at right angles, the four tangents, the right
+    // angles at the points of contact (III.18), the parallels (I.28, I.30),
+    // the parallelograms and their equal sides (I.34), then the right
+    // angles at the corners.
+    //
+    // Everything added leaves the resting figure as it was. FG, GH, HK and
+    // KF are solid black lines over the sides of Joyce's square, hidden at
+    // rest (initiallyHidden): they give the four tangents strokes of their
+    // own, and the square's face lands only on the slide that calls it a
+    // square. FGHK is a transparent twin of the square for the slides that
+    // name the quadrilateral before then. EA (the radius to the point of
+    // contact) and the parallelograms the proof names by their diagonals —
+    // GC, AK, FB, BK (the halves), GK (the whole, which is FGHK) and the
+    // quarter GBEA — are transparent highlight targets with explicit ;0
+    // faces.
+    //
+    // Right angles are red squares: AEB at the center (the diameters are
+    // drawn at right angles), the two angles at each point of contact
+    // (pinned small, side by side, out of ring stepping), and the four
+    // corners of the square.
+    var GIVEN = ["ABCD"];
+    var DIAM  = GIVEN.concat(["AC","BD","A","B","C","D","rtE"]);
+    var TAN   = DIAM.concat(["FG","GH","HK","KF","F","G","H","K"]);
+    var RAD   = TAN.concat(["E","EA"]);
+    var RTA   = RAD.concat(["rtA1","rtA2"]);
+    var RTALL = RTA.concat(["rtB1","rtB2","rtC1","rtC2","rtD1","rtD2"]);
+    var PGM   = RTALL.concat(["FGHK","pgGC","pgAK","pgFB","pgBK"]);
+    var QUAR  = PGM.concat(["GBEA","rtG"]);
+    var CORN  = QUAR.concat(["rtH","rtK","rtF"]);
+    var DONE  = CORN.concat(["square"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,31 +79,206 @@ Draw *FG, GH, HK,* and *KF* through the points *A, B, C,* and *D* touching the c
             "square;polygon;quadrilateral;F,G,H,K;0;0;black;random",
             "ABCD;circle;radius;E,A;0;0;black;random",
             "AC;line;connect;A,C",
-            "BD;line;connect;B,D"
+            "BD;line;connect;B,D",
+            // The four tangents, hidden at rest (see above).
+            "FG;line;connect;F,G",
+            "GH;line;connect;G,H",
+            "HK;line;connect;H,K",
+            "KF;line;connect;K,F",
+            // The radius to the point of contact at A.
+            "EA;line;connect;E,A;0;0;0",
+            // The quadrilateral, the parallelograms, and the quarter GBEA.
+            "FGHK;polygon;quadrilateral;F,G,H,K;0;0;0;0",
+            "pgGC;polygon;quadrilateral;G,H,C,A;0;0;0;0",
+            "pgAK;polygon;quadrilateral;A,C,K,F;0;0;0;0",
+            "pgFB;polygon;quadrilateral;F,G,B,D;0;0;0;0",
+            "pgBK;polygon;quadrilateral;B,H,K,D;0;0;0;0",
+            "GBEA;polygon;quadrilateral;G,B,E,A;0;0;0;0",
+            "rtE;sector;angleMarkerRight;E,A,B;0;0;red;red",
+            "rtA1;sector;angleMarkerRight;A,G,E,12;0;0;red;red",
+            "rtA2;sector;angleMarkerRight;A,F,E,12;0;0;red;red",
+            "rtB1;sector;angleMarkerRight;B,G,E,12;0;0;red;red",
+            "rtB2;sector;angleMarkerRight;B,H,E,12;0;0;red;red",
+            "rtC1;sector;angleMarkerRight;C,H,E,12;0;0;red;red",
+            "rtC2;sector;angleMarkerRight;C,K,E,12;0;0;red;red",
+            "rtD1;sector;angleMarkerRight;D,K,E,12;0;0;red;red",
+            "rtD2;sector;angleMarkerRight;D,F,E,12;0;0;red;red",
+            "rtG;sector;angleMarkerRight;G,A,B;0;0;red;red",
+            "rtH;sector;angleMarkerRight;H,B,C;0;0;red;red",
+            "rtK;sector;angleMarkerRight;K,C,D;0;0;red;red",
+            "rtF;sector;angleMarkerRight;F,D,A;0;0;red;red"
         ],
+        // Draggables (checked against the bundle): A and C, free. They are
+        // the circle's points, but the proof introduces them only with the
+        // diameters, so both are deferred and follow `visible`. B, D
+        // (perpendicular), E (midpoint) and F, G, H, K (parallelogram) are
+        // derived and listed per slide. The resting figure is unaffected.
+        deferDraggables: ["A","C"],
+        initiallyHidden: ["FG","GH","HK","KF"],
+        aliases: { "GF": "FG", "HG": "GH", "KH": "HK", "FK": "KF",
+                   "AE": "EA", "BED": "BD", "DB": "BD", "CA": "AC",
+                   "GK": "FGHK",
+                   "AEB": "rtE", "BEA": "rtE",
+                   "EBG": "rtB1", "GBE": "rtB1",
+                   "AGB": "rtG", "BGA": "rtG" },
+        slides: [
+            { text: "“To circumscribe a square about a given circle.”",
+              visible: GIVEN,
+              highlighted: ["ABCD"],
+              justifications: [{ ref: "IV.7" }] },
+            { text: "Let {ABCD} be the given circle.",
+              visible: GIVEN,
+              highlighted: ["ABCD"] },
+            { text: "It is required to circumscribe a square about the circle {ABCD}.",
+              visible: GIVEN,
+              highlighted: ["ABCD"] },
+            { text: "Draw two diameters {AC} and {BD} of the circle {ABCD} at right angles to one another.",
+              visible: DIAM,
+              highlighted: ["AC","BD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AC",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BD",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "rtE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [
+                  { claim: "a diameter through the center", ref: "III.1" },
+                  { claim: "at right angles to one another", ref: "I.11" } ] },
+            { text: "Draw {FG}, {GH}, {HK}, and {KF} through the points {A}, {B}, {C}, and {D} touching the circle {ABCD}.",
+              visible: TAN,
+              highlighted: ["A","B","C","D"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "at right angles to the diameters at A, B, C, D", ref: "III.16,Cor" }] },
+            { text: "Then, since {FG} touches the circle {ABCD},",
+              visible: TAN,
+              highlighted: ["FG","ABCD"] },
+            { text: "and {EA} has been joined from the center {E} to the point of contact at {A},",
+              visible: RAD,
+              highlighted: ["EA","E","A"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "therefore the angles at A are right.",
+              visible: RTA,
+              highlighted: ["rtA1","rtA2"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtA1", name: geomlib.A.Sector.sweep },
+                  { elem: "rtA2", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "a radius to the point of contact is perpendicular to the tangent", ref: "III.18" }] },
+            { text: "For the same reason the angles at the points {B}, {C}, and {D} are also right.",
+              visible: RTALL,
+              highlighted: ["rtB1","rtB2","rtC1","rtC2","rtD1","rtD2"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtB1", name: geomlib.A.Sector.sweep },
+                  { elem: "rtB2", name: geomlib.A.Sector.sweep },
+                  { elem: "rtC1", name: geomlib.A.Sector.sweep },
+                  { elem: "rtC2", name: geomlib.A.Sector.sweep },
+                  { elem: "rtD1", name: geomlib.A.Sector.sweep },
+                  { elem: "rtD2", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "III.18" }] },
+            { text: "Now, since the angle {AEB} is right, and the angle {EBG} is also right,",
+              visible: RTALL,
+              highlighted: ["rtE","rtB1"] },
+            { text: "therefore {GH} is parallel to {AC}.",
+              visible: RTALL,
+              highlighted: ["GH","AC"],
+              justifications: [{ claim: "GH parallel to AC", ref: "I.28" }] },
+            { text: "For the same reason {AC} is also parallel to {FK},",
+              visible: RTALL,
+              highlighted: ["AC","KF","rtD2"] },
+            { text: "so that {GH} is also parallel to {FK}.",
+              visible: RTALL,
+              highlighted: ["GH","KF"],
+              justifications: [{ claim: "parallel to the same straight line AC", ref: "I.30" }] },
+            { text: "Similarly we can prove that each of the straight lines {GF} and {HK} is parallel to {BED}.",
+              visible: RTALL,
+              highlighted: ["FG","HK","BD"] },
+            { text: "Therefore {GK}, {GC|pgGC}, {AK|pgAK}, {FB|pgFB}, and {BK|pgBK} are parallelograms,",
+              visible: PGM,
+              highlighted: ["FGHK","pgGC","pgAK","pgFB","pgBK"] },
+            { text: "therefore {GF} equals {HK}, and {GH} equals {FK}.",
+              visible: PGM,
+              highlighted: ["FG","HK","GH","KF"],
+              justifications: [{ claim: "opposite sides of a parallelogram are equal", ref: "I.34" }] },
+            { text: "And, since {AC} equals {BD}, and {AC} also equals each of the straight lines {GH} and {FK},",
+              visible: PGM,
+              highlighted: ["AC","BD","GH","KF"] },
+            { text: "and {BD} equals each of the straight lines {GF} and {HK},",
+              visible: PGM,
+              highlighted: ["BD","FG","HK"] },
+            { text: "therefore the quadrilateral {FGHK} is equilateral.",
+              visible: PGM,
+              highlighted: ["FG","GH","HK","KF"],
+              justifications: [{ claim: "opposite sides of a parallelogram are equal", ref: "I.34" }] },
+            { text: "I say next that it is also right-angled.",
+              visible: PGM,
+              highlighted: ["FGHK"] },
+            { text: "For, since {GBEA} is a parallelogram, and the angle {AEB} is right, therefore the angle {AGB} is also right.",
+              visible: QUAR,
+              highlighted: ["GBEA","rtE","rtG"],
+              transition: { animations: [
+                  { elem: "rtG", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "opposite angles of a parallelogram are equal", ref: "I.34" }] },
+            { text: "Similarly we can prove that the angles at {H}, {K}, and {F} are also right.",
+              visible: CORN,
+              highlighted: ["rtH","rtK","rtF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtH", name: geomlib.A.Sector.sweep },
+                  { elem: "rtK", name: geomlib.A.Sector.sweep },
+                  { elem: "rtF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore {FGHK} is right-angled.",
+              visible: CORN,
+              highlighted: ["rtG","rtH","rtK","rtF"] },
+            { text: "But it was also proved equilateral, therefore it is a square, and it has been circumscribed about the circle {ABCD}.",
+              visible: DONE,
+              highlighted: ["FG","GH","HK","KF"],
+              transition: { animations: [
+                  { elem: "square", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Therefore a square has been circumscribed about the given circle.",
+              visible: DONE,
+              highlighted: ["FG","GH","HK","KF","rtG","rtH","rtK","rtF"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IV.7") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.11":       "/elements/books/bookI/propositions/propI11/",
+        "I.28":       "/elements/books/bookI/propositions/propI28/",
+        "I.30":       "/elements/books/bookI/propositions/propI30/",
+        "I.34":       "/elements/books/bookI/propositions/propI34/",
+        "III.1":      "/elements/books/bookIII/propositions/propIII1/",
+        "III.16,Cor": "/elements/books/bookIII/propositions/propIII16/#cor",
+        "III.18":     "/elements/books/bookIII/propositions/propIII18/"
     });
 </script>
 </figure>
 
-Then, since *FG* touches the circle *ABCD,* and *EA* has been joined from the center *E* to the point of contact at *A,* therefore the angles at A are right. For the same reason the angles at the points *B, C,* and *D* are also right. [!just III.18]
+Then, since {FG} touches the circle {ABCD}, and {EA} has been joined from the center {E} to the point of contact at {A}, therefore the angles at A are right. For the same reason the angles at the points {B}, {C}, and {D} are also right. [!just III.18]
 
-Now, since the angle *AEB* is right, and the angle *EBG* is also right, therefore *GH* is parallel to *AC.* [!just I.28]
+Now, since the angle {AEB} is right, and the angle {EBG} is also right, therefore {GH} is parallel to {AC}. [!just I.28]
 
-For the same reason *AC* is also parallel to *FK,* so that *GH* is also parallel to *FK.* [!just I.30]
+For the same reason {AC} is also parallel to {FK}, so that {GH} is also parallel to {FK}. [!just I.30]
 
-Similarly we can prove that each of the straight lines *GF* and *HK* is parallel to *BED.*
+Similarly we can prove that each of the straight lines {GF} and {HK} is parallel to {BED}.
 
-Therefore *GK, GC, AK, FB,* and *BK* are parallelograms, therefore *GF* equals *HK,* and *GH* equals *FK.* [!just I.34]
+Therefore {GK}, {GC|pgGC}, {AK|pgAK}, {FB|pgFB}, and {BK|pgBK} are parallelograms, therefore {GF} equals {HK}, and {GH} equals {FK}. [!just I.34]
 
-And, since *AC* equals *BD,* and *AC* also equals each of the straight lines *GH* and *FK,* and *BD* equals each of the straight lines *GF* and *HK,* therefore the quadrilateral *FGHK* is equilateral. [!just I.34]
+And, since {AC} equals {BD}, and {AC} also equals each of the straight lines {GH} and {FK}, and {BD} equals each of the straight lines {GF} and {HK}, therefore the quadrilateral {FGHK} is equilateral. [!just I.34]
 
 I say next that it is also right-angled.
 
-For, since *GBEA* is a parallelogram, and the angle *AEB* is right, therefore the angle *AGB* is also right. [!just I.34]
+For, since {GBEA} is a parallelogram, and the angle {AEB} is right, therefore the angle {AGB} is also right. [!just I.34]
 
-Similarly we can prove that the angles at *H, K,* and *F* are also right. Therefore *FGHK* is right-angled.
+Similarly we can prove that the angles at {H}, {K}, and {F} are also right. Therefore {FGHK} is right-angled.
 
-But it was also proved equilateral, therefore it is a square, and it has been circumscribed about the circle *ABCD.*
+But it was also proved equilateral, therefore it is a square, and it has been circumscribed about the circle {ABCD}.
 
 Therefore a square has been circumscribed about the given circle.
 
