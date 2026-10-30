@@ -15,12 +15,19 @@ statement: If two magnitudes do not have to one another the ratio which a number
 ----
 proof:
 
-Let the two magnitudes *A* and *B* not have to one another the ratio which a number has to a number.
+Let the two magnitudes {A} and {B} not have to one another the ratio which a number has to a number.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="160" height="100" tabindex="0"></canvas>
 <noscript><img alt="X.8 diagram" src="propX7.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure, unchanged: the magnitudes A and B as two black lines.
+    // Nothing is added; the reductio is walked as highlight beats.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2 and the offscreen frees. A and B are both given on slide 1, so
+    // nothing is deferred.
+    var GIVEN = ["A","A1","A2","B","B1","B2"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,15 +44,54 @@ Let the two magnitudes *A* and *B* not have to one another the ratio which a num
             "B2;point;lineSlider;B0,B3,109,0;0",
             "B;line;connect;B1,B2;black"
         ],
+        slides: [
+            { text: "“If two magnitudes do not have to one another the ratio which a number has to a number,”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "X.8" }] },
+            { text: "“then the magnitudes are incommensurable.”",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Let the two magnitudes {A} and {B} not have to one another the ratio which a number has to a number.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that the magnitudes {A} and {B} are incommensurable.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "For, if they are commensurable, then {A} has to {B} the ratio which a number has to a number.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "commensurable gives ratio of numbers", ref: "X.5" }] },
+            { text: "But it does not, therefore the magnitudes {A} and {B} are incommensurable.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Therefore, if two magnitudes do not have to one another the ratio which a number has to a number,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "then the magnitudes are incommensurable.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.8") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.5": "/elements/books/bookX/propositions/propX5/"
     });
 </script>
 </figure>
 
-I say that the magnitudes *A* and *B* are incommensurable.
+I say that the magnitudes {A} and {B} are incommensurable.
 
-For, if they are commensurable, then *A* has to *B* the ratio which a number has to a number. [!just X.5]
+For, if they are commensurable, then {A} has to {B} the ratio which a number has to a number. [!just X.5]
 
-But it does not, therefore the magnitudes *A* and *B* are incommensurable.
+But it does not, therefore the magnitudes {A} and {B} are incommensurable.
 
 Therefore, *if two magnitudes do not have to one another the ratio which a number has to a number, then the magnitudes are incommensurable.*
 

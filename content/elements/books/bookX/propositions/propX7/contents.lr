@@ -15,12 +15,19 @@ statement: Incommensurable magnitudes do not have to one another the ratio which
 ----
 proof:
 
-Let *A* and *B* be incommensurable magnitudes.
+Let {A} and {B} be incommensurable magnitudes.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="160" height="100" tabindex="0"></canvas>
 <noscript><img alt="X.7 diagram" src="propX7.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure, unchanged: the magnitudes A and B as two black lines.
+    // Nothing is added; the reductio is walked as highlight beats.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2 and the offscreen frees. A and B are both given on slide 1, so
+    // nothing is deferred.
+    var GIVEN = ["A","A1","A2","B","B1","B2"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -37,15 +44,48 @@ Let *A* and *B* be incommensurable magnitudes.
             "B2;point;lineSlider;B0,B3,109,0;0",
             "B;line;connect;B1,B2;black"
         ],
+        slides: [
+            { text: "“Incommensurable magnitudes do not have to one another the ratio which a number has to a number.”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "X.7" }] },
+            { text: "Let {A} and {B} be incommensurable magnitudes.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that {A} does not have to {B} the ratio which a number has to a number.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "If {A} does have to {B} the ratio which a number has to a number, then {A} is commensurable with {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "ratio of numbers gives commensurable", ref: "X.6" }] },
+            { text: "But it is not, therefore {A} does not have to {B} the ratio which a number has to a number.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Therefore, incommensurable magnitudes do not have to one another the ratio which a number has to a number.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.7") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.6": "/elements/books/bookX/propositions/propX6/"
     });
 </script>
 </figure>
 
-I say that *A* does not have to *B* the ratio which a number has to a number.
+I say that {A} does not have to {B} the ratio which a number has to a number.
 
-If *A* does have to *B* the ratio which a number has to a number, then *A* is commensurable with *B.* [!just X.6]
+If {A} does have to {B} the ratio which a number has to a number, then {A} is commensurable with {B}. [!just X.6]
 
-But it is not, therefore *A* does not have to *B* the ratio which a number has to a number.
+But it is not, therefore {A} does not have to {B} the ratio which a number has to a number.
 
 Therefore, *incommensurable magnitudes do not have to one another the ratio which a number has to a number.*
 
