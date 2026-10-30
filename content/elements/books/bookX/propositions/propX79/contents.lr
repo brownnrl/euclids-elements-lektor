@@ -15,14 +15,27 @@ statement: To an apotome only one rational straight line can be annexed which is
 ----
 proof:
 
-Let *AB* be an apotome, and *BC* an annex to it. Then *AC* and *CB* are rational straight lines commensurable in square only. [!just X.73]
+Let {AB} be an apotome, and {BC} an annex to it. Then {AC} and {CB} are rational straight lines commensurable in square only. [!just X.73]
 
-I say that no other rational straight line can be annexed to *AB* which is commensurable with the whole in square only.
+I say that no other rational straight line can be annexed to {AB} which is commensurable with the whole in square only.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="60" tabindex="0"></canvas>
 <noscript><img alt="X.79 diagram" src="propX79.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the apotome AB with its annex BC on the line AD, and
+    // the supposed second annex BD. Added, all hidden at rest: solid twins
+    // AC and CD (initiallyHidden) so the whole AC stands alone before D and
+    // the annex is produced from C to D; transparent targets AB, CB, DB
+    // (;0;0;0). Joyce's "does not exceeded" is left literal.
+    //
+    // Draggables (checked against the bundle): A, B, C, D (line sliders) and
+    // the offscreen frees A0, A3. D only arrives with the reductio's "let BD
+    // be so annexed", so it is deferred; D and its lines are withdrawn once
+    // the contradiction is reached.
+    var GIVEN = ["A","B","C","AC","AB","CB"];
+    var ANNEX = GIVEN.concat(["D","CD","DB"]);
+    var ALL   = ANNEX.concat(["AD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -34,19 +47,131 @@ I say that no other rational straight line can be annexed to *AB* which is comme
             "B;point;lineSlider;A0,A3,90,0",
             "C;point;lineSlider;A0,A3,180,0",
             "D;point;lineSlider;A0,A3,210,0",
-            "AD;line;connect;A,D"
+            "AD;line;connect;A,D",
+            // Slide-only twins and highlight targets.
+            "AC;line;connect;A,C",
+            "CD;line;connect;C,D",
+            "AB;line;connect;A,B;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "DB;line;connect;D,B;0;0;0"
         ],
+        initiallyHidden: ["AC","CD"],
+        deferDraggables: ["D"],
+        aliases: { "BC": "CB", "BD": "DB" },
+        slides: [
+            { text: "“To an apotome only one rational straight line can be annexed",
+              visible: GIVEN,
+              highlighted: ["AB","CB"],
+              justifications: [{ ref: "X.79" }] },
+            { text: "which is commensurable with the whole in square only.”",
+              visible: GIVEN,
+              highlighted: ["CB","AC"] },
+            { text: "Let {AB} be an apotome, and {BC} an annex to it.",
+              visible: GIVEN,
+              highlighted: ["AB","CB"] },
+            { text: "Then {AC} and {CB} are rational straight lines commensurable in square only.",
+              visible: GIVEN,
+              highlighted: ["AC","CB"],
+              justifications: [{ claim: "AB an apotome", ref: "X.73" }] },
+            { text: "I say that no other rational straight line can be annexed to {AB}",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "which is commensurable with the whole in square only.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "If possible, let {BD} be so annexed.",
+              visible: ANNEX,
+              highlighted: ["DB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "D",  name: geomlib.A.Point.appear } ] } },
+            { text: "Then {AD} and {DB} are also rational straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["AD","DB"],
+              justifications: [{ claim: "BD an annex to AB", ref: "X.73" }] },
+            { text: "Now, since the excess of the sum of the squares on {AD} and {DB}",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "over twice the rectangle {AD} by {DB}",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "is also the excess of the sum of the squares on {AC} and {CB}",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "over twice the rectangle {AC} by {CB},",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "for both exceed by the same, the square on {AB},",
+              visible: ALL,
+              highlighted: ["AB"],
+              justifications: [{ claim: "each excess is the square on AB", ref: "II.7" }] },
+            { text: "therefore, alternately, the excess of the sum of the squares on {AD} and {DB}",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "over the sum of the squares on {AC} and {CB}",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "is the excess of twice the rectangle {AD} by {DB} over twice the rectangle {AC} by {CB}.",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "But the sum of the squares on {AD} and {DB}",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "exceeds the sum of the squares on {AC} and {CB} by a rational area, for both are rational,",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "therefore twice the rectangle {AD} by {DB} also exceeds twice the rectangle {AC} by {CB} by a rational area,",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "which is impossible, for both are medial,",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"],
+              justifications: [{ claim: "both rectangles medial", ref: "X.21" }] },
+            { text: "and a medial area does not exceeded a medial by a rational area.",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"],
+              justifications: [{ claim: "medial does not exceed medial by rational", ref: "X.26" }] },
+            { text: "Therefore no other rational straight line can be annexed to {AB} which is commensurable with the whole in square only.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "Therefore only one rational straight line can be annexed to an apotome",
+              visible: GIVEN,
+              highlighted: ["AB","CB"] },
+            { text: "which is commensurable with the whole in square only.",
+              visible: GIVEN,
+              highlighted: ["CB","AC"] },
+            { text: "Therefore, to an apotome only one rational straight line can be annexed",
+              visible: GIVEN,
+              highlighted: ["AB","CB"] },
+            { text: "which is commensurable with the whole in square only.",
+              visible: GIVEN,
+              highlighted: ["CB","AC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.79") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.73": "/elements/books/bookX/propositions/propX73/",
+        "II.7": "/elements/books/bookII/propositions/propII7/",
+        "X.21": "/elements/books/bookX/propositions/propX21/",
+        "X.26": "/elements/books/bookX/propositions/propX26/"
     });
 </script>
 </figure>
 
-If possible, let *BD* be so annexed. Then *AD* and *DB* are also rational straight lines commensurable in square only. [!just X.73]
+If possible, let {BD} be so annexed. Then {AD} and {DB} are also rational straight lines commensurable in square only. [!just X.73]
 
-Now, since the excess of the sum of the squares on *AD* and *DB* over twice the rectangle *AD* by *DB* is also the excess of the sum of the squares on *AC* and *CB* over twice the rectangle *AC* by *CB*, for both exceed by the same, the square on *AB*, therefore, alternately, the excess of the sum of the squares on *AD* and *DB* over the sum of the squares on *AC* and *CB* is the excess of twice the rectangle *AD* by *DB* over twice the rectangle *AC* by *CB*. [!just II.7]
+Now, since the excess of the sum of the squares on {AD} and {DB} over twice the rectangle {AD} by {DB} is also the excess of the sum of the squares on {AC} and {CB} over twice the rectangle {AC} by {CB}, for both exceed by the same, the square on {AB}, therefore, alternately, the excess of the sum of the squares on {AD} and {DB} over the sum of the squares on {AC} and {CB} is the excess of twice the rectangle {AD} by {DB} over twice the rectangle {AC} by {CB}. [!just II.7]
 
-But the sum of the squares on *AD* and *DB* exceeds the sum of the squares on *AC* and *CB* by a rational area, for both are rational, therefore twice the rectangle *AD* by *DB* also exceeds twice the rectangle *AC* by *CB* by a rational area, which is impossible, for both are medial, and a medial area does not exceeded a medial by a rational area. [!just X.21; X.26]
+But the sum of the squares on {AD} and {DB} exceeds the sum of the squares on {AC} and {CB} by a rational area, for both are rational, therefore twice the rectangle {AD} by {DB} also exceeds twice the rectangle {AC} by {CB} by a rational area, which is impossible, for both are medial, and a medial area does not exceeded a medial by a rational area. [!just X.21; X.26]
 
-Therefore no other rational straight line can be annexed to *AB* which is commensurable with the whole in square only.
+Therefore no other rational straight line can be annexed to {AB} which is commensurable with the whole in square only.
 
 Therefore only one rational straight line can be annexed to an apotome which is commensurable with the whole in square only.
 
