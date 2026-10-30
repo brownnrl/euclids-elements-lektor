@@ -15,14 +15,21 @@ statement: If two magnitudes are commensurable, and one of them is incommensurab
 ----
 proof:
 
-Let *A* and *B* be two commensurable magnitudes, and let one of them, *A,* be incommensurable with some other magnitude *C.*
+Let {A} and {B} be two commensurable magnitudes, and let one of them, {A}, be incommensurable with some other magnitude {C}.
 
-I say that the remaining one, *B,* is also incommensurable with *C.*
+I say that the remaining one, {B}, is also incommensurable with {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="230" height="120" tabindex="0"></canvas>
 <noscript><img alt="X.13 diagram" src="propX13.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the three magnitudes A, B, C as lines. Nothing added;
+    // the reductio is argued on the givens, so the deck is highlight beats.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2 and the offscreen frees. All are givens, standing from
+    // slide 1; nothing is deferred.
+    var GIVEN = ["A","A1","A2","B","B1","B2","C","C1","C2"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -44,13 +51,61 @@ I say that the remaining one, *B,* is also incommensurable with *C.*
             "C2;point;lineSlider;C0,C3,150,0;0",
             "C;line;connect;C1,C2;black"
         ],
+        slides: [
+            { text: "“If two magnitudes are commensurable, and one of them is incommensurable with any magnitude,”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "“then the remaining one is also incommensurable with the same.”",
+              visible: GIVEN,
+              highlighted: ["B","C"],
+              justifications: [{ ref: "X.13" }] },
+            { text: "Let {A} and {B} be two commensurable magnitudes,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and let one of them, {A}, be incommensurable with some other magnitude {C}.",
+              visible: GIVEN,
+              highlighted: ["A","C"] },
+            { text: "I say that the remaining one, {B}, is also incommensurable with {C}.",
+              visible: GIVEN,
+              highlighted: ["B","C"] },
+            { text: "If {B} is commensurable with {C}, while {A} is also commensurable with {B},",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "then {A} is also commensurable with {C}.",
+              visible: GIVEN,
+              highlighted: ["A","C"],
+              justifications: [{ claim: "commensurable with the same magnitude", ref: "X.12" }] },
+            { text: "But it is also incommensurable with it, which is impossible.",
+              visible: GIVEN,
+              highlighted: ["A","C"] },
+            { text: "Therefore {B} is not commensurable with {C}. Therefore it is incommensurable with it.",
+              visible: GIVEN,
+              highlighted: ["B","C"] },
+            { text: "Therefore, if two magnitudes are commensurable, and one of them is incommensurable with any magnitude,",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "then the remaining one is also incommensurable with the same.",
+              visible: GIVEN,
+              highlighted: ["B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.13") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.12": "/elements/books/bookX/propositions/propX12/"
     });
 </script>
 </figure>
 
-If *B* is commensurable with *C,* while *A* is also commensurable with *B,* then *A* is also commensurable with *C.* [!just X.12]
+If {B} is commensurable with {C}, while {A} is also commensurable with {B}, then {A} is also commensurable with {C}. [!just X.12]
 
-But it is also incommensurable with it, which is impossible. Therefore *B* is not commensurable with *C.* Therefore it is incommensurable with it.
+But it is also incommensurable with it, which is impossible. Therefore {B} is not commensurable with {C}. Therefore it is incommensurable with it.
 
 Therefore, *if two magnitudes are commensurable, and one of them is incommensurable with any magnitude, then the remaining one is also incommensurable with the same.*
 

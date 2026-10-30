@@ -17,14 +17,31 @@ proof:
 
 Given two unequal straight lines, to find by what square the square on the greater is greater than the square on the less.
 
-Let *AB* and *C* be the given two unequal straight lines, and let *AB* be the greater of them.
+Let {AB} and {C} be the given two unequal straight lines, and let {AB} be the greater of them.
 
-It is required to find by what square the square on *AB* is greater than the square on *C*.
+It is required to find by what square the square on {AB} is greater than the square on {C}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.14 lemma diagram" src="propX14l.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's lemma figure: AB, C, the semicircle on AB and the triangle ADB.
+    // Added, all hidden at rest: the solid twins AD and DB (initiallyHidden)
+    // so the fit and the join stroke from A and from D; a faceless twin of
+    // the semicircle (semiT) to carry its highlight, since the filled one
+    // would be raised over the triangle (#140); the right angle at D.
+    // ADK is Joyce's letter for the semicircle (the figure has no K); it is
+    // left literal and the hover sits on the word "semicircle".
+    //
+    // Draggables (checked against the bundle): A, B, C1, C2, all free and
+    // all givens. D is derived ("first") and listed per slide.
+    var L_GIVEN = ["A","B","AB","C","C1","C2"];
+    var L_SEMI  = L_GIVEN.concat(["semi"]);
+    var L_FIT   = L_SEMI.concat(["D","AD"]);
+    var L_JOIN  = L_FIT.concat(["DB","tri"]);
+    var L_RT    = L_JOIN.concat(["angADB"]);
+    var L_TWO   = ["A","B","D","AD","DB"];
+    var L_HYP   = L_TWO.concat(["AB","angADB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -42,23 +59,110 @@ It is required to find by what square the square on *AB* is greater than the squ
             "DD';line;bichord;circ,ACcirc;0;0;0",
             "D;point;first;DD'",
             "semi;sector;arc;B,D,A;0;0;black;random",
-            "tri;polygon;triangle;A,B,D;0;0;black;random"
+            "tri;polygon;triangle;A,B,D;0;0;black;random",
+            "semiT;sector;arc;B,D,A;0;0;0;0",
+            "AD;line;connect;A,D",
+            "DB;line;connect;D,B",
+            "angADB;sector;angleMarkerRight;D,A,B;0;0;red;red"
         ],
+        initiallyHidden: ["AD","DB"],
+        slides: [
+            { text: "Given two unequal straight lines,",
+              visible: L_GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "to find by what square the square on the greater is greater than the square on the less.",
+              visible: L_GIVEN,
+              highlighted: ["AB","C"],
+              justifications: [{ ref: "Lemma" }] },
+            { text: "Let {AB} and {C} be the given two unequal straight lines, and let {AB} be the greater of them.",
+              visible: L_GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "It is required to find by what square the square on {AB} is greater than the square on {C}.",
+              visible: L_GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "Describe the {semicircle|semiT} ADK on {AB},",
+              visible: L_SEMI,
+              highlighted: ["semiT","AB"],
+              transition: { animations: [
+                  { elem: "semi", name: geomlib.A.Sector.sweep } ] } },
+            { text: "fit {AD} into it equal to {C},",
+              visible: L_FIT.concat(["ACcirc"]),
+              highlighted: ["AD","C"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "ACcirc", name: geomlib.A.Circle.compass },
+                  { elem: "D",      name: geomlib.A.Point.appear },
+                  { elem: "AD",     name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "AD fitted equal to C", ref: "IV.1" }] },
+            { text: "and join {DB}.",
+              visible: L_JOIN,
+              highlighted: ["DB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DB",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "tri", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "It is then clear that the angle {ADB|angADB} is right,",
+              visible: L_RT,
+              highlighted: ["angADB"],
+              transition: { animations: [
+                  { elem: "angADB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the angle in a semicircle is right", ref: "III.31" }] },
+            { text: "and that the square on {AB} is greater than the square on {AD}, that is, {C}, by the square on {DB}.",
+              visible: L_RT,
+              highlighted: ["AB","AD","C","DB"],
+              justifications: [{ claim: "AB² = AD² + DB²", ref: "I.47" }] },
+            { text: "Similarly also, if two straight lines are given,",
+              visible: L_TWO,
+              highlighted: ["AD","DB"] },
+            { text: "then the straight line the square on which equals the sum of the squares on them is found in this manner.",
+              visible: L_TWO,
+              highlighted: ["AD","DB"] },
+            { text: "Let {AD} and {DB} be the given two straight lines,",
+              visible: L_TWO,
+              highlighted: ["AD","DB"] },
+            { text: "and let it be required to find the straight line the square on which equals the sum of the squares on them.",
+              visible: L_TWO,
+              highlighted: ["AD","DB"] },
+            { text: "Place them so as to contain a right angle {ADB|angADB}, and join {AB}.",
+              visible: L_HYP,
+              highlighted: ["angADB","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angADB", name: geomlib.A.Sector.sweep },
+                  { elem: "AB",     name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "It is again manifest that the straight line the square on which",
+              visible: L_HYP,
+              highlighted: ["AB"] },
+            { text: "equals the sum of the squares on {AD} and {DB} is {AB}.",
+              visible: L_HYP,
+              highlighted: ["AD","DB","AB"],
+              justifications: [{ ref: "I.47" }, { ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // (shared by both canvases on this page).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.47":   "/elements/books/bookI/propositions/propI47/",
+        "III.31": "/elements/books/bookIII/propositions/propIII31/",
+        "IV.1":   "/elements/books/bookIV/propositions/propIV1/"
     });
 </script>
 </figure>
 
-Describe the semicircle *ADK* on *AB*, fit *AD* into it equal to *C*, and join *DB*. [!just IV.1]
+Describe the {semicircle|semiT} *ADK* on {AB}, fit {AD} into it equal to {C}, and join {DB}. [!just IV.1]
 
-It is then clear that the angle *ADB* is right, and that the square on *AB* is greater than the square on *AD*, that is, *C*, by the square on *DB*. [!just III.31; I.47]
+It is then clear that the angle {ADB|angADB} is right, and that the square on {AB} is greater than the square on {AD}, that is, {C}, by the square on {DB}. [!just III.31; I.47]
 
 Similarly also, *if two straight lines are given, then the straight line the square on which equals the sum of the squares on them is found in this manner.*
 
-Let *AD* and *DB* be the given two straight lines, and let it be required to find the straight line the square on which equals the sum of the squares on them.
+Let {AD} and {DB} be the given two straight lines, and let it be required to find the straight line the square on which equals the sum of the squares on them.
 
-Place them so as to contain a right angle *ADB*, and join *AB*.
+Place them so as to contain a right angle {ADB|angADB}, and join {AB}.
 
-It is again manifest that the straight line the square on which equals the sum of the squares on *AD* and *DB* is *AB*. [!just I.47]
+It is again manifest that the straight line the square on which equals the sum of the squares on {AD} and {DB} is {AB}. [!just I.47]
 
 <div class="qed">Q.E.D.</div>
 ----
@@ -74,14 +178,25 @@ If four straight lines are proportional, and the square on the first is greater 
 
 <div class="just"><a href="#lemma">Lemma</a></div>
 
-Let *A*, *B*, *C*, and *D* be four straight lines in proportion, so that *A* is to *B* as *C* is to *D*, and let the square on *A* be greater than the square on *B* by the square on *E*, and let the square on *C* be greater than the square on *D* by the square on *F*.
+Let {A:canvas_1}, {B:canvas_1}, {C:canvas_1}, and {D:canvas_1} be four straight lines in proportion, so that {A:canvas_1} is to {B:canvas_1} as {C:canvas_1} is to {D:canvas_1}, and let the square on {A:canvas_1} be greater than the square on {B:canvas_1} by the square on {E:canvas_1}, and let the square on {C:canvas_1} be greater than the square on {D:canvas_1} by the square on {F:canvas_1}.
 
-I say that, if *A* is commensurable with *E*, then *C* is also commensurable with *F*, and, if *A* is incommensurable with *E*, then *C* is also incommensurable with *F*.
+I say that, if {A:canvas_1} is commensurable with {E:canvas_1}, then {C:canvas_1} is also commensurable with {F:canvas_1}, and, if {A:canvas_1} is incommensurable with {E:canvas_1}, then {C:canvas_1} is also incommensurable with {F:canvas_1}.
 
 <figure class="diagram">
 <canvas id="canvas_1" width="210" height="270" tabindex="0"></canvas>
 <noscript><img alt="X.14 diagram" src="propX14.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the six lines A-F. Nothing added; E and F are found by
+    // the lemma above (its construction is built hidden into the figure), so
+    // they simply stroke in when the statement first reaches them.
+    //
+    // Draggables (checked against the bundle): the lineSliders A1, A2, B1,
+    // B2, C1, C2, D1, E1, F1 and the offscreen frees. E1 and F1 are deferred
+    // to their statement clauses. D2 (proportion), E2 and F2 (cutoff) are
+    // derived and listed per slide.
+    var P_AD  = ["A","A1","A2","B","B1","B2","C","C1","C2","D","D1","D2"];
+    var P_E   = P_AD.concat(["E","E1","E2"]);
+    var P_ALL = P_E.concat(["F","F1","F2"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -128,19 +243,162 @@ I say that, if *A* is commensurable with *E*, then *C* is also commensurable wit
             "F2;point;cutoff;F1,F3,CF1,C2;0;black",
             "F;line;connect;F1,F2;black"
         ],
+        deferDraggables: ["E1","F1"],
+        slides: [
+            { text: "“If four straight lines are proportional,”",
+              visible: P_AD,
+              highlighted: ["A","B","C","D"] },
+            { text: "“and the square on {the first|A} is greater than the square on {the second|B}”",
+              visible: P_AD,
+              highlighted: ["A","B"] },
+            { text: "“by the square on {a straight line commensurable with the first|E},”",
+              visible: P_E,
+              highlighted: ["E","A"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "“then the square on {the third|C} is also greater than the square on {the fourth|D}”",
+              visible: P_E,
+              highlighted: ["C","D"] },
+            { text: "“by the square on {a third line commensurable with the third|F}.”",
+              visible: P_ALL,
+              highlighted: ["F","C"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "“And, if the square on {the first|A} is greater than the square on {the second|B}”",
+              visible: P_ALL,
+              highlighted: ["A","B"] },
+            { text: "“by the square on {a straight line incommensurable with the first|E},”",
+              visible: P_ALL,
+              highlighted: ["E","A"] },
+            { text: "“then the square on {the third|C} is also greater than the square on {the fourth|D}”",
+              visible: P_ALL,
+              highlighted: ["C","D"] },
+            { text: "“by the square on {a third line incommensurable with the third|F}.”",
+              visible: P_ALL,
+              highlighted: ["F","C"],
+              justifications: [{ ref: "X.14" }] },
+            { text: "Let {A}, {B}, {C}, and {D} be four straight lines in proportion, so that {A} is to {B} as {C} is to {D},",
+              visible: P_ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "and let the square on {A} be greater than the square on {B} by the square on {E},",
+              visible: P_ALL,
+              highlighted: ["A","B","E"],
+              justifications: [{ claim: "E found", ref: "Lemma" }] },
+            { text: "and let the square on {C} be greater than the square on {D} by the square on {F}.",
+              visible: P_ALL,
+              highlighted: ["C","D","F"],
+              justifications: [{ claim: "F found", ref: "Lemma" }] },
+            { text: "I say that, if {A} is commensurable with {E}, then {C} is also commensurable with {F},",
+              visible: P_ALL,
+              highlighted: ["A","E","C","F"] },
+            { text: "and, if {A} is incommensurable with {E}, then {C} is also incommensurable with {F}.",
+              visible: P_ALL,
+              highlighted: ["A","E","C","F"] },
+            { text: "Since {A} is to {B} as {C} is to {D},",
+              visible: P_ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "therefore the square on {A} is to the square on {B} as the square on {C} is to the square on {D}.",
+              visible: P_ALL,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ claim: "squares on proportionals are proportional", ref: "VI.22" }] },
+            { text: "But the sum of the squares on {E} and {B} equals the square on {A},",
+              visible: P_ALL,
+              highlighted: ["E","B","A"] },
+            { text: "and the sum of the squares on {D} and {F} equals the square on {C}.",
+              visible: P_ALL,
+              highlighted: ["D","F","C"] },
+            { text: "Therefore the sum of the squares on {E} and {B} is to the square on {B}",
+              visible: P_ALL,
+              highlighted: ["E","B"] },
+            { text: "as the sum of the squares on {D} and {F} is to the square on {D}.",
+              visible: P_ALL,
+              highlighted: ["D","F"] },
+            { text: "Therefore, taken separately, the square on {E} is to the square on {B}",
+              visible: P_ALL,
+              highlighted: ["E","B"] },
+            { text: "as the square on {F} is to the square on {D}.",
+              visible: P_ALL,
+              highlighted: ["F","D"],
+              justifications: [{ claim: "separando", ref: "V.17" }] },
+            { text: "Therefore {E} is to {B} as {F} is to {D}.",
+              visible: P_ALL,
+              highlighted: ["E","B","F","D"],
+              justifications: [{ claim: "sides of proportional squares are proportional", ref: "VI.22" }] },
+            { text: "Therefore, inversely, {B} is to {E} as {D} is to {F}.",
+              visible: P_ALL,
+              highlighted: ["B","E","D","F"],
+              justifications: [{ claim: "inversely", ref: "V.7.Cor" }] },
+            { text: "But {A} is to {B} as {C} is to {D},",
+              visible: P_ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "therefore, ex aequali, {A} is to {E} as {C} is to {F}.",
+              visible: P_ALL,
+              highlighted: ["A","E","C","F"],
+              justifications: [{ claim: "ex aequali", ref: "V.22" }] },
+            { text: "Therefore, if {A} is commensurable with {E}, then {C} is also commensurable with {F},",
+              visible: P_ALL,
+              highlighted: ["A","E","C","F"],
+              justifications: [{ claim: "same ratio, commensurable alike", ref: "X.11" }] },
+            { text: "but if {A} is incommensurable with {E}, then {C} is also incommensurable with {F}.",
+              visible: P_ALL,
+              highlighted: ["A","E","C","F"],
+              justifications: [{ claim: "same ratio, incommensurable alike", ref: "X.11" }] },
+            { text: "Therefore, if four straight lines are proportional,",
+              visible: P_ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "and the square on {the first|A} is greater than the square on {the second|B}",
+              visible: P_ALL,
+              highlighted: ["A","B"] },
+            { text: "by the square on {a straight line commensurable with the first|E},",
+              visible: P_ALL,
+              highlighted: ["E","A"] },
+            { text: "then the square on {the third|C} is also greater than the square on {the fourth|D}",
+              visible: P_ALL,
+              highlighted: ["C","D"] },
+            { text: "by the square on {a third line commensurable with the third|F}.",
+              visible: P_ALL,
+              highlighted: ["F","C"] },
+            { text: "And, if the square on {the first|A} is greater than the square on {the second|B}",
+              visible: P_ALL,
+              highlighted: ["A","B"] },
+            { text: "by the square on {a straight line incommensurable with the first|E},",
+              visible: P_ALL,
+              highlighted: ["E","A"] },
+            { text: "then the square on {the third|C} is also greater than the square on {the fourth|D}",
+              visible: P_ALL,
+              highlighted: ["C","D"] },
+            { text: "by the square on {a third line incommensurable with the third|F}.",
+              visible: P_ALL,
+              highlighted: ["F","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.14") return "#prop";
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.7.Cor": "/elements/books/bookV/propositions/propV7/#cor",
+        "V.17":    "/elements/books/bookV/propositions/propV17/",
+        "V.22":    "/elements/books/bookV/propositions/propV22/",
+        "VI.22":   "/elements/books/bookVI/propositions/propVI22/",
+        "X.11":    "/elements/books/bookX/propositions/propX11/"
     });
 </script>
 </figure>
 
-Since *A* is to *B* as *C* is to *D*, therefore the square on *A* is to the square on *B* as the square on *C* is to the square on *D*. [!just VI.22]
+Since {A} is to {B} as {C} is to {D}, therefore the square on {A} is to the square on {B} as the square on {C} is to the square on {D}. [!just VI.22]
 
-But the sum of the squares on *E* and *B* equals the square on *A*, and the sum of the squares on *D* and *F* equals the square on *C*. Therefore the sum of the squares on *E* and *B* is to the square on *B* as the sum of the squares on *D* and *F* is to the square on *D*.
+But the sum of the squares on {E} and {B} equals the square on {A}, and the sum of the squares on {D} and {F} equals the square on {C}. Therefore the sum of the squares on {E} and {B} is to the square on {B} as the sum of the squares on {D} and {F} is to the square on {D}.
 
-Therefore, taken separately, the square on *E* is to the square on *B* as the square on *F* is to the square on *D*. Therefore *E* is to *B* as *F* is to *D*. Therefore, inversely, *B* is to *E* as *D* is to *F*. [!just V.17, VI.22; V.7.Cor]
+Therefore, taken separately, the square on {E} is to the square on {B} as the square on {F} is to the square on {D}. Therefore {E} is to {B} as {F} is to {D}. Therefore, inversely, {B} is to {E} as {D} is to {F}. [!just V.17, VI.22; V.7.Cor]
 
-But *A* is to *B* as *C* is to *D*, therefore, *ex aequali*, *A* is to *E* as *C* is to *F*. [!just V.22]
+But {A} is to {B} as {C} is to {D}, therefore, *ex aequali*, {A} is to {E} as {C} is to {F}. [!just V.22]
 
-Therefore, if *A* is commensurable with *E*, then *C* is also commensurable with *F*, but if *A* is incommensurable with *E*, then *C* is also incommensurable with *F*. [!just X.11]
+Therefore, if {A} is commensurable with {E}, then {C} is also commensurable with {F}, but if {A} is incommensurable with {E}, then {C} is also incommensurable with {F}. [!just X.11]
 
 Therefore, *if four straight lines are proportional, and the square on the first is greater than the square on the second by the square on a straight line commensurable with the first, then the square on the third is also greater than the square on the fourth by the square on a third line commensurable with the third. And, if the square on the first is greater than the square on the second by the square on a straight line incommensurable with the first, then the square on the third is also greater than the square on the fourth by the square on a third line incommensurable with the third.*
 
@@ -148,7 +406,7 @@ Therefore, *if four straight lines are proportional, and the square on the first
 ----
 guide:
 
-A little modern algebra clarifies the situation. We assume *A* : *B* = *C* : *D*. Then if √(*A*² – *B*²) : *A* is a numeric ratio, then so is √(*C*² – *D*²) : *C*. It's simply because √(*A*² – *B*²) : *A* = √(*C*² – *D*²) : *C*.
+A little modern algebra clarifies the situation. We assume {A} : {B} = {C} : {D}. Then if √({A}² – {B}²) : {A} is a numeric ratio, then so is √({C}² – {D}²) : {C}. It's simply because √({A}² – {B}²) : {A} = √({C}² – {D}²) : {C}.
 
 The lemma is the same as the <a href="/elements/books/bookXI/propositions/propXI23/#lemma">lemma</a> for proposition XI.23.
 
