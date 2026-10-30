@@ -15,16 +15,20 @@ statement: If two numbers multiplied by one another make a square number, then t
 ----
 proof:
 
-Let *A* and *B* be two numbers, and let *A* multiplied by *B* make the square number *C.*
+Let {A} and {B} be two numbers, and let {A} multiplied by {B} make the square number {C}.
 
-I say that *A* and *B* are similar plane numbers.
+I say that {A} and {B} are similar plane numbers.
 
-Multiply *A* by itself to make *D.* Then *D* is square.
+Multiply {A} by itself to make {D}. Then {D} is square.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="170" tabindex="0"></canvas>
 <noscript><img alt="IX.2 diagram" src="propIX2.gif"/></noscript>
 <script type="text/javascript">
+    // Slide visible sets. The numbers are lines; their slider and
+    // proportion endpoints are uncoloured, so only the lines are listed.
+    var GIVEN = ["A","B","C"];
+    var ALL   = GIVEN.concat(["D"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -53,17 +57,81 @@ Multiply *A* by itself to make *D.* Then *D* is square.
             "D2;point;proportion;U1,U2,A1,A2,A1,A2,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        // D is introduced mid-proof ("Multiply A by itself to make D"), so
+        // its slider handle opts out of the every-slide draggable union.
+        deferDraggables: ["D1"],
+        slides: [
+            { text: "“If two numbers multiplied by one another make a square number, then they are similar plane numbers.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "IX.2" }] },
+            { text: "Let {A} and {B} be two numbers, and let {A} multiplied by {B} make the square number {C}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "I say that {A} and {B} are similar plane numbers.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Multiply {A} by itself to make {D}. Then {D} is square.",
+              visible: ALL,
+              highlighted: ["A","D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since {A} multiplied by itself makes {D}, and multiplied by {B} makes {C},",
+              visible: ALL,
+              highlighted: ["A","D","B","C"] },
+            { text: "therefore {A} is to {B} as {D} is to {C}.",
+              visible: ALL,
+              highlighted: ["A","B","D","C"],
+              justifications: [{ claim: "A : B = D : C", ref: "VII.17" }] },
+            { text: "And, since {D} is square, and {C} is so also, therefore {D} and {C} are similar plane numbers.",
+              visible: ALL,
+              highlighted: ["D","C"] },
+            { text: "Therefore one mean proportional number falls between {D} and {C}.",
+              visible: ALL,
+              highlighted: ["D","C"],
+              justifications: [{ claim: "one mean between D and C", ref: "VIII.18" }] },
+            { text: "And {D} is to {C} as {A} is to {B},",
+              visible: ALL,
+              highlighted: ["D","C","A","B"] },
+            { text: "therefore one mean proportional number falls between {A} and {B} also.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "one mean between A and B", ref: "VIII.8" }] },
+            { text: "But, if one mean proportional number falls between two numbers, then they are similar plane numbers,",
+              visible: ALL },
+            { text: "therefore {A} and {B} are similar plane numbers.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VIII.20" }] },
+            { text: "Therefore, if two numbers multiplied by one another make a square number, then they are similar plane numbers.",
+              visible: ALL,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.2") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.17":  "/elements/books/bookVII/propositions/propVII17/",
+        "VIII.8":  "/elements/books/bookVIII/propositions/propVIII8/",
+        "VIII.18": "/elements/books/bookVIII/propositions/propVIII18/",
+        "VIII.20": "/elements/books/bookVIII/propositions/propVIII20/"
     });
 </script>
 </figure>
 
-Now, since *A* multiplied by itself makes *D,* and multiplied by *B* makes *C,* therefore *A* is to *B* as *D* is to *C.* [!just VII.17]
+Now, since {A} multiplied by itself makes {D}, and multiplied by {B} makes {C}, therefore {A} is to {B} as {D} is to {C}. [!just VII.17]
 
-And, since *D* is square, and *C* is so also, therefore *D* and *C* are similar plane numbers.
+And, since {D} is square, and {C} is so also, therefore {D} and {C} are similar plane numbers.
 
-Therefore one mean proportional number falls between *D* and *C.* And *D* is to *C* as *A* is to *B,* therefore one mean proportional number falls between *A* and *B* also. [!just VIII.18; VIII.8]
+Therefore one mean proportional number falls between {D} and {C}. And {D} is to {C} as {A} is to {B}, therefore one mean proportional number falls between {A} and {B} also. [!just VIII.18; VIII.8]
 
-But, if one mean proportional number falls between two numbers, then they are similar plane numbers, therefore *A* and *B* are similar plane numbers. [!just VIII.20]
+But, if one mean proportional number falls between two numbers, then they are similar plane numbers, therefore {A} and {B} are similar plane numbers. [!just VIII.20]
 
 Therefore, *if two numbers multiplied by one another make a square number, then they are similar plane numbers.*
 
