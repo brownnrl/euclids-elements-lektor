@@ -15,9 +15,9 @@ statement: In equal pyramids with triangular bases the bases are reciprocally pr
 ----
 proof:
 
-Let there be equal pyramids with triangular bases *ABC* and *DEF* and vertices *G* and *H.*
+Let there be equal pyramids with triangular bases {ABC} and {DEF} and vertices {G} and {H}.
 
-I say that in the pyramids *ABCG* and *DEFH* the bases are reciprocally proportional to the heights, that is the base *ABC* is to the base *DEF* as the height of the pyramid *DEFH* is to the height of the pyramid *ABCG.*
+I say that in the pyramids {ABCG|pABCG} and {DEFH|pDEFH} the bases are reciprocally proportional to the heights, that is the base {ABC} is to the base {DEF} as the height of the pyramid {DEFH|pDEFH} is to the height of the pyramid {ABCG|pABCG}.
 
 Complete the parallelepipedal solids *BGML* and *EHQP.*
 
@@ -25,6 +25,32 @@ Complete the parallelepipedal solids *BGML* and *EHQP.*
 <canvas id="canvas_0" width="400" height="280" tabindex="0"></canvas>
 <noscript><img alt="XII.9 diagram" src="propXII9.gif"/></noscript>
 <script type="text/javascript">
+    // The pyramids are given; the one construction is completing the two
+    // parallelepipeds, after which the walk is highlight beats. The converse
+    // sets out the pyramids alone, then restores the solids at "With the
+    // same construction".
+    //
+    // A polyhedron draws no highlight, so the two pyramids get faceless
+    // wireframe twins, octagons that walk all six edges (pABCG, pDEFH;
+    // prose refs use the display override). The solids BGML and EHQP are
+    // lit through their six faces (BOX1, BOX2; A2 is the eighth corner of
+    // BGML, unlabelled in Joyce's figure). Joyce's ABCM already spans the
+    // base BM but is a helper for the application; BM is its own target.
+    // The heights are not drawn: the figure is built flat in the floor
+    // plane, so a foot from G or H has no length. Every added element is
+    // transparent, so the resting figure is unchanged.
+    // Draggables (checked against the bundle): B, E, D (lineSliders) and F
+    // (planeSlider) are givens; M (planeSlider) and a (lineSlider) are
+    // corners of BGML, arriving only when the solid is completed, so they
+    // are deferred. Every other point is derived.
+    var PYR   = ["A","B","C","G","D","E","F","H","ABCG","DEFH",
+                 "ABC","DEF","pABCG","pDEFH"];
+    var BOX1  = ["BM","BMtop","BMfr","BMbk","BMlf","BMrt"];
+    var BOX2  = ["EQ","EQtop","EQfr","EQbk","EQlf","EQrt"];
+    var ALL   = PYR.concat(["Apar","Dpar","M","a","L","Q","O","P","R"],
+                           BOX1, BOX2);
+    var BOXES = BOX1.concat(BOX2);
+    var PYRS  = ["pABCG","pDEFH"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -56,35 +82,184 @@ Complete the parallelepipedal solids *BGML* and *EHQP.*
             "Q;point;parallelogram;D,E,F",
             "O;point;parallelogram;D,E,H",
             "P;point;parallelogram;Q,E,H",
-            "R;point;parallelogram;F,E,H"
+            "R;point;parallelogram;F,E,H",
+            // Transparent highlight targets: bases, faces, wireframes.
+            "A2;point;parallelogram;A,C,a;0;0",
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "DEF;polygon;triangle;D,E,F;0;0;0;0",
+            "BM;polygon;quadrilateral;B,C,M,A;0;0;0;0",
+            "BMtop;polygon;quadrilateral;G,a,L,A2;0;0;0;0",
+            "BMfr;polygon;quadrilateral;B,C,a,G;0;0;0;0",
+            "BMbk;polygon;quadrilateral;A,M,L,A2;0;0;0;0",
+            "BMlf;polygon;quadrilateral;B,A,A2,G;0;0;0;0",
+            "BMrt;polygon;quadrilateral;C,M,L,a;0;0;0;0",
+            "EQ;polygon;quadrilateral;E,D,Q,F;0;0;0;0",
+            "EQtop;polygon;quadrilateral;H,O,P,R;0;0;0;0",
+            "EQfr;polygon;quadrilateral;E,D,O,H;0;0;0;0",
+            "EQbk;polygon;quadrilateral;F,Q,P,R;0;0;0;0",
+            "EQlf;polygon;quadrilateral;E,F,R,H;0;0;0;0",
+            "EQrt;polygon;quadrilateral;D,Q,P,O;0;0;0;0",
+            // Pyramid wireframes: each octagon walks the six edges.
+            "pABCG;polygon;octagon;A,B,C,G,A,C,G,B;0;0;0;0",
+            "pDEFH;polygon;octagon;D,E,F,H,D,F,H,E;0;0;0;0"
         ],
+        deferDraggables: ["M","a"],
+        slides: [
+            { text: "“In equal pyramids with triangular bases the bases are reciprocally proportional to the heights;”",
+              visible: PYR,
+              highlighted: PYRS,
+              justifications: [{ ref: "XII.9" }] },
+            { text: "“and those pyramids are equal in which the bases are reciprocally proportional to the heights.”",
+              visible: PYR,
+              highlighted: PYRS,
+              justifications: [{ ref: "XII.9" }] },
+            { text: "Let there be equal pyramids with triangular bases {ABC} and {DEF} and vertices {G} and {H}.",
+              visible: PYR,
+              highlighted: PYRS.concat(["ABC","DEF","G","H"]) },
+            { text: "I say that in the pyramids {ABCG|pABCG} and {DEFH|pDEFH} the bases are reciprocally proportional to the heights,",
+              visible: PYR,
+              highlighted: PYRS },
+            { text: "that is the base {ABC} is to the base {DEF}",
+              visible: PYR,
+              highlighted: ["ABC","DEF"] },
+            { text: "as the height of the pyramid {DEFH|pDEFH} is to the height of the pyramid {ABCG|pABCG}.",
+              visible: PYR,
+              highlighted: PYRS },
+            { text: "Complete the parallelepipedal solids BGML and EHQP.",
+              visible: ALL,
+              transition: { mode: "cascade", animations: [
+                  { elem: "BM", name: geomlib.A.Polygon.outline },
+                  { elem: "BMrt", name: geomlib.A.Polygon.outline },
+                  { elem: "BMtop", name: geomlib.A.Polygon.outline },
+                  { elem: "BMbk", name: geomlib.A.Polygon.outline },
+                  { elem: "EQ", name: geomlib.A.Polygon.outline },
+                  { elem: "EQrt", name: geomlib.A.Polygon.outline },
+                  { elem: "EQtop", name: geomlib.A.Polygon.outline },
+                  { elem: "EQbk", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Now, since the pyramid {ABCG|pABCG} equals the pyramid {DEFH|pDEFH},",
+              highlighted: PYRS },
+            { text: "and the solid BGML is six times the pyramid {ABCG|pABCG},",
+              highlighted: BOX1.concat(["pABCG"]) },
+            { text: "and the solid EHQP six times the pyramid {DEFH|pDEFH},",
+              highlighted: BOX2.concat(["pDEFH"]),
+              justifications: [{ claim: "a pyramid is a third of its prism", ref: "XII.7.Cor" }] },
+            { text: "therefore the solid BGML equals the solid EHQP.",
+              highlighted: BOXES },
+            { text: "But in equal parallelepipedal solids the bases are reciprocally proportional to the heights,",
+              highlighted: BOXES },
+            { text: "therefore the base {BM} is to the base {EQ}",
+              highlighted: ["BM","EQ"] },
+            { text: "as the height of the solid EHQP is to the height of the solid BGML.",
+              highlighted: BOXES,
+              justifications: [{ claim: "equal solids: bases reciprocal to heights", ref: "XI.34" }] },
+            { text: "But the base {BM} is to {EQ} as the triangle {ABC} is to the triangle {DEF}.",
+              highlighted: ["BM","EQ","ABC","DEF"],
+              justifications: [{ claim: "each triangle half its parallelogram", ref: "I.34" }] },
+            { text: "Therefore the triangle {ABC} is to the triangle {DEF}",
+              highlighted: ["ABC","DEF"] },
+            { text: "as the height of the solid EHQP is to the height of the solid BGML.",
+              highlighted: BOXES,
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "But the height of the solid EHQP is identical with the height of the pyramid {DEFH|pDEFH},",
+              highlighted: BOX2.concat(["pDEFH"]) },
+            { text: "and the height of the solid BGML is identical with the height of the pyramid {ABCG|pABCG},",
+              highlighted: BOX1.concat(["pABCG"]) },
+            { text: "therefore the base {ABC} is to the base {DEF}",
+              highlighted: ["ABC","DEF"] },
+            { text: "as the height of the pyramid {DEFH|pDEFH} is to the height of the pyramid {ABCG|pABCG}.",
+              highlighted: PYRS },
+            { text: "Therefore in the pyramids {ABCG|pABCG} and {DEFH|pDEFH} the bases are reciprocally proportional to the heights.",
+              highlighted: PYRS.concat(["ABC","DEF"]) },
+            // The converse: the pyramids are set out alone again.
+            { text: "Next, in the pyramids {ABCG|pABCG} and {DEFH|pDEFH} let the bases be reciprocally proportional to the heights,",
+              visible: PYR,
+              highlighted: PYRS },
+            { text: "that is, as the base {ABC} is to the base {DEF},",
+              visible: PYR,
+              highlighted: ["ABC","DEF"] },
+            { text: "so let the height of the pyramid {DEFH|pDEFH} be to the height of the pyramid {ABCG|pABCG}.",
+              visible: PYR,
+              highlighted: PYRS },
+            { text: "I say that the pyramid {ABCG|pABCG} equals the pyramid {DEFH|pDEFH}.",
+              visible: PYR,
+              highlighted: PYRS },
+            { text: "With the same construction, since the base {ABC} is to the base {DEF}",
+              visible: ALL,
+              highlighted: ["ABC","DEF"] },
+            { text: "as the height of the pyramid {DEFH|pDEFH} is to the height of the pyramid {ABCG|pABCG},",
+              highlighted: PYRS },
+            { text: "while the base {ABC} is to the base {DEF} as the parallelogram {BM} is to the parallelogram {EQ},",
+              highlighted: ["ABC","DEF","BM","EQ"] },
+            { text: "therefore the parallelogram {BM} is to the parallelogram {EQ}",
+              highlighted: ["BM","EQ"] },
+            { text: "as the height of the pyramid {DEFH|pDEFH} is to the height of the pyramid {ABCG|pABCG}.",
+              highlighted: PYRS,
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "But the height of the pyramid {DEFH|pDEFH} is identical with the height of the parallelepiped EHQP,",
+              highlighted: BOX2.concat(["pDEFH"]) },
+            { text: "and the height of the pyramid {ABCG|pABCG} is identical with the height of the parallelepiped BGML,",
+              highlighted: BOX1.concat(["pABCG"]) },
+            { text: "therefore the base {BM} is to the base {EQ}",
+              highlighted: ["BM","EQ"] },
+            { text: "as the height of the parallelepiped EHQP is to the height of the parallelepiped BGML.",
+              highlighted: BOXES },
+            { text: "But those parallelepipedal solids in which the bases are reciprocally proportional to the heights are equal,",
+              highlighted: BOXES },
+            { text: "therefore the parallelepipedal solid BGML equals the parallelepipedal solid EHQP.",
+              highlighted: BOXES,
+              justifications: [{ claim: "bases reciprocal to heights: solids equal", ref: "XI.34" }] },
+            { text: "And the pyramid {ABCG|pABCG} is a sixth part of BGML,",
+              highlighted: BOX1.concat(["pABCG"]) },
+            { text: "and the pyramid {DEFH|pDEFH} a sixth part of the parallelepiped EHQP,",
+              highlighted: BOX2.concat(["pDEFH"]) },
+            { text: "therefore the pyramid {ABCG|pABCG} equals the pyramid {DEFH|pDEFH}.",
+              highlighted: PYRS },
+            { text: "Therefore, in equal pyramids with triangular bases the bases are reciprocally proportional to the heights;",
+              highlighted: PYRS.concat(["ABC","DEF"]) },
+            { text: "and those pyramids are equal in which the bases are reciprocally proportional to the heights.",
+              highlighted: PYRS.concat(["ABC","DEF"]),
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.9") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.34":      "/elements/books/bookI/propositions/propI34/",
+        "V.11":      "/elements/books/bookV/propositions/propV11/",
+        "XI.34":     "/elements/books/bookXI/propositions/propXI34/",
+        "XII.7.Cor": "/elements/books/bookXII/propositions/propXII7/#cor"
     });
 </script>
 </figure>
 
-Now, since the pyramid *ABCG* equals the pyramid *DEFH,* and the solid *BGML* is six times the pyramid *ABCG,* and the solid *EHQP* six times the pyramid *DEFH,* therefore the solid *BGML* equals the solid *EHQP.* [!just XII.7.Cor]
+Now, since the pyramid {ABCG|pABCG} equals the pyramid {DEFH|pDEFH}, and the solid *BGML* is six times the pyramid {ABCG|pABCG}, and the solid *EHQP* six times the pyramid {DEFH|pDEFH}, therefore the solid *BGML* equals the solid *EHQP.* [!just XII.7.Cor]
 
-But in equal parallelepipedal solids the bases are reciprocally proportional to the heights, therefore the base *BM* is to the base *EQ* as the height of the solid *EHQP* is to the height of the solid *BGML.* [!just XI.34]
+But in equal parallelepipedal solids the bases are reciprocally proportional to the heights, therefore the base {BM} is to the base {EQ} as the height of the solid *EHQP* is to the height of the solid *BGML.* [!just XI.34]
 
-But the base *BM* is to *EQ* as the triangle *ABC* is to the triangle *DEF.* Therefore the triangle *ABC* is to the triangle *DEF* as the height of the solid *EHQP* is to the height of the solid *BGML.* [!just I.34; V.11]
+But the base {BM} is to {EQ} as the triangle {ABC} is to the triangle {DEF}. Therefore the triangle {ABC} is to the triangle {DEF} as the height of the solid *EHQP* is to the height of the solid *BGML.* [!just I.34; V.11]
 
-But the height of the solid *EHQP* is identical with the height of the pyramid *DEFH,* and the height of the solid *BGML* is identical with the height of the pyramid *ABCG,* therefore the base *ABC* is to the base *DEF* as the height of the pyramid *DEFH* is to the height of the pyramid *ABCG.*
+But the height of the solid *EHQP* is identical with the height of the pyramid {DEFH|pDEFH}, and the height of the solid *BGML* is identical with the height of the pyramid {ABCG|pABCG}, therefore the base {ABC} is to the base {DEF} as the height of the pyramid {DEFH|pDEFH} is to the height of the pyramid {ABCG|pABCG}.
 
-Therefore in the pyramids *ABCG* and *DEFH* the bases are reciprocally proportional to the heights.
+Therefore in the pyramids {ABCG|pABCG} and {DEFH|pDEFH} the bases are reciprocally proportional to the heights.
 
 <hr width="50%">
 
-Next, in the pyramids *ABCG* and *DEFH* let the bases be reciprocally proportional to the heights, that is, as the base *ABC* is to the base *DEF,* so let the height of the pyramid *DEFH* be to the height of the pyramid *ABCG.*
+Next, in the pyramids {ABCG|pABCG} and {DEFH|pDEFH} let the bases be reciprocally proportional to the heights, that is, as the base {ABC} is to the base {DEF}, so let the height of the pyramid {DEFH|pDEFH} be to the height of the pyramid {ABCG|pABCG}.
 
-I say that the pyramid *ABCG* equals the pyramid *DEFH.*
+I say that the pyramid {ABCG|pABCG} equals the pyramid {DEFH|pDEFH}.
 
-With the same construction, since the base *ABC* is to the base *DEF* as the height of the pyramid *DEFH* is to the height of the pyramid *ABCG,* while the base *ABC* is to the base *DEF* as the parallelogram *BM* is to the parallelogram *EQ,* therefore the parallelogram *BM* is to the parallelogram *EQ* as the height of the pyramid *DEFH* is to the height of the pyramid *ABCG.* [!just V.11]
+With the same construction, since the base {ABC} is to the base {DEF} as the height of the pyramid {DEFH|pDEFH} is to the height of the pyramid {ABCG|pABCG}, while the base {ABC} is to the base {DEF} as the parallelogram {BM} is to the parallelogram {EQ}, therefore the parallelogram {BM} is to the parallelogram {EQ} as the height of the pyramid {DEFH|pDEFH} is to the height of the pyramid {ABCG|pABCG}. [!just V.11]
 
-But the height of the pyramid *DEFH* is identical with the height of the parallelepiped *EHQP,* and the height of the pyramid *ABCG* is identical with the height of the parallelepiped *BGML,* therefore the base *BM* is to the base *EQ* as the height of the parallelepiped *EHQP* is to the height of the parallelepiped *BGML.*
+But the height of the pyramid {DEFH|pDEFH} is identical with the height of the parallelepiped *EHQP,* and the height of the pyramid {ABCG|pABCG} is identical with the height of the parallelepiped *BGML,* therefore the base {BM} is to the base {EQ} as the height of the parallelepiped *EHQP* is to the height of the parallelepiped *BGML.*
 
 But those parallelepipedal solids in which the bases are reciprocally proportional to the heights are equal, therefore the parallelepipedal solid *BGML* equals the parallelepipedal solid *EHQP.* [!just XI.34]
 
-And the pyramid *ABCG* is a sixth part of *BGML,* and the pyramid *DEFH* a sixth part of the parallelepiped *EHQP,* therefore the pyramid *ABCG* equals the pyramid *DEFH.*
+And the pyramid {ABCG|pABCG} is a sixth part of *BGML,* and the pyramid {DEFH|pDEFH} a sixth part of the parallelepiped *EHQP,* therefore the pyramid {ABCG|pABCG} equals the pyramid {DEFH|pDEFH}.
 
 Therefore, *in equal pyramids with triangular bases the bases are reciprocally proportional to the heights; and those pyramids are equal in which the bases are reciprocally proportional to the heights.*
 

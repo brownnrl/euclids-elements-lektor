@@ -15,7 +15,7 @@ statement: Any cone is a third part of the cylinder with the same base and equal
 ----
 proof:
 
-Let a cone have the same base, namely the circle *ABCD,* with a cylinder and equal height.
+Let a cone have the same base, namely the circle {ABCD|circABCD}, with a cylinder and equal height.
 
 I say that the cone is a third part of the cylinder, that is, that the cylinder is triple the cone.
 
@@ -27,6 +27,51 @@ First let it be greater than triple.
 <canvas id="canvas_0" width="280" height="280" tabindex="0"></canvas>
 <noscript><img alt="XII.10 diagram" src="propXII10.gif"/></noscript>
 <script type="text/javascript">
+    // A double reductio, each case worked on the base circle: the square,
+    // then the octagon AEBFCGDH, inscribed in ABCD, each step taking more
+    // than half of what is left (the X.1 principle). The cone and cylinder
+    // are not drawn; Joyce's figure is their common base, so the circle
+    // stands for both, the square and octagon for the prisms and pyramids
+    // set up on them.
+    //
+    // Joyce's figure draws the circle, the square ABCD (declared ABCE) and
+    // the octagon. All kept. Their faces are opaque, and a highlighted face
+    // is raised (#140) over the rest, so every highlight goes to a faceless
+    // twin: circABCD, sqABCD, AEBFCGDH. Also transparent: the sides AB..DA,
+    // the chords AE..HA, the circumferences AB..DA through E..H, the
+    // triangles AEB..DHA, the square circumscribed about the circle
+    // (corners A+B-O etc.), and the parallelograms on AB..DA through
+    // E..H. The segments of the circle are lit through the circumferences
+    // or the chords, as on XII.2.
+    //
+    // The second case repeats the construction, so the walk withdraws to
+    // the circle and inscribes the square and octagon again; the closing
+    // slide restores Joyce's figure.
+    // Draggables (checked against the bundle): B, D (free), the diameter's
+    // ends, given with the circle. A, C, E, F, G, H are derived and listed
+    // per slide.
+    var GIVEN = ["circ","circABCD","A","B","C","D"];
+    var SQ    = GIVEN.concat(["ABCE","sqABCD","AB","BC","CD","DA"]);
+    var CSQ   = SQ.concat(["circSq"]);
+    var BIS   = SQ.concat(["E","F","G","H","arcAB","arcBC","arcCD","arcDA"]);
+    var OCT   = BIS.concat(["AHDGCFBE","AEBFCGDH","AE","EB","BF","FC",
+                            "CG","GD","DH","HA","AEB","BFC","CGD","DHA"]);
+    var PAR   = OCT.concat(["rectAB","rectBC","rectCD","rectDA"]);
+    var ARCS  = ["arcAB","arcBC","arcCD","arcDA"];
+    var TRIS  = ["AEB","BFC","CGD","DHA"];
+    var RECTS = ["rectAB","rectBC","rectCD","rectDA"];
+    var CHORDS = ["AE","EB","BF","FC","CG","GD","DH","HA"];
+    var BISECT = { mode: "parallel", animations: [
+                      { elem: "E", name: geomlib.A.Point.appear },
+                      { elem: "F", name: geomlib.A.Point.appear },
+                      { elem: "G", name: geomlib.A.Point.appear },
+                      { elem: "H", name: geomlib.A.Point.appear } ] };
+    var JOIN  = { mode: "parallel", animations: CHORDS.map(function(c) {
+                      return { elem: c, name: geomlib.A.Line.straightEdgeConnect }; }) };
+    var INSCRIBE = { animations: [
+                      { elem: "ABCE", name: geomlib.A.Polygon.outlineAndFill } ] };
+    var CIRCUM = { animations: [
+                      { elem: "circSq", name: geomlib.A.Polygon.outline } ] };
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -47,25 +92,305 @@ First let it be greater than triple.
             "H';point;midpoint;D,A;0;0",
             "H;point;cutoff;O,H',O,A",
             "AHDGCFBE;polygon;octagon;A,H,D,G,C,F,B,E;0;0;black;random",
-            "ABCE;polygon;quadrilateral;A,B,C,D;0;0;black;random"
+            "ABCE;polygon;quadrilateral;A,B,C,D;0;0;black;random",
+            // Faceless twins of the circle, square and octagon (see above).
+            "circABCD;circle;radius;O,B;0;0;0;0",
+            "sqABCD;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            "AEBFCGDH;polygon;octagon;A,E,B,F,C,G,D,H;0;0;0;0",
+            // The sides of the square and the chords of the octagon.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "DA;line;connect;D,A;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "BF;line;connect;B,F;0;0;0",
+            "FC;line;connect;F,C;0;0;0",
+            "CG;line;connect;C,G;0;0;0",
+            "GD;line;connect;G,D;0;0;0",
+            "DH;line;connect;D,H;0;0;0",
+            "HA;line;connect;H,A;0;0;0",
+            // The circumferences AB, BC, CD, DA, each through its midpoint.
+            "arcAB;sector;arc;A,E,B;0;0;0;0",
+            "arcBC;sector;arc;B,F,C;0;0;0;0",
+            "arcCD;sector;arc;C,G,D;0;0;0;0",
+            "arcDA;sector;arc;D,H,A;0;0;0;0",
+            // The four triangles on the square's sides. Explicit ;0 faces.
+            "AEB;polygon;triangle;A,E,B;0;0;0;0",
+            "BFC;polygon;triangle;B,F,C;0;0;0;0",
+            "CGD;polygon;triangle;C,G,D;0;0;0;0",
+            "DHA;polygon;triangle;D,H,A;0;0;0;0",
+            // The square circumscribed about the circle: corners A+B-O etc.
+            "Z1;point;parallelogram;A,O,B;0;0",
+            "Z2;point;parallelogram;B,O,C;0;0",
+            "Z3;point;parallelogram;C,O,D;0;0",
+            "Z4;point;parallelogram;D,O,A;0;0",
+            "circSq;polygon;quadrilateral;Z1,Z2,Z3,Z4;0;0;0;0",
+            // Parallelograms on AB, BC, CD, DA through E, F, G, H.
+            "A1;point;parallelogram;A,E',E;0;0",
+            "B1;point;parallelogram;B,E',E;0;0",
+            "rectAB;polygon;quadrilateral;A,B,B1,A1;0;0;0;0",
+            "B2;point;parallelogram;B,F',F;0;0",
+            "C2;point;parallelogram;C,F',F;0;0",
+            "rectBC;polygon;quadrilateral;B,C,C2,B2;0;0;0;0",
+            "C3;point;parallelogram;C,G',G;0;0",
+            "D3;point;parallelogram;D,G',G;0;0",
+            "rectCD;polygon;quadrilateral;C,D,D3,C3;0;0;0;0",
+            "D4;point;parallelogram;D,H',H;0;0",
+            "A4;point;parallelogram;A,H',H;0;0",
+            "rectDA;polygon;quadrilateral;D,A,A4,D4;0;0;0;0"
         ],
+        slides: [
+            { text: "“Any cone is a third part of the cylinder with the same base and equal height.”",
+              visible: GIVEN,
+              highlighted: ["circABCD"],
+              justifications: [{ ref: "XII.10" }] },
+            { text: "Let a cone have the same base, namely the circle {ABCD|circABCD}, with a cylinder and equal height.",
+              highlighted: ["circABCD"] },
+            { text: "I say that the cone is a third part of the cylinder,",
+              highlighted: ["circABCD"] },
+            { text: "that is, that the cylinder is triple the cone.",
+              highlighted: ["circABCD"] },
+            { text: "For if the cylinder is not triple the cone,",
+              highlighted: ["circABCD"] },
+            { text: "then the cylinder will be either greater than triple or less than triple the cone.",
+              highlighted: ["circABCD"] },
+            { text: "First let it be greater than triple.",
+              highlighted: ["circABCD"] },
+            { text: "Inscribe the square {ABCD|sqABCD} in the circle {ABCD|circABCD}.",
+              visible: SQ,
+              highlighted: ["sqABCD"],
+              transition: INSCRIBE,
+              justifications: [{ claim: "square inscribed in a circle", ref: "IV.6" }] },
+            { text: "Then the square {ABCD|sqABCD} is greater than half of the circle {ABCD|circABCD}.",
+              highlighted: ["sqABCD","circABCD"] },
+            { text: "From the square {ABCD|sqABCD} set up a prism of equal height with the cylinder.",
+              highlighted: ["sqABCD"] },
+            { text: "Then the prism so set up is greater than the half of the cylinder,",
+              highlighted: ["sqABCD","circABCD"] },
+            { text: "for if we also circumscribe a square about the circle {ABCD|circABCD},",
+              visible: CSQ,
+              highlighted: ["circSq","circABCD"],
+              transition: CIRCUM,
+              justifications: [{ claim: "square circumscribed about a circle", ref: "IV.7" }] },
+            { text: "the square inscribed in the circle {ABCD|circABCD} is half of that circumscribed about it,",
+              highlighted: ["sqABCD","circSq"] },
+            { text: "and the solids set up from them are parallelepipedal prisms of equal height,",
+              highlighted: ["sqABCD","circSq"] },
+            { text: "while parallelepipedal solids of the same height are to one another as their bases,",
+              highlighted: ["sqABCD","circSq"],
+              justifications: [{ claim: "solids of the same height are as their bases", ref: "XI.32" }] },
+            { text: "therefore also the prism set up on the square {ABCD|sqABCD} is half",
+              highlighted: ["sqABCD"] },
+            { text: "of the prism set up from the square circumscribed about the circle {ABCD|circABCD},",
+              highlighted: ["circSq"] },
+            { text: "and the cylinder is less than the prism set up from the square circumscribed about the circle {ABCD|circABCD},",
+              highlighted: ["circABCD","circSq"] },
+            { text: "therefore the prism set up from the square {ABCD|sqABCD} and of equal height with the cylinder",
+              highlighted: ["sqABCD"] },
+            { text: "is greater than the half of the cylinder.",
+              highlighted: ["sqABCD","circABCD"],
+              justifications: [{ ref: "XI.28" }, { ref: "XII.6" }, { ref: "XII.7.Cor" }] },
+            { text: "Bisect the circumferences {AB|arcAB}, {BC|arcBC}, {CD|arcCD}, and {DA|arcDA} at the points {E}, {F}, {G}, and {H},",
+              visible: BIS,
+              highlighted: ARCS.concat(["E","F","G","H"]),
+              transition: BISECT },
+            { text: "and join {AE}, {EB}, {BF}, {FC}, {CG}, {GD}, {DH}, and {HA}.",
+              visible: OCT,
+              highlighted: CHORDS,
+              transition: JOIN },
+            { text: "Then each of the triangles {AEB}, {BFC}, {CGD}, and {DHA}",
+              highlighted: TRIS },
+            { text: "is greater than the half of that segment of the circle {ABCD|circABCD} about it, as we proved before.",
+              highlighted: TRIS.concat(ARCS),
+              justifications: [{ claim: "triangle more than half its segment", ref: "XII.2" }] },
+            { text: "On each of the triangles {AEB}, {BFC}, {CGD}, and {DHA} set prisms up of equal height with the cylinder.",
+              highlighted: TRIS },
+            { text: "Then each of the prisms so set up is greater than the half part of that segment of the cylinder about it,",
+              highlighted: TRIS.concat(ARCS) },
+            { text: "for if we draw through the points {E}, {F}, {G}, and {H} parallels to {AB}, {BC}, {CD}, and {DA},",
+              highlighted: ["E","F","G","H","AB","BC","CD","DA"],
+              justifications: [{ claim: "parallels through E, F, G, H", ref: "I.31" }] },
+            { text: "complete the parallelograms on {AB}, {BC}, {CD}, and {DA},",
+              visible: PAR,
+              highlighted: RECTS,
+              transition: { mode: "parallel", animations: RECTS.map(function(r) {
+                  return { elem: r, name: geomlib.A.Polygon.outline }; }) } },
+            { text: "and set up from them parallelepipedal solids of equal height with the cylinder,",
+              highlighted: RECTS },
+            { text: "then the prisms on the triangles {AEB}, {BFC}, {CGD}, and {DHA} are halves of the several solids set up,",
+              highlighted: TRIS.concat(RECTS) },
+            { text: "and the segments of the cylinder are less than the parallelepipedal solids set up,",
+              highlighted: ARCS.concat(RECTS) },
+            { text: "hence also the prisms on the triangles {AEB}, {BFC}, {CGD}, and {DHA}",
+              visible: OCT,
+              highlighted: TRIS },
+            { text: "are greater than half of the segments of the cylinder about them.",
+              highlighted: TRIS.concat(ARCS) },
+            { text: "Thus, bisecting the circumferences that are left, joining straight lines,",
+              highlighted: ["AEBFCGDH"] },
+            { text: "setting up on each of the triangles prisms of equal height with the cylinder, and doing this repeatedly,",
+              highlighted: ["AEBFCGDH"] },
+            { text: "we shall leave some segments of the cylinder",
+              highlighted: ["circABCD","AEBFCGDH"] },
+            { text: "which are less than the excess by which the cylinder exceeds the triple the cone.",
+              highlighted: ["circABCD"],
+              justifications: [{ ref: "X.1" }] },
+            { text: "Let such segments be left, and let them be {AE}, {EB}, {BF}, {FC}, {CG}, {GD}, {DH}, and {HA}.",
+              highlighted: ["circABCD"].concat(CHORDS) },
+            { text: "Therefore the remainder, the prism with polygonal base {AEBFCGDH} and the same height as that of the cylinder,",
+              highlighted: ["AEBFCGDH"] },
+            { text: "is greater than triple the cone.",
+              highlighted: ["AEBFCGDH","circABCD"] },
+            { text: "But the prism with polygonal base {AEBFCGDH} and the same height as that of the cylinder",
+              highlighted: ["AEBFCGDH"] },
+            { text: "is triple the pyramid with polygonal base {AEBFCGDH} and the same vertex as that of the cone.",
+              highlighted: ["AEBFCGDH"],
+              justifications: [{ claim: "the prism is triple the pyramid", ref: "XII.7.Cor" }] },
+            { text: "Therefore the pyramid with the polygonal base {AEBFCGDH} and the same vertex as that of the cone",
+              highlighted: ["AEBFCGDH"] },
+            { text: "is greater than the cone with circular base {ABCD|circABCD}.",
+              highlighted: ["AEBFCGDH","circABCD"] },
+            { text: "But it is also less, for it is enclosed by it, which is impossible.",
+              highlighted: ["AEBFCGDH","circABCD"] },
+            { text: "Therefore the cylinder is not greater than triple the cone.",
+              highlighted: ["circABCD"] },
+            // The second case: back to the circle, and inscribe again.
+            { text: "I say next that neither is the cylinder less than triple the cone,",
+              visible: GIVEN,
+              highlighted: ["circABCD"] },
+            { text: "For, if possible, let the cylinder be less than triple the cone.",
+              highlighted: ["circABCD"] },
+            { text: "Therefore, inversely, the cone is greater than a third part of the cylinder.",
+              highlighted: ["circABCD"] },
+            { text: "Inscribe the square {ABCD|sqABCD} in the circle {ABCD|circABCD}.",
+              visible: SQ,
+              highlighted: ["sqABCD"],
+              transition: INSCRIBE,
+              justifications: [{ claim: "square inscribed in a circle", ref: "IV.6" }] },
+            { text: "Therefore the square {ABCD|sqABCD} is greater than the half of the circle {ABCD|circABCD}.",
+              highlighted: ["sqABCD","circABCD"] },
+            { text: "Now set up from the square {ABCD|sqABCD} a pyramid with the same vertex as the cone.",
+              highlighted: ["sqABCD"] },
+            { text: "Therefore the pyramid so set up is greater than half of the cone,",
+              highlighted: ["sqABCD","circABCD"] },
+            { text: "for, as we proved before, if we circumscribe a square about the circle,",
+              visible: CSQ,
+              highlighted: ["circSq","circABCD"],
+              transition: CIRCUM },
+            { text: "then the square {ABCD|sqABCD} is half of the square circumscribed about the circle,",
+              highlighted: ["sqABCD","circSq"] },
+            { text: "and if we set up from the squares parallelepipedal solids of equal height with the cone, which are also called prisms,",
+              highlighted: ["sqABCD","circSq"] },
+            { text: "then the solid set up from the square {ABCD|sqABCD} is half",
+              highlighted: ["sqABCD"] },
+            { text: "of that set up from the square circumscribed about the circle, for they are to one another as their bases.",
+              highlighted: ["circSq"],
+              justifications: [{ claim: "solids of the same height are as their bases", ref: "XI.32" }] },
+            { text: "Hence the thirds of them are also in that ratio.",
+              highlighted: ["sqABCD","circSq"] },
+            { text: "Therefore the pyramid with the square base {ABCD|sqABCD} is half",
+              highlighted: ["sqABCD"] },
+            { text: "of the pyramid set up from the square circumscribed about the circle.",
+              highlighted: ["circSq"] },
+            { text: "And the pyramid set up from the square about the circle is greater than the cone, for it encloses it.",
+              highlighted: ["circSq","circABCD"] },
+            { text: "Therefore the pyramid with the square base {ABCD|sqABCD} and the same vertex as that of the cone",
+              visible: SQ,
+              highlighted: ["sqABCD"] },
+            { text: "is greater than the half of the cone.",
+              highlighted: ["sqABCD","circABCD"] },
+            { text: "Bisect the circumferences {AB|arcAB}, {BC|arcBC}, {CD|arcCD}, and {DA|arcDA} at the points {E}, {F}, {G}, and {H},",
+              visible: BIS,
+              highlighted: ARCS.concat(["E","F","G","H"]),
+              transition: BISECT },
+            // Joyce's slip, left literal: "join ... be joined".
+            { text: "and join {AE}, {EB}, {BF}, {FC}, {CG}, {GD}, {DH}, and {HA} be joined.",
+              visible: OCT,
+              highlighted: CHORDS,
+              transition: JOIN },
+            { text: "Then each of the triangles {AEB}, {BFC}, {CGD}, and {DHA}",
+              highlighted: TRIS },
+            { text: "is greater than the half part of that segment of the circle {ABCD|circABCD} about it.",
+              highlighted: TRIS.concat(ARCS) },
+            { text: "Now, on each of the triangles {AEB}, {BFC}, {CGD}, and {DHA} set pyramids up with the same vertex as the cone.",
+              highlighted: TRIS },
+            { text: "Therefore each of the pyramids so set up is, in the same manner,",
+              highlighted: TRIS },
+            { text: "greater than the half part of that segment of the cone about it.",
+              highlighted: TRIS.concat(ARCS) },
+            { text: "Thus, by bisecting the circumferences that are left, joining straight lines,",
+              highlighted: ["AEBFCGDH"] },
+            { text: "setting up pyramids on each of the triangles with the same vertex as the cone, and doing this repeatedly,",
+              highlighted: ["AEBFCGDH"] },
+            { text: "we shall leave some segments of the cone",
+              highlighted: ["circABCD","AEBFCGDH"] },
+            { text: "which will be less than the excess by which the cone exceeds the third part of the cylinder.",
+              highlighted: ["circABCD"],
+              justifications: [{ ref: "X.1" }] },
+            { text: "Let such be left, and let them be the segments on {AE}, {EB}, {BF}, {FC}, {CG}, {GD}, {DH}, and {HA}.",
+              highlighted: ["circABCD"].concat(CHORDS) },
+            { text: "Therefore the remainder, the pyramid with the polygonal base {AEBFCGDH} and the same vertex as that of the cone,",
+              highlighted: ["AEBFCGDH"] },
+            { text: "is greater than a third part of the cylinder.",
+              highlighted: ["AEBFCGDH","circABCD"] },
+            // Joyce's word order, left literal: "polygonal AEBFCGDH base".
+            { text: "But the pyramid with the polygonal {AEBFCGDH} base and the same vertex as that of the cone",
+              highlighted: ["AEBFCGDH"] },
+            { text: "is a third part of the prism with the polygonal base {AEBFCGDH} and the same height as that of the cylinder,",
+              highlighted: ["AEBFCGDH"] },
+            { text: "therefore the prism with the polygonal base {AEBFCGDH} and the same height as that of the cylinder",
+              highlighted: ["AEBFCGDH"] },
+            { text: "is greater than the cylinder with the circular base {ABCD|circABCD}.",
+              highlighted: ["AEBFCGDH","circABCD"] },
+            { text: "But it is also less, for it is enclosed by it, which is impossible.",
+              highlighted: ["AEBFCGDH","circABCD"] },
+            { text: "Therefore the cylinder is not less than triple the cone.",
+              highlighted: ["circABCD"] },
+            { text: "But it was proved that neither is it greater than triple.",
+              highlighted: ["circABCD"] },
+            { text: "Therefore the cylinder is triple the cone, hence the cone is a third part of the cylinder.",
+              highlighted: ["circABCD"] },
+            { text: "Therefore, any cone is a third part of the cylinder with the same base and equal height.",
+              visible: OCT,
+              highlighted: ["circABCD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.10") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "IV.6":      "/elements/books/bookIV/propositions/propIV6/",
+        "IV.7":      "/elements/books/bookIV/propositions/propIV7/",
+        "X.1":       "/elements/books/bookX/propositions/propX1/",
+        "XI.28":     "/elements/books/bookXI/propositions/propXI28/",
+        "XI.32":     "/elements/books/bookXI/propositions/propXI32/",
+        "XII.2":     "/elements/books/bookXII/propositions/propXII2/",
+        "XII.6":     "/elements/books/bookXII/propositions/propXII6/",
+        "XII.7.Cor": "/elements/books/bookXII/propositions/propXII7/#cor"
     });
 </script>
 </figure>
 
-Inscribe the square *ABCD* in the circle *ABCD.* Then the square *ABCD* is greater than half of the circle *ABCD.* From the square *ABCD* set up a prism of equal height with the cylinder. [!just IV.6]
+Inscribe the square {ABCD|sqABCD} in the circle {ABCD|circABCD}. Then the square {ABCD|sqABCD} is greater than half of the circle {ABCD|circABCD}. From the square {ABCD|sqABCD} set up a prism of equal height with the cylinder. [!just IV.6]
 
-Then the prism so set up is greater than the half of the cylinder, for if we also circumscribe a square about the circle *ABCD,* the square inscribed in the circle *ABCD* is half of that circumscribed about it, and the solids set up from them are parallelepipedal prisms of equal height, while parallelepipedal solids of the same height are to one another as their bases, therefore also the prism set up on the square *ABCD* is half of the prism set up from the square circumscribed about the circle *ABCD,* and the cylinder is less than the prism set up from the square circumscribed about the circle *ABCD,* therefore the prism set up from the square *ABCD* and of equal height with the cylinder is greater than the half of the cylinder. [!just IV.7; XI.32; XI.28, XII.6, XII.7.Cor]
+Then the prism so set up is greater than the half of the cylinder, for if we also circumscribe a square about the circle {ABCD|circABCD}, the square inscribed in the circle {ABCD|circABCD} is half of that circumscribed about it, and the solids set up from them are parallelepipedal prisms of equal height, while parallelepipedal solids of the same height are to one another as their bases, therefore also the prism set up on the square {ABCD|sqABCD} is half of the prism set up from the square circumscribed about the circle {ABCD|circABCD}, and the cylinder is less than the prism set up from the square circumscribed about the circle {ABCD|circABCD}, therefore the prism set up from the square {ABCD|sqABCD} and of equal height with the cylinder is greater than the half of the cylinder. [!just IV.7; XI.32; XI.28, XII.6, XII.7.Cor]
 
-Bisect the circumferences *AB, BC, CD,* and *DA* at the points *E, F, G,* and *H,* and join *AE, EB, BF, FC, CG, GD, DH,* and *HA.* Then each of the triangles *AEB, BFC, CGD,* and *DHA* is greater than the half of that segment of the circle *ABCD* about it, as we proved before. [!just XII.2]
+Bisect the circumferences {AB|arcAB}, {BC|arcBC}, {CD|arcCD}, and {DA|arcDA} at the points {E}, {F}, {G}, and {H}, and join {AE}, {EB}, {BF}, {FC}, {CG}, {GD}, {DH}, and {HA}. Then each of the triangles {AEB}, {BFC}, {CGD}, and {DHA} is greater than the half of that segment of the circle {ABCD|circABCD} about it, as we proved before. [!just XII.2]
 
-On each of the triangles *AEB, BFC, CGD,* and *DHA* set prisms up of equal height with the cylinder. Then each of the prisms so set up is greater than the half part of that segment of the cylinder about it, for if we draw through the points *E, F, G,* and *H* parallels to *AB, BC, CD,* and *DA,* complete the parallelograms on *AB, BC, CD,* and *DA,* and set up from them parallelepipedal solids of equal height with the cylinder, then the prisms on the triangles *AEB, BFC, CGD,* and *DHA* are halves of the several solids set up, and the segments of the cylinder are less than the parallelepipedal solids set up, hence also the prisms on the triangles *AEB, BFC, CGD,* and *DHA* are greater than half of the segments of the cylinder about them. [!just I.31]
+On each of the triangles {AEB}, {BFC}, {CGD}, and {DHA} set prisms up of equal height with the cylinder. Then each of the prisms so set up is greater than the half part of that segment of the cylinder about it, for if we draw through the points {E}, {F}, {G}, and {H} parallels to {AB}, {BC}, {CD}, and {DA}, complete the parallelograms on {AB}, {BC}, {CD}, and {DA}, and set up from them parallelepipedal solids of equal height with the cylinder, then the prisms on the triangles {AEB}, {BFC}, {CGD}, and {DHA} are halves of the several solids set up, and the segments of the cylinder are less than the parallelepipedal solids set up, hence also the prisms on the triangles {AEB}, {BFC}, {CGD}, and {DHA} are greater than half of the segments of the cylinder about them. [!just I.31]
 
 Thus, bisecting the circumferences that are left, joining straight lines, setting up on each of the triangles prisms of equal height with the cylinder, and doing this repeatedly, we shall leave some segments of the cylinder which are less than the excess by which the cylinder exceeds the triple the cone. [!just X.1]
 
-Let such segments be left, and let them be *AE, EB, BF, FC, CG, GD, DH,* and *HA.* Therefore the remainder, the prism with polygonal base *AEBFCGDH* and the same height as that of the cylinder, is greater than triple the cone.
+Let such segments be left, and let them be {AE}, {EB}, {BF}, {FC}, {CG}, {GD}, {DH}, and {HA}. Therefore the remainder, the prism with polygonal base {AEBFCGDH} and the same height as that of the cylinder, is greater than triple the cone.
 
-But the prism with polygonal base *AEBFCGDH* and the same height as that of the cylinder is triple the pyramid with polygonal base *AEBFCGDH* and the same vertex as that of the cone. Therefore the pyramid with the polygonal base *AEBFCGDH* and the same vertex as that of the cone is greater than the cone with circular base *ABCD.* [!just XII.7.Cor]
+But the prism with polygonal base {AEBFCGDH} and the same height as that of the cylinder is triple the pyramid with polygonal base {AEBFCGDH} and the same vertex as that of the cone. Therefore the pyramid with the polygonal base {AEBFCGDH} and the same vertex as that of the cone is greater than the cone with circular base {ABCD|circABCD}. [!just XII.7.Cor]
 
 But it is also less, for it is enclosed by it, which is impossible.
 
@@ -75,25 +400,25 @@ I say next that neither is the cylinder less than triple the cone,
 
 For, if possible, let the cylinder be less than triple the cone. Therefore, inversely, the cone is greater than a third part of the cylinder.
 
-Inscribe the square *ABCD* in the circle *ABCD.* Therefore the square *ABCD* is greater than the half of the circle *ABCD.* [!just IV.6]
+Inscribe the square {ABCD|sqABCD} in the circle {ABCD|circABCD}. Therefore the square {ABCD|sqABCD} is greater than the half of the circle {ABCD|circABCD}. [!just IV.6]
 
-Now set up from the square *ABCD* a pyramid with the same vertex as the cone. Therefore the pyramid so set up is greater than half of the cone, for, as we proved before, if we circumscribe a square about the circle, then the square *ABCD* is half of the square circumscribed about the circle, and if we set up from the squares parallelepipedal solids of equal height with the cone, which are also called prisms, then the solid set up from the square *ABCD* is half of that set up from the square circumscribed about the circle, for they are to one another as their bases. [!just XI.32]
+Now set up from the square {ABCD|sqABCD} a pyramid with the same vertex as the cone. Therefore the pyramid so set up is greater than half of the cone, for, as we proved before, if we circumscribe a square about the circle, then the square {ABCD|sqABCD} is half of the square circumscribed about the circle, and if we set up from the squares parallelepipedal solids of equal height with the cone, which are also called prisms, then the solid set up from the square {ABCD|sqABCD} is half of that set up from the square circumscribed about the circle, for they are to one another as their bases. [!just XI.32]
 
-Hence the thirds of them are also in that ratio. Therefore the pyramid with the square base *ABCD* is half of the pyramid set up from the square circumscribed about the circle.
+Hence the thirds of them are also in that ratio. Therefore the pyramid with the square base {ABCD|sqABCD} is half of the pyramid set up from the square circumscribed about the circle.
 
 And the pyramid set up from the square about the circle is greater than the cone, for it encloses it.
 
-Therefore the pyramid with the square base *ABCD* and the same vertex as that of the cone is greater than the half of the cone.
+Therefore the pyramid with the square base {ABCD|sqABCD} and the same vertex as that of the cone is greater than the half of the cone.
 
-Bisect the circumferences *AB, BC, CD,* and *DA* at the points *E, F, G,* and *H,* and join *AE, EB, BF, FC, CG, GD, DH,* and *HA* be joined. Then each of the triangles *AEB, BFC, CGD,* and *DHA* is greater than the half part of that segment of the circle *ABCD* about it.
+Bisect the circumferences {AB|arcAB}, {BC|arcBC}, {CD|arcCD}, and {DA|arcDA} at the points {E}, {F}, {G}, and {H}, and join {AE}, {EB}, {BF}, {FC}, {CG}, {GD}, {DH}, and {HA} be joined. Then each of the triangles {AEB}, {BFC}, {CGD}, and {DHA} is greater than the half part of that segment of the circle {ABCD|circABCD} about it.
 
-Now, on each of the triangles *AEB, BFC, CGD,* and *DHA* set pyramids up with the same vertex as the cone. Therefore each of the pyramids so set up is, in the same manner, greater than the half part of that segment of the cone about it.
+Now, on each of the triangles {AEB}, {BFC}, {CGD}, and {DHA} set pyramids up with the same vertex as the cone. Therefore each of the pyramids so set up is, in the same manner, greater than the half part of that segment of the cone about it.
 
 Thus, by bisecting the circumferences that are left, joining straight lines, setting up pyramids on each of the triangles with the same vertex as the cone, and doing this repeatedly, we shall leave some segments of the cone which will be less than the excess by which the cone exceeds the third part of the cylinder. [!just X.1]
 
-Let such be left, and let them be the segments on *AE, EB, BF, FC, CG, GD, DH,* and *HA.* Therefore the remainder, the pyramid with the polygonal base *AEBFCGDH* and the same vertex as that of the cone, is greater than a third part of the cylinder.
+Let such be left, and let them be the segments on {AE}, {EB}, {BF}, {FC}, {CG}, {GD}, {DH}, and {HA}. Therefore the remainder, the pyramid with the polygonal base {AEBFCGDH} and the same vertex as that of the cone, is greater than a third part of the cylinder.
 
-But the pyramid with the polygonal *AEBFCGDH* base and the same vertex as that of the cone is a third part of the prism with the polygonal base *AEBFCGDH* and the same height as that of the cylinder, therefore the prism with the polygonal base *AEBFCGDH* and the same height as that of the cylinder is greater than the cylinder with the circular base *ABCD.*
+But the pyramid with the polygonal {AEBFCGDH} base and the same vertex as that of the cone is a third part of the prism with the polygonal base {AEBFCGDH} and the same height as that of the cylinder, therefore the prism with the polygonal base {AEBFCGDH} and the same height as that of the cylinder is greater than the cylinder with the circular base {ABCD|circABCD}.
 
 But it is also less, for it is enclosed by it, which is impossible. Therefore the cylinder is not less than triple the cone.
 
