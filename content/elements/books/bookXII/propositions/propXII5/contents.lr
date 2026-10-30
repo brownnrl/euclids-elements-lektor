@@ -15,16 +15,49 @@ statement: Pyramids of the same height with triangular bases are to one another 
 ----
 proof:
 
-Let there be pyramids of the same height with triangular bases *ABC* and *DEF* and vertices *G* and *H.*
+Let there be pyramids of the same height with triangular bases {ABC} and {DEF} and vertices {G} and {H}.
 
-I say that the base *ABC* is to the base *DEF* as the pyramid *ABCG* is to the pyramid *DEFH.*
+I say that the base {ABC} is to the base {DEF} as the pyramid {ABCG} is to the pyramid {DEFH}.
 
-For, if the pyramid *ABCG* is not to the pyramid *DEFH* as the base *ABC* is to the base *DEF,* then the base *ABC* is to the base *DEF* as the pyramid *ABCG* is either to some solid less than the pyramid *DEFH* or to a greater solid.
+For, if the pyramid {ABCG} is not to the pyramid {DEFH} as the base {ABC} is to the base {DEF}, then the base {ABC} is to the base {DEF} as the pyramid {ABCG} is either to some solid less than the pyramid {DEFH} or to a greater solid.
 
 <center>
 <canvas id="canvas_0" width="550" height="280" tabindex="0"></canvas>
 <noscript><img alt="XII.5 diagram" src="propXII5.gif"/></noscript>
 <script type="text/javascript">
+    // A double reductio on the XII.3/XII.4 figure. Case 1: W less than DEFH.
+    // DEFH is divided (XII.3) until its leftover pyramids are less than the
+    // excess of DEFH over W (X.1), so its prisms exceed W; ABCG divided alike
+    // gives, through XII.4, V.11 and V.16, W greater than those prisms too —
+    // impossible. Case 2, W greater, inverts to case 1 (XII.2's lemma).
+    //
+    // Joyce's figure is kept whole: the division is XII.3's work and is
+    // assumed here, so the walk lights it rather than redraws it. Only the
+    // solid W is held back until the proof posits it, and withdrawn when
+    // each case is refuted. A polyhedron draws no highlight, so everything
+    // the prose names gets a transparent twin: the bases ABC, DEF; faceless
+    // octagon wireframes walking all six edges of each pyramid (ABCG, DEFH,
+    // and the small pyramids pAKLP, pPMNG, pDQRS, pSTUH); the faces of the
+    // prisms (PMOLt, STVRt are faceless twins of Joyce's shaded faces, which
+    // would be raised over the figure if lit, #140); and W's twelve edges,
+    // from four invisible corner points: Wf, an octagon walking W's outline
+    // plus the edge W1-W3 (the target of the prose W refs), and five lines.
+    // Draggables (checked against the bundle): A..H planeSliders and G a
+    // lineSlider, all givens; W1, W2, W3 (planeSliders) and W5 (lineSlider)
+    // are W's invisible handles, deferred so W follows `visible`.
+    var ORIG = ["A","B","C","G","K","O","L","P","M","N","PMOL","AKLP","PMNG",
+                "CB","CL","KB","MB","CN",
+                "D","E","F","H","Q","V","R","S","T","U","STVR","DQRS","STUH",
+                "EF","FR","QE","TE","FU"];
+    var PRA  = ["BMO","KPL","KBOL","KBMP","PMOLt","LOC","PMN","MOCN","NCLP"];
+    var PRD  = ["ETV","QSR","QEVR","QETS","STVRt","RVF","STU","TVFU","UFRS"];
+    var FIG  = ORIG.concat(["ABC","DEF","ABCG","DEFH",
+                "pAKLP","pPMNG","pDQRS","pSTUH"]).concat(PRA).concat(PRD);
+    var WBOX = ["Wf","Wdc","Wdd","Wbb","Wba","Wbc"];
+    var WFIG = FIG.concat(["W","W1","W2","W3","W5","Wc","Wb2","Wd2","Wc2"])
+                  .concat(WBOX);
+    var BASES = ["ABC","DEF"];
+    var PYRS  = ["ABCG","DEFH"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -79,47 +112,208 @@ For, if the pyramid *ABCG* is not to the pyramid *DEFH* as the base *ABC* is to 
             "W3;point;planeSlider;ceiling,310,46,0;0;0",
             "W4;point;parallelogram;origin,1Y,W1;0;0",
             "W5;point;lineSlider;W1,W4,210,99,0;0;0",
-            "W;polyhedron;parallelepiped;W1,W2,W3,W5;black;0;black;random"
+            "W;polyhedron;parallelepiped;W1,W2,W3,W5;black;0;black;random",
+            // Transparent highlight targets: the bases and pyramid wireframes.
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "DEF;polygon;triangle;D,E,F;0;0;0;0",
+            "ABCG;polygon;octagon;A,B,C,G,A,C,G,B;0;0;0;0",
+            "DEFH;polygon;octagon;D,E,F,H,D,F,H,E;0;0;0;0",
+            "pAKLP;polygon;octagon;A,K,L,P,A,L,P,K;0;0;0;0",
+            "pPMNG;polygon;octagon;P,M,N,G,P,N,G,M;0;0;0;0",
+            "pDQRS;polygon;octagon;D,Q,R,S,D,R,S,Q;0;0;0;0",
+            "pSTUH;polygon;octagon;S,T,U,H,S,U,H,T;0;0;0;0",
+            // The faces of the two prisms in ABCG, then in DEFH.
+            "BMO;polygon;triangle;B,M,O;0;0;0;0",
+            "KPL;polygon;triangle;K,P,L;0;0;0;0",
+            "KBOL;polygon;quadrilateral;K,B,O,L;0;0;0;0",
+            "KBMP;polygon;quadrilateral;K,B,M,P;0;0;0;0",
+            "PMOLt;polygon;quadrilateral;P,M,O,L;0;0;0;0",
+            "LOC;polygon;triangle;L,O,C;0;0;0;0",
+            "PMN;polygon;triangle;P,M,N;0;0;0;0",
+            "MOCN;polygon;quadrilateral;M,O,C,N;0;0;0;0",
+            "NCLP;polygon;quadrilateral;N,C,L,P;0;0;0;0",
+            "ETV;polygon;triangle;E,T,V;0;0;0;0",
+            "QSR;polygon;triangle;Q,S,R;0;0;0;0",
+            "QEVR;polygon;quadrilateral;Q,E,V,R;0;0;0;0",
+            "QETS;polygon;quadrilateral;Q,E,T,S;0;0;0;0",
+            "STVRt;polygon;quadrilateral;S,T,V,R;0;0;0;0",
+            "RVF;polygon;triangle;R,V,F;0;0;0;0",
+            "STU;polygon;triangle;S,T,U;0;0;0;0",
+            "TVFU;polygon;quadrilateral;T,V,F,U;0;0;0;0",
+            "UFRS;polygon;quadrilateral;U,F,R,S;0;0;0;0",
+            // W's other four bottom/top corners (W1, W2, W3, W5 are given),
+            // then its twelve edges: the outline octagon and five lines.
+            "Wc;point;parallelogram;W2,W1,W3;0;0",
+            "Wb2;point;parallelogram;W2,W1,W5;0;0",
+            "Wd2;point;parallelogram;W3,W1,W5;0;0",
+            "Wc2;point;parallelogram;Wc,W1,W5;0;0",
+            "Wf;polygon;octagon;W1,W2,Wc,Wc2,Wd2,W5,W1,W3;0;0;0;0",
+            "Wdc;line;connect;W3,Wc;0;0;0",
+            "Wdd;line;connect;W3,Wd2;0;0;0",
+            "Wbb;line;connect;W2,Wb2;0;0;0",
+            "Wba;line;connect;Wb2,W5;0;0;0",
+            "Wbc;line;connect;Wb2,Wc2;0;0;0"
         ],
+        deferDraggables: ["W1","W2","W3","W5"],
+        slides: [
+            { text: "“Pyramids of the same height with triangular bases are to one another as their bases.”",
+              visible: FIG,
+              highlighted: PYRS.concat(BASES),
+              justifications: [{ ref: "XII.5" }] },
+            { text: "Let there be pyramids of the same height with triangular bases {ABC} and {DEF} and vertices {G} and {H}.",
+              highlighted: BASES.concat(["G","H"]) },
+            { text: "I say that the base {ABC} is to the base {DEF} as the pyramid {ABCG} is to the pyramid {DEFH}.",
+              highlighted: BASES.concat(PYRS) },
+            { text: "For, if the pyramid {ABCG} is not to the pyramid {DEFH} as the base {ABC} is to the base {DEF},",
+              highlighted: PYRS.concat(BASES) },
+            { text: "then the base {ABC} is to the base {DEF} as the pyramid {ABCG}",
+              highlighted: BASES.concat(["ABCG"]) },
+            { text: "is either to some solid less than the pyramid {DEFH} or to a greater solid.",
+              highlighted: ["DEFH"] },
+            { text: "Let it, first, be in that ratio to a less solid {W|Wf}.",
+              visible: WFIG,
+              highlighted: WBOX },
+            { text: "Divide the pyramid {DEFH} into two pyramids equal to one another and similar to the whole",
+              highlighted: ["pDQRS","pSTUH"] },
+            { text: "and into two equal prisms.",
+              highlighted: PRD },
+            { text: "Then the two prisms are greater than the half of the whole pyramid.",
+              highlighted: PRD,
+              justifications: [{ claim: "the prisms exceed half the pyramid", ref: "XII.3" }] },
+            { text: "Again, divide the pyramids arising from the division similarly, and let this be done repeatedly",
+              highlighted: ["pDQRS","pSTUH"] },
+            { text: "until there are left over from the pyramid {DEFH} some pyramids which are less than the excess",
+              highlighted: ["DEFH"] },
+            { text: "by which the pyramid {DEFH} exceeds the solid {W|Wf}.",
+              highlighted: ["DEFH"].concat(WBOX),
+              justifications: [{ ref: "X.1" }] },
+            { text: "Let such be left, and let them be, for the sake of argument, {DQRS|pDQRS} and {STUH|pSTUH}.",
+              highlighted: ["pDQRS","pSTUH"] },
+            { text: "Therefore the remainders, the prisms in the pyramid {DEFH}, are greater than the solid {W|Wf}.",
+              highlighted: PRD.concat(WBOX) },
+            { text: "Divide the pyramid {ABCG} similarly, and a same number of times, with the pyramid {DEFH}.",
+              highlighted: ["pAKLP","pPMNG"].concat(PRA) },
+            { text: "Therefore the base {ABC} is to the base {DEF}",
+              highlighted: BASES },
+            { text: "as the prisms in the pyramid {ABCG} are to the prisms in the pyramid {DEFH}.",
+              highlighted: PRA.concat(PRD),
+              justifications: [{ claim: "bases as the prisms", ref: "XII.4" }] },
+            { text: "But the base {ABC} is to the base {DEF} as the pyramid {ABCG} is to the solid {W|Wf},",
+              highlighted: BASES.concat(["ABCG"]).concat(WBOX) },
+            { text: "therefore the pyramid {ABCG} is to the solid {W|Wf}",
+              highlighted: ["ABCG"].concat(WBOX) },
+            { text: "as the prisms in the pyramid {ABCG} are to the prisms in the pyramid {DEFH}.",
+              highlighted: PRA.concat(PRD),
+              justifications: [{ claim: "ratios the same with the same ratio", ref: "V.11" }] },
+            { text: "Therefore, alternately the pyramid {ABCG} is to the prisms in it",
+              highlighted: ["ABCG"].concat(PRA) },
+            { text: "as the solid {W|Wf} is to the prisms in the pyramid {DEFH}.",
+              highlighted: WBOX.concat(PRD),
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "But the pyramid {ABCG} is greater than the prisms in it,",
+              highlighted: ["ABCG"].concat(PRA) },
+            { text: "therefore the solid {W|Wf} is also greater than the prisms in the pyramid {DEFH}.",
+              highlighted: WBOX.concat(PRD) },
+            { text: "But it is also less, which is impossible.",
+              highlighted: WBOX.concat(PRD) },
+            // Case 1 refuted: W is withdrawn.
+            // Joyce's slip, left literal: "the prism ABCG" (for pyramid).
+            { text: "Therefore the prism {ABCG} is not to any solid less than the pyramid {DEFH}",
+              visible: FIG,
+              highlighted: PYRS },
+            { text: "as the base {ABC} is to the base {DEF}.",
+              highlighted: BASES },
+            { text: "Similarly it can be proved that neither is the pyramid {DEFH} to any solid less than the pyramid {ABCG}",
+              highlighted: PYRS },
+            { text: "as the base {DEF} is to the base {ABC}.",
+              highlighted: BASES },
+            { text: "I say next that neither is the pyramid {ABCG} to any solid greater than the pyramid {DEFH}",
+              highlighted: PYRS },
+            { text: "as the base {ABC} is to the base {DEF}.",
+              highlighted: BASES },
+            { text: "For, if possible, let it be in that ratio to a greater solid {W|Wf}.",
+              visible: WFIG,
+              highlighted: WBOX },
+            { text: "Therefore, inversely the base {DEF} is to the base {ABC} as the solid {W|Wf} is to the pyramid {ABCG}.",
+              highlighted: BASES.concat(WBOX).concat(["ABCG"]) },
+            { text: "But it was proved before that the solid {W|Wf} is to the solid {ABCG}",
+              highlighted: WBOX.concat(["ABCG"]) },
+            { text: "as the pyramid {DEFH} is to some solid less than the pyramid {ABCG}.",
+              highlighted: PYRS,
+              justifications: [{ ref: "XII.2,Lemma" }] },
+            { text: "Therefore the base {DEF} is to the base {ABC}",
+              highlighted: BASES },
+            { text: "as the pyramid {DEFH} is to some solid less than the pyramid {ABCG}, which was proved absurd.",
+              highlighted: PYRS,
+              justifications: [{ claim: "ratios the same with the same ratio", ref: "V.11" }] },
+            // Case 2 refuted: W is withdrawn again.
+            { text: "Therefore the pyramid {ABCG} is not to any solid greater than the pyramid {DEFH}",
+              visible: FIG,
+              highlighted: PYRS },
+            { text: "as the base {ABC} is to the base {DEF}.",
+              highlighted: BASES },
+            { text: "But it was proved that neither is it in that ratio to a less solid.",
+              highlighted: PYRS },
+            { text: "Therefore the base {ABC} is to the base {DEF} as the pyramid {ABCG} is to the pyramid {DEFH}.",
+              highlighted: BASES.concat(PYRS) },
+            { text: "Therefore, pyramids of the same height with triangular bases are to one another as their bases.",
+              highlighted: PYRS.concat(BASES),
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.5") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.11":        "/elements/books/bookV/propositions/propV11/",
+        "V.16":        "/elements/books/bookV/propositions/propV16/",
+        "X.1":         "/elements/books/bookX/propositions/propX1/",
+        "XII.2,Lemma": "/elements/books/bookXII/propositions/propXII2/#lemma",
+        "XII.3":       "/elements/books/bookXII/propositions/propXII3/",
+        "XII.4":       "/elements/books/bookXII/propositions/propXII4/"
     });
 </script>
 </center>
 
-Let it, first, be in that ratio to a less solid *W.*
+Let it, first, be in that ratio to a less solid {W|Wf}.
 
-Divide the pyramid *DEFH* into two pyramids equal to one another and similar to the whole and into two equal prisms.
+Divide the pyramid {DEFH} into two pyramids equal to one another and similar to the whole and into two equal prisms.
 
 Then the two prisms are greater than the half of the whole pyramid. [!just XII.3]
 
-Again, divide the pyramids arising from the division similarly, and let this be done repeatedly until there are left over from the pyramid *DEFH* some pyramids which are less than the excess by which the pyramid *DEFH* exceeds the solid *W.* [!just X.1]
+Again, divide the pyramids arising from the division similarly, and let this be done repeatedly until there are left over from the pyramid {DEFH} some pyramids which are less than the excess by which the pyramid {DEFH} exceeds the solid {W|Wf}. [!just X.1]
 
-Let such be left, and let them be, for the sake of argument, *DQRS* and *STUH.* Therefore the remainders, the prisms in the pyramid *DEFH,* are greater than the solid *W.*
+Let such be left, and let them be, for the sake of argument, {DQRS|pDQRS} and {STUH|pSTUH}. Therefore the remainders, the prisms in the pyramid {DEFH}, are greater than the solid {W|Wf}.
 
-Divide the pyramid *ABCG* similarly, and a same number of times, with the pyramid *DEFH.* Therefore the base *ABC* is to the base *DEF* as the prisms in the pyramid *ABCG* are to the prisms in the pyramid *DEFH.* [!just XII.4]
+Divide the pyramid {ABCG} similarly, and a same number of times, with the pyramid {DEFH}. Therefore the base {ABC} is to the base {DEF} as the prisms in the pyramid {ABCG} are to the prisms in the pyramid {DEFH}. [!just XII.4]
 
-But the base *ABC* is to the base *DEF* as the pyramid *ABCG* is to the solid *W,* therefore the pyramid *ABCG* is to the solid *W* as the prisms in the pyramid *ABCG* are to the prisms in the pyramid *DEFH.* Therefore, alternately the pyramid *ABCG* is to the prisms in it as the solid *W* is to the prisms in the pyramid *DEFH.* [!just V.11; V.16]
+But the base {ABC} is to the base {DEF} as the pyramid {ABCG} is to the solid {W|Wf}, therefore the pyramid {ABCG} is to the solid {W|Wf} as the prisms in the pyramid {ABCG} are to the prisms in the pyramid {DEFH}. Therefore, alternately the pyramid {ABCG} is to the prisms in it as the solid {W|Wf} is to the prisms in the pyramid {DEFH}. [!just V.11; V.16]
 
-But the pyramid *ABCG* is greater than the prisms in it, therefore the solid *W* is also greater than the prisms in the pyramid *DEFH.*
+But the pyramid {ABCG} is greater than the prisms in it, therefore the solid {W|Wf} is also greater than the prisms in the pyramid {DEFH}.
 
 But it is also less, which is impossible.
 
-Therefore the prism *ABCG* is not to any solid less than the pyramid *DEFH* as the base *ABC* is to the base *DEF.*
+Therefore the prism {ABCG} is not to any solid less than the pyramid {DEFH} as the base {ABC} is to the base {DEF}.
 
-Similarly it can be proved that neither is the pyramid *DEFH* to any solid less than the pyramid *ABCG* as the base *DEF* is to the base *ABC.*
+Similarly it can be proved that neither is the pyramid {DEFH} to any solid less than the pyramid {ABCG} as the base {DEF} is to the base {ABC}.
 
-I say next that neither is the pyramid *ABCG* to any solid greater than the pyramid *DEFH* as the base *ABC* is to the base *DEF.*
+I say next that neither is the pyramid {ABCG} to any solid greater than the pyramid {DEFH} as the base {ABC} is to the base {DEF}.
 
-For, if possible, let it be in that ratio to a greater solid *W.*
+For, if possible, let it be in that ratio to a greater solid {W|Wf}.
 
-Therefore, inversely the base *DEF* is to the base *ABC* as the solid *W* is to the pyramid *ABCG.*
+Therefore, inversely the base {DEF} is to the base {ABC} as the solid {W|Wf} is to the pyramid {ABCG}.
 
-But it was proved before that the solid *W* is to the solid *ABCG* as the pyramid *DEFH* is to some solid less than the pyramid *ABCG.* Therefore the base *DEF* is to the base *ABC* as the pyramid *DEFH* is to some solid less than the pyramid *ABCG,* which was proved absurd. <div class="just"><a href="/elements/books/bookXII/propositions/propXII2/#lemma">XII.2,Lemma</a><br><a href="/elements/books/bookV/propositions/propV11/">V.11</a></div>
+But it was proved before that the solid {W|Wf} is to the solid {ABCG} as the pyramid {DEFH} is to some solid less than the pyramid {ABCG}. Therefore the base {DEF} is to the base {ABC} as the pyramid {DEFH} is to some solid less than the pyramid {ABCG}, which was proved absurd. <div class="just"><a href="/elements/books/bookXII/propositions/propXII2/#lemma">XII.2,Lemma</a><br><a href="/elements/books/bookV/propositions/propV11/">V.11</a></div>
 
-Therefore the pyramid *ABCG* is not to any solid greater than the pyramid *DEFH* as the base *ABC* is to the base *DEF.*
+Therefore the pyramid {ABCG} is not to any solid greater than the pyramid {DEFH} as the base {ABC} is to the base {DEF}.
 
 But it was proved that neither is it in that ratio to a less solid.
 
-Therefore the base *ABC* is to the base *DEF* as the pyramid *ABCG* is to the pyramid *DEFH.*
+Therefore the base {ABC} is to the base {DEF} as the pyramid {ABCG} is to the pyramid {DEFH}.
 
 Therefore, *pyramids of the same height with triangular bases are to one another as their bases.*
 

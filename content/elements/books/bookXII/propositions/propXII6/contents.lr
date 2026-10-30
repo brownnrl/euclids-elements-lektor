@@ -15,16 +15,43 @@ statement: Pyramids of the same height with polygonal bases are to one another a
 ----
 proof:
 
-Let there be pyramids of the same height with the polygonal bases *ABCDE* and *FGHKL* and vertices *M* and *N.*
+Let there be pyramids of the same height with the polygonal bases {ABCDE} and {FGHKL} and vertices {M} and {N}.
 
-I say that the base *ABCDE* is to the base *FGHKL* as the pyramid *ABCDEM* is to the pyramid *FGHKLN.*
+I say that the base {ABCDE} is to the base {FGHKL} as the pyramid {ABCDEM|pABCDEM} is to the pyramid {FGHKLN|pFGHKLN}.
 
-Join *AC, AD, FH,* and *FK.*
+Join {AC}, {AD}, {FH}, and {FK}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="400" height="280" tabindex="0"></canvas>
 <noscript><img alt="XII.6 diagram" src="propXII6.gif"/></noscript>
 <script type="text/javascript">
+    // The pentagonal pyramids are cut by the joins AC, AD (and FH, FK) into
+    // triangular pyramids; XII.5 on each pair, compounded (V.18) and taken
+    // ex aequali (V.22), carries the ratio of the bases up to the whole.
+    //
+    // Joyce's figure is kept; the joins AC, AD, FH, FK are held back until
+    // the proof joins them. A polyhedron draws no highlight, so the solids
+    // the prose names get transparent twins: the bases (ABC, ACD, ADE,
+    // ABCD, FGH; ABCDE and FGHKL are Joyce's own faceless pentagons), the
+    // apex edges MA..ME, NF..NL, and octagon wireframes. The triangular
+    // pyramids ABCM, ACDM, ADEM, FGHN walk all six edges; an octagon cannot
+    // walk all the edges of ABCDM (8) or ABCDEM, FGHKLN (10), so their
+    // prose refs light pABCDM (all but CD), pABCDEM (base plus MD, ME) and
+    // pFGHKLN (base plus NF, NG), while the slides light base and apex
+    // edges in full (PYR_ABCD, PYR_M, PYR_N).
+    // Draggables (checked against the bundle): M (lineSlider), N and A..L
+    // (planeSliders), all givens; nothing to defer.
+    var ORIG  = ["M","A","B","C","D","E","Mpyr","N","F","G","H","K","L",
+                 "Npyr","ABCDEdup","FGHKLdup"];
+    var JOINS = ["AC","AD","FH","FK"];
+    var EDGES = ["MA","MB","MC","MD","ME","NF","NG","NH","NK","NL"];
+    var GIVEN = ORIG.concat(["ABCDE","FGHKL"]).concat(EDGES)
+                    .concat(["pABCDEM","pFGHKLN"]);
+    var FIG   = GIVEN.concat(JOINS).concat(["ABC","ACD","ADE","ABCD","FGH",
+                 "ABCM","ACDM","ADEM","FGHN","pABCDM"]);
+    var PYR_M    = ["ABCDE","MA","MB","MC","MD","ME"];
+    var PYR_N    = ["FGHKL","NF","NG","NH","NK","NL"];
+    var PYR_ABCD = ["ABCD","MA","MB","MC","MD"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -59,25 +86,119 @@ Join *AC, AD, FH,* and *FK.*
             "FH;line;connect;F,H",
             "FK;line;connect;F,K",
             "ABCDEdup;polygon;pentagon;A,B,C,D,E;0;0;0;random",
-            "FGHKLdup;polygon;pentagon;F,G,H,K,L;0;0;0;random"
+            "FGHKLdup;polygon;pentagon;F,G,H,K,L;0;0;0;random",
+            // Transparent highlight targets: bases, apex edges, wireframes.
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "ACD;polygon;triangle;A,C,D;0;0;0;0",
+            "ADE;polygon;triangle;A,D,E;0;0;0;0",
+            "ABCD;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            "FGH;polygon;triangle;F,G,H;0;0;0;0",
+            "MA;line;connect;M,A;0;0;0",
+            "MB;line;connect;M,B;0;0;0",
+            "MC;line;connect;M,C;0;0;0",
+            "MD;line;connect;M,D;0;0;0",
+            "ME;line;connect;M,E;0;0;0",
+            "NF;line;connect;N,F;0;0;0",
+            "NG;line;connect;N,G;0;0;0",
+            "NH;line;connect;N,H;0;0;0",
+            "NK;line;connect;N,K;0;0;0",
+            "NL;line;connect;N,L;0;0;0",
+            "ABCM;polygon;octagon;A,B,C,M,A,C,M,B;0;0;0;0",
+            "ACDM;polygon;octagon;A,C,D,M,A,D,M,C;0;0;0;0",
+            "ADEM;polygon;octagon;A,D,E,M,A,E,M,D;0;0;0;0",
+            "FGHN;polygon;octagon;F,G,H,N,F,H,N,G;0;0;0;0",
+            "pABCDM;polygon;octagon;M,A,D,M,C,B,A,B;0;0;0;0",
+            "pABCDEM;polygon;octagon;E,A,B,C,D,E,M,D;0;0;0;0",
+            "pFGHKLN;polygon;octagon;F,G,H,K,L,F,N,G;0;0;0;0"
         ],
+        slides: [
+            { text: "“Pyramids of the same height with polygonal bases are to one another as their bases.”",
+              visible: GIVEN,
+              highlighted: PYR_M.concat(PYR_N),
+              justifications: [{ ref: "XII.6" }] },
+            { text: "Let there be pyramids of the same height with the polygonal bases {ABCDE} and {FGHKL} and vertices {M} and {N}.",
+              highlighted: ["ABCDE","FGHKL","M","N"] },
+            { text: "I say that the base {ABCDE} is to the base {FGHKL} as the pyramid {ABCDEM|pABCDEM} is to the pyramid {FGHKLN|pFGHKLN}.",
+              highlighted: PYR_M.concat(PYR_N) },
+            { text: "Join {AC}, {AD}, {FH}, and {FK}.",
+              visible: FIG,
+              transition: { mode: "cascade", animations: [
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FK", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since then {ABCM} and {ACDM} are two pyramids with triangular bases and equal height,",
+              highlighted: ["ABCM","ACDM"] },
+            { text: "therefore they are to one another as their bases.",
+              highlighted: ["ABCM","ACDM","ABC","ACD"],
+              justifications: [{ ref: "XII.5" }] },
+            { text: "Therefore the base {ABC} is to the base {ACD} as the pyramid {ABCM} is to the pyramid {ACDM}.",
+              highlighted: ["ABC","ACD","ABCM","ACDM"] },
+            { text: "And, taken together, the base {ABCD} is to the base {ACD} as the pyramid {ABCDM|pABCDM} is to the pyramid {ACDM}.",
+              highlighted: PYR_ABCD.concat(["ACD","ACDM"]),
+              justifications: [{ claim: "taken together", ref: "V.18" }] },
+            { text: "But the base {ACD} is to the base {ADE} as the pyramid {ACDM} is to the pyramid {ADEM}.",
+              highlighted: ["ACD","ADE","ACDM","ADEM"],
+              justifications: [{ ref: "XII.5" }] },
+            { text: "Therefore, ex aequali, the base {ABCD} is to the base {ADE} as the pyramid {ABCDM|pABCDM} is to the pyramid {ADEM}.",
+              highlighted: PYR_ABCD.concat(["ADE","ADEM"]),
+              justifications: [{ claim: "ex aequali", ref: "V.22" }] },
+            { text: "And again, taken together, the base {ABCDE} is to the base {ADE} as the pyramid {ABCDEM|pABCDEM} is to the pyramid {ADEM}.",
+              highlighted: PYR_M.concat(["ADE","ADEM"]),
+              justifications: [{ claim: "taken together", ref: "V.18" }] },
+            { text: "Similarly also it can be proved that the base {FGHKL} is to the base {FGH}",
+              highlighted: ["FGHKL","FGH"] },
+            { text: "as the pyramid {FGHKLN|pFGHKLN} is to the pyramid {FGHN}.",
+              highlighted: PYR_N.concat(["FGHN"]),
+              justifications: [{ claim: "taken together", ref: "V.18" }] },
+            { text: "And, since {ADEM} and {FGHN} are two pyramids with triangular bases and equal heights,",
+              highlighted: ["ADEM","FGHN"] },
+            { text: "therefore the base {ADE} is to the base {FGH} as the pyramid {ADEM} is to the pyramid {FGHN}.",
+              highlighted: ["ADE","FGH","ADEM","FGHN"],
+              justifications: [{ ref: "XII.5" }] },
+            { text: "But the base {ADE} is to the base {ABCDE} as the pyramid {ADEM} is to the pyramid {ABCDEM|pABCDEM}.",
+              highlighted: PYR_M.concat(["ADE","ADEM"]) },
+            { text: "Therefore, ex aequali, the base {ABCDE} is to the base {FGH} as the pyramid {ABCDEM|pABCDEM} is to the pyramid {FGHN}.",
+              highlighted: PYR_M.concat(["FGH","FGHN"]),
+              justifications: [{ claim: "ex aequali", ref: "V.22" }] },
+            { text: "But further the base {FGH} is to the base {FGHKL} as the pyramid {FGHN} is to the pyramid {FGHKLN|pFGHKLN}.",
+              highlighted: PYR_N.concat(["FGH","FGHN"]) },
+            { text: "Therefore also, ex aequali, the base {ABCDE} is to the base {FGHKL} as the pyramid {ABCDEM|pABCDEM} is to the pyramid {FGHKLN|pFGHKLN}.",
+              highlighted: PYR_M.concat(PYR_N),
+              justifications: [{ claim: "ex aequali", ref: "V.22" }] },
+            { text: "Therefore, pyramids of the same height with polygonal bases are to one another as their bases.",
+              highlighted: PYR_M.concat(PYR_N),
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.6") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.18":  "/elements/books/bookV/propositions/propV18/",
+        "V.22":  "/elements/books/bookV/propositions/propV22/",
+        "XII.5": "/elements/books/bookXII/propositions/propXII5/"
     });
 </script>
 </figure>
 
-Since then *ABCM* and *ACDM* are two pyramids with triangular bases and equal height, therefore they are to one another as their bases. Therefore the base *ABC* is to the base *ACD* as the pyramid *ABCM* is to the pyramid *ACDM.* And, taken together, the base *ABCD* is to the base *ACD* as the pyramid *ABCDM* is to the pyramid *ACDM.* [!just XII.5; V.18]
+Since then {ABCM} and {ACDM} are two pyramids with triangular bases and equal height, therefore they are to one another as their bases. Therefore the base {ABC} is to the base {ACD} as the pyramid {ABCM} is to the pyramid {ACDM}. And, taken together, the base {ABCD} is to the base {ACD} as the pyramid {ABCDM|pABCDM} is to the pyramid {ACDM}. [!just XII.5; V.18]
 
-But the base *ACD* is to the base *ADE* as the pyramid *ACDM* is to the pyramid *ADEM.* [!just XII.5]
+But the base {ACD} is to the base {ADE} as the pyramid {ACDM} is to the pyramid {ADEM}. [!just XII.5]
 
-Therefore, *ex aequali,* the base *ABCD* is to the base *ADE* as the pyramid *ABCDM* is to the pyramid *ADEM.* [!just V.22]
+Therefore, *ex aequali,* the base {ABCD} is to the base {ADE} as the pyramid {ABCDM|pABCDM} is to the pyramid {ADEM}. [!just V.22]
 
-And again, taken together, the base *ABCDE* is to the base *ADE* as the pyramid *ABCDEM* is to the pyramid *ADEM.* Similarly also it can be proved that the base *FGHKL* is to the base *FGH* as the pyramid *FGHKLN* is to the pyramid *FGHN.* [!just V.18]
+And again, taken together, the base {ABCDE} is to the base {ADE} as the pyramid {ABCDEM|pABCDEM} is to the pyramid {ADEM}. Similarly also it can be proved that the base {FGHKL} is to the base {FGH} as the pyramid {FGHKLN|pFGHKLN} is to the pyramid {FGHN}. [!just V.18]
 
-And, since *ADEM* and *FGHN* are two pyramids with triangular bases and equal heights, therefore the base *ADE* is to the base *FGH* as the pyramid *ADEM* is to the pyramid *FGHN.* [!just XII.5]
+And, since {ADEM} and {FGHN} are two pyramids with triangular bases and equal heights, therefore the base {ADE} is to the base {FGH} as the pyramid {ADEM} is to the pyramid {FGHN}. [!just XII.5]
 
-But the base *ADE* is to the base *ABCDE* as the pyramid *ADEM* is to the pyramid *ABCDEM.* Therefore, *ex aequali,* the base *ABCDE* is to the base *FGH* as the pyramid *ABCDEM* is to the pyramid *FGHN.* [!just V.22]
+But the base {ADE} is to the base {ABCDE} as the pyramid {ADEM} is to the pyramid {ABCDEM|pABCDEM}. Therefore, *ex aequali,* the base {ABCDE} is to the base {FGH} as the pyramid {ABCDEM|pABCDEM} is to the pyramid {FGHN}. [!just V.22]
 
-But further the base *FGH* is to the base *FGHKL* as the pyramid *FGHN* is to the pyramid *FGHKLN.* Therefore also, *ex aequali,* the base *ABCDE* is to the base *FGHKL* as the pyramid *ABCDEM* is to the pyramid *FGHKLN.* [!just V.22]
+But further the base {FGH} is to the base {FGHKL} as the pyramid {FGHN} is to the pyramid {FGHKLN|pFGHKLN}. Therefore also, *ex aequali,* the base {ABCDE} is to the base {FGHKL} as the pyramid {ABCDEM|pABCDEM} is to the pyramid {FGHKLN|pFGHKLN}. [!just V.22]
 
 Therefore, *pyramids of the same height with polygonal bases are to one another as their bases.*
 
