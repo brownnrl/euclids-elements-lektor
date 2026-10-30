@@ -15,16 +15,31 @@ statement: A straight line commensurable in length with an apotome is an apotome
 ----
 proof:
 
-Let *AB* be an apotome, and let *CD* be commensurable in length with *AB*.
+Let {AB} be an apotome, and let {CD} be commensurable in length with {AB}.
 
-I say that *CD* is also an apotome and the same in order with *AB*.
+I say that {CD} is also an apotome and the same in order with {AB}.
 
-Since *AB* is an apotome, let *BE* be the annex to it, therefore *AE* and *EB* are rational straight lines commensurable in square only. [!just X.73]
+Since {AB} is an apotome, let {BE} be the annex to it, therefore {AE} and {EB} are rational straight lines commensurable in square only. [!just X.73]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="100" tabindex="0"></canvas>
 <noscript><img alt="X.103 diagram" src="propX103.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the apotome AB with its annex BE on the line AE, and
+    // CD commensurable with AB, produced to F so that BE : DF = AB : CD.
+    // Added, all hidden at rest (initiallyHidden): solid twins AB and CD so
+    // the givens stand alone before the annexes, and BE, DF so each annex is
+    // produced from B and from D. The wholes AE, CF are Joyce's own lines and
+    // join the visible sets once both pieces are drawn. No angles.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E (line sliders)
+    // and the offscreen frees. E arrives with "let BE be the annex", so it is
+    // deferred; F is derived and listed from its slide on.
+    var GIVEN = ["A","B","C","D","AB","CD"];
+    var ANNEX = GIVEN.concat(["E","BE"]);
+    var WHOLE = ANNEX.concat(["AE"]);
+    var FDF   = WHOLE.concat(["F","DF"]);
+    var ALL   = FDF.concat(["CF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -41,27 +56,175 @@ Since *AB* is an apotome, let *BE* be the annex to it, therefore *AE* and *EB* a
             "E;point;lineSlider;A0,A3,170,0",
             "AE;line;connect;A,E",
             "F;point;proportion;A,B,C,D,B,E,D,C3",
-            "CF;line;connect;C,F"
+            "CF;line;connect;C,F",
+            // Slide twins, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "BE;line;connect;B,E",
+            "DF;line;connect;D,F"
         ],
+        initiallyHidden: ["AB","CD","BE","DF"],
+        deferDraggables: ["E"],
+        aliases: { "EB": "BE", "FD": "DF" },
+        slides: [
+            { text: "“A straight line commensurable in length with an apotome is an apotome and the same in order.”",
+              visible: ALL,
+              highlighted: ["CD","AB"],
+              justifications: [{ ref: "X.103" }] },
+            { text: "Let {AB} be an apotome, and let {CD} be commensurable in length with {AB}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "I say that {CD} is also an apotome and the same in order with {AB}.",
+              visible: GIVEN,
+              highlighted: ["CD","AB"] },
+            { text: "Since {AB} is an apotome, let {BE} be the annex to it,",
+              visible: ANNEX,
+              highlighted: ["BE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "E",  name: geomlib.A.Point.appear } ] } },
+            { text: "therefore {AE} and {EB} are rational straight lines commensurable in square only.",
+              visible: WHOLE,
+              highlighted: ["AE","BE"],
+              justifications: [{ claim: "AE, EB rational, commensurable in square only", ref: "X.73" }] },
+            { text: "Let it be contrived that the ratio of {BE} to {DF} is the same as the ratio of {AB} to {CD}.",
+              visible: FDF,
+              highlighted: ["BE","DF","AB","CD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "F",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "BE : DF = AB : CD", ref: "VI.12" }] },
+            { text: "Then one is to one as are all to all.",
+              visible: ALL,
+              highlighted: ["AB","CD","BE","DF"] },
+            { text: "Therefore the whole {AE} is to the whole {CF} as {AB} is to {CD}.",
+              visible: ALL,
+              highlighted: ["AE","CF","AB","CD"],
+              justifications: [{ claim: "AE : CF = AB : CD", ref: "V.12" }] },
+            { text: "But {AB} is commensurable in length with {CD},",
+              visible: ALL,
+              highlighted: ["AB","CD"] },
+            { text: "therefore {AE} is also commensurable with {CF}, and {BE} with {DF}.",
+              visible: ALL,
+              highlighted: ["AE","CF","BE","DF"],
+              justifications: [{ claim: "AE, CF and BE, DF commensurable", ref: "X.11" }] },
+            { text: "And {AE} and {EB} are rational straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["AE","BE"] },
+            { text: "therefore {CF} and {FD} are also rational straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["CF","DF"],
+              justifications: [{ claim: "CF, FD rational, commensurable in square only", ref: "X.13" }] },
+            { text: "Now since {AE} is to {CF} as {BE} is to {DF},",
+              visible: ALL,
+              highlighted: ["AE","CF","BE","DF"] },
+            { text: "therefore, alternately, {AE} is to {EB} as {CF} is to {FD}.",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "And the square on {AE} is greater than the square on {EB}",
+              visible: ALL,
+              highlighted: ["AE","BE"] },
+            { text: "either by the square on a straight line commensurable with {AE}",
+              visible: ALL,
+              highlighted: ["AE"] },
+            { text: "or by the square on a straight line incommensurable with it.",
+              visible: ALL,
+              highlighted: ["AE"] },
+            { text: "If then the square on {AE} is greater than the square on {EB}",
+              visible: ALL,
+              highlighted: ["AE","BE"] },
+            { text: "by the square on a straight line commensurable with {AE},",
+              visible: ALL,
+              highlighted: ["AE"] },
+            { text: "then the square on {CF} is also greater than the square on {FD}",
+              visible: ALL,
+              highlighted: ["CF","DF"] },
+            { text: "by the square on a straight line commensurable with {CF}.",
+              visible: ALL,
+              highlighted: ["CF"],
+              justifications: [{ claim: "CF² − FD² commensurable with CF", ref: "X.14" }] },
+            { text: "And, if {AE} is commensurable in length with the rational straight line set out, then {CF} is also;",
+              visible: ALL,
+              highlighted: ["AE","CF"],
+              justifications: [{ claim: "CF commensurable with the rational", ref: "X.12" }] },
+            { text: "if {BE}, then {DF} also;",
+              visible: ALL,
+              highlighted: ["BE","DF"],
+              justifications: [{ claim: "DF commensurable with the rational", ref: "X.12" }] },
+            { text: "and, if neither of the straight lines {AE} nor {EB}, then neither of the straight lines {CF} nor {FD}.",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"],
+              justifications: [{ claim: "CF, FD incommensurable with the rational", ref: "X.13" }] },
+            { text: "But, if the square on {AE} is greater than the square on {EB}",
+              visible: ALL,
+              highlighted: ["AE","BE"] },
+            { text: "by the square on a straight line incommensurable with {AE},",
+              visible: ALL,
+              highlighted: ["AE"] },
+            { text: "then the square on {CF} is also greater than the square on {FD}",
+              visible: ALL,
+              highlighted: ["CF","DF"] },
+            { text: "by the square on a straight line incommensurable with {CF}.",
+              visible: ALL,
+              highlighted: ["CF"],
+              justifications: [{ claim: "CF² − FD² incommensurable with CF", ref: "X.14" }] },
+            { text: "And, if {AE} is commensurable in length with the rational straight line set out, then {CF} is also;",
+              visible: ALL,
+              highlighted: ["AE","CF"],
+              justifications: [{ claim: "CF commensurable with the rational", ref: "X.12" }] },
+            { text: "if {BE}, then {DF} also;",
+              visible: ALL,
+              highlighted: ["BE","DF"],
+              justifications: [{ claim: "DF commensurable with the rational", ref: "X.12" }] },
+            { text: "and, if neither of the straight lines {AE} nor {EB}, then neither of the straight lines {CF} nor {FD}.",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"],
+              justifications: [{ claim: "CF, FD incommensurable with the rational", ref: "X.13" }] },
+            { text: "Therefore {CD} is an apotome and the same in order with {AB}.",
+              visible: ALL,
+              highlighted: ["CD","AB"] },
+            { text: "Therefore, a straight line commensurable in length with an apotome is an apotome and the same in order.",
+              visible: ALL,
+              highlighted: ["CD","AB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.103") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.73":  "/elements/books/bookX/propositions/propX73/",
+        "VI.12": "/elements/books/bookVI/propositions/propVI12/",
+        "V.12":  "/elements/books/bookV/propositions/propV12/",
+        "X.11":  "/elements/books/bookX/propositions/propX11/",
+        "X.13":  "/elements/books/bookX/propositions/propX13/",
+        "V.16":  "/elements/books/bookV/propositions/propV16/",
+        "X.14":  "/elements/books/bookX/propositions/propX14/",
+        "X.12":  "/elements/books/bookX/propositions/propX12/"
     });
 </script>
 </figure>
 
-Let it be contrived that the ratio of *BE* to *DF* is the same as the ratio of *AB* to *CD*. Then one is to one as are all to all. Therefore the whole *AE* is to the whole *CF* as *AB* is to *CD*. [!just VI.12; V.12]
+Let it be contrived that the ratio of {BE} to {DF} is the same as the ratio of {AB} to {CD}. Then one is to one as are all to all. Therefore the whole {AE} is to the whole {CF} as {AB} is to {CD}. [!just VI.12; V.12]
 
-But *AB* is commensurable in length with *CD*, therefore *AE* is also commensurable with *CF*, and *BE* with *DF*. [!just X.11]
+But {AB} is commensurable in length with {CD}, therefore {AE} is also commensurable with {CF}, and {BE} with {DF}. [!just X.11]
 
-And *AE* and *EB* are rational straight lines commensurable in square only, therefore *CF* and *FD* are also rational straight lines commensurable in square only. [!just X.13]
+And {AE} and {EB} are rational straight lines commensurable in square only, therefore {CF} and {FD} are also rational straight lines commensurable in square only. [!just X.13]
 
-Now since *AE* is to *CF* as *BE* is to *DF*, therefore, alternately, *AE* is to *EB* as *CF* is to *FD*. And the square on *AE* is greater than the square on *EB* either by the square on a straight line commensurable with *AE* or by the square on a straight line incommensurable with it. [!just V.16]
+Now since {AE} is to {CF} as {BE} is to {DF}, therefore, alternately, {AE} is to {EB} as {CF} is to {FD}. And the square on {AE} is greater than the square on {EB} either by the square on a straight line commensurable with {AE} or by the square on a straight line incommensurable with it. [!just V.16]
 
-If then the square on *AE* is greater than the square on *EB* by the square on a straight line commensurable with *AE*, then the square on *CF* is also greater than the square on *FD* by the square on a straight line commensurable with *CF*. [!just X.14]
+If then the square on {AE} is greater than the square on {EB} by the square on a straight line commensurable with {AE}, then the square on {CF} is also greater than the square on {FD} by the square on a straight line commensurable with {CF}. [!just X.14]
 
-And, if *AE* is commensurable in length with the rational straight line set out, then *CF* is also; if *BE*, then *DF* also; and, if neither of the straight lines *AE* nor *EB*, then neither of the straight lines *CF* nor *FD*. [!just X.12; X.13]
+And, if {AE} is commensurable in length with the rational straight line set out, then {CF} is also; if {BE}, then {DF} also; and, if neither of the straight lines {AE} nor {EB}, then neither of the straight lines {CF} nor {FD}. [!just X.12; X.13]
 
-But, if the square on *AE* is greater than the square on *EB* by the square on a straight line incommensurable with *AE*, then the square on *CF* is also greater than the square on *FD* by the square on a straight line incommensurable with *CF*. [!just X.14]
+But, if the square on {AE} is greater than the square on {EB} by the square on a straight line incommensurable with {AE}, then the square on {CF} is also greater than the square on {FD} by the square on a straight line incommensurable with {CF}. [!just X.14]
 
-And, if *AE* is commensurable in length with the rational straight line set out, then *CF* is also; if *BE*, then *DF* also; and, if neither of the straight lines *AE* nor *EB*, then neither of the straight lines *CF* nor *FD*. Therefore *CD* is an apotome and the same in order with *AB*. [!just X.12; X.13]
+And, if {AE} is commensurable in length with the rational straight line set out, then {CF} is also; if {BE}, then {DF} also; and, if neither of the straight lines {AE} nor {EB}, then neither of the straight lines {CF} nor {FD}. Therefore {CD} is an apotome and the same in order with {AB}. [!just X.12; X.13]
 
 Therefore, *a straight line commensurable in length with an apotome is an apotome and the same in order.*
 

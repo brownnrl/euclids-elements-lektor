@@ -15,16 +15,33 @@ statement: A straight line commensurable with an apotome of a medial straight li
 ----
 proof:
 
-Let *AB* be an apotome of a medial straight line, and let *CD* be commensurable in length with *AB*.
+Let {AB} be an apotome of a medial straight line, and let {CD} be commensurable in length with {AB}.
 
-I say that *CD* is also an apotome of a medial straight line and the same in order with *AB*.
+I say that {CD} is also an apotome of a medial straight line and the same in order with {AB}.
 
-Since *AB* is an apotome of a medial straight line, let *EB* be the annex to it.
+Since {AB} is an apotome of a medial straight line, let {EB} be the annex to it.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="100" tabindex="0"></canvas>
 <noscript><img alt="X.104 diagram" src="propX104.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the apotome of a medial AB with its annex BE on the
+    // line AE, and CD commensurable with AB, produced to F so that
+    // AB : CD = BE : DF. Added, all hidden at rest (initiallyHidden): solid
+    // twins AB and CD so the givens stand alone before the annexes, and BE,
+    // DF so each annex is produced from B and from D. The wholes AE, CF are
+    // Joyce's own lines and join the visible sets once both pieces are drawn.
+    // The rectangles "AE by EB" and "CF by FD" are not drawn; their slides
+    // light the two sides. No angles.
+    //
+    // Draggables (checked against the bundle): A, B, C, D, E (line sliders)
+    // and the offscreen frees. E arrives with "let EB be the annex", so it is
+    // deferred; F is derived and listed from its slide on.
+    var GIVEN = ["A","B","C","D","AB","CD"];
+    var ANNEX = GIVEN.concat(["E","BE"]);
+    var WHOLE = ANNEX.concat(["AE"]);
+    var FDF   = WHOLE.concat(["F","DF"]);
+    var ALL   = FDF.concat(["CF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -41,29 +58,153 @@ Since *AB* is an apotome of a medial straight line, let *EB* be the annex to it.
             "E;point;lineSlider;A0,A3,170,0",
             "AE;line;connect;A,E",
             "F;point;proportion;A,B,C,D,B,E,D,C3",
-            "CF;line;connect;C,F"
+            "CF;line;connect;C,F",
+            // Slide twins, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            "CD;line;connect;C,D",
+            "BE;line;connect;B,E",
+            "DF;line;connect;D,F"
         ],
+        initiallyHidden: ["AB","CD","BE","DF"],
+        deferDraggables: ["E"],
+        aliases: { "EB": "BE", "FD": "DF" },
+        slides: [
+            { text: "“A straight line commensurable with an apotome of a medial straight line",
+              visible: ALL,
+              highlighted: ["CD","AB"],
+              justifications: [{ ref: "X.104" }] },
+            { text: "is an apotome of a medial straight line and the same in order.”",
+              visible: ALL,
+              highlighted: ["CD"] },
+            { text: "Let {AB} be an apotome of a medial straight line, and let {CD} be commensurable in length with {AB}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "I say that {CD} is also an apotome of a medial straight line and the same in order with {AB}.",
+              visible: GIVEN,
+              highlighted: ["CD","AB"] },
+            { text: "Since {AB} is an apotome of a medial straight line, let {EB} be the annex to it.",
+              visible: ANNEX,
+              highlighted: ["BE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "E",  name: geomlib.A.Point.appear } ] } },
+            { text: "Then {AE} and {EB} are medial straight lines commensurable in square only.",
+              visible: WHOLE,
+              highlighted: ["AE","BE"],
+              justifications: [
+                  { claim: "first apotome of a medial", ref: "X.74" },
+                  { claim: "second apotome of a medial", ref: "X.75" } ] },
+            { text: "Let it be contrived that {AB} is to {CD} as {BE} is to {DF}.",
+              visible: FDF,
+              highlighted: ["AB","CD","BE","DF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "F",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AB : CD = BE : DF", ref: "VI.12" }] },
+            { text: "Then {AE} is also commensurable with {CF}, and {BE} with {DF}.",
+              visible: ALL,
+              highlighted: ["AE","CF","BE","DF"],
+              justifications: [
+                  { claim: "AE : CF = AB : CD", ref: "V.12" },
+                  { claim: "AE, CF and BE, DF commensurable", ref: "X.11" } ] },
+            { text: "But {AE} and {EB} are medial straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["AE","BE"] },
+            { text: "therefore {CF} and {FD} are also medial straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["CF","DF"],
+              justifications: [
+                  { claim: "CF, FD medial", ref: "X.23" },
+                  { claim: "CF, FD commensurable in square only", ref: "X.13" } ] },
+            { text: "Therefore {CD} is an apotome of a medial straight line.",
+              visible: ALL,
+              highlighted: ["CD"],
+              justifications: [
+                  { claim: "first apotome of a medial", ref: "X.74" },
+                  { claim: "second apotome of a medial", ref: "X.75" } ] },
+            { text: "I say next that it is also the same in order with {AB}.",
+              visible: ALL,
+              highlighted: ["CD","AB"] },
+            { text: "Since {AE} is to {EB} as {CF} is to {FD},",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"] },
+            { text: "therefore the square on {AE} is to the rectangle {AE} by {EB}",
+              visible: ALL,
+              highlighted: ["AE","BE"] },
+            { text: "as the square on {CF} is to the rectangle {CF} by {FD}.",
+              visible: ALL,
+              highlighted: ["CF","DF"] },
+            { text: "But the square on {AE} is commensurable with the square on {CF},",
+              visible: ALL,
+              highlighted: ["AE","CF"] },
+            { text: "therefore the rectangle {AE} by {EB} is also commensurable with the rectangle {CF} by {FD}.",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"],
+              justifications: [
+                  { claim: "alternately", ref: "V.16" },
+                  { claim: "the rectangles commensurable", ref: "X.11" } ] },
+            { text: "Therefore, if the rectangle {AE} by {EB} is rational, then the rectangle {CF} by {FD} is also rational,",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"],
+              justifications: [{ claim: "rational area", ref: "X.Def.I.4" }] },
+            { text: "and if the rectangle {AE} by {EB} is medial, the rectangle {CF} by {FD} is also medial.",
+              visible: ALL,
+              highlighted: ["AE","BE","CF","DF"],
+              justifications: [{ claim: "commensurable with a medial area", ref: "X.23.Cor" }] },
+            { text: "Therefore {CD} is an apotome of a medial straight line and the same in order with {AB}.",
+              visible: ALL,
+              highlighted: ["CD","AB"],
+              justifications: [
+                  { claim: "first apotome of a medial", ref: "X.74" },
+                  { claim: "second apotome of a medial", ref: "X.75" } ] },
+            { text: "Therefore, a straight line commensurable with an apotome of a medial straight line",
+              visible: ALL,
+              highlighted: ["CD","AB"] },
+            { text: "is an apotome of a medial straight line and the same in order.",
+              visible: ALL,
+              highlighted: ["CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.104") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.74":      "/elements/books/bookX/propositions/propX74/",
+        "X.75":      "/elements/books/bookX/propositions/propX75/",
+        "VI.12":     "/elements/books/bookVI/propositions/propVI12/",
+        "V.12":      "/elements/books/bookV/propositions/propV12/",
+        "X.11":      "/elements/books/bookX/propositions/propX11/",
+        "X.23":      "/elements/books/bookX/propositions/propX23/",
+        "X.13":      "/elements/books/bookX/propositions/propX13/",
+        "V.16":      "/elements/books/bookV/propositions/propV16/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/",
+        "X.23.Cor":  "/elements/books/bookX/propositions/propX23/#cor"
     });
 </script>
 </figure>
 
-Then *AE* and *EB* are medial straight lines commensurable in square only. [!just X.74, X.75]
+Then {AE} and {EB} are medial straight lines commensurable in square only. [!just X.74, X.75]
 
-Let it be contrived that *AB* is to *CD* as *BE* is to *DF*. Then *AE* is also commensurable with *CF*, and *BE* with *DF*. [!just VI.12, V.12; X.11]
+Let it be contrived that {AB} is to {CD} as {BE} is to {DF}. Then {AE} is also commensurable with {CF}, and {BE} with {DF}. [!just VI.12, V.12; X.11]
 
-But *AE* and *EB* are medial straight lines commensurable in square only, therefore *CF* and *FD* are also medial straight lines commensurable in square only. [!just X.23, X.13]
+But {AE} and {EB} are medial straight lines commensurable in square only, therefore {CF} and {FD} are also medial straight lines commensurable in square only. [!just X.23, X.13]
 
-Therefore *CD* is an apotome of a medial straight line. [!just X.74, X.75]
+Therefore {CD} is an apotome of a medial straight line. [!just X.74, X.75]
 
-I say next that it is also the same in order with *AB*.
+I say next that it is also the same in order with {AB}.
 
-Since *AE* is to *EB* as *CF* is to *FD*, therefore the square on *AE* is to the rectangle *AE* by *EB* as the square on *CF* is to the rectangle *CF* by *FD*.
+Since {AE} is to {EB} as {CF} is to {FD}, therefore the square on {AE} is to the rectangle {AE} by {EB} as the square on {CF} is to the rectangle {CF} by {FD}.
 
-But the square on *AE* is commensurable with the square on *CF*, therefore the rectangle *AE* by *EB* is also commensurable with the rectangle *CF* by *FD*. [!just V.16, X.11]
+But the square on {AE} is commensurable with the square on {CF}, therefore the rectangle {AE} by {EB} is also commensurable with the rectangle {CF} by {FD}. [!just V.16, X.11]
 
-Therefore, if the rectangle *AE* by *EB* is rational, then the rectangle *CF* by *FD* is also rational, and if the rectangle *AE* by *EB* is medial, the rectangle *CF* by *FD* is also medial. [!just X.Def.I.4; X.23.Cor]
+Therefore, if the rectangle {AE} by {EB} is rational, then the rectangle {CF} by {FD} is also rational, and if the rectangle {AE} by {EB} is medial, the rectangle {CF} by {FD} is also medial. [!just X.Def.I.4; X.23.Cor]
 
-Therefore *CD* is an apotome of a medial straight line and the same in order with *AB*. [!just X.74, X.75]
+Therefore {CD} is an apotome of a medial straight line and the same in order with {AB}. [!just X.74, X.75]
 
 Therefore, *a straight line commensurable with an apotome of a medial straight line is an apotome of a medial straight line and the same in order.*
 
