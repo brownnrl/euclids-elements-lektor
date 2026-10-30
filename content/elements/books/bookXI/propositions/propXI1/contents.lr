@@ -15,12 +15,28 @@ statement: A part of a straight line cannot be in the plane of reference and a p
 ----
 proof:
 
-For, if possible, let a part *AB* of the straight line *ABC* be in the plane of reference, and a part *BC* be in a plane more elevated.
+For, if possible, let a part {AB} of the straight line {ABC} be in the plane of reference, and a part {BC} be in a plane more elevated.
 
 <figure class="diagram rdiagram">
 <canvas id="canvas_0" width="300" height="230" tabindex="0"></canvas>
 <noscript><img alt="XI.1 diagram" src="propXI1.gif"/></noscript>
 <script type="text/javascript">
+    // A reductio in a perspective figure: the plane of reference is the
+    // grey parallelogram, AB lies in it, and BC rises out of it. Joyce's
+    // element named BD is the elevated line from B to C; the prose BD (the
+    // continuation of AB in the plane) is the far part of his AD. So the
+    // added names avoid his: BC and BDh are transparent twins for the prose,
+    // ABs and BDs solid twins, hidden at rest, that stand in for AD until
+    // the proof has produced it, so that BD strokes from B out to D.
+    // ABC is a transparent path A, B, C (the bent "straight line ABC"),
+    // planeh a faceless twin of the plane (the filled plane would cover the
+    // lines when raised by a highlight), circB the transitory circle about
+    // B with radius AB. Everything added leaves the resting figure as it
+    // was.
+    var GIVEN = ["plane","A","B","C","ABs","BD","AB","BC","ABC"];
+    var PROD  = GIVEN.concat(["D","BDs","BDh"]);
+    var BOTH  = PROD.concat(["AD"]);
+    var CIRC  = BOTH.concat(["circB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -38,13 +54,68 @@ For, if possible, let a part *AB* of the straight line *ABC* be in the plane of 
             "AD;line;connect;A,D",
             "Z;point;free;150,100000;0;0",
             "C;point;lineSlider;D,Z,230,80",
-            "BD;line;connect;B,C"
+            "BD;line;connect;B,C",
+            // Added: hover and slide targets, and the stroke twins.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "BDh;line;connect;B,D;0;0;0",
+            "ABC;line;path;A,B,C;0;0;0",
+            "planeh;polygon;parallelogram;P3,P1,P2;0;0;0;0",
+            "circB;circle;radius;B,A;0;0;0;0",
+            "ABs;line;connect;A,B",
+            "BDs;line;connect;B,D"
         ],
+        // Draggables (checked against the bundle): P1, P2, P3 and Z free; A,
+        // B, D, C lineSliders. P1-P3 are the plane's corners and stand
+        // throughout; D arrives with "Let it be BD", so it is deferred.
+        deferDraggables: ["D"],
+        initiallyHidden: ["ABs","BDs"],
+        aliases: { "BA": "AB", "CB": "BC", "DB": "BDh", "CBA": "ABC" },
+        slides: [
+            { text: "A part of a straight line cannot be in the {plane of reference|planeh} and a part in plane more elevated.",
+              visible: GIVEN,
+              highlighted: ["ABC"],
+              justifications: [{ ref: "XI.1" }] },
+            { text: "For, if possible, let a part {AB} of the straight line {ABC} be in the {plane of reference|planeh},",
+              visible: GIVEN,
+              highlighted: ["AB","planeh"] },
+            { text: "and a part {BC} be in a plane more elevated.",
+              visible: GIVEN,
+              highlighted: ["BC"] },
+            { text: "Then there is in the {plane of reference|planeh} some straight line continuous with {AB} in a straight line.",
+              visible: GIVEN,
+              highlighted: ["planeh","AB"] },
+            { text: "Let it be {BD|BDh}.",
+              visible: PROD,
+              highlighted: ["BDh"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BDs", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "D",   name: geomlib.A.Point.appear } ] } },
+            { text: "Therefore {AB} is a common segment of the two straight lines {ABC} and {ABD|AD},",
+              visible: BOTH,
+              highlighted: ["AB","ABC","AD"] },
+            { text: "which is impossible, since, if we describe a circle with center {B} and radius {AB},",
+              visible: CIRC,
+              highlighted: ["B","AB"],
+              transition: { animations: [
+                  { elem: "circB", name: geomlib.A.Circle.compass } ] } },
+            { text: "then the diameters cut off unequal circumferences of the circle.",
+              visible: CIRC,
+              highlighted: ["ABC","AD","circB"] },
+            { text: "Therefore, a part of a straight line cannot be in the {plane of reference|planeh} and a part in plane more elevated.",
+              visible: BOTH,
+              highlighted: ["ABC","planeh"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.1") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-Then there is in the plane of reference some straight line continuous with *AB* in a straight line. Let it be *BD.* Therefore *AB* is a common segment of the two straight lines *ABC* and *ABD,* which is impossible, since, if we describe a circle with center *B* and radius *AB,* then the diameters cut off unequal circumferences of the circle.
+Then there is in the plane of reference some straight line continuous with {AB} in a straight line. Let it be {BD|BDh}. Therefore {AB} is a common segment of the two straight lines {ABC} and {ABD|AD}, which is impossible, since, if we describe a circle with center {B} and radius {AB}, then the diameters cut off unequal circumferences of the circle.
 
 Therefore, *a part of a straight line cannot be in the plane of reference and a part in plane more elevated.*
 
@@ -55,7 +126,7 @@ guide:
 
 Not only is the proof of this proposition unclear, so is the statement of it. The meaning of the "plane of reference" and the role it is to play in solid geometry are unclear. Is the intent of the statement that if part of a line lies in a plane, then all of it does? At least that would be a meaningful statement.
 
-The proof of this proposition is unclear for more than one reason. Before a circle with center *B* and radius *AB* can be described, a plane has to be specified in which to describe the circle. In space there are infinitely many circles that have the same center *B,* the same radius *AB,* and even contain the point *A.* Indeed, this possibility of many circles with same diameter was used to define a sphere in definition @XI.Def.14.  The last statement about unequal circumferences is incomprehensible.
+The proof of this proposition is unclear for more than one reason. Before a circle with center {B} and radius {AB} can be described, a plane has to be specified in which to describe the circle. In space there are infinitely many circles that have the same center {B}, the same radius {AB}, and even contain the point {A}. Indeed, this possibility of many circles with same diameter was used to define a sphere in definition @XI.Def.14.  The last statement about unequal circumferences is incomprehensible.
 
 The problem is that there are no postulates for solid geometry. The [postulates](/elements/books/bookI/postulates/) in Book I apparently refer to an ambient plane. Certainly @I.Post.3, "to describe a circle with any center and radius," and @I.Post.5 (which refers to interior angles when one line crosses two others) do. Without any postulates for nonplanar geometry it is impossible for solid geometry to get off the ground.
 

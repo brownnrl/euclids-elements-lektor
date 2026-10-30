@@ -15,14 +15,31 @@ statement: If two straight lines cut one another, then they lie in one plane; an
 ----
 proof:
 
-For let the two straight lines *AB* and *CD* cut one another at the point *E.*
+For let the two straight lines {AB} and {CD} cut one another at the point {E}.
 
-I say that *AB* and *CD* lie in one plane, and that every triangle lies in one plane.
+I say that {AB} and {CD} lie in one plane, and that every triangle lies in one plane.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="300" tabindex="0"></canvas>
 <noscript><img alt="XI.2 diagram" src="propXI2.gif"/></noscript>
 <script type="text/javascript">
+    // Two lines AB and CD crossing at E, the triangle ECB cut by FG, FH
+    // and GK. Joyce draws AB and CD as two sides of the crossed
+    // quadrilateral ABCD, whose other sides are CB and DA. The proof never
+    // names DA, so the walk draws AB, CD and CB with solid twins (hidden at
+    // rest) and brings ABCD itself on with the conclusion.
+    //
+    // Added transparent targets for the prose: EC, EB, the triangles ECB,
+    // FHC, GBK and the quadrilateral FCBG (all explicit ;0 faces), and the
+    // twins AB, CD, CB, which light at rest where the solid twins are
+    // hidden. The resting figure is unchanged.
+    var GIVEN = ["A","B","C","D","E","ABs","CDs","AB","CD"];
+    var PTS   = GIVEN.concat(["F","G","EC","EB"]);
+    var JOIN  = PTS.concat(["CBs","CB","FG","H","K","FH","GK"]);
+    var TRI   = JOIN.concat(["ECB"]);
+    var PARTS = TRI.concat(["FHC","GBK"]);
+    var QUAD  = TRI.concat(["FCBG"]);
+    var DONE  = JOIN.concat(["ABCD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -40,25 +57,127 @@ I say that *AB* and *CD* lie in one plane, and that every triangle lies in one p
             "K;point;lineSlider;C,B,140,200",
             "FG;line;connect;F,G",
             "FH;line;connect;F,H",
-            "GK;line;connect;G,K"
+            "GK;line;connect;G,K",
+            // Added: hover and slide targets, and the stroke twins.
+            "AB;line;connect;A,B;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "EC;line;connect;E,C;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "ECB;polygon;triangle;E,C,B;0;0;0;0",
+            "FHC;polygon;triangle;F,H,C;0;0;0;0",
+            "GBK;polygon;triangle;G,B,K;0;0;0;0",
+            "FCBG;polygon;quadrilateral;F,C,B,G;0;0;0;0",
+            "ABs;line;connect;A,B",
+            "CDs;line;connect;C,D",
+            "CBs;line;connect;C,B"
         ],
+        // Draggables (checked against the bundle): A, B, C, D free; F, G, H,
+        // K lineSliders. A-D are the given lines. F and G are taken "at
+        // random", H and K arrive with FH and GK, so all four are deferred.
+        // E (intersection) is derived and listed per slide.
+        deferDraggables: ["F","G","H","K"],
+        initiallyHidden: ["ABs","CDs","CBs"],
+        aliases: { "BA": "AB", "DC": "CD", "BC": "CB", "CE": "EC", "BE": "EB",
+                   "GF": "FG", "HF": "FH", "KG": "GK" },
+        slides: [
+            { text: "If two straight lines cut one another, then they lie in one plane; and every triangle lies in one plane.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"],
+              justifications: [{ ref: "XI.2" }] },
+            { text: "For let the two straight lines {AB} and {CD} cut one another at the point {E}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD","E"] },
+            { text: "I say that {AB} and {CD} lie in one plane, and that every triangle lies in one plane.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "Take the points {F} and {G} at random on {EC} and {EB},",
+              visible: PTS,
+              highlighted: ["EC","EB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "F", name: geomlib.A.Point.appear },
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "join {CB} and {FG}, and draw {FH} and {GK} across.",
+              visible: JOIN,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CBs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FG",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",   name: geomlib.A.Point.appear },
+                  { elem: "FH",  name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",   name: geomlib.A.Point.appear },
+                  { elem: "GK",  name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say first that the triangle {ECB} lies in one plane.",
+              visible: TRI,
+              highlighted: ["ECB"] },
+            { text: "For, if part of the triangle {ECB}, either {FHC} or {GBK}, is in the plane of reference,",
+              visible: PARTS,
+              highlighted: ["FHC","GBK"] },
+            { text: "and the rest in another,",
+              visible: PARTS,
+              highlighted: ["ECB"] },
+            { text: "then a part also of one of the straight lines {EC} or {EB} is in the plane of reference,",
+              visible: PARTS,
+              highlighted: ["EC","EB"] },
+            { text: "and a part in another.",
+              visible: PARTS,
+              highlighted: ["EC","EB"] },
+            { text: "But, if the part {FCBG} of the triangle {ECB} is in the plane of reference, and the rest in another,",
+              visible: QUAD,
+              highlighted: ["FCBG"] },
+            { text: "then a part also of both the straight lines {EC} and {EB} is in the plane of reference",
+              visible: QUAD,
+              highlighted: ["EC","EB"] },
+            { text: "and a part in another, which was proved absurd.",
+              visible: QUAD,
+              highlighted: ["EC","EB"],
+              justifications: [{ claim: "a straight line is not partly in one plane, partly in another", ref: "XI.1" }] },
+            { text: "Therefore the triangle {ECB} lies in one plane.",
+              visible: TRI,
+              highlighted: ["ECB"] },
+            { text: "But, in whatever plane the triangle {ECB} lies, each of the straight lines {EC} and {EB} also lies,",
+              visible: TRI,
+              highlighted: ["ECB","EC","EB"],
+              justifications: [{ ref: "XI.1" }] },
+            { text: "and in whatever plane each of the straight lines {EC} and {EB} lies, {AB} and {CD} also lie.",
+              visible: TRI,
+              highlighted: ["EC","EB","AB","CD"] },
+            { text: "Therefore the straight lines {AB} and {CD} lie in one plane; and every triangle lies in one plane.",
+              visible: DONE,
+              highlighted: ["AB","CD"],
+              transition: { animations: [
+                  { elem: "ABCD", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Therefore, if two straight lines cut one another, then they lie in one plane; and every triangle lies in one plane.",
+              visible: DONE,
+              highlighted: [],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.2") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "XI.1": "/elements/books/bookXI/propositions/propXI1/"
     });
 </script>
 </figure>
 
-Take the points *F* and *G* at random on *EC* and *EB,* join *CB* and *FG,* and draw *FH* and *GK* across.
+Take the points {F} and {G} at random on {EC} and {EB}, join {CB} and {FG}, and draw {FH} and {GK} across.
 
-I say first that the triangle *ECB* lies in one plane.
+I say first that the triangle {ECB} lies in one plane.
 
-For, if part of the triangle *ECB,* either *FHC* or *GBK,* is in the plane of reference, and the rest in another, then a part also of one of the straight lines *EC* or *EB* is in the plane of reference, and a part in another.
+For, if part of the triangle {ECB}, either {FHC} or {GBK}, is in the plane of reference, and the rest in another, then a part also of one of the straight lines {EC} or {EB} is in the plane of reference, and a part in another.
 
-[!just XI.1] But, if the part *FCBG* of the triangle *ECB* is in the plane of reference, and the rest in another, then a part also of both the straight lines *EC* and *EB* is in the plane of reference and a part in another, which was proved absurd.
+[!just XI.1] But, if the part {FCBG} of the triangle {ECB} is in the plane of reference, and the rest in another, then a part also of both the straight lines {EC} and {EB} is in the plane of reference and a part in another, which was proved absurd.
 
-Therefore the triangle *ECB* lies in one plane.
+Therefore the triangle {ECB} lies in one plane.
 
-[!just XI.1] But, in whatever plane the triangle *ECB* lies, each of the straight lines *EC* and *EB* also lies, and in whatever plane each of the straight lines *EC* and *EB* lies, *AB* and *CD* also lie.
+[!just XI.1] But, in whatever plane the triangle {ECB} lies, each of the straight lines {EC} and {EB} also lies, and in whatever plane each of the straight lines {EC} and {EB} lies, {AB} and {CD} also lie.
 
-Therefore the straight lines *AB* and *CD* lie in one plane; and every triangle lies in one plane.
+Therefore the straight lines {AB} and {CD} lie in one plane; and every triangle lies in one plane.
 
 Therefore, *if two straight lines cut one another, then they lie in one plane; and every triangle lies in one plane.*
 
@@ -66,7 +185,7 @@ Therefore, *if two straight lines cut one another, then they lie in one plane; a
 ----
 guide:
 
-The goal of the proof in this proposition is to produce a plane for the two lines *AB* and *CD* to lie in. Yet the proof fails to produce any plane at all. Near the beginning is the phrase "the plane of reference" occurs, but there is no reference as no planes have been mentioned. As the two lines *AB* and *CD* could be placed anywhere in space, any previously conceived plane would be irrelevant to them.
+The goal of the proof in this proposition is to produce a plane for the two lines {AB} and {CD} to lie in. Yet the proof fails to produce any plane at all. Near the beginning is the phrase "the plane of reference" occurs, but there is no reference as no planes have been mentioned. As the two lines {AB} and {CD} could be placed anywhere in space, any previously conceived plane would be irrelevant to them.
 
 Postulates of some sort are needed to justify the existence of planes. One could state that three noncollinear points determine a plane. Another might be that there are four noncoplanar points.
 
