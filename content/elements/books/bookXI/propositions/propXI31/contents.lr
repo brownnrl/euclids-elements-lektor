@@ -15,16 +15,53 @@ statement: Parallelepipedal solids which are on equal bases and of the same heig
 ----
 proof:
 
-Let the parallelepipedal solids *AE* and *CF* of the same height be on equal bases *AB* and *CD.*
+Let the parallelepipedal solids {AE|sAE} and {CF|sCF} of the same height be on equal bases {AB|baseAB} and {CD|baseCD}.
 
-I say that the solid *AE* equals the solid *CF.*
+I say that the solid {AE|sAE} equals the solid {CF|sCF}.
 
-First, let the sides which stand up, *HK, BE, AG, LM, PQ, DF, CO,* and *RS,* be at right angles to the bases *AB* and *CD.* Produce the straight line *RT* in a straight line with *CR.* Construct the angle *TRU* equal to the angle *ALB* at the point *R* on the straight line *RT.* Make *RT* equal to *A,* and *RU* equal to *LB.* Complete the base *RW* and the solid *XU.* [!just I.23; I.3; I.31]
+First, let the sides which stand up, {HK}, {BE|EB}, {AG}, {LM}, {PQ}, {DF|FD}, {CO}, and {RS}, be at right angles to the bases {AB|baseAB} and {CD|baseCD}. Produce the straight line {RT} in a straight line with {CR}. Construct the angle {TRU|angTRU} equal to the angle {ALB|angALB} at the point {R} on the straight line {RT}. Make {RT} equal to *A,* and {RU} equal to {LB}. Complete the base {RW|pRW} and the solid {XU|sXU}. [!just I.23; I.3; I.31]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="400" height="280" tabindex="0"></canvas>
 <noscript><img alt="XI.31 diagram" src="propXI31a.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure for the first case: the solids AE and CF on equal
+    // bases, the solid XU built on RT and RU beside CF, then DR and WU
+    // produced to Y, aTb drawn through T, and the solids YX and RI.
+    //
+    // Added, all transparent unless noted: a faceless hexagon on each
+    // solid's outline (sAE, sCF, sXU, sXY, sRI, sCI, sYI) to carry the
+    // solid's highlight, since a polyhedron draws none; faceless
+    // quadrilaterals for the bases and parallelograms the proof names
+    // (baseAB, which is also Joyce's HL; baseCD; pRW, also RUWT; pRX, pAM,
+    // pLE, pSU, pDT, pYT, pYc, pUV; pRF, the cutting plane), since a filled
+    // face would be raised over the figure (#140); the standing edges and
+    // lines the proof names (HK, AG, LM, PQ, CO, RS, CR, AL, DY, Tb, Sd, Xc,
+    // XV, YW, eV). RU, UW and ab (Joyce's aTb) are solid slide twins over
+    // edges of Joyce's faces, hidden at rest (initiallyHidden), so they can
+    // be drawn as the construction reaches them. The angles TRU, ALB are
+    // markers; ALM, CRS, TRS are right angles. All hidden at rest.
+    //
+    // Draggables (checked against the bundle): A, M, K, C, P, D, all on the
+    // given solids. Every other point is derived and listed per slide.
+    var AE  = ["G","A","M","K","L","H","B","E","AGKH","ALMG","GKEM","EB","HB","LB"];
+    var CF  = ["C","P","D","R","F","Q","O","S","QOCP","QOSF","COSR","FD","PD","RD"];
+    var TGT = ["sAE","sCF","baseAB","baseCD","HK","AG","LM","PQ","CO","RS","CR","AL"];
+    var GIVEN = AE.concat(CF, TGT);
+    var RTd = GIVEN.concat(["T","RT"]);
+    var RUd = RTd.concat(["U","RU","angTRU","angALB"]);
+    var RWd = RTd.concat(["U","RU","W","UW","WT","pRW"]);
+    var XUd = RWd.concat(["X","V","d","UdSR","UWVd","dSXV","XT","sXU",
+                          "pRX","pAM","pLE","pSU"]);
+    var ANG = XUd.concat(["angTRU","angALB"]);
+    var RTA = XUd.concat(["rtALM","rtTRS"]);
+    var Yd  = XUd.concat(["Y","RY","UY","DY"]);
+    var abd = Yd.concat(["a","b","ab"]);
+    var Dad = abd.concat(["Da"]);
+    var SOL = Dad.concat(["I","c","e","abcI","FI","Se","eY","cV","bW","de",
+                          "sXY","sRI","sCI","sYI","pYc","pUV","pDT","pYT","pRF",
+                          "Tb","Sd","Xc","XV","YW","eV"]);
+    var HYP = GIVEN.concat(["rtALM","rtCRS"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -95,40 +132,311 @@ First, let the sides which stand up, *HK, BE, AG, LM, PQ, DF, CO,* and *RS,* be 
             "cV;line;connect;c,V",
             "bW;line;connect;b,W",
             "de;line;connect;d,e",
-            "UY;line;connect;U,Y"
+            "UY;line;connect;U,Y",
+            // Transparent highlight targets: the solids' outlines.
+            "sAE;polygon;hexagon;A,L,M,E,K,H;0;0;0;0",
+            "sCF;polygon;hexagon;C,R,S,F,Q,P;0;0;0;0",
+            "sXU;polygon;hexagon;R,U,W,V,X,S;0;0;0;0",
+            "sXY;polygon;hexagon;R,Y,b,c,X,S;0;0;0;0",
+            "sRI;polygon;hexagon;D,R,T,X,I,F;0;0;0;0",
+            "sCI;polygon;hexagon;C,T,X,I,Q,P;0;0;0;0",
+            "sYI;polygon;hexagon;Y,b,c,I,F,D;0;0;0;0",
+            // Bases, faces and planes the proof names.
+            "baseAB;polygon;quadrilateral;A,L,B,H;0;0;0;0",
+            "baseCD;polygon;quadrilateral;C,P,D,R;0;0;0;0",
+            "pRW;polygon;quadrilateral;R,T,W,U;0;0;0;0",
+            "pRX;polygon;quadrilateral;R,T,X,S;0;0;0;0",
+            "pAM;polygon;quadrilateral;A,L,M,G;0;0;0;0",
+            "pLE;polygon;quadrilateral;L,B,E,M;0;0;0;0",
+            "pSU;polygon;quadrilateral;S,R,U,d;0;0;0;0",
+            "pDT;polygon;quadrilateral;D,R,T,a;0;0;0;0",
+            "pYT;polygon;quadrilateral;Y,R,T,b;0;0;0;0",
+            "pYc;polygon;quadrilateral;Y,b,c,e;0;0;0;0",
+            "pUV;polygon;quadrilateral;U,W,V,d;0;0;0;0",
+            "pRF;polygon;quadrilateral;R,D,F,S;0;0;0;0",
+            // Edges and lines the proof names.
+            "HK;line;connect;H,K;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "LM;line;connect;L,M;0;0;0",
+            "PQ;line;connect;P,Q;0;0;0",
+            "CO;line;connect;C,O;0;0;0",
+            "RS;line;connect;R,S;0;0;0",
+            "CR;line;connect;C,R;0;0;0",
+            "AL;line;connect;A,L;0;0;0",
+            "DY;line;connect;D,Y;0;0;0",
+            "Tb;line;connect;T,b;0;0;0",
+            "Sd;line;connect;S,d;0;0;0",
+            "Xc;line;connect;X,c;0;0;0",
+            "XV;line;connect;X,V;0;0;0",
+            "YW;line;connect;Y,W;0;0;0",
+            "eV;line;connect;e,V;0;0;0",
+            // Slide twins, hidden at rest (see above).
+            "RU;line;connect;R,U",
+            "UW;line;connect;U,W",
+            "ab;line;connect;a,b",
+            "angTRU;sector;angleMarker;R,T,U",
+            "angALB;sector;angleMarker;L,A,B",
+            "rtALM;sector;angleMarkerRight;L,A,M,12;0;0;red;red",
+            "rtCRS;sector;angleMarkerRight;R,C,S,12;0;0;red;red",
+            "rtTRS;sector;angleMarkerRight;R,T,S,12;0;0;red;red"
         ],
+        initiallyHidden: ["RU","UW","ab"],
+        aliases: { "TR": "RT", "BE": "EB", "DF": "FD", "DR": "RD", "WU": "UW",
+                   "TW": "WT", "HL": "baseAB", "RUWT": "pRW", "TD": "pDT" },
+        slides: [
+            { text: "“Parallelepipedal solids which are on equal bases and of the same height equal one another.”",
+              visible: GIVEN,
+              highlighted: ["sAE","sCF"],
+              justifications: [{ ref: "XI.31" }] },
+            { text: "Let the parallelepipedal solids {AE|sAE} and {CF|sCF} of the same height be on equal bases {AB|baseAB} and {CD|baseCD}.",
+              visible: GIVEN,
+              highlighted: ["sAE","sCF","baseAB","baseCD"] },
+            { text: "I say that the solid {AE|sAE} equals the solid {CF|sCF}.",
+              visible: GIVEN,
+              highlighted: ["sAE","sCF"] },
+            { text: "First, let the sides which stand up, {HK}, {BE|EB}, {AG}, {LM}, {PQ}, {DF|FD}, {CO}, and {RS},",
+              visible: GIVEN,
+              highlighted: ["HK","EB","AG","LM","PQ","FD","CO","RS"] },
+            { text: "be at right angles to the bases {AB|baseAB} and {CD|baseCD}.",
+              visible: HYP,
+              highlighted: ["baseAB","baseCD","LM","RS"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtALM", name: geomlib.A.Sector.sweep },
+                  { elem: "rtCRS", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Produce the straight line {RT} in a straight line with {CR}.",
+              visible: RTd,
+              highlighted: ["RT","CR"],
+              transition: { animations: [
+                  { elem: "RT", name: geomlib.A.Line.straightEdgeExtend } ] } },
+            { text: "Construct the angle {TRU|angTRU} equal to the angle {ALB|angALB} at the point {R} on the straight line {RT}.",
+              visible: RUd,
+              highlighted: ["angTRU","angALB"],
+              transition: { animations: [
+                  { elem: "angALB", name: geomlib.A.Sector.sweep },
+                  { elem: "RU", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angTRU", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle TRU = angle ALB", ref: "I.23" }] },
+            { text: "Make {RT} equal to A, and {RU} equal to {LB}.",
+              visible: RUd,
+              highlighted: ["RT","RU","LB"],
+              justifications: [{ claim: "RT, RU cut off", ref: "I.3" }] },
+            { text: "Complete the base {RW|pRW}",
+              visible: RWd,
+              highlighted: ["pRW"],
+              transition: { animations: [
+                  { elem: "UW", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "WT", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "parallels through T and U", ref: "I.31" }] },
+            { text: "and the solid {XU|sXU}.",
+              visible: XUd,
+              highlighted: ["sXU"],
+              transition: { animations: [
+                  { elem: "UdSR", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "UWVd", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "dSXV", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "XT", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since the two sides {TR|RT} and {RU} equal the two sides {AL} and {LB}, and they contain equal angles,",
+              visible: ANG,
+              highlighted: ["RT","RU","AL","LB","angTRU","angALB"] },
+            { text: "therefore the parallelogram {RW|pRW} equals and is similar to the parallelogram {HL|baseAB}.",
+              visible: XUd,
+              highlighted: ["pRW","baseAB"] },
+            { text: "Since again {AL} equals {RT}, and {LM} equals {RS}, and they contain right angles,",
+              visible: RTA,
+              highlighted: ["AL","RT","LM","RS"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtALM", name: geomlib.A.Sector.sweep },
+                  { elem: "rtTRS", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the parallelogram {RX|pRX} equals and is similar to the parallelogram {AM|pAM}.",
+              visible: RTA,
+              highlighted: ["pRX","pAM"] },
+            { text: "For the same reason {LE|pLE} also equals and is similar to {SU|pSU}.",
+              visible: XUd,
+              highlighted: ["pLE","pSU"] },
+            { text: "Therefore three parallelograms of the solid {AE|sAE} equal and are similar to three parallelograms of the solid {XU|sXU}.",
+              visible: XUd,
+              highlighted: ["baseAB","pAM","pLE","pRW","pRX","pSU"] },
+            { text: "But the former three equal and are similar to the three opposite,",
+              visible: XUd,
+              highlighted: ["sAE"],
+              justifications: [{ claim: "opposite planes equal", ref: "XI.24" }] },
+            { text: "and the latter three equal and are similar the three opposite,",
+              visible: XUd,
+              highlighted: ["sXU"] },
+            { text: "therefore the whole parallelepipedal solid {AE|sAE} equals the whole parallelepipedal solid {XU|sXU}.",
+              visible: XUd,
+              highlighted: ["sAE","sXU"],
+              justifications: [{ claim: "solid AE = solid XU", ref: "XI.Def.10" }] },
+            { text: "Draw {DR|RD} and {WU|UW} through to meet one another at {Y},",
+              visible: Yd,
+              highlighted: ["RD","UW","Y"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "RY", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "UY", name: geomlib.A.Line.straightEdgeExtend } ] } },
+            { text: "draw {aTb|ab} through {T} parallel to {DY},",
+              visible: abd,
+              highlighted: ["ab","DY"],
+              transition: { animations: [
+                  { elem: "ab", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "aTb parallel to DY", ref: "I.31" }] },
+            { text: "produce {PD} to {a},",
+              visible: Dad,
+              highlighted: ["PD","Da"],
+              transition: { animations: [
+                  { elem: "Da", name: geomlib.A.Line.straightEdgeExtend } ] } },
+            { text: "and complete the solids {YX|sXY} and {RI|sRI}.",
+              visible: SOL,
+              highlighted: ["sXY","sRI"],
+              transition: { animations: [
+                  { elem: "eY", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "Se", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "de", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "bW", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "cV", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "abcI", name: geomlib.A.Polygon.outline },
+                  { elem: "FI", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then the solid {XY|sXY}, of which the parallelogram {RX|pRX} is the base and {Yc|pYc} its opposite,",
+              visible: SOL,
+              highlighted: ["sXY","pRX","pYc"] },
+            { text: "equals the solid {XU|sXU}, of which the parallelogram {RX|pRX} is the base and {UV|pUV} its opposite,",
+              visible: SOL,
+              highlighted: ["sXU","pRX","pUV"] },
+            { text: "for they are on the same base {RX|pRX} and of the same height,",
+              visible: SOL,
+              highlighted: ["pRX"] },
+            { text: "and the ends of their edges which stand up, namely {RY}, {RU}, {Tb}, {TW|WT}, {Se}, {Sd}, {Xc}, and {XV},",
+              visible: SOL,
+              highlighted: ["RY","RU","Tb","WT","Se","Sd","Xc","XV"] },
+            { text: "are on the same straight lines {YW} and {eV}.",
+              visible: SOL,
+              highlighted: ["YW","eV"],
+              justifications: [{ claim: "solid XY = solid XU", ref: "XI.29" }] },
+            { text: "But the solid {XU|sXU} equals {AE|sAE}, therefore the solid {XY|sXY} also equals the solid {AE|sAE}.",
+              visible: SOL,
+              highlighted: ["sXU","sAE","sXY"] },
+            { text: "And, since the parallelogram {RUWT|pRW} equals the parallelogram {YT|pYT},",
+              visible: SOL,
+              highlighted: ["pRW","pYT"] },
+            { text: "for they are on the same base {RT} and in the same parallels {RT} and {YW},",
+              visible: SOL,
+              highlighted: ["RT","YW"],
+              justifications: [{ claim: "RUWT = YT", ref: "I.35" }] },
+            { text: "and {RUWT|pRW} equals {CD|baseCD}, since it also equals {AB|baseAB},",
+              visible: SOL,
+              highlighted: ["pRW","baseCD","baseAB"] },
+            { text: "therefore the parallelogram {YT|pYT} also equals {CD|baseCD}.",
+              visible: SOL,
+              highlighted: ["pYT","baseCD"] },
+            { text: "But {DT|pDT} is another parallelogram, therefore the base {CD|baseCD} is to {DT|pDT} as {YT|pYT} is to {DT|pDT}.",
+              visible: SOL,
+              highlighted: ["pDT","baseCD","pYT"],
+              justifications: [{ claim: "CD : DT = YT : DT", ref: "V.7" }] },
+            { text: "And, since the parallelepipedal solid {CI|sCI} is cut by the plane {RF|pRF} which is parallel to opposite planes,",
+              visible: SOL,
+              highlighted: ["sCI","pRF"] },
+            { text: "therefore the base {CD|baseCD} is to the base {DT|pDT} as the solid {CF|sCF} is to the solid {RI|sRI}.",
+              visible: SOL,
+              highlighted: ["baseCD","pDT","sCF","sRI"],
+              justifications: [{ claim: "CD : DT = solid CF : solid RI", ref: "XI.25" }] },
+            { text: "For the same reason, since the parallelepipedal solid {YI|sYI} is cut by the plane {RX|pRX} which is parallel to opposite planes,",
+              visible: SOL,
+              highlighted: ["sYI","pRX"] },
+            { text: "therefore the base {YT|pYT} is to the base {TD|pDT} as the solid {YX|sXY} is to the solid {RI|sRI}.",
+              visible: SOL,
+              highlighted: ["pYT","pDT","sXY","sRI"],
+              justifications: [{ claim: "YT : TD = solid YX : solid RI", ref: "XI.25" }] },
+            { text: "But the base {CD|baseCD} is to {DT|pDT} as {YT|pYT} is to {DT|pDT},",
+              visible: SOL,
+              highlighted: ["baseCD","pDT","pYT"] },
+            { text: "therefore the solid {CF|sCF} is to the solid {RI|sRI} as the solid {YX|sXY} is to {RI|sRI}.",
+              visible: SOL,
+              highlighted: ["sCF","sRI","sXY"],
+              justifications: [{ claim: "CF : RI = YX : RI", ref: "V.11" }] },
+            { text: "Therefore each of the solids {CF|sCF} and {YX|sXY} has to {RI|sRI} the same ratio.",
+              visible: SOL,
+              highlighted: ["sCF","sXY","sRI"] },
+            { text: "Therefore the solid {CF|sCF} equals the solid {YX|sXY}.",
+              visible: SOL,
+              highlighted: ["sCF","sXY"],
+              justifications: [{ claim: "solid CF = solid YX", ref: "V.9" }] },
+            { text: "But {YX|sXY} was proved equal to {AE|sAE}, therefore {AE|sAE} also equals {CF|sCF}.",
+              visible: SOL,
+              highlighted: ["sAE","sCF"] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.31") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshows' resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "I.23":      "/elements/books/bookI/propositions/propI23/",
+        "I.31":      "/elements/books/bookI/propositions/propI31/",
+        "I.35":      "/elements/books/bookI/propositions/propI35/",
+        "V.7":       "/elements/books/bookV/propositions/propV7/",
+        "V.9":       "/elements/books/bookV/propositions/propV9/",
+        "V.11":      "/elements/books/bookV/propositions/propV11/",
+        "XI.11":     "/elements/books/bookXI/propositions/propXI11/",
+        "XI.24":     "/elements/books/bookXI/propositions/propXI24/",
+        "XI.25":     "/elements/books/bookXI/propositions/propXI25/",
+        "XI.29":     "/elements/books/bookXI/propositions/propXI29/",
+        "XI.30":     "/elements/books/bookXI/propositions/propXI30/",
+        "XI.Def.10": "/elements/books/bookXI/definitions/defXI10/"
     });
 </script>
 </figure>
 
-Now, since the two sides *TR* and *RU* equal the two sides *AL* and *LB,* and they contain equal angles, therefore the parallelogram *RW* equals and is similar to the parallelogram *HL.* Since again *AL* equals *RT,* and *LM* equals *RS,* and they contain right angles, therefore the parallelogram *RX* equals and is similar to the parallelogram *AM.* For the same reason *LE* also equals and is similar to *SU.*
+Now, since the two sides {TR|RT} and {RU} equal the two sides {AL} and {LB}, and they contain equal angles, therefore the parallelogram {RW|pRW} equals and is similar to the parallelogram {HL|baseAB}. Since again {AL} equals {RT}, and {LM} equals {RS}, and they contain right angles, therefore the parallelogram {RX|pRX} equals and is similar to the parallelogram {AM|pAM}. For the same reason {LE|pLE} also equals and is similar to {SU|pSU}.
 
-Therefore three parallelograms of the solid *AE* equal and are similar to three parallelograms of the solid *XU.* But the former three equal and are similar to the three opposite, and the latter three equal and are similar the three opposite, therefore the whole parallelepipedal solid *AE* equals the whole parallelepipedal solid *XU.* [!just XI.24; XI.Def.10]
+Therefore three parallelograms of the solid {AE|sAE} equal and are similar to three parallelograms of the solid {XU|sXU}. But the former three equal and are similar to the three opposite, and the latter three equal and are similar the three opposite, therefore the whole parallelepipedal solid {AE|sAE} equals the whole parallelepipedal solid {XU|sXU}. [!just XI.24; XI.Def.10]
 
-Draw *DR* and *WU* through to meet one another at *Y,* draw *aTb* through *T* parallel to *DY,* produce *PD* to *a,* and complete the solids *YX* and *RI.* [!just I.31]
+Draw {DR|RD} and {WU|UW} through to meet one another at {Y}, draw {aTb|ab} through {T} parallel to {DY}, produce {PD} to {a}, and complete the solids {YX|sXY} and {RI|sRI}. [!just I.31]
 
-Then the solid *XY,* of which the parallelogram *RX* is the base and *Yc* its opposite, equals the solid *XU,* of which the parallelogram *RX* is the base and *UV* its opposite, for they are on the same base *RX* and of the same height, and the ends of their edges which stand up, namely *RY, RU, Tb, TW, Se, Sd, Xc,* and *XV,* are on the same straight lines *YW* and *eV.* But the solid *XU* equals *AE,* therefore the solid *XY* also equals the solid *AE.* [!just XI.29]
+Then the solid {XY|sXY}, of which the parallelogram {RX|pRX} is the base and {Yc|pYc} its opposite, equals the solid {XU|sXU}, of which the parallelogram {RX|pRX} is the base and {UV|pUV} its opposite, for they are on the same base {RX|pRX} and of the same height, and the ends of their edges which stand up, namely {RY}, {RU}, {Tb}, {TW|WT}, {Se}, {Sd}, {Xc}, and {XV}, are on the same straight lines {YW} and {eV}. But the solid {XU|sXU} equals {AE|sAE}, therefore the solid {XY|sXY} also equals the solid {AE|sAE}. [!just XI.29]
 
-And, since the parallelogram *RUWT* equals the parallelogram *YT,* for they are on the same base *RT* and in the same parallels *RT* and *YW,* and *RUWT* equals *CD,* since it also equals *AB,* therefore the parallelogram *YT* also equals *CD.* [!just I.35]
+And, since the parallelogram {RUWT|pRW} equals the parallelogram {YT|pYT}, for they are on the same base {RT} and in the same parallels {RT} and {YW}, and {RUWT|pRW} equals {CD|baseCD}, since it also equals {AB|baseAB}, therefore the parallelogram {YT|pYT} also equals {CD|baseCD}. [!just I.35]
 
-But *DT* is another parallelogram, therefore the base *CD* is to *DT* as *YT* is to *DT.* [!just V.7]
+But {DT|pDT} is another parallelogram, therefore the base {CD|baseCD} is to {DT|pDT} as {YT|pYT} is to {DT|pDT}. [!just V.7]
 
-And, since the parallelepipedal solid *CI* is cut by the plane *RF* which is parallel to opposite planes, therefore the base *CD* is to the base *DT* as the solid *CF* is to the solid *RI.* For the same reason, since the parallelepipedal solid *YI* is cut by the plane *RX* which is parallel to opposite planes, therefore the base *YT* is to the base *TD* as the solid *YX* is to the solid *RI.* [!just XI.25]
+And, since the parallelepipedal solid {CI|sCI} is cut by the plane {RF|pRF} which is parallel to opposite planes, therefore the base {CD|baseCD} is to the base {DT|pDT} as the solid {CF|sCF} is to the solid {RI|sRI}. For the same reason, since the parallelepipedal solid {YI|sYI} is cut by the plane {RX|pRX} which is parallel to opposite planes, therefore the base {YT|pYT} is to the base {TD|pDT} as the solid {YX|sXY} is to the solid {RI|sRI}. [!just XI.25]
 
-But the base *CD* is to *DT* as *YT* is to *DT,* therefore the solid *CF* is to the solid *RI* as the solid *YX* is to *RI.* [!just V.11]
+But the base {CD|baseCD} is to {DT|pDT} as {YT|pYT} is to {DT|pDT}, therefore the solid {CF|sCF} is to the solid {RI|sRI} as the solid {YX|sXY} is to {RI|sRI}. [!just V.11]
 
-Therefore each of the solids *CF* and *YX* has to *RI* the same ratio. Therefore the solid *CF* equals the solid *YX.* But *YX* was proved equal to *AE,* therefore *AE* also equals *CF.* [!just V.9]
+Therefore each of the solids {CF|sCF} and {YX|sXY} has to {RI|sRI} the same ratio. Therefore the solid {CF|sCF} equals the solid {YX|sXY}. But {YX|sXY} was proved equal to {AE|sAE}, therefore {AE|sAE} also equals {CF|sCF}. [!just V.9]
 
 <hr width="50%">
 
-Next, let the sides standing up, *AG, HK, BE, LM, CN, PQ, DF,* and *RS,* not be at right angles to the bases *AB* and *CD.*
+Next, let the sides standing up, {AG:canvas_1}, {HK:canvas_1}, {BE|EB:canvas_1}, {LM:canvas_1}, {CN:canvas_1}, {PQ:canvas_1}, {DF|FD:canvas_1}, and {RS:canvas_1}, not be at right angles to the bases {AB|baseAB:canvas_1} and {CD|baseCD:canvas_1}.
 
-I say again that the solid *AE* equals the solid *CF.*
+I say again that the solid {AE|sAE:canvas_1} equals the solid {CF|sCF:canvas_1}.
 
 <figure class="diagram">
 <canvas id="canvas_1" width="400" height="280" tabindex="0"></canvas>
 <noscript><img alt="XI.31 diagram" src="propXI31b.gif"/></noscript>
 <script type="text/javascript">
+    // The second case: the standing sides oblique. Perpendiculars from the
+    // eight upper corners meet the plane of reference at O, T, U, V, W, X,
+    // Y, I, making the upright solids KV and QI.
+    //
+    // Added, all transparent: faceless hexagons on the solids' outlines
+    // (sAE, sCF, sKV, sQI), faceless quadrilaterals for the bases AB, CD and
+    // for KM, QS (twins of Joyce's filled top faces, which would be raised
+    // over the figure if highlighted, #140), and the standing edges AG, HK,
+    // LM, CN, PQ, RS. The right angles at U and W are markers, hidden at
+    // rest.
+    //
+    // Draggables (checked against the bundle): U, A, M, K, Q, P, C, D. U is
+    // the foot of GU, which the proof draws mid-walk, so it is deferred.
+    var AE2 = ["G","A","M","K","L","H","B","E","AGKH","ALMG","GKEM","EB","HB","LB"];
+    var CF2 = ["Q","P","C","D","R","F","S","N","QNCP","QNSF","CNSR","FD","PD","RD"];
+    var GIVEN2 = AE2.concat(CF2, ["sAE","sCF","baseAB","baseCD",
+                                  "AG","HK","LM","CN","PQ","RS"]);
+    var PERP2 = GIVEN2.concat(["O","T","U","V","W","X","Y","I",
+                               "KO","ET","GU","MV","QW","FX","NY","SI"]);
+    var FEET2 = PERP2.concat(["UOTV","WXIY","rtU","rtW","sKV","sQI","pKM","pQS"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -191,21 +499,103 @@ I say again that the solid *AE* equals the solid *CF.*
             "QW;line;connect;Q,W",
             "NY;line;connect;N,Y",
             "FX;line;connect;F,X",
-            "SI;line;connect;S,I"
+            "SI;line;connect;S,I",
+            // Transparent highlight targets.
+            "sAE;polygon;hexagon;L,A,H,K,E,M;0;0;0;0",
+            "sCF;polygon;hexagon;P,C,R,S,F,Q;0;0;0;0",
+            "sKV;polygon;hexagon;V,U,O,K,E,M;0;0;0;0",
+            "sQI;polygon;hexagon;W,Y,I,S,F,Q;0;0;0;0",
+            "baseAB;polygon;quadrilateral;A,L,B,H;0;0;0;0",
+            "baseCD;polygon;quadrilateral;C,P,D,R;0;0;0;0",
+            "pKM;polygon;quadrilateral;G,K,E,M;0;0;0;0",
+            "pQS;polygon;quadrilateral;Q,N,S,F;0;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "HK;line;connect;H,K;0;0;0",
+            "LM;line;connect;L,M;0;0;0",
+            "CN;line;connect;C,N;0;0;0",
+            "PQ;line;connect;P,Q;0;0;0",
+            "RS;line;connect;R,S;0;0;0",
+            "rtU;sector;angleMarkerRight;U,G,V,12;0;0;red;red",
+            "rtW;sector;angleMarkerRight;W,Q,X,12;0;0;red;red"
         ],
+        deferDraggables: ["U"],
+        aliases: { "BE": "EB", "DF": "FD" },
+        slides: [
+            { text: "Next, let the sides standing up, {AG}, {HK}, {BE|EB}, {LM}, {CN}, {PQ}, {DF|FD}, and {RS},",
+              visible: GIVEN2,
+              highlighted: ["AG","HK","EB","LM","CN","PQ","FD","RS"] },
+            { text: "not be at right angles to the bases {AB|baseAB} and {CD|baseCD}.",
+              visible: GIVEN2,
+              highlighted: ["baseAB","baseCD"] },
+            { text: "I say again that the solid {AE|sAE} equals the solid {CF|sCF}.",
+              visible: GIVEN2,
+              highlighted: ["sAE","sCF"] },
+            { text: "Draw {KO}, {ET}, {GU}, {MV}, {QW}, {FX}, {NY} and {SI} from the points {K}, {E}, {G}, {M}, {Q}, {F}, {N}, and {S}",
+              visible: PERP2,
+              highlighted: ["KO","ET","GU","MV","QW","FX","NY","SI"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "KO", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ET", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GU", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "MV", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "QW", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FX", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "NY", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "SI", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "perpendiculars to a plane", ref: "XI.11" }] },
+            { text: "perpendicular to the plane of reference, and let them meet the plane at the points {O}, {T}, {U}, {V}, {W}, {X}, {Y}, and {I}.",
+              visible: FEET2,
+              highlighted: ["O","T","U","V","W","X","Y","I"],
+              transition: { animations: [
+                  { elem: "UOTV", name: geomlib.A.Polygon.outline },
+                  { elem: "WXIY", name: geomlib.A.Polygon.outline },
+                  { elem: "rtU", name: geomlib.A.Sector.sweep },
+                  { elem: "rtW", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Then the solid {KV|sKV} equals the solid {QI|sQI},",
+              visible: FEET2,
+              highlighted: ["sKV","sQI"],
+              justifications: [{ claim: "solid KV = solid QI", ref: "Above" }] },
+            { text: "for they are on the equal bases {KM|pKM} and {QS|pQS} and of the same height,",
+              visible: FEET2,
+              highlighted: ["pKM","pQS"] },
+            { text: "and their sides which stand up are at right angles to their bases.",
+              visible: FEET2,
+              highlighted: ["KO","ET","GU","MV","QW","FX","NY","SI","rtU","rtW"] },
+            { text: "But the solid {KV|sKV} equals the solid {AE|sAE}, and {QI|sQI} equals {CF|sCF},",
+              visible: FEET2,
+              highlighted: ["sKV","sAE","sQI","sCF"] },
+            { text: "for they are on the same base and of the same height,",
+              visible: FEET2,
+              highlighted: ["pKM","pQS"] },
+            { text: "while the ends of their edges which stand up are not on the same straight lines.",
+              visible: FEET2,
+              highlighted: ["AG","HK","EB","LM","GU","KO","ET","MV"],
+              justifications: [{ claim: "solid KV = solid AE, solid QI = solid CF", ref: "XI.30" }] },
+            { text: "Therefore the solid {AE|sAE} also equals the solid {CF|sCF}.",
+              visible: FEET2,
+              highlighted: ["sAE","sCF"] },
+            { text: "Therefore, parallelepipedal solids which are on equal bases and of the same height equal one another.",
+              visible: FEET2,
+              highlighted: ["sAE","sCF"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.31") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-Draw *KO, ET, GU, MV, QW, FX, NY* and *SI* from the points *K, E, G, M, Q, F, N,* and *S* perpendicular to the plane of reference, and let them meet the plane at the points *O, T, U, V, W, X, Y,* and *I.* [!just XI.11]
+Draw {KO}, {ET}, {GU}, {MV}, {QW}, {FX}, {NY} and {SI} from the points {K}, {E}, {G}, {M}, {Q}, {F}, {N}, and {S} perpendicular to the plane of reference, and let them meet the plane at the points {O}, {T}, {U}, {V}, {W}, {X}, {Y}, and {I}. [!just XI.11]
 
 <div class="just">Above</div>
 
-Then the solid *KV* equals the solid *QI,* for they are on the equal bases *KM* and *QS* and of the same height, and their sides which stand up are at right angles to their bases.
+Then the solid {KV|sKV} equals the solid {QI|sQI}, for they are on the equal bases {KM|pKM} and {QS|pQS} and of the same height, and their sides which stand up are at right angles to their bases.
 
-But the solid *KV* equals the solid *AE,* and *QI* equals *CF,* for they are on the same base and of the same height, while the ends of their edges which stand up are not on the same straight lines. [!just XI.30]
+But the solid {KV|sKV} equals the solid {AE|sAE}, and {QI|sQI} equals {CF|sCF}, for they are on the same base and of the same height, while the ends of their edges which stand up are not on the same straight lines. [!just XI.30]
 
-Therefore the solid *AE* also equals the solid *CF.*
+Therefore the solid {AE|sAE} also equals the solid {CF|sCF}.
 
 Therefore, *parallelepipedal solids which are on equal bases and of the same height equal one another.*
 

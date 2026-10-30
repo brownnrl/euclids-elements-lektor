@@ -15,16 +15,34 @@ statement: Parallelepipedal solids which are of the same height are to one anoth
 ----
 proof:
 
-Let *AB* and *CD* be parallelepipedal solids of the same height.
+Let {AB|sAB} and {CD|sCD} be parallelepipedal solids of the same height.
 
-I say that the parallelepipedal solids *AB* and *CD* are to one another as their bases, that is, that the solid *AB* to the solid *CD* as the base *AE* is to the base *CF*.
+I say that the parallelepipedal solids {AB|sAB} and {CD|sCD} are to one another as their bases, that is, that the solid {AB|sAB} to the solid {CD|sCD} as the base {AE|pAE} is to the base {CF|pCF}.
 
-Apply *FH* equal to *AE* to *FG.* Complete the parallelepipedal solid *GK* with the same height as that of *CD* on *FH* as base. [!just I.45; I.31]
+Apply {FH|FGUH} equal to {AE|pAE} to {FG}. Complete the parallelepipedal solid {GK|sGK} with the same height as that of {CD|sCD} on {FH|FGUH} as base. [!just I.45; I.31]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="440" height="240" tabindex="0"></canvas>
 <noscript><img alt="XI.32 diagram" src="propXI32.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the solids AB and CD of the same height, with FH
+    // applied to FG and the solid GK completed on it beside CD.
+    //
+    // Added, all transparent: faceless hexagons on the solids' outlines
+    // (sAB, sCD, sGK, which is also Joyce's DH, and sCK) to carry the
+    // solid's highlight, since a polyhedron draws none; faceless
+    // quadrilaterals for the bases AE and CF and the cutting plane DG,
+    // since a filled face would be raised over the figure (#140). Joyce's
+    // FGUH is already an outline and carries FH.
+    //
+    // Draggables (checked against the bundle): E, A, M, C, G, F, D, all on
+    // the given solids (M is unlettered). Every other point is derived and
+    // listed per slide.
+    var GIVEN = ["B","E","A","M","N","O","P","Q","AOMN","ANEP","EBMN","BQ","OQ","PQ",
+                 "C","G","F","D","L","R","S","T","CSTG","RSTD","RSCL","FD","FL","FG",
+                 "sAB","sCD","pAE","pCF"];
+    var APP = GIVEN.concat(["H'","FGUH","H","U"]);
+    var GK  = APP.concat(["K","V","DTVK","TGHV","UK","sGK","sCK","pDG"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -73,17 +91,91 @@ Apply *FH* equal to *AE* to *FG.* Complete the parallelepipedal solid *GK* with 
             "V;point;parallelogram;H,G,T;0;0",
             "DTVK;polygon;quadrilateral;D,T,V,K;0;0;black;130,40,100",
             "TGHV;polygon;quadrilateral;T,G,H,V;0;0;black;130,75,90",
-            "UK;line;connect;U,K"
+            "UK;line;connect;U,K",
+            // Transparent highlight targets.
+            "sAB;polygon;hexagon;A,P,E,B,M,O;0;0;0;0",
+            "sCD;polygon;hexagon;C,G,T,D,R,L;0;0;0;0",
+            "sGK;polygon;hexagon;F,G,H,V,K,D;0;0;0;0",
+            "sCK;polygon;hexagon;C,H,V,K,R,L;0;0;0;0",
+            "pAE;polygon;quadrilateral;A,N,E,P;0;0;0;0",
+            "pCF;polygon;quadrilateral;C,G,F,L;0;0;0;0",
+            "pDG;polygon;quadrilateral;D,T,G,F;0;0;0;0"
         ],
+        slides: [
+            { text: "“Parallelepipedal solids which are of the same height are to one another as their bases.”",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD"],
+              justifications: [{ ref: "XI.32" }] },
+            { text: "Let {AB|sAB} and {CD|sCD} be parallelepipedal solids of the same height.",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD"] },
+            { text: "I say that the parallelepipedal solids {AB|sAB} and {CD|sCD} are to one another as their bases,",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD"] },
+            { text: "that is, that the solid {AB|sAB} to the solid {CD|sCD} as the base {AE|pAE} is to the base {CF|pCF}.",
+              visible: GIVEN,
+              highlighted: ["sAB","sCD","pAE","pCF"] },
+            { text: "Apply {FH|FGUH} equal to {AE|pAE} to {FG}.",
+              visible: APP,
+              highlighted: ["FGUH","pAE","FG"],
+              transition: { animations: [
+                  { elem: "FGUH", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "FH = AE applied to FG", ref: "I.45" }] },
+            { text: "Complete the parallelepipedal solid {GK|sGK} with the same height as that of {CD|sCD} on {FH|FGUH} as base.",
+              visible: GK,
+              highlighted: ["sGK"],
+              transition: { animations: [
+                  { elem: "TGHV", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "DTVK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "UK", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "parallels completing GK", ref: "I.31" }] },
+            { text: "Then the solid {AB|sAB} equals the solid {GK|sGK}",
+              visible: GK,
+              highlighted: ["sAB","sGK"] },
+            { text: "for they are on equal bases {AE|pAE} and {FH|FGUH} and of the same height.",
+              visible: GK,
+              highlighted: ["pAE","FGUH"],
+              justifications: [{ claim: "solid AB = solid GK", ref: "XI.31" }] },
+            { text: "And, since the parallelepipedal solid {CK|sCK} is cut by the plane {DG|pDG} which is parallel to opposite planes,",
+              visible: GK,
+              highlighted: ["sCK","pDG"] },
+            { text: "therefore the solid {CD|sCD} is to the solid {DH|sGK} as the base {CF|pCF} is to the base {FH|FGUH}.",
+              visible: GK,
+              highlighted: ["sCD","sGK","pCF","FGUH"],
+              justifications: [{ claim: "solid CD : solid DH = CF : FH", ref: "XI.25" }] },
+            { text: "But the base {FH|FGUH} equals the base {AE|pAE}, and the solid {GK|sGK} equals the solid {AB|sAB},",
+              visible: GK,
+              highlighted: ["FGUH","pAE","sGK","sAB"] },
+            { text: "therefore the solid {AB|sAB} to the solid {CD|sCD} as the base {AE|pAE} is to the base {CF|pCF}.",
+              visible: GK,
+              highlighted: ["sAB","sCD","pAE","pCF"] },
+            { text: "Therefore, parallelepipedal solids which are of the same height are to one another as their bases.",
+              visible: GK,
+              highlighted: ["sAB","sCD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.32") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.31":  "/elements/books/bookI/propositions/propI31/",
+        "I.45":  "/elements/books/bookI/propositions/propI45/",
+        "XI.25": "/elements/books/bookXI/propositions/propXI25/",
+        "XI.31": "/elements/books/bookXI/propositions/propXI31/"
     });
 </script>
 </figure>
 
-Then the solid *AB* equals the solid *GK* for they are on equal bases *AE* and *FH* and of the same height. [!just XI.31]
+Then the solid {AB|sAB} equals the solid {GK|sGK} for they are on equal bases {AE|pAE} and {FH|FGUH} and of the same height. [!just XI.31]
 
-And, since the parallelepipedal solid *CK* is cut by the plane *DG* which is parallel to opposite planes, therefore the solid *CD* is to the solid *DH* as the base *CF* is to the base *FH.* [!just XI.25]
+And, since the parallelepipedal solid {CK|sCK} is cut by the plane {DG|pDG} which is parallel to opposite planes, therefore the solid {CD|sCD} is to the solid {DH|sGK} as the base {CF|pCF} is to the base {FH|FGUH}. [!just XI.25]
 
-But the base *FH* equals the base *AE,* and the solid *GK* equals the solid *AB,* therefore the solid *AB* to the solid *CD* as the base *AE* is to the base *CF.*
+But the base {FH|FGUH} equals the base {AE|pAE}, and the solid {GK|sGK} equals the solid {AB|sAB}, therefore the solid {AB|sAB} to the solid {CD|sCD} as the base {AE|pAE} is to the base {CF|pCF}.
 
 Therefore, *parallelepipedal solids which are of the same height are to one another as their bases.*
 
