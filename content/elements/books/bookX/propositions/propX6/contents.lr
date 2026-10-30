@@ -15,16 +15,34 @@ statement: If two magnitudes have to one another the ratio which a number has to
 ----
 proof:
 
-Let the two magnitudes *A* and *B* have to one another the ratio which the number *D* has to the number *E.*
+Let the two magnitudes {A|AA5} and {B} have to one another the ratio which the number {D} has to the number {E}.
 
-I say that the magnitudes *A* and *B* are commensurable.
+I say that the magnitudes {A|AA5} and {B} are commensurable.
 
-Divide *A* into as many equal parts as there are units in *D,* and let *C* equal one of them, and let *F* be made up of as many magnitudes equal to *C* as there are units in *E.*
+Divide {A|AA5} into as many equal parts as there are units in {D}, and let {C} equal one of them, and let {F} be made up of as many magnitudes equal to {C} as there are units in {E}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="120" tabindex="0"></canvas>
 <noscript><img alt="X.6 diagram" src="propX6.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the magnitude A is the line AA5 from the point A, cut
+    // into three parts each equal to C at A1, A4 (cutoffs); D and E (blue)
+    // are numbers drawn in units (the offscreen U1U2); F is cut off equal to
+    // B. The prose's {A} binds to the line AA5 by display override, since the
+    // element named A is the endpoint carrying the label.
+    //
+    // Added, all transparent (;0;0;0) so the resting figure is unchanged:
+    // the three parts AP1, AP2, AP3 of A, lit when A is divided and C is
+    // set equal to one of them.
+    //
+    // Draggables (checked against the bundle): the lineSliders A, B1, C1,
+    // C2, D1, E1, F1 and the offscreen frees. A, B, D and E are given on
+    // slide 1; C1, C2 and F1 are deferred so C and F arrive with the
+    // division. A1, A4, A5, B2, D2, E2, F2 are derived and listed per slide.
+    var GIVEN = ["A","AA5","A5","B","B1","B2","D","D1","D2","E","E1","E2"];
+    var DIV   = GIVEN.concat(["A1","A4","AP1","AP2","AP3"]);
+    var CPART = DIV.concat(["C","C1","C2"]);
+    var ALL   = CPART.concat(["F","F1","F2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -57,27 +75,143 @@ Divide *A* into as many equal parts as there are units in *D,* and let *C* equal
             "E;line;connect;E1,E2;black;0;blue",
             "F1;point;lineSlider;D0,D3,190,0;0",
             "F2;point;cutoff;F1,D3,B1,B2;0",
-            "F;line;connect;F1,F2;black"
+            "F;line;connect;F1,F2;black",
+            // The three equal parts of A, as transparent highlight targets.
+            "AP1;line;connect;A,A1;0;0;0",
+            "AP2;line;connect;A1,A4;0;0;0",
+            "AP3;line;connect;A4,A5;0;0;0"
         ],
+        deferDraggables: ["C1","C2","F1"],
+        slides: [
+            { text: "“If two magnitudes have to one another the ratio which a number has to a number, then the magnitudes are commensurable.”",
+              visible: GIVEN,
+              highlighted: ["AA5","B","D","E"],
+              justifications: [{ ref: "X.6" }] },
+            { text: "Let the two magnitudes {A|AA5} and {B} have to one another",
+              visible: GIVEN,
+              highlighted: ["AA5","B"] },
+            { text: "the ratio which the number {D} has to the number {E}.",
+              visible: GIVEN,
+              highlighted: ["AA5","B","D","E"] },
+            { text: "I say that the magnitudes {A|AA5} and {B} are commensurable.",
+              visible: GIVEN,
+              highlighted: ["AA5","B"] },
+            { text: "Divide {A|AA5} into as many equal parts as there are units in {D},",
+              visible: DIV,
+              highlighted: ["AP1","AP2","AP3","D"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "A1", name: geomlib.A.Point.appear },
+                  { elem: "A4", name: geomlib.A.Point.appear } ] } },
+            { text: "and let {C} equal one of them,",
+              visible: CPART,
+              highlighted: ["C","AP1"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and let {F} be made up of as many magnitudes equal to {C} as there are units in {E}.",
+              visible: ALL,
+              highlighted: ["F","C","E"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since then there are in {A|AA5} as many magnitudes equal to {C} as there are units in {D},",
+              visible: ALL,
+              highlighted: ["AP1","AP2","AP3","C","D"] },
+            { text: "whatever part the unit is of {D}, the same part is {C} of {A|AA5} also.",
+              visible: ALL,
+              highlighted: ["D","C","AA5"] },
+            { text: "Therefore {C} is to {A|AA5} as the unit is to {D}.",
+              visible: ALL,
+              highlighted: ["C","AA5","D"],
+              justifications: [{ claim: "C : A = unit : D", ref: "VII.Def.20" }] },
+            { text: "But the unit measures the number {D}, therefore {C} also measures {A|AA5}.",
+              visible: ALL,
+              highlighted: ["D","C","AA5"] },
+            { text: "And since {C} is to {A|AA5} as the unit is to {D},",
+              visible: ALL,
+              highlighted: ["C","AA5","D"] },
+            { text: "therefore, inversely, {A|AA5} is to {C} as the number {D} is to the unit.",
+              visible: ALL,
+              highlighted: ["AA5","C","D"],
+              justifications: [{ claim: "inversely", ref: "V.7.Cor" }] },
+            { text: "Again, since there are in {F} as many magnitudes equal to {C} as there are units in {E},",
+              visible: ALL,
+              highlighted: ["F","C","E"] },
+            { text: "therefore {C} is to {F} as the unit is to {E}.",
+              visible: ALL,
+              highlighted: ["C","F","E"],
+              justifications: [{ claim: "C : F = unit : E", ref: "VII.Def.20" }] },
+            { text: "But it was also proved that {A|AA5} is to {C} as {D} is to the unit,",
+              visible: ALL,
+              highlighted: ["AA5","C","D"] },
+            { text: "therefore, ex aequali, {A|AA5} is to {F} as {D} is to {E}.",
+              visible: ALL,
+              highlighted: ["AA5","F","D","E"],
+              justifications: [{ claim: "ex aequali", ref: "V.22" }] },
+            { text: "But {D} is to {E} as {A|AA5} is to {B},",
+              visible: ALL,
+              highlighted: ["D","E","AA5","B"] },
+            { text: "therefore {A|AA5} is to {B} as it is to {F} also.",
+              visible: ALL,
+              highlighted: ["AA5","B","F"],
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Therefore {A|AA5} has the same ratio to each of the magnitudes {B} and {F}.",
+              visible: ALL,
+              highlighted: ["AA5","B","F"] },
+            { text: "Therefore {B} equals {F}.",
+              visible: ALL,
+              highlighted: ["B","F"],
+              justifications: [{ claim: "same ratio to the same magnitude", ref: "V.9" }] },
+            { text: "But {C} measures {F}, therefore it measures {B} also.",
+              visible: ALL,
+              highlighted: ["C","F","B"] },
+            { text: "Further it measures {A|AA5} also, therefore {C} measures {A|AA5} and {B}.",
+              visible: ALL,
+              highlighted: ["C","AA5","B"] },
+            { text: "Therefore {A|AA5} is commensurable with {B}.",
+              visible: ALL,
+              highlighted: ["AA5","B"],
+              justifications: [{ claim: "measured by the same measure C", ref: "X.Def.I.1" }] },
+            { text: "Therefore, if two magnitudes have to one another the ratio which a number has to a number,",
+              visible: ALL,
+              highlighted: ["AA5","B","D","E"] },
+            { text: "then the magnitudes are commensurable.",
+              visible: ALL,
+              highlighted: ["AA5","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.6") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.7.Cor":    "/elements/books/bookV/propositions/propV7/#cor",
+        "V.9":        "/elements/books/bookV/propositions/propV9/",
+        "V.11":       "/elements/books/bookV/propositions/propV11/",
+        "V.22":       "/elements/books/bookV/propositions/propV22/",
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "X.Def.I.1":  "/elements/books/bookX/definitions/defX.I.1/"
     });
 </script>
 </figure>
 
-Since then there are in *A* as many magnitudes equal to *C* as there are units in *D,* whatever part the unit is of *D,* the same part is *C* of *A* also. Therefore *C* is to *A* as the unit is to *D.* [!just VII.Def.20]
+Since then there are in {A|AA5} as many magnitudes equal to {C} as there are units in {D}, whatever part the unit is of {D}, the same part is {C} of {A|AA5} also. Therefore {C} is to {A|AA5} as the unit is to {D}. [!just VII.Def.20]
 
-But the unit measures the number *D,* therefore *C* also measures *A.* And since *C* is to *A* as the unit is to *D,* therefore, inversely, *A* is to *C* as the number *D* is to the unit. [!just V.7.Cor]
+But the unit measures the number {D}, therefore {C} also measures {A|AA5}. And since {C} is to {A|AA5} as the unit is to {D}, therefore, inversely, {A|AA5} is to {C} as the number {D} is to the unit. [!just V.7.Cor]
 
-Again, since there are in *F* as many magnitudes equal to *C* as there are units in *E,* therefore *C* is to *F* as the unit is to *E.* [!just VII.Def.20]
+Again, since there are in {F} as many magnitudes equal to {C} as there are units in {E}, therefore {C} is to {F} as the unit is to {E}. [!just VII.Def.20]
 
-But it was also proved that *A* is to *C* as *D* is to the unit, therefore, *ex aequali,* *A* is to *F* as *D* is to *E.* [!just V.22]
+But it was also proved that {A|AA5} is to {C} as {D} is to the unit, therefore, *ex aequali,* {A|AA5} is to {F} as {D} is to {E}. [!just V.22]
 
-But *D* is to *E* as *A* is to *B,* therefore *A* is to *B* as it is to *F* also. [!just V.11]
+But {D} is to {E} as {A|AA5} is to {B}, therefore {A|AA5} is to {B} as it is to {F} also. [!just V.11]
 
-Therefore *A* has the same ratio to each of the magnitudes *B* and *F.* Therefore *B* equals *F.* [!just V.9]
+Therefore {A|AA5} has the same ratio to each of the magnitudes {B} and {F}. Therefore {B} equals {F}. [!just V.9]
 
-But *C* measures *F,* therefore it measures *B* also. Further it measures *A* also, therefore *C* measures *A* and *B.*
+But {C} measures {F}, therefore it measures {B} also. Further it measures {A|AA5} also, therefore {C} measures {A|AA5} and {B}.
 
-Therefore *A* is commensurable with *B.* [!just X.Def.I.1]
+Therefore {A|AA5} is commensurable with {B}. [!just X.Def.I.1]
 
 Therefore, *if two magnitudes have to one another the ratio which a number has to a number, then the magnitudes are commensurable.*
 
@@ -85,7 +219,7 @@ Therefore, *if two magnitudes have to one another the ratio which a number has t
 ----
 guide:
 
-If *A* : *B* = *m* : *n,* then, with *C* equal to *A/m,* it follows that *A* = *mC* and *B* = *nC.*
+If {A|AA5} : {B} = *m* : *n,* then, with {C} equal to *A/m,* it follows that {A|AA5} = *mC* and {B} = *nC.*
 
 The proof assumes that magnitudes are divisible. Not all magnitudes, however, are constructively divisible. For instance, a 60° angle cannot be trisected by a Euclidean construction. An alternate proof which does not depend on divisibility of magnitudes can be based on antenaresis.
 

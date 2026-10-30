@@ -15,18 +15,32 @@ statement: Commensurable magnitudes have to one another the ratio which a number
 ----
 proof:
 
-Let *A* and *B* be commensurable magnitudes.
+Let {A} and {B} be commensurable magnitudes.
 
-I say that *A* has to *B* the ratio which a number has to a number.
+I say that {A} has to {B} the ratio which a number has to a number.
 
-Since *A* and *B* are commensurable, some magnitude *C* measures them.
+Since {A} and {B} are commensurable, some magnitude {C} measures them.
 
-As many times as *C* measures *A,* let so many units be in *D,* and, as many times as *C* measures *B,* let so many units be in *E.*
+As many times as {C} measures {A}, let so many units be in {D}, and, as many times as {C} measures {B}, let so many units be in {E}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="90" tabindex="0"></canvas>
 <noscript><img alt="X.5 diagram" src="propX5.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure, unchanged: magnitudes A, B, C in black on the top row,
+    // the numbers D and E in blue below, each D and E drawn as many units
+    // (the offscreen U1U2) as C measures A and B (the proportion points D2,
+    // E2). Nothing is added; the walk is highlight beats plus the strokes of
+    // C, D and E as the proof introduces them.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2, D1, E1 and the offscreen frees. A and B are given on
+    // slide 1; C1, C2, D1, E1 are deferred so C, D and E arrive with their
+    // captions. D2 and E2 are derived (proportion) and listed per slide.
+    var GIVEN = ["A","A1","A2","B","B1","B2"];
+    var MEAS  = GIVEN.concat(["C","C1","C2"]);
+    var DNUM  = MEAS.concat(["D","D1","D2"]);
+    var ALL   = DNUM.concat(["E","E1","E2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -54,17 +68,106 @@ As many times as *C* measures *A,* let so many units be in *D,* and, as many tim
             "E2;point;proportion;C1,C2,B1,B2,U1,U2,E1,D3;0",
             "E;line;connect;E1,E2;black;0;blue"
         ],
+        deferDraggables: ["C1","C2","D1","E1"],
+        slides: [
+            { text: "“Commensurable magnitudes have to one another the ratio which a number has to a number.”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "X.5" }] },
+            { text: "Let {A} and {B} be commensurable magnitudes.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that {A} has to {B} the ratio which a number has to a number.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Since {A} and {B} are commensurable, some magnitude {C} measures them.",
+              visible: MEAS,
+              highlighted: ["A","B","C"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "measured by the same measure", ref: "X.Def.I.1" }] },
+            { text: "As many times as {C} measures {A}, let so many units be in {D},",
+              visible: DNUM,
+              highlighted: ["C","A","D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and, as many times as {C} measures {B}, let so many units be in {E}.",
+              visible: ALL,
+              highlighted: ["C","B","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since {C} measures {A} according to the units in {D},",
+              visible: ALL,
+              highlighted: ["C","A","D"] },
+            { text: "while the unit also measures {D} according to the units in it,",
+              visible: ALL,
+              highlighted: ["D"] },
+            { text: "therefore the unit measures the number {D} the same number of times as the magnitude {C} measures {A}.",
+              visible: ALL,
+              highlighted: ["D","C","A"] },
+            { text: "Therefore {C} is to {A} as the unit is to {D}.",
+              visible: ALL,
+              highlighted: ["C","A","D"],
+              justifications: [{ claim: "C : A = unit : D", ref: "VII.Def.20" }] },
+            { text: "Therefore, inversely, {A} is to {C} as {D} is to the unit.",
+              visible: ALL,
+              highlighted: ["A","C","D"],
+              justifications: [{ claim: "inversely", ref: "V.7.Cor" }] },
+            { text: "Again, since {C} measures {B} according to the units in {E},",
+              visible: ALL,
+              highlighted: ["C","B","E"] },
+            { text: "while the unit also measures {E} according to the units in it,",
+              visible: ALL,
+              highlighted: ["E"] },
+            { text: "therefore the unit measures {E} the same number of times as {C} measures {B}.",
+              visible: ALL,
+              highlighted: ["E","C","B"] },
+            { text: "Therefore {C} is to {B} as the unit is to {E}.",
+              visible: ALL,
+              highlighted: ["C","B","E"],
+              justifications: [{ claim: "C : B = unit : E", ref: "VII.Def.20" }] },
+            { text: "But it was also proved that {A} is to {C} as {D} is to the unit,",
+              visible: ALL,
+              highlighted: ["A","C","D"] },
+            { text: "therefore, ex aequali, {A} is to {B} as the number {D} is to {E}.",
+              visible: ALL,
+              highlighted: ["A","B","D","E"],
+              justifications: [{ claim: "ex aequali", ref: "V.22" }] },
+            { text: "Therefore the commensurable magnitudes {A} and {B} have to one another",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "the ratio which the number {D} has to the number {E}.",
+              visible: ALL,
+              highlighted: ["A","B","D","E"] },
+            { text: "Therefore, commensurable magnitudes have to one another the ratio which a number has to a number.",
+              visible: ALL,
+              highlighted: ["A","B","D","E"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.5") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.7.Cor":    "/elements/books/bookV/propositions/propV7/#cor",
+        "V.22":       "/elements/books/bookV/propositions/propV22/",
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "X.Def.I.1":  "/elements/books/bookX/definitions/defX.I.1/"
     });
 </script>
 </figure>
 
-Since *C* measures *A* according to the units in *D,* while the unit also measures *D* according to the units in it, therefore the unit measures the number *D* the same number of times as the magnitude *C* measures *A.* Therefore *C* is to *A* as the unit is to *D.* Therefore, inversely, *A* is to *C* as *D* is to the unit. [!just VII.Def.20; V.7.Cor]
+Since {C} measures {A} according to the units in {D}, while the unit also measures {D} according to the units in it, therefore the unit measures the number {D} the same number of times as the magnitude {C} measures {A}. Therefore {C} is to {A} as the unit is to {D}. Therefore, inversely, {A} is to {C} as {D} is to the unit. [!just VII.Def.20; V.7.Cor]
 
-Again, since *C* measures *B* according to the units in *E,* while the unit also measures *E* according to the units in it, therefore the unit measures *E* the same number of times as *C* measures *B.* Therefore *C* is to *B* as the unit is to *E.*
+Again, since {C} measures {B} according to the units in {E}, while the unit also measures {E} according to the units in it, therefore the unit measures {E} the same number of times as {C} measures {B}. Therefore {C} is to {B} as the unit is to {E}.
 
-But it was also proved that *A* is to *C* as *D* is to the unit, therefore, *ex aequali,* *A* is to *B* as the number *D* is to *E.* [!just V.22]
+But it was also proved that {A} is to {C} as {D} is to the unit, therefore, *ex aequali,* {A} is to {B} as the number {D} is to {E}. [!just V.22]
 
-Therefore the commensurable magnitudes *A* and *B* have to one another the ratio which the number *D* has to the number *E.*
+Therefore the commensurable magnitudes {A} and {B} have to one another the ratio which the number {D} has to the number {E}.
 
 Therefore, *commensurable magnitudes have to one another the ratio which a number has to a number.*
 
@@ -74,7 +177,7 @@ guide:
 
 This proposition equates ratios of magnitudes to ratios of numbers. Both magnitudes and numbers are represented as lines. To help distinguish them in this edition of the *Elements,* lines that represent numbers are drawn in blue.
 
-The proposition states that if *A* = *mC* and *B* = *nC,* then *A* : *B* = *m* : *n.*
+The proposition states that if {A} = *mC* and {B} = *nC,* then {A} : {B} = *m* : *n.*
 
 The proof here assumes that numbers are magnitudes, that is to say, the two definitions of proportion @V.Def.5 and @VII.Def.20 are compatible.
 
