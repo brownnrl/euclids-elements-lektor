@@ -15,12 +15,36 @@ statement: If a straight line is cut in extreme and mean ratio, and a straight l
 ----
 proof:
 
-Let the straight line *AB* be cut in extreme and mean ratio at the point *C,* let *AC* be the greater segment, and let *AD* be equal to *AC.*
+Let the straight line {AB} be cut in extreme and mean ratio at the point {C}, let {AC} be the greater segment, and let {AD} be equal to {AC}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="200" tabindex="0"></canvas>
 <noscript><img alt="XIII.5 diagram" src="propXIII5.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the square BATE (AE) on AB, the square ADLH (DH) on AD,
+    // HK drawn through to BE, the line CC' through C parallel to BE, and the
+    // diagonal AE. The proof names the regions by diagonal corners: CE and
+    // HE (each the rectangle AB by BC), CH (the square on AC), DH, DK (the
+    // rectangle BD by DA) and AE (the square on AB). None but the two
+    // squares is drawn, and Joyce's element AE is the diagonal, so all six
+    // regions are transparent quadrilaterals (explicit ;0 faces) and the
+    // prose reaches the square as {AE|sqAE}; highlighting the filled squares
+    // themselves would raise their faces over the figure (#140). Cf and Cg
+    // (the foot of CC' on TE, and its crossing with HK) are uncoloured
+    // helpers for the corners of CE and CH.
+    //
+    // AB and AD are solid twins, hidden at rest (initiallyHidden), so the
+    // walk can show the line before the squares and produce AD from A.
+    // Transparent targets: AC, BC, DB, DL.
+    //
+    // Draggables (checked against the bundle): A and B, free — the given
+    // line, standing from slide 1. C, D and every other point are derived
+    // and listed per slide; nothing to defer. No angle is treated as right
+    // in the text, so there are no markers.
+    var LINE0 = ["A","B","C","AB","AC","BC"];
+    var LINE  = LINE0.concat(["D","AD","DB"]);
+    var FIG   = LINE.concat(["BATE","E","ADLH","L","H","HK","K","AE","CC'","DL",
+                             "sqAE","CE","CH","HE","DH","DK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -41,27 +65,174 @@ Let the straight line *AB* be cut in extreme and mean ratio at the point *C,* le
             "K;point;intersection;L,H,B,E",
             "HK;line;connect;H,K",
             "AE;line;connect;A,E",
-            "CC';line;parallel;C,B,E"
+            "CC';line;parallel;C,B,E",
+            // Slide twins, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            "AD;line;extend;C,A,C,A",
+            // Transparent highlight targets.
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "DL;line;connect;D,L;0;0;0",
+            "Cq;polygon;parallelogram;C,B,E;0;0;0;0",
+            "Cf;point;vertex;Cq,4;0;0",
+            "Cg;point;intersection;C,Cf,H,K;0;0",
+            "sqAE;polygon;quadrilateral;A,B,E,T;0;0;0;0",
+            "CE;polygon;quadrilateral;C,B,E,Cf;0;0;0;0",
+            "CH;polygon;quadrilateral;C,A,H,Cg;0;0;0;0",
+            "HE;polygon;quadrilateral;H,K,E,T;0;0;0;0",
+            "DH;polygon;quadrilateral;D,A,H,L;0;0;0;0",
+            "DK;polygon;quadrilateral;D,B,K,L;0;0;0;0"
         ],
+        initiallyHidden: ["AB","AD"],
+        aliases: { "BA": "AB", "CA": "AC", "CB": "BC", "DA": "AD",
+                   "BD": "DB", "LD": "DL", "HC": "CH" },
+        slides: [
+            { text: "“If a straight line is cut in extreme and mean ratio,”",
+              visible: LINE0,
+              highlighted: ["AB","C"],
+              justifications: [{ ref: "XIII.5" }] },
+            { text: "“and a straight line equal to the greater segment is added to it,”",
+              visible: LINE,
+              highlighted: ["AC","AD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "D",  name: geomlib.A.Point.appear } ] } },
+            { text: "“then the whole straight line has been cut in extreme and mean ratio,”",
+              visible: LINE,
+              highlighted: ["DB","A"] },
+            { text: "“and the original straight line is the greater segment.”",
+              visible: LINE,
+              highlighted: ["AB"] },
+            { text: "Let the straight line {AB} be cut in extreme and mean ratio at the point {C},",
+              visible: LINE,
+              highlighted: ["AB","C"] },
+            { text: "let {AC} be the greater segment, and let {AD} be equal to {AC}.",
+              visible: LINE,
+              highlighted: ["AC","AD"] },
+            { text: "I say that the straight line {DB} is cut in extreme and mean ratio at {A},",
+              visible: LINE,
+              highlighted: ["DB","A"] },
+            { text: "and the original straight line {AB} is the greater segment.",
+              visible: LINE,
+              highlighted: ["AB"] },
+            { text: "Describe the square {AE|sqAE} on {AB}, and draw the figure.",
+              visible: FIG,
+              highlighted: [],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BATE", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "E",    name: geomlib.A.Point.appear },
+                  { elem: "AE",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ADLH", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "HK",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",    name: geomlib.A.Point.appear },
+                  { elem: "CC'",  name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "the square AE on AB", ref: "I.46" }] },
+            { text: "Since {AB} is cut in extreme and mean ratio at {C},",
+              visible: FIG,
+              highlighted: ["AB","C"] },
+            { text: "therefore the rectangle {AB} by {BC} equals the square on {AC}.",
+              visible: FIG,
+              highlighted: ["AB","BC","AC"],
+              justifications: [
+                  { claim: "AB is to AC as AC is to CB", ref: "VI.Def.3" },
+                  { claim: "rectangle AB by BC = square on AC", ref: "VI.17" } ] },
+            { text: "And {CE} is the rectangle {AB} by {BC},",
+              visible: FIG,
+              highlighted: ["CE"],
+              transition: { animations: [
+                  { elem: "CE", name: geomlib.A.Polygon.outline } ] } },
+            { text: "and {CH} is the square on {AC},",
+              visible: FIG,
+              highlighted: ["CH"],
+              transition: { animations: [
+                  { elem: "CH", name: geomlib.A.Polygon.outline } ] } },
+            { text: "therefore {CE} equals {HC}.",
+              visible: FIG,
+              highlighted: ["CE","CH"] },
+            { text: "But {HE} equals {CE},",
+              visible: FIG,
+              highlighted: ["HE","CE"],
+              transition: { animations: [
+                  { elem: "HE", name: geomlib.A.Polygon.outline } ] } },
+            { text: "and {DH} equals {HC},",
+              visible: FIG,
+              highlighted: ["DH","CH"] },
+            { text: "therefore {DH} also equals {HE}.",
+              visible: FIG,
+              highlighted: ["DH","HE"] },
+            { text: "Therefore the whole {DK} is equal to the whole {AE|sqAE}.",
+              visible: FIG,
+              highlighted: ["DK","sqAE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "DK",   name: geomlib.A.Polygon.outline },
+                  { elem: "sqAE", name: geomlib.A.Polygon.outline } ] } },
+            { text: "And {DK} is the rectangle {BD} by {DA},",
+              visible: FIG,
+              highlighted: ["DK","DB","AD"] },
+            { text: "for {AD} equals {DL},",
+              visible: FIG,
+              highlighted: ["AD","DL"] },
+            { text: "and {AE|sqAE} is the square on {AB},",
+              visible: FIG,
+              highlighted: ["sqAE","AB"] },
+            { text: "therefore the rectangle {BD} by {DA} equals the square on {AB}.",
+              visible: FIG,
+              highlighted: ["DK","sqAE"] },
+            { text: "Therefore {DB} is to {BA} as {BA} is to {AD}.",
+              visible: FIG,
+              highlighted: ["DB","AB","AD"],
+              justifications: [{ claim: "rectangle BD by DA = square on AB", ref: "VI.17" }] },
+            { text: "And {DB} is greater than {BA}, therefore {BA} is also greater than {AD}.",
+              visible: FIG,
+              highlighted: ["DB","AB","AD"],
+              justifications: [{ ref: "V.Def.5" }] },
+            { text: "Therefore {DB} has been cut in extreme and mean ratio at {A}, and {AB} is the greater segment.",
+              visible: FIG,
+              highlighted: ["DB","A","AB"] },
+            { text: "Therefore, if a straight line is cut in extreme and mean ratio,",
+              visible: FIG,
+              highlighted: ["AB","C"] },
+            { text: "and a straight line equal to the greater segment is added to it,",
+              visible: FIG,
+              highlighted: ["AC","AD"] },
+            { text: "then the whole straight line has been cut in extreme and mean ratio, and the original straight line is the greater segment.",
+              visible: FIG,
+              highlighted: ["DB","A","AB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.5") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.46":     "/elements/books/bookI/propositions/propI46/",
+        "V.Def.5":  "/elements/books/bookV/definitions/defV5/",
+        "VI.Def.3": "/elements/books/bookVI/definitions/defVI3/",
+        "VI.17":    "/elements/books/bookVI/propositions/propVI17/"
     });
 </script>
 </figure>
 
-I say that the straight line *DB* is cut in extreme and mean ratio at *A,* and the original straight line *AB* is the greater segment.
+I say that the straight line {DB} is cut in extreme and mean ratio at {A}, and the original straight line {AB} is the greater segment.
 
-Describe the square *AE* on *AB,* and draw the figure. [!just I.46]
+Describe the square {AE|sqAE} on {AB}, and draw the figure. [!just I.46]
 
-Since *AB* is cut in extreme and mean ratio at *C,* therefore the rectangle *AB* by *BC* equals the square on *AC.* [!just VI.Def.3, VI.17]
+Since {AB} is cut in extreme and mean ratio at {C}, therefore the rectangle {AB} by {BC} equals the square on {AC}. [!just VI.Def.3, VI.17]
 
-And *CE* is the rectangle *AB* by *BC,* and *CH* is the square on *AC,* therefore *CE* equals *HC.*
+And {CE} is the rectangle {AB} by {BC}, and {CH} is the square on {AC}, therefore {CE} equals {HC}.
 
-But *HE* equals *CE,* and *DH* equals *HC,* therefore *DH* also equals *HE.* Therefore the whole *DK* is equal to the whole *AE.*
+But {HE} equals {CE}, and {DH} equals {HC}, therefore {DH} also equals {HE}. Therefore the whole {DK} is equal to the whole {AE|sqAE}.
 
-And *DK* is the rectangle *BD* by *DA,* for *AD* equals *DL,* and *AE* is the square on *AB,* therefore the rectangle *BD* by *DA* equals the square on *AB.*
+And {DK} is the rectangle {BD} by {DA}, for {AD} equals {DL}, and {AE|sqAE} is the square on {AB}, therefore the rectangle {BD} by {DA} equals the square on {AB}.
 
-Therefore *DB* is to *BA* as *BA* is to *AD.* And *DB* is greater than *BA,* therefore *BA* is also greater than *AD.* [!just VI.17, V.Def.5]
+Therefore {DB} is to {BA} as {BA} is to {AD}. And {DB} is greater than {BA}, therefore {BA} is also greater than {AD}. [!just VI.17, V.Def.5]
 
-Therefore *DB* has been cut in extreme and mean ratio at *A,* and *AB* is the greater segment.
+Therefore {DB} has been cut in extreme and mean ratio at {A}, and {AB} is the greater segment.
 
 Therefore, *if a straight line is cut in extreme and mean ratio, and a straight line equal to the greater segment is added to it, then the whole straight line has been cut in extreme and mean ratio, and the original straight line is the greater segment.*
 

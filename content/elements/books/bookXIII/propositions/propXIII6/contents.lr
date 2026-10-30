@@ -15,14 +15,27 @@ statement: If a rational straight line is cut in extreme and mean ratio, then ea
 ----
 proof:
 
-Let *AB* be a rational straight line cut in extreme and mean ratio at *C,* and let *AC* be the greater segment.
+Let {AB} be a rational straight line cut in extreme and mean ratio at {C}, and let {AC} be the greater segment.
 
-I say that each of the straight lines *AC* and *CB* is the irrational straight line called apotome.
+I say that each of the straight lines {AC} and {CB} is the irrational straight line called apotome.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="70" tabindex="0"></canvas>
 <noscript><img alt="XIII.6 diagram" src="propXIII6.gif"/></noscript>
 <script type="text/javascript">
+    // A line-segment proof (Book X machinery): the walk is highlight beats
+    // on Joyce's figure, with one animation where BA is produced to D.
+    //
+    // Joyce's BD runs the whole line, so AB and AD are solid twins, hidden
+    // at rest (initiallyHidden): the opening slides show AB alone and AD is
+    // produced from A. Transparent targets: AC, BC, CD. The square BATE and
+    // the points E, X are Joyce's uncoloured construction of C.
+    //
+    // Draggables (checked against the bundle): A and B, free — the given
+    // line, standing from slide 1. C and D are derived and listed per
+    // slide; nothing to defer.
+    var GIVEN = ["A","B","C","AB","AC","BC"];
+    var PROD  = GIVEN.concat(["D","AD","BD","CD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -36,25 +49,151 @@ I say that each of the straight lines *AC* and *CB* is the irrational straight l
             "Y;point;extend;A,X,X,E;0;0",
             "C;point;cutoff;A,B,B,Y",
             "D;point;extend;B,A,B,X",
-            "BD;line;connect;B,D"
+            "BD;line;connect;B,D",
+            // Slide twins, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            "AD;line;extend;B,A,B,X",
+            // Transparent highlight targets.
+            "AC;line;connect;A,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0"
         ],
+        initiallyHidden: ["AB","AD"],
+        aliases: { "BA": "AB", "CA": "AC", "CB": "BC", "DA": "AD",
+                   "DC": "CD", "DB": "BD" },
+        slides: [
+            { text: "“If a rational straight line is cut in extreme and mean ratio,”",
+              visible: GIVEN,
+              highlighted: ["AB","C"],
+              justifications: [{ ref: "XIII.6" }] },
+            { text: "“then each of the segments is the irrational straight line called apotome.”",
+              visible: GIVEN,
+              highlighted: ["AC","BC"] },
+            { text: "Let {AB} be a rational straight line cut in extreme and mean ratio at {C},",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "and let {AC} be the greater segment.",
+              visible: GIVEN,
+              highlighted: ["AC"] },
+            { text: "I say that each of the straight lines {AC} and {CB} is the irrational straight line called apotome.",
+              visible: GIVEN,
+              highlighted: ["AC","BC"] },
+            { text: "Produce {BA}, and make {AD} half of {BA}.",
+              visible: PROD,
+              highlighted: ["AD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "D",  name: geomlib.A.Point.appear } ] },
+              justifications: [
+                  { ref: "I.Post.2" },
+                  { claim: "AD half of BA", ref: "I.10" } ] },
+            { text: "Since, then, the straight line {AB} is cut in extreme and mean ratio,",
+              visible: PROD,
+              highlighted: ["AB","C"] },
+            { text: "and to the greater segment {AC} is added {AD} which is half of {AB},",
+              visible: PROD,
+              highlighted: ["AC","AD"] },
+            { text: "therefore the square on {CD} is five times the square on {DA}.",
+              visible: PROD,
+              highlighted: ["CD","AD"],
+              justifications: [{ claim: "square on CD = 5 × square on DA", ref: "XIII.1" }] },
+            { text: "Therefore the square on {CD} has to the square on {DA} the ratio which a number has to a number,",
+              visible: PROD,
+              highlighted: ["CD","AD"] },
+            { text: "therefore the square on {CD} is commensurable with the square on {DA}",
+              visible: PROD,
+              highlighted: ["CD","AD"],
+              justifications: [{ ref: "X.6" }] },
+            { text: "But the square on {DA} is rational,",
+              visible: PROD,
+              highlighted: ["AD"] },
+            { text: "for {DA} is rational being half of {AB} which is rational,",
+              visible: PROD,
+              highlighted: ["AD","AB"] },
+            { text: "therefore the square on {CD} is also rational. Therefore {CD} is also rational.",
+              visible: PROD,
+              highlighted: ["CD"],
+              justifications: [{ ref: "X.Def.I.4" }] },
+            { text: "And, since the square on {CD} has not to the square on {DA}",
+              visible: PROD,
+              highlighted: ["CD","AD"] },
+            { text: "the ratio which a square number has to a square number,",
+              visible: PROD,
+              highlighted: ["CD","AD"] },
+            { text: "therefore {CD} is incommensurable in length with {DA}.",
+              visible: PROD,
+              highlighted: ["CD","AD"],
+              justifications: [{ ref: "X.9" }] },
+            { text: "Therefore {CD} and {DA} are rational straight lines commensurable in square only.",
+              visible: PROD,
+              highlighted: ["CD","AD"] },
+            { text: "Therefore {AC} is an apotome.",
+              visible: PROD,
+              highlighted: ["AC"],
+              justifications: [{ claim: "CD less DA", ref: "X.73" }] },
+            { text: "Again, since {AB} is cut in extreme and mean ratio, and {AC} is the greater segment,",
+              visible: PROD,
+              highlighted: ["AB","AC"] },
+            { text: "therefore the rectangle {AB} by {BC} equals the square on {AC}.",
+              visible: PROD,
+              highlighted: ["AB","BC","AC"],
+              justifications: [
+                  { claim: "AB is to AC as AC is to CB", ref: "VI.Def.3" },
+                  { claim: "rectangle AB by BC = square on AC", ref: "VI.17" } ] },
+            { text: "Therefore the square on the apotome {AC}, if applied to the rational straight line {AB}, produces {BC} as breadth.",
+              visible: PROD,
+              highlighted: ["AC","AB","BC"] },
+            { text: "But the square on an apotome, if applied to a rational straight line, produces as breadth a first apotome,",
+              visible: PROD,
+              highlighted: [],
+              justifications: [{ ref: "X.97" }] },
+            { text: "therefore {CB} is a first apotome. And {CA} was also proved to be an apotome.",
+              visible: PROD,
+              highlighted: ["BC","AC"] },
+            { text: "Therefore, if a rational straight line is cut in extreme and mean ratio,",
+              visible: PROD,
+              highlighted: ["AB","C"] },
+            { text: "then each of the segments is the irrational straight line called apotome.",
+              visible: PROD,
+              highlighted: ["AC","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.6") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.2":  "/elements/books/bookI/postulates/post2/",
+        "I.10":      "/elements/books/bookI/propositions/propI10/",
+        "VI.Def.3":  "/elements/books/bookVI/definitions/defVI3/",
+        "VI.17":     "/elements/books/bookVI/propositions/propVI17/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/",
+        "X.6":       "/elements/books/bookX/propositions/propX6/",
+        "X.9":       "/elements/books/bookX/propositions/propX9/",
+        "X.73":      "/elements/books/bookX/propositions/propX73/",
+        "X.97":      "/elements/books/bookX/propositions/propX97/",
+        "XIII.1":    "/elements/books/bookXIII/propositions/propXIII1/"
     });
 </script>
 </figure>
 
-Produce *BA,* and make *AD* half of *BA.*
+Produce {BA}, and make {AD} half of {BA}.
 
-Since, then, the straight line *AB* is cut in extreme and mean ratio, and to the greater segment *AC* is added *AD* which is half of *AB,* therefore the square on *CD* is five times the square on *DA.* [!just XIII.1]
+Since, then, the straight line {AB} is cut in extreme and mean ratio, and to the greater segment {AC} is added {AD} which is half of {AB}, therefore the square on {CD} is five times the square on {DA}. [!just XIII.1]
 
-Therefore the square on *CD* has to the square on *DA* the ratio which a number has to a number, therefore the square on *CD* is commensurable with the square on *DA* [!just X.6]
+Therefore the square on {CD} has to the square on {DA} the ratio which a number has to a number, therefore the square on {CD} is commensurable with the square on {DA} [!just X.6]
 
-But the square on *DA* is rational, for *DA* is rational being half of *AB* which is rational, therefore the square on *CD* is also rational. Therefore *CD* is also rational. [!just X.Def.I.4]
+But the square on {DA} is rational, for {DA} is rational being half of {AB} which is rational, therefore the square on {CD} is also rational. Therefore {CD} is also rational. [!just X.Def.I.4]
 
-And, since the square on *CD* has not to the square on *DA* the ratio which a square number has to a square number, therefore *CD* is incommensurable in length with *DA.* Therefore *CD* and *DA* are rational straight lines commensurable in square only. Therefore *AC* is an apotome. [!just X.9; X.73]
+And, since the square on {CD} has not to the square on {DA} the ratio which a square number has to a square number, therefore {CD} is incommensurable in length with {DA}. Therefore {CD} and {DA} are rational straight lines commensurable in square only. Therefore {AC} is an apotome. [!just X.9; X.73]
 
-Again, since *AB* is cut in extreme and mean ratio, and *AC* is the greater segment, therefore the rectangle *AB* by *BC* equals the square on *AC.* [!just VI.Def.3, VI.17]
+Again, since {AB} is cut in extreme and mean ratio, and {AC} is the greater segment, therefore the rectangle {AB} by {BC} equals the square on {AC}. [!just VI.Def.3, VI.17]
 
-Therefore the square on the apotome *AC,* if applied to the rational straight line *AB,* produces *BC* as breadth. But the square on an apotome, if applied to a rational straight line, produces as breadth a first apotome, therefore *CB* is a first apotome. And *CA* was also proved to be an apotome. [!just X.97]
+Therefore the square on the apotome {AC}, if applied to the rational straight line {AB}, produces {BC} as breadth. But the square on an apotome, if applied to a rational straight line, produces as breadth a first apotome, therefore {CB} is a first apotome. And {CA} was also proved to be an apotome. [!just X.97]
 
 Therefore, *if a rational straight line is cut in extreme and mean ratio, then each of the segments is the irrational straight line called apotome.*
 
