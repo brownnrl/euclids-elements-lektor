@@ -19,12 +19,39 @@ statement: To inscribe an equilateral and equiangular fifteen-angled figure in a
 ----
 proof:
 
-Let *ABCD* be the given circle.
+Let {ABCD} be the given circle.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="325" height="350" tabindex="0"></canvas>
 <noscript><img alt="IV.16 diagram" src="propIV16.gif"/></noscript>
 <script type="text/javascript">
+    // The triangle side AC (IV.2) and the pentagon side AB (IV.11), the
+    // circumferences ABC, AB and the remainder BC, its bisection at E
+    // (III.30), then BE and EC joined and fitted round the circle (IV.1).
+    //
+    // Joyce's figure builds the triangle ACD through the hidden circle Acirc
+    // and the pentagon on the unlabelled free points F and G; those stay
+    // assumed (IV.2, IV.11 are cited, not re-shown). Everything added is
+    // transparent or hidden at rest: ABCDc, a faceless twin of the circle
+    // (the original has an opaque face that highlighting would promote over
+    // the triangle and pentagon, #140); the sides AC and AB; the
+    // circumferences ABC, AB, BC, BE, EC as faceless sectors on the centre
+    // O, listed counter-clockwise on screen (the way an arc draws from its
+    // first arm to its last); and BE, EC, solid black slide twins of the
+    // fifteen-gon's first two sides, hidden at rest (initiallyHidden), so
+    // the joins draw before the figure is fitted round. Circumference and
+    // straight line share a name in the prose (AB, BC, BE, EC): the lines
+    // own it, the circumferences take the display override {BE|arcBE}.
+    var CIRC  = ["circ","ABCDc"];
+    var TRI   = CIRC.concat(["ACD","A","C","D","AC"]);
+    var PENT  = TRI.concat(["pentagon","duppent","F","G","B","AB"]);
+    var THIRD = PENT.concat(["ABC"]);
+    var FIFTH = THIRD.concat(["arcAB"]);
+    var REM   = FIFTH.concat(["arcBC"]);
+    var BIS   = PENT.concat(["arcBC","E"]);
+    var ARCS  = PENT.concat(["E","arcBE","arcEC"]);
+    var JOIN  = ARCS.concat(["BE","EC"]);
+    var DONE  = PENT.concat(["E","BE","EC","fifteen"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -48,19 +75,127 @@ Let *ABCD* be the given circle.
             "OE';line;angleBisector;B,O,C;0;0;0",
             "E';point;last;OE';0;0",
             "E;point;cutoff;O,E',O,A",
-            "fifteen;polygon;regularPolygon;B,E,15;0;0;black;0"
+            "fifteen;polygon;regularPolygon;B,E,15;0;0;black;0",
+            // Transparent twin of the circle (see above).
+            "ABCDc;circle;circumcircle;F,G,A;0;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            // The circumferences.
+            "ABC;sector;sector;O,A,C;0;0;0;0",
+            "arcAB;sector;sector;O,A,B;0;0;0;0",
+            "arcBC;sector;sector;O,B,C;0;0;0;0",
+            "arcBE;sector;sector;O,B,E;0;0;0;0",
+            "arcEC;sector;sector;O,E,C;0;0;0;0",
+            // Slide twins of the first two sides, hidden at rest.
+            "BE;line;connect;B,E",
+            "EC;line;connect;E,C"
         ],
+        // Draggables (checked against the bundle): F and G, free and
+        // unlabelled — the pentagon's base, the handles of the whole figure.
+        // They are deferred so the bare circle of slides 1-4 does not carry
+        // two stray dots, and arrive with the pentagon on slide 5. A, B
+        // (vertex), C, D (extend) and E (cutoff) are derived and listed per
+        // slide.
+        deferDraggables: ["F","G"],
+        initiallyHidden: ["BE","EC"],
+        aliases: { "ABCD": "ABCDc" },
+        slides: [
+            { text: "“To inscribe an equilateral and equiangular fifteen-angled figure in a given circle.”",
+              visible: CIRC,
+              highlighted: ["ABCDc"],
+              justifications: [{ ref: "IV.16" }] },
+            { text: "Let {ABCD} be the given circle.",
+              visible: CIRC,
+              highlighted: ["ABCDc"] },
+            { text: "It is required to inscribe in the circle {ABCD} a fifteen-angled figure which shall be both equilateral and equiangular.",
+              visible: CIRC,
+              highlighted: ["ABCDc"] },
+            { text: "Inscribe a side {AC} of an equilateral triangle",
+              visible: TRI,
+              highlighted: ["AC"],
+              transition: { animations: [
+                  { elem: "ACD", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "the equilateral triangle ACD", ref: "IV.2" }] },
+            { text: "and a side {AB} of an equilateral pentagon in the circle {ABCD}.",
+              visible: PENT,
+              highlighted: ["AB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "pentagon", name: geomlib.A.Polygon.outline },
+                  { elem: "duppent",  name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "the equilateral and equiangular pentagon", ref: "IV.11" }] },
+            { text: "Therefore, of the equal segments of which there are fifteen in the circle {ABCD},",
+              visible: PENT,
+              highlighted: ["ABCDc"] },
+            { text: "there will be five in the circumference {ABC} which is one-third of the circle,",
+              visible: THIRD,
+              highlighted: ["ABC"],
+              transition: { animations: [
+                  { elem: "ABC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and there will be three in the circumference {AB|arcAB} which is one-fifth of the circle.",
+              visible: FIFTH,
+              highlighted: ["arcAB"],
+              transition: { animations: [
+                  { elem: "arcAB", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore in the remainder {BC|arcBC} there will be two of the equal segments.",
+              visible: REM,
+              highlighted: ["arcBC"],
+              transition: { animations: [
+                  { elem: "arcBC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Bisect {BC|arcBC} at {E}.",
+              visible: BIS,
+              highlighted: ["arcBC","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "III.30" }] },
+            { text: "Therefore each of the circumferences {BE|arcBE} and {EC|arcEC} is a fifteenth of the circle {ABCD}.",
+              visible: ARCS,
+              highlighted: ["arcBE","arcEC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "arcBE", name: geomlib.A.Sector.sweep },
+                  { elem: "arcEC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "If therefore we join {BE} and {EC}",
+              visible: JOIN,
+              highlighted: ["BE","EC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "BE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "and continually fit into the circle {ABCD} straight lines equal to them,",
+              visible: DONE,
+              highlighted: ["fifteen"],
+              transition: { animations: [
+                  { elem: "fifteen", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "each fitted equal to BE", ref: "IV.1" }] },
+            { text: "a fifteen-angled figure which is both equilateral and equiangular will be inscribed in it.",
+              visible: DONE,
+              highlighted: ["fifteen"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IV.16") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "III.30":   "/elements/books/bookIII/propositions/propIII30/",
+        "IV.1":     "/elements/books/bookIV/propositions/propIV1/",
+        "IV.2":     "/elements/books/bookIV/propositions/propIV2/",
+        "IV.11":    "/elements/books/bookIV/propositions/propIV11/"
     });
 </script>
 </figure>
 
-It is required to inscribe in the circle *ABCD* a fifteen-angled figure which shall be both equilateral and equiangular.
+It is required to inscribe in the circle {ABCD} a fifteen-angled figure which shall be both equilateral and equiangular.
 
-Inscribe a side *AC* of an equilateral triangle and a side *AB* of an equilateral pentagon in the circle *ABCD.*   Therefore, of the equal segments of which there are fifteen in the circle *ABCD,* there will be five in the circumference *ABC* which is one-third of the circle, and there will be three in the circumference *AB* which is one-fifth of the circle.  Therefore in the remainder *BC* there will be two of the equal segments. [!just IV.2; IV.11]
+Inscribe a side {AC} of an equilateral triangle and a side {AB} of an equilateral pentagon in the circle {ABCD}.   Therefore, of the equal segments of which there are fifteen in the circle {ABCD}, there will be five in the circumference {ABC} which is one-third of the circle, and there will be three in the circumference {AB|arcAB} which is one-fifth of the circle.  Therefore in the remainder {BC|arcBC} there will be two of the equal segments. [!just IV.2; IV.11]
 
-Bisect *BC* at *E.*  Therefore each of the circumferences *BE* and *EC* is a fifteenth of the circle *ABCD.* [!just III.30]
+Bisect {BC|arcBC} at {E}.  Therefore each of the circumferences {BE|arcBE} and {EC|arcEC} is a fifteenth of the circle {ABCD}. [!just III.30]
 
-If therefore we join *BE* and *EC* and continually fit into the circle *ABCD* straight lines equal to them, a fifteen-angled figure which is both equilateral and equiangular will be inscribed in it. [!just IV.1]
+If therefore we join {BE} and {EC} and continually fit into the circle {ABCD} straight lines equal to them, a fifteen-angled figure which is both equilateral and equiangular will be inscribed in it. [!just IV.1]
 
 <div class="qed">Q.E.F.</div>
 <br clear="all">
@@ -68,7 +203,7 @@ If therefore we join *BE* and *EC* and continually fit into the circle *ABCD* st
 ----
 guide:
 
-The arc *AC* is 1/3 of the circle, since *A* and *B* are two of the three equally spaced vertices of a regular triangle. Likewise, the arc *AC* is 1/5 of the circle, since *A* and *C* are two adjacent points of a regular pentagon.  Therefore, the difference of these two arcs, *AC* – *AB,* which is the arc *BC* is 1/3 – 1/5 of the circle, that is 2/15 of the circle.  Since *E* bisects that arc *BC,* therefore *BE* and *EC* are each 1/15 of the circle. The rest of the regular 15-gon can then easily be constructed.
+The arc *AC* is 1/3 of the circle, since *A* and *B* are two of the three equally spaced vertices of a regular triangle. Likewise, the arc *AC* is 1/5 of the circle, since *A* and *C* are two adjacent points of a regular pentagon.  Therefore, the difference of these two arcs, *AC* – *AB,* which is the arc {BC|arcBC} is 1/3 – 1/5 of the circle, that is 2/15 of the circle.  Since {E} bisects that arc {BC|arcBC}, therefore {BE|arcBE} and {EC|arcEC} are each 1/15 of the circle. The rest of the regular 15-gon can then easily be constructed.
 
 #### Constructible regular polygons
 

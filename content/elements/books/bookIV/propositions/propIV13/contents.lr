@@ -17,16 +17,54 @@ statement: To inscribe a circle in a given equilateral and equiangular pentagon.
 ----
 proof:
 
-Let *ABCDE* be the given equilateral and equiangular pentagon.
+Let {ABCDE} be the given equilateral and equiangular pentagon.
 
-It is required to inscribe a circle in the pentagon *ABCDE.*
+It is required to inscribe a circle in the pentagon {ABCDE}.
 
-Bisect the angles *BCD* and *CDE* by the straight lines *CF* and *DF* respectively.  Join the straight lines *FB, FA,* and *FE* from the point *F* at which the straight lines *CF* and *DF* meet one another. [!just I.9]
+Bisect the angles {BCD} and {CDE} by the straight lines {CF|FC} and {DF|FD} respectively.  Join the straight lines {FB}, {FA}, and {FE} from the point {F} at which the straight lines {CF|FC} and {DF|FD} meet one another. [!just I.9]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="320" height="310" tabindex="0"></canvas>
 <noscript><img alt="IV.13 diagram" src="propIV13.gif"/></noscript>
 <script type="text/javascript">
+    // The two bisectors meet at F; the I.4 pair BCF / DCF carries the
+    // bisection on to B ("similarly" to A and E); the perpendiculars FG..FM
+    // and the I.26 pair FHC / FKC make them equal; the circle on them
+    // touches the five sides (III.16) and is described last.
+    //
+    // Joyce's figure draws the five lines AK, BL, CM, DG, EH, each running
+    // from a vertex through F to the foot on the opposite side, and his CF /
+    // DF are the hidden angleBisector lines that stop short of F. The proof
+    // works with the pieces either side of F, so FC, FD (drawn from C and D,
+    // as bisected), FB, FA, FE (joined from F) and the perpendiculars FG..FM
+    // are solid black slide twins over Joyce's lines, hidden at rest
+    // (initiallyHidden), as on IV.3. The prose reaches the bisectors as
+    // {CF|FC} / {DF|FD}, since CF and DF belong to the original elements.
+    //
+    // Everything else added is transparent: the five sides, the triangles
+    // BCF, DCF, FHC, FKC (explicit ;0 faces), and circT, a faceless twin of
+    // the circle that the argument talks about before "Let it be described".
+    // Angle markers: halves pinned at 20 and wholes at 32 so they lie side by
+    // side and nest as drawn; the right angles at G, H, K, L, M are red
+    // squares. The angle and triangle names collide (BCF, DCF, FHC, FKC):
+    // the triangles own them, the angles take the display override.
+    var GIVEN = ["CDEAB","C","D","E","A","B","AB","BC","CD","DE","EA"];
+    var BIS   = GIVEN.concat(["angBCD","angCDE","FC","FD"]);
+    var JOIN  = GIVEN.concat(["FC","FD","F","FB","FA","FE"]);
+    var TRI   = JOIN.concat(["BCF","DCF","angBCF","angDCF"]);
+    var OPP   = TRI.concat(["angCBF","angCDF"]);
+    var DBL   = OPP.concat(["angCDE"]);
+    var ABCv  = DBL.concat(["angABC"]);
+    var HALF  = ABCv.concat(["angABF"]);
+    var SIM   = JOIN.concat(["angBAE","angAED"]);
+    var SIM2  = SIM.concat(["angBAF","angFAE","angAEF","angFED"]);
+    var PERP  = JOIN.concat(["FG","FH","FK","FL","FM","G","H","K","L","M"]);
+    var RT    = PERP.concat(["rtG","rtH","rtK","rtL","rtM"]);
+    var EQ    = RT.concat(["angBCF","angDCF","FHC","FKC"]);
+    var HYP   = RT.concat(["circT"]);
+    // The right-angle squares are dropped once the circle is described:
+    // its opaque face would cover them, and Joyce's figure has none.
+    var DONE  = PERP.concat(["circ"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -52,33 +90,304 @@ Bisect the angles *BCD* and *CDE* by the straight lines *CF* and *DF* respective
             "CM;line;connect;C,M",
             "DG;line;connect;D,G",
             "EH;line;connect;E,H",
-            "circ;circle;radius;F,K;0;0;black;random"
+            "circ;circle;radius;F,K;0;0;black;random",
+            // The five sides, as transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EA;line;connect;E,A;0;0;0",
+            // Slide twins, hidden at rest (see above).
+            "FC;line;connect;C,F",
+            "FD;line;connect;D,F",
+            "FB;line;connect;F,B",
+            "FA;line;connect;F,A",
+            "FE;line;connect;F,E",
+            "FG;line;connect;F,G",
+            "FH;line;connect;F,H",
+            "FK;line;connect;F,K",
+            "FL;line;connect;F,L",
+            "FM;line;connect;F,M",
+            // The triangles of the two congruences. Explicit ;0 faces.
+            "BCF;polygon;triangle;B,C,F;0;0;0;0",
+            "DCF;polygon;triangle;D,C,F;0;0;0;0",
+            "FHC;polygon;triangle;F,H,C;0;0;0;0",
+            "FKC;polygon;triangle;F,K,C;0;0;0;0",
+            // The circle before it is described.
+            "circT;circle;radius;F,K;0;0;0;0",
+            "angBCD;sector;angleMarker;C,B,D,32;0;0;7a4fa3;cdb8e6",
+            "angCDE;sector;angleMarker;D,C,E,32;0;0;7a4fa3;cdb8e6",
+            "angABC;sector;angleMarker;B,A,C,32;0;0;7a4fa3;cdb8e6",
+            "angBAE;sector;angleMarker;A,B,E,32;0;0;7a4fa3;cdb8e6",
+            "angAED;sector;angleMarker;E,A,D,32;0;0;7a4fa3;cdb8e6",
+            "angBCF;sector;angleMarker;C,B,F,20;0;0;3b6ea5;9ec5e8",
+            "angDCF;sector;angleMarker;C,D,F,20;0;0;3b6ea5;9ec5e8",
+            "angCBF;sector;angleMarker;B,C,F,20;0;0;3f8e4f;a8dbb0",
+            "angCDF;sector;angleMarker;D,C,F,20;0;0;3f8e4f;a8dbb0",
+            "angABF;sector;angleMarker;B,A,F,20;0;0;3f8e4f;a8dbb0",
+            "angBAF;sector;angleMarker;A,B,F,20;0;0;c06a1b;f3c590",
+            "angFAE;sector;angleMarker;A,F,E,20;0;0;c06a1b;f3c590",
+            "angAEF;sector;angleMarker;E,A,F,20;0;0;c06a1b;f3c590",
+            "angFED;sector;angleMarker;E,F,D,20;0;0;c06a1b;f3c590",
+            "rtG;sector;angleMarkerRight;G,F,B,12;0;0;red;red",
+            "rtH;sector;angleMarkerRight;H,F,C,12;0;0;red;red",
+            "rtK;sector;angleMarkerRight;K,F,C,12;0;0;red;red",
+            "rtL;sector;angleMarkerRight;L,F,D,12;0;0;red;red",
+            "rtM;sector;angleMarkerRight;M,F,A,12;0;0;red;red"
         ],
+        // Draggables (checked against the bundle): only C and D, free — the
+        // given pentagon's base, standing from slide 1. Every other point is
+        // derived (vertex / intersection) and listed per slide.
+        initiallyHidden: ["FC","FD","FB","FA","FE","FG","FH","FK","FL","FM"],
+        aliases: { "ABCDE": "CDEAB", "BF": "FB", "CB": "BC", "DC": "CD",
+                   "BA": "AB", "ED": "DE", "AE": "EA",
+                   "BCD": "angBCD", "DCB": "angBCD",
+                   "CDE": "angCDE", "EDC": "angCDE",
+                   "ABC": "angABC", "CBA": "angABC",
+                   "BAE": "angBAE", "EAB": "angBAE",
+                   "AED": "angAED", "DEA": "angAED",
+                   "HCF": "angBCF", "FCH": "angBCF",
+                   "KCF": "angDCF", "FCK": "angDCF",
+                   "CBF": "angCBF", "FBC": "angCBF",
+                   "CDF": "angCDF", "FDC": "angCDF",
+                   "ABF": "angABF", "FBA": "angABF",
+                   "GHKLM": "circ" },
+        slides: [
+            { text: "“To inscribe a circle in a given equilateral and equiangular pentagon.”",
+              visible: GIVEN,
+              highlighted: ["CDEAB"],
+              justifications: [{ ref: "IV.13" }] },
+            { text: "Let {ABCDE} be the given equilateral and equiangular pentagon.",
+              visible: GIVEN,
+              highlighted: ["CDEAB"] },
+            { text: "It is required to inscribe a circle in the pentagon {ABCDE}.",
+              visible: GIVEN,
+              highlighted: ["CDEAB"] },
+            { text: "Bisect the angles {BCD} and {CDE} by the straight lines {CF|FC} and {DF|FD} respectively.",
+              visible: BIS,
+              highlighted: ["angBCD","angCDE","FC","FD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angBCD", name: geomlib.A.Sector.sweep },
+                  { elem: "FC",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angCDE", name: geomlib.A.Sector.sweep },
+                  { elem: "FD",     name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "bisect the angles BCD and CDE", ref: "I.9" }] },
+            { text: "Join the straight lines {FB}, {FA}, and {FE} from the point {F}",
+              visible: JOIN,
+              highlighted: ["FB","FA","FE","F"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",  name: geomlib.A.Point.appear },
+                  { elem: "FB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FA", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FE", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "at which the straight lines {CF|FC} and {DF|FD} meet one another.",
+              visible: JOIN,
+              highlighted: ["FC","FD","F"] },
+            { text: "Then, since {BC} equals {CD}, and {CF|FC} common,",
+              visible: JOIN,
+              highlighted: ["BC","CD","FC"] },
+            { text: "the two sides {BC} and {CF|FC} equal the two sides {DC} and {CF|FC},",
+              visible: TRI,
+              highlighted: ["BC","FC","CD"] },
+            { text: "and the angle {BCF|angBCF} equals the angle {DCF|angDCF},",
+              visible: TRI,
+              highlighted: ["angBCF","angDCF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBCF", name: geomlib.A.Sector.sweep },
+                  { elem: "angDCF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the base {BF} equals the base {DF|FD}, and the triangle {BCF} equals the triangle {DCF},",
+              visible: TRI,
+              highlighted: ["FB","FD","BCF","DCF"],
+              justifications: [{ claim: "two sides and the included angle", ref: "I.4" }] },
+            { text: "and the remaining angles equal the remaining angles, namely those opposite the equal sides.",
+              visible: TRI,
+              highlighted: ["BCF","DCF"] },
+            { text: "Therefore the angle {CBF} equals the angle {CDF}.",
+              visible: OPP,
+              highlighted: ["angCBF","angCDF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCBF", name: geomlib.A.Sector.sweep },
+                  { elem: "angCDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "And, since the angle {CDE} is double the angle {CDF},",
+              visible: DBL,
+              highlighted: ["angCDE","angCDF"],
+              transition: { animations: [
+                  { elem: "angCDE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the angle {CDE} equals the angle {ABC},",
+              visible: ABCv,
+              highlighted: ["angCDE","angABC"],
+              transition: { animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "while the angle {CDF} equals the angle {CBF},",
+              visible: ABCv,
+              highlighted: ["angCDF","angCBF"] },
+            { text: "therefore the angle {CBA} is also double the angle {CBF}.",
+              visible: ABCv,
+              highlighted: ["angABC","angCBF"] },
+            { text: "Therefore the angle {ABF} equals the angle {FBC}.",
+              visible: HALF,
+              highlighted: ["angABF","angCBF"],
+              transition: { animations: [
+                  { elem: "angABF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the angle {ABC} is bisected by the straight line {BF}.",
+              visible: HALF,
+              highlighted: ["angABC","FB"] },
+            { text: "Similarly it can be proved that the angles {BAE} and {AED}",
+              visible: SIM,
+              highlighted: ["angBAE","angAED"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAE", name: geomlib.A.Sector.sweep },
+                  { elem: "angAED", name: geomlib.A.Sector.sweep } ] } },
+            { text: "are also bisected by the straight lines {FA} and {FE} respectively.",
+              visible: SIM2,
+              highlighted: ["FA","FE","angBAF","angFAE","angAEF","angFED"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAF", name: geomlib.A.Sector.sweep },
+                  { elem: "angFAE", name: geomlib.A.Sector.sweep },
+                  { elem: "angAEF", name: geomlib.A.Sector.sweep },
+                  { elem: "angFED", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Now draw {FG}, {FH}, {FK}, {FL}, and {FM} from the point {F}",
+              visible: PERP,
+              highlighted: ["FG","FH","FK","FL","FM","F"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "G",  name: geomlib.A.Point.appear },
+                  { elem: "FH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H",  name: geomlib.A.Point.appear },
+                  { elem: "FK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K",  name: geomlib.A.Point.appear },
+                  { elem: "FL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "L",  name: geomlib.A.Point.appear },
+                  { elem: "FM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "M",  name: geomlib.A.Point.appear } ] } },
+            { text: "perpendicular to the straight lines {AB}, {BC}, {CD}, {DE}, and {EA}.",
+              visible: RT,
+              highlighted: ["AB","BC","CD","DE","EA","rtG","rtH","rtK","rtL","rtM"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "rtG", name: geomlib.A.Sector.sweep },
+                  { elem: "rtH", name: geomlib.A.Sector.sweep },
+                  { elem: "rtK", name: geomlib.A.Sector.sweep },
+                  { elem: "rtL", name: geomlib.A.Sector.sweep },
+                  { elem: "rtM", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "perpendiculars from F to the five sides", ref: "I.12" }] },
+            { text: "Then, since the angle {HCF} equals the angle {KCF},",
+              visible: EQ,
+              highlighted: ["angBCF","angDCF"] },
+            { text: "and the right angle {FHC|rtH} also equals the angle {FKC|rtK},",
+              visible: EQ,
+              highlighted: ["rtH","rtK"] },
+            { text: "{FHC} and {FKC} are two triangles having two angles equal to two angles",
+              visible: EQ,
+              highlighted: ["FHC","FKC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "FHC", name: geomlib.A.Polygon.outline },
+                  { elem: "FKC", name: geomlib.A.Polygon.outline } ] } },
+            { text: "and one side equal to one side, namely {FC} which is common to them",
+              visible: EQ,
+              highlighted: ["FC","FHC","FKC"] },
+            { text: "and opposite one of the equal angles,",
+              visible: EQ,
+              highlighted: ["FC","rtH","rtK"] },
+            { text: "therefore they also have the remaining sides equal to the remaining sides.",
+              visible: EQ,
+              highlighted: ["FHC","FKC"],
+              justifications: [{ claim: "two angles and a side opposite one of them", ref: "I.26" }] },
+            { text: "Therefore the perpendicular {FH} equals the perpendicular {FK}.",
+              visible: EQ,
+              highlighted: ["FH","FK"] },
+            { text: "Similarly it can be proved that each of the straight lines {FL}, {FM}, and {FG}",
+              visible: RT,
+              highlighted: ["FL","FM","FG"] },
+            { text: "also equals each of the straight lines {FH} and {FK},",
+              visible: RT,
+              highlighted: ["FL","FM","FG","FH","FK"] },
+            { text: "therefore the five straight lines {FG}, {FH}, {FK}, {FL}, and {FM} equal one another.",
+              visible: RT,
+              highlighted: ["FG","FH","FK","FL","FM"] },
+            { text: "Therefore the circle described with center {F} and radius one of the straight lines {FG}, {FH}, {FK}, {FL}, or {FM}",
+              visible: HYP,
+              highlighted: ["circT","F"],
+              transition: { animations: [
+                  { elem: "circT", name: geomlib.A.Circle.compass } ] } },
+            { text: "also passes through the remaining points,",
+              visible: HYP,
+              highlighted: ["circT","G","H","K","L","M"] },
+            { text: "and it touches the straight lines {AB}, {BC}, {CD}, {DE}, and {EA},",
+              visible: HYP,
+              highlighted: ["circT","AB","BC","CD","DE","EA"] },
+            { text: "because the angles at the points {G}, {H}, {K}, {L}, and {M} are right.",
+              visible: HYP,
+              highlighted: ["rtG","rtH","rtK","rtL","rtM"] },
+            { text: "For, if it does not touch them. but cuts them,",
+              visible: HYP,
+              highlighted: ["circT","AB","BC","CD","DE","EA"] },
+            { text: "it will result that the straight line drawn at right angles to the diameter of the circle from its end",
+              visible: HYP,
+              highlighted: ["circT"] },
+            { text: "falls within the circle, which was proved absurd.",
+              visible: HYP,
+              highlighted: ["circT"],
+              justifications: [{ claim: "the line at right angles to a diameter at its end falls outside", ref: "III.16" }] },
+            { text: "Therefore the circle described with center {F} and radius one of the straight lines {FG}, {FH}, {FK}, {FL}, or {FM}",
+              visible: HYP,
+              highlighted: ["circT","F"] },
+            { text: "does not cut the straight lines {AB}, {BC}, {CD}, {DE}, and {EA}. Therefore it touches them.",
+              visible: HYP,
+              highlighted: ["circT","AB","BC","CD","DE","EA"] },
+            { text: "Let it be described, as {GHKLM}.",
+              visible: DONE,
+              highlighted: ["circ"],
+              transition: { animations: [
+                  { elem: "circ", name: geomlib.A.Circle.compass } ] } },
+            { text: "Therefore a circle has been inscribed in the given equilateral and equiangular pentagon.",
+              visible: DONE,
+              highlighted: ["circ","AB","BC","CD","DE","EA"],
+              justifications: [
+                  { claim: "the circumference touches each side", ref: "IV.Def.5" },
+                  { ref: "Q.E.F." } ] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IV.13") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.9":      "/elements/books/bookI/propositions/propI9/",
+        "I.12":     "/elements/books/bookI/propositions/propI12/",
+        "I.26":     "/elements/books/bookI/propositions/propI26/",
+        "III.16":   "/elements/books/bookIII/propositions/propIII16/",
+        "IV.Def.5": "/elements/books/bookIV/definitions/defIV5/"
     });
 </script>
 </figure>
 
-Then, since *BC* equals *CD,* and *CF* common, the two sides *BC* and *CF* equal the two sides *DC* and *CF,* and the angle *BCF* equals the angle *DCF,* therefore the base *BF* equals the base *DF,* and the triangle *BCF* equals the triangle *DCF,* and the remaining angles equal the remaining angles, namely those opposite the equal sides. [!just I.4]
+Then, since {BC} equals {CD}, and {CF|FC} common, the two sides {BC} and {CF|FC} equal the two sides {DC} and {CF|FC}, and the angle {BCF|angBCF} equals the angle {DCF|angDCF}, therefore the base {BF} equals the base {DF|FD}, and the triangle {BCF} equals the triangle {DCF}, and the remaining angles equal the remaining angles, namely those opposite the equal sides. [!just I.4]
 
-Therefore the angle *CBF* equals the angle *CDF.*
+Therefore the angle {CBF} equals the angle {CDF}.
 
-And, since the angle *CDE* is double the angle *CDF,* and the angle *CDE* equals the angle *ABC,* while the angle *CDF* equals the angle *CBF,* therefore the angle *CBA* is also double the angle *CBF.*  Therefore the angle *ABF* equals the angle *FBC.*  Therefore the angle *ABC* is bisected by the straight line *BF.*
+And, since the angle {CDE} is double the angle {CDF}, and the angle {CDE} equals the angle {ABC}, while the angle {CDF} equals the angle {CBF}, therefore the angle {CBA} is also double the angle {CBF}.  Therefore the angle {ABF} equals the angle {FBC}.  Therefore the angle {ABC} is bisected by the straight line {BF}.
 
-Similarly it can be proved that the angles *BAE* and *AED* are also bisected by the straight lines *FA* and *FE* respectively.
+Similarly it can be proved that the angles {BAE} and {AED} are also bisected by the straight lines {FA} and {FE} respectively.
 
-Now draw *FG, FH, FK, FL,* and *FM* from the point *F* perpendicular to the straight lines *AB, BC, CD, DE,* and *EA.* [!just I.12]
+Now draw {FG}, {FH}, {FK}, {FL}, and {FM} from the point {F} perpendicular to the straight lines {AB}, {BC}, {CD}, {DE}, and {EA}. [!just I.12]
 
-Then, since the angle *HCF* equals the angle *KCF,* and the right angle *FHC* also equals the angle *FKC, FHC* and *FKC* are two triangles having two angles equal to two angles and one side equal to one side, namely *FC* which is common to them and opposite one of the equal angles, therefore they also have the remaining sides equal to the remaining sides.  Therefore the perpendicular *FH* equals the perpendicular *FK.* [!just I.26]
+Then, since the angle {HCF} equals the angle {KCF}, and the right angle {FHC|rtH} also equals the angle {FKC|rtK}, {FHC} and {FKC} are two triangles having two angles equal to two angles and one side equal to one side, namely {FC} which is common to them and opposite one of the equal angles, therefore they also have the remaining sides equal to the remaining sides.  Therefore the perpendicular {FH} equals the perpendicular {FK}. [!just I.26]
 
-Similarly it can be proved that each of the straight lines *FL, FM,* and *FG* also equals each of the straight lines *FH* and *FK,* therefore the five straight lines *FG, FH, FK,*  *FL,* and *FM* equal one another.
+Similarly it can be proved that each of the straight lines {FL}, {FM}, and {FG} also equals each of the straight lines {FH} and {FK}, therefore the five straight lines {FG}, {FH}, {FK},  {FL}, and {FM} equal one another.
 
-Therefore the circle described with center *F* and radius one of the straight lines *FG,* *FH, FK, FL,* or *FM* also passes through the remaining points, and it touches the straight lines *AB, BC, CD, DE,* and *EA,* because the angles at the points *G, H, K, L,* and *M* are right.
+Therefore the circle described with center {F} and radius one of the straight lines {FG}, {FH}, {FK}, {FL}, or {FM} also passes through the remaining points, and it touches the straight lines {AB}, {BC}, {CD}, {DE}, and {EA}, because the angles at the points {G}, {H}, {K}, {L}, and {M} are right.
 
 For, if it does not touch them. but cuts them, it will result that the straight line drawn at right angles to the diameter of the circle from its end falls within the circle, which was proved absurd. [!just III.16]
 
-Therefore the circle described with center *F* and radius one of the straight lines *FG, FH, FK, FL,* or *FM* does not cut the straight lines *AB, BC, CD, DE,* and *EA.*  Therefore it touches them.
+Therefore the circle described with center {F} and radius one of the straight lines {FG}, {FH}, {FK}, {FL}, or {FM} does not cut the straight lines {AB}, {BC}, {CD}, {DE}, and {EA}.  Therefore it touches them.
 
-Let it be described, as *GHKLM.*
+Let it be described, as {GHKLM}.
 
 Therefore a circle has been inscribed in the given equilateral and equiangular pentagon.
 

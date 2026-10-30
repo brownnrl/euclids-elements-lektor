@@ -19,18 +19,61 @@ statement: To inscribe an equilateral and equiangular hexagon in a given circle.
 ----
 proof:
 
-Let *ABCDEF* be the given circle.
+Let {ABCDEF|ABCDEFc} be the given circle.
 
-It is required to inscribe an equilateral and equiangular hexagon in the circle *ABCDEF.*
+It is required to inscribe an equilateral and equiangular hexagon in the circle {ABCDEF|ABCDEFc}.
 
-Draw the diameter *AD* of the circle *ABCDEF.*  Take the center *G* of the circle.  Describe the circle *EGCH* with center *D* and radius *DG.*  Join *EG* and *CG* and carry them through to the points *B* and *F.*  Join *AB,* *BC, CD, DE, EF,* and *FA.* [!just III.1]
+Draw the diameter {AD} of the circle {ABCDEF|ABCDEFc}.  Take the center {G} of the circle.  Describe the circle {EGCH} with center {D} and radius {DG}.  Join {EG} and {CG} and carry them through to the points {B} and {F}.  Join {AB}, {BC}, {CD}, {DE}, {EF}, and {FA}. [!just III.1]
 
-I say that the hexagon *ABCDEF* is equilateral and equiangular.
+I say that the hexagon {ABCDEF|hexagon} is equilateral and equiangular.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="380" tabindex="0"></canvas>
 <noscript><img alt="IV.15 diagram" src="propIV15.gif"/></noscript>
 <script type="text/javascript">
+    // The diameter AD, the centre G, the circle EGCH on D, the lines through
+    // G, the six joins; then the equilateral triangle EGD (I.5, I.32), the
+    // six equal angles at G (I.13, I.15) and their equal circumferences
+    // (III.26, III.29), and the angles of the hexagon on equal
+    // circumferences (III.27).
+    //
+    // Joyce's BE and CF are drawn whole from B and C. The proof joins EG
+    // and CG and carries them through to B and F, so EG, CG, GB and GF are
+    // solid black slide twins over them, hidden at rest (initiallyHidden),
+    // as on IV.3; EB is a transparent target for "standing on EB".
+    // Everything else added is transparent: DG, the six sides, the triangle
+    // EGD (explicit ;0 face), the circumferences (faceless sectors on G,
+    // listed counter-clockwise on screen, which is the way an arc draws from
+    // its first arm to its last), and ABCDEFc, a faceless twin of the
+    // circle. The circle ABCDEF has an opaque face declared below the
+    // hexagon, so highlighting it would paint over the hexagon (#140): the
+    // slides and the prose light the twin ({ABCDEF|ABCDEFc}) and leave the
+    // original in `visible` only. The hexagon is also ABCDEF in the prose
+    // and takes {ABCDEF|hexagon}.
+    //
+    // Angle markers: the six angles at G lie side by side and are pinned
+    // at 22 (EGC, the sum of two of them, at 34 outside); equal angles share
+    // a colour.
+    var CIRC  = ["ABCDEF","ABCDEFc"];
+    var DIAM  = CIRC.concat(["AD","A","D"]);
+    var CEN   = DIAM.concat(["G"]);
+    var SEC   = CEN.concat(["EGCH","DG","C","E","H"]);
+    var JOIN  = SEC.concat(["EG","CG","GB","GF","B","F","EB"]);
+    var HEX   = JOIN.concat(["hexagon","AB","BC","CD","DE","EF","FA"]);
+    var TRI   = HEX.concat(["EGD"]);
+    var TANG  = TRI.concat(["angEGD","angGDE","angDEG"]);
+    var CEN1  = HEX.concat(["angEGD"]);
+    var CEN2  = CEN1.concat(["angDGC"]);
+    var ADJ   = CEN2.concat(["angEGC","angCGB"]);
+    var CEN3  = CEN2.concat(["angCGB"]);
+    var VERT  = CEN3.concat(["angBGA","angAGF","angFGE"]);
+    var ARCS  = VERT.concat(["arcAB","arcBC","arcCD","arcDE","arcEF","arcFA"]);
+    var EQA   = HEX.concat(["arcFA","arcDE"]);
+    var ADD   = EQA.concat(["ABCD"]);
+    var WHOLE = HEX.concat(["FABCD","EDCBA"]);
+    var STAND = WHOLE.concat(["angFED"]);
+    var STAND2 = STAND.concat(["angAFE"]);
+    var ALLANG = HEX.concat(["angAFE","angFED","angA","angB","angC","angD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,39 +94,322 @@ I say that the hexagon *ABCDEF* is equilateral and equiangular.
             "H;point;extend;G,D,G,D;black;0",
             "BE;line;connect;B,E",
             "CF;line;connect;C,F",
-            "hexagon;polygon;hexagon;A,B,C,D,E,F;0;0;black;random"
+            "hexagon;polygon;hexagon;A,B,C,D,E,F;0;0;black;random",
+            // Transparent twin of the circle (see above).
+            "ABCDEFc;circle;radius;G,A;0;0;0;0",
+            "DG;line;connect;D,G;0;0;0",
+            // Slide twins of BE and CF, hidden at rest (see above).
+            "EG;line;connect;E,G",
+            "GB;line;connect;G,B",
+            "CG;line;connect;C,G",
+            "GF;line;connect;G,F",
+            "EB;line;connect;E,B;0;0;0",
+            // The six sides and the triangle EGD.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "FA;line;connect;F,A;0;0;0",
+            "EGD;polygon;triangle;E,G,D;0;0;0;0",
+            // The circumferences: the six sixths, ABCD, and the two wholes.
+            "arcAB;sector;sector;G,A,B;0;0;0;0",
+            "arcBC;sector;sector;G,B,C;0;0;0;0",
+            "arcCD;sector;sector;G,C,D;0;0;0;0",
+            "arcDE;sector;sector;G,D,E;0;0;0;0",
+            "arcEF;sector;sector;G,E,F;0;0;0;0",
+            "arcFA;sector;sector;G,F,A;0;0;0;0",
+            "ABCD;sector;sector;G,A,D;0;0;0;0",
+            "FABCD;sector;sector;G,F,D;0;0;0;0",
+            "EDCBA;sector;sector;G,A,E;0;0;0;0",
+            "angEGD;sector;angleMarker;G,E,D,22;0;0;3b6ea5;9ec5e8",
+            "angDGC;sector;angleMarker;G,D,C,22;0;0;3b6ea5;9ec5e8",
+            "angCGB;sector;angleMarker;G,C,B,22;0;0;3b6ea5;9ec5e8",
+            "angBGA;sector;angleMarker;G,B,A,22;0;0;3b6ea5;9ec5e8",
+            "angAGF;sector;angleMarker;G,A,F,22;0;0;3b6ea5;9ec5e8",
+            "angFGE;sector;angleMarker;G,F,E,22;0;0;3b6ea5;9ec5e8",
+            "angEGC;sector;angleMarker;G,E,C,34;0;0;7a4fa3;cdb8e6",
+            "angGDE;sector;angleMarker;D,G,E,22;0;0;3b6ea5;9ec5e8",
+            "angDEG;sector;angleMarker;E,D,G,22;0;0;3b6ea5;9ec5e8",
+            "angAFE;sector;angleMarker;F,A,E,22;0;0;c06a1b;f3c590",
+            "angFED;sector;angleMarker;E,F,D,22;0;0;c06a1b;f3c590",
+            "angA;sector;angleMarker;A,F,B,22;0;0;c06a1b;f3c590",
+            "angB;sector;angleMarker;B,A,C,22;0;0;c06a1b;f3c590",
+            "angC;sector;angleMarker;C,B,D,22;0;0;c06a1b;f3c590",
+            "angD;sector;angleMarker;D,C,E,22;0;0;c06a1b;f3c590"
         ],
+        // Draggables (checked against the bundle): A and D, free. They are
+        // the diameter's ends, which slide 4 draws, so both are deferred;
+        // without that the auto-union would stand them, lettered, on the
+        // bare circle of slides 1-3. G (midpoint), C, E (the bichord), B, F,
+        // H (extend) are derived and listed per slide.
+        deferDraggables: ["A","D"],
+        initiallyHidden: ["EG","GB","CG","GF"],
+        aliases: { "GE": "EG", "GC": "CG", "BG": "GB", "FG": "GF",
+                   "GD": "DG", "ED": "DE", "AF": "FA", "GCH": "EGCH",
+                   "DGC": "angDGC", "CGD": "angDGC",
+                   "CGB": "angCGB", "BGC": "angCGB",
+                   "BGA": "angBGA", "AGB": "angBGA",
+                   "AGF": "angAGF", "FGA": "angAGF",
+                   "FGE": "angFGE", "EGF": "angFGE",
+                   "EGC": "angEGC", "CGE": "angEGC",
+                   "GDE": "angGDE", "EDG": "angGDE",
+                   "DEG": "angDEG", "GED": "angDEG",
+                   "FED": "angFED", "DEF": "angFED",
+                   "AFE": "angAFE", "EFA": "angAFE" },
+        slides: [
+            { text: "“To inscribe an equilateral and equiangular hexagon in a given circle.”",
+              visible: CIRC,
+              highlighted: ["ABCDEFc"],
+              justifications: [{ ref: "IV.15" }] },
+            { text: "Let {ABCDEF|ABCDEFc} be the given circle.",
+              visible: CIRC,
+              highlighted: ["ABCDEFc"] },
+            { text: "It is required to inscribe an equilateral and equiangular hexagon in the circle {ABCDEF|ABCDEFc}.",
+              visible: CIRC,
+              highlighted: ["ABCDEFc"] },
+            { text: "Draw the diameter {AD} of the circle {ABCDEF|ABCDEFc}.",
+              visible: DIAM,
+              highlighted: ["AD"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "A",  name: geomlib.A.Point.appear },
+                  { elem: "AD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",  name: geomlib.A.Point.appear } ] } },
+            { text: "Take the center {G} of the circle.",
+              visible: CEN,
+              highlighted: ["G"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "III.1" }] },
+            { text: "Describe the circle {EGCH} with center {D} and radius {DG}.",
+              visible: SEC,
+              highlighted: ["EGCH","DG"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EGCH", name: geomlib.A.Circle.compass },
+                  { elem: "E",    name: geomlib.A.Point.appear },
+                  { elem: "C",    name: geomlib.A.Point.appear },
+                  { elem: "H",    name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.3" }] },
+            { text: "Join {EG} and {CG} and carry them through to the points {B} and {F}.",
+              visible: JOIN,
+              highlighted: ["EG","CG","GB","GF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "EG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "CG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GB", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "B",  name: geomlib.A.Point.appear },
+                  { elem: "GF", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "F",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.Post.1" }, { ref: "I.Post.2" }] },
+            { text: "Join {AB}, {BC}, {CD}, {DE}, {EF}, and {FA}.",
+              visible: HEX,
+              highlighted: ["AB","BC","CD","DE","EF","FA"],
+              transition: { animations: [
+                  // The six sides are zero-colour targets; the hexagon
+                  // draws them, so outlining it traces the same joins.
+                  { elem: "hexagon", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "I say that the hexagon {ABCDEF|hexagon} is equilateral and equiangular.",
+              visible: HEX,
+              highlighted: ["hexagon"] },
+            { text: "For, since the point {G} is the center of the circle {ABCDEF|ABCDEFc}, {GE} equals {GD}.",
+              visible: HEX,
+              highlighted: ["G","ABCDEFc","EG","DG"],
+              justifications: [{ claim: "radii of the circle ABCDEF", ref: "I.Def.15" }] },
+            { text: "Again, since the point {D} is the center of the circle {GCH}, {DE} equals {DG}.",
+              visible: HEX,
+              highlighted: ["D","EGCH","DE","DG"],
+              justifications: [{ claim: "radii of the circle GCH", ref: "I.Def.15" }] },
+            { text: "But {GE} was proved equal to {GD}, therefore {GE} also equals {ED}.",
+              visible: HEX,
+              highlighted: ["EG","DG","DE"],
+              justifications: [{ claim: "each equals GD", ref: "C.N.1" }] },
+            { text: "Therefore the triangle {EGD} is equilateral,",
+              visible: TRI,
+              highlighted: ["EGD"],
+              transition: { animations: [
+                  { elem: "EGD", name: geomlib.A.Polygon.outline } ] } },
+            { text: "and therefore its three angles {EGD|angEGD}, {GDE}, and {DEG} equal one another,",
+              visible: TANG,
+              highlighted: ["angEGD","angGDE","angDEG"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angEGD", name: geomlib.A.Sector.sweep },
+                  { elem: "angGDE", name: geomlib.A.Sector.sweep },
+                  { elem: "angDEG", name: geomlib.A.Sector.sweep } ] } },
+            { text: "inasmuch as, in isosceles triangles, the angles at the base equal one another.",
+              visible: TANG,
+              highlighted: ["EGD"],
+              justifications: [{ ref: "I.5" }] },
+            { text: "And the sum of the three angles of the triangle equals two right angles,",
+              visible: TANG,
+              highlighted: ["angEGD","angGDE","angDEG"],
+              justifications: [{ ref: "I.32" }] },
+            { text: "therefore the angle {EGD|angEGD} is one-third of two right angles.",
+              visible: TANG,
+              highlighted: ["angEGD"] },
+            { text: "Similarly, the angle {DGC} can also be proved to be one third of two right angles.",
+              visible: CEN2,
+              highlighted: ["angDGC"],
+              transition: { animations: [
+                  { elem: "angDGC", name: geomlib.A.Sector.sweep } ] } },
+            { text: "And, since the straight line {CG} standing on {EB}",
+              visible: CEN2,
+              highlighted: ["CG","EB"] },
+            { text: "makes the sum of the adjacent angles {EGC} and {CGB} equal to two right angles,",
+              visible: ADJ,
+              highlighted: ["angEGC","angCGB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angEGC", name: geomlib.A.Sector.sweep },
+                  { elem: "angCGB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angles EGC and CGB on the straight line EB", ref: "I.13" }] },
+            { text: "therefore the remaining angle {CGB} is also one-third of two right angles.",
+              visible: CEN3,
+              highlighted: ["angCGB"] },
+            { text: "Therefore the angles {EGD|angEGD}, {DGC}, and {CGB} equal one another,",
+              visible: CEN3,
+              highlighted: ["angEGD","angDGC","angCGB"] },
+            { text: "so that the angles vertical to them, the angles {BGA}, {AGF}, and {FGE}, are equal.",
+              visible: VERT,
+              highlighted: ["angBGA","angAGF","angFGE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBGA", name: geomlib.A.Sector.sweep },
+                  { elem: "angAGF", name: geomlib.A.Sector.sweep },
+                  { elem: "angFGE", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "vertical angles are equal", ref: "I.15" }] },
+            { text: "Therefore the six angles {EGD|angEGD}, {DGC}, {CGB}, {BGA}, {AGF}, and {FGE} equal one another.",
+              visible: VERT,
+              highlighted: ["angEGD","angDGC","angCGB","angBGA","angAGF","angFGE"] },
+            { text: "But equal angles stand on equal circumferences,",
+              visible: VERT,
+              highlighted: ["angEGD","angDGC","angCGB","angBGA","angAGF","angFGE"],
+              justifications: [{ ref: "III.26" }] },
+            { text: "therefore the six circumferences {AB|arcAB}, {BC|arcBC}, {CD|arcCD}, {DE|arcDE}, {EF|arcEF}, and {FA|arcFA} equal one another.",
+              visible: ARCS,
+              highlighted: ["arcAB","arcBC","arcCD","arcDE","arcEF","arcFA"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "arcAB", name: geomlib.A.Sector.sweep },
+                  { elem: "arcBC", name: geomlib.A.Sector.sweep },
+                  { elem: "arcCD", name: geomlib.A.Sector.sweep },
+                  { elem: "arcDE", name: geomlib.A.Sector.sweep },
+                  { elem: "arcEF", name: geomlib.A.Sector.sweep },
+                  { elem: "arcFA", name: geomlib.A.Sector.sweep } ] } },
+            { text: "And straight lines that cut off equal circumferences are equal, therefore the six straight lines equal one another.",
+              visible: ARCS,
+              highlighted: ["AB","BC","CD","DE","EF","FA"],
+              justifications: [{ ref: "III.29" }] },
+            { text: "Therefore the hexagon {ABCDEF|hexagon} is equilateral.",
+              visible: HEX,
+              highlighted: ["hexagon"] },
+            { text: "I say next that it is also equiangular.",
+              visible: HEX,
+              highlighted: ["hexagon"] },
+            { text: "For, since the circumference {FA|arcFA} equals the circumference {ED|arcDE},",
+              visible: EQA,
+              highlighted: ["arcFA","arcDE"] },
+            { text: "add the circumference {ABCD} to each,",
+              visible: ADD,
+              highlighted: ["ABCD"],
+              transition: { animations: [
+                  { elem: "ABCD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the whole {FABCD} equals the whole {EDCBA}.",
+              visible: WHOLE,
+              highlighted: ["FABCD","EDCBA"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "FABCD", name: geomlib.A.Sector.sweep },
+                  { elem: "EDCBA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "equals added to equals", ref: "C.N.2" }] },
+            { text: "And the angle {FED} stands on the circumference {FABCD},",
+              visible: STAND,
+              highlighted: ["angFED","FABCD"],
+              transition: { animations: [
+                  { elem: "angFED", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the angle {AFE} on the circumference {EDCBA},",
+              visible: STAND2,
+              highlighted: ["angAFE","EDCBA"],
+              transition: { animations: [
+                  { elem: "angAFE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the angle {AFE} equals the angle {DEF}.",
+              visible: STAND2,
+              highlighted: ["angAFE","angFED"],
+              justifications: [{ claim: "angles on equal circumferences", ref: "III.27" }] },
+            { text: "Similarly it can be proved that the remaining angles of the hexagon {ABCDEF|hexagon}",
+              visible: ALLANG,
+              highlighted: ["angA","angB","angC","angD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angA", name: geomlib.A.Sector.sweep },
+                  { elem: "angB", name: geomlib.A.Sector.sweep },
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "angD", name: geomlib.A.Sector.sweep } ] } },
+            { text: "are also severally equal to each of the angles {AFE} and {FED},",
+              visible: ALLANG,
+              highlighted: ["angA","angB","angC","angD","angAFE","angFED"] },
+            { text: "therefore the hexagon {ABCDEF|hexagon} is equiangular.",
+              visible: ALLANG,
+              highlighted: ["angA","angB","angC","angD","angAFE","angFED"] },
+            { text: "But it was also proved equilateral, and it has been inscribed in the circle {ABCDEF|ABCDEFc}.",
+              visible: HEX,
+              highlighted: ["hexagon"],
+              justifications: [{ claim: "each angle lies on the circumference", ref: "IV.Def.3" }] },
+            { text: "Therefore an equilateral and equiangular hexagon has been inscribed in the given circle.",
+              visible: HEX,
+              highlighted: ["hexagon","ABCDEFc"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IV.15") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Def.15": "/elements/books/bookI/definitions/defI15/",
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.Post.2": "/elements/books/bookI/postulates/post2/",
+        "I.Post.3": "/elements/books/bookI/postulates/post3/",
+        "C.N.1":    "/elements/books/bookI/commonnotions/cn1/",
+        "C.N.2":    "/elements/books/bookI/commonnotions/cn2/",
+        "I.5":      "/elements/books/bookI/propositions/propI5/",
+        "I.13":     "/elements/books/bookI/propositions/propI13/",
+        "I.15":     "/elements/books/bookI/propositions/propI15/",
+        "I.32":     "/elements/books/bookI/propositions/propI32/",
+        "III.1":    "/elements/books/bookIII/propositions/propIII1/",
+        "III.26":   "/elements/books/bookIII/propositions/propIII26/",
+        "III.27":   "/elements/books/bookIII/propositions/propIII27/",
+        "III.29":   "/elements/books/bookIII/propositions/propIII29/",
+        "IV.Def.3": "/elements/books/bookIV/definitions/defIV3/"
     });
 </script>
 </figure>
 
-For, since the point *G* is the center of the circle *ABCDEF, GE* equals *GD.*
+For, since the point {G} is the center of the circle {ABCDEF|ABCDEFc}, {GE} equals {GD}.
 
-Again, since the point *D* is the center of the circle *GCH, DE* equals *DG.*
+Again, since the point {D} is the center of the circle {GCH}, {DE} equals {DG}.
 
-But *GE* was proved equal to *GD,* therefore *GE* also equals *ED.*  Therefore the triangle *EGD* is equilateral, and therefore its three angles *EGD,* *GDE,* and *DEG* equal one another, inasmuch as, in isosceles triangles, the angles at the base equal one another. [!just I.5]
+But {GE} was proved equal to {GD}, therefore {GE} also equals {ED}.  Therefore the triangle {EGD} is equilateral, and therefore its three angles {EGD|angEGD}, {GDE}, and {DEG} equal one another, inasmuch as, in isosceles triangles, the angles at the base equal one another. [!just I.5]
 
-And the sum of the three angles of the triangle equals two right angles, therefore the angle *EGD* is one-third of two right angles. [!just I.32]
+And the sum of the three angles of the triangle equals two right angles, therefore the angle {EGD|angEGD} is one-third of two right angles. [!just I.32]
 
-Similarly, the angle *DGC* can also be proved to be one third of two right angles.
+Similarly, the angle {DGC} can also be proved to be one third of two right angles.
 
-And, since the straight line *CG* standing on *EB* makes the sum of the adjacent angles *EGC* and *CGB* equal to two right angles, therefore the remaining angle *CGB* is also one-third of two right angles. [!just I.13]
+And, since the straight line {CG} standing on {EB} makes the sum of the adjacent angles {EGC} and {CGB} equal to two right angles, therefore the remaining angle {CGB} is also one-third of two right angles. [!just I.13]
 
-Therefore the angles *EGD, DGC,* and *CGB* equal one another, so that the angles vertical to them, the angles *BGA, AGF,* and *FGE,* are equal. [!just I.15]
+Therefore the angles {EGD|angEGD}, {DGC}, and {CGB} equal one another, so that the angles vertical to them, the angles {BGA}, {AGF}, and {FGE}, are equal. [!just I.15]
 
-Therefore the six angles *EGD, DGC, CGB, BGA, AGF,* and *FGE* equal one another.
+Therefore the six angles {EGD|angEGD}, {DGC}, {CGB}, {BGA}, {AGF}, and {FGE} equal one another.
 
-But equal angles stand on equal circumferences, therefore the six circumferences *AB, BC, CD, DE, EF,* and *FA* equal one another. [!just III.26]
+But equal angles stand on equal circumferences, therefore the six circumferences {AB|arcAB}, {BC|arcBC}, {CD|arcCD}, {DE|arcDE}, {EF|arcEF}, and {FA|arcFA} equal one another. [!just III.26]
 
-And straight lines that cut off equal circumferences are equal, therefore the six straight lines equal one another.  Therefore the hexagon *ABCDEF* is equilateral. [!just III.29]
+And straight lines that cut off equal circumferences are equal, therefore the six straight lines equal one another.  Therefore the hexagon {ABCDEF|hexagon} is equilateral. [!just III.29]
 
 I say next that it is also equiangular.
 
-For, since the circumference *FA* equals the circumference *ED,* add the circumference *ABCD* to each, therefore the whole *FABCD* equals the whole *EDCBA.*  And the angle *FED* stands on the circumference *FABCD,* and the angle *AFE* on the circumference *EDCBA,* therefore the angle *AFE* equals the angle *DEF.* [!just III.27]
+For, since the circumference {FA|arcFA} equals the circumference {ED|arcDE}, add the circumference {ABCD} to each, therefore the whole {FABCD} equals the whole {EDCBA}.  And the angle {FED} stands on the circumference {FABCD}, and the angle {AFE} on the circumference {EDCBA}, therefore the angle {AFE} equals the angle {DEF}. [!just III.27]
 
-Similarly it can be proved that the remaining angles of the hexagon *ABCDEF* are also severally equal to each of the angles *AFE* and *FED,* therefore the hexagon *ABCDEF* is equiangular.
+Similarly it can be proved that the remaining angles of the hexagon {ABCDEF|hexagon} are also severally equal to each of the angles {AFE} and {FED}, therefore the hexagon {ABCDEF|hexagon} is equiangular.
 
-But it was also proved equilateral, and it has been inscribed in the circle *ABCDEF.*
+But it was also proved equilateral, and it has been inscribed in the circle {ABCDEF|ABCDEFc}.
 
 Therefore an equilateral and equiangular hexagon has been inscribed in the given circle.
 

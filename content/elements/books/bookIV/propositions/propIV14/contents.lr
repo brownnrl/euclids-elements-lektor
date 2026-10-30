@@ -17,16 +17,33 @@ statement: To circumscribe a circle about a given equilateral and equiangular pe
 ----
 proof:
 
-Let *ABCDE* be the given pentagon, which is equilateral and equiangular.
+Let {ABCDE} be the given pentagon, which is equilateral and equiangular.
 
-It is required to circumscribe a circle about the pentagon *ABCDE.*
+It is required to circumscribe a circle about the pentagon {ABCDE}.
 
-Bisect the angles *BCD* and *CDE* by the straight lines *CF* and *DF* respectively.  Join the straight lines *FB, FA,* and *FE* from the point *F* at which the straight lines meet to the points *B, A,* and *E.* [!just I.9]
+Bisect the angles {BCD} and {CDE} by the straight lines {CF} and {DF} respectively.  Join the straight lines {FB}, {FA}, and {FE} from the point {F} at which the straight lines meet to the points {B}, {A}, and {E}. [!just I.9]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="220" tabindex="0"></canvas>
 <noscript><img alt="IV.14 diagram" src="propIV14.gif"/></noscript>
 <script type="text/javascript">
+    // The IV.13 bisectors, the joins from F, then I.6 on the isosceles FCD
+    // and the circle through the five vertices. Joyce's figure already draws
+    // the five lines from F, so the deck animates them directly; what is
+    // added is transparent or hidden at rest: circT, a faceless twin of the
+    // circle for the slides that speak of it before "Let it be
+    // circumscribed", and the angle markers (halves pinned at 20, wholes at
+    // 32, so they nest as drawn). The pentagon and the circle are both
+    // ABCDE in the prose: the pentagon takes the alias, the circle the
+    // display override {ABCDE|circ}.
+    var GIVEN = ["CDEAB","C","D","E","A","B"];
+    var BIS   = GIVEN.concat(["angBCD","angCDE","CF","DF"]);
+    var JOIN  = GIVEN.concat(["CF","DF","F","BF","AF","EF"]);
+    var SIM   = JOIN.concat(["angCBA","angBAE","angAED"]);
+    var WHOLE = JOIN.concat(["angBCD","angCDE"]);
+    var HALF  = WHOLE.concat(["angFCD","angCDF"]);
+    var HYP   = JOIN.concat(["circT"]);
+    var DONE  = JOIN.concat(["circ"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -45,23 +62,146 @@ Bisect the angles *BCD* and *CDE* by the straight lines *CF* and *DF* respective
             "BF;line;connect;B,F",
             "CF;line;connect;C,F",
             "DF;line;connect;D,F",
-            "EF;line;connect;E,F"
+            "EF;line;connect;E,F",
+            // The circle before it is circumscribed: a faceless twin.
+            "circT;circle;circumcircle;A,B,C;0;0;0;0",
+            "angBCD;sector;angleMarker;C,B,D,32;0;0;7a4fa3;cdb8e6",
+            "angCDE;sector;angleMarker;D,C,E,32;0;0;7a4fa3;cdb8e6",
+            "angCBA;sector;angleMarker;B,C,A,32;0;0;7a4fa3;cdb8e6",
+            "angBAE;sector;angleMarker;A,B,E,32;0;0;7a4fa3;cdb8e6",
+            "angAED;sector;angleMarker;E,A,D,32;0;0;7a4fa3;cdb8e6",
+            "angFCD;sector;angleMarker;C,F,D,20;0;0;3b6ea5;9ec5e8",
+            "angCDF;sector;angleMarker;D,C,F,20;0;0;3b6ea5;9ec5e8"
         ],
+        // Draggables (checked against the bundle): only C and D, free — the
+        // given pentagon's base, standing from slide 1. E, A, B (vertex) and
+        // F (center) are derived and listed per slide.
+        aliases: { "ABCDE": "CDEAB",
+                   "FC": "CF", "FD": "DF", "FB": "BF", "FA": "AF", "FE": "EF",
+                   "BCD": "angBCD", "DCB": "angBCD",
+                   "CDE": "angCDE", "EDC": "angCDE",
+                   "CBA": "angCBA", "ABC": "angCBA",
+                   "BAE": "angBAE", "EAB": "angBAE",
+                   "AED": "angAED", "DEA": "angAED",
+                   "FCD": "angFCD", "DCF": "angFCD",
+                   "CDF": "angCDF", "FDC": "angCDF" },
+        slides: [
+            { text: "“To circumscribe a circle about a given equilateral and equiangular pentagon.”",
+              visible: GIVEN,
+              highlighted: ["CDEAB"],
+              justifications: [{ ref: "IV.14" }] },
+            { text: "Let {ABCDE} be the given pentagon, which is equilateral and equiangular.",
+              visible: GIVEN,
+              highlighted: ["CDEAB"] },
+            { text: "It is required to circumscribe a circle about the pentagon {ABCDE}.",
+              visible: GIVEN,
+              highlighted: ["CDEAB"] },
+            { text: "Bisect the angles {BCD} and {CDE} by the straight lines {CF} and {DF} respectively.",
+              visible: BIS,
+              highlighted: ["angBCD","angCDE","CF","DF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angBCD", name: geomlib.A.Sector.sweep },
+                  { elem: "CF",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angCDE", name: geomlib.A.Sector.sweep },
+                  { elem: "DF",     name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "bisect the angles BCD and CDE", ref: "I.9" }] },
+            { text: "Join the straight lines {FB}, {FA}, and {FE} from the point {F} at which the straight lines meet",
+              visible: JOIN,
+              highlighted: ["BF","AF","EF","F"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",  name: geomlib.A.Point.appear },
+                  { elem: "BF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "to the points {B}, {A}, and {E}.",
+              visible: JOIN,
+              highlighted: ["BF","AF","EF","B","A","E"] },
+            { text: "Then in manner similar to the preceding it can be proved that the angles {CBA}, {BAE}, and {AED}",
+              visible: SIM,
+              highlighted: ["angCBA","angBAE","angAED"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCBA", name: geomlib.A.Sector.sweep },
+                  { elem: "angBAE", name: geomlib.A.Sector.sweep },
+                  { elem: "angAED", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "as in the preceding proposition", ref: "IV.13" }] },
+            { text: "are also bisected by the straight lines {FB}, {FA}, and {FE} respectively.",
+              visible: SIM,
+              highlighted: ["angCBA","angBAE","angAED","BF","AF","EF"] },
+            { text: "Now, since the angle {BCD} equals the angle {CDE},",
+              visible: WHOLE,
+              highlighted: ["angBCD","angCDE"] },
+            { text: "and the angle {FCD} is half of the angle {BCD}, and the angle {CDF} half of the angle {CDE},",
+              visible: HALF,
+              highlighted: ["angFCD","angBCD","angCDF","angCDE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angFCD", name: geomlib.A.Sector.sweep },
+                  { elem: "angCDF", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the angle {FCD} also equals the angle {CDF},",
+              visible: HALF,
+              highlighted: ["angFCD","angCDF"] },
+            { text: "so that the side {FC} also equals the side {FD}.",
+              visible: HALF,
+              highlighted: ["CF","DF","angFCD","angCDF"],
+              justifications: [{ claim: "sides opposite equal angles are equal", ref: "I.6" }] },
+            { text: "Similarly it can be proved that each of the straight lines {FB}, {FA}, and {FE}",
+              visible: JOIN,
+              highlighted: ["BF","AF","EF"] },
+            { text: "also equals each of the straight lines {FC} and {FD}.",
+              visible: JOIN,
+              highlighted: ["BF","AF","EF","CF","DF"] },
+            { text: "Therefore the five straight lines {FA}, {FB}, {FC}, {FD}, and {FE} equal one another.",
+              visible: JOIN,
+              highlighted: ["AF","BF","CF","DF","EF"] },
+            { text: "Therefore the circle described with center {F} and radius one of the straight lines {FA}, {FB}, {FC}, {FD}, or {FE}",
+              visible: HYP,
+              highlighted: ["circT","F"],
+              transition: { animations: [
+                  { elem: "circT", name: geomlib.A.Circle.compass } ] } },
+            { text: "also passes through the remaining points, and is circumscribed.",
+              visible: HYP,
+              highlighted: ["circT","A","B","C","D","E"] },
+            { text: "Let it be circumscribed, and let it be {ABCDE|circ}.",
+              visible: DONE,
+              highlighted: ["circ"],
+              transition: { animations: [
+                  { elem: "circ", name: geomlib.A.Circle.compass } ] } },
+            { text: "Therefore a circle has been circumscribed about the given equilateral and equiangular pentagon.",
+              visible: DONE,
+              highlighted: ["circ","A","B","C","D","E"],
+              justifications: [
+                  { claim: "the circumference passes through each angle", ref: "IV.Def.6" },
+                  { ref: "Q.E.F." } ] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IV.14") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.6":      "/elements/books/bookI/propositions/propI6/",
+        "I.9":      "/elements/books/bookI/propositions/propI9/",
+        "IV.13":    "/elements/books/bookIV/propositions/propIV13/",
+        "IV.Def.6": "/elements/books/bookIV/definitions/defIV6/"
     });
 </script>
 </figure>
 
 <div class="just">As in <a href="/elements/books/bookIV/propositions/propIV13/">IV.13</a></div>
 
-Then in manner similar to the preceding it can be proved that the angles *CBA, BAE,* and *AED* are also bisected by the straight lines *FB, FA,* and *FE* respectively.
+Then in manner similar to the preceding it can be proved that the angles {CBA}, {BAE}, and {AED} are also bisected by the straight lines {FB}, {FA}, and {FE} respectively.
 
-Now, since the angle *BCD* equals the angle *CDE,* and the angle *FCD* is half of the angle *BCD,* and the angle *CDF* half of the angle *CDE,* therefore the angle *FCD* also equals the angle *CDF,* so that the side *FC* also equals the side *FD.* [!just I.6]
+Now, since the angle {BCD} equals the angle {CDE}, and the angle {FCD} is half of the angle {BCD}, and the angle {CDF} half of the angle {CDE}, therefore the angle {FCD} also equals the angle {CDF}, so that the side {FC} also equals the side {FD}. [!just I.6]
 
-Similarly it can be proved that each of the straight lines *FB, FA,* and *FE* also equals each of the straight lines *FC* and *FD.*  Therefore the five straight lines *FA, FB, FC,*  *FD,* and *FE* equal one another.
+Similarly it can be proved that each of the straight lines {FB}, {FA}, and {FE} also equals each of the straight lines {FC} and {FD}.  Therefore the five straight lines {FA}, {FB}, {FC},  {FD}, and {FE} equal one another.
 
-Therefore the circle described with center *F* and radius one of the straight lines *FA, FB, FC, FD,* or *FE* also passes through the remaining points, and is circumscribed.
+Therefore the circle described with center {F} and radius one of the straight lines {FA}, {FB}, {FC}, {FD}, or {FE} also passes through the remaining points, and is circumscribed.
 
-Let it be circumscribed, and let it be *ABCDE.*
+Let it be circumscribed, and let it be {ABCDE|circ}.
 
 Therefore a circle has been circumscribed about the given equilateral and equiangular pentagon.
 
