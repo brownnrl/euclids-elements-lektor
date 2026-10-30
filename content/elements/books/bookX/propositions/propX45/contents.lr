@@ -15,14 +15,26 @@ statement: A major straight line is divided at one point only.
 ----
 proof:
 
-Let *AB* be a major straight line divided at *C*, so that *AC* and *CB* are incommensurable in square, and let the sum of the squares on *AC* and *CB* be rational, but the rectangle *AC* by *CB* medial.
+Let {AB} be a major straight line divided at {C}, so that {AC} and {CB} are incommensurable in square, and let the sum of the squares on {AC} and {CB} be rational, but the rectangle {AC} by {CB} medial.
 
-I say that *AB* is not so divided at another point.
+I say that {AB} is not so divided at another point.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="70" tabindex="0"></canvas>
 <noscript><img alt="X.45 diagram" src="propX45.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the major line AB with its point of division C and the
+    // supposed second point D. Added, all transparent highlight targets
+    // (;0;0;0): the parts AC, CB, AD, DB. Resting figure unchanged.
+    //
+    // Draggables (checked against the bundle): A0, A3 (invisible offscreen
+    // frees), A, B, C, D (line sliders). D only arrives with "If possible,
+    // let it also be divided at D", so it is deferred.
+    //
+    // A reductio: D rests on the supposition, so the closing slides withdraw
+    // it and leave AB divided at C.
+    var GIVEN = ["A","B","C","AB","AC","CB"];
+    var ALL   = GIVEN.concat(["D","AD","DB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -34,15 +46,90 @@ I say that *AB* is not so divided at another point.
             "B;point;lineSlider;A0,A3,220,0",
             "AB;line;connect;A,B;0;0",
             "C;point;lineSlider;A0,A3,170,0",
-            "D;point;lineSlider;A0,A3,130,0"
+            "D;point;lineSlider;A0,A3,130,0",
+            // Highlight targets only.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0"
         ],
+        deferDraggables: ["D"],
+        slides: [
+            { text: "“A major straight line is divided at one point only.”",
+              visible: GIVEN,
+              highlighted: ["AB"],
+              justifications: [{ ref: "X.45" }] },
+            { text: "Let {AB} be a major straight line divided at {C},",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "so that {AC} and {CB} are incommensurable in square,",
+              visible: GIVEN,
+              highlighted: ["AC","CB"] },
+            { text: "and let the sum of the squares on {AC} and {CB} be rational, but the rectangle {AC} by {CB} medial.",
+              visible: GIVEN,
+              highlighted: ["AC","CB"] },
+            { text: "I say that {AB} is not so divided at another point.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "If possible, let it also be divided at {D},",
+              visible: ALL,
+              highlighted: ["D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "so that {AD} and {DB} are incommensurable in square",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "and the sum of the squares on {AD} and {DB} is rational, but the rectangle contained by them medial.",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "Then, since that by which the sum of the squares on {AC} and {CB}",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "differs from the sum of the squares on {AD} and {DB}",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "is also that by which twice the rectangle {AD} by {DB} differs from twice the rectangle {AC} by {CB},",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "while the sum of the squares on {AC} and {CB} exceeds the sum of the squares on {AD} and {DB}",
+              visible: ALL,
+              highlighted: ["AC","CB","AD","DB"] },
+            { text: "by a rational area, for both are rational,",
+              visible: ALL },
+            { text: "therefore twice the rectangle {AD} by {DB} also exceeds twice the rectangle {AC} by {CB} by a rational area,",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "though they are medial, which is impossible.",
+              visible: ALL,
+              justifications: [{ claim: "a medial area does not exceed a medial area by a rational area", ref: "X.26" }] },
+            { text: "Therefore a major straight line is not divided at different points.",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "Therefore it is only divided at one and the same point.",
+              visible: GIVEN,
+              highlighted: ["C"] },
+            { text: "Therefore, a major straight line is divided at one point only.",
+              visible: GIVEN,
+              highlighted: ["AB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.45") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.26": "/elements/books/bookX/propositions/propX26/"
     });
 </script>
 </figure>
 
-If possible, let it also be divided at *D*, so that *AD* and *DB* are incommensurable in square and the sum of the squares on *AD* and *DB* is rational, but the rectangle contained by them medial.
+If possible, let it also be divided at {D}, so that {AD} and {DB} are incommensurable in square and the sum of the squares on {AD} and {DB} is rational, but the rectangle contained by them medial.
 
-Then, since that by which the sum of the squares on *AC* and *CB* differs from the sum of the squares on *AD* and *DB* is also that by which twice the rectangle *AD* by *DB* differs from twice the rectangle *AC* by *CB*, while the sum of the squares on *AC* and *CB* exceeds the sum of the squares on *AD* and *DB* by a rational area, for both are rational, therefore twice the rectangle *AD* by *DB* also exceeds twice the rectangle *AC* by *CB* by a rational area, though they are medial, which is impossible. [!just X.26]
+Then, since that by which the sum of the squares on {AC} and {CB} differs from the sum of the squares on {AD} and {DB} is also that by which twice the rectangle {AD} by {DB} differs from twice the rectangle {AC} by {CB}, while the sum of the squares on {AC} and {CB} exceeds the sum of the squares on {AD} and {DB} by a rational area, for both are rational, therefore twice the rectangle {AD} by {DB} also exceeds twice the rectangle {AC} by {CB} by a rational area, though they are medial, which is impossible. [!just X.26]
 
 Therefore a major straight line is not divided at different points. Therefore it is only divided at one and the same point.
 

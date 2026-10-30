@@ -15,14 +15,27 @@ statement: The side of a rational plus a medial area is divided at one point onl
 ----
 proof:
 
-Let *AB* be the side of a rational plus a medial area divided at *C*, so that *AC* and *CB* are incommensurable in square and let the sum of the squares on *AC* and *CB* be medial, but twice the rectangle *AC* by *CB* rational. [!just X.40]
+Let {AB} be the side of a rational plus a medial area divided at {C}, so that {AC} and {CB} are incommensurable in square and let the sum of the squares on {AC} and {CB} be medial, but twice the rectangle {AC} by {CB} rational. [!just X.40]
 
-I say that *AB* is not so divided at another point.
+I say that {AB} is not so divided at another point.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="70" tabindex="0"></canvas>
 <noscript><img alt="X.46 diagram" src="propX46.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the side of a rational plus a medial area AB with its
+    // point of division C and the supposed second point D. Added, all
+    // transparent highlight targets (;0;0;0): the parts AC, CB, AD, DB.
+    // Resting figure unchanged.
+    //
+    // Draggables (checked against the bundle): A0, A3 (invisible offscreen
+    // frees), A, B, C, D (line sliders). D only arrives with "If possible,
+    // let it be divided at D also", so it is deferred.
+    //
+    // A reductio: D rests on the supposition, so the closing slides withdraw
+    // it and leave AB divided at C.
+    var GIVEN = ["A","B","C","AB","AC","CB"];
+    var ALL   = GIVEN.concat(["D","AD","DB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -34,15 +47,90 @@ I say that *AB* is not so divided at another point.
             "B;point;lineSlider;A0,A3,220,0",
             "AB;line;connect;A,B;0;0",
             "C;point;lineSlider;A0,A3,170,0",
-            "D;point;lineSlider;A0,A3,130,0"
+            "D;point;lineSlider;A0,A3,130,0",
+            // Highlight targets only.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0"
         ],
+        deferDraggables: ["D"],
+        slides: [
+            { text: "“The side of a rational plus a medial area is divided at one point only.”",
+              visible: GIVEN,
+              highlighted: ["AB"],
+              justifications: [{ ref: "X.46" }] },
+            { text: "Let {AB} be the side of a rational plus a medial area divided at {C},",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "so that {AC} and {CB} are incommensurable in square",
+              visible: GIVEN,
+              highlighted: ["AC","CB"] },
+            { text: "and let the sum of the squares on {AC} and {CB} be medial, but twice the rectangle {AC} by {CB} rational.",
+              visible: GIVEN,
+              highlighted: ["AC","CB"],
+              justifications: [{ ref: "X.40" }] },
+            { text: "I say that {AB} is not so divided at another point.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "If possible, let it be divided at {D} also,",
+              visible: ALL,
+              highlighted: ["D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "so that {AD} and {DB} are also incommensurable in square",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "and the sum of the squares on {AD} and {DB} is medial, but twice the rectangle {AD} by {DB} rational.",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "Since, then, that by which twice the rectangle {AC} by {CB} differs from twice the rectangle {AD} by {DB}",
+              visible: ALL,
+              highlighted: ["AC","CB","AD","DB"] },
+            { text: "is also that by which the sum of the squares on {AD} and {DB}",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "differs from the sum of the squares on {AC} and {CB},",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "while twice the rectangle {AC} by {CB} exceeds twice the rectangle {AD} by {DB} by a rational area,",
+              visible: ALL,
+              highlighted: ["AC","CB","AD","DB"] },
+            { text: "therefore the sum of the squares on {AD} and {DB} also exceeds the sum of the squares on {AC} and {CB}",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "by a rational area, though they are medial, which is impossible.",
+              visible: ALL,
+              justifications: [{ claim: "a medial area does not exceed a medial area by a rational area", ref: "X.26" }] },
+            { text: "Therefore the side of a rational plus a medial area is not divided at different points,",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "therefore it is divided at one point only.",
+              visible: GIVEN,
+              highlighted: ["C"] },
+            { text: "Therefore, the side of a rational plus a medial area is divided at one point only.",
+              visible: GIVEN,
+              highlighted: ["AB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.46") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.26": "/elements/books/bookX/propositions/propX26/",
+        "X.40": "/elements/books/bookX/propositions/propX40/"
     });
 </script>
 </figure>
 
-If possible, let it be divided at *D* also, so that *AD* and *DB* are also incommensurable in square and the sum of the squares on *AD* and *DB* is medial, but twice the rectangle *AD* by *DB* rational.
+If possible, let it be divided at {D} also, so that {AD} and {DB} are also incommensurable in square and the sum of the squares on {AD} and {DB} is medial, but twice the rectangle {AD} by {DB} rational.
 
-Since, then, that by which twice the rectangle *AC* by *CB* differs from twice the rectangle *AD* by *DB* is also that by which the sum of the squares on *AD* and *DB* differs from the sum of the squares on *AC* and *CB*, while twice the rectangle *AC* by *CB* exceeds twice the rectangle *AD* by *DB* by a rational area, therefore the sum of the squares on *AD* and *DB* also exceeds the sum of the squares on *AC* and *CB* by a rational area, though they are medial, which is impossible. [!just X.26]
+Since, then, that by which twice the rectangle {AC} by {CB} differs from twice the rectangle {AD} by {DB} is also that by which the sum of the squares on {AD} and {DB} differs from the sum of the squares on {AC} and {CB}, while twice the rectangle {AC} by {CB} exceeds twice the rectangle {AD} by {DB} by a rational area, therefore the sum of the squares on {AD} and {DB} also exceeds the sum of the squares on {AC} and {CB} by a rational area, though they are medial, which is impossible. [!just X.26]
 
 Therefore the side of a rational plus a medial area is not divided at different points, therefore it is divided at one point only.
 
