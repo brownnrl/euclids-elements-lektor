@@ -15,12 +15,26 @@ statement: If a rational area is applied to a rational straight line, then it pr
 ----
 proof:
 
-Let the rational area *AC* be applied to *AB*, a straight line once more rational in any of the aforesaid ways, producing *BC* as breadth.
+Let the rational area {AC|ACh} be applied to {AB}, a straight line once more rational in any of the aforesaid ways, producing {BC} as breadth.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="160" height="220" tabindex="0"></canvas>
 <noscript><img alt="X.20 diagram" src="propX20.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the square AD on AB above AB (random face) and the
+    // rectangle AC below it (default opaque face), C sliding on the line
+    // DB produced. The proof talks about the sides AB, BC, DB, so those
+    // are transparent highlight targets (;0;0;0). The square and the
+    // rectangle are lit through faceless, strokeless twins ADh / ACh, so a
+    // highlight never raises an opaque face over the figure (#140); prose
+    // and captions reach them with the display override ({AD|ADh},
+    // {DA|ADh}, {AC|ACh}). Resting figure unchanged.
+    //
+    // Draggables (checked against the bundle): A, B, C (given) and the
+    // offscreen frees. D is a derived vertex, so the square and D simply
+    // stay out of the visible sets until "Describe the square".
+    var GIVEN = ["A","B","C","AC","ACh","AB","BC"];
+    var SQ    = GIVEN.concat(["AD","ADh","D","DB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -33,19 +47,92 @@ Let the rational area *AC* be applied to *AB*, a straight line once more rationa
             "AD;polygon;square;B,A;0;0;black;random",
             "D;point;vertex;AD,4",
             "C;point;lineSlider;B,D,0,190",
-            "AC;polygon;parallelogram;A,B,C"
+            "AC;polygon;parallelogram;A,B,C",
+            // Highlight targets only — the figure already draws these.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "ADh;polygon;square;B,A;0;0;0;0",
+            "ACh;polygon;parallelogram;A,B,C;0;0;0;0"
         ],
+        aliases: { "BA": "AB" },
+        slides: [
+            { text: "“If a rational area is applied to a rational straight line,",
+              visible: GIVEN,
+              highlighted: ["ACh","AB"],
+              justifications: [{ ref: "X.20" }] },
+            { text: "then it produces as breadth a straight line rational and commensurable in length with the straight line to which it is applied.”",
+              visible: GIVEN,
+              highlighted: ["BC","AB"] },
+            { text: "Let the rational area {AC|ACh} be applied to {AB}, a straight line once more rational in any of the aforesaid ways,",
+              visible: GIVEN,
+              highlighted: ["ACh","AB"] },
+            { text: "producing {BC} as breadth.",
+              visible: GIVEN,
+              highlighted: ["BC"] },
+            { text: "I say that {BC} is rational and commensurable in length with {BA}.",
+              visible: GIVEN,
+              highlighted: ["BC","AB"] },
+            { text: "Describe the square {AD|ADh} on {AB}.",
+              visible: SQ,
+              highlighted: ["AB"],
+              justifications: [{ claim: "the square on AB", ref: "I.46" }],
+              transition: { animations: [
+                  { elem: "ADh", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Then {AD|ADh} is rational.",
+              visible: SQ,
+              highlighted: ["ADh"],
+              justifications: [{ claim: "square on a rational line", ref: "X.Def.I.4" }] },
+            { text: "But {AC|ACh} is also rational, therefore {DA|ADh} is commensurable with {AC|ACh}.",
+              visible: SQ,
+              highlighted: ["ACh","ADh"] },
+            { text: "And {DA|ADh} is to {AC|ACh} as {DB} is to {BC}.",
+              visible: SQ,
+              highlighted: ["ADh","ACh","DB","BC"],
+              justifications: [{ claim: "DA : AC = DB : BC", ref: "VI.1" }] },
+            { text: "Therefore {DB} is also commensurable with {BC}, and {DB} equals {BA}.",
+              visible: SQ,
+              highlighted: ["DB","BC","AB"],
+              justifications: [{ claim: "DB, BC commensurable", ref: "X.11" }] },
+            { text: "Therefore {AB} is also commensurable with {BC}.",
+              visible: SQ,
+              highlighted: ["AB","BC"] },
+            // Joyce's stray "C" before "therefore" is left literal.
+            { text: "But {AB} is rational, C therefore {BC} is also rational and commensurable in length with {AB}.",
+              visible: SQ,
+              highlighted: ["AB","BC"] },
+            { text: "Therefore, if a rational area is applied to a rational straight line,",
+              visible: SQ,
+              highlighted: ["ACh","AB"] },
+            { text: "then it produces as breadth a straight line rational and commensurable in length with the straight line to which it is applied.",
+              visible: SQ,
+              highlighted: ["BC","AB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.20") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.46":      "/elements/books/bookI/propositions/propI46/",
+        "VI.1":      "/elements/books/bookVI/propositions/propVI1/",
+        "X.11":      "/elements/books/bookX/propositions/propX11/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-I say that *BC* is rational and commensurable in length with *BA*.
+I say that {BC} is rational and commensurable in length with {BA}.
 
-Describe the square *AD* on *AB*. Then *AD* is rational. [!just I.46, X.Def.I.4]
+Describe the square {AD|ADh} on {AB}. Then {AD|ADh} is rational. [!just I.46, X.Def.I.4]
 
-But *AC* is also rational, therefore *DA* is commensurable with *AC*. And *DA* is to *AC* as *DB* is to *BC*. Therefore *DB* is also commensurable with *BC*, and *DB* equals *BA*. Therefore *AB* is also commensurable with *BC*. [!just VI.1; X.11]
+But {AC|ACh} is also rational, therefore {DA|ADh} is commensurable with {AC|ACh}. And {DA|ADh} is to {AC|ACh} as {DB} is to {BC}. Therefore {DB} is also commensurable with {BC}, and {DB} equals {BA}. Therefore {AB} is also commensurable with {BC}. [!just VI.1; X.11]
 
-But *AB* is rational, *C* therefore *BC* is also rational and commensurable in length with *AB*.
+But {AB} is rational, *C* therefore {BC} is also rational and commensurable in length with {AB}.
 
 Therefore, *if a rational area is applied to a rational straight line, then it produces as breadth a straight line rational and commensurable in length with the straight line to which it is applied.*
 
@@ -56,7 +143,7 @@ guide:
 
 This proposition is a converse of the last, except that it's preceded by applying an area to a straight line to get the rectangle. That would be more evident if it read "If one side of a rational rectangle is rational, then the other side is rational and commensurable with the first."
 
-It's often easier to understand the statement and proof they're translated into modern language. Let *a* be the length of *AB*, and *b* be the length of *BC*. Since the rectangle *AC* is rational, that means its area *ab* is a rational number. Since *AB* is a rational line, that means *a*² is a rational number. Therefore, *a*/*b* is a rational number, that is, lines *AB* and *BC* are commensurable. Also, *b*² is a rational number, that is, line *BC* is a rational line.
+It's often easier to understand the statement and proof they're translated into modern language. Let *a* be the length of {AB}, and *b* be the length of {BC}. Since the rectangle {AC|ACh} is rational, that means its area *ab* is a rational number. Since {AB} is a rational line, that means *a*² is a rational number. Therefore, *a*/*b* is a rational number, that is, lines {AB} and {BC} are commensurable. Also, *b*² is a rational number, that is, line {BC} is a rational line.
 
 #### Use of this proposition
 

@@ -23,12 +23,26 @@ statement: The rectangle contained by rational straight lines commensurable in l
 ----
 proof:
 
-Let the rectangle *AC* be contained by the rational straight lines *AB* and *BC* commensurable in length.
+Let the rectangle {AC|ACh} be contained by the rational straight lines {AB} and {BC} commensurable in length.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="240" height="240" tabindex="0"></canvas>
 <noscript><img alt="X.19 diagram" src="propX19.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the square AD on AB (random face) with the rectangle
+    // AC drawn over it (default opaque face), C sliding on BD. The proof
+    // talks about the sides AB, BC, BD, so those are transparent highlight
+    // targets (;0;0;0). Highlighting AD itself would raise its face over
+    // AC (#140), so the square and the rectangle are lit through faceless,
+    // strokeless twins ADh / ACh; prose and captions reach them with the
+    // display override ({AD|ADh}, {DA|ADh}, {AC|ACh}). Resting figure
+    // unchanged.
+    //
+    // Draggables (checked against the bundle): A, B, C (given) and the
+    // offscreen frees. D is a derived vertex, so the square and D simply
+    // stay out of the visible sets until "Describe the square".
+    var GIVEN = ["A","B","C","AC","ACh","AB","BC"];
+    var SQ    = GIVEN.concat(["AD","ADh","D","BD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -41,23 +55,86 @@ Let the rectangle *AC* be contained by the rational straight lines *AB* and *BC*
             "AD;polygon;square;A,B;0;0;black;random",
             "D;point;vertex;AD,3",
             "C;point;lineSlider;B,D,200,90",
-            "AC;polygon;parallelogram;A,B,C"
+            "AC;polygon;parallelogram;A,B,C",
+            // Highlight targets only — the figure already draws these.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "BD;line;connect;B,D;0;0;0",
+            "ADh;polygon;square;A,B;0;0;0;0",
+            "ACh;polygon;parallelogram;A,B,C;0;0;0;0"
         ],
+        slides: [
+            { text: "“The rectangle contained by rational straight lines commensurable in length is rational.”",
+              visible: GIVEN,
+              highlighted: ["ACh","AB","BC"],
+              justifications: [{ ref: "X.19" }] },
+            { text: "Let the rectangle {AC|ACh} be contained by the rational straight lines {AB} and {BC} commensurable in length.",
+              visible: GIVEN,
+              highlighted: ["ACh","AB","BC"] },
+            { text: "I say that {AC|ACh} is rational.",
+              visible: GIVEN,
+              highlighted: ["ACh"] },
+            { text: "Describe the square {AD|ADh} on {AB}.",
+              visible: SQ,
+              highlighted: ["AB"],
+              justifications: [{ claim: "the square on AB", ref: "I.46" }],
+              transition: { animations: [
+                  { elem: "ADh", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Then {AD|ADh} is rational.",
+              visible: SQ,
+              highlighted: ["ADh"],
+              justifications: [{ claim: "square on a rational line", ref: "X.Def.I.4" }] },
+            { text: "And, since {AB} is commensurable in length with {BC}, while {AB} equals {BD},",
+              visible: SQ,
+              highlighted: ["AB","BC","BD"] },
+            { text: "therefore {BD} is commensurable in length with {BC}.",
+              visible: SQ,
+              highlighted: ["BD","BC"] },
+            { text: "And {BD} is to {BC} as {DA|ADh} is to {AC|ACh}.",
+              visible: SQ,
+              highlighted: ["BD","BC","ADh","ACh"],
+              justifications: [{ claim: "BD : BC = DA : AC", ref: "VI.1" }] },
+            { text: "Therefore {DA|ADh} is commensurable with {AC|ACh}.",
+              visible: SQ,
+              highlighted: ["ADh","ACh"],
+              justifications: [{ claim: "DA, AC commensurable", ref: "X.11" }] },
+            { text: "But {DA|ADh} is rational, therefore {AC|ACh} is also rational.",
+              visible: SQ,
+              highlighted: ["ADh","ACh"],
+              justifications: [{ claim: "commensurable with a rational area", ref: "X.Def.I.4" }] },
+            { text: "Therefore, the rectangle contained by rational straight lines commensurable in length is rational.",
+              visible: SQ,
+              highlighted: ["ACh","AB","BC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.19") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.46":      "/elements/books/bookI/propositions/propI46/",
+        "VI.1":      "/elements/books/bookVI/propositions/propVI1/",
+        "X.11":      "/elements/books/bookX/propositions/propX11/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-I say that *AC* is rational.
+I say that {AC|ACh} is rational.
 
-Describe the square *AD* on *AB*. Then *AD* is rational. [!just I.46, X.Def.I.4]
+Describe the square {AD|ADh} on {AB}. Then {AD|ADh} is rational. [!just I.46, X.Def.I.4]
 
-And, since *AB* is commensurable in length with *BC*, while *AB* equals *BD*, therefore *BD* is commensurable in length with *BC*.
+And, since {AB} is commensurable in length with {BC}, while {AB} equals {BD}, therefore {BD} is commensurable in length with {BC}.
 
-And *BD* is to *BC* as *DA* is to *AC*. [!just VI.1]
+And {BD} is to {BC} as {DA|ADh} is to {AC|ACh}. [!just VI.1]
 
-Therefore *DA* is commensurable with *AC*. [!just X.11]
+Therefore {DA|ADh} is commensurable with {AC|ACh}. [!just X.11]
 
-But *DA* is rational, therefore *AC* is also rational. [!just X.Def.I.4]
+But {DA|ADh} is rational, therefore {AC|ACh} is also rational. [!just X.Def.I.4]
 
 Therefore, *the rectangle contained by rational straight lines commensurable in length is rational.*
 
@@ -68,7 +145,7 @@ guide:
 
 This is the first proposition that deals with rational lines and rational squares. As required by definitions @X.Def.I.3 and @X.Def.I.3, there is some assigned straight line to act as a standard to which other lines and squares are compared for rationality. That line is usually not mentioned in the propositions.
 
-In this proposition, it is assumed that both sides of the rectangle *AB* and *BC* are rational lines. That means these lines are commensurable in square to the standard line, that is, their squares are commensurable with the standard square. It is also assumed that *AB* and *BC* are commensurable with each other. Therefore the rectangle *AC* is commensurable with the square on *AB*, but that's commensurable with the standard square, so the rectangle *AC* is too.
+In this proposition, it is assumed that both sides of the rectangle {AB} and {BC} are rational lines. That means these lines are commensurable in square to the standard line, that is, their squares are commensurable with the standard square. It is also assumed that {AB} and {BC} are commensurable with each other. Therefore the rectangle {AC|ACh} is commensurable with the square on {AB}, but that's commensurable with the standard square, so the rectangle {AC|ACh} is too.
 
 The proposition is used several times starting with @X.25. The lemma is used in @X.23.
 
