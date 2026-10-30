@@ -15,12 +15,32 @@ statement: If two planes cut one another, then their intersection is a straight 
 ----
 proof:
 
-Let two planes *AB* and *BC* cut one another, and let the line *DB* be their intersection.
+Let two planes {AB} and {BC} cut one another, and let the line {DB|BD} be their intersection.
 
 <figure class="diagram rdiagram">
 <canvas id="canvas_0" width="260" height="290" tabindex="0"></canvas>
 <noscript><img alt="XI.3 diagram" src="propXI3.gif"/></noscript>
 <script type="text/javascript">
+    // A reductio in two planes. Joyce's figure draws the plane AB (Aplane)
+    // and the plane BC as two halves, backC behind and frontC in front of it,
+    // their common section BD, and the two curves DEB and DFB, one in each
+    // plane. The walk sets out the planes and BD, supposes the curves (each
+    // swept from D to B, as the text joins them), and withdraws them when
+    // "neither is there any other straight line" closes the reductio.
+    //
+    // The planes have opaque faces, and a highlighted filled polygon is
+    // raised over everything under it (#140), so the slides and prose light
+    // two faceless twins instead: AB over the corners of Aplane, BC over the
+    // outer corners of backC and frontC (C, C3, C2, C1). Both are ;0;0;0;0
+    // and draw nothing at rest.
+    //
+    // Draggables (checked against the bundle): A (free), D, C, B
+    // (lineSliders) and the far-off direction points X, Y, Z (free). All are
+    // givens or off-canvas, so nothing is deferred. E and F are derived
+    // (cutoff / extend) and are listed on the slides that show them.
+    var GIVEN = ["Aplane","backC","frontC","A","B","C","D","BD"];
+    var SUPP  = GIVEN.concat(["E","BED"]);
+    var BOTH  = SUPP.concat(["F","BFD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,21 +69,84 @@ Let two planes *AB* and *BC* cut one another, and let the line *DB* be their int
             "BED;sector;arc;D,E,B;0;0;black;0",
             "F;point;extend;Z,M,B,N;black",
             "BFD;sector;arc;B,F,D;0;0;black;0",
-            "BD;line;connect;B,D"
+            "BD;line;connect;B,D",
+            // Faceless highlight twins of the two planes (see above).
+            "AB;polygon;quadrilateral;A,A1,A3,A2;0;0;0;0",
+            "BC;polygon;quadrilateral;C,C3,C2,C1;0;0;0;0"
         ],
+        aliases: { "DB": "BD", "DEB": "BED", "DFB": "BFD" },
+        slides: [
+            { text: "“If two planes cut one another, then their intersection is a straight line.”",
+              visible: GIVEN,
+              highlighted: ["AB","BC","BD"],
+              justifications: [{ ref: "XI.3" }] },
+            { text: "Let two planes {AB} and {BC} cut one another,",
+              visible: GIVEN,
+              highlighted: ["AB","BC"] },
+            { text: "and let the line {DB|BD} be their intersection.",
+              visible: GIVEN,
+              highlighted: ["BD","D","B"] },
+            { text: "I say that the line {DB|BD} is a straight line.",
+              visible: GIVEN,
+              highlighted: ["BD"] },
+            { text: "For, if not, join the straight line {DEB|BED} from {D} to {B} in the plane {AB},",
+              visible: SUPP,
+              highlighted: ["BED","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "E",   name: geomlib.A.Point.appear },
+                  { elem: "BED", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            // BFD is declared B, F, D: reverse so it, too, sweeps from D.
+            { text: "and the straight line {DFB|BFD} in the plane {BC}.",
+              visible: BOTH,
+              highlighted: ["BFD","BC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",   name: geomlib.A.Point.appear },
+                  { elem: "BFD", name: geomlib.A.Sector.sweep, args: { reverse: true } } ] } },
+            { text: "Then the two straight lines {DEB|BED} and {DFB|BFD} have the same ends",
+              visible: BOTH,
+              highlighted: ["BED","BFD","D","B"] },
+            { text: "and clearly enclose an area, which is absurd.",
+              visible: BOTH,
+              highlighted: ["BED","BFD"] },
+            { text: "Therefore {DEB|BED} and {DFB|BFD} are not straight lines.",
+              visible: BOTH,
+              highlighted: ["BED","BFD"] },
+            // The reductio is closed: the supposed curves are withdrawn.
+            { text: "Similarly we can prove that neither is there any other straight line joined from {D} to {B} except {DB|BD},",
+              visible: GIVEN,
+              highlighted: ["BD","D","B"] },
+            { text: "the intersection of the planes {AB} and {BC}.",
+              visible: GIVEN,
+              highlighted: ["BD","AB","BC"] },
+            { text: "Therefore, if two planes cut one another, then their intersection is a straight line.",
+              visible: GIVEN,
+              highlighted: ["AB","BC","BD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.3") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/"
     });
 </script>
 </figure>
 
-I say that the line *DB* is a straight line.
+I say that the line {DB|BD} is a straight line.
 
-For, if not, join the straight line *DEB* from *D* to *B* in the plane *AB,* and the straight line *DFB* in the plane *BC.*
+For, if not, join the straight line {DEB|BED} from {D} to {B} in the plane {AB}, and the straight line {DFB|BFD} in the plane {BC}.
 
-Then the two straight lines *DEB* and *DFB* have the same ends and clearly enclose an area, which is absurd.
+Then the two straight lines {DEB|BED} and {DFB|BFD} have the same ends and clearly enclose an area, which is absurd.
 
-Therefore *DEB* and *DFB* are not straight lines.
+Therefore {DEB|BED} and {DFB|BFD} are not straight lines.
 
-Similarly we can prove that neither is there any other straight line joined from *D* to *B* except *DB,* the intersection of the planes *AB* and *BC.*
+Similarly we can prove that neither is there any other straight line joined from {D} to {B} except {DB|BD}, the intersection of the planes {AB} and {BC}.
 
 Therefore, *if two planes cut one another, then their intersection is a straight line.*
 
