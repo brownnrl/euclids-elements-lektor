@@ -15,7 +15,7 @@ statement: If a solid is contained by parallel planes, then the opposite planes 
 ----
 proof:
 
-Let the solid *CDHG* be contained by the parallel planes *AC, GF, AH, DF, BF,* and *AE.*
+Let the solid *CDHG* be contained by the parallel planes {AC|planeAC}, {GF|planeGF}, {AH|planeAH}, {DF|planeDF}, {BF|planeBF}, and {AE|planeAE}.
 
 I say that the opposite planes in it are equal and parallelogrammic.
 
@@ -23,6 +23,27 @@ I say that the opposite planes in it are equal and parallelogrammic.
 <canvas id="canvas_0" width="270" height="230" tabindex="0"></canvas>
 <noscript><img alt="XI.24 diagram" src="propXI24.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the solid with its top AH (ABHG), front AE (ADEG) and
+    // right GF (EFHG) faces filled, the hidden edges BC, CD, CF, and the
+    // diagonals AH and DF.
+    //
+    // Added, all transparent: a faceless quadrilateral for each of the six
+    // planes (planeAC, planeGF, planeAH, planeDF, planeBF, planeAE) to carry
+    // the highlight, since a filled face would be raised over the figure
+    // (#140); the edges AB, AD, BH the proof names; the triangles ABH and DCF
+    // (explicit ;0 faces). The angles ABH and DCF are markers, hidden at
+    // rest. The plane names AH and DF collide with the diagonals AH and DF,
+    // which keep them; the planes take the display override, as do the
+    // angles ABH / DCF, whose names the triangles own. Joyce's BG, GB, CE
+    // and FG are aliases of the planes.
+    //
+    // Draggables (checked against the bundle): A, B, C, E, all givens. D, F,
+    // G, H are derived and listed per slide.
+    var PLANES = ["planeAC","planeGF","planeAH","planeDF","planeBF","planeAE"];
+    var GIVEN  = ["A","B","C","D","E","F","G","H","ABHG","ADEG","EFHG",
+                  "BC","CD","CF","AB","AD","BH"].concat(PLANES);
+    var JOIN   = GIVEN.concat(["AH","DF","ABH","DCF"]);
+    var ANG    = JOIN.concat(["angABH","angDCF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -43,25 +64,136 @@ I say that the opposite planes in it are equal and parallelogrammic.
             "CD;line;connect;C,D",
             "CF;line;connect;C,F",
             "AH;line;connect;A,H",
-            "DF;line;connect;D,F"
+            "DF;line;connect;D,F",
+            // Transparent highlight targets.
+            "planeAC;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            "planeGF;polygon;quadrilateral;G,H,F,E;0;0;0;0",
+            "planeAH;polygon;quadrilateral;A,B,H,G;0;0;0;0",
+            "planeDF;polygon;quadrilateral;D,C,F,E;0;0;0;0",
+            "planeBF;polygon;quadrilateral;B,C,F,H;0;0;0;0",
+            "planeAE;polygon;quadrilateral;A,D,E,G;0;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "BH;line;connect;B,H;0;0;0",
+            "ABH;polygon;triangle;A,B,H;0;0;0;0",
+            "DCF;polygon;triangle;D,C,F;0;0;0;0",
+            "angABH;sector;angleMarker;B,A,H",
+            "angDCF;sector;angleMarker;C,D,F"
         ],
+        aliases: { "BG": "planeAH", "GB": "planeAH", "CE": "planeDF",
+                   "FG": "planeGF", "DC": "CD" },
+        slides: [
+            { text: "“If a solid is contained by parallel planes, then the opposite planes in it are equal and parallelogrammic.”",
+              visible: GIVEN,
+              highlighted: PLANES,
+              justifications: [{ ref: "XI.24" }] },
+            { text: "Let the solid CDHG be contained by the parallel planes {AC|planeAC}, {GF|planeGF}, {AH|planeAH}, {DF|planeDF}, {BF|planeBF}, and {AE|planeAE}.",
+              visible: GIVEN,
+              highlighted: PLANES },
+            { text: "I say that the opposite planes in it are equal and parallelogrammic.",
+              visible: GIVEN,
+              highlighted: ["planeAC","planeGF"] },
+            { text: "Since the two parallel planes {BG|planeAH} and {CE|planeDF} are cut by the plane {AC|planeAC},",
+              visible: GIVEN,
+              highlighted: ["planeAH","planeDF","planeAC"] },
+            { text: "therefore their common sections are parallel. Therefore {AB} is parallel to {DC|CD}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"],
+              justifications: [{ claim: "AB parallel to DC", ref: "XI.16" }] },
+            { text: "Again, since the two parallel planes {BF|planeBF} and {AE|planeAE} are cut by the plane {AC|planeAC},",
+              visible: GIVEN,
+              highlighted: ["planeBF","planeAE","planeAC"] },
+            { text: "therefore their intersections are parallel. Therefore {BC} is parallel to {AD}.",
+              visible: GIVEN,
+              highlighted: ["BC","AD"],
+              justifications: [{ claim: "BC parallel to AD", ref: "XI.16" }] },
+            { text: "But {AB} was proved parallel to {DC|CD}, therefore {AC|planeAC} is a parallelogram.",
+              visible: GIVEN,
+              highlighted: ["AB","CD","planeAC"] },
+            { text: "Similarly we can prove that each of the planes {DF|planeDF}, {FG|planeGF}, {GB|planeAH}, {BF|planeBF}, and {AE|planeAE} is a parallelogram.",
+              visible: GIVEN,
+              highlighted: ["planeDF","planeGF","planeAH","planeBF","planeAE"] },
+            { text: "Join {AH} and {DF}.",
+              visible: JOIN,
+              highlighted: ["AH","DF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since {AB} is parallel to {DC|CD}, and {BH} is parallel to {CF},",
+              visible: JOIN,
+              highlighted: ["AB","CD","BH","CF"] },
+            { text: "therefore the two straight lines {AB} and {BH}, which meet one another,",
+              visible: JOIN,
+              highlighted: ["AB","BH"] },
+            { text: "are parallel to the two straight lines {DC|CD} and {CF}, which meet one another, not in the same plane.",
+              visible: JOIN,
+              highlighted: ["CD","CF"] },
+            { text: "Therefore they contain equal angles. Therefore the angle {ABH|angABH} equals the angle {DCF|angDCF}.",
+              visible: ANG,
+              highlighted: ["angABH","angDCF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABH", name: geomlib.A.Sector.sweep },
+                  { elem: "angDCF", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle ABH = angle DCF", ref: "XI.10" }] },
+            { text: "And, since the two sides {AB} and {BH} equal the two sides {DC|CD} and {CF},",
+              visible: ANG,
+              highlighted: ["AB","BH","CD","CF"],
+              justifications: [{ claim: "AB = DC, BH = CF", ref: "I.34" }] },
+            { text: "and the angle {ABH|angABH} equals the angle {DCF|angDCF},",
+              visible: ANG,
+              highlighted: ["angABH","angDCF"] },
+            { text: "therefore the base {AH} equals the base {DF}, and the triangle {ABH} equals the triangle {DCF}.",
+              visible: ANG,
+              highlighted: ["AH","DF","ABH","DCF"],
+              justifications: [{ claim: "AH = DF, triangle ABH = triangle DCF", ref: "I.4" }] },
+            { text: "And the parallelogram {BG|planeAH} is double the triangle {ABH},",
+              visible: JOIN,
+              highlighted: ["planeAH","ABH"],
+              justifications: [{ claim: "a parallelogram is double its triangle", ref: "I.34" }] },
+            { text: "and the parallelogram {CE|planeDF} is double the triangle {DCF},",
+              visible: JOIN,
+              highlighted: ["planeDF","DCF"] },
+            { text: "therefore the parallelogram {BG|planeAH} equals the parallelogram {CE|planeDF}.",
+              visible: JOIN,
+              highlighted: ["planeAH","planeDF"] },
+            { text: "Similarly we can prove that {AC|planeAC} equals {GF|planeGF}, and {AE|planeAE} equals {BF|planeBF}.",
+              visible: JOIN,
+              highlighted: ["planeAC","planeGF","planeAE","planeBF"] },
+            { text: "Therefore, if a solid is contained by parallel planes, then the opposite planes in it are equal and parallelogrammic.",
+              visible: JOIN,
+              highlighted: PLANES,
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.24") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.4":   "/elements/books/bookI/propositions/propI4/",
+        "I.34":  "/elements/books/bookI/propositions/propI34/",
+        "XI.10": "/elements/books/bookXI/propositions/propXI10/",
+        "XI.16": "/elements/books/bookXI/propositions/propXI16/"
     });
 </script>
 </figure>
 
-Since the two parallel planes *BG* and *CE* are cut by the plane *AC,* therefore their common sections are parallel. Therefore *AB* is parallel to *DC.* Again, since the two parallel planes *BF* and *AE* are cut by the plane *AC,* therefore their intersections are parallel. Therefore *BC* is parallel to *AD.* [!just XI.16]
+Since the two parallel planes {BG} and {CE} are cut by the plane {AC|planeAC}, therefore their common sections are parallel. Therefore {AB} is parallel to {DC}. Again, since the two parallel planes {BF|planeBF} and {AE|planeAE} are cut by the plane {AC|planeAC}, therefore their intersections are parallel. Therefore {BC} is parallel to {AD}. [!just XI.16]
 
-But *AB* was proved parallel to *DC,* therefore *AC* is a parallelogram. Similarly we can prove that each of the planes *DF, FG, GB, BF,* and *AE* is a parallelogram.
+But {AB} was proved parallel to {DC}, therefore {AC|planeAC} is a parallelogram. Similarly we can prove that each of the planes {DF|planeDF}, {FG}, {GB}, {BF|planeBF}, and {AE|planeAE} is a parallelogram.
 
-Join *AH* and *DF.*
+Join {AH} and {DF}.
 
-Then, since *AB* is parallel to *DC,* and *BH* is parallel to *CF,* therefore the two straight lines *AB* and *BH,* which meet one another, are parallel to the two straight lines *DC* and *CF,* which meet one another, not in the same plane. Therefore they contain equal angles. Therefore the angle *ABH* equals the angle *DCF.* [!just XI.10]
+Then, since {AB} is parallel to {DC}, and {BH} is parallel to {CF}, therefore the two straight lines {AB} and {BH}, which meet one another, are parallel to the two straight lines {DC} and {CF}, which meet one another, not in the same plane. Therefore they contain equal angles. Therefore the angle {ABH|angABH} equals the angle {DCF|angDCF}. [!just XI.10]
 
-And, since the two sides *AB* and *BH* equal the two sides *DC* and *CF,* and the angle *ABH* equals the angle *DCF,* therefore the base *AH* equals the base *DF,* and the triangle *ABH* equals the triangle *DCF.* [!just I.34; I.4]
+And, since the two sides {AB} and {BH} equal the two sides {DC} and {CF}, and the angle {ABH|angABH} equals the angle {DCF|angDCF}, therefore the base {AH} equals the base {DF}, and the triangle {ABH} equals the triangle {DCF}. [!just I.34; I.4]
 
-And the parallelogram *BG* is double the triangle *ABH,* and the parallelogram *CE* is double the triangle *DCF,* therefore the parallelogram *BG* equals the parallelogram *CE.* [!just I.34]
+And the parallelogram {BG} is double the triangle {ABH}, and the parallelogram {CE} is double the triangle {DCF}, therefore the parallelogram {BG} equals the parallelogram {CE}. [!just I.34]
 
-Similarly we can prove that *AC* equals *GF,* and *AE* equals *BF.*
+Similarly we can prove that {AC|planeAC} equals {GF|planeGF}, and {AE|planeAE} equals {BF|planeBF}.
 
 Therefore, *if a solid is contained by parallel planes, then the opposite planes in it are equal and parallelogrammic.*
 

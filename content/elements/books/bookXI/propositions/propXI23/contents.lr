@@ -19,18 +19,51 @@ proof:
 
 [!just XI.20; XI.21]
 
-Let the angles *ABC, DEF,* and *GHK* be the three given plane angles, and let the sum of any two of them be greater than the remaining one, and further, let the sum of all three be less than four right angles.
+Let the angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK} be the three given plane angles, and let the sum of any two of them be greater than the remaining one, and further, let the sum of all three be less than four right angles.
 
-It is required to construct a solid angle out of angles equal to the angles *ABC, DEF,* and *GHK.*
+It is required to construct a solid angle out of angles equal to the angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK}.
 
-Cut off *AB, BC, DE, EF, GH,* and *HK* equal to one another, and join *AC, DF,* and *GK.* [!just I.3]
+Cut off {AB}, {BC}, {DE}, {EF}, {GH}, and {HK} equal to one another, and join {AC}, {DF}, and {GK}. [!just I.3]
 
-It is therefore possible to construct a triangle out of straight lines equal to *AC, DF,* and *GK.* Construct *LMN* so that *AC* equals *LM, DF* equals *MN,* and *GK* equals *NL.* [!just XI.22]
+It is therefore possible to construct a triangle out of straight lines equal to {AC}, {DF}, and {GK}. Construct {LMN|LMNT} so that {AC} equals {LM}, {DF} equals {MN}, and {GK} equals {NL}. [!just XI.22]
 
 <center>
 <canvas id="canvas_0" width="600" height="270" tabindex="0"></canvas>
 <noscript><img alt="XI.23 diagram" src="propXI23a.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's first figure: the three given angles drawn as the isosceles
+    // triangles ABC, DEF, GHK (AB, BC, DE, EF, GH, HK equal), the triangle
+    // LMN on AC, DF, GK, its circumcircle with centre O and radii OL, OM,
+    // ON, and the points P, Q of the second reductio.
+    //
+    // Added, hidden at rest: solid twins of the arms (BAs .. HKs) so the
+    // given angles stand before AC, DF, GK are joined, and LOs, MOs, NOs so
+    // the join strokes from L, M, N (initiallyHidden, the IV.13 idiom);
+    // the prose reaches the radii as {LO} through aliases onto OL, OM, ON.
+    // Added, all transparent: the segments AB .. QM the proof names; LMNT
+    // and LMNcircT, faceless twins of the triangle and the filled circle,
+    // which would be raised over the figure if highlighted (#140); the
+    // triangles LMO and PQO (explicit ;0 faces). Angle markers at B, E, H
+    // and O, hidden at rest; POQ shares LOM's rays and its marker. The
+    // angle names ABC, DEF, GHK, LMN collide with the triangles, which own
+    // them; the angles take the display override. The triangle LMN (default
+    // opaque face) is traced through LMNT and stands from the next slide.
+    //
+    // Draggables (checked against the bundle): A0, A3, D0, D3 (off-canvas
+    // tracks), A, B, C, D, F, G, K (givens), L, M. L and M arrive with
+    // "Construct LMN", so they are deferred. E, H, N, O, P, Q are derived
+    // and listed per slide.
+    var PTS  = ["A","B","C","D","E","F","G","H","K","AB","BC","DE","EF","GH","HK"];
+    var ANG  = ["angABC","angDEF","angGHK"];
+    var GIV  = PTS.concat(ANG, ["BAs","BCs","EDs","EFs","HGs","HKs"]);
+    var JN   = GIV.concat(["AC","DF","GK"]);
+    var TRI  = PTS.concat(ANG, ["ABC","DEF","GHK","AC","DF","GK"]);
+    var LMNv = TRI.concat(["L","M","N","LMN","LMNT","LM","MN","NL"]);
+    var CIRC = LMNv.concat(["LMNcirc","LMNcircT","O"]);
+    var RAD  = CIRC.concat(["OL","OM","ON"]);
+    var OANG = ["angLOM","angMON","angNOL"];
+    var PQv  = RAD.concat(["P","Q","OP","OQ","PQ","LP","QM","LMO","PQO"]);
+    var PQA  = PQv.concat(OANG);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -76,54 +109,349 @@ It is therefore possible to construct a triangle out of straight lines equal to 
             "P';point;midpoint;O,L;0;0",
             "P;point;midpoint;P',L",
             "Q;point;cutoff;O,M,O,P",
-            "PQ;line;connect;P,Q"
+            "PQ;line;connect;P,Q",
+            // Slide twins, hidden at rest.
+            "BAs;line;connect;B,A",
+            "BCs;line;connect;B,C",
+            "EDs;line;connect;E,D",
+            "EFs;line;connect;E,F",
+            "HGs;line;connect;H,G",
+            "HKs;line;connect;H,K",
+            "LOs;line;connect;L,O",
+            "MOs;line;connect;M,O",
+            "NOs;line;connect;N,O",
+            // Transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "DF;line;connect;D,F;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "HK;line;connect;H,K;0;0;0",
+            "GK;line;connect;G,K;0;0;0",
+            "LM;line;connect;L,M;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "NL;line;connect;N,L;0;0;0",
+            "OP;line;connect;O,P;0;0;0",
+            "OQ;line;connect;O,Q;0;0;0",
+            "LP;line;connect;L,P;0;0;0",
+            "QM;line;connect;Q,M;0;0;0",
+            "LMNT;polygon;triangle;L,M,N;0;0;0;0",
+            "LMNcircT;circle;circumcircle;L,M,N;0;0;0;0",
+            "LMO;polygon;triangle;L,M,O;0;0;0;0",
+            "PQO;polygon;triangle;P,Q,O;0;0;0;0",
+            "angABC;sector;angleMarker;B,A,C",
+            "angDEF;sector;angleMarker;E,D,F",
+            "angGHK;sector;angleMarker;H,G,K",
+            "angLOM;sector;angleMarker;O,L,M",
+            "angMON;sector;angleMarker;O,M,N",
+            "angNOL;sector;angleMarker;O,N,L"
         ],
+        initiallyHidden: ["BAs","BCs","EDs","EFs","HGs","HKs","LOs","MOs","NOs"],
+        deferDraggables: ["L","M"],
+        aliases: { "LO": "OL", "MO": "OM", "NO": "ON", "PO": "OP" },
+        slides: [
+            { text: "“To construct a solid angles out of three plane angles",
+              visible: GIV,
+              highlighted: ANG,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep },
+                  { elem: "angDEF", name: geomlib.A.Sector.sweep },
+                  { elem: "angGHK", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "XI.23" }] },
+            { text: "such that the sum of any two is greater than the remaining one:",
+              visible: GIV,
+              highlighted: ANG },
+            { text: "thus the sum of the three angles must be less than four right angles.”",
+              visible: GIV,
+              highlighted: ANG },
+            { text: "Let the angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK} be the three given plane angles,",
+              visible: GIV,
+              highlighted: ANG },
+            { text: "and let the sum of any two of them be greater than the remaining one,",
+              visible: GIV,
+              highlighted: ANG,
+              justifications: [{ claim: "necessary for a solid angle", ref: "XI.20" }] },
+            { text: "and further, let the sum of all three be less than four right angles.",
+              visible: GIV,
+              highlighted: ANG,
+              justifications: [{ claim: "necessary for a solid angle", ref: "XI.21" }] },
+            { text: "It is required to construct a solid angle out of angles equal to the angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK}.",
+              visible: GIV,
+              highlighted: ANG },
+            { text: "Cut off {AB}, {BC}, {DE}, {EF}, {GH}, and {HK} equal to one another,",
+              visible: GIV,
+              highlighted: ["AB","BC","DE","EF","GH","HK"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "A", name: geomlib.A.Point.appear },
+                  { elem: "C", name: geomlib.A.Point.appear },
+                  { elem: "D", name: geomlib.A.Point.appear },
+                  { elem: "F", name: geomlib.A.Point.appear },
+                  { elem: "G", name: geomlib.A.Point.appear },
+                  { elem: "K", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "six equal lines cut off", ref: "I.3" }] },
+            { text: "and join {AC}, {DF}, and {GK}.",
+              visible: JN,
+              highlighted: ["AC","DF","GK"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "AC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GK", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "It is therefore possible to construct a triangle out of straight lines equal to {AC}, {DF}, and {GK}.",
+              visible: TRI,
+              highlighted: ["AC","DF","GK"],
+              justifications: [{ claim: "a triangle out of AC, DF, GK", ref: "XI.22" }] },
+            { text: "Construct {LMN|LMNT} so that {AC} equals {LM}, {DF} equals {MN}, and {GK} equals {NL}.",
+              visible: TRI.concat(["L","M","N","LMNT","LM","MN","NL"]),
+              highlighted: ["AC","LM","DF","MN","GK","NL"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "L",    name: geomlib.A.Point.appear },
+                  { elem: "M",    name: geomlib.A.Point.appear },
+                  { elem: "N",    name: geomlib.A.Point.appear },
+                  { elem: "LMNT", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "LM = AC, MN = DF, NL = GK", ref: "XI.22" }] },
+            { text: "Describe the circle {LMN|LMNcircT} about the triangle {LMN|LMNT}, and take its center {O}.",
+              visible: CIRC,
+              highlighted: ["LMNT","O"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "LMNcirc", name: geomlib.A.Circle.compass },
+                  { elem: "O",       name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "circle about LMN", ref: "IV.5" },
+                               { claim: "its center O", ref: "III.1" }] },
+            { text: "Join {LO|LOs}, {MO|MOs}, and {NO|NOs}.",
+              visible: CIRC.concat(["LOs","MOs","NOs"]),
+              highlighted: ["LOs","MOs","NOs"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "LOs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "MOs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "NOs", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "I say that {AB} is greater than {LO}.",
+              visible: RAD,
+              highlighted: ["AB","OL"] },
+            { text: "For, if not, {AB} either equals {LO}, or is less.",
+              visible: RAD,
+              highlighted: ["AB","OL"] },
+            { text: "First, let it be equal. Then, since {AB} equals {LO}, while {AB} equals {BC}, and {LO} equals {OM},",
+              visible: RAD,
+              highlighted: ["AB","OL","BC","OM"] },
+            { text: "therefore the two sides {AB} and {BC} equal the two sides {LO} and {OM} respectively.",
+              visible: RAD,
+              highlighted: ["AB","BC","OL","OM"] },
+            { text: "And, by hypothesis, the base {AC} equals the base {LM},",
+              visible: RAD,
+              highlighted: ["AC","LM"] },
+            { text: "therefore the angle {ABC|angABC} equals the angle {LOM|angLOM}.",
+              visible: RAD.concat(["angLOM"]),
+              highlighted: ["angABC","angLOM"],
+              transition: { animations: [
+                  { elem: "angLOM", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle ABC = angle LOM", ref: "I.8" }] },
+            { text: "For the same reason the angle {DEF|angDEF} also equals the angle {MON|angMON},",
+              visible: RAD.concat(["angLOM","angMON"]),
+              highlighted: ["angDEF","angMON"],
+              transition: { animations: [
+                  { elem: "angMON", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the angle {GHK|angGHK} equals the angle {NOL|angNOL}.",
+              visible: RAD.concat(OANG),
+              highlighted: ["angGHK","angNOL"],
+              transition: { animations: [
+                  { elem: "angNOL", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the sum of the three angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK}",
+              visible: RAD.concat(OANG),
+              highlighted: ANG },
+            { text: "equals the sum of the three angles {LOM|angLOM}, {MON|angMON}, and {NOL|angNOL}.",
+              visible: RAD.concat(OANG),
+              highlighted: OANG },
+            { text: "But the sum of the three angles {LOM|angLOM}, {MON|angMON}, and {NOL|angNOL} equals four right angles,",
+              visible: RAD.concat(OANG),
+              highlighted: OANG },
+            { text: "therefore the sum of the three angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK} equals four right angles.",
+              visible: RAD.concat(OANG),
+              highlighted: ANG },
+            { text: "But the sum is also, by hypothesis, less than four right angles, which is absurd.",
+              visible: RAD.concat(OANG),
+              highlighted: ANG },
+            { text: "Therefore {AB} is not equal to {LO}.",
+              visible: RAD,
+              highlighted: ["AB","OL"] },
+            { text: "I say next that neither is {AB} less than {LO}.",
+              visible: RAD,
+              highlighted: ["AB","OL"] },
+            { text: "For, if possible, let it be so. Make {OP} equal to {AB}, and {OQ} equal to {BC},",
+              visible: RAD.concat(["P","Q","OP","OQ"]),
+              highlighted: ["OP","AB","OQ","BC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "P", name: geomlib.A.Point.appear },
+                  { elem: "Q", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "OP = AB, OQ = BC", ref: "I.3" }] },
+            { text: "and join {PQ}.",
+              visible: PQv,
+              highlighted: ["PQ"],
+              transition: { animations: [
+                  { elem: "PQ", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since {AB} equals {BC}, therefore {OP} also equals {OQ}, so that the remainder {LP} equals {QM}.",
+              visible: PQv,
+              highlighted: ["AB","BC","OP","OQ","LP","QM"] },
+            { text: "Therefore {LM} is parallel to {PQ}, and {LMO} is equiangular with {PQO}.",
+              visible: PQv,
+              highlighted: ["LM","PQ","LMO","PQO"],
+              justifications: [{ claim: "LM parallel to PQ", ref: "VI.2" },
+                               { claim: "LMO equiangular with PQO", ref: "I.29" }] },
+            { text: "Therefore, {OL} is to {LM} as {OP} is to {PQ},",
+              visible: PQv,
+              highlighted: ["OL","LM","OP","PQ"],
+              justifications: [{ claim: "OL : LM = OP : PQ", ref: "VI.4" }] },
+            { text: "and alternately, {LO} is to {OP} as {LM} is to {PQ}.",
+              visible: PQv,
+              highlighted: ["OL","OP","LM","PQ"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "But {LO} is greater than {OP}, therefore {LM} is greater than {PQ}.",
+              visible: PQv,
+              highlighted: ["OL","OP","LM","PQ"] },
+            { text: "And {LM} equals {AC}, therefore {AC} is greater than {PQ}.",
+              visible: PQv,
+              highlighted: ["LM","AC","PQ"] },
+            { text: "Since, then, the two sides {AB} and {BC} equal the two sides {PO} and {OQ},",
+              visible: PQv,
+              highlighted: ["AB","BC","OP","OQ"] },
+            { text: "and the base {AC} is greater than the base {PQ}, therefore the angle {ABC|angABC} is greater than the angle {POQ|angLOM}.",
+              visible: PQv.concat(["angLOM"]),
+              highlighted: ["AC","PQ","angABC","angLOM"],
+              transition: { animations: [
+                  { elem: "angLOM", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle ABC > angle POQ", ref: "I.25" }] },
+            { text: "Similarly we can prove that the angle {DEF|angDEF} is also greater than the angle {MON|angMON},",
+              visible: PQv.concat(["angLOM","angMON"]),
+              highlighted: ["angDEF","angMON"],
+              transition: { animations: [
+                  { elem: "angMON", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the angle {GHK|angGHK} is greater than the angle {NOL|angNOL}.",
+              visible: PQA,
+              highlighted: ["angGHK","angNOL"],
+              transition: { animations: [
+                  { elem: "angNOL", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore the sum of the three angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK}",
+              visible: PQA,
+              highlighted: ANG },
+            { text: "is greater than the sum of the three angles {LOM|angLOM}, {MON|angMON}, and {NOL|angNOL}.",
+              visible: PQA,
+              highlighted: OANG },
+            { text: "But, by hypothesis, the sum of the angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK} is less than four right angles,",
+              visible: PQA,
+              highlighted: ANG },
+            { text: "therefore the sum of the angles {LOM|angLOM}, {MON|angMON}, and {NOL|angNOL} is much less than four right angles.",
+              visible: PQA,
+              highlighted: OANG },
+            { text: "But the sum also equals four right angles, which is absurd. Therefore {AB} is not less than {LO}.",
+              visible: PQA,
+              highlighted: ["AB","OL"] },
+            { text: "And it was proved that neither is it equal, therefore {AB} is greater than {LO}.",
+              visible: RAD,
+              highlighted: ["AB","OL"] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XI.23") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification,
+    // shared by the three proof canvases on this page.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":      "/elements/books/bookI/propositions/propI3/",
+        "I.4":      "/elements/books/bookI/propositions/propI4/",
+        "I.8":      "/elements/books/bookI/propositions/propI8/",
+        "I.25":     "/elements/books/bookI/propositions/propI25/",
+        "I.29":     "/elements/books/bookI/propositions/propI29/",
+        "I.47":     "/elements/books/bookI/propositions/propI47/",
+        "III.1":    "/elements/books/bookIII/propositions/propIII1/",
+        "III.31":   "/elements/books/bookIII/propositions/propIII31/",
+        "IV.1":     "/elements/books/bookIV/propositions/propIV1/",
+        "IV.5":     "/elements/books/bookIV/propositions/propIV5/",
+        "V.16":     "/elements/books/bookV/propositions/propV16/",
+        "VI.2":     "/elements/books/bookVI/propositions/propVI2/",
+        "VI.4":     "/elements/books/bookVI/propositions/propVI4/",
+        "XI.Def.3": "/elements/books/bookXI/definitions/defXI3/",
+        "XI.12":    "/elements/books/bookXI/propositions/propXI12/",
+        "XI.20":    "/elements/books/bookXI/propositions/propXI20/",
+        "XI.21":    "/elements/books/bookXI/propositions/propXI21/",
+        "XI.22":    "/elements/books/bookXI/propositions/propXI22/"
     });
 </script>
 </center>
 
-Describe the circle *LMN* about the triangle *LMN,* and take its center *O.* Join *LO, MO,* and *NO.* [!just IV.5, III.1]
+Describe the circle {LMN|LMNcircT} about the triangle {LMN|LMNT}, and take its center {O}. Join {LO}, {MO}, and {NO}. [!just IV.5, III.1]
 
-I say that *AB* is greater than *LO.*
+I say that {AB} is greater than {LO}.
 
-For, if not, *AB* either equals *LO,* or is less.
+For, if not, {AB} either equals {LO}, or is less.
 
-First, let it be equal. Then, since *AB* equals *LO,* while *AB* equals *BC,* and *LO* equals *OM,* therefore the two sides *AB* and *BC* equal the two sides *LO* and *OM* respectively. And, by hypothesis, the base *AC* equals the base *LM,* therefore the angle *ABC* equals the angle *LOM.* [!just I.8]
+First, let it be equal. Then, since {AB} equals {LO}, while {AB} equals {BC}, and {LO} equals {OM}, therefore the two sides {AB} and {BC} equal the two sides {LO} and {OM} respectively. And, by hypothesis, the base {AC} equals the base {LM}, therefore the angle {ABC|angABC} equals the angle {LOM|angLOM}. [!just I.8]
 
-For the same reason the angle *DEF* also equals the angle *MON,* and the angle *GHK* equals the angle *NOL.* Therefore the sum of the three angles *ABC, DEF,* and *GHK* equals the sum of the three angles *LOM, MON,* and *NOL.*
+For the same reason the angle {DEF|angDEF} also equals the angle {MON|angMON}, and the angle {GHK|angGHK} equals the angle {NOL|angNOL}. Therefore the sum of the three angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK} equals the sum of the three angles {LOM|angLOM}, {MON|angMON}, and {NOL|angNOL}.
 
-But the sum of the three angles *LOM, MON,* and *NOL* equals four right angles, therefore the sum of the three angles *ABC, DEF,* and *GHK* equals four right angles.
+But the sum of the three angles {LOM|angLOM}, {MON|angMON}, and {NOL|angNOL} equals four right angles, therefore the sum of the three angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK} equals four right angles.
 
-But the sum is also, by hypothesis, less than four right angles, which is absurd. Therefore *AB* is not equal to *LO.*
+But the sum is also, by hypothesis, less than four right angles, which is absurd. Therefore {AB} is not equal to {LO}.
 
-I say next that neither is *AB* less than *LO.*
+I say next that neither is {AB} less than {LO}.
 
-For, if possible, let it be so. Make *OP* equal to *AB,* and *OQ* equal to *BC,* and join *PQ.* [!just I.3]
+For, if possible, let it be so. Make {OP} equal to {AB}, and {OQ} equal to {BC}, and join {PQ}. [!just I.3]
 
-Then, since *AB* equals *BC,* therefore *OP* also equals *OQ,* so that the remainder *LP* equals *QM.*
+Then, since {AB} equals {BC}, therefore {OP} also equals {OQ}, so that the remainder {LP} equals {QM}.
 
-Therefore *LM* is parallel to *PQ,* and *LMO* is equiangular with *PQO.* [!just VI.2, I.29]
+Therefore {LM} is parallel to {PQ}, and {LMO} is equiangular with {PQO}. [!just VI.2, I.29]
 
-Therefore, *OL* is to *LM* as *OP* is to *PQ,* and alternately, *LO* is to *OP* as *LM* is to *PQ.* [!just VI.4, V.16]
+Therefore, {OL} is to {LM} as {OP} is to {PQ}, and alternately, {LO} is to {OP} as {LM} is to {PQ}. [!just VI.4, V.16]
 
-But *LO* is greater than *OP,* therefore *LM* is greater than *PQ.* And *LM* equals *AC,* therefore *AC* is greater than *PQ.*
+But {LO} is greater than {OP}, therefore {LM} is greater than {PQ}. And {LM} equals {AC}, therefore {AC} is greater than {PQ}.
 
-Since, then, the two sides *AB* and *BC* equal the two sides *PO* and *OQ,* and the base *AC* is greater than the base *PQ,* therefore the angle *ABC* is greater than the angle *POQ.* [!just I.25]
+Since, then, the two sides {AB} and {BC} equal the two sides {PO} and {OQ}, and the base {AC} is greater than the base {PQ}, therefore the angle {ABC|angABC} is greater than the angle {POQ|angLOM}. [!just I.25]
 
-Similarly we can prove that the angle *DEF* is also greater than the angle *MON,* and the angle *GHK* is greater than the angle *NOL.*
+Similarly we can prove that the angle {DEF|angDEF} is also greater than the angle {MON|angMON}, and the angle {GHK|angGHK} is greater than the angle {NOL|angNOL}.
 
-Therefore the sum of the three angles *ABC, DEF,* and *GHK* is greater than the sum of the three angles *LOM, MON,* and *NOL.* But, by hypothesis, the sum of the angles *ABC, DEF,* and *GHK* is less than four right angles, therefore the sum of the angles *LOM, MON,* and *NOL* is much less than four right angles. But the sum also equals four right angles, which is absurd. Therefore *AB* is not less than *LO.*
+Therefore the sum of the three angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK} is greater than the sum of the three angles {LOM|angLOM}, {MON|angMON}, and {NOL|angNOL}. But, by hypothesis, the sum of the angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK} is less than four right angles, therefore the sum of the angles {LOM|angLOM}, {MON|angMON}, and {NOL|angNOL} is much less than four right angles. But the sum also equals four right angles, which is absurd. Therefore {AB} is not less than {LO}.
 
-And it was proved that neither is it equal, therefore *AB* is greater than *LO.*
+And it was proved that neither is it equal, therefore {AB} is greater than {LO}.
 
 <div class="just"><a href="/elements/books/bookXI/propositions/propXI12/">XI.12</a><br><a href="#lemma">Lemma below</a></div>
 
-Next set up *OR* from the point *O* at right angles to the plane of the circle *LMN* so that the square on *OR* equals the square on *AB* minus the square on *LO.* Join *RL, RM,* and *RN.*
+Next set up {OR:canvas_1} from the point {O:canvas_1} at right angles to the plane of the circle {LMN|LMNcircT:canvas_1} so that the square on {OR:canvas_1} equals the square on {AB:canvas_1} minus the square on {LO:canvas_1}. Join {RL:canvas_1}, {RM:canvas_1}, and {RN:canvas_1}.
 
 <center>
 <canvas id="canvas_1" width="600" height="270" tabindex="0"></canvas>
 <noscript><img alt="XI.23 diagram" src="propXI23b.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's second figure: the same givens, the base LMN in the plane of
+    // its circle (xyplane, seen obliquely), OR set up at O at right angles
+    // to that plane, and the pyramid on LMN with vertex R. The helper points
+    // a, b, c, d carry the lengths: d gives OR with the square on OR equal
+    // to the square on AB minus the square on LO (the lemma below).
+    //
+    // Added, hidden at rest: solid twins RLs, RMs, RNs so the joins stroke
+    // from R before the pyramid stands (initiallyHidden); the pyramid itself
+    // waits for the closing slide. Added, all transparent: the segments
+    // AB .. NL and RL, RM, RN the proof names; LMNT and LMNcircT, faceless
+    // twins of the triangle and the filled circle (#140). The right angles
+    // LOR, MOR, NOR (XI.Def.3) are angleMarkerRight squares; the angles at
+    // B, E, H and R are sector markers, all hidden at rest. Joyce's
+    // "equals equals" is left literal.
+    //
+    // Draggables (checked against the bundle): A0, A3, D0, D3 (off-canvas
+    // tracks), A, B, C, D, F, G, K, O, L, all givens of this stage, carried
+    // over from the first figure. E, H, M, N, R are derived and listed.
+    var BASE = ["A","B","C","D","E","F","G","H","K","ABC","DEF","GHK",
+                "AB","BC","AC","DE","EF","DF","GH","HK","GK",
+                "L","M","N","LMNcirc","LMNcircT","LMN","LMNT","LM","MN","NL",
+                "O","OL","OM","ON"];
+    var RV   = BASE.concat(["R","OR"]);
+    var JR   = RV.concat(["RLs","RMs","RNs","RL","RM","RN"]);
+    var RT   = JR.concat(["angLOR","angMOR","angNOR"]);
+    var ANG  = ["angABC","angDEF","angGHK"];
+    var RANG = ["angLRM","angMRN","angLRN"];
+    var EQ   = JR.concat(ANG);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -180,25 +508,166 @@ Next set up *OR* from the point *O* at right angles to the plane of the circle *
             "d;point;first;dd';0;0",
             "R;point;perpendicular;xyplane,O,d,B",
             "OR;line;connect;O,R",
-            "pyr;polyhedron;pyramid;R,LMN;0;0;black;random"
+            "pyr;polyhedron;pyramid;R,LMN;0;0;black;random",
+            // Slide twins, hidden at rest.
+            "RLs;line;connect;R,L",
+            "RMs;line;connect;R,M",
+            "RNs;line;connect;R,N",
+            // Transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "DF;line;connect;D,F;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "HK;line;connect;H,K;0;0;0",
+            "GK;line;connect;G,K;0;0;0",
+            "LM;line;connect;L,M;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "NL;line;connect;N,L;0;0;0",
+            "RL;line;connect;R,L;0;0;0",
+            "RM;line;connect;R,M;0;0;0",
+            "RN;line;connect;R,N;0;0;0",
+            "LMNT;polygon;triangle;L,M,N;0;0;0;0",
+            "LMNcircT;circle;radius;O,A,b,xyplane;0;0;0;0",
+            "angLOR;sector;angleMarkerRight;O,L,R",
+            "angMOR;sector;angleMarkerRight;O,M,R",
+            "angNOR;sector;angleMarkerRight;O,N,R",
+            "angABC;sector;angleMarker;B,A,C",
+            "angDEF;sector;angleMarker;E,D,F",
+            "angGHK;sector;angleMarker;H,G,K",
+            "angLRM;sector;angleMarker;R,L,M",
+            "angMRN;sector;angleMarker;R,M,N",
+            "angLRN;sector;angleMarker;R,L,N"
         ],
+        initiallyHidden: ["RLs","RMs","RNs"],
+        aliases: { "LO": "OL", "MO": "OM", "NO": "ON", "RO": "OR", "LR": "RL" },
+        slides: [
+            { text: "Next set up {OR} from the point {O} at right angles to the plane of the circle {LMN|LMNcircT}",
+              visible: RV,
+              highlighted: ["OR","O","LMNcircT"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "OR", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "R",  name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "OR at right angles to the plane", ref: "XI.12" }] },
+            { text: "so that the square on {OR} equals the square on {AB} minus the square on {LO}.",
+              visible: RV,
+              highlighted: ["OR","AB","OL"],
+              justifications: [{ claim: "OR² = AB² − LO²", ref: "Lemma" }] },
+            { text: "Join {RL|RLs}, {RM|RMs}, and {RN|RNs}.",
+              visible: JR,
+              highlighted: ["RLs","RMs","RNs"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "RLs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "RMs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "RNs", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since {RO} is at right angles to the plane of the circle {LMN|LMNcircT},",
+              visible: JR,
+              highlighted: ["OR","LMNcircT"] },
+            { text: "therefore {RO} is also at right angles to each of the straight lines {LO}, {MO}, and {NO}.",
+              visible: RT,
+              highlighted: ["OR","OL","OM","ON"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angLOR", name: geomlib.A.Sector.sweep },
+                  { elem: "angMOR", name: geomlib.A.Sector.sweep },
+                  { elem: "angNOR", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "at right angles to every line in the plane", ref: "XI.Def.3" }] },
+            { text: "And, since {LO} equals {OM}, and {OR} is common and at right angles,",
+              visible: RT,
+              highlighted: ["OL","OM","OR","angLOR","angMOR"] },
+            { text: "therefore the base {RL} equals the base {RM}.",
+              visible: RT,
+              highlighted: ["RL","RM"],
+              justifications: [{ claim: "RL = RM", ref: "I.4" }] },
+            { text: "For the same reason {RN} also equals each of the straight lines {RL} and {RM}.",
+              visible: RT,
+              highlighted: ["RN","RL","RM"] },
+            { text: "Therefore the three straight lines {RL}, {RM}, and {RN} equal one another.",
+              visible: JR,
+              highlighted: ["RL","RM","RN"] },
+            { text: "Next, since by hypothesis the square on {OR} equals equals the square on {AB} minus the square on {LO},",
+              visible: JR,
+              highlighted: ["OR","AB","OL"] },
+            { text: "therefore the square on {AB} equals the sum of the squares on {LO} and {OR}.",
+              visible: JR,
+              highlighted: ["AB","OL","OR"] },
+            { text: "But the square on {LR} equals the sum of the squares on {LO} and {OR},",
+              visible: JR.concat(["angLOR"]),
+              highlighted: ["RL","OL","OR"] },
+            { text: "for the angle {LOR|angLOR} is right,",
+              visible: JR.concat(["angLOR"]),
+              highlighted: ["angLOR"],
+              justifications: [{ claim: "LR² = LO² + OR²", ref: "I.47" }] },
+            { text: "therefore the square on {AB} equals the square on {RL}. Therefore {AB} equals {RL}.",
+              visible: JR,
+              highlighted: ["AB","RL"] },
+            { text: "But each of the straight lines {BC}, {DE}, {EF}, {GH}, and {HK} equals {AB},",
+              visible: JR,
+              highlighted: ["BC","DE","EF","GH","HK","AB"] },
+            { text: "while each of the straight lines {RM} and {RN} equals {RL},",
+              visible: JR,
+              highlighted: ["RM","RN","RL"] },
+            { text: "therefore each of the straight lines {AB}, {BC}, {DE}, {EF}, {GH}, and {HK}",
+              visible: JR,
+              highlighted: ["AB","BC","DE","EF","GH","HK"] },
+            { text: "equals each of the straight lines {RL}, {RM}, and {RN}.",
+              visible: JR,
+              highlighted: ["RL","RM","RN"] },
+            { text: "Since the two sides {LR} and {RM} equal the two sides {AB} and {BC},",
+              visible: JR,
+              highlighted: ["RL","RM","AB","BC"] },
+            { text: "and, by hypothesis, the base {LM} equals the base {AC}, therefore the angle {LRM|angLRM} equals the angle {ABC|angABC}.",
+              visible: EQ.concat(["angLRM"]),
+              highlighted: ["LM","AC","angLRM","angABC"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angABC", name: geomlib.A.Sector.sweep },
+                  { elem: "angLRM", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle LRM = angle ABC", ref: "I.8" }] },
+            { text: "For the same reason the angle {MRN|angMRN} equals the angle {DEF|angDEF},",
+              visible: EQ.concat(["angLRM","angMRN"]),
+              highlighted: ["angMRN","angDEF"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angDEF", name: geomlib.A.Sector.sweep },
+                  { elem: "angMRN", name: geomlib.A.Sector.sweep } ] } },
+            { text: "and the angle {LRN|angLRN} equals the angle {GHK|angGHK}.",
+              visible: EQ.concat(RANG),
+              highlighted: ["angLRN","angGHK"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angGHK", name: geomlib.A.Sector.sweep },
+                  { elem: "angLRN", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Therefore, out of the three plane angles {LRM|angLRM}, {MRN|angMRN}, and {LRN|angLRN},",
+              visible: EQ.concat(RANG),
+              highlighted: RANG },
+            { text: "which equal the three given angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK},",
+              visible: EQ.concat(RANG),
+              highlighted: ANG },
+            { text: "the solid angle at {R} has been constructed, which is contained by the angles {LRM|angLRM}, {MRN|angMRN}, and {LRN|angLRN}.",
+              visible: EQ.concat(RANG, ["pyr"]),
+              highlighted: ["R"].concat(RANG),
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </center>
 
-Then, since *RO* is at right angles to the plane of the circle *LMN,* therefore *RO* is also at right angles to each of the straight lines *LO, MO,* and *NO.* And, since *LO* equals *OM,* and *OR* is common and at right angles, therefore the base *RL* equals the base *RM.* [!just XI.Def.3; I.4]
+Then, since {RO} is at right angles to the plane of the circle {LMN|LMNcircT}, therefore {RO} is also at right angles to each of the straight lines {LO}, {MO}, and {NO}. And, since {LO} equals {OM}, and {OR} is common and at right angles, therefore the base {RL} equals the base {RM}. [!just XI.Def.3; I.4]
 
-For the same reason *RN* also equals each of the straight lines *RL* and *RM.* Therefore the three straight lines *RL, RM,* and *RN* equal one another.
+For the same reason {RN} also equals each of the straight lines {RL} and {RM}. Therefore the three straight lines {RL}, {RM}, and {RN} equal one another.
 
-Next, since by hypothesis the square on *OR* equals equals the square on *AB* minus the square on *LO,* therefore the square on *AB* equals the sum of the squares on *LO* and *OR.*
+Next, since by hypothesis the square on {OR} equals equals the square on {AB} minus the square on {LO}, therefore the square on {AB} equals the sum of the squares on {LO} and {OR}.
 
-But the square on *LR* equals the sum of the squares on *LO* and *OR,* for the angle *LOR* is right, therefore the square on *AB* equals the square on *RL.* Therefore *AB* equals *RL.* [!just I.47]
+But the square on {LR} equals the sum of the squares on {LO} and {OR}, for the angle {LOR|angLOR} is right, therefore the square on {AB} equals the square on {RL}. Therefore {AB} equals {RL}. [!just I.47]
 
-But each of the straight lines *BC, DE, EF, GH,* and *HK* equals *AB,* while each of the straight lines *RM* and *RN* equals *RL,* therefore each of the straight lines *AB, BC, DE, EF, GH,* and *HK* equals each of the straight lines *RL, RM,* and *RN.*
+But each of the straight lines {BC}, {DE}, {EF}, {GH}, and {HK} equals {AB}, while each of the straight lines {RM} and {RN} equals {RL}, therefore each of the straight lines {AB}, {BC}, {DE}, {EF}, {GH}, and {HK} equals each of the straight lines {RL}, {RM}, and {RN}.
 
-Since the two sides *LR* and *RM* equal the two sides *AB* and *BC,* and, by hypothesis, the base *LM* equals the base *AC,* therefore the angle *LRM* equals the angle *ABC.* For the same reason the angle *MRN* equals the angle *DEF,* and the angle *LRN* equals the angle *GHK.* [!just I.8]
+Since the two sides {LR} and {RM} equal the two sides {AB} and {BC}, and, by hypothesis, the base {LM} equals the base {AC}, therefore the angle {LRM|angLRM} equals the angle {ABC|angABC}. For the same reason the angle {MRN|angMRN} equals the angle {DEF|angDEF}, and the angle {LRN|angLRN} equals the angle {GHK|angGHK}. [!just I.8]
 
-Therefore, out of the three plane angles *LRM, MRN,* and *LRN,* which equal the three given angles *ABC, DEF,* and *GHK,* the solid angle at *R* has been constructed, which is contained by the angles *LRM, MRN,* and *LRN.*
+Therefore, out of the three plane angles {LRM|angLRM}, {MRN|angMRN}, and {LRN|angLRN}, which equal the three given angles {ABC|angABC}, {DEF|angDEF}, and {GHK|angGHK}, the solid angle at {R} has been constructed, which is contained by the angles {LRM|angLRM}, {MRN|angMRN}, and {LRN|angLRN}.
 
 <div class="qed">Q.E.F.</div>
 
@@ -206,12 +675,34 @@ Therefore, out of the three plane angles *LRM, MRN,* and *LRN,* which equal the 
 
 ### Lemma
 
-But how it is possible to take the square on *OR* equal to the square on *AB* minus the square on *LO* we can show as follows.
+But how it is possible to take the square on *OR* equal to the square on {AB} minus the square on *LO* we can show as follows.
 
 <figure class="diagram">
 <canvas id="canvas_2" width="220" height="180" tabindex="0"></canvas>
 <noscript><img alt="XI.23 lemma diagram" src="propXI23l.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's lemma figure: the semicircle on AB and the triangle ACB in it.
+    // The lemma's LO and OR are not drawn, so they are left as text.
+    //
+    // Added, hidden at rest: solid twins ABs, ACs, CBs (initiallyHidden) so
+    // AB stands before the semicircle and the fit and the join stroke from
+    // A and from C. Added, all transparent: AB, AC, CB for the highlight and
+    // the prose; semiT, a faceless twin of the filled semicircle, which
+    // would be raised over the triangle if highlighted (#140). The right
+    // angle ACB (III.31) is an angleMarkerRight square, hidden at rest. The
+    // triangle owns the name ABC, so the semicircle ABC takes the override.
+    //
+    // Joyce's last three steps have the squares the wrong way round (the
+    // square on AB equals the square on AC minus the square on CB, and so
+    // on); they are left literal.
+    //
+    // Draggables (checked against the bundle): A, B, C. C arrives with
+    // "Fit AC", so it is deferred.
+    var LG   = ["A","B","ABs","AB"];
+    var LS   = LG.concat(["semi","semiT"]);
+    var LFIT = LS.concat(["C","ACs","AC"]);
+    var LJN  = LFIT.concat(["CBs","CB","ABC"]);
+    var LRT  = LJN.concat(["angACB"]);
     geomlib.init({
         canvasid: "canvas_2",
         background: "35,19,100",
@@ -223,25 +714,95 @@ But how it is possible to take the square on *OR* equal to the square on *AB* mi
             "circ;circle;radius;O,A;0;0;0;0",
             "C;point;circleSlider;circ,80,40",
             "semi;sector;arc;B,C,A;0;0;black;random",
-            "ABC;polygon;triangle;A,B,C;0;0;black;random"
+            "ABC;polygon;triangle;A,B,C;0;0;black;random",
+            // Slide twins, hidden at rest.
+            "ABs;line;connect;A,B",
+            "ACs;line;connect;A,C",
+            "CBs;line;connect;C,B",
+            // Transparent highlight targets.
+            "AB;line;connect;A,B;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "semiT;sector;arc;B,C,A;0;0;0;0",
+            "angACB;sector;angleMarkerRight;C,A,B"
         ],
+        initiallyHidden: ["ABs","ACs","CBs"],
+        deferDraggables: ["C"],
+        aliases: { "BC": "CB" },
+        slides: [
+            { text: "But how it is possible to take the square on OR",
+              visible: LG,
+              highlighted: ["AB"],
+              justifications: [{ ref: "Lemma" }] },
+            { text: "equal to the square on {AB} minus the square on LO we can show as follows.",
+              visible: LG,
+              highlighted: ["AB"] },
+            { text: "Set out the straight lines {AB} and LO, and let {AB} be the greater.",
+              visible: LG,
+              highlighted: ["AB"] },
+            { text: "Describe the semicircle {ABC|semiT} on {AB}.",
+              visible: LS,
+              highlighted: ["semiT","AB"],
+              transition: { animations: [
+                  { elem: "semi", name: geomlib.A.Sector.sweep } ] } },
+            { text: "Fit {AC} into the semicircle {ABC|semiT} equal to the straight line LO, not being greater than the diameter {AB}.",
+              visible: LFIT,
+              highlighted: ["ACs","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "C",   name: geomlib.A.Point.appear },
+                  { elem: "ACs", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "AC fitted equal to LO", ref: "IV.1" }] },
+            { text: "Join {CB|CBs}.",
+              visible: LJN,
+              highlighted: ["CBs"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CBs", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "ABC", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Since the angle {ACB|angACB} is an angle in the semicircle {ACB|semiT}, therefore the angle {ACB|angACB} is right.",
+              visible: LRT,
+              highlighted: ["angACB","semiT"],
+              transition: { animations: [
+                  { elem: "angACB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "the angle in a semicircle is right", ref: "III.31" }] },
+            { text: "Therefore the square on {AB} equals the sum of the squares on {AC} and {CB}.",
+              visible: LRT,
+              highlighted: ["AB","AC","CB"],
+              justifications: [{ claim: "AB² = AC² + CB²", ref: "I.47" }] },
+            { text: "Hence the square on {AB} equals the square on {AC} minus the square on {CB}.",
+              visible: LRT,
+              highlighted: ["AB","AC","CB"] },
+            { text: "But {AC} equals LO. Therefore the square on {AB} equals the square on LO minus the square on {CB}.",
+              visible: LRT,
+              highlighted: ["AC","AB","CB"] },
+            { text: "Therefore if we cut off OR equal to {BC},",
+              visible: LRT,
+              highlighted: ["CB"] },
+            { text: "then the square on {AB} will equal the square on LO minus the square on OR.",
+              visible: LRT,
+              highlighted: ["AB"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
     });
 </script>
 </figure>
 
-Set out the straight lines *AB* and *LO,* and let *AB* be the greater. Describe the semicircle *ABC* on *AB.* Fit *AC* into the semicircle *ABC* equal to the straight line *LO,* not being greater than the diameter *AB.* Join *CB.* [!just IV.1]
+Set out the straight lines {AB} and *LO,* and let {AB} be the greater. Describe the semicircle {ABC|semiT} on {AB}. Fit {AC} into the semicircle {ABC|semiT} equal to the straight line *LO,* not being greater than the diameter {AB}. Join {CB}. [!just IV.1]
 
-Since the angle *ACB* is an angle in the semicircle *ACB,* therefore the angle *ACB* is right. [!just III.31]
+Since the angle {ACB|angACB} is an angle in the semicircle {ACB|semiT}, therefore the angle {ACB|angACB} is right. [!just III.31]
 
-Therefore the square on *AB* equals the sum of the squares on *AC* and *CB.* [!just I.47]
+Therefore the square on {AB} equals the sum of the squares on {AC} and {CB}. [!just I.47]
 
-Hence the square on *AB* equals the square on *AC* minus the square on *CB.* But *AC* equals *LO.* Therefore the square on *AB* equals the square on *LO* minus the square on *CB.* Therefore if we cut off *OR* equal to *BC,* then the square on *AB* will equal the square on *LO* minus the square on *OR.*
+Hence the square on {AB} equals the square on {AC} minus the square on {CB}. But {AC} equals *LO.* Therefore the square on {AB} equals the square on *LO* minus the square on {CB}. Therefore if we cut off *OR* equal to {BC}, then the square on {AB} will equal the square on *LO* minus the square on *OR.*
 
 <div class="qed">Q.E.F.</div>
 ----
 guide:
 
-This proposition shows that the necessary conditions for constructing a solid angle found in @XI.20 (the sum any two angles must be less than the third) and @XI.21 (the sum of the three angles must be less than four right angles) are, in fact, sufficient. It is interesting to see how parts of the construction disappear as the angles *B, E,* and *H* grow so that these conditions fail.
+This proposition shows that the necessary conditions for constructing a solid angle found in @XI.20 (the sum any two angles must be less than the third) and @XI.21 (the sum of the three angles must be less than four right angles) are, in fact, sufficient. It is interesting to see how parts of the construction disappear as the angles {B}, {E}, and {H} grow so that these conditions fail.
 
 This proposition completes the introductory portion of Book XI. Most of the remainder deals with parallelepipedal solids and their properties.
 
@@ -292,13 +853,16 @@ This proposition completes the introductory portion of Book XI. Most of the rema
             "O;point;center;LMNcirc",
             "OL;line;connect;O,L",
             "OM;line;connect;O,M",
-            "ON;line;connect;O,N"
+            "ON;line;connect;O,N",
+            // Added for the guide's hover refs: a faceless twin of the
+            // triangle, whose default face would be raised if highlighted.
+            "LMNT;polygon;triangle;L,M,N;0;0;0;0"
         ],
     });
 </script>
 </center>
 
-This is a rather long proof that has several stages. First, the base *LMN* for the proposed solid angle is constructed. This first stage has been set off as the previous proposition @XI.24.
+This is a rather long proof that has several stages. First, the base {LMN|LMNT} for the proposed solid angle is constructed. This first stage has been set off as the previous proposition @XI.24.
 
 After the circumcircle for this base is constructed, it is shown that the proposed edges for the solid angle, which are all equal, are greater than the radius of the circle. That part of the demonstration takes some time, and it is separated into two parts to show, first, that the edges can't equal the radius, and, second, that the edges can't be less than the radius.
 
@@ -306,4 +870,4 @@ The next stage is to place the proposed vertex *R* for the solid angle. It is pl
 
 The remainder of the proof is the verification that the proposed solid angle satisfies the requirements of the construction.
 
-The proof only covers the case when the circumcenter *O* of the triangle *LMN* lies within that triangle. Two other cases need to be considered as well—when *O* lies outside the triangle and when *O* lies on the boundary of the triangle. The three different cases need only be considered in the stage which shows that the proposed edges are greater than the radius of the circumcircle; the proof doesn't have to be split into three cases for the other stages of the proof.
+The proof only covers the case when the circumcenter {O} of the triangle {LMN|LMNT} lies within that triangle. Two other cases need to be considered as well—when {O} lies outside the triangle and when {O} lies on the boundary of the triangle. The three different cases need only be considered in the stage which shows that the proposed edges are greater than the radius of the circumcircle; the proof doesn't have to be split into three cases for the other stages of the proof.
