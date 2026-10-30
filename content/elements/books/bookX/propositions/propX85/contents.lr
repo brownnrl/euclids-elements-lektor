@@ -17,18 +17,33 @@ statement: To find the first apotome.
 ----
 proof:
 
-Set out a rational straight line, and let *BG* be commensurable in length with *A*. Then *BG* is also rational.
+Set out a rational straight line, and let {BG} be commensurable in length with {A}. Then {BG} is also rational.
 
-Set out two square numbers *DE* and *EF*, and let their difference *FD* not be square. Then *ED* does not have to *DF* the ratio which a square number has to a square number.
+Set out two square numbers {DE} and {EF}, and let their difference {FD|DF} not be square. Then {ED|DE} does not have to {DF} the ratio which a square number has to a square number.
 
-Let it be contrived that *ED* is to *DF* as the square on *BG* is to the square on *GC*. Then the square on *BG* is commensurable with the square on *GC*. [!just X.6.Cor; X.6]
+Let it be contrived that {ED|DE} is to {DF} as the square on {BG} is to the square on {GC}. Then the square on {BG} is commensurable with the square on {GC}. [!just X.6.Cor; X.6]
 
-But the square on *BG* is rational, therefore the square on *GC* is also rational. Therefore *GC* is also rational.
+But the square on {BG} is rational, therefore the square on {GC} is also rational. Therefore {GC} is also rational.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="90" tabindex="0"></canvas>
 <noscript><img alt="X.85 diagram" src="propX85.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the rational line A, the apotome BC cut from BG at C,
+    // the line H, and the numbers ED, EF, FD on DE. Added, all invisible at
+    // rest: transparent highlight targets GC, BC, EF, DF (;0;0;0). C lands
+    // on Joyce's solid BG, so the contrivance is a point-appear. Captions
+    // reach Joyce's spellings with the display override ({ED|DE}, {FD|DF},
+    // {GB|BG}). Joyce's H is drawn equal to GC; left as he drew it.
+    //
+    // Draggables (checked against the bundle): B, G, D, E, F and the hidden
+    // handles A1, A2, H1 (line sliders), plus the offscreen frees. All eight
+    // are deferred so each arrives with its caption. C and H2 are derived
+    // and listed.
+    var AS   = ["A1","A2","A","B","G","BG"];
+    var NUMS = AS.concat(["D","E","F","DE","EF","DF"]);
+    var CS   = NUMS.concat(["C","GC","BC"]);
+    var HS   = CS.concat(["H1","H2","H"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -57,29 +72,155 @@ But the square on *BG* is rational, therefore the square on *GC* is also rationa
             "bich;line;bichord;BGcirc,CGcirc;0;0;0",
             "H2';point;first;bich;0;0",
             "H2;point;cutoff;H1,H3,G,H2';0",
-            "H;line;connect;H1,H2;black"
+            "H;line;connect;H1,H2;black",
+            // Slide-only highlight targets — invisible at rest.
+            "GC;line;connect;G,C;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "DF;line;connect;D,F;0;0;0"
         ],
+        deferDraggables: ["A1","A2","B","G","D","E","F","H1"],
+        slides: [
+            { text: "“To find the first apotome.”",
+              visible: HS,
+              highlighted: ["BC"],
+              justifications: [{ ref: "X.85" }] },
+            { text: "Set out a rational straight line, and let {BG} be commensurable in length with {A}.",
+              visible: AS,
+              highlighted: ["A","BG"],
+              transition: { animations: [
+                  { elem: "A", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "BG", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {BG} is also rational.",
+              visible: AS,
+              highlighted: ["BG"] },
+            { text: "Set out two square numbers {DE} and {EF}, and let their difference {FD|DF} not be square.",
+              visible: NUMS,
+              highlighted: ["DE","EF","DF"] },
+            { text: "Then {ED|DE} does not have to {DF} the ratio which a square number has to a square number.",
+              visible: NUMS,
+              highlighted: ["DE","DF"] },
+            { text: "Let it be contrived that {ED|DE} is to {DF} as the square on {BG} is to the square on {GC}.",
+              visible: CS,
+              highlighted: ["DE","DF","BG","GC"],
+              justifications: [{ claim: "ED : DF = BG² : GC²", ref: "X.6.Cor" }],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Point.appear } ] } },
+            { text: "Then the square on {BG} is commensurable with the square on {GC}.",
+              visible: CS,
+              highlighted: ["BG","GC"],
+              justifications: [{ claim: "BG², GC² commensurable", ref: "X.6" }] },
+            { text: "But the square on {BG} is rational, therefore the square on {GC} is also rational.",
+              visible: CS,
+              highlighted: ["BG","GC"] },
+            { text: "Therefore {GC} is also rational.",
+              visible: CS,
+              highlighted: ["GC"] },
+            { text: "Since {ED|DE} does not have to {DF} the ratio which a square number has to a square number,",
+              visible: CS,
+              highlighted: ["DE","DF"] },
+            { text: "therefore neither has the square on {BG} to the square on {GC}",
+              visible: CS,
+              highlighted: ["BG","GC"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: CS,
+              highlighted: ["BG","GC"] },
+            { text: "Therefore {BG} is incommensurable in length with {GC}.",
+              visible: CS,
+              highlighted: ["BG","GC"],
+              justifications: [{ claim: "BG, GC incommensurable in length", ref: "X.9" }] },
+            { text: "And both are rational, therefore {BG} and {GC} are rational straight lines commensurable in square only.",
+              visible: CS,
+              highlighted: ["BG","GC"] },
+            { text: "Therefore {BC} is an apotome.",
+              visible: CS,
+              highlighted: ["BC"],
+              justifications: [{ claim: "BC an apotome", ref: "X.73" }] },
+            { text: "I say next that it is also a first apotome.",
+              visible: CS,
+              highlighted: ["BC"] },
+            { text: "Let the square on {H} be that by which the square on {BG} is greater than the square on {GC}.",
+              visible: HS,
+              highlighted: ["H","BG","GC"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now since {ED|DE} is to {FD|DF} as the square on {BG} is to the square on {GC},",
+              visible: HS,
+              highlighted: ["DE","DF","BG","GC"] },
+            { text: "therefore, in conversion, as {DE} is to {EF} as the square on {GB|BG} is to the square on {H}.",
+              visible: HS,
+              highlighted: ["DE","EF","BG","H"],
+              justifications: [{ claim: "DE : EF = GB² : H²", ref: "V.19.Cor" }] },
+            { text: "But {DE} has to {EF} the ratio which a square number has to a square number, for each is square,",
+              visible: HS,
+              highlighted: ["DE","EF"] },
+            { text: "therefore the square on {GB|BG} also has to the square on {H}",
+              visible: HS,
+              highlighted: ["BG","H"] },
+            { text: "the ratio which a square number has to a square number.",
+              visible: HS,
+              highlighted: ["BG","H"] },
+            { text: "Therefore {BG} is commensurable in length with {H}.",
+              visible: HS,
+              highlighted: ["BG","H"],
+              justifications: [{ claim: "BG, H commensurable in length", ref: "X.9" }] },
+            { text: "And the square on {BG} is greater than the square on {GC} by the square on {H},",
+              visible: HS,
+              highlighted: ["BG","GC","H"] },
+            { text: "therefore the square on {BG} is greater than the square on {GC}",
+              visible: HS,
+              highlighted: ["BG","GC"] },
+            { text: "by the square on {a straight line commensurable in length with BG|H}.",
+              visible: HS,
+              highlighted: ["H","BG"] },
+            { text: "And the whole {BG} is commensurable in length with the rational straight line {A} set out.",
+              visible: HS,
+              highlighted: ["BG","A"] },
+            { text: "Therefore {BC} is a first apotome.",
+              visible: HS,
+              highlighted: ["BC"],
+              justifications: [{ claim: "BC a first apotome", ref: "X.Def.III.1" }] },
+            { text: "Therefore the first apotome {BC} has been found.",
+              visible: HS,
+              highlighted: ["BC"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.85") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.19.Cor":    "/elements/books/bookV/propositions/propV19/#cor",
+        "X.6":         "/elements/books/bookX/propositions/propX6/",
+        "X.6.Cor":     "/elements/books/bookX/propositions/propX6/#cor",
+        "X.9":         "/elements/books/bookX/propositions/propX9/",
+        "X.73":        "/elements/books/bookX/propositions/propX73/",
+        "X.Def.III.1": "/elements/books/bookX/definitions/defX.III.1/"
     });
 </script>
 </figure>
 
-Since *ED* does not have to *DF* the ratio which a square number has to a square number, therefore neither has the square on *BG* to the square on *GC* the ratio which a square number has to a square number. Therefore *BG* is incommensurable in length with *GC*. [!just X.9]
+Since {ED|DE} does not have to {DF} the ratio which a square number has to a square number, therefore neither has the square on {BG} to the square on {GC} the ratio which a square number has to a square number. Therefore {BG} is incommensurable in length with {GC}. [!just X.9]
 
-And both are rational, therefore *BG* and *GC* are rational straight lines commensurable in square only. Therefore *BC* is an apotome. [!just X.73]
+And both are rational, therefore {BG} and {GC} are rational straight lines commensurable in square only. Therefore {BC} is an apotome. [!just X.73]
 
 I say next that it is also a first apotome.
 
-Let the square on *H* be that by which the square on *BG* is greater than the square on *GC*.
+Let the square on {H} be that by which the square on {BG} is greater than the square on {GC}.
 
-Now since *ED* is to *FD* as the square on *BG* is to the square on *GC*, therefore, in conversion, as *DE* is to *EF* as the square on *GB* is to the square on *H*. [!just V.19.Cor]
+Now since {ED|DE} is to {FD|DF} as the square on {BG} is to the square on {GC}, therefore, in conversion, as {DE} is to {EF} as the square on {GB|BG} is to the square on {H}. [!just V.19.Cor]
 
-But *DE* has to *EF* the ratio which a square number has to a square number, for each is square, therefore the square on *GB* also has to the square on *H* the ratio which a square number has to a square number. Therefore *BG* is commensurable in length with *H*. [!just X.9]
+But {DE} has to {EF} the ratio which a square number has to a square number, for each is square, therefore the square on {GB|BG} also has to the square on {H} the ratio which a square number has to a square number. Therefore {BG} is commensurable in length with {H}. [!just X.9]
 
-And the square on *BG* is greater than the square on *GC* by the square on *H*, therefore the square on *BG* is greater than the square on *GC* by the square on a straight line commensurable in length with *BG*.
+And the square on {BG} is greater than the square on {GC} by the square on {H}, therefore the square on {BG} is greater than the square on {GC} by the square on a straight line commensurable in length with {BG}.
 
-And the whole *BG* is commensurable in length with the rational straight line *A* set out.
+And the whole {BG} is commensurable in length with the rational straight line {A} set out.
 
-Therefore *BC* is a first apotome. Therefore the first apotome *BC* has been found. [!just X.Def.III.1]
+Therefore {BC} is a first apotome. Therefore the first apotome {BC} has been found. [!just X.Def.III.1]
 
 <div class="qed">Q.E.F.</div>
 ----
