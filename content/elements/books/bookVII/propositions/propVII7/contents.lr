@@ -15,14 +15,28 @@ statement: If a number is that part of a number which a subtracted number is of 
 ----
 proof:
 
-Let the number *AB* be that part of the number *CD* which *AE* subtracted is of *CF* subtracted.
+Let the number {AB} be that part of the number {CD} which {AE} subtracted is of {CF} subtracted.
 
-I say that the remainder *EB* is also the same part of the remainder *FD* that the whole *AB* is of the whole *CD.*
+I say that the remainder {EB} is also the same part of the remainder {FD} that the whole {AB} is of the whole {CD}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="120" tabindex="0"></canvas>
 <noscript><img alt="VII.7 diagram" src="propVII7.gif"/></noscript>
 <script type="text/javascript">
+    // AB is one half of CD and AE one half of CF; G is laid off from C so
+    // that CG = FD, making GF = CD. Line segments only, so the walk is
+    // highlight beats, with G and GC arriving at "Let EB be the same part
+    // of CG".
+    //
+    // Added to Joyce's figure, all transparent (;0;0;0): the segments AE,
+    // EB, CF, FD and GF the proof names, so they can light.
+    //
+    // Draggables (checked against the bundle): the lineSliders A, B, C, E
+    // and the colourless off-canvas rail ends. All are givens and stand
+    // from slide 1. D, F and G are derived cutoffs and follow the visible
+    // sets.
+    var GIVEN = ["A","B","E","AB","AE","EB","C","D","F","CD","CF","FD"];
+    var LAID  = GIVEN.concat(["G","GC","GF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -43,23 +57,111 @@ I say that the remainder *EB* is also the same part of the remainder *FD* that t
             "F';point;cutoff;C,C3,A,E;0;0",
             "F;point;cutoff;F',C3,A,E",
             "G;point;cutoff;C,C0,F,D",
-            "GC;line;connect;G,C"
+            "GC;line;connect;G,C",
+            // Invisible highlight targets. Zero-colour: nothing changes at rest.
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "FD;line;connect;F,D;0;0;0",
+            "GF;line;connect;G,F;0;0;0"
         ],
+        aliases: { "CG": "GC", "BA": "AB", "DC": "CD", "BE": "EB", "DF": "FD", "FG": "GF" },
+        slides: [
+            { text: "“If a number is that part of a number which a subtracted number is of a subtracted number,”",
+              visible: GIVEN,
+              highlighted: ["AB","CD","AE","CF"] },
+            { text: "“then the remainder is also the same part of the remainder that the whole is of the whole.”",
+              visible: GIVEN,
+              highlighted: ["EB","FD","AB","CD"],
+              justifications: [{ ref: "VII.7" }] },
+            { text: "Let the number {AB} be that part of the number {CD}",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "which {AE} subtracted is of {CF} subtracted.",
+              visible: GIVEN,
+              highlighted: ["AE","CF"] },
+            { text: "I say that the remainder {EB} is also the same part of the remainder {FD}",
+              visible: GIVEN,
+              highlighted: ["EB","FD"] },
+            { text: "that the whole {AB} is of the whole {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "Let {EB} be the same part of {CG} that {AE} is of {CF}.",
+              visible: LAID,
+              highlighted: ["EB","GC","AE","CF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G", name: geomlib.A.Point.appear },
+                  { elem: "GC", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now since {EB} is the same part of {CG} that {AE} is of {CF},",
+              visible: LAID,
+              highlighted: ["EB","GC","AE","CF"] },
+            { text: "therefore {AB} is the same part of {GF} that {AE} is of {CF}.",
+              visible: LAID,
+              highlighted: ["AB","GF","AE","CF"],
+              justifications: [{ claim: "AE + EB is the same part of CF + CG", ref: "VII.5" }] },
+            { text: "But, by hypothesis, {AB} is the same part of {CD} that {AE} is of {CF},",
+              visible: LAID,
+              highlighted: ["AB","CD","AE","CF"] },
+            { text: "therefore {AB} is the same part of {CD} that it is of {GF}.",
+              visible: LAID,
+              highlighted: ["AB","CD","GF"] },
+            { text: "Therefore {GF} equals {CD}.",
+              visible: LAID,
+              highlighted: ["GF","CD"] },
+            { text: "Subtract {CF} from each.",
+              visible: LAID,
+              highlighted: ["CF"] },
+            { text: "Then the remainder {GC} equals the remainder {FD}.",
+              visible: LAID,
+              highlighted: ["GC","FD"] },
+            { text: "Now since {EB} is the same part of {GC} that {AE} is of {CF}, and {GC} equals {FD},",
+              visible: LAID,
+              highlighted: ["EB","GC","AE","CF","FD"] },
+            { text: "therefore {EB} is the same part of {FD} that {AE} is of {CF}.",
+              visible: LAID,
+              highlighted: ["EB","FD","AE","CF"] },
+            { text: "But {AB} is the same part of {CD} that {AE} is of {CF},",
+              visible: LAID,
+              highlighted: ["AB","CD","AE","CF"] },
+            { text: "therefore the remainder {EB} is the same part of the remainder {FD}",
+              visible: LAID,
+              highlighted: ["EB","FD"] },
+            { text: "that the whole {AB} is of the whole {CD}.",
+              visible: LAID,
+              highlighted: ["AB","CD"] },
+            { text: "Therefore, if a number is that part of a number which a subtracted number is of a subtracted number,",
+              visible: LAID,
+              highlighted: ["AB","CD","AE","CF"] },
+            { text: "then the remainder is also the same part of the remainder that the whole is of the whole.",
+              visible: LAID,
+              highlighted: ["EB","FD","AB","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.7") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.5": "/elements/books/bookVII/propositions/propVII5/"
     });
 </script>
 </figure>
 
-Let *EB* be the same part of *CG* that *AE* is of *CF.*
+Let {EB} be the same part of {CG} that {AE} is of {CF}.
 
-Now since *EB* is the same part of *CG* that *AE* is of *CF,* therefore *AB* is the same part of *GF* that *AE* is of *CF.* [!just VII.5]
+Now since {EB} is the same part of {CG} that {AE} is of {CF}, therefore {AB} is the same part of {GF} that {AE} is of {CF}. [!just VII.5]
 
-But, by hypothesis, *AB* is the same part of *CD* that *AE* is of *CF,* therefore *AB* is the same part of *CD* that it is of *GF.* Therefore *GF* equals *CD.*
+But, by hypothesis, {AB} is the same part of {CD} that {AE} is of {CF}, therefore {AB} is the same part of {CD} that it is of {GF}. Therefore {GF} equals {CD}.
 
-Subtract *CF* from each. Then the remainder *GC* equals the remainder *FD.*
+Subtract {CF} from each. Then the remainder {GC} equals the remainder {FD}.
 
-Now since *EB* is the same part of *GC* that *AE* is of *CF,* and *GC* equals *FD,* therefore *EB* is the same part of *FD* that *AE* is of *CF.*
+Now since {EB} is the same part of {GC} that {AE} is of {CF}, and {GC} equals {FD}, therefore {EB} is the same part of {FD} that {AE} is of {CF}.
 
-But *AB* is the same part of *CD* that *AE* is of *CF,* therefore the remainder *EB* is the same part of the remainder *FD* that the whole *AB* is of the whole *CD.*
+But {AB} is the same part of {CD} that {AE} is of {CF}, therefore the remainder {EB} is the same part of the remainder {FD} that the whole {AB} is of the whole {CD}.
 
 Therefore, *if a number is that part of a number which a subtracted number is of a subtracted number, then the remainder is also the same part of the remainder that the whole is of the whole.*
 

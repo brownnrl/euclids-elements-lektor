@@ -15,14 +15,36 @@ statement: If a number is the same parts of a number that a subtracted number is
 ----
 proof:
 
-Let the number *AB* be the same parts of the number *CD* that *AE* subtracted is of *CF* subtracted.
+Let the number {AB} be the same parts of the number {CD} that {AE} subtracted is of {CF} subtracted.
 
-I say that the remainder *EB* is also the same parts of the remainder *FD* that the whole *AB* is of the whole *CD.*
+I say that the remainder {EB} is also the same parts of the remainder {FD} that the whole {AB} is of the whole {CD}.
 
 <figure class="diagram rdiagram">
 <canvas id="canvas_0" width="280" height="150" tabindex="0"></canvas>
 <noscript><img alt="VII.8 diagram" src="propVII8.gif"/></noscript>
 <script type="text/javascript">
+    // AB is parts of CD, AE the same parts of CF (E and F cut AB and CD in
+    // the ratio 2:3 through the P0…P3 helper). GH is made equal to AB, K
+    // halves it, L halves AE, and M, N are laid off for the two VII.7
+    // steps. Line segments only, so the walk is highlight beats, with G and
+    // GH, then K, L, M, N appearing with the sentences that make them.
+    //
+    // Added to Joyce's figure, all transparent (;0;0;0): the segments AE,
+    // EB, CF, FD, GK, KH, AL, LE, GM, MK, KN and NH the proof names, so
+    // they can light.
+    //
+    // Draggables (checked against the bundle): the lineSliders A, B, C, D,
+    // G and the colourless off-canvas helpers C0…A3, P0, P1. G is the end
+    // of GH, which the proof makes mid-walk, so it is deferred. E, F, H,
+    // K, L, M, N are derived and follow the visible sets.
+    var GIVEN = ["A","B","E","AB","AE","EB","C","D","F","CD","CF","FD"];
+    var MADE  = GIVEN.concat(["G","H","GH"]);
+    var DIVK  = MADE.concat(["K","GK","KH"]);
+    var DIVL  = DIVK.concat(["L","AL","LE"]);
+    var CUTM  = DIVL.concat(["M","GM"]);
+    var REMM  = CUTM.concat(["MK"]);
+    var CUTN  = REMM.concat(["N","KN"]);
+    var REMN  = CUTN.concat(["NH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -52,33 +74,172 @@ I say that the remainder *EB* is also the same parts of the remainder *FD* that 
             "K;point;midpoint;G,H",
             "L;point;midpoint;A,E",
             "M;point;cutoff;G,H,A,L",
-            "N;point;cutoff;K,H,E,B"
+            "N;point;cutoff;K,H,E,B",
+            // Invisible highlight targets. Zero-colour: nothing changes at rest.
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "FD;line;connect;F,D;0;0;0",
+            "GK;line;connect;G,K;0;0;0",
+            "KH;line;connect;K,H;0;0;0",
+            "AL;line;connect;A,L;0;0;0",
+            "LE;line;connect;L,E;0;0;0",
+            "GM;line;connect;G,M;0;0;0",
+            "MK;line;connect;M,K;0;0;0",
+            "KN;line;connect;K,N;0;0;0",
+            "NH;line;connect;N,H;0;0;0"
         ],
+        deferDraggables: ["G"],
+        aliases: { "BA": "AB", "DC": "CD", "BE": "EB", "DF": "FD", "HG": "GH",
+                   "HK": "KH", "EL": "LE", "KM": "MK", "HN": "NH" },
+        slides: [
+            { text: "“If a number is the same parts of a number that a subtracted number is of a subtracted number,”",
+              visible: GIVEN,
+              highlighted: ["AB","CD","AE","CF"] },
+            { text: "“then the remainder is also the same parts of the remainder that the whole is of the whole.”",
+              visible: GIVEN,
+              highlighted: ["EB","FD","AB","CD"],
+              justifications: [{ ref: "VII.8" }] },
+            { text: "Let the number {AB} be the same parts of the number {CD}",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "that {AE} subtracted is of {CF} subtracted.",
+              visible: GIVEN,
+              highlighted: ["AE","CF"] },
+            { text: "I say that the remainder {EB} is also the same parts of the remainder {FD}",
+              visible: GIVEN,
+              highlighted: ["EB","FD"] },
+            { text: "that the whole {AB} is of the whole {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB","CD"] },
+            { text: "Make {GH} equal to {AB}.",
+              visible: MADE,
+              highlighted: ["GH","AB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G", name: geomlib.A.Point.appear },
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore {AE} is the same parts of {CF} that {GH} is of {CD}.",
+              visible: MADE,
+              highlighted: ["AE","CF","GH","CD"] },
+            { text: "Divide {GH} into the parts of {CD}, namely {GK} and {KH},",
+              visible: DIVK,
+              highlighted: ["GK","KH","K"],
+              transition: { animations: [
+                  { elem: "K", name: geomlib.A.Point.appear } ] } },
+            { text: "and divide {AE} into the parts of {CF}, namely {AL} and {LE}.",
+              visible: DIVL,
+              highlighted: ["AL","LE","L"],
+              transition: { animations: [
+                  { elem: "L", name: geomlib.A.Point.appear } ] } },
+            { text: "Then the multitude of {GK} and {KH} equals the multitude of {AL} and {LE}.",
+              visible: DIVL,
+              highlighted: ["GK","KH","AL","LE"] },
+            { text: "Now since {AL} is the same part of {CF} that {GK} is of {CD},",
+              visible: DIVL,
+              highlighted: ["AL","CF","GK","CD"] },
+            { text: "and {CD} is greater than {CF}, therefore {GK} is also greater than {AL}.",
+              visible: DIVL,
+              highlighted: ["CD","CF","GK","AL"] },
+            { text: "Make {GM} equal to {AL}.",
+              visible: CUTM,
+              highlighted: ["GM","AL","M"],
+              transition: { animations: [
+                  { elem: "M", name: geomlib.A.Point.appear } ] } },
+            { text: "Then {GK} is the same part of {CD} that {GM} is of {CF}.",
+              visible: CUTM,
+              highlighted: ["GK","CD","GM","CF"] },
+            { text: "Therefore the remainder {MK} is the same part of the remainder {FD}",
+              visible: REMM,
+              highlighted: ["MK","FD"],
+              justifications: [{ claim: "MK is the same part of FD", ref: "VII.7" }] },
+            { text: "that the whole {GK} is of the whole {CD}.",
+              visible: REMM,
+              highlighted: ["GK","CD"] },
+            { text: "Again, since {EL} is the same part of {CF} that {KH} is of {CD},",
+              visible: REMM,
+              highlighted: ["LE","CF","KH","CD"] },
+            { text: "and {CD} is greater than {CF}, therefore {HK} is also greater than {EL}.",
+              visible: REMM,
+              highlighted: ["CD","CF","KH","LE"] },
+            { text: "Make {KN} equal to {EL}.",
+              visible: CUTN,
+              highlighted: ["KN","LE","N"],
+              transition: { animations: [
+                  { elem: "N", name: geomlib.A.Point.appear } ] } },
+            { text: "Therefore {KN} is the same part of {CF} that {KH} is of {CD}.",
+              visible: CUTN,
+              highlighted: ["KN","CF","KH","CD"] },
+            { text: "Therefore the remainder {NH} is the same part of the remainder {FD}",
+              visible: REMN,
+              highlighted: ["NH","FD"],
+              justifications: [{ claim: "NH is the same part of FD", ref: "VII.7" }] },
+            { text: "that the whole {KH} is of the whole {CD}.",
+              visible: REMN,
+              highlighted: ["KH","CD"] },
+            { text: "But the remainder {MK} was proved to be the same part of the remainder {FD}",
+              visible: REMN,
+              highlighted: ["MK","FD"] },
+            { text: "that the whole {GK} is of the whole {CD},",
+              visible: REMN,
+              highlighted: ["GK","CD"] },
+            { text: "therefore the sum of {MK} and {NH} is the same parts of {DF}",
+              visible: REMN,
+              highlighted: ["MK","NH","FD"] },
+            { text: "that the whole {HG} is of the whole {CD}.",
+              visible: REMN,
+              highlighted: ["GH","CD"] },
+            { text: "But the sum of {MK} and {NH} equals {EB}, and {HG} equals {BA},",
+              visible: REMN,
+              highlighted: ["MK","NH","EB","GH","AB"] },
+            { text: "therefore the remainder {EB} is the same parts of the remainder {FD}",
+              visible: REMN,
+              highlighted: ["EB","FD"] },
+            { text: "that the whole {AB} is of the whole {CD}.",
+              visible: REMN,
+              highlighted: ["AB","CD"] },
+            { text: "Therefore, if a number is the same parts of a number that a subtracted number is of a subtracted number,",
+              visible: REMN,
+              highlighted: ["AB","CD","AE","CF"] },
+            { text: "then the remainder is also the same parts of the remainder that the whole is of the whole.",
+              visible: REMN,
+              highlighted: ["EB","FD","AB","CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.8") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.7": "/elements/books/bookVII/propositions/propVII7/"
     });
 </script>
 </figure>
 
-Make *GH* equal to *AB.*
+Make {GH} equal to {AB}.
 
-Therefore *AE* is the same parts of *CF* that *GH* is of *CD.*
+Therefore {AE} is the same parts of {CF} that {GH} is of {CD}.
 
-Divide *GH* into the parts of *CD,* namely *GK* and *KH,* and divide *AE* into the parts of *CF,* namely *AL* and *LE.* Then the multitude of *GK* and *KH* equals the multitude of *AL* and *LE.*
+Divide {GH} into the parts of {CD}, namely {GK} and {KH}, and divide {AE} into the parts of {CF}, namely {AL} and {LE}. Then the multitude of {GK} and {KH} equals the multitude of {AL} and {LE}.
 
-Now since *AL* is the same part of *CF* that *GK* is of *CD,* and *CD* is greater than *CF,* therefore *GK* is also greater than *AL.*
+Now since {AL} is the same part of {CF} that {GK} is of {CD}, and {CD} is greater than {CF}, therefore {GK} is also greater than {AL}.
 
-Make *GM* equal to *AL.*
+Make {GM} equal to {AL}.
 
-Then *GK* is the same part of *CD* that *GM* is of *CF.* Therefore the remainder *MK* is the same part of the remainder *FD* that the whole *GK* is of the whole *CD.* [!just VII.7]
+Then {GK} is the same part of {CD} that {GM} is of {CF}. Therefore the remainder {MK} is the same part of the remainder {FD} that the whole {GK} is of the whole {CD}. [!just VII.7]
 
-Again, since *EL* is the same part of *CF* that *KH* is of *CD,* and *CD* is greater than *CF,* therefore *HK* is also greater than *EL.*
+Again, since {EL} is the same part of {CF} that {KH} is of {CD}, and {CD} is greater than {CF}, therefore {HK} is also greater than {EL}.
 
-Make *KN* equal to *EL.*
+Make {KN} equal to {EL}.
 
-Therefore *KN* is the same part of *CF* that *KH* is of *CD.* Therefore the remainder *NH* is the same part of the remainder *FD* that the whole *KH* is of the whole *CD.* [!just VII.7]
+Therefore {KN} is the same part of {CF} that {KH} is of {CD}. Therefore the remainder {NH} is the same part of the remainder {FD} that the whole {KH} is of the whole {CD}. [!just VII.7]
 
-But the remainder *MK* was proved to be the same part of the remainder *FD* that the whole *GK* is of the whole *CD,* therefore the sum of *MK* and *NH* is the same parts of *DF* that the whole *HG* is of the whole *CD.*
+But the remainder {MK} was proved to be the same part of the remainder {FD} that the whole {GK} is of the whole {CD}, therefore the sum of {MK} and {NH} is the same parts of {DF} that the whole {HG} is of the whole {CD}.
 
-But the sum of *MK* and *NH* equals *EB,* and *HG* equals *BA,* therefore the remainder *EB* is the same parts of the remainder *FD* that the whole *AB* is of the whole *CD.*
+But the sum of {MK} and {NH} equals {EB}, and {HG} equals {BA}, therefore the remainder {EB} is the same parts of the remainder {FD} that the whole {AB} is of the whole {CD}.
 
 Therefore, *if a number is the same parts of a number that a subtracted number is of a subtracted number, then the remainder is also the same parts of the remainder that the whole is of the whole.*
 
