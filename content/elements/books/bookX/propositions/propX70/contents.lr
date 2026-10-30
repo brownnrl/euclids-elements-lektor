@@ -15,14 +15,27 @@ statement: A straight line commensurable with the side of the sum of two medial 
 ----
 proof:
 
-Let *AB* be the side of the sum of two medial areas, and *CD* commensurable with *AB*.
+Let {AB} be the side of the sum of two medial areas, and {CD} commensurable with {AB}.
 
-It is to be proved that *CD* is also the side of the sum of two medial areas.
+It is to be proved that {CD} is also the side of the sum of two medial areas.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="240" height="95" tabindex="0"></canvas>
 <noscript><img alt="X.70 diagram" src="propX70.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: AB, the side of the sum of two medial areas, divided
+    // into its straight lines at E, and CD commensurable with AB, divided at
+    // F in the same ratio. "Make the same construction as before" (X.66's
+    // AB : CD = AE : CF) is the one slide that brings F in. Added, all
+    // invisible at rest: transparent highlight targets AE, EB, CF, FD
+    // (;0;0;0). No angles in the figure, so no markers.
+    //
+    // Draggables (checked against the bundle): A, B, C, D (the givens) and
+    // E (line slider), which only arrives with "divide it into its straight
+    // lines at E", so it is deferred. F is derived and listed per slide.
+    var GIVEN = ["A","B","AB","C","D","CD"];
+    var TERMS = GIVEN.concat(["E","AE","EB"]);
+    var ALL   = TERMS.concat(["F","CF","FD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -39,19 +52,101 @@ It is to be proved that *CD* is also the side of the sum of two medial areas.
             "D;point;lineSlider;C0,C3,210,0",
             "CD;line;connect;C,D",
             "E;point;lineSlider;A0,A3,130,0",
-            "F;point;proportion;A,B,C,D,A,E,C,C3"
+            "F;point;proportion;A,B,C,D,A,E,C,C3",
+            // Highlight targets only — invisible at rest.
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "CF;line;connect;C,F;0;0;0",
+            "FD;line;connect;F,D;0;0;0"
         ],
+        deferDraggables: ["E"],
+        slides: [
+            { text: "“A straight line commensurable with the side of the sum of two medial areas",
+              visible: GIVEN,
+              highlighted: ["CD","AB"],
+              justifications: [{ ref: "X.70" }] },
+            { text: "is the side of the sum of two medial areas.”",
+              visible: GIVEN,
+              highlighted: ["CD"] },
+            { text: "Let {AB} be the side of the sum of two medial areas,",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "and {CD} commensurable with {AB}.",
+              visible: GIVEN,
+              highlighted: ["CD","AB"] },
+            { text: "It is to be proved that {CD} is also the side of the sum of two medial areas.",
+              visible: GIVEN,
+              highlighted: ["CD"] },
+            { text: "Since {AB} is the side of the sum of two medial areas, divide it into its straight lines at {E},",
+              visible: TERMS,
+              highlighted: ["E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "therefore {AE} and {EB} are straight lines incommensurable in square",
+              visible: TERMS,
+              highlighted: ["AE","EB"] },
+            { text: "which make the sum of the squares on them medial, the rectangle contained by them medial,",
+              visible: TERMS,
+              highlighted: ["AE","EB"] },
+            { text: "and furthermore the sum of the squares on {AE} and {EB} incommensurable with the rectangle {AE} by {EB}.",
+              visible: TERMS,
+              highlighted: ["AE","EB"],
+              justifications: [{ claim: "AB the side of the sum of two medial areas", ref: "X.41" }] },
+            { text: "Make the same construction as before.",
+              visible: ALL,
+              highlighted: ["F"],
+              transition: { animations: [
+                  { elem: "F", name: geomlib.A.Point.appear } ] } },
+            { text: "We can then prove similarly that {CF} and {FD} are also incommensurable in square,",
+              visible: ALL,
+              highlighted: ["CF","FD"] },
+            { text: "the sum of the squares on {AE} and {EB} is commensurable with the sum of the squares on {CF} and {FD},",
+              visible: ALL,
+              highlighted: ["AE","EB","CF","FD"] },
+            { text: "and the rectangle {AE} by {EB} with the rectangle {CF} by {FD},",
+              visible: ALL,
+              highlighted: ["AE","EB","CF","FD"] },
+            { text: "so that the sum of the squares on {CF} and {FD} is also medial,",
+              visible: ALL,
+              highlighted: ["CF","FD"] },
+            { text: "the rectangle {CF} by {FD} is medial,",
+              visible: ALL,
+              highlighted: ["CF","FD"] },
+            { text: "and moreover the sum of the squares on {CF} and {FD} is incommensurable with the rectangle {CF} by {FD}.",
+              visible: ALL,
+              highlighted: ["CF","FD"] },
+            { text: "Therefore {CD} is the side of the sum of two medial areas.",
+              visible: ALL,
+              highlighted: ["CD"] },
+            { text: "Therefore, a straight line commensurable with the side of the sum of two medial areas",
+              visible: ALL,
+              highlighted: ["CD","AB"] },
+            { text: "is the side of the sum of two medial areas.",
+              visible: ALL,
+              highlighted: ["CD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.70") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.41": "/elements/books/bookX/propositions/propX41/"
     });
 </script>
 </figure>
 
-Since *AB* is the side of the sum of two medial areas, divide it into its straight lines at *E*, therefore *AE* and *EB* are straight lines incommensurable in square which make the sum of the squares on them medial, the rectangle contained by them medial, and furthermore the sum of the squares on *AE* and *EB* incommensurable with the rectangle *AE* by *EB*. [!just X.41]
+Since {AB} is the side of the sum of two medial areas, divide it into its straight lines at {E}, therefore {AE} and {EB} are straight lines incommensurable in square which make the sum of the squares on them medial, the rectangle contained by them medial, and furthermore the sum of the squares on {AE} and {EB} incommensurable with the rectangle {AE} by {EB}. [!just X.41]
 
 Make the same construction as before.
 
-We can then prove similarly that *CF* and *FD* are also incommensurable in square, the sum of the squares on *AE* and *EB* is commensurable with the sum of the squares on *CF* and *FD*, and the rectangle *AE* by *EB* with the rectangle *CF* by *FD*, so that the sum of the squares on *CF* and *FD* is also medial, the rectangle *CF* by *FD* is medial, and moreover the sum of the squares on *CF* and *FD* is incommensurable with the rectangle *CF* by *FD*.
+We can then prove similarly that {CF} and {FD} are also incommensurable in square, the sum of the squares on {AE} and {EB} is commensurable with the sum of the squares on {CF} and {FD}, and the rectangle {AE} by {EB} with the rectangle {CF} by {FD}, so that the sum of the squares on {CF} and {FD} is also medial, the rectangle {CF} by {FD} is medial, and moreover the sum of the squares on {CF} and {FD} is incommensurable with the rectangle {CF} by {FD}.
 
-Therefore *CD* is the side of the sum of two medial areas.
+Therefore {CD} is the side of the sum of two medial areas.
 
 Therefore, *a straight line commensurable with the side of the sum of two medial areas is the side of the sum of two medial areas.*
 
