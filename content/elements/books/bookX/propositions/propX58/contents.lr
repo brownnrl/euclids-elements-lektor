@@ -15,16 +15,40 @@ statement: If an area is contained by a rational straight line and the fifth bin
 ----
 proof:
 
-Let the area *AC* be contained by the rational straight line *AB* and the fifth binomial *AD* divided into its terms at *E*, so that *AE* is the greater term.
+Let the area {AC} be contained by the rational straight line {AB} and the fifth binomial {AD} divided into its terms at {E}, so that {AE} is the greater term.
 
-I say that the side of the area *AC* is the irrational straight line called the side of a rational plus a medial area.
+I say that the side of the area {AC} is the irrational straight line called the side of a rational plus a medial area.
 
-Make the same construction shown before. It is then manifest that *MO* is the side of the area *AC*. It is then to be proved that *MO* is the side of a rational plus a medial area.
+Make the same construction shown before. It is then manifest that {MO} is the side of the area {AC}. It is then to be proved that {MO} is the side of a rational plus a medial area.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="400" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.58 diagram" src="propX54.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure (X.54's, recoloured): the rectangle ABCD on the rational
+    // AB and the binomial AD, divided at E, with F bisecting ED, G applied on
+    // AE, the parallels GH, EK, FL, the rectangles AH and GK (HGEK), and the
+    // squares SN (SPNM) and NQ (NOQR) inside the completed square SQ.
+    // "Make the same construction shown before" is one slide that rebuilds it.
+    // Added, all hidden at rest: solid twins GH, EK (initiallyHidden) so the
+    // parallels stroke from G and E before the rectangles fill; transparent
+    // targets AB, AD, AE, ED, EF, AG, GE, MN, NO, MO (;0;0;0); a faceless
+    // twin ABCDh of the random-faced rectangle, which would be raised over AH
+    // and GK when lit (#140), reached through the alias AC; faceless targets
+    // AK (A,B,K,E), EL (E,F,L,K) and MR (M,N,R and SQ's fourth vertex SQ4).
+    // No angle is called right in the text, so no markers.
+    // Joyce's "AH is also commensurable with HE" (for "incommensurable with
+    // GK") is left literal and HE untokenized.
+    //
+    // Draggables (checked against the bundle): A, D, B (the givens), E and S
+    // (line sliders), and the offscreen frees. E arrives with "divided into
+    // its terms at E" and S with the construction, so both are deferred.
+    // F, G, H, K, L, P, M, N, O, Q, R are derived and listed per slide.
+    var GIVEN = ["A","B","C","D","ABCD","AB","AD"];
+    var TERMS = GIVEN.concat(["E","AE","ED"]);
+    var ALL   = TERMS.concat(["F","EF","G","AG","GE","H","K","L","GH","EK","FL",
+                              "AH","HGEK","S","P","M","N","SPNM","O","Q","R","NOQR",
+                              "SQ","SQ4","MN","NO","MO","MR","EL","AK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -65,25 +89,159 @@ Make the same construction shown before. It is then manifest that *MO* is the si
             "NOQR;polygon;square;N,O;0;0;black;290,80,100",
             "Q;point;vertex;NOQR,3",
             "R;point;vertex;NOQR,4",
-            "SQ;polygon;parallelogram;S,T,Q;0;0;black;0"
+            "SQ;polygon;parallelogram;S,T,Q;0;0;black;0",
+            // Slide-only twins and highlight targets.
+            "GH;line;connect;G,H",
+            "EK;line;connect;E,K",
+            "AB;line;connect;A,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "AG;line;connect;A,G;0;0;0",
+            "GE;line;connect;G,E;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "NO;line;connect;N,O;0;0;0",
+            "MO;line;connect;M,O;0;0;0",
+            "SQ4;point;vertex;SQ,4;0;0",
+            "ABCDh;polygon;quadrilateral;A,B,C,D;0;0;0;0",
+            "AK;polygon;quadrilateral;A,B,K,E;0;0;0;0",
+            "EL;polygon;quadrilateral;E,F,L,K;0;0;0;0",
+            "MR;polygon;quadrilateral;M,N,R,SQ4;0;0;0;0"
         ],
+        initiallyHidden: ["GH","EK"],
+        deferDraggables: ["E","S"],
+        aliases: { "AC": "ABCDh", "DE": "ED" },
+        slides: [
+            { text: "“If an area is contained by a rational straight line and the fifth binomial,",
+              visible: ALL,
+              highlighted: ["ABCDh","AB","AD"],
+              justifications: [{ ref: "X.58" }] },
+            { text: "then the side of the area is the irrational straight line called the side of a rational plus a medial area.”",
+              visible: ALL,
+              highlighted: ["MO"] },
+            { text: "Let the area {AC} be contained by the rational straight line {AB} and the fifth binomial {AD}",
+              visible: GIVEN,
+              highlighted: ["ABCDh","AB","AD"] },
+            { text: "divided into its terms at {E}, so that {AE} is the greater term.",
+              visible: TERMS,
+              highlighted: ["E","AE"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "I say that the side of the area {AC} is the irrational straight line",
+              visible: TERMS,
+              highlighted: ["ABCDh"] },
+            { text: "called the side of a rational plus a medial area.",
+              visible: TERMS,
+              highlighted: ["ABCDh"] },
+            { text: "Make the same construction shown before.",
+              visible: ALL,
+              transition: { mode: "cascade", animations: [
+                  { elem: "F",    name: geomlib.A.Point.appear },
+                  { elem: "G",    name: geomlib.A.Point.appear },
+                  { elem: "GH",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EK",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FL",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "AH",   name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "HGEK", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "S",    name: geomlib.A.Point.appear },
+                  { elem: "SPNM", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "NOQR", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "SQ",   name: geomlib.A.Polygon.outline } ] } },
+            { text: "It is then manifest that {MO} is the side of the area {AC}.",
+              visible: ALL,
+              highlighted: ["MO","ABCDh"] },
+            { text: "It is then to be proved that {MO} is the side of a rational plus a medial area.",
+              visible: ALL,
+              highlighted: ["MO"] },
+            { text: "Since {AG} is incommensurable with {GE}, therefore {AH} is also commensurable with HE,",
+              visible: ALL,
+              highlighted: ["AG","GE","AH"],
+              justifications: [{ claim: "AG, GE incommensurable", ref: "X.18" }] },
+            { text: "that is, the square on {MN} with the square on {NO}. Therefore {MN} and {NO} are incommensurable in square.",
+              visible: ALL,
+              highlighted: ["SPNM","NOQR","MN","NO"],
+              justifications: [{ claim: "AG : GE = AH : GK", ref: "VI.1" },
+                               { claim: "AH, GK incommensurable", ref: "X.11" }] },
+            { text: "Since {AD} is a fifth binomial straight line, and {ED} the lesser segment,",
+              visible: ALL,
+              highlighted: ["AD","ED"] },
+            { text: "therefore {ED} is commensurable in length with {AB}.",
+              visible: ALL,
+              highlighted: ["ED","AB"],
+              justifications: [{ claim: "AD a fifth binomial", ref: "X.Def.II.5" }] },
+            { text: "But {AE} is incommensurable with {ED}, therefore {AB} is also incommensurable in length with {AE}.",
+              visible: ALL,
+              highlighted: ["AE","ED","AB"],
+              justifications: [{ claim: "AB, AE incommensurable", ref: "X.13" }] },
+            { text: "Therefore {AK}, that is, the sum of the squares on {MN} and {NO}, is medial.",
+              visible: ALL,
+              highlighted: ["AK","SPNM","NOQR"],
+              justifications: [{ claim: "AK medial", ref: "X.21" }] },
+            { text: "Since {DE} is commensurable in length with {AB}, that is, with {EK},",
+              visible: ALL,
+              highlighted: ["ED","AB","EK"] },
+            { text: "while {DE} is commensurable with {EF}, therefore {EF} is also commensurable with {EK}.",
+              visible: ALL,
+              highlighted: ["ED","EF","EK"],
+              justifications: [{ claim: "EF, EK commensurable", ref: "X.12" }] },
+            { text: "And {EK} is rational, therefore {EL}, that is, {MR}, that is, the rectangle {MN} by {NO}, is also rational.",
+              visible: ALL,
+              highlighted: ["EK","EL","MR"],
+              justifications: [{ claim: "EL rational", ref: "X.19" }] },
+            { text: "Therefore {MN} and {NO} are straight lines incommensurable in square",
+              visible: ALL,
+              highlighted: ["MN","NO"] },
+            { text: "which make the sum of the squares on them medial, but the rectangle contained by them rational.",
+              visible: ALL,
+              highlighted: ["SPNM","NOQR","MR"] },
+            { text: "Therefore {MO} is the side of a rational plus a medial area and is the side of the area {AC}.",
+              visible: ALL,
+              highlighted: ["MO","ABCDh"],
+              justifications: [{ claim: "side of a rational plus a medial area", ref: "X.40" }] },
+            { text: "Therefore, if an area is contained by a rational straight line and the fifth binomial,",
+              visible: ALL,
+              highlighted: ["ABCDh","AB","AD"] },
+            { text: "then the side of the area is the irrational straight line called the side of a rational plus a medial area.",
+              visible: ALL,
+              highlighted: ["MO"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.58") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VI.1":       "/elements/books/bookVI/propositions/propVI1/",
+        "X.Def.II.5": "/elements/books/bookX/definitions/defX.II.5/",
+        "X.11":       "/elements/books/bookX/propositions/propX11/",
+        "X.12":       "/elements/books/bookX/propositions/propX12/",
+        "X.13":       "/elements/books/bookX/propositions/propX13/",
+        "X.18":       "/elements/books/bookX/propositions/propX18/",
+        "X.19":       "/elements/books/bookX/propositions/propX19/",
+        "X.21":       "/elements/books/bookX/propositions/propX21/",
+        "X.40":       "/elements/books/bookX/propositions/propX40/"
     });
 </script>
 </figure>
 
-Since *AG* is incommensurable with *GE*,  therefore *AH* is also commensurable with *HE*, that is, the square on *MN* with the square on *NO*. Therefore *MN* and *NO* are incommensurable in square. [!just X.18; VI.1, X.11]
+Since {AG} is incommensurable with {GE},  therefore {AH} is also commensurable with *HE*, that is, the square on {MN} with the square on {NO}. Therefore {MN} and {NO} are incommensurable in square. [!just X.18; VI.1, X.11]
 
-Since *AD* is a fifth binomial straight line, and *ED* the lesser segment, therefore *ED* is commensurable in length with *AB*. [!just X.Def.II.5]
+Since {AD} is a fifth binomial straight line, and {ED} the lesser segment, therefore {ED} is commensurable in length with {AB}. [!just X.Def.II.5]
 
-But *AE* is incommensurable with *ED*, therefore *AB* is also incommensurable in length with *AE*.  Therefore *AK*, that is, the sum of the squares on *MN* and *NO*, is medial. [!just X.13; X.21]
+But {AE} is incommensurable with {ED}, therefore {AB} is also incommensurable in length with {AE}.  Therefore {AK}, that is, the sum of the squares on {MN} and {NO}, is medial. [!just X.13; X.21]
 
-Since *DE* is commensurable in length with *AB*, that is, with *EK*, while *DE* is commensurable with *EF*, therefore *EF* is also commensurable with *EK*. [!just X.12]
+Since {DE} is commensurable in length with {AB}, that is, with {EK}, while {DE} is commensurable with {EF}, therefore {EF} is also commensurable with {EK}. [!just X.12]
 
-And *EK* is rational, therefore *EL*, that is, *MR*, that is, the rectangle *MN* by *NO*, is also rational. [!just X.19]
+And {EK} is rational, therefore {EL}, that is, {MR}, that is, the rectangle {MN} by {NO}, is also rational. [!just X.19]
 
-Therefore *MN* and *NO* are straight lines incommensurable in square which make the sum of the squares on them medial, but the rectangle contained by them rational.
+Therefore {MN} and {NO} are straight lines incommensurable in square which make the sum of the squares on them medial, but the rectangle contained by them rational.
 
-Therefore *MO* is the side of a rational plus a medial area and is the side of the area *AC*. [!just X.40]
+Therefore {MO} is the side of a rational plus a medial area and is the side of the area {AC}. [!just X.40]
 
 Therefore, *if an area is contained by a rational straight line and the fifth binomial, then the side of the area is the irrational straight line called the side of a rational plus a medial area.*
 
