@@ -17,12 +17,25 @@ statement: To find two medial straight lines commensurable in square only, conta
 ----
 proof:
 
-Set out two rational straight lines *A* and *B* commensurable in square only such that the square on *A,* being the greater, is greater than the square on *B* the less by the square on a straight line commensurable in length with *A.* [!just X.29]
+Set out two rational straight lines {A} and {B} commensurable in square only such that the square on {A}, being the greater, is greater than the square on {B} the less by the square on a straight line commensurable in length with {A}. [!just X.29]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="150" height="200" tabindex="0"></canvas>
 <noscript><img alt="X.31 diagram" src="propX31.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure, unchanged: the rational lines A and B, C the mean
+    // proportional between them (square on C = rectangle A by B), and D the
+    // third proportional to C and B (rectangle C by D = square on B). The
+    // squares and rectangles are not drawn, so "the square on C" or "the
+    // rectangle A by B" lights the lines themselves. Nothing is added.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, D1 and the offscreen frees. The statement slides show the
+    // resting figure; C1 and D1 are deferred so C and D then arrive with
+    // their captions. C2 and D2 are derived and listed per slide.
+    var GIVEN = ["A","A1","A2","B","B1","B2"];
+    var CLINE = GIVEN.concat(["C","C1","C2"]);
+    var ALL   = CLINE.concat(["D","D1","D2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,29 +62,141 @@ Set out two rational straight lines *A* and *B* commensurable in square only suc
             "D2;point;proportion;C1,C2,B1,B2,B1,B2,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        deferDraggables: ["C1","D1"],
+        slides: [
+            { text: "“To find two medial straight lines commensurable in square only, containing a rational rectangle,",
+              visible: ALL,
+              highlighted: ["C","D"],
+              justifications: [{ ref: "X.31" }] },
+            { text: "such that the square on {the greater|C} is greater than the square on {the less|D}",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "by the square on a straight line commensurable in length with {the greater|C}.”",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "Set out two rational straight lines {A} and {B} commensurable in square only",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "such that the square on {A}, being the greater, is greater than the square on {B} the less",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "by the square on a straight line commensurable in length with {A}.",
+              visible: GIVEN,
+              highlighted: ["A"],
+              justifications: [{ claim: "A and B found", ref: "X.29" }] },
+            { text: "Let the square on {C} equal the rectangle {A} by {B}.",
+              visible: CLINE,
+              highlighted: ["C","A","B"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now the rectangle {A} by {B} is medial, therefore the square on {C} is also medial.",
+              visible: CLINE,
+              highlighted: ["A","B","C"] },
+            { text: "Therefore {C} is also medial.",
+              visible: CLINE,
+              highlighted: ["C"],
+              justifications: [{ ref: "X.21" }] },
+            { text: "Let the rectangle {C} by {D} equal the square on {B}.",
+              visible: ALL,
+              highlighted: ["C","D","B"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now the square on {B} is rational, therefore the rectangle {C} by {D} is also rational.",
+              visible: ALL,
+              highlighted: ["B","C","D"] },
+            { text: "And since {A} is to {B} as the rectangle {A} by {B} is to the square on {B},",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "while the square on {C} equals the rectangle {A} by {B}, and the rectangle {C} by {D} equals the square on {B},",
+              visible: ALL,
+              highlighted: ["C","A","B","D"] },
+            { text: "therefore {A} is to {B} as the square on {C} is to the rectangle {C} by {D}.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "X.22.Lem" }] },
+            { text: "But the square on {C} is to the rectangle {C} by {D} as {C} is to {D},",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "therefore {A} is to {B} as {C} is to {D}.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "But {A} is commensurable with {B} in square only, therefore {C} is also commensurable with {D} in square only.",
+              visible: ALL,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "X.11" }] },
+            { text: "And {C} is medial, therefore {D} is also medial.",
+              visible: ALL,
+              highlighted: ["C","D"],
+              justifications: [{ claim: "commensurable with a medial line", ref: "X.23.Note" }] },
+            { text: "Since {A} is to {B} as {C} is to {D},",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "and the square on {A} is greater than the square on {B} by the square on a straight line commensurable with {A},",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "therefore the square on {C} is greater than the square on {D} by the square on a straight line commensurable with {C}.",
+              visible: ALL,
+              highlighted: ["C","D"],
+              justifications: [{ ref: "X.14" }] },
+            { text: "Therefore two medial straight lines {C} and {D}, commensurable in square only and containing a rational rectangle, have been found,",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "and the square on {C} is greater than the square on {D}",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "by the square on a straight line commensurable in length with {C}.",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "Similarly also it can be proved that the square on {C} exceeds the square on {D}",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "by the square on a straight line incommensurable with {C},",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "when the square on {A} is greater than the square on {B} by the square on a straight line incommensurable with {A}.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "X.30" }, { ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.31") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.11":      "/elements/books/bookX/propositions/propX11/",
+        "X.14":      "/elements/books/bookX/propositions/propX14/",
+        "X.21":      "/elements/books/bookX/propositions/propX21/",
+        "X.22.Lem":  "/elements/books/bookX/propositions/propX22/#lemma",
+        "X.23.Note": "/elements/books/bookX/propositions/propX23/#note",
+        "X.29":      "/elements/books/bookX/propositions/propX29/",
+        "X.30":      "/elements/books/bookX/propositions/propX30/"
     });
 </script>
 </figure>
 
-Let the square on *C* equal the rectangle *A* by *B.*
+Let the square on {C} equal the rectangle {A} by {B}.
 
-Now the rectangle *A* by *B* is medial, therefore the square on *C* is also medial. Therefore *C* is also medial. [!just X.21]
+Now the rectangle {A} by {B} is medial, therefore the square on {C} is also medial. Therefore {C} is also medial. [!just X.21]
 
-Let the rectangle *C* by *D* equal the square on *B.*
+Let the rectangle {C} by {D} equal the square on {B}.
 
-Now the square on *B* is rational, therefore the rectangle *C* by *D* is also rational. And since *A* is to *B* as the rectangle *A* by *B* is to the square on *B,* while the square on *C* equals the rectangle *A* by *B,* and the rectangle *C* by *D* equals the square on *B,* therefore *A* is to *B* as the square on *C* is to the rectangle *C* by *D.* <div class="just"><a href="/elements/books/bookX/propositions/propX22/#lemma">X.22.Lem</a></div>
+Now the square on {B} is rational, therefore the rectangle {C} by {D} is also rational. And since {A} is to {B} as the rectangle {A} by {B} is to the square on {B}, while the square on {C} equals the rectangle {A} by {B}, and the rectangle {C} by {D} equals the square on {B}, therefore {A} is to {B} as the square on {C} is to the rectangle {C} by {D}. <div class="just"><a href="/elements/books/bookX/propositions/propX22/#lemma">X.22.Lem</a></div>
 
-But the square on *C* is to the rectangle *C* by *D* as *C* is to *D,* therefore *A* is to *B* as *C* is to *D.*
+But the square on {C} is to the rectangle {C} by {D} as {C} is to {D}, therefore {A} is to {B} as {C} is to {D}.
 
-But *A* is commensurable with *B* in square only, therefore *C* is also commensurable with *D* in square only. [!just X.11]
+But {A} is commensurable with {B} in square only, therefore {C} is also commensurable with {D} in square only. [!just X.11]
 
-And *C* is medial, therefore *D* is also medial. <div class="just"><a href="/elements/books/bookX/propositions/propX23/#note">X.23,Note</a></div>
+And {C} is medial, therefore {D} is also medial. <div class="just"><a href="/elements/books/bookX/propositions/propX23/#note">X.23,Note</a></div>
 
-Since *A* is to *B* as *C* is to *D,* and the square on *A* is greater than the square on *B* by the square on a straight line commensurable with *A,* therefore the square on *C* is greater than the square on *D* by the square on a straight line commensurable with *C.* [!just X.14]
+Since {A} is to {B} as {C} is to {D}, and the square on {A} is greater than the square on {B} by the square on a straight line commensurable with {A}, therefore the square on {C} is greater than the square on {D} by the square on a straight line commensurable with {C}. [!just X.14]
 
-Therefore two medial straight lines *C* and *D,* commensurable in square only and containing a rational rectangle, have been found, and the square on *C* is greater than the square on *D* by the square on a straight line commensurable in length with *C.*
+Therefore two medial straight lines {C} and {D}, commensurable in square only and containing a rational rectangle, have been found, and the square on {C} is greater than the square on {D} by the square on a straight line commensurable in length with {C}.
 
-Similarly also it can be proved that the square on *C* exceeds the square on *D* by the square on a straight line incommensurable with *C,* when the square on *A* is greater than the square on *B* by the square on a straight line incommensurable with *A.* [!just X.30]
+Similarly also it can be proved that the square on {C} exceeds the square on {D} by the square on a straight line incommensurable with {C}, when the square on {A} is greater than the square on {B} by the square on a straight line incommensurable with {A}. [!just X.30]
 
 <div class="qed">Q.E.D.</div>
 ----
