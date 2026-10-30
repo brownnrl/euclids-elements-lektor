@@ -15,16 +15,20 @@ statement: Between two similar plane numbers there is one mean proportional numb
 ----
 proof:
 
-Let *A* and *B* be two similar plane numbers, and let the numbers *C* and *D* be the sides of *A,* and *E* and *F* of *B.*
+Let {A} and {B} be two similar plane numbers, and let the numbers {C} and {D} be the sides of {A}, and {E} and {F} of {B}.
 
-Now, since similar plane numbers are those which have their sides proportional, therefore *C* is to *D* as *E* is to *F.* [!just VII.Def.21]
+Now, since similar plane numbers are those which have their sides proportional, therefore {C} is to {D} as {E} is to {F}. [!just VII.Def.21]
 
-I say then that between *A* and *B* there is one mean proportional number, and *A* has to *B* the ratio duplicate of that which *C* has to *E,* or as *D* has to *F,* that is, of that which the corresponding side has to the corresponding side.
+I say then that between {A} and {B} there is one mean proportional number, and {A} has to {B} the ratio duplicate of that which {C} has to {E}, or as {D} has to {F}, that is, of that which the corresponding side has to the corresponding side.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="200" tabindex="0"></canvas>
 <noscript><img alt="VIII.18 diagram" src="propVIII18.gif"/></noscript>
 <script type="text/javascript">
+    // The givens stand from the start; G is stroked in when it is made. The
+    // rest is highlight beats. The derived right ends carry the dots.
+    var GIVEN = ["A","B","C","D","E","F","A2","B2"];
+    var ALL   = GIVEN.concat(["G","G1","G2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -64,25 +68,142 @@ I say then that between *A* and *B* there is one mean proportional number, and *
             "G2;point;proportion;U1,U2,D1,D2,E1,E2,G1,G3;0",
             "G;line;connect;G1,G2;black"
         ],
+        // Draggables (checked against the bundle): the lineSlider ends and
+        // U1, U2, all colourless. G is made mid-walk, so G1 is deferred.
+        deferDraggables: ["G1"],
+        slides: [
+            { text: "“Between two similar plane numbers there is one mean proportional number,”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VIII.18" }] },
+            { text: "“and the plane number has to the plane number the ratio duplicate of that which the corresponding side has to the corresponding side.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C","E","D","F"] },
+            { text: "Let {A} and {B} be two similar plane numbers,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and let the numbers {C} and {D} be the sides of {A}, and {E} and {F} of {B}.",
+              visible: GIVEN,
+              highlighted: ["C","D","A","E","F","B"] },
+            { text: "Now, since similar plane numbers are those which have their sides proportional,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "therefore {C} is to {D} as {E} is to {F}.",
+              visible: GIVEN,
+              highlighted: ["C","D","E","F"],
+              justifications: [{ claim: "C : D = E : F", ref: "VII.Def.21" }] },
+            { text: "I say then that between {A} and {B} there is one mean proportional number,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and {A} has to {B} the ratio duplicate of that which {C} has to {E}, or as {D} has to {F},",
+              visible: GIVEN,
+              highlighted: ["A","B","C","E","D","F"] },
+            { text: "that is, of that which the corresponding side has to the corresponding side.",
+              visible: GIVEN,
+              highlighted: ["C","E","D","F"] },
+            { text: "Now since {C} is to {D} as {E} is to {F}, therefore, alternately {C} is to {E} as {D} is to {F}.",
+              visible: GIVEN,
+              highlighted: ["C","E","D","F"],
+              justifications: [{ claim: "C : E = D : F", ref: "VII.13" }] },
+            { text: "And, since {A} is plane, and {C} and {D} are its sides, therefore {D} multiplied by {C} makes {A}.",
+              visible: GIVEN,
+              highlighted: ["A","C","D"] },
+            { text: "For the same reason also {E} multiplied by {F} makes {B}.",
+              visible: GIVEN,
+              highlighted: ["E","F","B"] },
+            { text: "Multiply {D} by {E} to make {G}.",
+              visible: ALL,
+              highlighted: ["D","E","G"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since {D} multiplied by {C} makes {A}, and multiplied by {E} makes {G},",
+              visible: ALL,
+              highlighted: ["D","C","A","E","G"] },
+            { text: "therefore {C} is to {E} as {A} is to {G}.",
+              visible: ALL,
+              highlighted: ["C","E","A","G"],
+              justifications: [{ claim: "C : E = A : G", ref: "VII.17" }] },
+            { text: "But {C} is to {E} as {D} is to {F}, therefore {D} is to {F} as {A} is to {G}.",
+              visible: ALL,
+              highlighted: ["D","F","A","G"] },
+            { text: "Again, since {E} multiplied by {D} makes {G}, and multiplied by {F} makes {B},",
+              visible: ALL,
+              highlighted: ["E","D","G","F","B"] },
+            { text: "therefore {D} is to {F} as {G} is to {B}.",
+              visible: ALL,
+              highlighted: ["D","F","G","B"],
+              justifications: [{ claim: "D : F = G : B", ref: "VII.17" }] },
+            { text: "But it was also proved that {D} is to {F} as {A} is to {G},",
+              visible: ALL,
+              highlighted: ["D","F","A","G"] },
+            { text: "therefore {A} is to {G} as {G} is to {B}.",
+              visible: ALL,
+              highlighted: ["A","G","B"] },
+            { text: "Therefore {A}, {G}, and {B} are in continued proportion.",
+              visible: ALL,
+              highlighted: ["A","G","B"] },
+            { text: "Therefore between {A} and {B} there is one mean proportional number.",
+              visible: ALL,
+              highlighted: ["A","G","B"] },
+            { text: "I say next that {A} also has to {B} the ratio duplicate of that which the corresponding side has to the corresponding side,",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "that is, of that which {C} has to {E} or {D} has to {F}.",
+              visible: ALL,
+              highlighted: ["C","E","D","F"] },
+            { text: "Since {A}, {G}, and {B} are in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","G","B"] },
+            { text: "{A} has to {B} the ratio duplicate of that which it has to {G}.",
+              visible: ALL,
+              highlighted: ["A","B","G"],
+              justifications: [{ claim: "A : B duplicate of A : G", ref: "V.Def.9" }] },
+            { text: "And {A} is to {G} as {C} is to {E}, and as {D} is to {F}.",
+              visible: ALL,
+              highlighted: ["A","G","C","E","D","F"] },
+            { text: "Therefore {A} also has to {B} the ratio duplicate of that which {C} has to {E} or {D} has to {F}.",
+              visible: ALL,
+              highlighted: ["A","B","C","E","D","F"] },
+            { text: "Therefore, between two similar plane numbers there is one mean proportional number,",
+              visible: ALL,
+              highlighted: ["A","G","B"] },
+            { text: "and the plane number has to the plane number the ratio duplicate of that which the corresponding side has to the corresponding side.",
+              visible: ALL,
+              highlighted: ["A","B","C","E","D","F"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.18") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.21": "/elements/books/bookVII/definitions/defVII21/",
+        "VII.13":     "/elements/books/bookVII/propositions/propVII13/",
+        "VII.17":     "/elements/books/bookVII/propositions/propVII17/",
+        "V.Def.9":    "/elements/books/bookV/definitions/defV9/"
     });
 </script>
 </figure>
 
-Now since *C* is to *D* as *E* is to *F,* therefore, alternately *C* is to *E* as *D* is to *F.* [!just VII.13]
+Now since {C} is to {D} as {E} is to {F}, therefore, alternately {C} is to {E} as {D} is to {F}. [!just VII.13]
 
-And, since *A* is plane, and *C* and *D* are its sides, therefore *D* multiplied by *C* makes *A.* For the same reason also *E* multiplied by *F* makes *B.*
+And, since {A} is plane, and {C} and {D} are its sides, therefore {D} multiplied by {C} makes {A}. For the same reason also {E} multiplied by {F} makes {B}.
 
-Multiply *D* by *E* to make *G.* Then, since *D* multiplied by *C* makes *A,* and multiplied by *E* makes *G,* therefore *C* is to *E* as *A* is to *G.* [!just VII.17]
+Multiply {D} by {E} to make {G}. Then, since {D} multiplied by {C} makes {A}, and multiplied by {E} makes {G}, therefore {C} is to {E} as {A} is to {G}. [!just VII.17]
 
-But *C* is to *E* as *D* is to *F,* therefore *D* is to *F* as *A* is to *G.* Again, since *E* multiplied by *D* makes *G,* and multiplied by *F* makes *B,* therefore *D* is to *F* as *G* is to *B.* [!just VII.17]
+But {C} is to {E} as {D} is to {F}, therefore {D} is to {F} as {A} is to {G}. Again, since {E} multiplied by {D} makes {G}, and multiplied by {F} makes {B}, therefore {D} is to {F} as {G} is to {B}. [!just VII.17]
 
-But it was also proved that *D* is to *F* as *A* is to *G,* therefore *A* is to *G* as *G* is to *B.* Therefore *A, G,* and *B* are in continued proportion.
+But it was also proved that {D} is to {F} as {A} is to {G}, therefore {A} is to {G} as {G} is to {B}. Therefore {A}, {G}, and {B} are in continued proportion.
 
-Therefore between *A* and *B* there is one mean proportional number.
+Therefore between {A} and {B} there is one mean proportional number.
 
-I say next that *A* also has to *B* the ratio duplicate of that which the corresponding side has to the corresponding side, that is, of that which *C* has to *E* or *D* has to *F.*
+I say next that {A} also has to {B} the ratio duplicate of that which the corresponding side has to the corresponding side, that is, of that which {C} has to {E} or {D} has to {F}.
 
-Since *A, G,* and *B* are in continued proportion, *A* has to *B* the ratio duplicate of that which it has to *G.* And *A* is to *G* as *C* is to *E,* and as *D* is to *F.* Therefore *A* also has to *B* the ratio duplicate of that which *C* has to *E* or *D* has to *F.* [!just V.Def.9]
+Since {A}, {G}, and {B} are in continued proportion, {A} has to {B} the ratio duplicate of that which it has to {G}. And {A} is to {G} as {C} is to {E}, and as {D} is to {F}. Therefore {A} also has to {B} the ratio duplicate of that which {C} has to {E} or {D} has to {F}. [!just V.Def.9]
 
 Therefore, *between two similar plane numbers there is one mean proportional number, and the plane number has to the plane number the ratio duplicate of that which the corresponding side has to the corresponding side.*
 
@@ -132,7 +253,7 @@ This proposition generalizes @VIII.11 from squares to similar rectangles.
 </script>
 </figure>
 
-Assume that the similar plane numbers are *cd* and *ef* so that *c* : *d* = *e* : *f,* or, alternately, *c* : *e* = *d* : *f.* Then *c* : *e* = *cd* : *de,* and *d* : *f* = *de* : *ef,* therefore the ratio of the plane numbers *cd* : *ef* is compounded of the ratios of the corresponding sides *c* : *e* and *d* : *f.* Also, since the ratios of the corresponding sides are the same, the ratio of the plane numbers is the duplicate of the ratio of the sides. Furthermore, since *cd* : *de* = *de* : *ef,* the number *de* is a mean proportional between the two plane numbers *cd* and *ef.*
+Assume that the similar plane numbers are {cd} and {ef} so that {c} : {d} = {e} : {f}, or, alternately, {c} : {e} = {d} : {f}. Then {c} : {e} = {cd} : {de|ed}, and {d} : {f} = {de|ed} : {ef}, therefore the ratio of the plane numbers {cd} : {ef} is compounded of the ratios of the corresponding sides {c} : {e} and {d} : {f}. Also, since the ratios of the corresponding sides are the same, the ratio of the plane numbers is the duplicate of the ratio of the sides. Furthermore, since {cd} : {de|ed} = {de|ed} : {ef}, the number {de|ed} is a mean proportional between the two plane numbers {cd} and {ef}.
 
 #### Use of this proposition
 
