@@ -15,20 +15,38 @@ statement: If two medial areas incommensurable with one another are added togeth
 ----
 proof:
 
-Let two medial areas *AB* and *CD* incommensurable with one another be added together.
+Let two medial areas {AB} and {CD} incommensurable with one another be added together.
 
-I say that the side of the area *AD* is either a second bimedial or a side of the sum of two medial areas.
+I say that the side of the area {AD} is either a second bimedial or a side of the sum of two medial areas.
 
-For *AB* is either greater or less than *CD*.
+For {AB} is either greater or less than {CD}.
 
-First, let *AB* be greater than *CD*.
+First, let {AB} be greater than {CD}.
 
-Set out the rational straight line *EF*, and apply to *EF* the rectangle *EG* equal to *AB* and producing *EH* as breadth, and the rectangle *HI* equal to *CD* and producing *HK* as breadth.
+Set out the rational straight line {EF}, and apply to {EF} the rectangle {EG} equal to {AB} and producing {EH} as breadth, and the rectangle {HI} equal to {CD} and producing {HK} as breadth.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="390" height="210" tabindex="0"></canvas>
 <noscript><img alt="X.72 diagram" src="propX72.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the given areas AB and CD side by side making AD, and
+    // the rational line EF with EG (EFGH) applied to it equal to AB and HI
+    // (GHKI) equal to CD, so that EK is divided at H. Added, all hidden at
+    // rest: a solid twin EF (initiallyHidden) that strokes from E when EF is
+    // set out; transparent targets EH, HK, EK (;0;0;0); faceless targets AD
+    // (A, AB4, D, CD4 — the rectangles' fourth vertices) and EI (E,F,I,K)
+    // for the wholes, so lighting them raises no face (#140). Captions reach
+    // Joyce's EG, HI, FE through display overrides; prose uses the
+    // aliases. No angle is called right in the text, so no markers.
+    //
+    // Draggables (checked against the bundle): A, C, B, D (the givens), E, F
+    // and the offscreen frees. E and F arrive with "Set out the rational
+    // straight line EF", so both are deferred. H, G, K, I are derived and
+    // listed per slide.
+    var GIVEN = ["A","B","C","D","AB","CD","AD"];
+    var EFS   = GIVEN.concat(["E","F","EF"]);
+    var EGS   = EFS.concat(["H","G","EFGH","EH"]);
+    var ALL   = EGS.concat(["K","I","GHKI","HK","EK","EI"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -53,35 +71,200 @@ Set out the rational straight line *EF*, and apply to *EF* the rectangle *EG* eq
             "EFGH;polygon;quadrilateral;E,F,G,H;0;0;black;0,20,70",
             "K;point;proportion;E,F,B,C,B,D,H,H'",
             "I;point;parallelogram;K,E,F",
-            "GHKI;polygon;quadrilateral;G,H,K,I;0;0;black;60,50,100"
+            "GHKI;polygon;quadrilateral;G,H,K,I;0;0;black;60,50,100",
+            // Slide-only twins and highlight targets — invisible at rest.
+            "EF;line;connect;E,F",
+            "EH;line;connect;E,H;0;0;0",
+            "HK;line;connect;H,K;0;0;0",
+            "EK;line;connect;E,K;0;0;0",
+            "AB4;point;vertex;AB,4;0;0",
+            "CD4;point;vertex;CD,4;0;0",
+            "AD;polygon;quadrilateral;A,AB4,D,CD4;0;0;0;0",
+            "EI;polygon;quadrilateral;E,F,I,K;0;0;0;0"
         ],
+        initiallyHidden: ["EF"],
+        deferDraggables: ["E","F"],
+        aliases: { "EG": "EFGH", "HI": "GHKI", "DC": "CD", "HE": "EH", "FE": "EF" },
+        slides: [
+            { text: "“If two medial areas incommensurable with one another are added together,",
+              visible: ALL,
+              highlighted: ["AB", "CD"],
+              justifications: [{ ref: "X.72" }] },
+            { text: "then the remaining two irrational straight lines arise,",
+              visible: ALL,
+              highlighted: ["AD"] },
+            { text: "namely either a second bimedial or a side of the sum of two medial areas.”",
+              visible: ALL,
+              highlighted: ["AD"] },
+            { text: "Let two medial areas {AB} and {CD} incommensurable with one another be added together.",
+              visible: GIVEN,
+              highlighted: ["AB", "CD"] },
+            { text: "I say that the side of the area {AD} is either a second bimedial",
+              visible: GIVEN,
+              highlighted: ["AD"] },
+            { text: "or a side of the sum of two medial areas.",
+              visible: GIVEN,
+              highlighted: ["AD"] },
+            { text: "For {AB} is either greater or less than {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB", "CD"] },
+            { text: "First, let {AB} be greater than {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB", "CD"] },
+            { text: "Set out the rational straight line {EF},",
+              visible: EFS,
+              highlighted: ["EF"],
+              transition: { animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and apply to {EF} the rectangle {EG|EFGH} equal to {AB} and producing {EH} as breadth,",
+              visible: EGS,
+              highlighted: ["EFGH", "AB", "EH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "H", name: geomlib.A.Point.appear },
+                  { elem: "EFGH", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and the rectangle {HI|GHKI} equal to {CD} and producing {HK} as breadth.",
+              visible: ALL,
+              highlighted: ["GHKI", "CD", "HK"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "GHKI", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Now, since each of the areas {AB} and {CD} is medial,",
+              visible: ALL,
+              highlighted: ["AB", "CD"] },
+            { text: "therefore each of the areas {EG|EFGH} and {HI|GHKI} is also medial.",
+              visible: ALL,
+              highlighted: ["EFGH", "GHKI"] },
+            { text: "And they are applied to the rational straight line {FE|EF} producing {EH} and {HK} as breadth,",
+              visible: ALL,
+              highlighted: ["EF", "EH", "HK"] },
+            { text: "therefore each of the straight lines {EH} and {HK} is rational and incommensurable in length with {EF}.",
+              visible: ALL,
+              highlighted: ["EH", "HK", "EF"],
+              justifications: [{ claim: "EH, HK rational, incommensurable with EF", ref: "X.22" }] },
+            { text: "Since {AB} is incommensurable with {CD}, and {AB} equals {EG|EFGH}, and {CD} equals {HI|GHKI},",
+              visible: ALL,
+              highlighted: ["AB", "CD", "EFGH", "GHKI"] },
+            { text: "therefore {EG|EFGH} is also incommensurable with {HI|GHKI}.",
+              visible: ALL,
+              highlighted: ["EFGH", "GHKI"] },
+            { text: "But {EG|EFGH} is to {HI|GHKI} as {EH} is to {HK}, therefore {EH} is incommensurable in length with {HK}.",
+              visible: ALL,
+              highlighted: ["EFGH", "GHKI", "EH", "HK"],
+              justifications: [{ claim: "EG : HI = EH : HK", ref: "VI.1" }, { claim: "EH, HK incommensurable in length", ref: "X.11" }] },
+            { text: "Therefore {EH} and {HK} are rational straight lines commensurable in square only,",
+              visible: ALL,
+              highlighted: ["EH", "HK"] },
+            { text: "therefore {EK} is binomial.",
+              visible: ALL,
+              highlighted: ["EK"],
+              justifications: [{ claim: "EK binomial", ref: "X.36" }] },
+            { text: "But the square on {EH} is greater than the square on {HK}",
+              visible: ALL,
+              highlighted: ["EH", "HK"] },
+            { text: "either by the square on a straight line commensurable with {EH}",
+              visible: ALL,
+              highlighted: ["EH"] },
+            { text: "or by the square on a straight line incommensurable with it.",
+              visible: ALL,
+              highlighted: ["EH"] },
+            { text: "First, let the square on it be greater by the square on a straight line commensurable in length with itself.",
+              visible: ALL,
+              highlighted: ["EH"] },
+            { text: "Now neither of the straight lines {EH} nor {HK} is commensurable in length with the rational straight line {EF} set out,",
+              visible: ALL,
+              highlighted: ["EH", "HK", "EF"] },
+            { text: "therefore {EK} is a third binomial.",
+              visible: ALL,
+              highlighted: ["EK"],
+              justifications: [{ claim: "EK a third binomial", ref: "X.Def.II.3" }] },
+            { text: "But {EF} is rational, and, if an area is contained by a rational straight line and the third binomial,",
+              visible: ALL,
+              highlighted: ["EF", "EK"] },
+            { text: "then the side of the area is a second bimedial,",
+              visible: ALL,
+              highlighted: ["EI"] },
+            { text: "therefore the side of {EI}, that is, of {AD}, is a second bimedial.",
+              visible: ALL,
+              highlighted: ["EI", "AD"],
+              justifications: [{ claim: "side of EI a second bimedial", ref: "X.56" }] },
+            { text: "Next, let the square on {EH} be greater than the square on {HK}",
+              visible: ALL,
+              highlighted: ["EH", "HK"] },
+            { text: "by the square on a straight line incommensurable in length with {EH}.",
+              visible: ALL,
+              highlighted: ["EH"] },
+            { text: "Now each of the straight lines {EH} and {HK} is incommensurable in length with {EF},",
+              visible: ALL,
+              highlighted: ["EH", "HK", "EF"] },
+            { text: "therefore {EK} is a sixth binomial.",
+              visible: ALL,
+              highlighted: ["EK"],
+              justifications: [{ claim: "EK a sixth binomial", ref: "X.Def.II.6" }] },
+            { text: "But, if an area is contained by a rational straight line and the sixth binomial,",
+              visible: ALL,
+              highlighted: ["EF", "EK"] },
+            { text: "then the side of the area is the side of the sum of two medial areas,",
+              visible: ALL,
+              highlighted: ["EI"] },
+            { text: "so that the side of the area {AD} is also the side of the sum of two medial areas.",
+              visible: ALL,
+              highlighted: ["AD"],
+              justifications: [{ claim: "side of AD", ref: "X.59" }] },
+            { text: "Therefore, if two medial areas incommensurable with one another are added together,",
+              visible: ALL,
+              highlighted: ["AB", "CD"] },
+            { text: "then the remaining two irrational straight lines arise,",
+              visible: ALL,
+              highlighted: ["AD"] },
+            { text: "namely either a second bimedial or a side of the sum of two medial areas.",
+              visible: ALL,
+              highlighted: ["AD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.72") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VI.1":       "/elements/books/bookVI/propositions/propVI1/",
+        "X.11":       "/elements/books/bookX/propositions/propX11/",
+        "X.22":       "/elements/books/bookX/propositions/propX22/",
+        "X.36":       "/elements/books/bookX/propositions/propX36/",
+        "X.56":       "/elements/books/bookX/propositions/propX56/",
+        "X.59":       "/elements/books/bookX/propositions/propX59/",
+        "X.Def.II.3": "/elements/books/bookX/definitions/defX.II.3/",
+        "X.Def.II.6": "/elements/books/bookX/definitions/defX.II.6/"
     });
 </script>
 </figure>
 
-Now, since each of the areas *AB* and *CD* is medial, therefore each of the areas *EG* and *HI* is also medial.
+Now, since each of the areas {AB} and {CD} is medial, therefore each of the areas {EG} and {HI} is also medial.
 
-And they are applied to the rational straight line *FE* producing *EH* and *HK* as breadth, therefore each of the straight lines *EH* and *HK* is rational and incommensurable in length with *EF*. [!just X.22]
+And they are applied to the rational straight line {FE} producing {EH} and {HK} as breadth, therefore each of the straight lines {EH} and {HK} is rational and incommensurable in length with {EF}. [!just X.22]
 
-Since *AB* is incommensurable with *CD*, and *AB* equals *EG*, and *CD* equals *HI*, therefore *EG* is also incommensurable with *HI*.
+Since {AB} is incommensurable with {CD}, and {AB} equals {EG}, and {CD} equals {HI}, therefore {EG} is also incommensurable with {HI}.
 
-But *EG* is to *HI* as *EH* is to *HK*, therefore *EH* is incommensurable in length with *HK*. [!just VI.1, X.11]
+But {EG} is to {HI} as {EH} is to {HK}, therefore {EH} is incommensurable in length with {HK}. [!just VI.1, X.11]
 
-Therefore *EH* and *HK* are rational straight lines commensurable in square only, therefore *EK* is binomial. [!just X.36]
+Therefore {EH} and {HK} are rational straight lines commensurable in square only, therefore {EK} is binomial. [!just X.36]
 
-But the square on *EH* is greater than the square on *HK* either by the square on a straight line commensurable with *EH* or by the square on a straight line incommensurable with it.
+But the square on {EH} is greater than the square on {HK} either by the square on a straight line commensurable with {EH} or by the square on a straight line incommensurable with it.
 
 First, let the square on it be greater by the square on a straight line commensurable in length with itself.
 
-Now neither of the straight lines *EH* nor *HK* is commensurable in length with the rational straight line *EF* set out, therefore *EK* is a third binomial. [!just X.Def.II.3]
+Now neither of the straight lines {EH} nor {HK} is commensurable in length with the rational straight line {EF} set out, therefore {EK} is a third binomial. [!just X.Def.II.3]
 
-But *EF* is rational, and, if an area is contained by a rational straight line and the third binomial, then the side of the area is a second bimedial, therefore the side of *EI*, that is, of *AD*, is a second bimedial. [!just X.56]
+But {EF} is rational, and, if an area is contained by a rational straight line and the third binomial, then the side of the area is a second bimedial, therefore the side of {EI}, that is, of {AD}, is a second bimedial. [!just X.56]
 
-Next, let the square on *EH* be greater than the square on *HK* by the square on a straight line incommensurable in length with *EH*.
+Next, let the square on {EH} be greater than the square on {HK} by the square on a straight line incommensurable in length with {EH}.
 
-Now each of the straight lines *EH* and *HK* is incommensurable in length with *EF*, therefore *EK* is a sixth binomial. [!just X.Def.II.6]
+Now each of the straight lines {EH} and {HK} is incommensurable in length with {EF}, therefore {EK} is a sixth binomial. [!just X.Def.II.6]
 
-But, if an area is contained by a rational straight line and the sixth binomial, then the side of the area is the side of the sum of two medial areas, so that the side of the area *AD* is also the side of the sum of two medial areas. [!just X.59]
+But, if an area is contained by a rational straight line and the sixth binomial, then the side of the area is the side of the sum of two medial areas, so that the side of the area {AD} is also the side of the sum of two medial areas. [!just X.59]
 
 Therefore, *if two medial areas incommensurable with one another are added together, then the remaining two irrational straight lines arise, namely either a second bimedial or a side of the sum of two medial areas.*
 

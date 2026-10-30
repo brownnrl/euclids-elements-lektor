@@ -15,18 +15,38 @@ statement: If a rational and a medial are added together, then four irrational s
 ----
 proof:
 
-Let *AB* be rational, and *CD* medial.
+Let {AB} be rational, and {CD} medial.
 
-I say that the side of the area *AD* is a binomial or a first bimedial or a major or a side of a rational plus a medial area.
+I say that the side of the area {AD} is a binomial or a first bimedial or a major or a side of a rational plus a medial area.
 
-For *AB* is either greater or less than *CD*.
+For {AB} is either greater or less than {CD}.
 
-First, let it be greater. Set out a rational straight line *EF*, apply to *EF* the rectangle *EG* equal to *AB*, producing *EH* as breadth, and apply to *EF* *HI*, equal to *DC*, producing *HK* as breadth.
+First, let it be greater. Set out a rational straight line {EF}, apply to {EF} the rectangle {EG} equal to {AB}, producing {EH} as breadth, and apply to {EF} {HI}, equal to {DC}, producing {HK} as breadth.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="390" height="220" tabindex="0"></canvas>
 <noscript><img alt="X.71 diagram" src="propX71.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the given areas AB and CD side by side making AD, and
+    // the rational line EF with EG (EFGH) applied to it equal to AB and HI
+    // (GHKI) equal to CD, so that EK is divided at H. Added, all hidden at
+    // rest: a solid twin EF (initiallyHidden) that strokes from E when EF is
+    // set out; transparent targets EH, HK, EK (;0;0;0); faceless targets AD
+    // (A, AB4, D, CD4 — the rectangles' fourth vertices) and EI (E,F,I,K)
+    // for the wholes, so lighting them raises no face (#140). Captions reach
+    // Joyce's EG, HI, DC, HE, FE through display overrides; prose uses the
+    // aliases. No angle is called right in the text, so no markers.
+    //
+    // Draggables (checked against the bundle): A, C, B, D (the givens), E, F
+    // and the offscreen frees. E and F arrive with "Set out a rational
+    // straight line EF", so both are deferred. H, G, K, I are derived and
+    // listed per slide.
+    // Joyce's "the side of the square it is a first bimedial" (second case) is
+    // left as written.
+    var GIVEN = ["A","B","C","D","AB","CD","AD"];
+    var EFS   = GIVEN.concat(["E","F","EF"]);
+    var EGS   = EFS.concat(["H","G","EFGH","EH"]);
+    var ALL   = EGS.concat(["K","I","GHKI","HK","EK","EI"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -51,55 +71,296 @@ First, let it be greater. Set out a rational straight line *EF*, apply to *EF* t
             "EFGH;polygon;quadrilateral;E,F,G,H;0;0;black;180,70,100",
             "K;point;proportion;E,F,B,C,B,D,H,H'",
             "I;point;parallelogram;K,E,F",
-            "GHKI;polygon;quadrilateral;G,H,K,I;0;0;black;300,50,100"
+            "GHKI;polygon;quadrilateral;G,H,K,I;0;0;black;300,50,100",
+            // Slide-only twins and highlight targets — invisible at rest.
+            "EF;line;connect;E,F",
+            "EH;line;connect;E,H;0;0;0",
+            "HK;line;connect;H,K;0;0;0",
+            "EK;line;connect;E,K;0;0;0",
+            "AB4;point;vertex;AB,4;0;0",
+            "CD4;point;vertex;CD,4;0;0",
+            "AD;polygon;quadrilateral;A,AB4,D,CD4;0;0;0;0",
+            "EI;polygon;quadrilateral;E,F,I,K;0;0;0;0"
         ],
+        initiallyHidden: ["EF"],
+        deferDraggables: ["E","F"],
+        aliases: { "EG": "EFGH", "HI": "GHKI", "DC": "CD", "HE": "EH", "FE": "EF" },
+        slides: [
+            { text: "“If a rational and a medial are added together,",
+              visible: ALL,
+              highlighted: ["AB", "CD"],
+              justifications: [{ ref: "X.71" }] },
+            { text: "then four irrational straight lines arise,",
+              visible: ALL,
+              highlighted: ["AD"] },
+            { text: "namely a binomial or a first bimedial or a major or a side of a rational plus a medial area.”",
+              visible: ALL,
+              highlighted: ["AD"] },
+            { text: "Let {AB} be rational, and {CD} medial.",
+              visible: GIVEN,
+              highlighted: ["AB", "CD"] },
+            { text: "I say that the side of the area {AD} is a binomial or a first bimedial",
+              visible: GIVEN,
+              highlighted: ["AD"] },
+            { text: "or a major or a side of a rational plus a medial area.",
+              visible: GIVEN,
+              highlighted: ["AD"] },
+            { text: "For {AB} is either greater or less than {CD}.",
+              visible: GIVEN,
+              highlighted: ["AB", "CD"] },
+            { text: "First, let it be greater.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "Set out a rational straight line {EF},",
+              visible: EFS,
+              highlighted: ["EF"],
+              transition: { animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "apply to {EF} the rectangle {EG|EFGH} equal to {AB}, producing {EH} as breadth,",
+              visible: EGS,
+              highlighted: ["EFGH", "AB", "EH"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "H", name: geomlib.A.Point.appear },
+                  { elem: "EFGH", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and apply to {EF} {HI|GHKI}, equal to {DC|CD}, producing {HK} as breadth.",
+              visible: ALL,
+              highlighted: ["GHKI", "CD", "HK"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "GHKI", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Then, since {AB} is rational and equals {EG|EFGH}, therefore {EG|EFGH} is also rational.",
+              visible: ALL,
+              highlighted: ["AB", "EFGH"] },
+            { text: "And it is applied to {EF}, producing {EH} as breadth, therefore {EH} is rational and commensurable in length with {EF}.",
+              visible: ALL,
+              highlighted: ["EF", "EH"],
+              justifications: [{ claim: "EH rational, commensurable with EF", ref: "X.20" }] },
+            { text: "Again, since {CD} is medial and equals {HI|GHKI}, therefore {HI|GHKI} is also medial.",
+              visible: ALL,
+              highlighted: ["CD", "GHKI"] },
+            { text: "And it is applied to the rational straight line {EF}, producing {HK} as breadth,",
+              visible: ALL,
+              highlighted: ["EF", "HK"] },
+            { text: "therefore {HK} is rational and incommensurable in length with {EF}.",
+              visible: ALL,
+              highlighted: ["HK", "EF"],
+              justifications: [{ claim: "HK rational, incommensurable with EF", ref: "X.22" }] },
+            { text: "Since {CD} is medial, while {AB} is rational, therefore {AB} is incommensurable with {CD},",
+              visible: ALL,
+              highlighted: ["CD", "AB"] },
+            { text: "so that {EG|EFGH} is also incommensurable with {HI|GHKI}.",
+              visible: ALL,
+              highlighted: ["EFGH", "GHKI"] },
+            { text: "But {EG|EFGH} is to {HI|GHKI} as {EH} is to {HK}, therefore {EH} is also incommensurable in length with {HK}.",
+              visible: ALL,
+              highlighted: ["EFGH", "GHKI", "EH", "HK"],
+              justifications: [{ claim: "EG : HI = EH : HK", ref: "VI.1" }, { claim: "EH, HK incommensurable in length", ref: "X.11" }] },
+            { text: "And both are rational, therefore {EH} and {HK} are rational straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["EH", "HK"] },
+            { text: "Therefore {EK} is a binomial straight line, divided at {H}.",
+              visible: ALL,
+              highlighted: ["EK", "H"],
+              justifications: [{ claim: "EK binomial", ref: "X.36" }] },
+            { text: "Since {AB} is greater than {CD}, while {AB} equals {EG|EFGH} and {CD} equals {HI|GHKI},",
+              visible: ALL,
+              highlighted: ["AB", "CD", "EFGH", "GHKI"] },
+            { text: "therefore {EG|EFGH} is also greater than {HI|GHKI}. Therefore {EH} is also greater than {HK}.",
+              visible: ALL,
+              highlighted: ["EFGH", "GHKI", "EH", "HK"] },
+            { text: "The square, then, on {EH} is greater than the square on {HK}",
+              visible: ALL,
+              highlighted: ["EH", "HK"] },
+            { text: "either by the square on a straight line commensurable in length with {EH}",
+              visible: ALL,
+              highlighted: ["EH"] },
+            { text: "or by the square on a straight line incommensurable with it.",
+              visible: ALL,
+              highlighted: ["EH"] },
+            { text: "First, let the square on it be greater by the square on a straight line commensurable with itself.",
+              visible: ALL,
+              highlighted: ["EH"] },
+            { text: "Now the greater straight line {HE|EH} is commensurable in length with the rational straight line {EF} set out,",
+              visible: ALL,
+              highlighted: ["EH", "EF"] },
+            { text: "therefore {EK} is a first binomial.",
+              visible: ALL,
+              highlighted: ["EK"],
+              justifications: [{ claim: "EK a first binomial", ref: "X.Def.II.1" }] },
+            { text: "But {EF} is rational, and, if an area is contained by a rational straight line and the first binomial,",
+              visible: ALL,
+              highlighted: ["EF", "EK"] },
+            { text: "then the side of the square equal to the area is binomial.",
+              visible: ALL,
+              highlighted: ["EI"] },
+            { text: "Therefore the side of {EI} is binomial, so that the side of {AD} is also binomial.",
+              visible: ALL,
+              highlighted: ["EI", "AD"],
+              justifications: [{ claim: "side of EI binomial", ref: "X.54" }] },
+            { text: "Next, let the square on {EH} be greater than the square on {HK}",
+              visible: ALL,
+              highlighted: ["EH", "HK"] },
+            { text: "by the square on a straight line incommensurable with {EH}.",
+              visible: ALL,
+              highlighted: ["EH"] },
+            { text: "Now the greater straight line {EH} is commensurable in length with the rational straight line {EF} set out,",
+              visible: ALL,
+              highlighted: ["EH", "EF"] },
+            { text: "therefore {EK} is a fourth binomial.",
+              visible: ALL,
+              highlighted: ["EK"],
+              justifications: [{ claim: "EK a fourth binomial", ref: "X.Def.II.4" }] },
+            { text: "But {EF} is rational, and, if an area be contained by a rational straight line and the fourth binomial,",
+              visible: ALL,
+              highlighted: ["EF", "EK"] },
+            { text: "then the side of the area is the irrational straight line called major.",
+              visible: ALL,
+              highlighted: ["EI"] },
+            { text: "Therefore the side of the area {EI} is major, so that the side of the area {AD} is also major.",
+              visible: ALL,
+              highlighted: ["EI", "AD"],
+              justifications: [{ claim: "side of EI major", ref: "X.57" }] },
+            { text: "Next, let {AB} be less than {CD}.",
+              visible: ALL,
+              highlighted: ["AB", "CD"] },
+            { text: "Then {EG|EFGH} is also less than {HI|GHKI}, so that {EH} is also less than {HK}.",
+              visible: ALL,
+              highlighted: ["EFGH", "GHKI", "EH", "HK"] },
+            { text: "Now the square on {HK} is greater than the square on {EH}",
+              visible: ALL,
+              highlighted: ["HK", "EH"] },
+            { text: "either by the square on a straight line commensurable with {HK}",
+              visible: ALL,
+              highlighted: ["HK"] },
+            { text: "or by the square on a straight line incommensurable with it.",
+              visible: ALL,
+              highlighted: ["HK"] },
+            { text: "First, let the square on it be greater by the square on a straight line commensurable in length with itself.",
+              visible: ALL,
+              highlighted: ["HK"] },
+            { text: "Now the lesser straight line {EH} is commensurable in length with the rational straight line {EF} set out,",
+              visible: ALL,
+              highlighted: ["EH", "EF"] },
+            { text: "therefore {EK} is a second binomial.",
+              visible: ALL,
+              highlighted: ["EK"],
+              justifications: [{ claim: "EK a second binomial", ref: "X.Def.II.2" }] },
+            { text: "But {EF} is rational, and, if an area is contained by a rational straight line and the second binomial,",
+              visible: ALL,
+              highlighted: ["EF", "EK"] },
+            { text: "then the side of the square it is a first bimedial,",
+              visible: ALL,
+              highlighted: ["EI"] },
+            { text: "therefore the side of the area {EI} is a first bimedial, so that the side of {AD} is also a first bimedial.",
+              visible: ALL,
+              highlighted: ["EI", "AD"],
+              justifications: [{ claim: "side of EI a first bimedial", ref: "X.55" }] },
+            { text: "Next, let the square on {HK} be greater than the square on {HE|EH}",
+              visible: ALL,
+              highlighted: ["HK", "EH"] },
+            { text: "by the square on a straight line incommensurable with {HK}.",
+              visible: ALL,
+              highlighted: ["HK"] },
+            { text: "Now the lesser straight line {EH} is commensurable with the rational straight line {EF} set out,",
+              visible: ALL,
+              highlighted: ["EH", "EF"] },
+            { text: "therefore {EK} is a fifth binomial.",
+              visible: ALL,
+              highlighted: ["EK"],
+              justifications: [{ claim: "EK a fifth binomial", ref: "X.Def.II.5" }] },
+            { text: "But {EF} is rational, and, if an area is contained by a rational straight line and the fifth binomial,",
+              visible: ALL,
+              highlighted: ["EF", "EK"] },
+            { text: "then the side of the square equal to the area is a side of a rational plus a medial area.",
+              visible: ALL,
+              highlighted: ["EI"],
+              justifications: [{ claim: "side of EI", ref: "X.58" }] },
+            { text: "Therefore the side of the area {EI} is a side of a rational plus a medial area,",
+              visible: ALL,
+              highlighted: ["EI"] },
+            { text: "so that the side of the area {AD} is also a side of a rational plus a medial area.",
+              visible: ALL,
+              highlighted: ["AD"] },
+            { text: "Therefore, if a rational and a medial are added together,",
+              visible: ALL,
+              highlighted: ["AB", "CD"] },
+            { text: "then four irrational straight lines arise,",
+              visible: ALL,
+              highlighted: ["AD"] },
+            { text: "namely a binomial or a first bimedial or a major or a side of a rational plus a medial area.",
+              visible: ALL,
+              highlighted: ["AD"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.71") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VI.1":       "/elements/books/bookVI/propositions/propVI1/",
+        "X.11":       "/elements/books/bookX/propositions/propX11/",
+        "X.20":       "/elements/books/bookX/propositions/propX20/",
+        "X.22":       "/elements/books/bookX/propositions/propX22/",
+        "X.36":       "/elements/books/bookX/propositions/propX36/",
+        "X.54":       "/elements/books/bookX/propositions/propX54/",
+        "X.55":       "/elements/books/bookX/propositions/propX55/",
+        "X.57":       "/elements/books/bookX/propositions/propX57/",
+        "X.58":       "/elements/books/bookX/propositions/propX58/",
+        "X.Def.II.1": "/elements/books/bookX/definitions/defX.II.1/",
+        "X.Def.II.2": "/elements/books/bookX/definitions/defX.II.2/",
+        "X.Def.II.4": "/elements/books/bookX/definitions/defX.II.4/",
+        "X.Def.II.5": "/elements/books/bookX/definitions/defX.II.5/"
     });
 </script>
 </figure>
 
-Then, since *AB* is rational and equals *EG*, therefore *EG* is also rational. And it is applied to *EF*, producing *EH* as breadth, therefore *EH* is rational and commensurable in length with *EF*. [!just X.20]
+Then, since {AB} is rational and equals {EG}, therefore {EG} is also rational. And it is applied to {EF}, producing {EH} as breadth, therefore {EH} is rational and commensurable in length with {EF}. [!just X.20]
 
-Again, since *CD* is medial and equals *HI*, therefore *HI* is also medial. And it is applied to the rational straight line *EF*, producing *HK* as breadth, therefore *HK* is rational and incommensurable in length with *EF*. [!just X.22]
+Again, since {CD} is medial and equals {HI}, therefore {HI} is also medial. And it is applied to the rational straight line {EF}, producing {HK} as breadth, therefore {HK} is rational and incommensurable in length with {EF}. [!just X.22]
 
-Since *CD* is medial, while *AB* is rational, therefore *AB* is incommensurable with *CD*, so that *EG* is also incommensurable with *HI.*
+Since {CD} is medial, while {AB} is rational, therefore {AB} is incommensurable with {CD}, so that {EG} is also incommensurable with {HI}.
 
-But *EG* is to *HI* as *EH* is to *HK*, therefore *EH* is also incommensurable in length with *HK*. [!just VI.1, X.11]
+But {EG} is to {HI} as {EH} is to {HK}, therefore {EH} is also incommensurable in length with {HK}. [!just VI.1, X.11]
 
-And both are rational, therefore *EH* and *HK* are rational straight lines commensurable in square only. Therefore *EK* is a binomial straight line, divided at *H*. [!just X.36]
+And both are rational, therefore {EH} and {HK} are rational straight lines commensurable in square only. Therefore {EK} is a binomial straight line, divided at {H}. [!just X.36]
 
-Since *AB* is greater than *CD*, while *AB* equals *EG* and *CD* equals *HI*, therefore *EG* is also greater than *HI*. Therefore *EH* is also greater than *HK*. The square, then, on *EH* is greater than the square on *HK* either by the square on a straight line commensurable in length with *EH* or by the square on a straight line incommensurable with it.
+Since {AB} is greater than {CD}, while {AB} equals {EG} and {CD} equals {HI}, therefore {EG} is also greater than {HI}. Therefore {EH} is also greater than {HK}. The square, then, on {EH} is greater than the square on {HK} either by the square on a straight line commensurable in length with {EH} or by the square on a straight line incommensurable with it.
 
 First, let the square on it be greater by the square on a straight line commensurable with itself.
 
-Now the greater straight line *HE* is commensurable in length with the rational straight line *EF* set out, therefore *EK* is a first binomial. [!just X.Def.II.1]
+Now the greater straight line {HE} is commensurable in length with the rational straight line {EF} set out, therefore {EK} is a first binomial. [!just X.Def.II.1]
 
-But *EF* is rational, and, if an area is contained by a rational straight line and the first binomial, then the side of the square equal to the area is binomial. Therefore the side of *EI* is binomial, so that the side of *AD* is also binomial. [!just X.54]
+But {EF} is rational, and, if an area is contained by a rational straight line and the first binomial, then the side of the square equal to the area is binomial. Therefore the side of {EI} is binomial, so that the side of {AD} is also binomial. [!just X.54]
 
-Next, let the square on *EH* be greater than the square on *HK* by the square on a straight line incommensurable with *EH*.
+Next, let the square on {EH} be greater than the square on {HK} by the square on a straight line incommensurable with {EH}.
 
-Now the greater straight line *EH* is commensurable in length with the rational straight line *EF* set out, therefore *EK* is a fourth binomial. [!just X.Def.II.4]
+Now the greater straight line {EH} is commensurable in length with the rational straight line {EF} set out, therefore {EK} is a fourth binomial. [!just X.Def.II.4]
 
-But *EF* is rational, and, if an area be contained by a rational straight line and the fourth binomial, then the side of the area is the irrational straight line called major. Therefore the side of the area *EI* is major, so that the side of the area *AD* is also major. [!just X.57]
+But {EF} is rational, and, if an area be contained by a rational straight line and the fourth binomial, then the side of the area is the irrational straight line called major. Therefore the side of the area {EI} is major, so that the side of the area {AD} is also major. [!just X.57]
 
 <hr width="50%">
 
-Next, let *AB* be less than *CD*. Then *EG* is also less than *HI*, so that *EH* is also less than *HK*.
+Next, let {AB} be less than {CD}. Then {EG} is also less than {HI}, so that {EH} is also less than {HK}.
 
-Now the square on *HK* is greater than the square on *EH* either by the square on a straight line commensurable with *HK* or by the square on a straight line incommensurable with it.
+Now the square on {HK} is greater than the square on {EH} either by the square on a straight line commensurable with {HK} or by the square on a straight line incommensurable with it.
 
 First, let the square on it be greater by the square on a straight line commensurable in length with itself.
 
-Now the lesser straight line *EH* is commensurable in length with the rational straight line *EF* set out, therefore *EK* is a second binomial. [!just X.Def.II.2]
+Now the lesser straight line {EH} is commensurable in length with the rational straight line {EF} set out, therefore {EK} is a second binomial. [!just X.Def.II.2]
 
-But *EF* is rational, and, if an area is contained by a rational straight line and the second binomial, then the side of the square it is a first bimedial, therefore the side of the area *EI* is a first bimedial, so that the side of *AD* is also a first bimedial. [!just X.55]
+But {EF} is rational, and, if an area is contained by a rational straight line and the second binomial, then the side of the square it is a first bimedial, therefore the side of the area {EI} is a first bimedial, so that the side of {AD} is also a first bimedial. [!just X.55]
 
-Next, let the square on *HK* be greater than the square on *HE* by the square on a straight line incommensurable with *HK*.
+Next, let the square on {HK} be greater than the square on {HE} by the square on a straight line incommensurable with {HK}.
 
-Now the lesser straight line *EH* is commensurable with the rational straight line *EF* set out, therefore *EK* is a fifth binomial. [!just X.Def.II.5]
+Now the lesser straight line {EH} is commensurable with the rational straight line {EF} set out, therefore {EK} is a fifth binomial. [!just X.Def.II.5]
 
-But *EF* is rational, and, if an area is contained by a rational straight line and the fifth binomial, then the side of the square equal to the area is a side of a rational plus a medial area. [!just X.58]
+But {EF} is rational, and, if an area is contained by a rational straight line and the fifth binomial, then the side of the square equal to the area is a side of a rational plus a medial area. [!just X.58]
 
-Therefore the side of the area *EI* is a side of a rational plus a medial area, so that the side of the area *AD* is also a side of a rational plus a medial area.
+Therefore the side of the area {EI} is a side of a rational plus a medial area, so that the side of the area {AD} is also a side of a rational plus a medial area.
 
 Therefore, *if a rational and a medial are added together, then four irrational straight lines arise, namely a binomial or a first bimedial or a major or a side of a rational plus a medial area.*
 
