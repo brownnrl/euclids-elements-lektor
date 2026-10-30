@@ -15,16 +15,49 @@ statement: Any pyramid with a triangular base is divided into two pyramids equal
 ----
 proof:
 
-Let there be a pyramid of with the triangular base *ABC* and vertex *D.*
+Let there be a pyramid of with the triangular base {ABC} and vertex {D}.
 
-I say that the pyramid *ABCD* is divided into two pyramids equal to one another, having triangular bases and similar to the whole pyramid, and into two equal prisms, and the two prisms are greater than the half of the whole pyramid.
+I say that the pyramid {ABCD} is divided into two pyramids equal to one another, having triangular bases and similar to the whole pyramid, and into two equal prisms, and the two prisms are greater than the half of the whole pyramid.
 
-Bisect *AB, BC, CA, AD, DB,* and *DC* at the points *E, F, G, H, K,* and *L.* Join *HE, EG, GH, HK, KL, LH, KF,* and *FG*. [!just I.10]
+Bisect {AB}, {BC}, {CA}, {AD}, {DB}, and {DC} at the points {E}, {F}, {G}, {H}, {K}, and {L}. Join {HE}, {EG}, {GH}, {HK}, {KL}, {LH}, {KF}, and {FG}. [!just I.10]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="300" tabindex="0"></canvas>
 <noscript><img alt="XII.3 diagram" src="propXII3.gif"/></noscript>
 <script type="text/javascript">
+    // The six edges of ABCD are bisected at E..L and the eight joins drawn;
+    // the walk then shows the two small pyramids equal and similar to each
+    // other and to the whole, the two prisms equal, and each prism greater
+    // than a small pyramid.
+    //
+    // Joyce's figure draws the edges in pieces (tetrahedron edges and the
+    // lines CB, CG, EB, KB, CL), so the outline AB, CA, AD, DB, DC and the
+    // eight joins are solid slide twins, hidden at rest (initiallyHidden).
+    // A polyhedron draws no highlight, so each pyramid the prose names gets
+    // a faceless wireframe twin: an octagon that walks all six edges
+    // (ABCD, pAEGH, pHKLD, pEBFK). The prisms are lit through their faces.
+    // HKFGt is a faceless twin of the shaded parallelogram HKFG. Everything
+    // else added is transparent. EF is Joyce's line, kept back until the
+    // proof joins it; EK, which his figure does not draw, is transparent.
+    // Angle and triangle names collide (EHG, KDL): the triangles own them.
+    // Draggables (checked against the bundle): D (lineSlider) and A, B, C
+    // (planeSliders), all givens; every other point is a midpoint.
+    var GIVEN = ["A","B","C","D","AB","CB","CA","AD","DB","DC"];
+    var MIDS  = GIVEN.concat(["E","F","G","H","K","L"]);
+    var JOINS = MIDS.concat(["HE","EG","GH","HK","KL","LH","KF","FG"]);
+    var ORIG  = ["HKFG","AEGH","HKLD","CB","CG","EB","KB","CL"];
+    var REST  = ["A","B","C","D","E","F","G","H","K","L","EF"].concat(ORIG);
+    var FULL  = JOINS.concat(ORIG).concat(["AE","AH","HD","KD","DL","BF","FC",
+                "ABCD","pAEGH","pHKLD","HEBK","ABC","AEH","HKD","AHG","HLD",
+                "EHG","KDL","AEG","HKL","ADB","DHK","DBC","DKL","ADC","DLH"]);
+    var A1    = FULL.concat(["angEAH","angKHD"]);
+    var A2    = A1.concat(["angEHG","angKDL"]);
+    var A3    = A2.concat(["angBAC","angKHL"]);
+    // The angle markers have done their work once the prisms are reached.
+    var PRISMS = FULL.concat(["EBFG","GFC","BKF","EBKH","HKFGt","KFCL","LCGH"]);
+    var JOINED = PRISMS.concat(["EF","EK","EBF","pEBFK"]);
+    var PRISM1 = ["EBFG","BKF","EHG","EBKH","HKFGt"];
+    var PRISM2 = ["GFC","HKL","KFCL","LCGH","HKFGt"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -54,45 +87,321 @@ Bisect *AB, BC, CA, AD, DB,* and *DC* at the points *E, F, G, H, K,* and *L.* Jo
             "EF;line;connect;E,F",
             "EB;line;connect;E,B",
             "KB;line;connect;K,B",
-            "CL;line;connect;C,L"
+            "CL;line;connect;C,L",
+            // Slide twins, hidden at rest: the outline, then the joins.
+            "AB;line;connect;A,B",
+            "CA;line;connect;C,A",
+            "AD;line;connect;A,D",
+            "DB;line;connect;D,B",
+            "DC;line;connect;D,C",
+            "HE;line;connect;H,E",
+            "EG;line;connect;E,G",
+            "GH;line;connect;G,H",
+            "HK;line;connect;H,K",
+            "KL;line;connect;K,L",
+            "LH;line;connect;L,H",
+            "KF;line;connect;K,F",
+            "FG;line;connect;F,G",
+            // Transparent highlight targets.
+            "AE;line;connect;A,E;0;0;0",
+            "AH;line;connect;A,H;0;0;0",
+            "HD;line;connect;H,D;0;0;0",
+            "KD;line;connect;K,D;0;0;0",
+            "DL;line;connect;D,L;0;0;0",
+            "BF;line;connect;B,F;0;0;0",
+            "FC;line;connect;F,C;0;0;0",
+            "EK;line;connect;E,K;0;0;0",
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "AEH;polygon;triangle;A,E,H;0;0;0;0",
+            "HKD;polygon;triangle;H,K,D;0;0;0;0",
+            "AHG;polygon;triangle;A,H,G;0;0;0;0",
+            "HLD;polygon;triangle;H,L,D;0;0;0;0",
+            "EHG;polygon;triangle;E,H,G;0;0;0;0",
+            "KDL;polygon;triangle;K,D,L;0;0;0;0",
+            "AEG;polygon;triangle;A,E,G;0;0;0;0",
+            "HKL;polygon;triangle;H,K,L;0;0;0;0",
+            "ADB;polygon;triangle;A,D,B;0;0;0;0",
+            "DHK;polygon;triangle;D,H,K;0;0;0;0",
+            "DBC;polygon;triangle;D,B,C;0;0;0;0",
+            "DKL;polygon;triangle;D,K,L;0;0;0;0",
+            "ADC;polygon;triangle;A,D,C;0;0;0;0",
+            "DLH;polygon;triangle;D,L,H;0;0;0;0",
+            "GFC;polygon;triangle;G,F,C;0;0;0;0",
+            "BKF;polygon;triangle;B,K,F;0;0;0;0",
+            "EBF;polygon;triangle;E,B,F;0;0;0;0",
+            "HEBK;polygon;quadrilateral;H,E,B,K;0;0;0;0",
+            "EBFG;polygon;quadrilateral;E,B,F,G;0;0;0;0",
+            "EBKH;polygon;quadrilateral;E,B,K,H;0;0;0;0",
+            "HKFGt;polygon;quadrilateral;H,K,F,G;0;0;0;0",
+            "KFCL;polygon;quadrilateral;K,F,C,L;0;0;0;0",
+            "LCGH;polygon;quadrilateral;L,C,G,H;0;0;0;0",
+            // Pyramid wireframes: each octagon walks the six edges.
+            "ABCD;polygon;octagon;A,B,C,D,A,C,D,B;0;0;0;0",
+            "pAEGH;polygon;octagon;A,E,G,H,A,G,H,E;0;0;0;0",
+            "pHKLD;polygon;octagon;H,K,L,D,H,L,D,K;0;0;0;0",
+            "pEBFK;polygon;octagon;E,B,F,K,E,F,K,B;0;0;0;0",
+            "angEAH;sector;angleMarker;A,E,H;0;0;3b6ea5;9ec5e8",
+            "angKHD;sector;angleMarker;H,K,D;0;0;3b6ea5;9ec5e8",
+            "angEHG;sector;angleMarker;H,E,G;0;0;3f8e4f;a8dbb0",
+            "angKDL;sector;angleMarker;D,K,L;0;0;3f8e4f;a8dbb0",
+            "angBAC;sector;angleMarker;A,B,C;0;0;c06a1b;f3c590",
+            "angKHL;sector;angleMarker;H,K,L;0;0;c06a1b;f3c590"
         ],
+        initiallyHidden: ["AB","CA","AD","DB","DC",
+                          "HE","EG","GH","HK","KL","LH","KF","FG"],
+        aliases: { "BC": "CB", "AC": "CA", "BA": "AB", "DH": "HD", "EH": "HE",
+                   "EA": "AE", "KH": "HK", "HG": "GH", "HL": "LH" },
+        slides: [
+            { text: "“Any pyramid with a triangular base is divided into two pyramids equal and similar to one another,”",
+              visible: REST,
+              highlighted: ["pAEGH","pHKLD"],
+              justifications: [{ ref: "XII.3" }] },
+            { text: "“similar to the whole, and having triangular bases,”",
+              visible: REST,
+              highlighted: ["ABCD","AEG","HKL"] },
+            { text: "“and into two equal prisms,”",
+              visible: REST,
+              highlighted: PRISM1.concat(PRISM2) },
+            { text: "“and the two prisms are greater than half of the whole pyramid.”",
+              visible: REST,
+              highlighted: PRISM1.concat(PRISM2) },
+            { text: "Let there be a pyramid of with the triangular base {ABC} and vertex {D}.",
+              visible: GIVEN.concat(["ABC"]),
+              highlighted: ["ABC","D"] },
+            { text: "I say that the pyramid {ABCD} is divided into two pyramids equal to one another, having triangular bases",
+              visible: GIVEN.concat(["ABCD"]),
+              highlighted: ["ABCD"] },
+            { text: "and similar to the whole pyramid, and into two equal prisms,",
+              highlighted: ["ABCD"] },
+            { text: "and the two prisms are greater than the half of the whole pyramid.",
+              highlighted: ["ABCD"] },
+            { text: "Bisect {AB}, {BC}, {CA}, {AD}, {DB}, and {DC} at the points {E}, {F}, {G}, {H}, {K}, and {L}.",
+              visible: MIDS,
+              transition: { mode: "cascade", animations: [
+                  { elem: "E", name: geomlib.A.Point.appear },
+                  { elem: "F", name: geomlib.A.Point.appear },
+                  { elem: "G", name: geomlib.A.Point.appear },
+                  { elem: "H", name: geomlib.A.Point.appear },
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "L", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "bisect the six edges", ref: "I.10" }] },
+            { text: "Join {HE}, {EG}, {GH}, {HK}, {KL}, {LH}, {KF}, and {FG}.",
+              visible: JOINS,
+              transition: { mode: "cascade", animations: [
+                  { elem: "HE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "LH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FG", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since {AE} equals {EB}, and {AH} equals {DH}, therefore {EH} is parallel to {DB}.",
+              visible: FULL,
+              highlighted: ["AE","EB","AH","HD","HE","DB"],
+              justifications: [{ claim: "EH parallel to DB", ref: "VI.2" }] },
+            { text: "For the same reason {HK} is also parallel to {AB}. Therefore {HEBK} is a parallelogram.",
+              highlighted: ["HK","AB","HEBK"],
+              justifications: [{ claim: "HK parallel to AB", ref: "VI.2" }] },
+            { text: "Therefore {HK} equals {EB}.",
+              highlighted: ["HK","EB"],
+              justifications: [{ claim: "HK = EB", ref: "I.34" }] },
+            { text: "But {EB} equals {EA}, therefore {AE} also equals {HK}.",
+              highlighted: ["EB","AE","HK"] },
+            { text: "But {AH} also equals {HD}, therefore the two sides {EA} and {AH} equal the two sides {KH}, {HD} respectively,",
+              highlighted: ["AH","HD","AE","HK"] },
+            { text: "and the angle {EAH|angEAH} equals the angle {KHD|angKHD}, therefore the base {EH} equals the base {KD}.",
+              visible: A1,
+              highlighted: ["HE","KD"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angEAH", name: geomlib.A.Sector.sweep },
+                  { elem: "angKHD", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "base EH = base KD", ref: "I.4" }] },
+            { text: "Therefore the triangle {AEH} equals and is similar to the triangle {HKD}.",
+              highlighted: ["AEH","HKD"] },
+            { text: "For the same reason the triangle {AHG} also equals and is similar to the triangle {HLD}.",
+              highlighted: ["AHG","HLD"] },
+            { text: "Now, since two straight lines {EH} and {HG} meeting one another",
+              highlighted: ["HE","GH"] },
+            { text: "are parallel to two straight lines {KD} and {DL} meeting one another",
+              highlighted: ["HE","GH","KD","DL"] },
+            { text: "and are not in the same plane, therefore they contain equal angles. Therefore the angle {EHG|angEHG} equals the angle {KDL|angKDL}.",
+              visible: A2,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angEHG", name: geomlib.A.Sector.sweep },
+                  { elem: "angKDL", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle EHG = angle KDL", ref: "XI.10" }] },
+            { text: "And, since the two straight lines {EH} and {HG} equal the two {KD} and {DL} respectively,",
+              highlighted: ["HE","GH","KD","DL"] },
+            { text: "and the angle {EHG|angEHG} equals the angle {KDL|angKDL}, therefore the base {EG} equals the base {KL}.",
+              highlighted: ["angEHG","angKDL","EG","KL"],
+              justifications: [{ claim: "base EG = base KL", ref: "I.4" }] },
+            { text: "Therefore the triangle {EHG} equals and is similar to the triangle {KDL}.",
+              highlighted: ["EHG","KDL"] },
+            { text: "For the same reason the triangle {AEG} also equals and is similar to the triangle {HKL}.",
+              highlighted: ["AEG","HKL"] },
+            { text: "Therefore the pyramid with triangular base {AEG} and vertex {H} equals and is similar",
+              highlighted: ["pAEGH","AEG","H"] },
+            { text: "to the pyramid with triangular base {HKL} and the vertex {D}.",
+              highlighted: ["pAEGH","pHKLD","HKL","D"],
+              justifications: [{ claim: "equal and similar pyramids", ref: "XI.Def.10" }] },
+            { text: "And, since {HK} is parallel to {AB}, one of the sides of the triangle {ADB},",
+              highlighted: ["HK","AB","ADB"] },
+            { text: "the triangle {ADB} is equiangular to the triangle {DHK}, and they have their sides proportional,",
+              highlighted: ["ADB","DHK"],
+              justifications: [{ claim: "ADB equiangular to DHK", ref: "I.29" }] },
+            { text: "therefore the triangle {ADB} is similar to the triangle {DHK}.",
+              highlighted: ["ADB","DHK"],
+              justifications: [{ claim: "ADB similar to DHK", ref: "VI.Def.1" }] },
+            { text: "For the same reason the triangle {DBC} is also similar to the triangle {DKL},",
+              highlighted: ["DBC","DKL"] },
+            { text: "and the triangle {ADC} is similar to the triangle {DLH}.",
+              highlighted: ["ADC","DLH"] },
+            { text: "Now, since the two straight lines {BA} and {AC} meeting one another",
+              highlighted: ["AB","CA"] },
+            { text: "are parallel to the two straight lines {KH} and {HL} meeting one another not in the same plane,",
+              highlighted: ["AB","CA","HK","LH"] },
+            { text: "therefore they contain equal angles. Therefore the angle {BAC|angBAC} equals the angle {KHL|angKHL}.",
+              visible: A3,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBAC", name: geomlib.A.Sector.sweep },
+                  { elem: "angKHL", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle BAC = angle KHL", ref: "XI.10" }] },
+            { text: "And {BA} is to {AC} as {KH} is to {HL}, therefore the triangle {ABC} is similar to the triangle {HKL}.",
+              highlighted: ["AB","CA","HK","LH","ABC","HKL"] },
+            { text: "Therefore the pyramid with the triangular base {ABC} and vertex {D}",
+              highlighted: ["ABCD","ABC","D"] },
+            { text: "is similar to the pyramid with the triangular base {HKL} and vertex {D}.",
+              highlighted: ["ABCD","pHKLD","HKL","D"] },
+            { text: "But the pyramid with the triangular base {HKL} and vertex {D} was proved similar",
+              highlighted: ["pHKLD","HKL","D"] },
+            { text: "to the pyramid with the triangular base {AEG} and the vertex {H}.",
+              highlighted: ["pHKLD","pAEGH","AEG","H"] },
+            { text: "Therefore each of the pyramids {AEGH|pAEGH} and {HKLD|pHKLD} is similar to the whole pyramid {ABCD}.",
+              highlighted: ["pAEGH","pHKLD","ABCD"] },
+            { text: "Next, since {BF} equals {FC}, therefore the parallelogram {EBFG} is double the triangle {GFC}.",
+              visible: PRISMS,
+              highlighted: ["BF","FC","EBFG","GFC"] },
+            { text: "And since, if there are two prisms of equal height,",
+              highlighted: PRISM1.concat(PRISM2) },
+            { text: "and one has a parallelogram as base and the other a triangle,",
+              highlighted: ["EBFG","GFC"] },
+            { text: "and if the parallelogram is double the triangle, then the prisms are equal.",
+              highlighted: ["EBFG","GFC"] },
+            { text: "Therefore the prism contained by the two triangles {BKF} and {EHG}, and the three parallelograms {EBFG}, {EBKH}, and {HKFG|HKFGt}",
+              highlighted: PRISM1 },
+            { text: "equals the prism contained by the two triangles {GFC} and {HKL} and the three parallelograms {KFCL}, {LCGH}, and {HKFG|HKFGt}.",
+              highlighted: PRISM2,
+              justifications: [{ claim: "the two prisms are equal", ref: "XI.39" }] },
+            { text: "And it is clear that each of the prisms,",
+              highlighted: PRISM1.concat(PRISM2) },
+            { text: "namely that with the parallelogram {EBFG} the base and the straight line {HK} its opposite,",
+              highlighted: PRISM1 },
+            { text: "and that with the triangle {GFC} the base and the triangle {HKL} its opposite,",
+              highlighted: PRISM2 },
+            { text: "is greater than each of the pyramids with the triangular bases {AEG} and {HKL} and vertices {H} and {D},",
+              highlighted: ["pAEGH","pHKLD","AEG","HKL","H","D"] },
+            { text: "for, if we join the straight lines {EF} and {EK},",
+              visible: JOINED,
+              transition: { mode: "cascade", animations: [
+                  { elem: "EF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EK", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "the prism with the parallelogram {EBFG} the base and the straight line {HK} opposite",
+              highlighted: PRISM1 },
+            { text: "is greater than the pyramid with the triangular base {EBF} and vertex {K}.",
+              highlighted: ["pEBFK","EBF","K"] },
+            // Joyce's slips, left literal: "vertex A" (for K) and "base AE"
+            // (for AEG) here, "parallelogram EBF" (for EBFG) below. The slides
+            // still light the solids his argument means.
+            { text: "But the pyramid with the triangular base {EBF} and vertex A equals",
+              highlighted: ["pEBFK","EBF"] },
+            { text: "the pyramid with the triangular base AE and the vertex {H}, for they are contained by equal and similar planes.",
+              highlighted: ["pEBFK","pAEGH","H"] },
+            { text: "Hence the prism with the parallelogram EBF the base and the straight line {HK} opposite",
+              highlighted: PRISM1 },
+            { text: "is greater than the pyramid with the triangular base AE and vertex {H}.",
+              highlighted: PRISM1.concat(["pAEGH","H"]) },
+            { text: "But the prism with the parallelogram EBF the base and the straight line {HK} opposite",
+              highlighted: PRISM1 },
+            { text: "equals the prism with the triangle {GFC} the base and the triangle {HKL} opposite,",
+              highlighted: PRISM2 },
+            { text: "and the pyramid with the triangular base {AEG} and vertex {H}",
+              highlighted: ["pAEGH","AEG","H"] },
+            { text: "equals the pyramid with the triangular base {HKL} and vertex {D}.",
+              highlighted: ["pAEGH","pHKLD","HKL","D"] },
+            { text: "Therefore the said two prisms are greater than the said two pyramids",
+              highlighted: PRISM1.concat(PRISM2) },
+            { text: "with the triangular bases {AEG} and {HKL} and vertices {H} and {D}.",
+              highlighted: ["pAEGH","pHKLD","AEG","HKL","H","D"] },
+            { text: "Therefore the whole pyramid with the triangular base {ABC} and vertex {D}",
+              highlighted: ["ABCD","ABC","D"] },
+            { text: "has been divided into two pyramids equal to one another",
+              highlighted: ["pAEGH","pHKLD"] },
+            { text: "and into two equal prisms, and the two prisms are greater than the half of the whole pyramid.",
+              highlighted: PRISM1.concat(PRISM2) },
+            { text: "Therefore, any pyramid with a triangular base is divided into two pyramids equal and similar to one another,",
+              highlighted: ["ABCD","pAEGH","pHKLD"] },
+            { text: "similar to the whole, and having triangular bases, and into two equal prisms,",
+              highlighted: ["AEG","HKL"].concat(PRISM1).concat(PRISM2) },
+            { text: "and the two prisms are greater than half of the whole pyramid.",
+              highlighted: PRISM1.concat(PRISM2),
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.3") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.4":       "/elements/books/bookI/propositions/propI4/",
+        "I.10":      "/elements/books/bookI/propositions/propI10/",
+        "I.29":      "/elements/books/bookI/propositions/propI29/",
+        "I.34":      "/elements/books/bookI/propositions/propI34/",
+        "VI.2":      "/elements/books/bookVI/propositions/propVI2/",
+        "VI.Def.1":  "/elements/books/bookVI/definitions/defVI1/",
+        "XI.Def.10": "/elements/books/bookXI/definitions/defXI10/",
+        "XI.10":     "/elements/books/bookXI/propositions/propXI10/",
+        "XI.39":     "/elements/books/bookXI/propositions/propXI39/"
     });
 </script>
 </figure>
 
-Since *AE* equals *EB,* and *AH* equals *DH,* therefore *EH* is parallel to *DB.* For the same reason *HK* is also parallel to *AB.* Therefore *HEBK* is a parallelogram. Therefore *HK* equals *EB.* [!just VI.2; I.34]
+Since {AE} equals {EB}, and {AH} equals {DH}, therefore {EH} is parallel to {DB}. For the same reason {HK} is also parallel to {AB}. Therefore {HEBK} is a parallelogram. Therefore {HK} equals {EB}. [!just VI.2; I.34]
 
-But *EB* equals *EA,* therefore *AE* also equals *HK.*
+But {EB} equals {EA}, therefore {AE} also equals {HK}.
 
-But *AH* also equals *HD,* therefore the two sides *EA* and *AH* equal the two sides *KH, HD* respectively, and the angle *EAH* equals the angle *KHD,* therefore the base *EH* equals the base *KD.* [!just I.4]
+But {AH} also equals {HD}, therefore the two sides {EA} and {AH} equal the two sides {KH}, {HD} respectively, and the angle {EAH|angEAH} equals the angle {KHD|angKHD}, therefore the base {EH} equals the base {KD}. [!just I.4]
 
-Therefore the triangle *AEH* equals and is similar to the triangle *HKD.* For the same reason the triangle *AHG* also equals and is similar to the triangle *HLD.*
+Therefore the triangle {AEH} equals and is similar to the triangle {HKD}. For the same reason the triangle {AHG} also equals and is similar to the triangle {HLD}.
 
-Now, since two straight lines *EH* and *HG* meeting one another are parallel to two straight lines *KD* and *DL* meeting one another and are not in the same plane, therefore they contain equal angles. Therefore the angle *EHG* equals the angle *KDL.* [!just XI.10]
+Now, since two straight lines {EH} and {HG} meeting one another are parallel to two straight lines {KD} and {DL} meeting one another and are not in the same plane, therefore they contain equal angles. Therefore the angle {EHG|angEHG} equals the angle {KDL|angKDL}. [!just XI.10]
 
-And, since the two straight lines *EH* and *HG* equal the two *KD* and *DL* respectively, and the angle *EHG* equals the angle *KDL,* therefore the base *EG* equals the base *KL.* Therefore the triangle *EHG* equals and is similar to the triangle *KDL.* For the same reason the triangle *AEG* also equals and is similar to the triangle *HKL.* [!just I.4]
+And, since the two straight lines {EH} and {HG} equal the two {KD} and {DL} respectively, and the angle {EHG|angEHG} equals the angle {KDL|angKDL}, therefore the base {EG} equals the base {KL}. Therefore the triangle {EHG} equals and is similar to the triangle {KDL}. For the same reason the triangle {AEG} also equals and is similar to the triangle {HKL}. [!just I.4]
 
-Therefore the pyramid with triangular base *AEG* and vertex *H* equals and is similar to the pyramid with triangular base *HKL* and the vertex *D.* [!just XI.Def.10]
+Therefore the pyramid with triangular base {AEG} and vertex {H} equals and is similar to the pyramid with triangular base {HKL} and the vertex {D}. [!just XI.Def.10]
 
-And, since *HK* is parallel to *AB,* one of the sides of the triangle *ADB,* the triangle *ADB* is equiangular to the triangle *DHK,* and they have their sides proportional, therefore the triangle *ADB* is similar to the triangle *DHK.* For the same reason the triangle *DBC* is also similar to the triangle *DKL,* and the triangle *ADC* is similar to the triangle *DLH.* [!just I.29; VI.Def.1]
+And, since {HK} is parallel to {AB}, one of the sides of the triangle {ADB}, the triangle {ADB} is equiangular to the triangle {DHK}, and they have their sides proportional, therefore the triangle {ADB} is similar to the triangle {DHK}. For the same reason the triangle {DBC} is also similar to the triangle {DKL}, and the triangle {ADC} is similar to the triangle {DLH}. [!just I.29; VI.Def.1]
 
-Now, since the two straight lines *BA* and *AC* meeting one another are parallel to the two straight lines *KH* and *HL* meeting one another not in the same plane, therefore they contain equal angles. Therefore the angle *BAC* equals the angle *KHL.* [!just XI.10]
+Now, since the two straight lines {BA} and {AC} meeting one another are parallel to the two straight lines {KH} and {HL} meeting one another not in the same plane, therefore they contain equal angles. Therefore the angle {BAC|angBAC} equals the angle {KHL|angKHL}. [!just XI.10]
 
-And *BA* is to *AC* as *KH* is to *HL,* therefore the triangle *ABC* is similar to the triangle *HKL.*
+And {BA} is to {AC} as {KH} is to {HL}, therefore the triangle {ABC} is similar to the triangle {HKL}.
 
-Therefore the pyramid with the triangular base *ABC* and vertex *D* is similar to the pyramid with the triangular base *HKL* and vertex *D.*
+Therefore the pyramid with the triangular base {ABC} and vertex {D} is similar to the pyramid with the triangular base {HKL} and vertex {D}.
 
-But the pyramid with the triangular base *HKL* and vertex *D* was proved similar to the pyramid with the triangular base *AEG* and the vertex *H.* Therefore each of the pyramids *AEGH* and *HKLD* is similar to the whole pyramid *ABCD.*
+But the pyramid with the triangular base {HKL} and vertex {D} was proved similar to the pyramid with the triangular base {AEG} and the vertex {H}. Therefore each of the pyramids {AEGH|pAEGH} and {HKLD|pHKLD} is similar to the whole pyramid {ABCD}.
 
-Next, since *BF* equals *FC,* therefore the parallelogram *EBFG* is double the triangle *GFC.* And since, if there are two prisms of equal height, and one has a parallelogram as base and the other a triangle, and if the parallelogram is double the triangle, then the prisms are equal. Therefore the prism contained by the two triangles *BKF* and *EHG,* and the three parallelograms *EBFG, EBKH,* and *HKFG* equals the prism contained by the two triangles *GFC* and *HKL* and the three parallelograms *KFCL, LCGH,* and *HKFG.* [!just XI.39]
+Next, since {BF} equals {FC}, therefore the parallelogram {EBFG} is double the triangle {GFC}. And since, if there are two prisms of equal height, and one has a parallelogram as base and the other a triangle, and if the parallelogram is double the triangle, then the prisms are equal. Therefore the prism contained by the two triangles {BKF} and {EHG}, and the three parallelograms {EBFG}, {EBKH}, and {HKFG|HKFGt} equals the prism contained by the two triangles {GFC} and {HKL} and the three parallelograms {KFCL}, {LCGH}, and {HKFG|HKFGt}. [!just XI.39]
 
-And it is clear that each of the prisms, namely that with the parallelogram *EBFG* the base and the straight line *HK* its opposite, and that with the triangle *GFC* the base and the triangle *HKL* its opposite, is greater than each of the pyramids with the triangular bases *AEG* and *HKL* and vertices *H* and *D,* for, if we join the straight lines *EF* and *EK,* the prism with the parallelogram *EBFG* the base and the straight line *HK* opposite is greater than the pyramid with the triangular base *EBF* and vertex *K.*
+And it is clear that each of the prisms, namely that with the parallelogram {EBFG} the base and the straight line {HK} its opposite, and that with the triangle {GFC} the base and the triangle {HKL} its opposite, is greater than each of the pyramids with the triangular bases {AEG} and {HKL} and vertices {H} and {D}, for, if we join the straight lines {EF} and {EK}, the prism with the parallelogram {EBFG} the base and the straight line {HK} opposite is greater than the pyramid with the triangular base {EBF} and vertex {K}.
 
-But the pyramid with the triangular base *EBF* and vertex *A* equals the pyramid with the triangular base *AE* and the vertex *H,* for they are contained by equal and similar planes.
+But the pyramid with the triangular base {EBF} and vertex *A* equals the pyramid with the triangular base *AE* and the vertex {H}, for they are contained by equal and similar planes.
 
-Hence the prism with the parallelogram *EBF* the base and the straight line *HK* opposite is greater than the pyramid with the triangular base *AE* and vertex *H.* But the prism with the parallelogram *EBF* the base and the straight line *HK* opposite equals the prism with the triangle *GFC* the base and the triangle *HKL* opposite, and the pyramid with the triangular base *AEG* and vertex *H* equals the pyramid with the triangular base *HKL* and vertex *D.*
+Hence the prism with the parallelogram *EBF* the base and the straight line {HK} opposite is greater than the pyramid with the triangular base *AE* and vertex {H}. But the prism with the parallelogram *EBF* the base and the straight line {HK} opposite equals the prism with the triangle {GFC} the base and the triangle {HKL} opposite, and the pyramid with the triangular base {AEG} and vertex {H} equals the pyramid with the triangular base {HKL} and vertex {D}.
 
-Therefore the said two prisms are greater than the said two pyramids with the triangular bases *AEG* and *HKL* and vertices *H* and *D.* Therefore the whole pyramid with the triangular base *ABC* and vertex *D* has been divided into two pyramids equal to one another and into two equal prisms, and the two prisms are greater than the half of the whole pyramid.
+Therefore the said two prisms are greater than the said two pyramids with the triangular bases {AEG} and {HKL} and vertices {H} and {D}. Therefore the whole pyramid with the triangular base {ABC} and vertex {D} has been divided into two pyramids equal to one another and into two equal prisms, and the two prisms are greater than the half of the whole pyramid.
 
 Therefore, *any pyramid with a triangular base is divided into two pyramids equal and similar to one another, similar to the whole, and having triangular bases, and into two equal prisms, and the two prisms are greater than half of the whole pyramid.*
 

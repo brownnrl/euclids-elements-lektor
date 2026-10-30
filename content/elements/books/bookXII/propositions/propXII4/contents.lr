@@ -15,14 +15,38 @@ statement: If there are two pyramids of the same height with triangular bases, a
 ----
 proof:
 
-Let there be two pyramids of the same height with triangular bases *ABC* and *DEF* the points *G* and *H* the vertices, and let each of them be divided into two pyramids equal to one another and similar to the whole and into two equal prisms. [!just XII.3]
+Let there be two pyramids of the same height with triangular bases {ABC} and {DEF} the points {G} and {H} the vertices, and let each of them be divided into two pyramids equal to one another and similar to the whole and into two equal prisms. [!just XII.3]
 
-I say that the base *ABC* is to the base *DEF* as all the prisms in the pyramid *ABCG* to all the prisms, being equal in multitude, in the pyramid *DEFH.*
+I say that the base {ABC} is to the base {DEF} as all the prisms in the pyramid {ABCG} to all the prisms, being equal in multitude, in the pyramid {DEFH}.
 
 <center>
 <canvas id="canvas_0" width="550" height="280" tabindex="0"></canvas>
 <noscript><img alt="XII.4 diagram" src="propXII4.gif"/></noscript>
 <script type="text/javascript">
+    // XII.4 takes both pyramids as already divided by XII.3, so nothing is
+    // constructed: the walk is highlight beats over Joyce's figure.
+    //
+    // A polyhedron draws no highlight, so each pyramid the prose names gets
+    // a faceless wireframe twin, an octagon that walks all six edges (ABCG,
+    // DEFH, pAKLP, pPMNG, pDQRS, pSTUH). The four prisms are lit through
+    // their faces; PMOLt and STVRt are faceless twins of the shaded
+    // parallelograms PMOL and STVR. Every added element is transparent, so
+    // the resting figure is unchanged. The lemma's perpendiculars from G and
+    // H are not in Joyce's figure and are not drawn.
+    // Draggables (checked against the bundle): G (lineSlider), A, B, C, D,
+    // E, F, H (planeSliders), all givens; every other point is a midpoint.
+    var PRISM_LOC  = ["LOC","PMN","PMOLt","OCNM","LCNP"];
+    var PRISM_KBOL = ["KBOL","KPL","BMO","KBMP","PMOLt"];
+    var PRISM_RVF  = ["RVF","STU","STVRt","VFUT","RFUS"];
+    var PRISM_QEVR = ["QEVR","QSR","ETV","QETS","STVRt"];
+    var PRISMS = PRISM_LOC.concat(PRISM_KBOL, PRISM_RVF, PRISM_QEVR);
+    var SMALL  = ["pAKLP","pPMNG","pDQRS","pSTUH"];
+    var ALL = ["A","B","C","G","K","O","L","P","M","N",
+               "D","E","F","H","Q","V","R","S","T","U",
+               "PMOL","AKLP","PMNG","CB","CL","KB","MB","CN",
+               "STVR","DQRS","STUH","EF","FR","QE","TE","FU",
+               "BO","OC","AL","LO","AB","FV","PM","ST","GC",
+               "ABC","DEF","ABCG","DEFH"].concat(SMALL, PRISMS);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -71,33 +95,228 @@ I say that the base *ABC* is to the base *DEF* as all the prisms in the pyramid 
             "FR;line;connect;F,R",
             "QE;line;connect;Q,E",
             "TE;line;connect;T,E",
-            "FU;line;connect;F,U"
+            "FU;line;connect;F,U",
+            // Transparent highlight targets.
+            "BO;line;connect;B,O;0;0;0",
+            "OC;line;connect;O,C;0;0;0",
+            "AL;line;connect;A,L;0;0;0",
+            "LO;line;connect;L,O;0;0;0",
+            "AB;line;connect;A,B;0;0;0",
+            "FV;line;connect;F,V;0;0;0",
+            "PM;line;connect;P,M;0;0;0",
+            "ST;line;connect;S,T;0;0;0",
+            "GC;line;connect;G,C;0;0;0",
+            "ABC;polygon;triangle;A,B,C;0;0;0;0",
+            "DEF;polygon;triangle;D,E,F;0;0;0;0",
+            // The four prisms, face by face.
+            "LOC;polygon;triangle;L,O,C;0;0;0;0",
+            "PMN;polygon;triangle;P,M,N;0;0;0;0",
+            "PMOLt;polygon;quadrilateral;P,M,O,L;0;0;0;0",
+            "OCNM;polygon;quadrilateral;O,C,N,M;0;0;0;0",
+            "LCNP;polygon;quadrilateral;L,C,N,P;0;0;0;0",
+            "KBOL;polygon;quadrilateral;K,B,O,L;0;0;0;0",
+            "KPL;polygon;triangle;K,P,L;0;0;0;0",
+            "BMO;polygon;triangle;B,M,O;0;0;0;0",
+            "KBMP;polygon;quadrilateral;K,B,M,P;0;0;0;0",
+            "RVF;polygon;triangle;R,V,F;0;0;0;0",
+            "STU;polygon;triangle;S,T,U;0;0;0;0",
+            "STVRt;polygon;quadrilateral;S,T,V,R;0;0;0;0",
+            "VFUT;polygon;quadrilateral;V,F,U,T;0;0;0;0",
+            "RFUS;polygon;quadrilateral;R,F,U,S;0;0;0;0",
+            "QEVR;polygon;quadrilateral;Q,E,V,R;0;0;0;0",
+            "QSR;polygon;triangle;Q,S,R;0;0;0;0",
+            "ETV;polygon;triangle;E,T,V;0;0;0;0",
+            "QETS;polygon;quadrilateral;Q,E,T,S;0;0;0;0",
+            // Pyramid wireframes: each octagon walks the six edges.
+            "ABCG;polygon;octagon;A,B,C,G,A,C,G,B;0;0;0;0",
+            "DEFH;polygon;octagon;D,E,F,H,D,F,H,E;0;0;0;0",
+            "pAKLP;polygon;octagon;A,K,L,P,A,L,P,K;0;0;0;0",
+            "pPMNG;polygon;octagon;P,M,N,G,P,N,G,M;0;0;0;0",
+            "pDQRS;polygon;octagon;D,Q,R,S,D,R,S,Q;0;0;0;0",
+            "pSTUH;polygon;octagon;S,T,U,H,S,U,H,T;0;0;0;0"
         ],
+        aliases: { "LC": "CL", "BC": "CB", "CO": "OC" },
+        slides: [
+            { text: "“If there are two pyramids of the same height with triangular bases,”",
+              visible: ALL,
+              highlighted: ["ABCG","DEFH"],
+              justifications: [{ ref: "XII.4" }] },
+            { text: "“and each of them is divided into two pyramids equal and similar to one another and similar to the whole,”",
+              highlighted: SMALL },
+            { text: "“and into two equal prisms,”",
+              highlighted: PRISMS },
+            { text: "“then the base of the one pyramid is to the base of the other pyramid”",
+              highlighted: ["ABC","DEF"] },
+            { text: "“as all the prisms in the one pyramid are to all the prisms, being equal in multitude, in the other pyramid.”",
+              highlighted: PRISMS },
+            { text: "Let there be two pyramids of the same height with triangular bases {ABC} and {DEF}",
+              highlighted: ["ABCG","DEFH","ABC","DEF"] },
+            { text: "the points {G} and {H} the vertices,",
+              highlighted: ["G","H"] },
+            { text: "and let each of them be divided into two pyramids equal to one another and similar to the whole",
+              highlighted: SMALL },
+            { text: "and into two equal prisms.",
+              highlighted: PRISMS,
+              justifications: [{ claim: "two pyramids and two prisms in each", ref: "XII.3" }] },
+            { text: "I say that the base {ABC} is to the base {DEF} as all the prisms in the pyramid {ABCG}",
+              highlighted: ["ABC","DEF","ABCG"].concat(PRISM_LOC, PRISM_KBOL) },
+            { text: "to all the prisms, being equal in multitude, in the pyramid {DEFH}.",
+              highlighted: ["DEFH"].concat(PRISM_RVF, PRISM_QEVR) },
+            { text: "Since {BO} equals {OC}, and {AL} equals {LC}, therefore {LO} is parallel to {AB},",
+              highlighted: ["BO","OC","AL","CL","LO","AB"] },
+            { text: "and the triangle {ABC} is similar to the triangle {LOC}.",
+              highlighted: ["ABC","LOC"] },
+            { text: "For the same reason the triangle {DEF} is also similar to the triangle {RVF}.",
+              highlighted: ["DEF","RVF"] },
+            { text: "And, since {BC} is double {CO}, and {EF} double {FV}, therefore {BC} is to {CO} as {EF} is to {FV}.",
+              highlighted: ["CB","OC","EF","FV"] },
+            { text: "And on {BC} and {CO} are described the similar and similarly situated rectilinear figures {ABC} and {LOC},",
+              highlighted: ["CB","OC","ABC","LOC"] },
+            { text: "and on {EF} and {FV} the similar and similarly situated figures {DEF} and {RVF},",
+              highlighted: ["EF","FV","DEF","RVF"] },
+            { text: "therefore the triangle {ABC} is to the triangle {LOC} as the triangle {DEF} is to the triangle {RVF}.",
+              highlighted: ["ABC","LOC","DEF","RVF"],
+              justifications: [{ claim: "ABC : LOC = DEF : RVF", ref: "VI.22" }] },
+            { text: "Therefore, alternately the triangle {ABC} is to the triangle {DEF} as the triangle {LOC} is to the triangle {RVF}.",
+              highlighted: ["ABC","DEF","LOC","RVF"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "But the triangle {LOC} is to the triangle {RVF} as the prism with the triangle {LOC} the base and {PMN} opposite",
+              highlighted: PRISM_LOC },
+            { text: "is to the prism with the triangle {RVF} the base and {STU} opposite.",
+              highlighted: PRISM_LOC.concat(PRISM_RVF),
+              justifications: [{ claim: "triangles as prisms", ref: "Lemma" }] },
+            { text: "Therefore the triangle {ABC} is to the triangle {DEF} as the prism with the triangle {LOC} the base and {PMN} opposite",
+              highlighted: ["ABC","DEF"].concat(PRISM_LOC) },
+            { text: "is to the prism with the triangle {RVF} the base and {STU} opposite.",
+              highlighted: PRISM_LOC.concat(PRISM_RVF) },
+            { text: "But the said prisms are to one another",
+              highlighted: PRISM_LOC.concat(PRISM_RVF) },
+            { text: "as the prism with the parallelogram {KBOL} the base and the straight line {PM} opposite",
+              highlighted: PRISM_KBOL },
+            { text: "is to the prism with the parallelogram {QEVR} the base and the straight line {ST} opposite.",
+              highlighted: PRISM_KBOL.concat(PRISM_QEVR),
+              justifications: [{ claim: "each prism equals its twin", ref: "XI.39" }] },
+            { text: "Therefore the two prisms, that with the parallelogram {KBOL} the base and {PM} opposite,",
+              highlighted: PRISM_KBOL },
+            { text: "and that with the triangle {LOC} the base and {PMN} opposite,",
+              highlighted: PRISM_KBOL.concat(PRISM_LOC) },
+            { text: "are to the prisms with {QEVR} the base and the straight line {ST} opposite",
+              highlighted: PRISM_QEVR },
+            { text: "and with the triangle {RVF} the base and {STU} opposite in the same ratio.",
+              highlighted: PRISM_QEVR.concat(PRISM_RVF),
+              justifications: [{ claim: "sums in the same ratio", ref: "V.12" }] },
+            { text: "Therefore the base {ABC} is to the base {DEF} as the said two prisms are to the said two prisms.",
+              highlighted: ["ABC","DEF"].concat(PRISMS) },
+            { text: "And similarly, if the pyramids {PMNG|pPMNG} and {STUH|pSTUH} are divided into two prisms and two pyramids,",
+              highlighted: ["pPMNG","pSTUH"] },
+            { text: "then the base {PMN} is to the base {STU}",
+              highlighted: ["PMN","STU"] },
+            { text: "as the two prisms in the pyramid {PMNG|pPMNG} are to the two prisms in the pyramid {STUH|pSTUH}.",
+              highlighted: ["pPMNG","pSTUH"] },
+            { text: "But the base {PMN} is to the base {STU} as the base {ABC} is to the base {DEF},",
+              highlighted: ["PMN","STU","ABC","DEF"] },
+            { text: "for the triangles {PMN} and {STU} equal the triangles {LOC} and {RVF} respectively.",
+              highlighted: ["PMN","STU","LOC","RVF"] },
+            { text: "Therefore the base {ABC} is to the base {DEF} as the four prisms are to the four prisms.",
+              highlighted: ["ABC","DEF"].concat(PRISMS) },
+            { text: "And similarly, if we divide the remaining pyramids into two pyramids and into two prisms,",
+              highlighted: SMALL },
+            { text: "then the base {ABC} is to base the {DEF} as all the prisms in the pyramid {ABCG}",
+              highlighted: ["ABC","DEF","ABCG"] },
+            { text: "are to all the prisms, being equal in multitude, in the pyramid {DEFH}.",
+              highlighted: ["ABCG","DEFH"] },
+            { text: "But that the triangle {LOC} is to the triangle {RVF}",
+              highlighted: ["LOC","RVF"] },
+            { text: "as the prism with the triangle {LOC} the base and {PMN} opposite",
+              highlighted: PRISM_LOC },
+            { text: "is to the prism with the triangle {RVF} the base and {STU} opposite, we must prove as follows.",
+              highlighted: PRISM_LOC.concat(PRISM_RVF) },
+            { text: "In the same figure draw perpendiculars from {G} and {H} to the planes {ABC} and {DEF}.",
+              highlighted: ["G","H","ABC","DEF"] },
+            { text: "These are, of course, equal since the pyramids are of equal height by hypothesis.",
+              highlighted: ["ABCG","DEFH"],
+              justifications: [{ claim: "perpendiculars from G and H", ref: "XI.11" }] },
+            { text: "Now, since the two straight lines {GC} and the perpendicular from {G} are cut by the parallel planes {ABC} and {PMN},",
+              highlighted: ["GC","G","ABC","PMN"] },
+            { text: "therefore they are cut in the same ratios.",
+              highlighted: ["GC","ABC","PMN"],
+              justifications: [{ claim: "cut in the same ratios", ref: "XI.17" }] },
+            { text: "And {GC} is bisected by the plane {PMN} at {N},",
+              highlighted: ["GC","PMN","N"] },
+            { text: "therefore the perpendicular from {G} to the plane {ABC} is also bisected by the plane {PMN}.",
+              highlighted: ["G","ABC","PMN"] },
+            { text: "For the same reason the perpendicular from {H} to the plane {DEF} is also bisected by the plane {STU}.",
+              highlighted: ["H","DEF","STU"] },
+            { text: "And the perpendiculars from {G} and {H} to the planes {ABC} and {DEF} are equal,",
+              highlighted: ["G","H","ABC","DEF"] },
+            { text: "therefore the perpendiculars from the triangles {PMN} and {STU} to the planes {ABC} and {DEF} are also equal.",
+              highlighted: ["PMN","STU","ABC","DEF"] },
+            { text: "Therefore the prisms with the triangles {LOC} and {RVF} the bases, and {PMN} and {STU} opposite, are of equal height.",
+              highlighted: PRISM_LOC.concat(PRISM_RVF) },
+            { text: "Hence also the parallelepipedal solids described from the said prisms are of equal height",
+              highlighted: PRISM_LOC.concat(PRISM_RVF) },
+            { text: "and are to one another as their bases.",
+              highlighted: PRISM_LOC.concat(PRISM_RVF),
+              justifications: [{ claim: "parallelepipeds as their bases", ref: "XI.32" }] },
+            { text: "Therefore their halves, namely the said prisms, are to one another as the base {LOC} is to the base {RVF}.",
+              highlighted: PRISM_LOC.concat(PRISM_RVF),
+              justifications: [{ claim: "the prisms are their halves", ref: "XI.28" }] },
+            { text: "Therefore, if there are two pyramids of the same height with triangular bases,",
+              highlighted: ["ABCG","DEFH"] },
+            { text: "and each of them is divided into two pyramids equal and similar to one another and similar to the whole,",
+              highlighted: SMALL },
+            { text: "and into two equal prisms,",
+              highlighted: PRISMS },
+            { text: "then the base of the one pyramid is to the base of the other pyramid",
+              highlighted: ["ABC","DEF"] },
+            { text: "as all the prisms in the one pyramid are to all the prisms, being equal in multitude, in the other pyramid.",
+              highlighted: PRISMS,
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.4") return "#prop";
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.12":   "/elements/books/bookV/propositions/propV12/",
+        "V.16":   "/elements/books/bookV/propositions/propV16/",
+        "VI.22":  "/elements/books/bookVI/propositions/propVI22/",
+        "XI.11":  "/elements/books/bookXI/propositions/propXI11/",
+        "XI.17":  "/elements/books/bookXI/propositions/propXI17/",
+        "XI.28":  "/elements/books/bookXI/propositions/propXI28/",
+        "XI.32":  "/elements/books/bookXI/propositions/propXI32/",
+        "XI.39":  "/elements/books/bookXI/propositions/propXI39/",
+        "XII.3":  "/elements/books/bookXII/propositions/propXII3/"
     });
 </script>
 </center>
 
-Since *BO* equals *OC,* and *AL* equals *LC,* therefore *LO* is parallel to *AB,* and the triangle *ABC* is similar to the triangle *LOC.* For the same reason the triangle *DEF* is also similar to the triangle *RVF.*
+Since {BO} equals {OC}, and {AL} equals {LC}, therefore {LO} is parallel to {AB}, and the triangle {ABC} is similar to the triangle {LOC}. For the same reason the triangle {DEF} is also similar to the triangle {RVF}.
 
-And, since *BC* is double *CO,* and *EF* double *FV,* therefore *BC* is to *CO* as *EF* is to *FV.*
+And, since {BC} is double {CO}, and {EF} double {FV}, therefore {BC} is to {CO} as {EF} is to {FV}.
 
-And on *BC* and *CO* are described the similar and similarly situated rectilinear figures *ABC* and *LOC,* and on *EF* and *FV* the similar and similarly situated figures *DEF* and *RVF,* therefore the triangle *ABC* is to the triangle *LOC* as the triangle *DEF* is to the triangle *RVF.* [!just VI.22]
+And on {BC} and {CO} are described the similar and similarly situated rectilinear figures {ABC} and {LOC}, and on {EF} and {FV} the similar and similarly situated figures {DEF} and {RVF}, therefore the triangle {ABC} is to the triangle {LOC} as the triangle {DEF} is to the triangle {RVF}. [!just VI.22]
 
-Therefore, alternately the triangle *ABC* is to the triangle *DEF* as the triangle *LOC* is to the triangle *RVF.* But the triangle *LOC* is to the triangle *RVF* as the prism with the triangle *LOC* the base and *PMN* opposite is to the prism with the triangle *RVF* the base and *STU* opposite. <div class="just"><a href="/elements/books/bookV/propositions/propV16/">V.16</a><br><a href="/elements/books/bookXII/propositions/propXII4/#lemma">Lemma</a> below</div>
+Therefore, alternately the triangle {ABC} is to the triangle {DEF} as the triangle {LOC} is to the triangle {RVF}. But the triangle {LOC} is to the triangle {RVF} as the prism with the triangle {LOC} the base and {PMN} opposite is to the prism with the triangle {RVF} the base and {STU} opposite. <div class="just"><a href="/elements/books/bookV/propositions/propV16/">V.16</a><br><a href="/elements/books/bookXII/propositions/propXII4/#lemma">Lemma</a> below</div>
 
-Therefore the triangle *ABC* is to the triangle *DEF* as the prism with the triangle *LOC* the base and *PMN* opposite is to the prism with the triangle *RVF* the base and *STU* opposite.
+Therefore the triangle {ABC} is to the triangle {DEF} as the prism with the triangle {LOC} the base and {PMN} opposite is to the prism with the triangle {RVF} the base and {STU} opposite.
 
-But the said prisms are to one another as the prism with the parallelogram *KBOL* the base and the straight line *PM* opposite is to the prism with the parallelogram *QEVR* the base and the straight line *ST* opposite. [!just XI.39]
+But the said prisms are to one another as the prism with the parallelogram {KBOL} the base and the straight line {PM} opposite is to the prism with the parallelogram {QEVR} the base and the straight line {ST} opposite. [!just XI.39]
 
-Therefore the two prisms, that with the parallelogram *KBOL* the base and *PM* opposite, and that with the triangle *LOC* the base and *PMN* opposite, are to the prisms with *QEVR* the base and the straight line *ST* opposite and with the triangle *RVF* the base and *STU* opposite in the same ratio. [!just V.12]
+Therefore the two prisms, that with the parallelogram {KBOL} the base and {PM} opposite, and that with the triangle {LOC} the base and {PMN} opposite, are to the prisms with {QEVR} the base and the straight line {ST} opposite and with the triangle {RVF} the base and {STU} opposite in the same ratio. [!just V.12]
 
-Therefore the base *ABC* is to the base *DEF* as the said two prisms are to the said two prisms.
+Therefore the base {ABC} is to the base {DEF} as the said two prisms are to the said two prisms.
 
-And similarly, if the pyramids *PMNG* and *STUH* are divided into two prisms and two pyramids, then the base *PMN* is to the base *STU* as the two prisms in the pyramid *PMNG* are to the two prisms in the pyramid *STUH.*
+And similarly, if the pyramids {PMNG|pPMNG} and {STUH|pSTUH} are divided into two prisms and two pyramids, then the base {PMN} is to the base {STU} as the two prisms in the pyramid {PMNG|pPMNG} are to the two prisms in the pyramid {STUH|pSTUH}.
 
-But the base *PMN* is to the base *STU* as the base *ABC* is to the base *DEF,* for the triangles *PMN* and *STU* equal the triangles *LOC* and *RVF* respectively.
+But the base {PMN} is to the base {STU} as the base {ABC} is to the base {DEF}, for the triangles {PMN} and {STU} equal the triangles {LOC} and {RVF} respectively.
 
-Therefore the base *ABC* is to the base *DEF* as the four prisms are to the four prisms. And similarly, if we divide the remaining pyramids into two pyramids and into two prisms, then the base *ABC* is to base the *DEF* as all the prisms in the pyramid *ABCG* are to all the prisms, being equal in multitude, in the pyramid *DEFH.*
+Therefore the base {ABC} is to the base {DEF} as the four prisms are to the four prisms. And similarly, if we divide the remaining pyramids into two pyramids and into two prisms, then the base {ABC} is to base the {DEF} as all the prisms in the pyramid {ABCG} are to all the prisms, being equal in multitude, in the pyramid {DEFH}.
 
 <br clear="all">
 
@@ -107,19 +326,19 @@ Therefore the base *ABC* is to the base *DEF* as the four prisms are to the four
 
 ### Lemma
 
-But that the triangle *LOC* is to the triangle *RVF* as the prism with the triangle *LOC* the base and *PMN* opposite is to the prism with the triangle *RVF* the base and *STU* opposite, we must prove as follows.
+But that the triangle {LOC} is to the triangle {RVF} as the prism with the triangle {LOC} the base and {PMN} opposite is to the prism with the triangle {RVF} the base and {STU} opposite, we must prove as follows.
 
-In the same figure draw perpendiculars from *G* and *H* to the planes *ABC* and *DEF.* These are, of course, equal since the pyramids are of equal height by hypothesis. [!just XI.11]
+In the same figure draw perpendiculars from {G} and {H} to the planes {ABC} and {DEF}. These are, of course, equal since the pyramids are of equal height by hypothesis. [!just XI.11]
 
-Now, since the two straight lines *GC* and the perpendicular from *G* are cut by the parallel planes *ABC* and *PMN,* therefore they are cut in the same ratios. [!just XI.17]
+Now, since the two straight lines {GC} and the perpendicular from {G} are cut by the parallel planes {ABC} and {PMN}, therefore they are cut in the same ratios. [!just XI.17]
 
-And *GC* is bisected by the plane *PMN* at *N,* therefore the perpendicular from *G* to the plane *ABC* is also bisected by the plane *PMN.* For the same reason the perpendicular from *H* to the plane *DEF* is also bisected by the plane *STU.*
+And {GC} is bisected by the plane {PMN} at {N}, therefore the perpendicular from {G} to the plane {ABC} is also bisected by the plane {PMN}. For the same reason the perpendicular from {H} to the plane {DEF} is also bisected by the plane {STU}.
 
-And the perpendiculars from *G* and *H* to the planes *ABC* and *DEF* are equal, therefore the perpendiculars from the triangles *PMN* and *STU* to the planes *ABC* and *DEF* are also equal.
+And the perpendiculars from {G} and {H} to the planes {ABC} and {DEF} are equal, therefore the perpendiculars from the triangles {PMN} and {STU} to the planes {ABC} and {DEF} are also equal.
 
-Therefore the prisms with the triangles *LOC* and *RVF* the bases, and *PMN* and *STU* opposite, are of equal height.
+Therefore the prisms with the triangles {LOC} and {RVF} the bases, and {PMN} and {STU} opposite, are of equal height.
 
-Hence also the parallelepipedal solids described from the said prisms are of equal height and are to one another as their bases. Therefore their halves, namely the said prisms, are to one another as the base *LOC* is to the base *RVF.* [!just XI.32; XI.28]
+Hence also the parallelepipedal solids described from the said prisms are of equal height and are to one another as their bases. Therefore their halves, namely the said prisms, are to one another as the base {LOC} is to the base {RVF}. [!just XI.32; XI.28]
 
 Therefore, *if there are two pyramids of the same height with triangular bases, and each of them is divided into two pyramids equal and similar to one another and similar to the whole, and into two equal prisms, then the base of the one pyramid is to the base of the other pyramid as all the prisms in the one pyramid are to all the prisms, being equal in multitude, in the other pyramid.*
 
