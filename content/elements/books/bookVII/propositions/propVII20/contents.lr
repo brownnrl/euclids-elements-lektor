@@ -15,14 +15,28 @@ statement: The least numbers of those which have the same ratio with them measur
 ----
 proof:
 
-Let *CD* and *EF* be the least numbers of those which have the same ratio with *A* and *B.*
+Let {CD} and {EF} be the least numbers of those which have the same ratio with {A} and {B}.
 
-I say that *CD* measures *A* the same number of times that *EF* measures *B.*
+I say that {CD} measures {A} the same number of times that {EF} measures {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="160" height="280" tabindex="0"></canvas>
 <noscript><img alt="VII.20 diagram" src="propVII20.gif"/></noscript>
 <script type="text/javascript">
+    // A and B are the given numbers, CD and EF the least numbers in the same
+    // ratio, and G, H the division points of the reductio, which supposes CD
+    // to be parts of A. Line segments only, so the walk is highlight beats.
+    //
+    // Added to Joyce's figure, all transparent (;0;0;0): the parts CG, GD,
+    // EH and HF the proof names, so they can light.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2 (zero-colour handles) and the points C and E, all givens. D, F
+    // (cutoff / proportion) and the midpoints G, H are derived and listed per
+    // slide; G and H join with the division and are withdrawn once the
+    // reductio closes.
+    var GIVEN = ["A","B","C","D","CD","E","F","EF"];
+    var PARTS = GIVEN.concat(["G","H","CG","GD","EH","HF"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -50,25 +64,143 @@ I say that *CD* measures *A* the same number of times that *EF* measures *B.*
             "E;point;lineSlider;E0,E3,130,30",
             "F;point;proportion;A1,A2,B1,B2,C,D,E,E3",
             "EF;line;connect;E,F",
-            "H;point;midpoint;EF"
+            "H;point;midpoint;EF",
+            // Hover / highlight targets only — CD and EF draw these parts.
+            "CG;line;connect;C,G;0;0;0",
+            "GD;line;connect;G,D;0;0;0",
+            "EH;line;connect;E,H;0;0;0",
+            "HF;line;connect;H,F;0;0;0"
         ],
+        slides: [
+            { text: "“The least numbers of those which have the same ratio with them”",
+              visible: GIVEN,
+              highlighted: ["CD","EF"] },
+            { text: "“measure those which have the same ratio with them the same number of times;”",
+              visible: GIVEN,
+              highlighted: ["CD","EF","A","B"] },
+            { text: "“the greater the greater;”",
+              visible: GIVEN,
+              highlighted: ["CD","A"] },
+            { text: "“and the less the less.”",
+              visible: GIVEN,
+              highlighted: ["EF","B"],
+              justifications: [{ ref: "VII.20" }] },
+            { text: "Let {CD} and {EF} be the least numbers of those which have the same ratio with {A} and {B}.",
+              visible: GIVEN,
+              highlighted: ["CD","EF","A","B"] },
+            { text: "I say that {CD} measures {A} the same number of times that {EF} measures {B}.",
+              visible: GIVEN,
+              highlighted: ["CD","A","EF","B"] },
+            { text: "Now {CD} is not parts of {A}.",
+              visible: GIVEN,
+              highlighted: ["CD","A"] },
+            { text: "If possible, let it be so.",
+              visible: GIVEN,
+              highlighted: ["CD","A"] },
+            { text: "Therefore {EF} is also the same parts of {B} that {CD} is of {A}.",
+              visible: GIVEN,
+              highlighted: ["EF","B","CD","A"],
+              justifications: [{ ref: "VII.13" }, { ref: "VII.Def.20" }] },
+            { text: "Therefore there are as many parts of {B} in {EF} are there are parts of {A} in {CD}.",
+              visible: GIVEN,
+              highlighted: ["B","EF","A","CD"] },
+            { text: "Divide {CD} into the parts of {A}, namely {CG} and {GD},",
+              visible: GIVEN.concat(["G","CG","GD"]),
+              highlighted: ["CG","GD"],
+              transition: { animations: [
+                  { elem: "G", name: geomlib.A.Point.appear } ] } },
+            { text: "and divide {EF} into the parts of {B}, namely {EH} and {HF}.",
+              visible: PARTS,
+              highlighted: ["EH","HF"],
+              transition: { animations: [
+                  { elem: "H", name: geomlib.A.Point.appear } ] } },
+            { text: "Thus the multitude of {CG} and {GD} equals the multitude of {EH} and {HF}.",
+              visible: PARTS,
+              highlighted: ["CG","GD","EH","HF"] },
+            { text: "Now, since the numbers {CG} and {GD} equal one another, and the numbers {EH} and {HF} also equal one another,",
+              visible: PARTS,
+              highlighted: ["CG","GD","EH","HF"] },
+            { text: "while the multitude of {CG} and {GD} equals the multitude of {EH} and {HF},",
+              visible: PARTS,
+              highlighted: ["CG","GD","EH","HF"] },
+            { text: "therefore {CG} is to {EH} as {GD} is to {HF}.",
+              visible: PARTS,
+              highlighted: ["CG","EH","GD","HF"] },
+            { text: "Since one of the antecedents is to one of the consequents",
+              visible: PARTS,
+              highlighted: ["CG","EH"] },
+            { text: "as the sum of the antecedents is to the sum of the consequents,",
+              visible: PARTS,
+              highlighted: ["CD","EF"] },
+            { text: "therefore {CG} is to {EH} as {CD} is to {EF}.",
+              visible: PARTS,
+              highlighted: ["CG","EH","CD","EF"],
+              justifications: [{ ref: "VII.12" }] },
+            { text: "Therefore {CG} and {EH} are in the same ratio with {CD} and {EF},",
+              visible: PARTS,
+              highlighted: ["CG","EH","CD","EF"] },
+            { text: "being less than they, which is impossible,",
+              visible: PARTS,
+              highlighted: ["CG","EH"] },
+            { text: "for by hypothesis {CD} and {EF} are the least numbers of those which have the same ratio with them.",
+              visible: PARTS,
+              highlighted: ["CD","EF"] },
+            // The reductio is closed: the supposed division G, H is withdrawn.
+            { text: "Therefore {CD} is not parts of {A}, therefore it is a part of it.",
+              visible: GIVEN,
+              highlighted: ["CD","A"],
+              justifications: [{ ref: "VII.4" }] },
+            { text: "And {EF} is the same part of {B} that {CD} is of {A},",
+              visible: GIVEN,
+              highlighted: ["EF","B","CD","A"],
+              justifications: [{ ref: "VII.13" }, { ref: "VII.Def.20" }] },
+            { text: "therefore {CD} measures {A} the same number of times that {EF} measures {B}.",
+              visible: GIVEN,
+              highlighted: ["CD","A","EF","B"] },
+            { text: "Therefore, the least numbers of those which have the same ratio with them",
+              visible: GIVEN,
+              highlighted: ["CD","EF"] },
+            { text: "measure those which have the same ratio with them the same number of times;",
+              visible: GIVEN,
+              highlighted: ["CD","EF","A","B"] },
+            { text: "the greater the greater;",
+              visible: GIVEN,
+              highlighted: ["CD","A"] },
+            { text: "and the less the less.",
+              visible: GIVEN,
+              highlighted: ["EF","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.20") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.4":      "/elements/books/bookVII/propositions/propVII4/",
+        "VII.12":     "/elements/books/bookVII/propositions/propVII12/",
+        "VII.13":     "/elements/books/bookVII/propositions/propVII13/",
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/"
     });
 </script>
 </figure>
 
-Now *CD* is not parts of *A.* If possible, let it be so. Therefore *EF* is also the same parts of *B* that *CD* is of *A.* [!just VII.13; VII.Def.20]
+Now {CD} is not parts of {A}. If possible, let it be so. Therefore {EF} is also the same parts of {B} that {CD} is of {A}. [!just VII.13; VII.Def.20]
 
-Therefore there are as many parts of *B* in *EF* are there are parts of *A* in *CD.*
+Therefore there are as many parts of {B} in {EF} are there are parts of {A} in {CD}.
 
-Divide *CD* into the parts of *A,* namely *CG* and *GD,* and divide *EF* into the parts of *B,* namely *EH* and *HF.* Thus the multitude of *CG* and *GD* equals the multitude of *EH* and *HF.*
+Divide {CD} into the parts of {A}, namely {CG} and {GD}, and divide {EF} into the parts of {B}, namely {EH} and {HF}. Thus the multitude of {CG} and {GD} equals the multitude of {EH} and {HF}.
 
-Now, since the numbers *CG* and *GD* equal one another, and the numbers *EH* and *HF* also equal one another, while the multitude of *CG* and *GD* equals the multitude of *EH* and *HF,* therefore *CG* is to *EH* as *GD* is to *HF.*
+Now, since the numbers {CG} and {GD} equal one another, and the numbers {EH} and {HF} also equal one another, while the multitude of {CG} and {GD} equals the multitude of {EH} and {HF}, therefore {CG} is to {EH} as {GD} is to {HF}.
 
-Since one of the antecedents is to one of the consequents as the sum of the antecedents is to the sum of the consequents, therefore *CG* is to *EH* as *CD* is to *EF.* [!just VII.12]
+Since one of the antecedents is to one of the consequents as the sum of the antecedents is to the sum of the consequents, therefore {CG} is to {EH} as {CD} is to {EF}. [!just VII.12]
 
-Therefore *CG* and *EH* are in the same ratio with *CD* and *EF,* being less than they, which is impossible, for by hypothesis *CD* and *EF* are the least numbers of those which have the same ratio with them. Therefore *CD* is not parts of *A,* therefore it is a part of it. [!just VII.4]
+Therefore {CG} and {EH} are in the same ratio with {CD} and {EF}, being less than they, which is impossible, for by hypothesis {CD} and {EF} are the least numbers of those which have the same ratio with them. Therefore {CD} is not parts of {A}, therefore it is a part of it. [!just VII.4]
 
-And *EF* is the same part of *B* that *CD* is of *A,* therefore *CD* measures *A* the same number of times that *EF* measures *B.* [!just VII.13; VII.Def.20]
+And {EF} is the same part of {B} that {CD} is of {A}, therefore {CD} measures {A} the same number of times that {EF} measures {B}. [!just VII.13; VII.Def.20]
 
 Therefore, *the least numbers of those which have the same ratio with them measure those which have the same ratio with them the same number of times; the greater the greater; and the less the less.*
 
