@@ -15,14 +15,30 @@ statement: If two straight lines incommensurable in square which make the sum of
 ----
 proof:
 
-Let two straight lines *AB* and *BC* incommensurable in square and satisfying the given conditions be added together. [!just X.35]
+Let two straight lines {AB} and {BC} incommensurable in square and satisfying the given conditions be added together. [!just X.35]
 
-I say that *AC* is irrational.
+I say that {AC} is irrational.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="210" height="350" tabindex="0"></canvas>
 <noscript><img alt="X.41 diagram" src="propX41.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the line AC (through B), and on the rational line DE
+    // the rectangle DF (DEFG, random face) with the rectangle GH (FGKH,
+    // random face) above it. Added, all hidden at rest: a solid twin DE
+    // (initiallyHidden) so the rational line is set out before DF is applied
+    // to it; transparent targets AB, BC, DG, GF, GK, DK (;0;0;0); faceless,
+    // strokeless twins DFh / GHh / DHh carrying the highlights of DF, GH and
+    // the whole DH (#140), reached with the display override ({DF|DFh}).
+    // Joyce's "the side of the sum two medial areas" is left literal.
+    //
+    // Draggables (checked against the bundle): A, B, C (the givens) and D, E
+    // (line sliders), which only arrive with "Set out a rational straight
+    // line DE", so they are deferred. G, F, K, H are derived and listed.
+    var GIVEN = ["A","B","C","AC","AB","BC"];
+    var RAT   = GIVEN.concat(["D","E","DE"]);
+    var DF    = RAT.concat(["G","F","DEFG","DFh","DG","GF"]);
+    var ALL   = DF.concat(["K","H","FGKH","GHh","GK","DK","DHh"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -48,23 +64,143 @@ I say that *AC* is irrational.
             "K';point;proportion;G,F,B,C,A,B,G,D';0;0",
             "K;point;extend;D,K',G,K'",
             "FGKH;polygon;parallelogram;F,G,K;0;0;black;random",
-            "H;point;vertex;FGKH,4"
+            "H;point;vertex;FGKH,4",
+            // Slide-only twins and highlight targets.
+            "DE;line;connect;D,E",
+            "AB;line;connect;A,B;0;0;0",
+            "BC;line;connect;B,C;0;0;0",
+            "DG;line;connect;D,G;0;0;0",
+            "GF;line;connect;G,F;0;0;0",
+            "GK;line;connect;G,K;0;0;0",
+            "DK;line;connect;D,K;0;0;0",
+            "DFh;polygon;quadrilateral;D,E,F,G;0;0;0;0",
+            "GHh;polygon;parallelogram;F,G,K;0;0;0;0",
+            "DHh;polygon;quadrilateral;D,E,H,K;0;0;0;0"
         ],
+        initiallyHidden: ["DE"],
+        deferDraggables: ["D","E"],
+        slides: [
+            { text: "“If two straight lines incommensurable in square which make the sum of the squares on them medial",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "X.41" }] },
+            { text: "and the rectangle contained by them medial and also incommensurable with the sum of the squares on them",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "are added together, then the whole straight line is irrational;",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "let it be called the side of the sum of two medial areas.”",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Let two straight lines {AB} and {BC} incommensurable in square and satisfying the given conditions be added together.",
+              visible: GIVEN,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "AB, BC as required", ref: "X.35" }] },
+            { text: "I say that {AC} is irrational.",
+              visible: GIVEN,
+              highlighted: ["AC"] },
+            { text: "Set out a rational straight line {DE}.",
+              visible: RAT,
+              highlighted: ["DE"],
+              transition: { animations: [
+                  { elem: "DE", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Apply to {DE} the rectangle {DF|DFh} equal to the sum of the squares on {AB} and {BC},",
+              visible: DF,
+              highlighted: ["DE","AB","BC"],
+              transition: { animations: [
+                  { elem: "DEFG", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "and apply to {DE} the rectangle {GH|GHh} equal to twice the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["DE","AB","BC"],
+              transition: { animations: [
+                  { elem: "FGKH", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Then the whole {DH|DHh} equals the square on {AC}.",
+              visible: ALL,
+              highlighted: ["DHh","AC"],
+              justifications: [{ claim: "AC² = AB² + BC² + 2 AB·BC", ref: "II.4" }] },
+            { text: "Now, since the sum of the squares on {AB} and {BC} is medial, and equals {DF|DFh},",
+              visible: ALL,
+              highlighted: ["AB","BC","DFh"] },
+            { text: "therefore {DF|DFh} is also medial.",
+              visible: ALL,
+              highlighted: ["DFh"] },
+            { text: "And it is applied to the rational straight line {DE},",
+              visible: ALL,
+              highlighted: ["DFh","DE"] },
+            { text: "therefore {DG} is rational and incommensurable in length with {DE}.",
+              visible: ALL,
+              highlighted: ["DG","DE"],
+              justifications: [{ claim: "DG rational, incommensurable with DE", ref: "X.22" }] },
+            { text: "For the same reason {GK} is also rational and incommensurable in length with {GF}, that is, {DE}.",
+              visible: ALL,
+              highlighted: ["GK","GF","DE"],
+              justifications: [{ claim: "GK rational, incommensurable with GF", ref: "X.22" }] },
+            { text: "Since the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore {DF|DFh} is incommensurable with {GH|GHh},",
+              visible: ALL,
+              highlighted: ["DFh","GHh"] },
+            { text: "so that {DG} is also incommensurable with {GK}.",
+              visible: ALL,
+              highlighted: ["DG","GK"],
+              justifications: [{ claim: "DF : GH = DG : GK", ref: "VI.1" },
+                               { claim: "DG, GK incommensurable", ref: "X.11" }] },
+            { text: "And they are rational, therefore {DG} and {GK} are rational straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["DG","GK"] },
+            { text: "Therefore {DK} is irrational and what is called binomial.",
+              visible: ALL,
+              highlighted: ["DK"],
+              justifications: [{ claim: "DK binomial", ref: "X.36" }] },
+            { text: "But {DE} is rational, therefore {DH|DHh} is irrational,",
+              visible: ALL,
+              highlighted: ["DE","DHh"] },
+            { text: "and the side of the square which equals it is irrational.",
+              visible: ALL,
+              highlighted: ["DHh"],
+              justifications: [{ claim: "the side of DH irrational", ref: "X.Def.I.4" }] },
+            { text: "But {AC} is the side of the square equal to {HD|DHh}, therefore {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC","DHh"] },
+            { text: "Let it be called the side of the sum two medial areas.",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.41") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification
+    // (shared by both canvases on this page).
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.4":      "/elements/books/bookII/propositions/propII4/",
+        "VI.1":      "/elements/books/bookVI/propositions/propVI1/",
+        "X.11":      "/elements/books/bookX/propositions/propX11/",
+        "X.22":      "/elements/books/bookX/propositions/propX22/",
+        "X.35":      "/elements/books/bookX/propositions/propX35/",
+        "X.36":      "/elements/books/bookX/propositions/propX36/",
+        "X.Def.I.4": "/elements/books/bookX/definitions/defX.I.4/"
     });
 </script>
 </figure>
 
-Set out a rational straight line *DE*. Apply to *DE* the rectangle *DF* equal to the sum of the squares on *AB* and *BC*, and apply to *DE* the rectangle *GH* equal to twice the rectangle *AB* by *BC*. Then the whole *DH* equals the square on *AC*. [!just II.4]
+Set out a rational straight line {DE}. Apply to {DE} the rectangle {DF|DFh} equal to the sum of the squares on {AB} and {BC}, and apply to {DE} the rectangle {GH|GHh} equal to twice the rectangle {AB} by {BC}. Then the whole {DH|DHh} equals the square on {AC}. [!just II.4]
 
-Now, since the sum of the squares on *AB* and *BC* is medial, and equals *DF*, therefore *DF* is also medial. And it is applied to the rational straight line *DE*, therefore *DG* is rational and incommensurable in length with *DE*. For the same reason *GK* is also rational and incommensurable in length with *GF*, that is, *DE*. [!just X.22]
+Now, since the sum of the squares on {AB} and {BC} is medial, and equals {DF|DFh}, therefore {DF|DFh} is also medial. And it is applied to the rational straight line {DE}, therefore {DG} is rational and incommensurable in length with {DE}. For the same reason {GK} is also rational and incommensurable in length with {GF}, that is, {DE}. [!just X.22]
 
-Since the sum of the squares on *AB* and *BC* is incommensurable with twice the rectangle *AB* by *BC*, therefore *DF* is incommensurable with *GH*, so that *DG* is also incommensurable with *GK*. [!just VI.1; X.11]
+Since the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC}, therefore {DF|DFh} is incommensurable with {GH|GHh}, so that {DG} is also incommensurable with {GK}. [!just VI.1; X.11]
 
-And they are rational, therefore *DG* and *GK* are rational straight lines commensurable in square only. Therefore *DK* is irrational and what is called binomial. [!just X.36]
+And they are rational, therefore {DG} and {GK} are rational straight lines commensurable in square only. Therefore {DK} is irrational and what is called binomial. [!just X.36]
 
-But *DE* is rational, therefore *DH* is irrational, and the side of the square which equals it is irrational. [!just X.Def.I.4]
+But {DE} is rational, therefore {DH|DHh} is irrational, and the side of the square which equals it is irrational. [!just X.Def.I.4]
 
-But *AC* is the side of the square equal to *HD*, therefore *AC* is irrational. Let it be called the side of the sum two medial areas.
+But {AC} is the side of the square equal to {HD|DHh}, therefore {AC} is irrational. Let it be called the side of the sum two medial areas.
 
 <div class="qed">Q.E.D.</div>
 ----
@@ -80,18 +216,30 @@ statement: And that <i>the aforesaid irrational straight lines are divided only 
 ----
 proof:
 
-Set out the straight line *AB*, cut the whole into unequal parts at each of the points *C* and *D*, and let *AC* be supposed greater than *DB*.
+Set out the straight line {AB:canvas_1}, cut the whole into unequal parts at each of the points {C:canvas_1} and {D:canvas_1}, and let {AC:canvas_1} be supposed greater than {DB:canvas_1}.
 
-I say that the sum of the squares on *AC* and *CB* is greater than the sum of the squares on *AD* and *DB*.
+I say that the sum of the squares on {AC:canvas_1} and {CB:canvas_1} is greater than the sum of the squares on {AD:canvas_1} and {DB:canvas_1}.
 
-Bisect *AB* at *E*.
+Bisect {AB:canvas_1} at {E:canvas_1}.
 
-Since *AC* is greater than *DB*, subtract *DC* from each, therefore the remainder *AD* is greater than the remainder *CB*.
+Since {AC:canvas_1} is greater than {DB:canvas_1}, subtract {DC:canvas_1} from each, therefore the remainder {AD:canvas_1} is greater than the remainder {CB:canvas_1}.
 
 <figure class="diagram">
 <canvas id="canvas_1" width="270" height="60" tabindex="0"></canvas>
 <noscript><img alt="X.41 lemma diagram" src="propX41l.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's lemma figure: AB cut at C and D, bisected at E. Added, all
+    // invisible at rest: transparent highlight targets AC, CB, AD, DB, DC,
+    // AE, EB, DE, EC (;0;0;0). The prose above this canvas binds to it
+    // explicitly ({AB:canvas_1}).
+    //
+    // Draggables (checked against the bundle): A, B (the given line) and
+    // C, D (line sliders), which only arrive with "cut the whole into
+    // unequal parts", so they are deferred. E is a derived midpoint, listed
+    // from "Bisect".
+    var L_AB = ["A","B","AB"];
+    var L_CD = L_AB.concat(["C","D","AC","CB","AD","DB","DC"]);
+    var L_E  = L_CD.concat(["E","AE","EB","DE","EC"]);
     geomlib.init({
         canvasid: "canvas_1",
         background: "35,19,100",
@@ -104,18 +252,113 @@ Since *AC* is greater than *DB*, subtract *DC* from each, therefore the remainde
             "AB;line;connect;A,B",
             "C;point;lineSlider;A0,A3,180,0",
             "D;point;lineSlider;A0,A3,100,0",
-            "E;point;midpoint;A,B"
+            "E;point;midpoint;A,B",
+            // Highlight targets only — invisible at rest.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0",
+            "DC;line;connect;D,C;0;0;0",
+            "AE;line;connect;A,E;0;0;0",
+            "EB;line;connect;E,B;0;0;0",
+            "DE;line;connect;D,E;0;0;0",
+            "EC;line;connect;E,C;0;0;0"
         ],
+        deferDraggables: ["C","D"],
+        slides: [
+            { text: "“And that the aforesaid irrational straight lines are divided only in one way",
+              visible: L_E,
+              highlighted: ["AB"],
+              justifications: [{ ref: "Lemma" }] },
+            { text: "into the straight lines of which they are the sum and which produce the types in question",
+              visible: L_E,
+              highlighted: ["AC","CB"] },
+            { text: "we will now prove after premising the following lemma.”",
+              visible: L_E,
+              highlighted: ["AB"] },
+            { text: "Set out the straight line {AB},",
+              visible: L_AB,
+              highlighted: ["AB"],
+              transition: { animations: [
+                  { elem: "AB", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "cut the whole into unequal parts at each of the points {C} and {D},",
+              visible: L_CD,
+              highlighted: ["C","D"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "C", name: geomlib.A.Point.appear },
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "and let {AC} be supposed greater than {DB}.",
+              visible: L_CD,
+              highlighted: ["AC","DB"] },
+            { text: "I say that the sum of the squares on {AC} and {CB} is greater than the sum of the squares on {AD} and {DB}.",
+              visible: L_CD,
+              highlighted: ["AC","CB","AD","DB"] },
+            { text: "Bisect {AB} at {E}.",
+              visible: L_E,
+              highlighted: ["AB","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Point.appear } ] } },
+            { text: "Since {AC} is greater than {DB}, subtract {DC} from each,",
+              visible: L_E,
+              highlighted: ["AC","DB","DC"] },
+            { text: "therefore the remainder {AD} is greater than the remainder {CB}.",
+              visible: L_E,
+              highlighted: ["AD","CB"] },
+            { text: "But {AE} equals {EB}, therefore {DE} is less than {EC}.",
+              visible: L_E,
+              highlighted: ["AE","EB","DE","EC"] },
+            { text: "Therefore the points {C} and {D} are not equidistant from the point of bisection.",
+              visible: L_E,
+              highlighted: ["C","D","E"] },
+            { text: "Since the rectangle {AC} by {CB} together with the square on {EC} equals the square on {EB},",
+              visible: L_E,
+              highlighted: ["AC","CB","EC","EB"],
+              justifications: [{ claim: "AC·CB + EC² = EB²", ref: "II.5" }] },
+            { text: "and, further, the rectangle {AD} by {DB} together with the square on {DE} equals the square on {EB},",
+              visible: L_E,
+              highlighted: ["AD","DB","DE","EB"],
+              justifications: [{ claim: "AD·DB + DE² = EB²", ref: "II.5" }] },
+            { text: "therefore the rectangle {AC} by {CB} together with the square on {EC}",
+              visible: L_E,
+              highlighted: ["AC","CB","EC"] },
+            { text: "equals the rectangle {AD} by {DB} together with the square on {DE}.",
+              visible: L_E,
+              highlighted: ["AD","DB","DE"] },
+            { text: "And of these the square on {DE} is less than the square on {EC},",
+              visible: L_E,
+              highlighted: ["DE","EC"] },
+            { text: "therefore the remainder, the rectangle {AC} by {CB}, is also less than the rectangle {AD} by {DB}",
+              visible: L_E,
+              highlighted: ["AC","CB","AD","DB"] },
+            { text: "so that twice the rectangle {AC} by {CB} is also less than twice the rectangle {AD} by {DB}.",
+              visible: L_E,
+              highlighted: ["AC","CB","AD","DB"] },
+            { text: "Therefore the remainder, the sum of the squares on {AC} and {CB},",
+              visible: L_E,
+              highlighted: ["AC","CB"] },
+            { text: "is greater than the sum of the squares on {AD} and {DB}.",
+              visible: L_E,
+              highlighted: ["AD","DB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "Lemma") return "#lemma";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    Object.assign(window.eucrefs, {
+        "II.5": "/elements/books/bookII/propositions/propII5/"
     });
 </script>
 </figure>
 
-But *AE* equals *EB*, therefore *DE* is less than *EC*. Therefore the points *C* and *D* are not equidistant from the point of bisection.
+But {AE} equals {EB}, therefore {DE} is less than {EC}. Therefore the points {C} and {D} are not equidistant from the point of bisection.
 
-Since the rectangle *AC* by *CB* together with the square on *EC* equals the square on *EB*, and, further, the rectangle *AD* by *DB* together with the square on *DE* equals the square on *EB*, therefore the rectangle *AC* by *CB* together with the square on *EC* equals the rectangle *AD* by *DB* together with the square on *DE*. [!just II.5]
+Since the rectangle {AC} by {CB} together with the square on {EC} equals the square on {EB}, and, further, the rectangle {AD} by {DB} together with the square on {DE} equals the square on {EB}, therefore the rectangle {AC} by {CB} together with the square on {EC} equals the rectangle {AD} by {DB} together with the square on {DE}. [!just II.5]
 
-And of these the square on *DE* is less than the square on *EC*, therefore the remainder, the rectangle *AC* by *CB*, is also less than the rectangle *AD* by *DB* so that twice the rectangle *AC* by *CB* is also less than twice the rectangle *AD* by *DB*.
+And of these the square on {DE} is less than the square on {EC}, therefore the remainder, the rectangle {AC} by {CB}, is also less than the rectangle {AD} by {DB} so that twice the rectangle {AC} by {CB} is also less than twice the rectangle {AD} by {DB}.
 
-Therefore the remainder, the sum of the squares on *AC* and *CB*, is greater than the sum of the squares on *AD* and *DB*.
+Therefore the remainder, the sum of the squares on {AC} and {CB}, is greater than the sum of the squares on {AD} and {DB}.
 
 <div class="qed">Q.E.D.</div>

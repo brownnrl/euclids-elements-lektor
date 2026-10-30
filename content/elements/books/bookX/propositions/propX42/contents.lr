@@ -15,16 +15,27 @@ statement: A binomial straight line is divided into its terms at one point only.
 ----
 proof:
 
-Let *AB* be a binomial straight line divided into its terms at *C*. Then *AC* and *CB* are rational straight lines commensurable in square only.
+Let {AB} be a binomial straight line divided into its terms at {C}. Then {AC} and {CB} are rational straight lines commensurable in square only.
 
-I say that *AB* is not divided at another point into two rational straight lines commensurable in square only.
+I say that {AB} is not divided at another point into two rational straight lines commensurable in square only.
 
-For, if possible, let it be divided at *D* also, so that *AD* and *DB* are also rational straight lines commensurable in square only.
+For, if possible, let it be divided at {D} also, so that {AD} and {DB} are also rational straight lines commensurable in square only.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="260" height="70" tabindex="0"></canvas>
 <noscript><img alt="X.42 diagram" src="propX42.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the binomial AB divided at C, and the supposed second
+    // division point D. Added, all invisible at rest: transparent highlight
+    // targets AC, CB, AD, DB (;0;0;0). Joyce's "Then AB is also the same as
+    // CB" (for AD) is left literal and untokenized.
+    //
+    // Draggables (checked against the bundle): A, B, C (the givens) and D
+    // (line slider), which only arrives with the reductio's "let it be
+    // divided at D also", so it is deferred; D and its parts are withdrawn
+    // once the contradiction is reached.
+    var GIVEN = ["A","B","AB","C","AC","CB"];
+    var ALL   = GIVEN.concat(["D","AD","DB"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -36,23 +47,135 @@ For, if possible, let it be divided at *D* also, so that *AD* and *DB* are also 
             "B;point;lineSlider;A0,A3,220,0",
             "AB;line;connect;A,B;0;0",
             "C;point;lineSlider;A0,A3,170,0",
-            "D;point;lineSlider;A0,A3,130,0"
+            "D;point;lineSlider;A0,A3,130,0",
+            // Highlight targets only — invisible at rest.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "AD;line;connect;A,D;0;0;0",
+            "DB;line;connect;D,B;0;0;0"
         ],
+        deferDraggables: ["D"],
+        aliases: { "BD": "DB", "DA": "AD" },
+        slides: [
+            { text: "“A binomial straight line is divided into its terms at one point only.”",
+              visible: GIVEN,
+              highlighted: ["AB","C"],
+              justifications: [{ ref: "X.42" }] },
+            { text: "Let {AB} be a binomial straight line divided into its terms at {C}.",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "Then {AC} and {CB} are rational straight lines commensurable in square only.",
+              visible: GIVEN,
+              highlighted: ["AC","CB"] },
+            { text: "I say that {AB} is not divided at another point into two rational straight lines commensurable in square only.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "For, if possible, let it be divided at {D} also,",
+              visible: ALL,
+              highlighted: ["D"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Point.appear } ] } },
+            { text: "so that {AD} and {DB} are also rational straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "It is then manifest that {AC} is not the same as {DB}.",
+              visible: ALL,
+              highlighted: ["AC","DB"] },
+            { text: "If possible, let it be so.",
+              visible: ALL,
+              highlighted: ["AC","DB"] },
+            { text: "Then AB is also the same as {CB},",
+              visible: ALL,
+              highlighted: ["CB"] },
+            { text: "and {AC} is to {CB} as {BD} is to {DA}.",
+              visible: ALL,
+              highlighted: ["AC","CB","DB","AD"] },
+            { text: "Thus {AB} is divided at {D} also in the same way as by the division at {C},",
+              visible: ALL,
+              highlighted: ["AB","D","C"] },
+            { text: "which is contrary to the hypothesis.",
+              visible: ALL,
+              highlighted: ["D"] },
+            { text: "Therefore {AC} is not the same with {DB}.",
+              visible: ALL,
+              highlighted: ["AC","DB"] },
+            { text: "For this reason also the points {C} and {D} are not equidistant from the point of bisection.",
+              visible: ALL,
+              highlighted: ["C","D"] },
+            { text: "Therefore that by which the sum of the squares on {AC} and {CB} differs",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "from the sum of the squares on {AD} and {DB}",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "is also that by which twice the rectangle {AD} by {DB} differs from twice the rectangle {AC} by {CB},",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "because both the squares on {AC} and {CB} together with twice the rectangle {AC} by {CB},",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "and the squares on {AD} and {DB} together with twice the rectangle {AD} by {DB},",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "equal the square on {AB}.",
+              visible: ALL,
+              highlighted: ["AB"],
+              justifications: [{ claim: "each equals the square on AB", ref: "II.4" }] },
+            { text: "But the sum of the squares on {AC} and {CB} differs from the sum of the squares on {AD} and {DB}",
+              visible: ALL,
+              highlighted: ["AC","CB","AD","DB"] },
+            { text: "by a rational area, for both are rational,",
+              visible: ALL,
+              highlighted: ["AC","CB","AD","DB"] },
+            { text: "therefore twice the rectangle {AD} by {DB} also differs from twice the rectangle {AC} by {CB} by a rational area,",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "though they are medial, which is absurd,",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"],
+              justifications: [{ claim: "both rectangles medial", ref: "X.21" }] },
+            { text: "for a medial area does not exceed a medial by a rational area.",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"],
+              justifications: [{ claim: "medial does not exceed medial by rational", ref: "X.26" }] },
+            { text: "Therefore a binomial straight line is not divided at different points.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "Therefore it is divided at one point only.",
+              visible: GIVEN,
+              highlighted: ["AB","C"] },
+            { text: "Therefore, a binomial straight line is divided into its terms at one point only.",
+              visible: GIVEN,
+              highlighted: ["AC","CB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.42") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.4": "/elements/books/bookII/propositions/propII4/",
+        "X.21": "/elements/books/bookX/propositions/propX21/",
+        "X.26": "/elements/books/bookX/propositions/propX26/"
     });
 </script>
 </figure>
 
-It is then manifest that *AC* is not the same as *DB*.
+It is then manifest that {AC} is not the same as {DB}.
 
-If possible, let it be so. Then *AB* is also the same as *CB*, and *AC* is to *CB* as *BD* is to *DA*. Thus *AB* is divided at *D* also in the same way as by the division at *C*, which is contrary to the hypothesis.
+If possible, let it be so. Then *AB* is also the same as {CB}, and {AC} is to {CB} as {BD} is to {DA}. Thus {AB} is divided at {D} also in the same way as by the division at {C}, which is contrary to the hypothesis.
 
-Therefore *AC* is not the same with *DB*.
+Therefore {AC} is not the same with {DB}.
 
-For this reason also the points *C* and *D* are not equidistant from the point of bisection.
+For this reason also the points {C} and {D} are not equidistant from the point of bisection.
 
-Therefore that by which the sum of the squares on *AC* and *CB* differs from the sum of the squares on *AD* and *DB* is also that by which twice the rectangle *AD* by *DB* differs from twice the rectangle *AC* by *CB*, because both the squares on *AC* and *CB* together with twice the rectangle *AC* by *CB*, and the squares on *AD* and *DB* together with twice the rectangle *AD* by *DB*, equal the square on *AB*. [!just II.4]
+Therefore that by which the sum of the squares on {AC} and {CB} differs from the sum of the squares on {AD} and {DB} is also that by which twice the rectangle {AD} by {DB} differs from twice the rectangle {AC} by {CB}, because both the squares on {AC} and {CB} together with twice the rectangle {AC} by {CB}, and the squares on {AD} and {DB} together with twice the rectangle {AD} by {DB}, equal the square on {AB}. [!just II.4]
 
-But the sum of the squares on *AC* and *CB* differs from the sum of the squares on *AD* and *DB* by a rational area, for both are rational, therefore twice the rectangle *AD* by *DB* also differs from twice the rectangle *AC* by *CB* by a rational area, though they are medial, which is absurd, for a medial area does not exceed a medial by a rational area. [!just X.21; X.26]
+But the sum of the squares on {AC} and {CB} differs from the sum of the squares on {AD} and {DB} by a rational area, for both are rational, therefore twice the rectangle {AD} by {DB} also differs from twice the rectangle {AC} by {CB} by a rational area, though they are medial, which is absurd, for a medial area does not exceed a medial by a rational area. [!just X.21; X.26]
 
 Therefore a binomial straight line is not divided at different points. Therefore it is divided at one point only.
 
