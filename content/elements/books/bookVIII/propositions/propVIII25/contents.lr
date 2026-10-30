@@ -15,12 +15,17 @@ statement: If two numbers have to one another the ratio which a cubic number has
 ----
 proof:
 
-Let the two numbers *A* and *B* have to one another the ratio which the cubic number *C* has to the cubic number *D,* and let *A* be a cube.
+Let the two numbers {A} and {B} have to one another the ratio which the cubic number {C} has to the cubic number {D}, and let {A} be a cube.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="290" height="175" tabindex="0"></canvas>
 <noscript><img alt="VIII.25 diagram" src="propVIII25.gif"/></noscript>
 <script type="text/javascript">
+    // A walk of the proof over Joyce's lines. A, B, C, D are given; the two
+    // means E and F are stroked when VIII.18 brings them in. The rest is
+    // highlight beats.
+    var GIVEN = ["A","B","C","D","B2","D2"];
+    var ALL   = GIVEN.concat(["E","F","E1","E2","F1","F2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -53,17 +58,85 @@ Let the two numbers *A* and *B* have to one another the ratio which the cubic nu
             "D2;point;proportion;A1,A2,B1,B2,C1,C2,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        // Draggables (checked against the bundle): the lineSlider ends and the
+        // colourless rails. E and F arrive mid-walk, so their draggable ends
+        // E1, E2, F1 are deferred. No elements added.
+        deferDraggables: ["E1","E2","F1"],
+        slides: [
+            { text: "If two numbers have to one another the ratio which a cubic number has to a cubic number,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "VIII.25" }] },
+            { text: "and the first is a cube, then the second is also a cube.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Let the two numbers {A} and {B} have to one another the ratio",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "which the cubic number {C} has to the cubic number {D},",
+              visible: GIVEN,
+              highlighted: ["C","D"] },
+            { text: "and let {A} be a cube.",
+              visible: GIVEN,
+              highlighted: ["A"] },
+            { text: "I say that {B} is also a cube.",
+              visible: GIVEN,
+              highlighted: ["B"] },
+            { text: "Since {C} and {D} are cubes, {C} and {D} are similar solid numbers,",
+              visible: GIVEN,
+              highlighted: ["C","D"] },
+            { text: "therefore two mean proportional numbers fall between {C} and {D}.",
+              visible: GIVEN,
+              highlighted: ["C","D"],
+              justifications: [{ claim: "two means between C and D", ref: "VIII.19" }] },
+            { text: "Since as many numbers fall in continued proportion between those which have the same ratio with {C} and {D}",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "as fall between {C} and {D}, therefore two mean proportional numbers {E} and {F} fall between {A} and {B}.",
+              visible: ALL,
+              highlighted: ["E","F","A","B"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "two means E, F between A and B", ref: "VIII.18" }] },
+            { text: "Since, then, the four numbers {A}, {E}, {F}, and {B} are in continued proportion, and {A} is a cube,",
+              visible: ALL,
+              highlighted: ["A","E","F","B"] },
+            { text: "therefore {B} is also a cube.",
+              visible: ALL,
+              highlighted: ["B"],
+              justifications: [{ ref: "VIII.23" }] },
+            { text: "Therefore, if two numbers have to one another the ratio which a cubic number has to a cubic number,",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "and the first is a cube, then the second is also a cube.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.25") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VIII.18": "/elements/books/bookVIII/propositions/propVIII18/",
+        "VIII.19": "/elements/books/bookVIII/propositions/propVIII19/",
+        "VIII.23": "/elements/books/bookVIII/propositions/propVIII23/"
     });
 </script>
 </figure>
 
-I say that *B* is also a cube.
+I say that {B} is also a cube.
 
-Since *C* and *D* are cubes, *C* and *D* are similar solid numbers, therefore two mean proportional numbers fall between *C* and *D.* [!just VIII.19]
+Since {C} and {D} are cubes, {C} and {D} are similar solid numbers, therefore two mean proportional numbers fall between {C} and {D}. [!just VIII.19]
 
-Since as many numbers fall in continued proportion between those which have the same ratio with *C* and *D* as fall between *C* and *D,* therefore two mean proportional numbers *E* and *F* fall between *A* and *B.* [!just VIII.18]
+Since as many numbers fall in continued proportion between those which have the same ratio with {C} and {D} as fall between {C} and {D}, therefore two mean proportional numbers {E} and {F} fall between {A} and {B}. [!just VIII.18]
 
-Since, then, the four numbers *A, E, F,* and *B* are in continued proportion, and *A* is a cube, therefore *B* is also a cube. [!just VIII.23]
+Since, then, the four numbers {A}, {E}, {F}, and {B} are in continued proportion, and {A} is a cube, therefore {B} is also a cube. [!just VIII.23]
 
 Therefore, *if two numbers have to one another the ratio which a cubic number has to a cubic number, and the first is a cube, then the second is also a cube.*
 

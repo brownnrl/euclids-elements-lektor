@@ -15,14 +15,20 @@ statement: Similar plane numbers have to one another the ratio which a square nu
 ----
 proof:
 
-Let *A* and *B* be similar plane numbers.
+Let {A} and {B} be similar plane numbers.
 
-I say that *A* has to *B* the ratio which a square number has to a square number.
+I say that {A} has to {B} the ratio which a square number has to a square number.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="300" height="140" tabindex="0"></canvas>
 <noscript><img alt="VIII.26 diagram" src="propVIII26.gif"/></noscript>
 <script type="text/javascript">
+    // A walk of the proof over Joyce's lines. A and B are given; the mean C,
+    // then D, E, F are stroked as the proof brings them in. The rest is
+    // highlight beats.
+    var GIVEN = ["A","B"];
+    var Cv    = GIVEN.concat(["C","C1","C2"]);
+    var ALL   = Cv.concat(["D","E","F","D1","D2","E1","E2","F1","F2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -53,15 +59,73 @@ I say that *A* has to *B* the ratio which a square number has to a square number
             "F2;point;proportion;A1,A2,C1,C2,D1,D2,F1,D3;0",
             "F;line;connect;F1,F2;black"
         ],
+        // Draggables (checked against the bundle): the lineSlider ends and the
+        // colourless rails. C, then D, E, F arrive mid-walk, so their
+        // draggable ends C1, D1, D2, E1, F1 are deferred. No elements added.
+        deferDraggables: ["C1","D1","D2","E1","F1"],
+        slides: [
+            { text: "Similar plane numbers have to one another the ratio which a square number has to a square number.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VIII.26" }] },
+            { text: "Let {A} and {B} be similar plane numbers.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that {A} has to {B} the ratio which a square number has to a square number.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Since {A} and {B} are similar plane numbers, therefore one mean proportional number {C} falls between {A} and {B}.",
+              visible: Cv,
+              highlighted: ["C","A","B"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "one mean C between A and B", ref: "VIII.18" }] },
+            { text: "Take {D}, {E}, and {F}, the least numbers of those which have the same ratio with {A}, {C}, and {B}",
+              visible: ALL,
+              highlighted: ["D","E","F","A","C","B"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "F", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "least numbers in the ratio of A, C, B", ref: "VII.33" },
+                               { ref: "VIII.2" }] },
+            { text: "Then the extremes of them {D} and {F} are square.",
+              visible: ALL,
+              highlighted: ["D","F"],
+              justifications: [{ claim: "D and F square", ref: "VIII.2.Cor" }] },
+            { text: "And since {D} is to {F} as {A} is to {B}, and {D} and {F} are square,",
+              visible: ALL,
+              highlighted: ["D","F","A","B"] },
+            { text: "therefore {A} has to {B} the ratio which a square number has to a square number.",
+              visible: ALL,
+              highlighted: ["A","B","D","F"] },
+            { text: "Therefore, similar plane numbers have to one another the ratio which a square number has to a square number.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.26") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.33": "/elements/books/bookVII/propositions/propVII33/",
+        "VIII.2": "/elements/books/bookVIII/propositions/propVIII2/",
+        "VIII.2.Cor": "/elements/books/bookVIII/propositions/propVIII2/#cor",
+        "VIII.18": "/elements/books/bookVIII/propositions/propVIII18/"
     });
 </script>
 </figure>
 
-Since *A* and *B* are similar plane numbers, therefore one mean proportional number *C* falls between *A* and *B.* [!just VIII.18]
+Since {A} and {B} are similar plane numbers, therefore one mean proportional number {C} falls between {A} and {B}. [!just VIII.18]
 
-Take *D, E,* and *F,* the least numbers of those which have the same ratio with *A, C,* and *B* [!just VII.33, VIII.2]
+Take {D}, {E}, and {F}, the least numbers of those which have the same ratio with {A}, {C}, and {B} [!just VII.33, VIII.2]
 
-Then the extremes of them *D* and *F* are square. And since *D* is to *F* as *A* is to *B,* and *D* and *F* are square, therefore *A* has to *B* the ratio which a square number has to a square number. [!just VIII.2.Cor]
+Then the extremes of them {D} and {F} are square. And since {D} is to {F} as {A} is to {B}, and {D} and {F} are square, therefore {A} has to {B} the ratio which a square number has to a square number. [!just VIII.2.Cor]
 
 Therefore, *similar plane numbers have to one another the ratio which a square number has to a square number.*
 
