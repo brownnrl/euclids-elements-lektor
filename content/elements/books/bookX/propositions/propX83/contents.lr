@@ -15,14 +15,27 @@ statement: To a straight line which produces with a rational area a medial whole
 ----
 proof:
 
-Let *AB* be the straight line which produces with a rational area a medial whole, and let *BC* be an annex to *AB*. Then *AC* and *CB* are straight lines incommensurable in square which fulfill the given conditions. [!just X.77]
+Let {AB} be the straight line which produces with a rational area a medial whole, and let {BC} be an annex to {AB}. Then {AC} and {CB} are straight lines incommensurable in square which fulfill the given conditions. [!just X.77]
 
-I say that no other straight line can be annexed to *AB* which fulfills the same conditions.
+I say that no other straight line can be annexed to {AB} which fulfills the same conditions.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="65" tabindex="0"></canvas>
 <noscript><img alt="X.83 diagram" src="propX83.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: AB with its annex BC on the line AD, and the supposed
+    // second annex BD. Added, all hidden at rest (the X.79 pattern): solid
+    // twins AC and CD (initiallyHidden) so the whole AC stands alone before D
+    // and the supposed annex is produced from C to D; transparent targets AB,
+    // CB, DB (;0;0;0).
+    //
+    // Draggables (checked against the bundle): A, B, C, D (line sliders) and
+    // the offscreen frees A0, A3. D only arrives with the reductio's "let BD
+    // be so annexed", so it is deferred; D and its lines are withdrawn once
+    // the contradiction is reached.
+    var GIVEN = ["A","B","C","AC","AB","CB"];
+    var ANNEX = GIVEN.concat(["D","CD","DB"]);
+    var ALL   = ANNEX.concat(["AD"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -34,17 +47,110 @@ I say that no other straight line can be annexed to *AB* which fulfills the same
             "B;point;lineSlider;A0,A3,90,0",
             "C;point;lineSlider;A0,A3,180,0",
             "D;point;lineSlider;A0,A3,210,0",
-            "AD;line;connect;A,D"
+            "AD;line;connect;A,D",
+            // Slide-only twins and highlight targets.
+            "AC;line;connect;A,C",
+            "CD;line;connect;C,D",
+            "AB;line;connect;A,B;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "DB;line;connect;D,B;0;0;0"
         ],
+        initiallyHidden: ["AC","CD"],
+        deferDraggables: ["D"],
+        aliases: { "BC": "CB", "BD": "DB" },
+        slides: [
+            { text: "“To a straight line which produces with a rational area a medial whole",
+              visible: GIVEN,
+              highlighted: ["AB"],
+              justifications: [{ ref: "X.83" }] },
+            { text: "only one straight line can be annexed which is incommensurable in square with the whole straight line",
+              visible: GIVEN,
+              highlighted: ["CB","AC"] },
+            { text: "and which with the whole straight line makes the sum of squares on them medial",
+              visible: GIVEN,
+              highlighted: ["AC","CB"] },
+            { text: "but twice the rectangle contained by them rational.”",
+              visible: GIVEN,
+              highlighted: ["AC","CB"] },
+            { text: "Let {AB} be the straight line which produces with a rational area a medial whole,",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "and let {BC} be an annex to {AB}.",
+              visible: GIVEN,
+              highlighted: ["CB","AB"] },
+            { text: "Then {AC} and {CB} are straight lines incommensurable in square which fulfill the given conditions.",
+              visible: GIVEN,
+              highlighted: ["AC","CB"],
+              justifications: [{ claim: "AB makes with a rational area a medial whole", ref: "X.77" }] },
+            { text: "I say that no other straight line can be annexed to {AB} which fulfills the same conditions.",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "If possible, let {BD} be so annexed.",
+              visible: ANNEX,
+              highlighted: ["DB"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeExtend },
+                  { elem: "D",  name: geomlib.A.Point.appear } ] } },
+            { text: "Then {AD} and {DB} are both straight lines incommensurable in square which fulfill the given conditions.",
+              visible: ALL,
+              highlighted: ["AD","DB"],
+              justifications: [{ claim: "BD an annex to AB", ref: "X.77" }] },
+            { text: "As in the preceding cases, the excess of the sum of the squares on {AD} and {DB}",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "over the sum of the squares on {AC} and {CB}",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "is also the excess of twice the rectangle {AD} by {DB} over twice the rectangle {AC} by {CB},",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "while twice the rectangle {AD} by {DB} exceeds twice the rectangle {AC} by {CB} by a rational area,",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "for both are rational,",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"] },
+            { text: "therefore the sum of the squares on {AD} and {DB} also exceeds",
+              visible: ALL,
+              highlighted: ["AD","DB"] },
+            { text: "the sum of the squares on {AC} and {CB} by a rational area,",
+              visible: ALL,
+              highlighted: ["AC","CB"] },
+            { text: "which is impossible, for both are medial.",
+              visible: ALL,
+              highlighted: ["AD","DB","AC","CB"],
+              justifications: [{ claim: "medial does not exceed medial by rational", ref: "X.26" }] },
+            { text: "Therefore no other straight line can be annexed to {AB} which is incommensurable in square with the whole",
+              visible: GIVEN,
+              highlighted: ["AB","AC"] },
+            { text: "and which with the whole fulfills the aforesaid conditions,",
+              visible: GIVEN,
+              highlighted: ["AC"] },
+            { text: "therefore only one straight line can be so annexed.",
+              visible: GIVEN,
+              highlighted: ["AB","CB"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.83") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "X.77": "/elements/books/bookX/propositions/propX77/",
+        "X.26": "/elements/books/bookX/propositions/propX26/"
     });
 </script>
 </figure>
 
-If possible, let *BD* be so annexed. Then *AD* and *DB* are both straight lines incommensurable in square which fulfill the given conditions. [!just X.77]
+If possible, let {BD} be so annexed. Then {AD} and {DB} are both straight lines incommensurable in square which fulfill the given conditions. [!just X.77]
 
-As in the preceding cases, the excess of the sum of the squares on *AD* and *DB* over the sum of the squares on *AC* and *CB* is also the excess of twice the rectangle *AD* by *DB* over twice the rectangle *AC* by *CB*, while twice the rectangle *AD* by *DB* exceeds twice the rectangle *AC* by *CB* by a rational area, for both are rational, therefore the sum of the squares on *AD* and *DB* also exceeds the sum of the squares on *AC* and *CB* by a rational area, which is impossible, for both are medial. [!just X.26]
+As in the preceding cases, the excess of the sum of the squares on {AD} and {DB} over the sum of the squares on {AC} and {CB} is also the excess of twice the rectangle {AD} by {DB} over twice the rectangle {AC} by {CB}, while twice the rectangle {AD} by {DB} exceeds twice the rectangle {AC} by {CB} by a rational area, for both are rational, therefore the sum of the squares on {AD} and {DB} also exceeds the sum of the squares on {AC} and {CB} by a rational area, which is impossible, for both are medial. [!just X.26]
 
-Therefore no other straight line can be annexed to *AB* which is incommensurable in square with the whole and which with the whole fulfills the aforesaid conditions, therefore only one straight line can be so annexed.
+Therefore no other straight line can be annexed to {AB} which is incommensurable in square with the whole and which with the whole fulfills the aforesaid conditions, therefore only one straight line can be so annexed.
 
 <div class="qed">Q.E.D.</div>
 ----
