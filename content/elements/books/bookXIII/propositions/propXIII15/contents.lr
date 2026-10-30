@@ -17,12 +17,60 @@ statement: To construct a cube and comprehend it in a sphere, like the pyramid; 
 ----
 proof:
 
-Set out the diameter *AB* of the given sphere, and cut it at *C* so that *AC* is double *CB.*  Describe the semicircle *ADB* on *AB,* draw *CD* from *C* at right angles to *AB,* and join *DB.* Set out the square *EFGH* having its side equal to *DB,* draw *EK, FL, GM,* and *HN* from *E, F, G,* and *H* at right angles to the plane of the square *EFGH,* and cut *EK, FL, GM,* and *HN* off from *EK, FL, GM,* and *HN*  respectively equal to one of the straight lines *EF, FG, GH,* or *HE.* Join *KL, LM, MN,* and *NK.* [!just VI.9, I.11; I.46; XI.12; I.3]
+Set out the diameter {AB} of the given sphere, and cut it at {C} so that {AC} is double {CB}.  Describe the semicircle {ADB|semiT} on {AB}, draw {CD} from {C} at right angles to {AB}, and join {DB}. Set out the square {EFGH} having its side equal to {DB}, draw {EK}, {FL}, {GM}, and {HN} from {E}, {F}, {G}, and {H} at right angles to the plane of the square {EFGH}, and cut {EK}, {FL}, {GM}, and {HN} off from {EK}, {FL}, {GM}, and {HN}  respectively equal to one of the straight lines {EF}, {FG}, {GH}, or {HE}. Join {KL}, {LM}, {MN}, and {NK}. [!just VI.9, I.11; I.46; XI.12; I.3]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="550" height="320" tabindex="0"></canvas>
 <noscript><img alt="XIII.15 diagram" src="propXIII15.gif"/></noscript>
 <script type="text/javascript">
+    // The sphere's diameter AB is cut at C with AC double CB (VI.9); the
+    // semicircle ADB and the perpendicular CD give DB, the cube's side
+    // (I.11). The square EFGH on DB (I.46), the perpendiculars EK, FL, GM,
+    // HN (XI.12) cut off equal to its side (I.3), and the joins KL, LM, MN,
+    // NK make the cube. The semicircles on KG through E and F (XI.Def.3)
+    // put it in a sphere; I.47 and the ratio of AB to BC make it the given
+    // one.
+    //
+    // Joyce's cube is one polyhedron, so the construction is drawn with
+    // solid slide twins, hidden at rest (initiallyHidden): the square dEFGH
+    // and the edges dEK..dNK, each drawn from the end the text names; they
+    // give way to the cube when "the cube FN has been constructed". His
+    // KG and EG are held back until "Join KG and EG".
+    //
+    // Everything else added is transparent: the twelve edges as highlight
+    // targets for the prose and, together, for the cube (a polyhedron
+    // takes no highlight; "the cube FN" stays untokenized); AC, CB; the faces EFGH ("the plane EG") and
+    // FEKL ("the plane FK"); FK, which the text joins and the figure does
+    // not draw; sphT, the given sphere's outline as a screen circle (a
+    // sphere takes no highlight), and semiT, a faceless twin of the
+    // semicircle (its face would be raised when lit, #140); and semKG / semGK, the circles on KG through
+    // E and through F, standing for the semicircles carried round.
+    // Right angles (red squares): DCB, KEG, GFL, GFE, GFK, as the text
+    // calls them right.
+    //
+    // Draggables (checked against the bundle): A, B lineSliders and P free,
+    // the given sphere's diameter and centre; A0, A3 off-canvas; E
+    // (sphereSlider) and F (circleSlider), deferred to "Set out the square
+    // EFGH". C, D, G, H, K, L, M, N are derived and listed per slide.
+    var GIVEN = ["Psphere","sphT","P","A","B","AB"];
+    var CUT   = GIVEN.concat(["C","AC","CB"]);
+    var SEMI  = CUT.concat(["semi","semiT"]);
+    var PERP  = SEMI.concat(["D","CD","BD","angC"]);
+    var SQ    = PERP.concat(["E","F","G","H","dEFGH","EFGH","EF","FG","GH","HE"]);
+    var UP    = SQ.concat(["dEK","dFL","dGM","dHN","EK","FL","GM","HN"]);
+    var CUTK  = UP.concat(["K","L","M","N"]);
+    var TOP   = CUTK.concat(["dKL","dLM","dMN","dNK","KL","LM","MN","NK"]);
+    var CUBE  = PERP.concat(["E","F","G","H","K","L","M","N","EFGH",
+                 "EF","FG","GH","HE","EK","FL","GM","HN","KL","LM","MN","NK",
+                 "cube"]);
+    // A polyhedron takes no highlight: the cube is lit by its edges.
+    var EDGES = ["EF","FG","GH","HE","EK","FL","GM","HN","KL","LM","MN","NK"];
+    var JOIN  = CUBE.concat(["GK","EG"]);
+    var RTE   = JOIN.concat(["angKEG"]);
+    var SEM1  = RTE.concat(["semKG"]);
+    var RTF   = SEM1.concat(["angGFL","angGFE","sqFK"]);
+    var FKJ   = RTF.concat(["FK","angGFK"]);
+    var SEM2  = FKJ.concat(["semGK"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -61,8 +109,249 @@ Set out the diameter *AB* of the given sphere, and cut it at *C* so that *AC* is
             "G;point;extend;K,P,P,E",
             "cube;polyhedron;parallelepiped;E,F,H,K;0;0;black;random",
             "EG;line;connect;E,G",
-            "GK;line;connect;G,K"
+            "GK;line;connect;G,K",
+            // Solid slide twins of the construction, hidden at rest.
+            "dEFGH;polygon;quadrilateral;E,F,G,H;0;0;black;0",
+            "dEK;line;connect;E,K",
+            "dFL;line;connect;F,L",
+            "dGM;line;connect;G,M",
+            "dHN;line;connect;H,N",
+            "dKL;line;connect;K,L",
+            "dLM;line;connect;L,M",
+            "dMN;line;connect;M,N",
+            "dNK;line;connect;N,K",
+            // The sphere's outline as a screen circle (a sphere does not
+            // take a highlight), and a faceless twin of the semicircle.
+            "sphT;circle;radius;P,A,ABmid;0;0;0;0",
+            "semiT;sector;sector;ABmid,B,A;0;0;0;0",
+            // Transparent highlight targets.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "EF;line;connect;E,F;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "GH;line;connect;G,H;0;0;0",
+            "HE;line;connect;H,E;0;0;0",
+            "EK;line;connect;E,K;0;0;0",
+            "FL;line;connect;F,L;0;0;0",
+            "GM;line;connect;G,M;0;0;0",
+            "HN;line;connect;H,N;0;0;0",
+            "KL;line;connect;K,L;0;0;0",
+            "LM;line;connect;L,M;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "NK;line;connect;N,K;0;0;0",
+            "FK;line;connect;F,K;0;0;0",
+            "EFGH;polygon;quadrilateral;E,F,G,H;0;0;0;0",
+            "sqFK;polygon;quadrilateral;F,E,K,L;0;0;0;0",
+            // The semicircles on KG, carried round through E and F.
+            "plKEG;plane;threePoints;K,E,G;0;0;0;0",
+            "semKG;circle;radius;P,E,plKEG;0;0;0;0",
+            "plKFG;plane;threePoints;K,F,G;0;0;0;0",
+            "semGK;circle;radius;P,F,plKFG;0;0;0;0",
+            // Right angles.
+            "angC;sector;angleMarkerRight;C,B,D,12;0;0;red;red",
+            "angKEG;sector;angleMarkerRight;E,K,G,12;0;0;red;red",
+            "angGFL;sector;angleMarkerRight;F,G,L,12;0;0;red;red",
+            "angGFE;sector;angleMarkerRight;F,G,E,12;0;0;red;red",
+            "angGFK;sector;angleMarkerRight;F,G,K,12;0;0;red;red"
         ],
+        initiallyHidden: ["dEFGH","dEK","dFL","dGM","dHN","dKL","dLM","dMN","dNK"],
+        deferDraggables: ["E","F"],
+        aliases: { "DB": "BD", "KG": "GK", "KE": "EK", "GF": "FG", "FE": "EF",
+                   "GE": "EG", "BC": "CB" },
+        slides: [
+            { text: "“To construct a cube and comprehend it in a sphere, like the pyramid;”",
+              visible: GIVEN,
+              highlighted: ["sphT"],
+              justifications: [{ ref: "XIII.15" }] },
+            { text: "“and to prove that the square on the diameter of the sphere is triple the square on the side of the cube.”",
+              visible: GIVEN,
+              highlighted: ["sphT","AB"] },
+            { text: "Set out the diameter {AB} of the given sphere,",
+              visible: GIVEN,
+              highlighted: ["AB","sphT"] },
+            { text: "and cut it at {C} so that {AC} is double {CB}.",
+              visible: CUT,
+              highlighted: ["AC","CB"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AC double CB", ref: "VI.9" }] },
+            { text: "Describe the semicircle {ADB|semiT} on {AB},",
+              visible: SEMI,
+              highlighted: ["semiT"],
+              transition: { animations: [
+                  { elem: "semi", name: geomlib.A.Sector.sweep } ] } },
+            { text: "draw {CD} from {C} at right angles to {AB}, and join {DB}.",
+              visible: PERP,
+              highlighted: ["CD","BD","angC"],
+              transition: { animations: [
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",  name: geomlib.A.Point.appear },
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "CD at right angles to AB", ref: "I.11" }] },
+            { text: "Set out the square {EFGH} having its side equal to {DB},",
+              visible: SQ,
+              highlighted: ["EFGH","BD"],
+              transition: { animations: [
+                  { elem: "dEFGH", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "the square EFGH", ref: "I.46" }] },
+            { text: "draw {EK}, {FL}, {GM}, and {HN} from {E}, {F}, {G}, and {H}",
+              visible: UP,
+              highlighted: ["EK","FL","GM","HN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "dEK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "dFL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "dGM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "dHN", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "at right angles to the plane of the square {EFGH},",
+              visible: UP,
+              highlighted: ["EK","FL","GM","HN","EFGH"],
+              justifications: [{ claim: "perpendiculars to the plane", ref: "XI.12" }] },
+            { text: "and cut {EK}, {FL}, {GM}, and {HN} off from {EK}, {FL}, {GM}, and {HN}",
+              visible: CUTK,
+              highlighted: ["EK","FL","GM","HN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "K", name: geomlib.A.Point.appear },
+                  { elem: "L", name: geomlib.A.Point.appear },
+                  { elem: "M", name: geomlib.A.Point.appear },
+                  { elem: "N", name: geomlib.A.Point.appear } ] } },
+            { text: "respectively equal to one of the straight lines {EF}, {FG}, {GH}, or {HE}.",
+              visible: CUTK,
+              highlighted: ["EK","FL","GM","HN","EF","FG","GH","HE"],
+              justifications: [{ claim: "cut off equal to EF", ref: "I.3" }] },
+            { text: "Join {KL}, {LM}, {MN}, and {NK}.",
+              visible: TOP,
+              highlighted: ["KL","LM","MN","NK"],
+              transition: { animations: [
+                  { elem: "dKL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "dLM", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "dMN", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "dNK", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore the cube FN has been constructed which is contained by six equal squares.",
+              visible: CUBE,
+              highlighted: EDGES,
+              justifications: [{ ref: "XI.Def.25" }] },
+            { text: "It is then required to comprehend it in the given sphere,",
+              visible: CUBE,
+              highlighted: EDGES.concat(["sphT"]) },
+            { text: "and to prove that the square on the diameter of the sphere is triple the square on the side of the cube.",
+              visible: CUBE,
+              highlighted: ["AB","EF"] },
+            { text: "Join {KG} and {EG}.",
+              visible: JOIN,
+              highlighted: ["GK","EG"],
+              transition: { animations: [
+                  { elem: "GK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EG", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then, since the angle {KEG|angKEG} is right,",
+              visible: RTE,
+              highlighted: ["angKEG","EK","EG"],
+              transition: { animations: [
+                  { elem: "angKEG", name: geomlib.A.Sector.sweep } ] } },
+            { text: "for {KE} is also at right angles to the plane {EG|EFGH} and of course to the straight line {EG} also,",
+              visible: RTE,
+              highlighted: ["EK","EFGH","EG"],
+              justifications: [{ ref: "XI.Def.3" }] },
+            { text: "therefore the semicircle described on {KG} passes through the point {E}.",
+              visible: SEM1,
+              highlighted: ["GK","E","semKG"],
+              transition: { animations: [
+                  { elem: "semKG", name: geomlib.A.Circle.compass } ] } },
+            { text: "Again, since {GF} is at right angles to each of the straight lines {FL} and {FE},",
+              visible: RTF,
+              highlighted: ["FG","FL","EF","angGFL","angGFE"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angGFL", name: geomlib.A.Sector.sweep },
+                  { elem: "angGFE", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore {GF} is also at right angles to the plane {FK|sqFK}.",
+              visible: RTF,
+              highlighted: ["FG","sqFK"] },
+            { text: "Hence also, if we join {FK}, then {GF} will be at right angles to {FK}.",
+              visible: FKJ,
+              highlighted: ["FK","FG","angGFK"],
+              transition: { animations: [
+                  { elem: "FK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angGFK", name: geomlib.A.Sector.sweep } ] } },
+            { text: "For this reason the semicircle described on {GK} also passes through {F}.",
+              visible: SEM2,
+              highlighted: ["GK","F","semGK"],
+              transition: { animations: [
+                  { elem: "semGK", name: geomlib.A.Circle.compass } ] } },
+            { text: "Similarly it also passes through the remaining angular points of the cube.",
+              visible: SEM2,
+              highlighted: ["H","L","M","N"] },
+            { text: "If then, {KG} remaining fixed, the semicircle is carried round",
+              visible: SEM2,
+              highlighted: ["GK","semKG","semGK"] },
+            { text: "and restored to the same position from which it began to be moved,",
+              visible: SEM2,
+              highlighted: ["semKG"] },
+            { text: "then the cube is comprehended in a sphere.",
+              visible: SEM2,
+              highlighted: EDGES.concat(["sphT"]) },
+            { text: "I say next that it is also comprehended in the given sphere.",
+              visible: SEM2,
+              highlighted: ["sphT"] },
+            { text: "For, since {GF} equals {FE}, and the angle at {F|angGFE} is right,",
+              visible: SEM2,
+              highlighted: ["FG","EF","angGFE"] },
+            { text: "therefore the square on {EG} is double the square on {EF}.",
+              visible: SEM2,
+              highlighted: ["EG","EF"],
+              justifications: [{ claim: "square on EG = squares on EF, FG", ref: "I.47" }] },
+            { text: "But {EF} equals {EK}, therefore the square on {EG} is double the square on {EK}.",
+              visible: SEM2,
+              highlighted: ["EF","EK","EG"] },
+            { text: "Hence the sum of the squares on {GE} and {EK}, that is the square on {GK}, is triple the square on {EK}.",
+              visible: SEM2,
+              highlighted: ["EG","EK","GK","angKEG"],
+              justifications: [{ claim: "square on GK = squares on GE, EK", ref: "I.47" }] },
+            { text: "And, since {AB} is triple {BC},",
+              visible: SEM2,
+              highlighted: ["AB","CB"] },
+            { text: "while {AB} is to {BC} as the square on {AB} is to the square on {BD},",
+              visible: SEM2,
+              highlighted: ["AB","CB","BD"] },
+            { text: "therefore the square on {AB} is triple the square on {BD}.",
+              visible: SEM2,
+              highlighted: ["AB","BD"] },
+            { text: "But the square on {GK} was also proved triple the square on {KE}.",
+              visible: SEM2,
+              highlighted: ["GK","EK"] },
+            { text: "And {KE} was made equal to {DB}, therefore {KG} also equals {AB}.",
+              visible: SEM2,
+              highlighted: ["EK","BD","GK","AB"] },
+            { text: "And {AB} is the diameter of the given sphere, therefore {KG} also equals the diameter of the given sphere.",
+              visible: SEM2,
+              highlighted: ["AB","GK","sphT"] },
+            { text: "Therefore the cube has been comprehended in the given sphere,",
+              visible: SEM2,
+              highlighted: EDGES.concat(["sphT"]) },
+            { text: "and it has been demonstrated at the same time",
+              visible: SEM2,
+              highlighted: EDGES },
+            { text: "that the square on the diameter of the sphere is triple the square on the side of the cube.",
+              visible: SEM2,
+              highlighted: ["GK","EK"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.15") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "I.11":      "/elements/books/bookI/propositions/propI11/",
+        "I.46":      "/elements/books/bookI/propositions/propI46/",
+        "I.47":      "/elements/books/bookI/propositions/propI47/",
+        "VI.9":      "/elements/books/bookVI/propositions/propVI9/",
+        "XI.12":     "/elements/books/bookXI/propositions/propXI12/",
+        "XI.Def.3":  "/elements/books/bookXI/definitions/defXI3/",
+        "XI.Def.25": "/elements/books/bookXI/definitions/defXI25/"
     });
 </script>
 </figure>
@@ -71,23 +360,23 @@ Therefore the cube *FN* has been constructed which is contained by six equal squ
 
 It is then required to comprehend it in the given sphere, and to prove that the square on the diameter of the sphere is triple the square on the side of the cube.
 
-Join *KG* and *EG.*
+Join {KG} and {EG}.
 
-Then, since the angle *KEG* is right, for *KE* is also at right angles to the plane *EG* and of course to the straight line *EG* also,  therefore the semicircle described on *KG* passes through the point *E.* [!just XI.Def.3]
+Then, since the angle {KEG|angKEG} is right, for {KE} is also at right angles to the plane {EG|EFGH} and of course to the straight line {EG} also,  therefore the semicircle described on {KG} passes through the point {E}. [!just XI.Def.3]
 
-Again, since *GF* is at right angles to each of the straight lines *FL* and *FE,* therefore *GF* is also at right angles to the plane *FK.* Hence also, if we join *FK,* then *GF* will be at right angles to *FK.* For this reason the semicircle described on *GK* also passes through *F.*
+Again, since {GF} is at right angles to each of the straight lines {FL} and {FE}, therefore {GF} is also at right angles to the plane {FK|sqFK}. Hence also, if we join {FK}, then {GF} will be at right angles to {FK}. For this reason the semicircle described on {GK} also passes through {F}.
 
 Similarly it also passes through the remaining angular points of the cube.
 
-If then, *KG* remaining fixed, the semicircle is carried round and restored to the same position from which it began to be moved, then the cube is comprehended in a sphere.
+If then, {KG} remaining fixed, the semicircle is carried round and restored to the same position from which it began to be moved, then the cube is comprehended in a sphere.
 
 I say next that it is also comprehended in the given sphere.
 
-For, since *GF* equals *FE,* and the angle at *F* is right, therefore the square on *EG* is double the square on *EF.*  But *EF* equals *EK,*  therefore the square on *EG* is double the square on *EK.* Hence the sum of the squares on *GE* and *EK,* that is the square on *GK,* is triple the square on *EK.* [!just I.47]
+For, since {GF} equals {FE}, and the angle at {F|angGFE} is right, therefore the square on {EG} is double the square on {EF}.  But {EF} equals {EK},  therefore the square on {EG} is double the square on {EK}. Hence the sum of the squares on {GE} and {EK}, that is the square on {GK}, is triple the square on {EK}. [!just I.47]
 
-And, since *AB* is triple *BC,* while *AB* is to *BC* as the square on *AB* is to the square on *BD,* therefore the square on *AB* is triple the square on *BD.*
+And, since {AB} is triple {BC}, while {AB} is to {BC} as the square on {AB} is to the square on {BD}, therefore the square on {AB} is triple the square on {BD}.
 
-But the square on *GK* was also proved triple the square on *KE.* And *KE* was made equal to *DB,* therefore *KG* also equals *AB.* And *AB* is the diameter of the given sphere, therefore *KG* also equals the diameter of the given sphere.
+But the square on {GK} was also proved triple the square on {KE}. And {KE} was made equal to {DB}, therefore {KG} also equals {AB}. And {AB} is the diameter of the given sphere, therefore {KG} also equals the diameter of the given sphere.
 
 Therefore the cube has been comprehended in the given sphere, and it has been demonstrated at the same time that the square on the diameter of the sphere is triple the square on the side of the cube.
 
@@ -139,17 +428,23 @@ guide:
             "L;point;extend;H,P,P,E",
             "G;point;extend;K,P,P,E",
             "cube;polyhedron;parallelepiped;E,F,H,K;0;0;red;0",
-            "tet;polyhedron;tetrahedron;E,N,L,G;0;0;blue;random"
+            "tet;polyhedron;tetrahedron;E,N,L,G;0;0;blue;random",
+            // Guide hover targets, transparent: a polyhedron takes no
+            // highlight, so the tetrahedron EGLN and the pyramid EGHN are
+            // octagons walking their six edges (as on XII.12). The prism
+            // EFKHGN has nine edges, too many for one octagon; untokenized.
+            "EGLN;polygon;octagon;E,G,L,N,E,L,N,G;0;0;0;0",
+            "EGHN;polygon;octagon;E,G,H,N,E,H,N,G;0;0;0;0"
         ],
     });
 </script>
 </figure>
 
-Note that the beginning of this construction of a cube is the same as that for the tetrahedron in proposition @XIII.13, namely, the points *C* and *D* are the same. The difference is that the line *AD* is the edge of a tetrahedron while the line *BD* is the edge of a cube. Following through the construction, you will see that four of the eight vertices of the cube are the four vertices of the tetrahedron. Using the labelling of this proposition, they may be taken as *E, G, L,* and *N.*
+Note that the beginning of this construction of a cube is the same as that for the tetrahedron in proposition @XIII.13, namely, the points {C} and {D} are the same. The difference is that the line {AD} is the edge of a tetrahedron while the line {BD} is the edge of a cube. Following through the construction, you will see that four of the eight vertices of the cube are the four vertices of the tetrahedron. Using the labelling of this proposition, they may be taken as {E}, {G}, {L}, and {N}.
 
-Alternatively, the other four vertices of the cube, *F, H, K,* and *M,* form the vertices of a regular tetrahedron. See the [Guide](/elements/books/bookXIII/propositions/propXIII13/#guide) to XIII.13 for more on this connection which involves placing coordinates on the vertices of the cube and tetrahedron.
+Alternatively, the other four vertices of the cube, {F}, {H}, {K}, and {M}, form the vertices of a regular tetrahedron. See the [Guide](/elements/books/bookXIII/propositions/propXIII13/#guide) to XIII.13 for more on this connection which involves placing coordinates on the vertices of the cube and tetrahedron.
 
-The volumes of the tetrahedron and cube are easily compared. When the tetrahedron is removed from the cube, there are four remaining pyramids, *EGHN* is one of them. By proposition @XII.9 the volume of each pyramid is one-third of the volume of a prism, for instance, *EGHN* is one-third of the triangular prism *EFKHGN,* which in turn is half of the cube. Therefore each pyramid is one-sixth of the cube. Since the four pyramids together make four-sixths of the cube, that leaves one-third of the cube for the regular tetrahedron *EGLN.*
+The volumes of the tetrahedron and cube are easily compared. When the tetrahedron is removed from the cube, there are four remaining pyramids, {EGHN} is one of them. By proposition @XII.9 the volume of each pyramid is one-third of the volume of a prism, for instance, {EGHN} is one-third of the triangular prism *EFKHGN,* which in turn is half of the cube. Therefore each pyramid is one-sixth of the cube. Since the four pyramids together make four-sixths of the cube, that leaves one-third of the cube for the regular tetrahedron {EGLN}.
 
 #### Use of this construction
 

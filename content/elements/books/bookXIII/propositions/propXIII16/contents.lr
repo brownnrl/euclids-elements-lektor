@@ -17,14 +17,85 @@ statement: To construct an icosahedron and comprehend it in a sphere, like the a
 ----
 proof:
 
-Set out the diameter *AB* of the given sphere, and cut it at *C* so that *AC* is quadruple *CB,* describe the semicircle *ADB* on *AB,* draw the straight line *CD* from *C* at right angles to *AB,* and join *DB.* [!just VI.9; I.11]
+Set out the diameter {AB} of the given sphere, and cut it at {C} so that {AC} is quadruple {CB}, describe the semicircle {ADB|semiT} on {AB}, draw the straight line {CD} from {C} at right angles to {AB}, and join {DB}. [!just VI.9; I.11]
 
-Set out the circle *EFGHK,* and let its radius be equal to *DB.*  Inscribe the equilateral and equiangular pentagon *EFGHK* in the circle *EFGHK,* bisect the circumferences *EF, FG, GH, HK,* and *KE* at the points *L, M, N, O,* and *P,* and join *LM, MN, NO, OP, PL,* and  *EP.* [!just IV.11; I.9]
+Set out the circle {EFGHK|Vcirc}, and let its radius be equal to {DB}.  Inscribe the equilateral and equiangular pentagon {EFGHK|EFpent} in the circle {EFGHK|Vcirc}, bisect the circumferences *EF, FG, GH, HK,* and *KE* at the points {L}, {M}, {N}, {O}, and {P}, and join {LM}, {MN}, {NO}, {OP}, {PL}, and  {EP}. [!just IV.11; I.9]
 
 <figure class="diagram">
 <canvas id="canvas_0" width="600" height="400" tabindex="0"></canvas>
 <noscript><img alt="XIII.16 diagram" src="propXIII16.gif"/></noscript>
 <script type="text/javascript">
+    // The diameter AB is cut at C with AC quadruple CB (VI.9) and DB, from
+    // the semicircle and the perpendicular CD (I.11), is the radius of the
+    // circle EFGHK. The pentagon EFGHK (IV.11) and the arcs bisected at
+    // L..P (I.9) give the pentagon LMNOP and the decagon side EP; EQ..KU,
+    // set up equal to the radius (XI.12, I.3), give the pentagon QRSTU, and
+    // XIII.10 makes the ten band triangles equilateral. VZ through the
+    // centre V (III.1, XI.12), cut at W and X, gives the vertices Z and X
+    // and the ten cap triangles (XI.6, I.33, IV.15.Cor, XIII.10). XIII.9,
+    // VI.8 and III.31 put the icosahedron in a sphere on XZ; XIII.3 and
+    // VI.8 make XZ the given diameter; XIII.11 makes the side minor.
+    //
+    // Joyce's figure is kept and held back until the proof reaches each
+    // piece: the circle, the pentagons and decagon, EQ..KU, the ten band
+    // triangles (revealed at the joins), XZ and the joins QZ, QW, UZ, EV,
+    // LV, LX, XM. VZ and VX are drawn from V as solid slide twins (dVZ,
+    // dVX), hidden at rest (initiallyHidden), and give way to Joyce's XZ;
+    // A', which only the closing argument names, is hidden at rest too.
+    //
+    // Everything else added is transparent: sphT, the given sphere's
+    // outline as a screen circle (a sphere takes no highlight), and semiT,
+    // a faceless twin of the semicircle; the segments the text names that
+    // the figure draws only as triangle or polygon sides (QR.., QL.., EK,
+    // EP, LM.., VW, WZ, ...); the joins VK, WU, MV, EZ, QX, which the text
+    // makes and the figure does not draw; the ten band triangles as
+    // faceless twins under Joyce's spellings (QPU, QLR, ... — his have
+    // fills, raised over the figure when lit, #140); the ten cap triangles;
+    // the pentagon QRSTU; the triangles XEZ, VEZ; and semXZ, the circle on
+    // XZ through Q, standing for the semicircle carried round. The arcs
+    // EF.. bisected at L..P are left untokenized (an arc on a tilted plane
+    // is not in the vocabulary). Right angles (red squares): DCB, QEP, QWZ,
+    // UWZ, LVX, ZVE, EVX, XEZ, XQZ, as the text calls them right.
+    //
+    // Draggables (checked against the bundle): A, B lineSliders and a free,
+    // the given sphere's diameter and centre; A0, A3 off-canvas; E
+    // (circleSlider) and X (sphereSlider), deferred until the proof reaches
+    // them. Every other point is derived and listed per slide.
+    var GIVEN = ["sphere","sphT","a","A","B","AB"];
+    var CUT   = GIVEN.concat(["C","AC","CB"]);
+    var SEMI  = CUT.concat(["semi","semiT"]);
+    var PERP  = SEMI.concat(["D","CD","BD","angC"]);
+    var CIRC  = PERP.concat(["Vcirc"]);
+    var PENT  = CIRC.concat(["E","F","G","H","K","EFpent","EK"]);
+    var BIS   = PENT.concat(["L","M","N","O","P"]);
+    var JLM   = BIS.concat(["LMpent","EP","LM","MN","NO","OP","PL"]);
+    var DEC   = JLM.concat(["dec"]);
+    var UPL   = DEC.concat(["EQ","FR","GS","HT","KU"]);
+    var UPP   = UPL.concat(["Q","R","S","T","U"]);
+    var BAND  = ["LQR","MRS","NST","OUT","QUP","LMR","MNS","NOT","POU","LPQ"];
+    var BANDT = ["QPU","QLR","RMS","SNT","TOU","QLP","LRM","MSN","NTO","OUP"];
+    var JOIN  = UPP.concat(BAND).concat(BANDT).concat(["QR","RS","ST","TU",
+                 "QU","QL","LR","RM","MS","SN","NT","TO","OU","PU","QP"]);
+    var PQR   = JOIN.concat(["QRSTU"]);
+    var RQE   = PQR.concat(["angQEP"]);
+    var CEN   = RQE.concat(["V"]);
+    var VZX   = CEN.concat(["dVZ","dVX","VZ","VX"]);
+    var CUTW  = CEN.concat(["XZ","VZ","VX","W","X","Z","VW","WZ"]);
+    var J2    = CUTW.concat(["QZ","QW","UZ","EV","LV","LX","XM"]);
+    var RQW   = J2.concat(["angQWZ"]);
+    var JVK   = RQW.concat(["VK","WU"]);
+    var RUW   = JVK.concat(["angUWZ"]);
+    var CAPZ  = RUW.concat(["QUZ","QRZ","RSZ","STZ","TUZ"]);
+    var RLV   = CAPZ.concat(["angLVX"]);
+    var JMV   = RLV.concat(["MV"]);
+    var CAPX  = JMV.concat(["LMX","MNX","NOX","OPX","PLX"]);
+    var ICO   = BANDT.concat(["QUZ","QRZ","RSZ","STZ","TUZ",
+                 "LMX","MNX","NOX","OPX","PLX"]);
+    var RV2   = CAPX.concat(["angZVE","angEVX"]);
+    var JEZ   = RV2.concat(["EZ","XEZ","VEZ","angXEZ","XW"]);
+    var JQX   = JEZ.concat(["QX","angXQZ"]);
+    var SEMX  = JQX.concat(["semXZ"]);
+    var BISW  = SEMX.concat(["A'","ZA'","A'W"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -99,49 +170,592 @@ Set out the circle *EFGHK,* and let its radius be equal to *DB.*  Inscribe the e
             "EV;line;connect;E,V",
             "LV;line;connect;L,V",
             "LX;line;connect;L,X",
-            "XM;line;connect;X,M"
+            "XM;line;connect;X,M",
+            // Solid slide twins drawn from V, and A', hidden at rest.
+            "dVZ;line;connect;V,Z",
+            "dVX;line;connect;V,X",
+            "A';point;midpoint;V,W",
+            // The sphere's outline as a screen circle, and a faceless
+            // twin of the semicircle.
+            "sphT;circle;radius;a,ABmid,A;0;0;0;0",
+            "semiT;sector;sector;ABmid,B,A;0;0;0;0",
+            // Transparent segments.
+            "AC;line;connect;A,C;0;0;0",
+            "CB;line;connect;C,B;0;0;0",
+            "EK;line;connect;E,K;0;0;0",
+            "EP;line;connect;E,P;0;0;0",
+            "LM;line;connect;L,M;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "NO;line;connect;N,O;0;0;0",
+            "OP;line;connect;O,P;0;0;0",
+            "PL;line;connect;P,L;0;0;0",
+            "QR;line;connect;Q,R;0;0;0",
+            "RS;line;connect;R,S;0;0;0",
+            "ST;line;connect;S,T;0;0;0",
+            "TU;line;connect;T,U;0;0;0",
+            "QU;line;connect;Q,U;0;0;0",
+            "QL;line;connect;Q,L;0;0;0",
+            "LR;line;connect;L,R;0;0;0",
+            "RM;line;connect;R,M;0;0;0",
+            "MS;line;connect;M,S;0;0;0",
+            "SN;line;connect;S,N;0;0;0",
+            "NT;line;connect;N,T;0;0;0",
+            "TO;line;connect;T,O;0;0;0",
+            "OU;line;connect;O,U;0;0;0",
+            "PU;line;connect;P,U;0;0;0",
+            "QP;line;connect;Q,P;0;0;0",
+            "VZ;line;connect;V,Z;0;0;0",
+            "VX;line;connect;V,X;0;0;0",
+            "VW;line;connect;V,W;0;0;0",
+            "WZ;line;connect;W,Z;0;0;0",
+            "VK;line;connect;V,K;0;0;0",
+            "WU;line;connect;W,U;0;0;0",
+            "MV;line;connect;M,V;0;0;0",
+            "EZ;line;connect;E,Z;0;0;0",
+            "QX;line;connect;Q,X;0;0;0",
+            "XW;line;connect;X,W;0;0;0",
+            "ZA';line;connect;Z,A';0;0;0",
+            "A'W;line;connect;A',W;0;0;0",
+            // Faceless twins of the band triangles, in Joyce's spelling.
+            "QPU;polygon;triangle;Q,P,U;0;0;0;0",
+            "QLR;polygon;triangle;Q,L,R;0;0;0;0",
+            "RMS;polygon;triangle;R,M,S;0;0;0;0",
+            "SNT;polygon;triangle;S,N,T;0;0;0;0",
+            "TOU;polygon;triangle;T,O,U;0;0;0;0",
+            "QLP;polygon;triangle;Q,L,P;0;0;0;0",
+            "LRM;polygon;triangle;L,R,M;0;0;0;0",
+            "MSN;polygon;triangle;M,S,N;0;0;0;0",
+            "NTO;polygon;triangle;N,T,O;0;0;0;0",
+            "OUP;polygon;triangle;O,U,P;0;0;0;0",
+            // The cap triangles, the pentagon QRSTU, and XEZ, VEZ.
+            "QUZ;polygon;triangle;Q,U,Z;0;0;0;0",
+            "QRZ;polygon;triangle;Q,R,Z;0;0;0;0",
+            "RSZ;polygon;triangle;R,S,Z;0;0;0;0",
+            "STZ;polygon;triangle;S,T,Z;0;0;0;0",
+            "TUZ;polygon;triangle;T,U,Z;0;0;0;0",
+            "LMX;polygon;triangle;L,M,X;0;0;0;0",
+            "MNX;polygon;triangle;M,N,X;0;0;0;0",
+            "NOX;polygon;triangle;N,O,X;0;0;0;0",
+            "OPX;polygon;triangle;O,P,X;0;0;0;0",
+            "PLX;polygon;triangle;P,L,X;0;0;0;0",
+            "QRSTU;polygon;pentagon;Q,R,S,T,U;0;0;0;0",
+            "XEZ;polygon;triangle;X,E,Z;0;0;0;0",
+            "VEZ;polygon;triangle;V,E,Z;0;0;0;0",
+            // The semicircle on XZ, carried round through Q.
+            "plXZQ;plane;threePoints;X,Z,Q;0;0;0;0",
+            "semXZ;circle;radius;a,X,plXZQ;0;0;0;0",
+            // Right angles.
+            "angC;sector;angleMarkerRight;C,B,D,12;0;0;red;red",
+            "angQEP;sector;angleMarkerRight;E,Q,P,12;0;0;red;red",
+            "angQWZ;sector;angleMarkerRight;W,Q,Z,12;0;0;red;red",
+            "angUWZ;sector;angleMarkerRight;W,U,Z,12;0;0;red;red",
+            "angLVX;sector;angleMarkerRight;V,L,X,12;0;0;red;red",
+            "angZVE;sector;angleMarkerRight;V,Z,E,12;0;0;red;red",
+            "angEVX;sector;angleMarkerRight;V,E,X,12;0;0;red;red",
+            "angXEZ;sector;angleMarkerRight;E,X,Z,12;0;0;red;red",
+            "angXQZ;sector;angleMarkerRight;Q,X,Z,12;0;0;red;red"
         ],
+        initiallyHidden: ["dVZ","dVX","A'"],
+        deferDraggables: ["E","X"],
+        aliases: { "DB": "BD", "BC": "CB", "UQ": "QU", "UP": "PU", "PQ": "QP",
+                   "QE": "EQ", "LP": "PL", "ZV": "VZ", "VE": "EV", "VL": "LV",
+                   "MX": "XM", "ZX": "XZ", "WQ": "QW",
+                   "WV": "VW", "ZW": "WZ", "WA'": "A'W" },
+        slides: [
+            { text: "“To construct an icosahedron and comprehend it in a sphere, like the aforesaid figures;”",
+              visible: GIVEN,
+              highlighted: ["sphT"],
+              justifications: [{ ref: "XIII.16" }] },
+            { text: "“and to prove that the square on the side of the icosahedron is the irrational straight line called minor.”",
+              visible: GIVEN,
+              highlighted: ["sphT"] },
+            { text: "Set out the diameter {AB} of the given sphere,",
+              visible: GIVEN,
+              highlighted: ["AB","sphT"] },
+            { text: "and cut it at {C} so that {AC} is quadruple {CB},",
+              visible: CUT,
+              highlighted: ["AC","CB"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "AC quadruple CB", ref: "VI.9" }] },
+            { text: "describe the semicircle {ADB|semiT} on {AB},",
+              visible: SEMI,
+              highlighted: ["semiT"],
+              transition: { animations: [
+                  { elem: "semi", name: geomlib.A.Sector.sweep } ] } },
+            { text: "draw the straight line {CD} from {C} at right angles to {AB}, and join {DB}.",
+              visible: PERP,
+              highlighted: ["CD","BD","angC"],
+              transition: { animations: [
+                  { elem: "CD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "D",  name: geomlib.A.Point.appear },
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "CD at right angles to AB", ref: "I.11" }] },
+            { text: "Set out the circle {EFGHK|Vcirc}, and let its radius be equal to {DB}.",
+              visible: CIRC,
+              highlighted: ["Vcirc","BD"],
+              transition: { animations: [
+                  { elem: "Vcirc", name: geomlib.A.Circle.compass } ] } },
+            { text: "Inscribe the equilateral and equiangular pentagon {EFGHK|EFpent} in the circle {EFGHK|Vcirc},",
+              visible: PENT,
+              highlighted: ["EFpent"],
+              transition: { animations: [
+                  { elem: "EFpent", name: geomlib.A.Polygon.outline } ] },
+              justifications: [{ claim: "the pentagon EFGHK", ref: "IV.11" }] },
+            { text: "bisect the circumferences EF, FG, GH, HK, and KE at the points {L}, {M}, {N}, {O}, and {P},",
+              visible: BIS,
+              highlighted: ["L","M","N","O","P"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "L", name: geomlib.A.Point.appear },
+                  { elem: "M", name: geomlib.A.Point.appear },
+                  { elem: "N", name: geomlib.A.Point.appear },
+                  { elem: "O", name: geomlib.A.Point.appear },
+                  { elem: "P", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the circumferences bisected", ref: "I.9" }] },
+            { text: "and join {LM}, {MN}, {NO}, {OP}, {PL}, and {EP}.",
+              visible: JLM,
+              highlighted: ["LM","MN","NO","OP","PL","EP"],
+              transition: { animations: [
+                  { elem: "LMpent", name: geomlib.A.Polygon.outline },
+                  { elem: "EP", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore the pentagon {LMNOP|LMpent} is also equilateral, and the straight line {EP} belongs to a decagon.",
+              visible: DEC,
+              highlighted: ["LMpent","EP"] },
+            { text: "Now from the points {E}, {F}, {G}, {H}, and {K} set up the straight lines {EQ}, {FR}, {GS}, {HT}, and {KU}",
+              visible: UPL,
+              highlighted: ["EQ","FR","GS","HT","KU"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "EQ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "FR", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "GS", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "HT", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "KU", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "at right angles to the plane of the circle, and make them equal to the radius of the circle {EFGHK|Vcirc}.",
+              visible: UPP,
+              highlighted: ["EQ","FR","GS","HT","KU","Vcirc"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "Q", name: geomlib.A.Point.appear },
+                  { elem: "R", name: geomlib.A.Point.appear },
+                  { elem: "S", name: geomlib.A.Point.appear },
+                  { elem: "T", name: geomlib.A.Point.appear },
+                  { elem: "U", name: geomlib.A.Point.appear } ] },
+              justifications: [
+                  { claim: "perpendiculars to the plane", ref: "XI.12" },
+                  { claim: "made equal to the radius", ref: "I.3" } ] },
+            { text: "Join {QR}, {RS}, {ST}, {TU}, {UQ}, {QL}, {LR}, {RM}, {MS}, {SN}, {NT}, {TO}, {OU}, {UP}, and {PQ}.",
+              visible: JOIN,
+              highlighted: ["QR","RS","ST","TU","QU","QL","LR","RM","MS",
+                            "SN","NT","TO","OU","PU","QP"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "LQR", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "MRS", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "NST", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "OUT", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "QUP", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "LMR", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "MNS", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "NOT", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "POU", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "LPQ", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Now, since each of the straight lines {EQ} and {KU} is at right angles to the same plane,",
+              visible: JOIN,
+              highlighted: ["EQ","KU"] },
+            { text: "therefore {EQ} is parallel to {KU}.",
+              visible: JOIN,
+              highlighted: ["EQ","KU"] },
+            { text: "But it is also equal to it,",
+              visible: JOIN,
+              highlighted: ["EQ","KU"] },
+            { text: "and the straight lines joining those ends of equal and parallel straight lines",
+              visible: JOIN,
+              highlighted: ["QU","EK"] },
+            { text: "which are in the same direction are equal and parallel.",
+              visible: JOIN,
+              highlighted: ["QU","EK"] },
+            { text: "Therefore {QU} is equal and parallel to {EK}.",
+              visible: JOIN,
+              highlighted: ["QU","EK"],
+              justifications: [{ ref: "I.33" }] },
+            { text: "But {EK} belongs to an equilateral pentagon,",
+              visible: JOIN,
+              highlighted: ["EK","EFpent"] },
+            { text: "therefore {QU} also belongs to the equilateral pentagon inscribed in the circle {EFGHK|Vcirc}.",
+              visible: JOIN,
+              highlighted: ["QU","Vcirc"] },
+            { text: "For the same reason each of the straight lines {QR}, {RS}, {ST}, and {TU}",
+              visible: JOIN,
+              highlighted: ["QR","RS","ST","TU"] },
+            { text: "also belongs to the equilateral pentagon inscribed in the circle {EFGHK|Vcirc}.",
+              visible: JOIN,
+              highlighted: ["QR","RS","ST","TU","Vcirc"] },
+            { text: "Therefore the pentagon {QRSTU} is equilateral.",
+              visible: PQR,
+              highlighted: ["QRSTU"] },
+            { text: "And, since {QE} belongs to a hexagon, and {EP} to a decagon, and the angle {QEP|angQEP} is right,",
+              visible: RQE,
+              highlighted: ["EQ","EP","angQEP"],
+              transition: { animations: [
+                  { elem: "angQEP", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore {QP} belongs to a pentagon,",
+              visible: RQE,
+              highlighted: ["QP"],
+              justifications: [{ claim: "pentagon² = hexagon² + decagon²", ref: "XIII.10" }] },
+            { text: "for the square on the side of the pentagon equals the sum of the square on the side of the hexagon",
+              visible: RQE,
+              highlighted: ["QP","EQ"] },
+            { text: "and the square on the side of the decagon inscribed in the same circle.",
+              visible: RQE,
+              highlighted: ["EP","Vcirc"] },
+            { text: "For the same reason {PU} is also a side of a pentagon.",
+              visible: RQE,
+              highlighted: ["PU"] },
+            { text: "But {QU} also belongs to a pentagon, therefore the triangle {QPU} is equilateral.",
+              visible: RQE,
+              highlighted: ["QU","QPU"] },
+            { text: "For the same reason each of the triangles {QLR}, {RMS}, {SNT}, and {TOU} is also equilateral.",
+              visible: RQE,
+              highlighted: ["QLR","RMS","SNT","TOU"] },
+            { text: "And, since each of the straight lines {QL} and {QP} was proved to belong to a pentagon,",
+              visible: RQE,
+              highlighted: ["QL","QP"] },
+            { text: "and {LP} also belongs to a pentagon, therefore the triangle {QLP} is equilateral.",
+              visible: RQE,
+              highlighted: ["PL","QLP"] },
+            { text: "For the same reason each of the triangles {LRM}, {MSN}, {NTO}, and {OUP} is also equilateral.",
+              visible: RQE,
+              highlighted: ["LRM","MSN","NTO","OUP"] },
+            { text: "Take the center {V} of the circle {EFGHK|Vcirc},",
+              visible: CEN,
+              highlighted: ["V","Vcirc"],
+              transition: { animations: [
+                  { elem: "V", name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "the center V", ref: "III.1" }] },
+            { text: "set {VZ} up from {V} at right angles to the plane of the circle,",
+              visible: VZX.filter(function(n) { return n !== "dVX"; }),
+              highlighted: ["VZ"],
+              transition: { animations: [
+                  { elem: "dVZ", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "VZ perpendicular to the plane", ref: "XI.12" }] },
+            { text: "and produce it in the other direction {VX}.",
+              visible: VZX,
+              highlighted: ["VX"],
+              transition: { animations: [
+                  { elem: "dVX", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Cut off {VW}, the side of a hexagon, and each of the straight lines {VX} and {WZ}, sides of a decagon.",
+              visible: CUTW,
+              highlighted: ["VW","VX","WZ"],
+              transition: { animations: [
+                  { elem: "W", name: geomlib.A.Point.appear },
+                  { elem: "X", name: geomlib.A.Point.appear },
+                  { elem: "Z", name: geomlib.A.Point.appear } ] } },
+            { text: "Join {QZ}, {QW}, {UZ}, {EV}, {LV}, {LX}, and {XM}.",
+              visible: J2,
+              highlighted: ["QZ","QW","UZ","EV","LV","LX","XM"],
+              transition: { animations: [
+                  { elem: "QZ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "QW", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "UZ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "EV", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "LV", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "LX", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "XM", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since each of the straight lines {VW} and {QE} is at right angles to the plane of the circle,",
+              visible: J2,
+              highlighted: ["VW","EQ"] },
+            { text: "therefore {VW} is parallel to {QE}. But they are also equal,",
+              visible: J2,
+              highlighted: ["VW","EQ"],
+              justifications: [{ ref: "XI.6" }] },
+            { text: "therefore {EV} and {QW} are also equal and parallel.",
+              visible: J2,
+              highlighted: ["EV","QW"],
+              justifications: [{ ref: "I.33" }] },
+            { text: "But {EV} belongs to a hexagon, therefore {QW} also belongs to a hexagon.",
+              visible: J2,
+              highlighted: ["EV","QW"] },
+            { text: "And, since {QW} belongs to a hexagon, and {WZ} to a decagon, and the angle {QWZ|angQWZ} is right,",
+              visible: RQW,
+              highlighted: ["QW","WZ","angQWZ"],
+              transition: { animations: [
+                  { elem: "angQWZ", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore {QZ} belongs to a pentagon.",
+              visible: RQW,
+              highlighted: ["QZ"],
+              justifications: [{ ref: "XIII.10" }] },
+            { text: "For the same reason {UZ} also belongs to a pentagon,",
+              visible: RQW,
+              highlighted: ["UZ"] },
+            { text: "for if we join {VK} and {WU}, then they will be equal and opposite,",
+              visible: JVK,
+              highlighted: ["VK","WU"],
+              transition: { animations: [
+                  { elem: "VK", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "WU", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and {VK}, being a radius, belongs to a hexagon, therefore {WU} also belongs to a hexagon.",
+              visible: JVK,
+              highlighted: ["VK","WU"],
+              justifications: [{ claim: "side of the hexagon = radius", ref: "IV.15.Cor" }] },
+            { text: "But {WZ} belongs to a decagon, and the angle {UWZ|angUWZ} is right, therefore {UZ} belongs to a pentagon.",
+              visible: RUW,
+              highlighted: ["WZ","angUWZ","UZ"],
+              transition: { animations: [
+                  { elem: "angUWZ", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ ref: "XIII.10" }] },
+            { text: "But {QU} also belongs to a pentagon, therefore the triangle {QUZ} is equilateral.",
+              visible: CAPZ,
+              highlighted: ["QU","QUZ"] },
+            { text: "For the same reason each of the remaining triangles",
+              visible: CAPZ,
+              highlighted: ["QRZ","RSZ","STZ","TUZ"] },
+            { text: "of which the straight lines {QR}, {RS}, {ST}, and {TU} are the bases, and the point {Z} the vertex, is also equilateral.",
+              visible: CAPZ,
+              highlighted: ["QR","RS","ST","TU","Z"] },
+            { text: "Again, since {VL} belongs to a hexagon, and {VX} to a decagon, and the angle {LVX|angLVX} is right,",
+              visible: RLV,
+              highlighted: ["LV","VX","angLVX"],
+              transition: { animations: [
+                  { elem: "angLVX", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore {LX} belongs to a pentagon.",
+              visible: RLV,
+              highlighted: ["LX"],
+              justifications: [{ ref: "XIII.10" }] },
+            { text: "For the same reason, if we join {MV}, which belongs to a hexagon, {MX} is also inferred to belong to a pentagon.",
+              visible: JMV,
+              highlighted: ["MV","XM"],
+              transition: { animations: [
+                  { elem: "MV", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "But {LM} also belongs to a pentagon, therefore the triangle {LMX} is equilateral.",
+              visible: CAPX,
+              highlighted: ["LM","LMX"] },
+            { text: "Similarly it can be proved that each of the remaining triangles",
+              visible: CAPX,
+              highlighted: ["MNX","NOX","OPX","PLX"] },
+            { text: "of which {MN}, {NO}, {OP}, and {PL} are the bases and the point {X} the vertex, is also equilateral.",
+              visible: CAPX,
+              highlighted: ["MN","NO","OP","PL","X"] },
+            { text: "Therefore an icosahedron has been constructed which is contained by twenty equilateral triangles.",
+              visible: CAPX,
+              highlighted: ICO,
+              justifications: [{ ref: "XI.Def.27" }] },
+            { text: "It is next required to comprehend it in the given sphere,",
+              visible: CAPX,
+              highlighted: ["sphT"] },
+            { text: "and to prove that the side of the icosahedron is the irrational straight line called minor.",
+              visible: CAPX,
+              highlighted: ["QU"] },
+            { text: "Since {VW} belongs to a hexagon, and {WZ} to a decagon,",
+              visible: CAPX,
+              highlighted: ["VW","WZ"] },
+            { text: "therefore {VZ} is cut in extreme and mean ratio at {W}, and {VW} is its greater segment.",
+              visible: CAPX,
+              highlighted: ["VZ","W","VW"],
+              justifications: [{ ref: "XIII.9" }] },
+            { text: "Therefore as {ZV} is to {VW} as {VW} is to {WZ}.",
+              visible: CAPX,
+              highlighted: ["VZ","VW","WZ"] },
+            { text: "But {VW} equals {VE}, and {WZ} equals {VX},",
+              visible: CAPX,
+              highlighted: ["VW","EV","WZ","VX"] },
+            { text: "therefore {ZV} is to {VE} as {EV} is to {VX}.",
+              visible: CAPX,
+              highlighted: ["VZ","EV","VX"] },
+            { text: "And the angles {ZVE|angZVE} and {EVX|angEVX} are right,",
+              visible: RV2,
+              highlighted: ["angZVE","angEVX"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angZVE", name: geomlib.A.Sector.sweep },
+                  { elem: "angEVX", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore, if we join the straight line {EZ}, then the angle {XEZ|angXEZ} will be right",
+              visible: JEZ,
+              highlighted: ["EZ","angXEZ"],
+              transition: { animations: [
+                  { elem: "EZ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angXEZ", name: geomlib.A.Sector.sweep } ] } },
+            { text: "since the triangles {XEZ} and {VEZ} are similar.",
+              visible: JEZ,
+              highlighted: ["XEZ","VEZ"] },
+            { text: "For the same reason, since {ZV} is to {VW} as {VW} is to {WZ},",
+              visible: JEZ,
+              highlighted: ["VZ","VW","WZ"] },
+            { text: "and {ZV} equals {XW}, and {VW} equals {WQ},",
+              visible: JEZ,
+              highlighted: ["VZ","XW","VW","QW"] },
+            { text: "therefore {XW} is to {WQ} as {QW} is to {WZ}.",
+              visible: JEZ,
+              highlighted: ["XW","QW","WZ"] },
+            { text: "And for this reason again, if we join {QX}, then the angle at {Q|angXQZ} will be right,",
+              visible: JQX,
+              highlighted: ["QX","angXQZ"],
+              transition: { animations: [
+                  { elem: "QX", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angXQZ", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the semicircle described on {XZ} will also pass through {Q}.",
+              visible: SEMX,
+              highlighted: ["XZ","Q","semXZ"],
+              transition: { animations: [
+                  { elem: "semXZ", name: geomlib.A.Circle.compass } ] },
+              justifications: [{ ref: "VI.8" }, { ref: "III.31" }] },
+            { text: "And if, {XZ} remaining fixed, the semicircle is carried round",
+              visible: SEMX,
+              highlighted: ["XZ","semXZ"] },
+            { text: "and restored to the same position from which it began to be moved,",
+              visible: SEMX,
+              highlighted: ["semXZ"] },
+            { text: "then it will pass through {Q} and the remaining angular points of the icosahedron,",
+              visible: SEMX,
+              highlighted: ["Q","R","S","T","U","L","M","N","O","P","X","Z"] },
+            { text: "and the icosahedron will have been comprehended in a sphere.",
+              visible: SEMX,
+              highlighted: ["sphT"] },
+            { text: "I say next that it is also comprehended in the given sphere.",
+              visible: SEMX,
+              highlighted: ["sphT"] },
+            { text: "Bisect {VW} at {A'}.",
+              visible: BISW,
+              highlighted: ["VW","A'"],
+              transition: { animations: [
+                  { elem: "A'", name: geomlib.A.Point.appear } ] },
+              justifications: [{ ref: "I.9" }] },
+            { text: "Then, since the straight line {VZ} is cut in extreme and mean ratio at {W}, and {ZW} is its lesser segment,",
+              visible: BISW,
+              highlighted: ["VZ","W","WZ"] },
+            { text: "therefore the square on {ZW} added to the half of the greater segment, that is {WA'},",
+              visible: BISW,
+              highlighted: ["WZ","A'W"] },
+            { text: "is five times the square on the half of the greater segment.",
+              visible: BISW,
+              highlighted: ["ZA'","A'W"] },
+            { text: "Therefore the square on {ZA'} is five times the square on {A'W}.",
+              visible: BISW,
+              highlighted: ["ZA'","A'W"],
+              justifications: [{ ref: "XIII.3" }] },
+            { text: "And {ZX} is double {ZA'}, and {VW} is double {A'W},",
+              visible: BISW,
+              highlighted: ["XZ","ZA'","VW","A'W"] },
+            { text: "therefore the square on {ZX} is five times the square on {WV}.",
+              visible: BISW,
+              highlighted: ["XZ","VW"] },
+            { text: "And, since {AC} is quadruple {CB}, therefore {AB} is five times {BC}.",
+              visible: BISW,
+              highlighted: ["AC","CB","AB"] },
+            { text: "But {AB} is to {BC} as the square on {AB} is to the square on {BD},",
+              visible: BISW,
+              highlighted: ["AB","CB","BD"] },
+            { text: "therefore the square on {AB} is five times the square on {BD}.",
+              visible: BISW,
+              highlighted: ["AB","BD"],
+              justifications: [{ ref: "VI.8" }, { ref: "V.Def.9" }] },
+            { text: "But the square on {ZX} was also proved to be five times the square on {VW}.",
+              visible: BISW,
+              highlighted: ["XZ","VW"] },
+            { text: "And {DB} equals {VW}, for each of them equals the radius of the circle {EFGHK|Vcirc},",
+              visible: BISW,
+              highlighted: ["BD","VW","Vcirc"] },
+            { text: "therefore {AB} also equals {XZ}.",
+              visible: BISW,
+              highlighted: ["AB","XZ"] },
+            { text: "And {AB} is the diameter of the given sphere, therefore {XZ} also equals the diameter of the given sphere.",
+              visible: BISW,
+              highlighted: ["AB","XZ","sphT"] },
+            { text: "Therefore the icosahedron has been comprehended in the given sphere.",
+              visible: BISW,
+              highlighted: ICO.concat(["sphT"]) },
+            { text: "I say next that the side of the icosahedron is the irrational straight line called minor.",
+              visible: BISW,
+              highlighted: ["QU"] },
+            { text: "Since the diameter of the sphere is rational,",
+              visible: BISW,
+              highlighted: ["XZ"] },
+            { text: "and the square on it is five times the square on the radius of the circle {EFGHK|Vcirc},",
+              visible: BISW,
+              highlighted: ["XZ","Vcirc"] },
+            { text: "therefore the radius of the circle {EFGHK|Vcirc} is also rational, hence its diameter is also rational.",
+              visible: BISW,
+              highlighted: ["Vcirc"] },
+            { text: "But, if an equilateral pentagon is inscribed in a circle which has its diameter rational,",
+              visible: BISW,
+              highlighted: ["EFpent","Vcirc"] },
+            { text: "then the side of the pentagon is the irrational straight line called minor.",
+              visible: BISW,
+              highlighted: ["EK"],
+              justifications: [{ ref: "XIII.11" }] },
+            { text: "And the side of the pentagon {EFGHK|EFpent} is the side of the icosahedron.",
+              visible: BISW,
+              highlighted: ["EK","QU"] },
+            { text: "Therefore the side of the icosahedron is the irrational straight line called minor.",
+              visible: BISW,
+              highlighted: ["QU"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XIII.16") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":       "/elements/books/bookI/propositions/propI3/",
+        "I.9":       "/elements/books/bookI/propositions/propI9/",
+        "I.11":      "/elements/books/bookI/propositions/propI11/",
+        "I.33":      "/elements/books/bookI/propositions/propI33/",
+        "III.1":     "/elements/books/bookIII/propositions/propIII1/",
+        "III.31":    "/elements/books/bookIII/propositions/propIII31/",
+        "IV.11":     "/elements/books/bookIV/propositions/propIV11/",
+        "IV.15.Cor": "/elements/books/bookIV/propositions/propIV15/#cor",
+        "V.Def.9":   "/elements/books/bookV/definitions/defV9/",
+        "VI.8":      "/elements/books/bookVI/propositions/propVI8/",
+        "VI.9":      "/elements/books/bookVI/propositions/propVI9/",
+        "XI.6":      "/elements/books/bookXI/propositions/propXI6/",
+        "XI.12":     "/elements/books/bookXI/propositions/propXI12/",
+        "XI.Def.27": "/elements/books/bookXI/definitions/defXI27/",
+        "XIII.3":    "/elements/books/bookXIII/propositions/propXIII3/",
+        "XIII.9":    "/elements/books/bookXIII/propositions/propXIII9/",
+        "XIII.10":   "/elements/books/bookXIII/propositions/propXIII10/",
+        "XIII.11":   "/elements/books/bookXIII/propositions/propXIII11/"
     });
 </script>
 </figure>
 
-Therefore the pentagon *LMNOP* is also equilateral, and the straight line *EP* belongs to a decagon.
+Therefore the pentagon {LMNOP|LMpent} is also equilateral, and the straight line {EP} belongs to a decagon.
 
-Now from the points *E, F, G, H,* and *K* set up the straight lines *EQ, FR, GS, HT,* and *KU*  at right angles to the plane of the circle, and make them equal to the radius of the circle *EFGHK.*  Join *QR, RS, ST, TU, UQ, QL, LR, RM, MS, SN, NT, TO, OU, UP,* and *PQ.* [!just XI.12; I.3]
+Now from the points {E}, {F}, {G}, {H}, and {K} set up the straight lines {EQ}, {FR}, {GS}, {HT}, and {KU}  at right angles to the plane of the circle, and make them equal to the radius of the circle {EFGHK|Vcirc}.  Join {QR}, {RS}, {ST}, {TU}, {UQ}, {QL}, {LR}, {RM}, {MS}, {SN}, {NT}, {TO}, {OU}, {UP}, and {PQ}. [!just XI.12; I.3]
 
-Now, since each of the straight lines *EQ* and *KU* is at right angles to the same plane, therefore *EQ* is parallel to *KU.*
+Now, since each of the straight lines {EQ} and {KU} is at right angles to the same plane, therefore {EQ} is parallel to {KU}.
 
-But it is also equal to it, and the straight lines joining those ends of equal and parallel straight lines which are in the same direction are equal and parallel.  Therefore *QU* is equal and parallel to *EK.* [!just I.33]
+But it is also equal to it, and the straight lines joining those ends of equal and parallel straight lines which are in the same direction are equal and parallel.  Therefore {QU} is equal and parallel to {EK}. [!just I.33]
 
-But *EK* belongs to an equilateral pentagon, therefore *QU* also belongs to the equilateral pentagon inscribed in the circle *EFGHK.*
+But {EK} belongs to an equilateral pentagon, therefore {QU} also belongs to the equilateral pentagon inscribed in the circle {EFGHK|Vcirc}.
 
-For the same reason each of the straight lines *QR, RS, ST,* and *TU* also belongs to the equilateral pentagon inscribed in the circle *EFGHK.*  Therefore the pentagon *QRSTU* is equilateral.
+For the same reason each of the straight lines {QR}, {RS}, {ST}, and {TU} also belongs to the equilateral pentagon inscribed in the circle {EFGHK|Vcirc}.  Therefore the pentagon {QRSTU} is equilateral.
 
-And, since *QE* belongs to a hexagon, and *EP* to a decagon, and the angle *QEP* is right, therefore *QP* belongs to a pentagon, for the square on the side of the pentagon equals the sum of the square on the side of the hexagon and the square on the side of the decagon inscribed in the same circle. [!just XIII.10]
+And, since {QE} belongs to a hexagon, and {EP} to a decagon, and the angle {QEP|angQEP} is right, therefore {QP} belongs to a pentagon, for the square on the side of the pentagon equals the sum of the square on the side of the hexagon and the square on the side of the decagon inscribed in the same circle. [!just XIII.10]
 
-For the same reason *PU* is also a side of a pentagon. But *QU* also belongs to a pentagon, therefore the triangle *QPU* is equilateral. For the same reason each of the triangles *QLR, RMS, SNT,* and *TOU* is also equilateral.
+For the same reason {PU} is also a side of a pentagon. But {QU} also belongs to a pentagon, therefore the triangle {QPU} is equilateral. For the same reason each of the triangles {QLR}, {RMS}, {SNT}, and {TOU} is also equilateral.
 
-And, since each of the straight lines *QL* and *QP* was proved to belong to a pentagon, and *LP* also belongs to a pentagon, therefore the triangle *QLP* is equilateral.
+And, since each of the straight lines {QL} and {QP} was proved to belong to a pentagon, and {LP} also belongs to a pentagon, therefore the triangle {QLP} is equilateral.
 
-For the same reason each of the triangles *LRM, MSN, NTO,* and *OUP* is also equilateral.
+For the same reason each of the triangles {LRM}, {MSN}, {NTO}, and {OUP} is also equilateral.
 
-Take the center *V* of the circle *EFGHK,* set *VZ* up from *V* at right angles to the plane of the circle, and produce it in the other direction *VX.*  Cut off *VW,* the side of a hexagon, and each of the straight lines *VX* and *WZ,* sides of a decagon.  Join *QZ, QW, UZ, EV, LV, LX,* and *XM.* [!just III.1; XI.12]
+Take the center {V} of the circle {EFGHK|Vcirc}, set {VZ} up from {V} at right angles to the plane of the circle, and produce it in the other direction {VX}.  Cut off {VW}, the side of a hexagon, and each of the straight lines {VX} and {WZ}, sides of a decagon.  Join {QZ}, {QW}, {UZ}, {EV}, {LV}, {LX}, and {XM}. [!just III.1; XI.12]
 
-Now, since each of the straight lines *VW* and *QE* is at right angles to the plane of the circle, therefore *VW* is parallel to *QE.* But they are also equal, therefore *EV* and *QW* are also equal and parallel. [!just XI.6; I.33]
+Now, since each of the straight lines {VW} and {QE} is at right angles to the plane of the circle, therefore {VW} is parallel to {QE}. But they are also equal, therefore {EV} and {QW} are also equal and parallel. [!just XI.6; I.33]
 
-But *EV* belongs to a hexagon, therefore *QW* also belongs to a hexagon. And, since *QW* belongs to a hexagon,  and *WZ* to a decagon,  and the angle *QWZ* is right,  therefore *QZ* belongs to a pentagon. [!just XIII.10]
+But {EV} belongs to a hexagon, therefore {QW} also belongs to a hexagon. And, since {QW} belongs to a hexagon,  and {WZ} to a decagon,  and the angle {QWZ|angQWZ} is right,  therefore {QZ} belongs to a pentagon. [!just XIII.10]
 
-For the same reason  *UZ* also belongs to a pentagon, for if we join *VK* and *WU,* then they will be equal and opposite, and *VK,* being a radius, belongs to a hexagon, therefore *WU* also belongs to a hexagon. But *WZ* belongs to a decagon, and the angle *UWZ* is right, therefore *UZ* belongs to a pentagon. [!just IV.15.Cor; XIII.10]
+For the same reason  {UZ} also belongs to a pentagon, for if we join {VK} and {WU}, then they will be equal and opposite, and {VK}, being a radius, belongs to a hexagon, therefore {WU} also belongs to a hexagon. But {WZ} belongs to a decagon, and the angle {UWZ|angUWZ} is right, therefore {UZ} belongs to a pentagon. [!just IV.15.Cor; XIII.10]
 
-But *QU* also belongs to a pentagon, therefore the triangle *QUZ* is equilateral. For the same reason each of the remaining triangles of which the straight lines *QR, RS, ST,* and *TU* are the bases, and the point *Z* the vertex, is also equilateral.
+But {QU} also belongs to a pentagon, therefore the triangle {QUZ} is equilateral. For the same reason each of the remaining triangles of which the straight lines {QR}, {RS}, {ST}, and {TU} are the bases, and the point {Z} the vertex, is also equilateral.
 
-Again, since *VL* belongs to a hexagon, and *VX* to a decagon, and the angle *LVX* is right, therefore *LX* belongs to a pentagon. [!just XIII.10]
+Again, since {VL} belongs to a hexagon, and {VX} to a decagon, and the angle {LVX|angLVX} is right, therefore {LX} belongs to a pentagon. [!just XIII.10]
 
-For the same reason, if we join *MV,* which belongs to a hexagon, *MX* is also inferred to belong to a pentagon.
+For the same reason, if we join {MV}, which belongs to a hexagon, {MX} is also inferred to belong to a pentagon.
 
-But *LM* also belongs to a pentagon, therefore the triangle *LMX* is equilateral.
+But {LM} also belongs to a pentagon, therefore the triangle {LMX} is equilateral.
 
-Similarly it can be proved that each of the remaining triangles of which *MN, NO, OP,* and *PL* are the bases and the point *X* the vertex, is also equilateral.
+Similarly it can be proved that each of the remaining triangles of which {MN}, {NO}, {OP}, and {PL} are the bases and the point {X} the vertex, is also equilateral.
 
 Therefore an icosahedron has been constructed which is contained by twenty equilateral triangles. [!just XI.Def.27]
 
@@ -149,39 +763,39 @@ Therefore an icosahedron has been constructed which is contained by twenty equil
 
 It is next required to comprehend it in the given sphere, and to prove that the side of the icosahedron is the irrational straight line called minor.
 
-Since *VW* belongs to a hexagon, and *WZ* to a decagon, therefore *VZ* is cut in extreme and mean ratio at *W,* and *VW* is its greater segment. Therefore as *ZV* is to *VW* as *VW* is to *WZ.* [!just XIII.9]
+Since {VW} belongs to a hexagon, and {WZ} to a decagon, therefore {VZ} is cut in extreme and mean ratio at {W}, and {VW} is its greater segment. Therefore as {ZV} is to {VW} as {VW} is to {WZ}. [!just XIII.9]
 
-But *VW* equals *VE,* and *WZ* equals *VX,* therefore *ZV* is to *VE* as *EV* is to *VX.*
+But {VW} equals {VE}, and {WZ} equals {VX}, therefore {ZV} is to {VE} as {EV} is to {VX}.
 
-And the angles *ZVE* and *EVX* are right, therefore, if we join the straight line *EZ,* then the angle *XEZ* will be right since the triangles *XEZ* and *VEZ* are similar.
+And the angles {ZVE|angZVE} and {EVX|angEVX} are right, therefore, if we join the straight line {EZ}, then the angle {XEZ|angXEZ} will be right since the triangles {XEZ} and {VEZ} are similar.
 
-For the same reason, since *ZV* is to *VW* as *VW* is to *WZ,* and *ZV* equals *XW,* and *VW* equals *WQ,* therefore *XW* is to *WQ* as *QW* is to *WZ.*
+For the same reason, since {ZV} is to {VW} as {VW} is to {WZ}, and {ZV} equals {XW}, and {VW} equals {WQ}, therefore {XW} is to {WQ} as {QW} is to {WZ}.
 
-And for this reason again, if we join *QX,* then the angle at *Q* will be right, therefore the semicircle described on *XZ* will also pass through *Q.* [!just VI.8, III.31]
+And for this reason again, if we join {QX}, then the angle at {Q|angXQZ} will be right, therefore the semicircle described on {XZ} will also pass through {Q}. [!just VI.8, III.31]
 
-And if, *XZ* remaining fixed, the semicircle is carried round and restored to the same position from which it began to be moved, then it will pass through *Q* and the remaining angular points of the icosahedron, and the icosahedron will have been comprehended in a sphere.
+And if, {XZ} remaining fixed, the semicircle is carried round and restored to the same position from which it began to be moved, then it will pass through {Q} and the remaining angular points of the icosahedron, and the icosahedron will have been comprehended in a sphere.
 
 <hr width="50%">
 
 I say next that it is also comprehended in the given sphere.
 
-Bisect *VW* at *A'.* [!just I.9]
+Bisect {VW} at {A'}. [!just I.9]
 
-Then, since the straight line *VZ* is cut in extreme and mean ratio at *W,* and *ZW* is its lesser segment, therefore the square on *ZW* added to the half of the greater segment, that is *WA',* is five times the square on the half of the greater segment. Therefore the square on *ZA'* is five times the square on *A'W.* [!just XIII.3]
+Then, since the straight line {VZ} is cut in extreme and mean ratio at {W}, and {ZW} is its lesser segment, therefore the square on {ZW} added to the half of the greater segment, that is {WA'}, is five times the square on the half of the greater segment. Therefore the square on {ZA'} is five times the square on {A'W}. [!just XIII.3]
 
-And *ZX* is double *ZA',* and *VW* is double *A'W,* therefore the square on *ZX* is five times the square on *WV.*  And, since *AC* is quadruple *CB,* therefore *AB* is five times *BC.*
+And {ZX} is double {ZA'}, and {VW} is double {A'W}, therefore the square on {ZX} is five times the square on {WV}.  And, since {AC} is quadruple {CB}, therefore {AB} is five times {BC}.
 
-But *AB* is to *BC* as the square on *AB* is to the square on *BD,* therefore the square on *AB* is five times the square on *BD.* [!just VI.8; V.Def.9]
+But {AB} is to {BC} as the square on {AB} is to the square on {BD}, therefore the square on {AB} is five times the square on {BD}. [!just VI.8; V.Def.9]
 
-But the square on *ZX* was also proved to be five times the square on *VW.* And *DB* equals *VW,*  for each of them equals the radius of the circle *EFGHK,* therefore *AB* also equals *XZ.*  And *AB* is the diameter of the given sphere, therefore *XZ* also equals the diameter of the given sphere.
+But the square on {ZX} was also proved to be five times the square on {VW}. And {DB} equals {VW},  for each of them equals the radius of the circle {EFGHK|Vcirc}, therefore {AB} also equals {XZ}.  And {AB} is the diameter of the given sphere, therefore {XZ} also equals the diameter of the given sphere.
 
 Therefore the icosahedron has been comprehended in the given sphere.
 
 I say next that the side of the icosahedron is the irrational straight line called minor.
 
-Since the diameter of the sphere is rational, and the square on it is five times the square on the radius of the circle *EFGHK,* therefore the radius of the circle *EFGHK* is also rational, hence its diameter is also rational.  But, if an equilateral pentagon is inscribed in a circle which has its diameter rational, then the side of the pentagon is the irrational straight line called minor. [!just XIII.11]
+Since the diameter of the sphere is rational, and the square on it is five times the square on the radius of the circle {EFGHK|Vcirc}, therefore the radius of the circle {EFGHK|Vcirc} is also rational, hence its diameter is also rational.  But, if an equilateral pentagon is inscribed in a circle which has its diameter rational, then the side of the pentagon is the irrational straight line called minor. [!just XIII.11]
 
-And the side of the pentagon *EFGHK* is the side of the icosahedron.
+And the side of the pentagon {EFGHK|EFpent} is the side of the icosahedron.
 
 Therefore the side of the icosahedron is the irrational straight line called minor.
 
@@ -348,13 +962,18 @@ Unlike most of the Euclid's illustrations, the diagram he used for this proposit
             "PLX;polygon;triangle;P,L,X",
             "LMTU;polygon;parallelogram;L,M,T;0;0;red;50,30,100",
             "OXRZ;polygon;parallelogram;O,X,R;0;0;red;50,30,100",
-            "NPQS;polygon;parallelogram;N,P,Q;0;0;red;50,30,100"
+            "NPQS;polygon;parallelogram;N,P,Q;0;0;red;50,30,100",
+            // Faceless twins of the rectangles for the guide hovers (their
+            // fills would be raised over the icosahedron when lit, #140).
+            "rLMTU;polygon;parallelogram;L,M,T;0;0;0;0",
+            "rOXRZ;polygon;parallelogram;O,X,R;0;0;0;0",
+            "rNPQS;polygon;parallelogram;N,P,Q;0;0;0;0"
         ],
     });
 </script>
 </figure>
 
-Luca Pacioli (1445–1517) discussed the construction of the regular polygons in his *De divina proportione*, entitled for his term for the extreme and mean ratio. In the preceding diagram, the 12 vertices of icosahedron appear in three groups of four vertices, each group being the vertices of three mutually perpendicular rectangles, *LMTU*, *OXRZ*, and *NPSQ*.
+Luca Pacioli (1445–1517) discussed the construction of the regular polygons in his *De divina proportione*, entitled for his term for the extreme and mean ratio. In the preceding diagram, the 12 vertices of icosahedron appear in three groups of four vertices, each group being the vertices of three mutually perpendicular rectangles, {LMTU|rLMTU}, {OXRZ|rOXRZ}, and {NPSQ|rNPQS}.
 
 Pacioli recognized that the sides of each of those rectangles are in extreme and mean ratio, and used them as the construction of the icosahedron.
 
