@@ -17,14 +17,39 @@ statement: To describe a rectilinear figure similar and similarly situated to a 
 ----
 proof:
 
-Let *AB* be the given straight line and *CE* the given rectilinear figure.
+Let {AB} be the given straight line and {CE|CEt} the given rectilinear figure.
 
-It is required to describe on the straight line *AB* a rectilinear figure similar and similarly situated to the rectilinear figure *CE.*
+It is required to describe on the straight line {AB} a rectilinear figure similar and similarly situated to the rectilinear figure {CE|CEt}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="350" height="270" tabindex="0"></canvas>
 <noscript><img alt="VI.18 diagram" src="propVI18.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the given quadrilateral CDEF, the join DF, and
+    // the triangles ABG (similar to CDF) and BGH (similar to DFE), all with
+    // random faces; G and H are derived (similar).
+    //
+    // The walk builds the new figure line by line, so AB, AG, BG, GH, BH
+    // are solid slide twins over the triangles' edges, hidden at rest
+    // (initiallyHidden), stroking from A, B, G, B as constructed; the
+    // filled triangles come back on the closing slide. DF is Joyce's own
+    // line, declared D to F, and is simply withheld until "Join DF".
+    // Everything else added is transparent: the sides FC, CD, FE, ED, and
+    // faceless polygons for "the rectilinear figures" CE (CEt) and AH (AHt)
+    // and the four triangles FCD, GAB, FDE, GBH (a highlighted filled
+    // polygon is raised over the figure, #140). Equal angles share a
+    // colour; none is a right angle. The triangles own the names GAB, FDE,
+    // GBH, ABG, BGH; the angles take display overrides.
+    var GIVEN = ["CDEF","C","D","E","F","AB","A","B"];
+    var JOIN  = GIVEN.concat(["DF"]);
+    var TRI1  = JOIN.concat(["AG","BG","G"]);
+    var TRI2  = TRI1.concat(["GH","BH","H"]);
+    var SIDES = ["FC","CD","FE","ED"];
+    var ANG1  = ["angC","angA","angCDF","angABG","angCFD","angAGB"];
+    var ANG2  = ["angDFE","angBGH","angFDE","angGBH","angE","angH"];
+    var WHOLE = ["angCFE","angAGH","angCDE","angABH"];
+    var ALL   = TRI2.concat(SIDES, ANG1, ANG2);
+    var DONE  = TRI2.concat(["ABG","BGH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -43,39 +68,250 @@ It is required to describe on the straight line *AB* a rectilinear figure simila
             "G;point;similar;A,B,C,D,F",
             "ABG;polygon;triangle;A,B,G;0;0;black;random",
             "H;point;similar;B,G,D,F,E",
-            "BGH;polygon;triangle;B,G,H;0;0;black;random"
+            "BGH;polygon;triangle;B,G,H;0;0;black;random",
+            // Slide twins, hidden at rest (see above).
+            "AB;line;connect;A,B",
+            "AG;line;connect;A,G",
+            "BG;line;connect;B,G",
+            "GH;line;connect;G,H",
+            "BH;line;connect;B,H",
+            // Transparent highlight targets.
+            "FC;line;connect;F,C;0;0;0",
+            "CD;line;connect;C,D;0;0;0",
+            "FE;line;connect;F,E;0;0;0",
+            "ED;line;connect;E,D;0;0;0",
+            "CEt;polygon;quadrilateral;C,D,E,F;0;0;0;0",
+            "AHt;polygon;quadrilateral;A,B,H,G;0;0;0;0",
+            "FCD;polygon;triangle;F,C,D;0;0;0;0",
+            "GAB;polygon;triangle;G,A,B;0;0;0;0",
+            "FDE;polygon;triangle;F,D,E;0;0;0;0",
+            "GBH;polygon;triangle;G,B,H;0;0;0;0",
+            // Angle markers; equal angles share a colour.
+            "angC;sector;angleMarker;C,D,F;0;0;7a4fa3;cdb8e6",
+            "angA;sector;angleMarker;A,B,G;0;0;7a4fa3;cdb8e6",
+            "angCDF;sector;angleMarker;D,C,F;0;0;3b6ea5;9ec5e8",
+            "angABG;sector;angleMarker;B,A,G;0;0;3b6ea5;9ec5e8",
+            "angCFD;sector;angleMarker;F,C,D;0;0;3f8e4f;a8dbb0",
+            "angAGB;sector;angleMarker;G,A,B;0;0;3f8e4f;a8dbb0",
+            "angDFE;sector;angleMarker;F,D,E;0;0;c06a1b;f3c590",
+            "angBGH;sector;angleMarker;G,B,H;0;0;c06a1b;f3c590",
+            "angFDE;sector;angleMarker;D,F,E;0;0;b5446e;f0b6cb",
+            "angGBH;sector;angleMarker;B,G,H;0;0;b5446e;f0b6cb",
+            "angE;sector;angleMarker;E,D,F;0;0;2a8a8a;a6dede",
+            "angH;sector;angleMarker;H,B,G;0;0;2a8a8a;a6dede",
+            "angCFE;sector;angleMarker;F,C,E;0;0;8a6d3b;e0cfa8",
+            "angAGH;sector;angleMarker;G,A,H;0;0;8a6d3b;e0cfa8",
+            "angCDE;sector;angleMarker;D,C,E;0;0;5a5a5a;c8c8c8",
+            "angABH;sector;angleMarker;B,A,H;0;0;5a5a5a;c8c8c8"
         ],
+        // Draggables (checked against the bundle): the track ends A0, A3
+        // (free, off-canvas), the lineSliders A, B, C, D and the free E, F —
+        // all givens, standing from slide 1; nothing to defer. G and H are
+        // derived and listed per slide.
+        initiallyHidden: ["AB","AG","BG","GH","BH"],
+        aliases: { "BA": "AB", "GA": "AG", "GB": "BG", "HG": "GH",
+                   "HB": "BH", "FD": "DF", "CF": "FC", "DC": "CD",
+                   "EF": "FE", "DE": "ED", "CE": "CEt", "AH": "AHt",
+                   "CDF": "angCDF", "FDC": "angCDF",
+                   "CFD": "angCFD", "DFC": "angCFD",
+                   "AGB": "angAGB", "BGA": "angAGB",
+                   "DFE": "angDFE", "EFD": "angDFE",
+                   "CFE": "angCFE", "EFC": "angCFE",
+                   "AGH": "angAGH", "HGA": "angAGH",
+                   "CDE": "angCDE", "EDC": "angCDE",
+                   "ABH": "angABH", "HBA": "angABH" },
+        slides: [
+            { text: "“To describe a rectilinear figure similar and similarly situated to a given rectilinear figure on a given straight line.”",
+              visible: GIVEN,
+              highlighted: ["CEt","AB"],
+              justifications: [{ ref: "VI.18" }] },
+            { text: "Let {AB} be the given straight line and {CE|CEt} the given rectilinear figure.",
+              visible: GIVEN,
+              highlighted: ["AB","CEt"] },
+            { text: "It is required to describe on the straight line {AB} a rectilinear figure",
+              visible: GIVEN,
+              highlighted: ["AB"] },
+            { text: "similar and similarly situated to the rectilinear figure {CE|CEt}.",
+              visible: GIVEN,
+              highlighted: ["CEt"] },
+            { text: "Join {DF}.",
+              visible: JOIN,
+              highlighted: ["DF"],
+              transition: { animations: [
+                  { elem: "DF", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Construct the angle {GAB|angA} equal to the angle at {C|angC},",
+              visible: JOIN.concat(["AG","angC","angA"]),
+              highlighted: ["angA","angC"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angC", name: geomlib.A.Sector.sweep },
+                  { elem: "AG",   name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angA", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle GAB = angle C", ref: "I.23" }] },
+            { text: "and the angle {ABG|angABG} equal to the angle {CDF|angCDF},",
+              visible: TRI1.concat(["angC","angA","angCDF","angABG"]),
+              highlighted: ["angABG","angCDF"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angCDF", name: geomlib.A.Sector.sweep },
+                  { elem: "BG",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angABG", name: geomlib.A.Sector.sweep },
+                  { elem: "G",      name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "angle ABG = angle CDF", ref: "I.23" }] },
+            { text: "on the straight line {AB} at the points {A} and {B} on it.",
+              visible: TRI1.concat(["angC","angA","angCDF","angABG"]),
+              highlighted: ["AB","A","B"] },
+            { text: "Therefore the remaining angle {CFD|angCFD} equals the angle {AGB|angAGB}.",
+              visible: TRI1.concat(ANG1),
+              highlighted: ["angCFD","angAGB"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCFD", name: geomlib.A.Sector.sweep },
+                  { elem: "angAGB", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "remaining angle CFD = AGB", ref: "I.32" }] },
+            { text: "Therefore the triangle {FCD} is equiangular with the triangle {GAB}.",
+              visible: TRI1.concat(ANG1),
+              highlighted: ["FCD","GAB"] },
+            { text: "Therefore, proportionally, {FD|DF} is to {GB|BG} as {FC} is to {GA|AG}, and as {CD} is to {AB}.",
+              visible: TRI1.concat(ANG1, ["FC","CD"]),
+              highlighted: ["DF","BG","FC","AG","CD","AB"],
+              justifications: [
+                  { claim: "FD : FC = GB : GA, FD : DC = GB : BA", ref: "VI.4" },
+                  { claim: "alternately", ref: "V.16" } ] },
+            { text: "Again, construct the angle {BGH|angBGH} equal to the angle {DFE|angDFE},",
+              visible: TRI1.concat(["GH","angDFE","angBGH"]),
+              highlighted: ["angBGH","angDFE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angDFE", name: geomlib.A.Sector.sweep },
+                  { elem: "GH",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angBGH", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "angle BGH = angle DFE", ref: "I.23" }] },
+            { text: "and the angle {GBH|angGBH} equal to the angle {FDE|angFDE},",
+              visible: TRI2.concat(["angDFE","angBGH","angFDE","angGBH"]),
+              highlighted: ["angGBH","angFDE"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "angFDE", name: geomlib.A.Sector.sweep },
+                  { elem: "BH",     name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "angGBH", name: geomlib.A.Sector.sweep },
+                  { elem: "H",      name: geomlib.A.Point.appear } ] },
+              justifications: [{ claim: "angle GBH = angle FDE", ref: "I.23" }] },
+            { text: "on the straight line {BG} and at the points {B} and {G} on it.",
+              visible: TRI2.concat(["angDFE","angBGH","angFDE","angGBH"]),
+              highlighted: ["BG","B","G"] },
+            { text: "Therefore the remaining angle at {E|angE} equals the remaining angle at {H|angH}.",
+              visible: TRI2.concat(ANG2),
+              highlighted: ["angE","angH"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angE", name: geomlib.A.Sector.sweep },
+                  { elem: "angH", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "remaining angle E = H", ref: "I.32" }] },
+            { text: "Therefore the triangle {FDE} is equiangular with the triangle {GBH}.",
+              visible: TRI2.concat(ANG2),
+              highlighted: ["FDE","GBH"] },
+            { text: "Therefore, proportionally, {FD|DF} is to {GB|BG} as {FE} is to {GH}, and as {ED} is to {HB|BH}.",
+              visible: TRI2.concat(ANG2, ["FE","ED"]),
+              highlighted: ["DF","BG","FE","GH","ED","BH"],
+              justifications: [
+                  { claim: "FD : FE = GB : GH, FD : DE = GB : BH", ref: "VI.4" },
+                  { claim: "alternately", ref: "V.16" } ] },
+            { text: "But it was also proved that {FD|DF} is to {GB|BG} as {FC} is to {GA|AG}, and as {CD} is to {AB}.",
+              visible: TRI2.concat(SIDES),
+              highlighted: ["DF","BG","FC","AG","CD","AB"] },
+            { text: "Therefore {FC} is to {AG} as {CD} is to {AB},",
+              visible: TRI2.concat(SIDES),
+              highlighted: ["FC","AG","CD","AB"] },
+            { text: "and as {FE} is to {GH}, and further as {ED} is to {HB|BH}.",
+              visible: TRI2.concat(SIDES),
+              highlighted: ["FC","AG","FE","GH","ED","BH"],
+              justifications: [{ claim: "ratios the same with the same ratio", ref: "V.11" }] },
+            { text: "And, since the angle {CFD|angCFD} equals the angle {AGB|angAGB},",
+              visible: ALL,
+              highlighted: ["angCFD","angAGB"] },
+            { text: "and the angle {DFE|angDFE} equals the angle {BGH|angBGH},",
+              visible: ALL,
+              highlighted: ["angDFE","angBGH"] },
+            { text: "therefore the whole angle {CFE|angCFE} equals the whole angle {AGH|angAGH}.",
+              visible: ALL.concat(["angCFE","angAGH"]),
+              highlighted: ["angCFE","angAGH"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCFE", name: geomlib.A.Sector.sweep },
+                  { elem: "angAGH", name: geomlib.A.Sector.sweep } ] } },
+            { text: "For the same reason the angle {CDE|angCDE} also equals the angle {ABH|angABH}.",
+              visible: ALL.concat(WHOLE),
+              highlighted: ["angCDE","angABH"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angCDE", name: geomlib.A.Sector.sweep },
+                  { elem: "angABH", name: geomlib.A.Sector.sweep } ] } },
+            { text: "And the angle at {C|angC} also equals the angle at {A|angA},",
+              visible: ALL.concat(WHOLE),
+              highlighted: ["angC","angA"] },
+            { text: "and the angle at {E|angE} equals the angle at {H|angH}.",
+              visible: ALL.concat(WHOLE),
+              highlighted: ["angE","angH"] },
+            { text: "Therefore {AH|AHt} is equiangular with {CE|CEt},",
+              visible: TRI2.concat(SIDES, ["angC","angA","angE","angH"], WHOLE),
+              highlighted: ["AHt","CEt","angC","angA","angE","angH",
+                            "angCFE","angAGH","angCDE","angABH"] },
+            { text: "and they have the sides about their equal angles proportional.",
+              visible: TRI2.concat(SIDES),
+              highlighted: ["AB","BH","GH","AG","CD","ED","FE","FC"] },
+            { text: "Therefore the rectilinear figure {AH|AHt} is similar to the rectilinear figure {CE|CEt}.",
+              visible: TRI2,
+              highlighted: ["AHt","CEt"],
+              justifications: [{ ref: "VI.Def.1" }] },
+            { text: "Therefore the rectilinear figure {AH|AHt} has been described similar and similarly situated",
+              visible: DONE,
+              highlighted: ["AHt"] },
+            { text: "to the given rectilinear figure {CE|CEt} on the given straight line {AB}.",
+              visible: DONE,
+              highlighted: ["CEt","AB"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.18") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1": "/elements/books/bookI/postulates/post1/",
+        "I.23":     "/elements/books/bookI/propositions/propI23/",
+        "I.32":     "/elements/books/bookI/propositions/propI32/",
+        "V.11":     "/elements/books/bookV/propositions/propV11/",
+        "V.16":     "/elements/books/bookV/propositions/propV16/",
+        "VI.4":     "/elements/books/bookVI/propositions/propVI4/",
+        "VI.Def.1": "/elements/books/bookVI/definitions/defVI1/"
     });
 </script>
 </figure>
 
-Join *DF.*  Construct the angle *GAB* equal to the angle at *C,* and the angle *ABG* equal to the angle *CDF,* on the straight line *AB* at the points *A* and *B* on it. [!just I.23]
+Join {DF}.  Construct the angle {GAB|angA} equal to the angle at {C|angC}, and the angle {ABG|angABG} equal to the angle {CDF|angCDF}, on the straight line {AB} at the points {A} and {B} on it. [!just I.23]
 
-Therefore the remaining angle *CFD* equals the angle *AGB.* Therefore the triangle *FCD* is equiangular with the triangle *GAB.* [!just I.32]
+Therefore the remaining angle {CFD|angCFD} equals the angle {AGB|angAGB}. Therefore the triangle {FCD} is equiangular with the triangle {GAB}. [!just I.32]
 
-Therefore, proportionally, *FD* is to *GB* as *FC* is to *GA,* and as *CD* is to *AB.* [!just VI.4; V.16]
+Therefore, proportionally, {FD|DF} is to {GB|BG} as {FC} is to {GA|AG}, and as {CD} is to {AB}. [!just VI.4; V.16]
 
-Again, construct the angle *BGH* equal to the angle *DFE,* and the angle *GBH* equal to the angle *FDE,* on the straight line *BG* and at the points *B* and *G* on it. [!just I.23]
+Again, construct the angle {BGH|angBGH} equal to the angle {DFE|angDFE}, and the angle {GBH|angGBH} equal to the angle {FDE|angFDE}, on the straight line {BG} and at the points {B} and {G} on it. [!just I.23]
 
-Therefore the remaining angle at *E* equals the remaining angle at *H.*  Therefore the triangle *FDE* is equiangular with the triangle *GBH.*  Therefore, proportionally, *FD* is to *GB* as *FE* is to *GH,* and as *ED* is to *HB.* [!just I.32; VI.4; V.16]
+Therefore the remaining angle at {E|angE} equals the remaining angle at {H|angH}.  Therefore the triangle {FDE} is equiangular with the triangle {GBH}.  Therefore, proportionally, {FD|DF} is to {GB|BG} as {FE} is to {GH}, and as {ED} is to {HB|BH}. [!just I.32; VI.4; V.16]
 
-But it was also proved that *FD* is to *GB* as *FC* is to *GA,* and as *CD* is to *AB.* Therefore  *FC* is to *AG* as *CD* is to *AB,* and as *FE* is to *GH,* and further as *ED* is to *HB.* [!just V.11]
+But it was also proved that {FD|DF} is to {GB|BG} as {FC} is to {GA|AG}, and as {CD} is to {AB}. Therefore  {FC} is to {AG} as {CD} is to {AB}, and as {FE} is to {GH}, and further as {ED} is to {HB|BH}. [!just V.11]
 
-And, since the angle *CFD* equals the angle *AGB,* and the angle *DFE* equals the angle *BGH,* therefore the whole angle *CFE* equals the whole angle *AGH.*
+And, since the angle {CFD|angCFD} equals the angle {AGB|angAGB}, and the angle {DFE|angDFE} equals the angle {BGH|angBGH}, therefore the whole angle {CFE|angCFE} equals the whole angle {AGH|angAGH}.
 
-For the same reason the angle *CDE* also equals the angle *ABH.*
+For the same reason the angle {CDE|angCDE} also equals the angle {ABH|angABH}.
 
-And the angle at *C* also equals the angle at *A,* and the angle at *E* equals the angle at *H.*
+And the angle at {C|angC} also equals the angle at {A|angA}, and the angle at {E|angE} equals the angle at {H|angH}.
 
-Therefore *AH* is equiangular with *CE,* and they have the sides about their equal angles proportional.  Therefore the rectilinear figure *AH* is similar to the rectilinear figure *CE.* [!just VI.Def.1]
+Therefore {AH|AHt} is equiangular with {CE|CEt}, and they have the sides about their equal angles proportional.  Therefore the rectilinear figure {AH|AHt} is similar to the rectilinear figure {CE|CEt}. [!just VI.Def.1]
 
-Therefore the rectilinear figure *AH* has been described similar and similarly situated to the given rectilinear figure *CE* on the given straight line *AB.*
+Therefore the rectilinear figure {AH|AHt} has been described similar and similarly situated to the given rectilinear figure {CE|CEt} on the given straight line {AB}.
 
 <div class="qed">Q.E.F.</div>
 ----
 guide:
 
-It is evident from the diagram, if not from the text, that *AB* should correspond to *CD.*
+It is evident from the diagram, if not from the text, that {AB} should correspond to {CD}.
 
 Although the figure has only four sides, it is clear that the method applies to figures with more than four sides.
 

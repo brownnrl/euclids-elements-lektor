@@ -15,14 +15,25 @@ statement: If three straight lines are proportional, then the rectangle containe
 ----
 proof:
 
-Let the three straight lines *A* and *B* and *C* be proportional, so that *A* is to *B* as *B* is to *C.*
+Let the three straight lines {A} and {B} and {C} be proportional, so that {A} is to {B} as {B} is to {C}.
 
-I say that the rectangle *A* by *C* equals the square on *B.*
+I say that the rectangle {A} by {C} equals the square on {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="160" height="220" tabindex="0"></canvas>
 <noscript><img alt="VI.17 diagram" src="propVI17.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure draws the four lines A, B, C, D on vertical tracks
+    // (invisible free ends off-canvas, slider ends A1..D1, A2, B2). C2 is
+    // the third proportional to A, B (proportion) and D2 cuts D off equal
+    // to B (cutoff); both are derived and listed per slide. Neither the
+    // rectangles nor the square is drawn, so the walk lights the lines
+    // that contain them. D strokes from D1 when it is made (I.3 by chip
+    // only, fatigue rule). The converse "Next, ..." returns to the three
+    // lines alone and brings D back "with the same construction".
+    // Nothing is added to the figure; no angles, so no markers.
+    var GIVEN = ["A","B","C","C2"];
+    var CONS  = GIVEN.concat(["D","D1","D2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -49,31 +60,129 @@ I say that the rectangle *A* by *C* equals the square on *B.*
             "D2;point;cutoff;D1,D3,B1,B2;0",
             "D;line;connect;D1,D2;black"
         ],
+        // Draggables (checked against the bundle): the track ends A0..D3
+        // (free, off-canvas) and the slider ends A1, A2, B1, B2, C1, D1.
+        // D1 carries the line D, which the proof makes mid-walk, so it is
+        // deferred (with D's track ends). C2 and D2 are derived.
+        deferDraggables: ["D0","D1","D3"],
+        slides: [
+            { text: "“If three straight lines are proportional, then the rectangle contained by the extremes equals the square on the mean;",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "VI.17" }] },
+            { text: "and, if the rectangle contained by the extremes equals the square on the mean, then the three straight lines are proportional.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "Let the three straight lines {A} and {B} and {C} be proportional,",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "so that {A} is to {B} as {B} is to {C}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "I say that the rectangle {A} by {C} equals the square on {B}.",
+              visible: GIVEN,
+              highlighted: ["A","C","B"] },
+            { text: "Make {D} equal to {B}.",
+              visible: CONS,
+              highlighted: ["D","B"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "D equal to B", ref: "I.3" }] },
+            { text: "Then, since {A} is to {B} as {B} is to {C}, and {B} equals {D},",
+              visible: CONS,
+              highlighted: ["A","B","C","D"] },
+            { text: "therefore {A} is to {B} as {D} is to {C}.",
+              visible: CONS,
+              highlighted: ["A","B","D","C"],
+              justifications: [
+                  { claim: "B : C = D : C", ref: "V.7" },
+                  { claim: "A : B = D : C", ref: "V.11" } ] },
+            { text: "But, if four straight lines are proportional, then the rectangle contained by the extremes equals the rectangle contained by the means.",
+              visible: CONS,
+              highlighted: ["A","B","D","C"],
+              justifications: [{ ref: "VI.16" }] },
+            { text: "Therefore the rectangle {A} by {C} equals the rectangle {B} by {D}.",
+              visible: CONS,
+              highlighted: ["A","C","B","D"] },
+            { text: "But the rectangle {B} by {D} is the square on {B}, for {B} equals {D},",
+              visible: CONS,
+              highlighted: ["B","D"] },
+            { text: "therefore the rectangle {A} by {C} equals the square on {B}.",
+              visible: CONS,
+              highlighted: ["A","C","B"] },
+            { text: "Next, let the rectangle {A} by {C} equal the square on {B}.",
+              visible: GIVEN,
+              highlighted: ["A","C","B"] },
+            { text: "I say that {A} is to {B} as {B} is to {C}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "With the same construction, since the rectangle {A} by {C} equals the square on {B},",
+              visible: CONS,
+              highlighted: ["A","C","B"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "while the square on {B} is the rectangle {B} by {D}, for {B} equals {D},",
+              visible: CONS,
+              highlighted: ["B","D"] },
+            { text: "therefore the rectangle {A} by {C} equals the rectangle {B} by {D}.",
+              visible: CONS,
+              highlighted: ["A","C","B","D"] },
+            { text: "But, if the rectangle contained by the extremes equals that contained by the means, then the four straight lines are proportional.",
+              visible: CONS,
+              highlighted: ["A","C","B","D"],
+              justifications: [{ ref: "VI.16" }] },
+            { text: "Therefore {A} is to {B} as {D} is to {C}.",
+              visible: CONS,
+              highlighted: ["A","B","D","C"] },
+            { text: "But {B} equals {D}, therefore {A} is to {B} as {B} is to {C}.",
+              visible: CONS,
+              highlighted: ["A","B","C"] },
+            { text: "Therefore, if three straight lines are proportional, then the rectangle contained by the extremes equals the square on the mean;",
+              visible: CONS,
+              highlighted: ["A","B","C"] },
+            { text: "and, if the rectangle contained by the extremes equals the square on the mean, then the three straight lines are proportional.",
+              visible: CONS,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VI.17") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.3":   "/elements/books/bookI/propositions/propI3/",
+        "V.7":   "/elements/books/bookV/propositions/propV7/",
+        "V.11":  "/elements/books/bookV/propositions/propV11/",
+        "VI.16": "/elements/books/bookVI/propositions/propVI16/"
     });
 </script>
 </figure>
 
-Make *D* equal to *B.* [!just I.3]
+Make {D} equal to {B}. [!just I.3]
 
-Then, since *A* is to *B* as *B* is to *C,* and *B* equals *D,* therefore *A* is to *B* as *D* is to *C.* [!just V.7; V.11]
+Then, since {A} is to {B} as {B} is to {C}, and {B} equals {D}, therefore {A} is to {B} as {D} is to {C}. [!just V.7; V.11]
 
 But, if four straight lines are proportional, then the rectangle contained by the extremes equals the rectangle contained by the means. [!just VI.16]
 
-Therefore the rectangle *A* by *C* equals the rectangle *B* by *D.*  But the rectangle *B* by *D* is the square on *B,* for *B* equals *D,* therefore the rectangle *A* by *C* equals the square on *B.*
+Therefore the rectangle {A} by {C} equals the rectangle {B} by {D}.  But the rectangle {B} by {D} is the square on {B}, for {B} equals {D}, therefore the rectangle {A} by {C} equals the square on {B}.
 
 <hr width="50%">
 
-Next, let the rectangle *A* by *C* equal the square on *B.*
+Next, let the rectangle {A} by {C} equal the square on {B}.
 
-I say that *A* is to *B* as *B* is to *C.*
+I say that {A} is to {B} as {B} is to {C}.
 
-With the same construction, since the rectangle *A* by *C* equals the square on *B,* while the square on *B* is the rectangle *B* by *D,* for *B* equals *D,* therefore the rectangle *A* by *C* equals the rectangle *B* by *D.*
+With the same construction, since the rectangle {A} by {C} equals the square on {B}, while the square on {B} is the rectangle {B} by {D}, for {B} equals {D}, therefore the rectangle {A} by {C} equals the rectangle {B} by {D}.
 
 But, if the rectangle contained by the extremes equals that contained by the means, then the four straight lines are proportional. [!just VI.16]
 
-Therefore *A* is to *B* as *D* is to *C.*
+Therefore {A} is to {B} as {D} is to {C}.
 
-But *B* equals *D,* therefore *A* is to *B* as *B* is to *C.*
+But {B} equals {D}, therefore {A} is to {B} as {B} is to {C}.
 
 Therefore, *if three straight lines are proportional, then the rectangle contained by the extremes equals the square on the mean; and, if the rectangle contained by the extremes equals the square on the mean, then the three straight lines are proportional.*
 
