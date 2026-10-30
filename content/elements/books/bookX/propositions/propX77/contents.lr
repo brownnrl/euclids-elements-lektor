@@ -15,14 +15,22 @@ statement: If from a straight line there is subtracted a straight line which is 
 ----
 proof:
 
-From the straight line *AB* let there be subtracted the straight line *BC* which is incommensurable in square with *AB* and fulfills the given conditions.
+From the straight line {AB} let there be subtracted the straight line {BC} which is incommensurable in square with {AB} and fulfills the given conditions.
 
-I say that the remainder *AC* is the irrational straight line aforesaid.
+I say that the remainder {AC} is the irrational straight line aforesaid.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="240" height="65" tabindex="0"></canvas>
 <noscript><img alt="X.77 diagram" src="propX77.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the line AB with C on it (A0, A3 are off-canvas
+    // anchors for the line sliders). Added, hidden at rest: transparent
+    // targets BC, AC (;0;0;0) so the subtracted line and the remainder can
+    // light separately. Resting figure unchanged.
+    //
+    // Draggables (checked against the bundle): A0, A3 (free, off-canvas)
+    // and A, B, C (line sliders), all givens; nothing is deferred.
+    var ALL = ["A","B","C","AB","BC","AC"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -33,15 +41,80 @@ I say that the remainder *AC* is the irrational straight line aforesaid.
             "A;point;lineSlider;A0,A3,30,0",
             "B;point;lineSlider;A0,A3,210,0",
             "C;point;lineSlider;A0,A3,100,0",
-            "AB;line;connect;A,B"
+            "AB;line;connect;A,B",
+            // Slide-only highlight targets.
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0"
         ],
+        slides: [
+            { text: "“If from a straight line there is subtracted a straight line which is incommensurable in square with the whole,",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "X.77" }] },
+            { text: "and which with the whole makes the sum of the squares on them medial",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "but twice the rectangle contained by them rational,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "then the remainder is irrational;",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "let it be called that which produces with a rational area a medial whole.”",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "From the straight line {AB} let there be subtracted the straight line {BC}",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "which is incommensurable in square with {AB} and fulfills the given conditions.",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "I say that the remainder {AC} is the irrational straight line aforesaid.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Since the sum of the squares on {AB} and {BC} is medial,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "while twice the rectangle {AB} by {BC} is rational,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "Therefore the remainder, the square on {AC}, is also incommensurable with twice the rectangle {AB} by {BC}.",
+              visible: ALL,
+              highlighted: ["AC","AB","BC"],
+              justifications: [{ claim: "AB² + BC² = 2 AB·BC + AC²", ref: "II.7" },
+                               { claim: "AC², 2 AB·BC incommensurable", ref: "X.16" }] },
+            { text: "And twice the rectangle {AB} by {BC} is rational,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore the square on {AC} is irrational. Therefore {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "Let it be called that which produces with a rational area a medial whole.",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.77") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.7": "/elements/books/bookII/propositions/propII7/",
+        "X.16": "/elements/books/bookX/propositions/propX16/"
     });
 </script>
 </figure>
 
-Since the sum of the squares on *AB* and *BC* is medial, while twice the rectangle *AB* by *BC* is rational, therefore the sum of the squares on *AB* and *BC* is incommensurable with twice the rectangle *AB* by *BC*. Therefore the remainder, the square on *AC*, is also incommensurable with twice the rectangle *AB* by *BC*. [!just II.7; X.16]
+Since the sum of the squares on {AB} and {BC} is medial, while twice the rectangle {AB} by {BC} is rational, therefore the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC}. Therefore the remainder, the square on {AC}, is also incommensurable with twice the rectangle {AB} by {BC}. [!just II.7; X.16]
 
-And twice the rectangle *AB* by *BC* is rational, therefore the square on *AC* is irrational. Therefore *AC* is irrational. Let it be called that which produces with a rational area a medial whole.
+And twice the rectangle {AB} by {BC} is rational, therefore the square on {AC} is irrational. Therefore {AC} is irrational. Let it be called that which produces with a rational area a medial whole.
 
 <div class="qed">Q.E.D.</div>
 ----

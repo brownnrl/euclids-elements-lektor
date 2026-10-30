@@ -15,14 +15,33 @@ statement: If from a straight line there is subtracted a straight line which is 
 ----
 proof:
 
-From the straight line *AB* let there be subtracted the straight line *BC* incommensurable in square with *AB* and fulfilling the given conditions. [!just X.35]
+From the straight line {AB} let there be subtracted the straight line {BC} incommensurable in square with {AB} and fulfilling the given conditions. [!just X.35]
 
-I say that the remainder *AC* is the irrational straight line called that which produces with a medial area a medial whole.
+I say that the remainder {AC} is the irrational straight line called that which produces with a medial area a medial whole.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="320" height="180" tabindex="0"></canvas>
 <noscript><img alt="X.78 diagram" src="propX78.gif"/></noscript>
 <script type="text/javascript">
+    // Joyce's figure: the line AB with C on it, the rational line DI (the
+    // shared side of the two rectangles), DE applied to DI with breadth DG,
+    // split at F/H into DH (IDFH) and the remainder FE (HFGE). Added, all
+    // invisible at rest: transparent targets BC, AC, DI, DG, DF, FG, FH
+    // (;0;0;0); faceless twins DEh (I,D,G,E), DHh, FEh (;0;0;0;0) so the
+    // random-faced rectangles are never raised over each other when lit
+    // (#140), reached as {DE|DEh}, {DH|DHh}, {FE|FEh} and the aliases.
+    // The apply slide strokes DEh's outline; IDFH and HFGE fill on the
+    // subtract and remainder slides. No angle is called right.
+    //
+    // Draggables (checked against the bundle): A0, A3, D0, D3 (free,
+    // off-canvas), A, B, C, D, I (line sliders). D and I arrive with "Set
+    // out a rational straight line DI", so both are deferred. G, E, F, H
+    // are derived and listed per slide.
+    var LINE = ["A","B","C","AB","BC","AC"];
+    var DIS  = LINE.concat(["D","I","DI"]);
+    var DES  = DIS.concat(["G","E","DEh","DG"]);
+    var DHS  = DES.concat(["F","H","IDFH","DHh","DF"]);
+    var ALL  = DHS.concat(["HFGE","FEh","FG","FH"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -46,29 +65,162 @@ I say that the remainder *AC* is the irrational straight line called that which 
             "F;point;extend;D,F',D,F'",
             "H;point;parallelogram;I,D,F",
             "IDFH;polygon;quadrilateral;I,D,F,H;0;0;black;random",
-            "HFGE;polygon;quadrilateral;H,F,G,E;0;0;black;random"
+            "HFGE;polygon;quadrilateral;H,F,G,E;0;0;black;random",
+            // Slide-only highlight targets — invisible at rest.
+            "BC;line;connect;B,C;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "DI;line;connect;D,I;0;0;0",
+            "DG;line;connect;D,G;0;0;0",
+            "DF;line;connect;D,F;0;0;0",
+            "FG;line;connect;F,G;0;0;0",
+            "FH;line;connect;F,H;0;0;0",
+            "DEh;polygon;quadrilateral;I,D,G,E;0;0;0;0",
+            "DHh;polygon;quadrilateral;I,D,F,H;0;0;0;0",
+            "FEh;polygon;quadrilateral;H,F,G,E;0;0;0;0"
         ],
+        deferDraggables: ["D","I"],
+        aliases: { "DE": "DEh", "DH": "DHh", "FE": "FEh", "GD": "DG" },
+        slides: [
+            { text: "“If from a straight line there is subtracted a straight line which is incommensurable in square with the whole",
+              visible: ALL,
+              highlighted: ["AB","BC"],
+              justifications: [{ ref: "X.78" }] },
+            { text: "and which with the whole makes the sum of the squares on them medial,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "twice the rectangle contained by them medial,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "and further the squares on them incommensurable with twice the rectangle contained by them,",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "then the remainder is irrational;",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "let it be called that which produces with a medial area a medial whole.”",
+              visible: ALL,
+              highlighted: ["AC"] },
+            { text: "From the straight line {AB} let there be subtracted the straight line {BC}",
+              visible: LINE,
+              highlighted: ["AB","BC"] },
+            { text: "incommensurable in square with {AB} and fulfilling the given conditions.",
+              visible: LINE,
+              highlighted: ["AB","BC"],
+              justifications: [{ claim: "such a BC can be found", ref: "X.35" }] },
+            { text: "I say that the remainder {AC} is the irrational straight line called that which produces with a medial area a medial whole.",
+              visible: LINE,
+              highlighted: ["AC"] },
+            { text: "Set out a rational straight line {DI}.",
+              visible: DIS,
+              highlighted: ["DI"],
+              transition: { animations: [
+                  { elem: "DI", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Apply {DE|DEh}, equal to the sum of the squares on {AB} and {BC}, to {DI} producing {DG} as breadth.",
+              visible: DES,
+              highlighted: ["DEh","DG"],
+              transition: { animations: [
+                  { elem: "DEh", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Subtract {DH|DHh} equal twice the rectangle {AB} by {BC}.",
+              visible: DHS,
+              highlighted: ["DHh"],
+              transition: { animations: [
+                  { elem: "IDFH", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Then the remainder {FE|FEh} equals the square on {AC}, so that {AC} is the side of {FE|FEh}.",
+              visible: ALL,
+              highlighted: ["FEh","AC"],
+              justifications: [{ claim: "FE = AC²", ref: "II.7" }],
+              transition: { animations: [
+                  { elem: "HFGE", name: geomlib.A.Polygon.outlineAndFill } ] } },
+            { text: "Now, since the sum of the squares on {AB} and {BC} is medial and equals {DE|DEh}, therefore {DE|DEh} is medial.",
+              visible: ALL,
+              highlighted: ["AB","BC","DEh"] },
+            { text: "And it is applied to the rational straight line {DI} producing {DG} as breadth,",
+              visible: ALL,
+              highlighted: ["DEh","DI","DG"] },
+            { text: "therefore {DG} is rational and incommensurable in length with {DI}.",
+              visible: ALL,
+              highlighted: ["DG","DI"],
+              justifications: [{ claim: "DG rational, incommensurable with DI", ref: "X.22" }] },
+            { text: "Again, since twice the rectangle {AB} by {BC} is medial and equals {DH|DHh}, therefore {DH|DHh} is medial.",
+              visible: ALL,
+              highlighted: ["AB","BC","DHh"] },
+            { text: "And it is applied to the rational straight line {DI} producing {DF} as breadth,",
+              visible: ALL,
+              highlighted: ["DHh","DI","DF"] },
+            { text: "therefore {DF} is also rational and incommensurable in length with {DI}.",
+              visible: ALL,
+              highlighted: ["DF","DI"],
+              justifications: [{ claim: "DF rational, incommensurable with DI", ref: "X.22" }] },
+            { text: "Since the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC},",
+              visible: ALL,
+              highlighted: ["AB","BC"] },
+            { text: "therefore {DE|DEh} is also incommensurable with {DH|DHh}.",
+              visible: ALL,
+              highlighted: ["DEh","DHh"] },
+            { text: "But {DE|DEh} is to {DH|DHh} as {DG} is to {DF}, therefore {DG} is incommensurable with {DF}.",
+              visible: ALL,
+              highlighted: ["DG","DF"],
+              justifications: [{ claim: "DG, DF incommensurable", ref: "X.11" },
+                               { claim: "DE : DH = DG : DF", ref: "VI.1" }] },
+            { text: "And both are rational, therefore {GD|DG} and {DF} are rational straight lines commensurable in square only.",
+              visible: ALL,
+              highlighted: ["DG","DF"] },
+            { text: "Therefore {FG} is an apotome.",
+              visible: ALL,
+              highlighted: ["FG"],
+              justifications: [{ claim: "FG an apotome", ref: "X.73" }] },
+            { text: "And {FH} is rational, but the rectangle contained by a rational straight line and an apotome is irrational,",
+              visible: ALL,
+              highlighted: ["FH","FG","FEh"] },
+            { text: "and its side is irrational.",
+              visible: ALL,
+              highlighted: ["FEh"],
+              justifications: [{ claim: "FE and its side irrational", ref: "X.20" }] },
+            { text: "And {AC} is the side of {FE|FEh}, therefore {AC} is irrational.",
+              visible: ALL,
+              highlighted: ["AC","FEh"] },
+            { text: "Let it be called that which produces with a medial area a medial whole.",
+              visible: ALL,
+              highlighted: ["AC"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "X.78") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "II.7": "/elements/books/bookII/propositions/propII7/",
+        "VI.1": "/elements/books/bookVI/propositions/propVI1/",
+        "X.11": "/elements/books/bookX/propositions/propX11/",
+        "X.20": "/elements/books/bookX/propositions/propX20/",
+        "X.22": "/elements/books/bookX/propositions/propX22/",
+        "X.35": "/elements/books/bookX/propositions/propX35/",
+        "X.73": "/elements/books/bookX/propositions/propX73/"
     });
 </script>
 </figure>
 
-Set out a rational straight line *DI*. Apply *DE*, equal to the sum of the squares on *AB* and *BC*, to *DI* producing *DG* as breadth. Subtract *DH* equal twice the rectangle *AB* by *BC*. Then the remainder *FE* equals the square on *AC*, so that *AC* is the side of *FE*. [!just II.7]
+Set out a rational straight line {DI}. Apply {DE}, equal to the sum of the squares on {AB} and {BC}, to {DI} producing {DG} as breadth. Subtract {DH} equal twice the rectangle {AB} by {BC}. Then the remainder {FE} equals the square on {AC}, so that {AC} is the side of {FE}. [!just II.7]
 
-Now, since the sum of the squares on *AB* and *BC* is medial and equals *DE*, therefore *DE* is medial.
+Now, since the sum of the squares on {AB} and {BC} is medial and equals {DE}, therefore {DE} is medial.
 
-And it is applied to the rational straight line *DI* producing *DG* as breadth, therefore *DG* is rational and incommensurable in length with *DI*. [!just X.22]
+And it is applied to the rational straight line {DI} producing {DG} as breadth, therefore {DG} is rational and incommensurable in length with {DI}. [!just X.22]
 
-Again, since twice the rectangle *AB* by *BC* is medial and equals *DH*, therefore *DH* is medial. And it is applied to the rational straight line *DI* producing *DF* as breadth, therefore *DF* is also rational and incommensurable in length with *DI*. [!just X.22]
+Again, since twice the rectangle {AB} by {BC} is medial and equals {DH}, therefore {DH} is medial. And it is applied to the rational straight line {DI} producing {DF} as breadth, therefore {DF} is also rational and incommensurable in length with {DI}. [!just X.22]
 
-Since the sum of the squares on *AB* and *BC* is incommensurable with twice the rectangle *AB* by *BC*, therefore *DE* is also incommensurable with *DH*.
+Since the sum of the squares on {AB} and {BC} is incommensurable with twice the rectangle {AB} by {BC}, therefore {DE} is also incommensurable with {DH}.
 
-But *DE* is to *DH* as *DG* is to *DF*, therefore *DG* is incommensurable with *DF*. [!just X.11, VI.1]
+But {DE} is to {DH} as {DG} is to {DF}, therefore {DG} is incommensurable with {DF}. [!just X.11, VI.1]
 
-And both are rational, therefore *GD* and *DF* are rational straight lines commensurable in square only. Therefore *FG* is an apotome. [!just X.73]
+And both are rational, therefore {GD} and {DF} are rational straight lines commensurable in square only. Therefore {FG} is an apotome. [!just X.73]
 
-And *FH* is rational, but the rectangle contained by a rational straight line and an apotome is irrational, and its side is irrational. [!just X.20]
+And {FH} is rational, but the rectangle contained by a rational straight line and an apotome is irrational, and its side is irrational. [!just X.20]
 
-And *AC* is the side of *FE*, therefore *AC* is irrational.
+And {AC} is the side of {FE}, therefore {AC} is irrational.
 
 Let it be called *that which produces with a medial area a medial whole*.
 
