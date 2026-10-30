@@ -15,18 +15,26 @@ statement: Given two numbers, to investigate whether it is possible to find a th
 ----
 proof:
 
-Let *A* and *B* be the given two numbers. It is required to investigate whether it is possible to find a third proportional to them.
+Let {A} and {B} be the given two numbers. It is required to investigate whether it is possible to find a third proportional to them.
 
-Now *A* and *B* are either relatively prime or not. And, if they are relatively prime, it was proved that it is impossible to find a third proportional to them. [!just IX.16]
+Now {A} and {B} are either relatively prime or not. And, if they are relatively prime, it was proved that it is impossible to find a third proportional to them. [!just IX.16]
 
-Next, let *A* and *B* not be relatively prime, and let *B* multiplied by itself make *C.* Then *A* either measures *C* or does not measure it.
+Next, let {A} and {B} not be relatively prime, and let {B} multiplied by itself make {C}. Then {A} either measures {C} or does not measure it.
 
-First, let it measure it according to *D,* therefore *A* multiplied by *D* makes *C.* But, further, *B* multiplied by itself makes *C,* therefore the product of *A* and *D* equals the square on *B.*
+First, let it measure it according to {D}, therefore {A} multiplied by {D} makes {C}. But, further, {B} multiplied by itself makes {C}, therefore the product of {A} and {D} equals the square on {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="170" tabindex="0"></canvas>
 <noscript><img alt="IX.18 diagram" src="propIX18.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines; the unit (U1-U2) sits off-canvas and is not drawn.
+    // C arrives with "let B multiplied by itself make C" and D with the
+    // first case, so their slider ends are deferred. D is withdrawn when the
+    // second case opens and drawn again under its "If possible" hypothesis,
+    // then withdrawn for the closing conclusion.
+    var GIVEN  = ["A","B"];
+    var WITH_C = GIVEN.concat(["C"]);
+    var WITH_D = WITH_C.concat(["D"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -55,23 +63,107 @@ First, let it measure it according to *D,* therefore *A* multiplied by *D* makes
             "D2;point;proportion;U1,U2,A1,A2,B1,B2,D1,D3;0",
             "D;line;connect;D1,D2;black"
         ],
+        deferDraggables: ["C1","D1"],
+        slides: [
+            { text: "“Given two numbers, to investigate whether it is possible to find a third proportional to them.”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "IX.18" }] },
+            { text: "Let {A} and {B} be the given two numbers.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "It is required to investigate whether it is possible to find a third proportional to them.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "Now {A} and {B} are either relatively prime or not.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "And, if they are relatively prime, it was proved that it is impossible to find a third proportional to them.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "no third proportional to relatively prime numbers", ref: "IX.16" }] },
+            { text: "Next, let {A} and {B} not be relatively prime, and let {B} multiplied by itself make {C}.",
+              visible: WITH_C,
+              highlighted: ["A","B","C"],
+              transition: { animations: [
+                  { elem: "C", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then {A} either measures {C} or does not measure it.",
+              visible: WITH_C,
+              highlighted: ["A","C"] },
+            { text: "First, let it measure it according to {D}, therefore {A} multiplied by {D} makes {C}.",
+              visible: WITH_D,
+              highlighted: ["A","D","C"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "But, further, {B} multiplied by itself makes {C},",
+              visible: WITH_D,
+              highlighted: ["B","C"] },
+            { text: "therefore the product of {A} and {D} equals the square on {B}.",
+              visible: WITH_D,
+              highlighted: ["A","D","B"] },
+            { text: "Therefore {A} is to {B} as {B} is to {D},",
+              visible: WITH_D,
+              highlighted: ["A","B","D"],
+              justifications: [{ claim: "A : B = B : D", ref: "VII.19" }] },
+            { text: "therefore a third proportional number {D} has been found to {A} and {B}.",
+              visible: WITH_D,
+              highlighted: ["D","A","B"] },
+            { text: "Next, let {A} not measure {C}.",
+              visible: WITH_C,
+              highlighted: ["A","C"] },
+            { text: "I say that it is impossible to find a third proportional number to {A} and {B}.",
+              visible: WITH_C,
+              highlighted: ["A","B"] },
+            { text: "If possible, let {D} be such third proportional.",
+              visible: WITH_D,
+              highlighted: ["D","A","B"],
+              transition: { animations: [
+                  { elem: "D", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Then the product of {A} and {D} equals the square on {B}.",
+              visible: WITH_D,
+              highlighted: ["A","D","B"] },
+            { text: "But the square on {B} is {C}, therefore the product of {A} and {D} equals {C}.",
+              visible: WITH_D,
+              highlighted: ["B","C","A","D"] },
+            { text: "Hence {A} multiplied by {D} makes {C}, therefore {A} measures {C} according to {D}.",
+              visible: WITH_D,
+              highlighted: ["A","D","C"] },
+            { text: "But, by hypothesis, it also does not measure it, which is absurd.",
+              visible: WITH_D,
+              highlighted: ["A","C"] },
+            { text: "Therefore it is not possible to find a third proportional number to {A} and {B} when {A} does not measure {C}.",
+              visible: WITH_C,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.18") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "IX.16":  "/elements/books/bookIX/propositions/propIX16/",
+        "VII.19": "/elements/books/bookVII/propositions/propVII19/"
     });
 </script>
 </figure>
 
-Therefore *A* is to *B* as *B* is to *D,* therefore a third proportional number *D* has been found to *A* and *B.* [!just VII.19]
+Therefore {A} is to {B} as {B} is to {D}, therefore a third proportional number {D} has been found to {A} and {B}. [!just VII.19]
 
-Next, let *A* not measure *C.*
+Next, let {A} not measure {C}.
 
-I say that it is impossible to find a third proportional number to *A* and *B.*
+I say that it is impossible to find a third proportional number to {A} and {B}.
 
-If possible, let *D* be such third proportional. Then the product of *A* and *D* equals the square on *B.* But the square on *B* is *C,* therefore the product of *A* and *D* equals *C.*
+If possible, let {D} be such third proportional. Then the product of {A} and {D} equals the square on {B}. But the square on {B} is {C}, therefore the product of {A} and {D} equals {C}.
 
-Hence *A* multiplied by *D* makes *C,* therefore *A* measures *C* according to *D.*
+Hence {A} multiplied by {D} makes {C}, therefore {A} measures {C} according to {D}.
 
 But, by hypothesis, it also does not measure it, which is absurd.
 
-Therefore it is not possible to find a third proportional number to *A* and *B* when *A* does not measure *C.*
+Therefore it is not possible to find a third proportional number to {A} and {B} when {A} does not measure {C}.
 
 <div class="qed">Q.E.D.</div>
 ----

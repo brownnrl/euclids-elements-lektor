@@ -15,14 +15,19 @@ statement: If there are as many numbers as we please in continued proportion, an
 ----
 proof:
 
-Let there be as many numbers as we please, *A, B, C,* and *D,* in continued proportion, and let the extremes of them, *A* and *D,* be relatively prime.
+Let there be as many numbers as we please, {A}, {B}, {C}, and {D}, in continued proportion, and let the extremes of them, {A} and {D}, be relatively prime.
 
-I say that *D* is not to any other number as *A* is to *B.*
+I say that {D} is not to any other number as {A} is to {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="200" tabindex="0"></canvas>
 <noscript><img alt="IX.17 diagram" src="propIX17.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines. E exists only under the reductio's hypothesis
+    // ("If possible ... let D be to E"), so its slider end is deferred and
+    // it is withdrawn once the supposition is refuted.
+    var GIVEN  = ["A","B","C","D"];
+    var WITH_E = GIVEN.concat(["E"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -54,17 +59,105 @@ I say that *D* is not to any other number as *A* is to *B.*
             "E2;point;proportion;A1,A2,B1,B2,D1,D2,E1,E3;0",
             "E;line;connect;E1,E2;black"
         ],
+        deferDraggables: ["E1"],
+        slides: [
+            { text: "“If there are as many numbers as we please in continued proportion,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"],
+              justifications: [{ ref: "IX.17" }] },
+            { text: "and the extremes of them are relatively prime,",
+              visible: GIVEN,
+              highlighted: ["A","D"] },
+            { text: "then the last is not to any other number as the first is to the second.”",
+              visible: GIVEN,
+              highlighted: ["D","A","B"] },
+            { text: "Let there be as many numbers as we please, {A}, {B}, {C}, and {D}, in continued proportion,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "and let the extremes of them, {A} and {D}, be relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","D"] },
+            { text: "I say that {D} is not to any other number as {A} is to {B}.",
+              visible: GIVEN,
+              highlighted: ["D","A","B"] },
+            { text: "If possible {A} is to {B}, so let {D} be to {E},",
+              visible: WITH_E,
+              highlighted: ["A","B","D","E"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "therefore, alternately {A} is to {D} as {B} is to {E}.",
+              visible: WITH_E,
+              highlighted: ["A","D","B","E"],
+              justifications: [{ claim: "A : D = B : E", ref: "VII.13" }] },
+            { text: "But {A} and {D} are prime, primes are also least,",
+              visible: WITH_E,
+              highlighted: ["A","D"],
+              justifications: [{ claim: "A, D least in their ratio", ref: "VII.21" }] },
+            { text: "and the least numbers measure those which have the same ratio the same number of times,",
+              visible: WITH_E,
+              highlighted: ["A","D","B","E"] },
+            { text: "the antecedent the antecedent and the consequent the consequent. Therefore {A} measures {B}.",
+              visible: WITH_E,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "A measures B", ref: "VII.20" }] },
+            { text: "And {A} is to {B} as {B} is to {C}. Therefore {B} also measures {C},",
+              visible: WITH_E,
+              highlighted: ["A","B","C"] },
+            { text: "so that {A} also measures {C}.",
+              visible: WITH_E,
+              highlighted: ["A","C"] },
+            { text: "And since {B} is to {C} as {C} is to {D}, and {B} measures {C},",
+              visible: WITH_E,
+              highlighted: ["B","C","D"] },
+            { text: "therefore {C} also measures {D}.",
+              visible: WITH_E,
+              highlighted: ["C","D"] },
+            { text: "But {A} measures {C}, so that {A} also measures {D}.",
+              visible: WITH_E,
+              highlighted: ["A","C","D"] },
+            { text: "But it also measures itself,",
+              visible: WITH_E,
+              highlighted: ["A"] },
+            { text: "therefore {A} measures {A} and {D} which are relatively prime, which is impossible.",
+              visible: WITH_E,
+              highlighted: ["A","D"] },
+            { text: "Therefore {D} is not to any other number as {A} is to {B}.",
+              visible: GIVEN,
+              highlighted: ["D","A","B"] },
+            { text: "Therefore, if there are as many numbers as we please in continued proportion,",
+              visible: GIVEN,
+              highlighted: ["A","B","C","D"] },
+            { text: "and the extremes of them are relatively prime,",
+              visible: GIVEN,
+              highlighted: ["A","D"] },
+            { text: "then the last is not to any other number as the first is to the second.",
+              visible: GIVEN,
+              highlighted: ["D","A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.17") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.13": "/elements/books/bookVII/propositions/propVII13/",
+        "VII.20": "/elements/books/bookVII/propositions/propVII20/",
+        "VII.21": "/elements/books/bookVII/propositions/propVII21/"
     });
 </script>
 </figure>
 
-If possible *A* is to *B,* so let *D* be to *E,* therefore, alternately *A* is to *D* as *B* is to *E.* [!just VII.13]
+If possible {A} is to {B}, so let {D} be to {E}, therefore, alternately {A} is to {D} as {B} is to {E}. [!just VII.13]
 
-But *A* and *D* are prime, primes are also least, and the least numbers measure those which have the same ratio the same number of times, the antecedent the antecedent and the consequent the consequent. Therefore *A* measures *B.* And *A* is to *B* as *B* is to *C.* Therefore *B* also measures *C,* so that *A* also measures *C.* [!just VII.21; VII.20]
+But {A} and {D} are prime, primes are also least, and the least numbers measure those which have the same ratio the same number of times, the antecedent the antecedent and the consequent the consequent. Therefore {A} measures {B}. And {A} is to {B} as {B} is to {C}. Therefore {B} also measures {C}, so that {A} also measures {C}. [!just VII.21; VII.20]
 
-And since *B* is to *C* as *C* is to *D,* and *B* measures *C,* therefore *C* also measures *D.* But *A* measures *C,* so that *A* also measures *D.* But it also measures itself, therefore *A* measures *A* and *D* which are relatively prime, which is impossible.
+And since {B} is to {C} as {C} is to {D}, and {B} measures {C}, therefore {C} also measures {D}. But {A} measures {C}, so that {A} also measures {D}. But it also measures itself, therefore {A} measures {A} and {D} which are relatively prime, which is impossible.
 
-Therefore *D* is not to any other number as *A* is to *B.*
+Therefore {D} is not to any other number as {A} is to {B}.
 
 Therefore, *if there are as many numbers as we please in continued proportion, and the extremes of them are relatively prime, then the last is not to any other number as the first is to the second.*
 
