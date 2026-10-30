@@ -15,7 +15,7 @@ statement: If as many numbers as we please beginning from a unit are in continue
 ----
 proof:
 
-Let there be as many numbers as we please, *A, B, C, D, E,* and *F,* beginning from a unit and in continued proportion, and let *A,* the number after the unit, not be square.
+Let there be as many numbers as we please, {A}, {B}, {C}, {D}, {E}, and {F}, beginning from a unit and in continued proportion, and let {A}, the number after the unit, not be square.
 
 I say that neither are any other square except the third from the unit and those which leave out one.
 
@@ -23,6 +23,10 @@ I say that neither are any other square except the third from the unit and those
 <canvas id="canvas_0" width="250" height="230" tabindex="0"></canvas>
 <noscript><img alt="IX.10 diagram" src="propIX10.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: the walk is highlight beats over Joyce's six lines.
+    // The proof (a pair of reductios) makes no new number, so there is no
+    // animation. The unit sits off Joyce's figure and is not drawn.
+    var ALL = ["A1","A2","A","B1","B2","B","C1","C2","C","D1","D2","D","E1","E2","E","F1","F2","F"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -59,29 +63,165 @@ I say that neither are any other square except the third from the unit and those
             "F2;point;proportion;A1,A2,B1,B2,E1,E2,F1,F3;0",
             "F;line;connect;F1,F2;black"
         ],
+        slides: [
+            { text: "If as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"],
+              justifications: [{ ref: "IX.10" }] },
+            { text: "and the number after the unit is not square,",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "then neither is any other square except the third from the unit and all those which leave out one;",
+              visible: ALL,
+              highlighted: ["B","D","F"] },
+            { text: "and, if the number after the unit is not cubic,",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "then neither is any other cubic except the fourth from the unit and all those which leave out two.",
+              visible: ALL,
+              highlighted: ["C","F"] },
+            { text: "Let there be as many numbers as we please, {A}, {B}, {C}, {D}, {E}, and {F}, beginning from a unit and in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "and let {A}, the number after the unit, not be square.",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "I say that neither are any other square except the third from the unit and those which leave out one.",
+              visible: ALL,
+              highlighted: ["B","D","F"] },
+            { text: "If possible, let {C} be square.",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "But {B} is also square,",
+              visible: ALL,
+              highlighted: ["B"],
+              justifications: [{ claim: "B, the third from the unit, is square", ref: "IX.8" }] },
+            { text: "therefore {B} and {C} have to one another the ratio which a square number has to a square number.",
+              visible: ALL,
+              highlighted: ["B","C"] },
+            { text: "And {B} is to {C} as {A} is to {B},",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "therefore {A} and {B} have to one another the ratio which a square number has to a square number,",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "so that {A} and {B} are similar plane numbers.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "A, B similar plane numbers (converse)", ref: "VIII.26" }] },
+            { text: "And {B} is square, therefore {A} is also square, which is contrary to the hypothesis.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "Therefore {C} is not square.",
+              visible: ALL,
+              highlighted: ["C"] },
+            { text: "Similarly we can prove that neither is any other of the numbers square",
+              visible: ALL,
+              highlighted: ["C","E"] },
+            { text: "except the third from the unit and those which leave out one.",
+              visible: ALL,
+              highlighted: ["B","D","F"] },
+            { text: "Next, let {A} not be a cube.",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "I say that neither are any other cubes except the fourth from the unit and those which leave out two.",
+              visible: ALL,
+              highlighted: ["C","F"] },
+            { text: "If possible, let {D} be a cube.",
+              visible: ALL,
+              highlighted: ["D"] },
+            { text: "Now {C} is also a cube, for it is fourth from the unit.",
+              visible: ALL,
+              highlighted: ["C"],
+              justifications: [{ claim: "C, the fourth from the unit, is a cube", ref: "IX.8" }] },
+            { text: "And {C} is to {D} as {B} is to {C},",
+              visible: ALL,
+              highlighted: ["B","C","D"] },
+            { text: "therefore {B} has to {C} the ratio which a cube has to a cube.",
+              visible: ALL,
+              highlighted: ["B","C"] },
+            { text: "And {C} is a cube, therefore {B} is also a cube.",
+              visible: ALL,
+              highlighted: ["B","C"],
+              justifications: [{ claim: "B is a cube", ref: "VIII.25" }] },
+            { text: "And since the unit is to {A} as {A} is to {B}, and the unit measures {A} according to the units in it,",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "therefore {A} also measures {B} according to the units in itself.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "Therefore {A} multiplied by itself makes the cubic number {B}.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "But, if a number multiplied by itself makes cubic number, then it is itself a cube.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "Therefore {A} is also a cube, contrary to the hypothesis.",
+              visible: ALL,
+              highlighted: ["A"],
+              justifications: [{ claim: "A is a cube", ref: "IX.6" }] },
+            { text: "Therefore {D} is not a cube.",
+              visible: ALL,
+              highlighted: ["D"] },
+            { text: "Similarly we can prove that neither is any other of the numbers a cube",
+              visible: ALL,
+              highlighted: ["B","D","E"] },
+            { text: "except the fourth from the unit and those which leave out two.",
+              visible: ALL,
+              highlighted: ["C","F"] },
+            { text: "Therefore, if as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "and the number after the unit is not square,",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "then neither is any other square except the third from the unit and all those which leave out one;",
+              visible: ALL,
+              highlighted: ["B","D","F"] },
+            { text: "and, if the number after the unit is not cubic,",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "then neither is any other cubic except the fourth from the unit and all those which leave out two.",
+              visible: ALL,
+              highlighted: ["C","F"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.10") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VIII.25": "/elements/books/bookVIII/propositions/propVIII25/",
+        "VIII.26": "/elements/books/bookVIII/propositions/propVIII26/",
+        "IX.6":    "/elements/books/bookIX/propositions/propIX6/",
+        "IX.8":    "/elements/books/bookIX/propositions/propIX8/"
     });
 </script>
 </figure>
 
-If possible, let *C* be square. But *B* is also square, therefore *B* and *C* have to one another the ratio which a square number has to a square number. [!just IX.8]
+If possible, let {C} be square. But {B} is also square, therefore {B} and {C} have to one another the ratio which a square number has to a square number. [!just IX.8]
 
-And *B* is to *C* as *A* is to *B,* therefore *A* and *B* have to one another the ratio which a square number has to a square number, so that *A* and *B* are similar plane numbers. [!just VIII.26 converse]
+And {B} is to {C} as {A} is to {B}, therefore {A} and {B} have to one another the ratio which a square number has to a square number, so that {A} and {B} are similar plane numbers. [!just VIII.26 converse]
 
-And *B* is square, therefore *A* is also square, which is contrary to the hypothesis.
+And {B} is square, therefore {A} is also square, which is contrary to the hypothesis.
 
-Therefore *C* is not square. Similarly we can prove that neither is any other of the numbers square except the third from the unit and those which leave out one.
+Therefore {C} is not square. Similarly we can prove that neither is any other of the numbers square except the third from the unit and those which leave out one.
 
-Next, let *A* not be a cube.
+Next, let {A} not be a cube.
 
 I say that neither are any other cubes except the fourth from the unit and those which leave out two.
 
-If possible, let *D* be a cube.
+If possible, let {D} be a cube.
 
-Now *C* is also a cube, for it is fourth from the unit. And *C* is to *D* as *B* is to *C,* therefore *B* has to *C* the ratio which a cube has to a cube. And *C* is a cube, therefore *B* is also a cube. [!just IX.8; VIII.25]
+Now {C} is also a cube, for it is fourth from the unit. And {C} is to {D} as {B} is to {C}, therefore {B} has to {C} the ratio which a cube has to a cube. And {C} is a cube, therefore {B} is also a cube. [!just IX.8; VIII.25]
 
-And since the unit is to *A* as *A* is to *B,* and the unit measures *A* according to the units in it, therefore *A* also measures *B* according to the units in itself. Therefore *A* multiplied by itself makes the cubic number *B.*
+And since the unit is to {A} as {A} is to {B}, and the unit measures {A} according to the units in it, therefore {A} also measures {B} according to the units in itself. Therefore {A} multiplied by itself makes the cubic number {B}.
 
-But, if a number multiplied by itself makes cubic number, then it is itself a cube. Therefore *A* is also a cube, contrary to the hypothesis. Therefore *D* is not a cube. Similarly we can prove that neither is any other of the numbers a cube except the fourth from the unit and those which leave out two. [!just IX.6]
+But, if a number multiplied by itself makes cubic number, then it is itself a cube. Therefore {A} is also a cube, contrary to the hypothesis. Therefore {D} is not a cube. Similarly we can prove that neither is any other of the numbers a cube except the fourth from the unit and those which leave out two. [!just IX.6]
 
 Therefore, *if as many numbers as we please beginning from a unit are in continued proportion, and the number after the unit is not square, then neither is any other square except the third from the unit and all those which leave out one; and, if the number after the unit is not cubic, then neither is any other cubic except the fourth from the unit and all those which leave out two.*
 

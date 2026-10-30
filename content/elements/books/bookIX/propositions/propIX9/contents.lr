@@ -15,12 +15,16 @@ statement: If as many numbers as we please beginning from a unit are in continue
 ----
 proof:
 
-Let there be as many numbers as we please, *A, B, C, D, E,* and *F,* beginning from a unit and in continued proportion, and let *A,* the number after the unit, be square.
+Let there be as many numbers as we please, {A}, {B}, {C}, {D}, {E}, and {F}, beginning from a unit and in continued proportion, and let {A}, the number after the unit, be square.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="200" tabindex="0"></canvas>
 <noscript><img alt="IX.9 diagram" src="propIX9.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: the walk is highlight beats over Joyce's six lines.
+    // The proof makes no new number, so there is no animation.
+    // The unit sits off Joyce's figure and is not drawn.
+    var ALL = ["A1","A2","A","B1","B2","B","C1","C2","C","D1","D2","D","E1","E2","E","F1","F2","F"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -57,33 +61,138 @@ Let there be as many numbers as we please, *A, B, C, D, E,* and *F,* beginning f
             "F2;point;proportion;A1,A2,B1,B2,E1,E2,F1,F3;0",
             "F;line;connect;F1,F2;black"
         ],
+        slides: [
+            { text: "If as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"],
+              justifications: [{ ref: "IX.9" }] },
+            { text: "and the number after the unit is square, then all the rest are also square;",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "and if the number after the unit is cubic, then all the rest are also cubic.",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "Let there be as many numbers as we please, {A}, {B}, {C}, {D}, {E}, and {F}, beginning from a unit and in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "and let {A}, the number after the unit, be square.",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "I say that all the rest are also square.",
+              visible: ALL,
+              highlighted: ["B","C","D","E","F"] },
+            { text: "Now it was proved that {B}, the third from the unit, is square as are all those which leave out one.",
+              visible: ALL,
+              highlighted: ["B","D","F"],
+              justifications: [{ claim: "B, D, F are square", ref: "IX.8" }] },
+            { text: "I say that all the rest are also square.",
+              visible: ALL,
+              highlighted: ["C","E"] },
+            { text: "Since {A}, {B}, and {C} are in continued proportion, and {A} is square, therefore {C} is also square.",
+              visible: ALL,
+              highlighted: ["A","B","C"],
+              justifications: [{ claim: "C is square", ref: "VIII.22" }] },
+            { text: "Again, since {B}, {C}, and {D} are in continued proportion, and {B} is square, therefore {D} is also square.",
+              visible: ALL,
+              highlighted: ["B","C","D"],
+              justifications: [{ claim: "D is square", ref: "VIII.22" }] },
+            { text: "Similarly we can prove that all the rest are also square.",
+              visible: ALL,
+              highlighted: ["B","C","D","E","F"],
+              justifications: [{ claim: "all the rest are square", ref: "VIII.22" }] },
+            { text: "Next, let {A} be a cube.",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "I say that all the rest are also cubes.",
+              visible: ALL,
+              highlighted: ["B","C","D","E","F"] },
+            { text: "Now it was proved that {C}, the fourth from the unit, is a cube as are all those which leave out two.",
+              visible: ALL,
+              highlighted: ["C","F"],
+              justifications: [{ claim: "C, F are cubes", ref: "IX.8" }] },
+            { text: "I say that all the rest are also cubic.",
+              visible: ALL,
+              highlighted: ["B","D","E"] },
+            { text: "Since the unit is to {A} as {A} is to {B},",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "therefore the unit measures {A} the same number of times as {A} measures {B}.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "But the unit measures {A} according to the units in it,",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "therefore {A} also measures {B} according to the units in itself, therefore {A} multiplied by itself makes {B}.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "And {A} is cubic. But, if cubic number multiplied by itself makes some number, then the product is also a cube,",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "therefore {B} is also a cube.",
+              visible: ALL,
+              highlighted: ["B"],
+              justifications: [{ claim: "B, the cube A times itself, is a cube", ref: "IX.3" }] },
+            { text: "And, since the four numbers {A}, {B}, {C}, and {D} are in continued proportion, and {A} is a cube,",
+              visible: ALL,
+              highlighted: ["A","B","C","D"] },
+            { text: "therefore {D} also is a cube.",
+              visible: ALL,
+              highlighted: ["D"],
+              justifications: [{ claim: "D is a cube", ref: "VIII.23" }] },
+            { text: "For the same reason {E} is also a cube, and similarly all the rest are cubes.",
+              visible: ALL,
+              highlighted: ["E"] },
+            { text: "Therefore, if as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "and the number after the unit is square, then all the rest are also square;",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "and if the number after the unit is cubic, then all the rest are also cubic.",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.9") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VIII.22": "/elements/books/bookVIII/propositions/propVIII22/",
+        "VIII.23": "/elements/books/bookVIII/propositions/propVIII23/",
+        "IX.3":    "/elements/books/bookIX/propositions/propIX3/",
+        "IX.8":    "/elements/books/bookIX/propositions/propIX8/"
     });
 </script>
 </figure>
 
 I say that all the rest are also square.
 
-Now it was proved that *B,* the third from the unit, is square as are all those which leave out one. [!just IX.8]
+Now it was proved that {B}, the third from the unit, is square as are all those which leave out one. [!just IX.8]
 
 I say that all the rest are also square.
 
-Since *A, B,* and *C* are in continued proportion, and *A* is square, therefore *C* is also square. Again, since *B, C,* and *D* are in continued proportion, and *B* is square, therefore *D* is also square. Similarly we can prove that all the rest are also square. [!just VIII.22]
+Since {A}, {B}, and {C} are in continued proportion, and {A} is square, therefore {C} is also square. Again, since {B}, {C}, and {D} are in continued proportion, and {B} is square, therefore {D} is also square. Similarly we can prove that all the rest are also square. [!just VIII.22]
 
-Next, let *A* be a cube.
+Next, let {A} be a cube.
 
 I say that all the rest are also cubes.
 
-Now it was proved that *C,* the fourth from the unit, is a cube as are all those which leave out two. [!just IX.8]
+Now it was proved that {C}, the fourth from the unit, is a cube as are all those which leave out two. [!just IX.8]
 
 I say that all the rest are also cubic.
 
-Since the unit is to *A* as *A* is to *B,* therefore the unit measures *A* the same number of times as *A* measures *B.* But the unit measures *A* according to the units in it, therefore *A* also measures *B* according to the units in itself, therefore *A* multiplied by itself makes *B.*
+Since the unit is to {A} as {A} is to {B}, therefore the unit measures {A} the same number of times as {A} measures {B}. But the unit measures {A} according to the units in it, therefore {A} also measures {B} according to the units in itself, therefore {A} multiplied by itself makes {B}.
 
-And *A* is cubic. But, if cubic number multiplied by itself makes some number, then the product is also a cube, therefore *B* is also a cube. [!just IX.3]
+And {A} is cubic. But, if cubic number multiplied by itself makes some number, then the product is also a cube, therefore {B} is also a cube. [!just IX.3]
 
-And, since the four numbers *A, B, C,* and *D* are in continued proportion, and *A* is a cube, therefore *D* also is a cube. [!just VIII.23]
+And, since the four numbers {A}, {B}, {C}, and {D} are in continued proportion, and {A} is a cube, therefore {D} also is a cube. [!just VIII.23]
 
-For the same reason *E* is also a cube, and similarly all the rest are cubes.
+For the same reason {E} is also a cube, and similarly all the rest are cubes.
 
 Therefore, *if as many numbers as we please beginning from a unit are in continued proportion, and the number after the unit is square, then all the rest are also square; and if the number after the unit is cubic, then all the rest are also cubic.*
 
