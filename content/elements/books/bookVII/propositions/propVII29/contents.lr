@@ -15,14 +15,24 @@ statement: Any prime number is relatively prime to any number which it does not 
 ----
 proof:
 
-Let *A* be a prime number, and let it not measure *B.*
+Let {A} be a prime number, and let it not measure {B}.
 
-I say that *B* and *A* are relatively prime.
+I say that {B} and {A} are relatively prime.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="140" tabindex="0"></canvas>
 <noscript><img alt="VII.29 diagram" src="propVII29.gif"/></noscript>
 <script type="text/javascript">
+    // A is the prime number, B the number it does not measure, and C the
+    // supposed common measure of the reductio. Line segments only, so the
+    // walk is highlight beats. C is withdrawn once the reductio closes.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, C2 (zero-colour handles) and the off-canvas, colourless
+    // rail ends. C1 and C2 arrive with the supposed measure C, so they are
+    // deferred.
+    var GIVEN  = ["A","B"];
+    var WITH_C = GIVEN.concat(["C","C1","C2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -44,17 +54,66 @@ I say that *B* and *A* are relatively prime.
             "C2;point;lineSlider;C0,C3,70,0;0",
             "C;line;connect;C1,C2;black"
         ],
+        deferDraggables: ["C1","C2"],
+        slides: [
+            { text: "“Any prime number is relatively prime to any number which it does not measure.”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VII.29" }] },
+            { text: "Let {A} be a prime number, and let it not measure {B}.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "I say that {B} and {A} are relatively prime.",
+              visible: GIVEN,
+              highlighted: ["B","A"] },
+            { text: "If {B} and {A} are not relatively prime, then some number {C} measures them.",
+              visible: WITH_C,
+              highlighted: ["C","B","A"],
+              justifications: [{ ref: "VII.Def.11" }] },
+            { text: "Since {C} measures {B}, and {A} does not measure {B}, therefore {C} is not the same as {A}.",
+              visible: WITH_C,
+              highlighted: ["C","B","A"] },
+            { text: "Now, since {C} measures {B} and {A},",
+              visible: WITH_C,
+              highlighted: ["C","B","A"] },
+            { text: "therefore it also measures {A} which is prime, though it is not the same as it, which is impossible.",
+              visible: WITH_C,
+              highlighted: ["C","A"] },
+            // The reductio is closed: the supposed measure C is withdrawn.
+            { text: "Therefore no number measures {B} and {A}.",
+              visible: GIVEN,
+              highlighted: ["B","A"] },
+            { text: "Therefore {A} and {B} are relatively prime.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VII.Def.12" }] },
+            { text: "Therefore, any prime number is relatively prime to any number which it does not measure.",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.29") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.11": "/elements/books/bookVII/definitions/defVII11/",
+        "VII.Def.12": "/elements/books/bookVII/definitions/defVII12/"
     });
 </script>
 </figure>
 
-If *B* and *A* are not relatively prime, then some number *C* measures them. [!just VII.Def.11]
+If {B} and {A} are not relatively prime, then some number {C} measures them. [!just VII.Def.11]
 
-Since *C* measures *B,* and *A* does not measure *B,* therefore *C* is not the same as *A.*
+Since {C} measures {B}, and {A} does not measure {B}, therefore {C} is not the same as {A}.
 
-Now, since *C* measures *B* and *A,* therefore it also measures *A* which is prime, though it is not the same as it, which is impossible. Therefore no number measures *B* and *A.*
+Now, since {C} measures {B} and {A}, therefore it also measures {A} which is prime, though it is not the same as it, which is impossible. Therefore no number measures {B} and {A}.
 
-Therefore *A* and *B* are relatively prime. [!just VII.Def.12]
+Therefore {A} and {B} are relatively prime. [!just VII.Def.12]
 
 Therefore, *any prime number is relatively prime to any number which it does not measure.*
 

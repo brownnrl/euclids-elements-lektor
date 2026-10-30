@@ -15,14 +15,26 @@ statement: If two numbers, multiplied by one another make some number, and any p
 ----
 proof:
 
-Let the two numbers *A* and *B* multiplied by one another make *C,* and let any prime number *D* measure *C.*
+Let the two numbers {A} and {B} multiplied by one another make {C}, and let any prime number {D} measure {C}.
 
-I say that *D* measures one of the numbers *A* or *B.*
+I say that {D} measures one of the numbers {A} or {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="270" height="185" tabindex="0"></canvas>
 <noscript><img alt="VII.30 diagram" src="propVII30.gif"/></noscript>
 <script type="text/javascript">
+    // A multiplied by B makes C; D is the prime that measures C, and E the
+    // number of times D measures C. Line segments only, so the walk is
+    // highlight beats. E belongs to the case D does not measure A and is
+    // withdrawn when the walk turns to the similar case.
+    //
+    // Draggables (checked against the bundle): the lineSlider ends A1, A2,
+    // B1, B2, C1, D1, D2, E1 (zero-colour handles) and the off-canvas,
+    // colourless rail and unit ends. D1, D2 and E1 arrive mid-walk, so they
+    // are deferred; C2 and E2 (proportion) are derived and listed per slide.
+    var ABC    = ["A","B","C","C2"];
+    var ABCD   = ABC.concat(["D","D1","D2"]);
+    var WITH_E = ABCD.concat(["E","E1","E2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -56,25 +68,125 @@ I say that *D* measures one of the numbers *A* or *B.*
             "E2;point;proportion;D1,D2,C1,C2,U1,U2,E1,E3;0",
             "E;line;connect;E1,E2;black"
         ],
+        deferDraggables: ["D1","D2","E1"],
+        slides: [
+            { text: "“If two numbers, multiplied by one another make some number,",
+              visible: ABC,
+              highlighted: ["A","B","C"] },
+            { text: "and any prime number measures the product,",
+              visible: ABCD,
+              highlighted: ["D","C"] },
+            { text: "then it also measures one of the original numbers.”",
+              visible: ABCD,
+              highlighted: ["D","A","B"],
+              justifications: [{ ref: "VII.30" }] },
+            { text: "Let the two numbers {A} and {B} multiplied by one another make {C},",
+              visible: ABC,
+              highlighted: ["A","B","C"] },
+            { text: "and let any prime number {D} measure {C}.",
+              visible: ABCD,
+              highlighted: ["D","C"] },
+            { text: "I say that {D} measures one of the numbers {A} or {B}.",
+              visible: ABCD,
+              highlighted: ["D","A","B"] },
+            { text: "Let it not measure {A}.",
+              visible: ABCD,
+              highlighted: ["D","A"] },
+            { text: "Now {D} is prime, therefore {A} and {D} are relatively prime.",
+              visible: ABCD,
+              highlighted: ["A","D"],
+              justifications: [{ ref: "VII.29" }] },
+            { text: "Let as many units be in {E} as the times that {D} measures {C}.",
+              visible: WITH_E,
+              highlighted: ["E","D","C"] },
+            { text: "Since then {D} measures {C} according to the units in {E},",
+              visible: WITH_E,
+              highlighted: ["D","C","E"] },
+            { text: "therefore {D} multiplied by {E} makes {C}.",
+              visible: WITH_E,
+              highlighted: ["D","E","C"],
+              justifications: [{ ref: "VII.Def.15" }] },
+            { text: "Further, {A} multiplied by {B} also makes {C},",
+              visible: WITH_E,
+              highlighted: ["A","B","C"] },
+            { text: "therefore the product of {D} and {E} equals the product of {A} and {B}.",
+              visible: WITH_E,
+              highlighted: ["D","E","A","B"] },
+            { text: "Therefore {D} is to {A} as {B} is to {E}.",
+              visible: WITH_E,
+              highlighted: ["D","A","B","E"],
+              justifications: [{ ref: "VII.19" }] },
+            { text: "But {D} and {A} are relatively prime,",
+              visible: WITH_E,
+              highlighted: ["D","A"] },
+            { text: "relatively prime numbers are also least,",
+              visible: WITH_E,
+              highlighted: ["D","A"],
+              justifications: [{ ref: "VII.21" }] },
+            { text: "and the least measure the numbers which have the same ratio the same number of times,",
+              visible: WITH_E,
+              highlighted: ["D","A","B","E"] },
+            { text: "the greater the greater and the less the less,",
+              visible: WITH_E,
+              highlighted: ["D","A","B","E"] },
+            { text: "that is, the antecedent the antecedent and the consequent the consequent,",
+              visible: WITH_E,
+              highlighted: ["D","B","A","E"] },
+            { text: "therefore {D} measures {B}.",
+              visible: WITH_E,
+              highlighted: ["D","B"],
+              justifications: [{ ref: "VII.20" }] },
+            // The first case is closed: its E is withdrawn.
+            { text: "Similarly we can also show that, if {D} does not measure {B}, then it measures {A}.",
+              visible: ABCD,
+              highlighted: ["D","B","A"] },
+            { text: "Therefore {D} measures one of the numbers {A} or {B}.",
+              visible: ABCD,
+              highlighted: ["D","A","B"] },
+            { text: "Therefore, if two numbers, multiplied by one another make some number,",
+              visible: ABCD,
+              highlighted: ["A","B","C"] },
+            { text: "and any prime number measures the product,",
+              visible: ABCD,
+              highlighted: ["D","C"] },
+            { text: "then it also measures one of the original numbers.",
+              visible: ABCD,
+              highlighted: ["D","A","B"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VII.30") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.29":     "/elements/books/bookVII/propositions/propVII29/",
+        "VII.Def.15": "/elements/books/bookVII/definitions/defVII15/",
+        "VII.19":     "/elements/books/bookVII/propositions/propVII19/",
+        "VII.21":     "/elements/books/bookVII/propositions/propVII21/",
+        "VII.20":     "/elements/books/bookVII/propositions/propVII20/"
     });
 </script>
 </figure>
 
-Let it not measure *A.*
+Let it not measure {A}.
 
-Now *D* is prime, therefore *A* and *D* are relatively prime. [!just VII.29]
+Now {D} is prime, therefore {A} and {D} are relatively prime. [!just VII.29]
 
-Let as many units be in *E* as the times that *D* measures *C.*
+Let as many units be in {E} as the times that {D} measures {C}.
 
-Since then *D* measures *C* according to the units in *E,* therefore *D* multiplied by *E* makes *C.* [!just VII.Def.15]
+Since then {D} measures {C} according to the units in {E}, therefore {D} multiplied by {E} makes {C}. [!just VII.Def.15]
 
-Further, *A* multiplied by *B* also makes *C,* therefore the product of *D* and *E* equals the product of *A* and *B.*
+Further, {A} multiplied by {B} also makes {C}, therefore the product of {D} and {E} equals the product of {A} and {B}.
 
-Therefore *D* is to *A* as *B* is to *E.* [!just VII.19]
+Therefore {D} is to {A} as {B} is to {E}. [!just VII.19]
 
-But *D* and *A* are relatively prime, relatively prime numbers are also least, and the least measure the numbers which have the same ratio the same number of times, the greater the greater and the less the less, that is, the antecedent the antecedent and the consequent the consequent, therefore *D* measures *B.* [!just VII.21; VII.20]
+But {D} and {A} are relatively prime, relatively prime numbers are also least, and the least measure the numbers which have the same ratio the same number of times, the greater the greater and the less the less, that is, the antecedent the antecedent and the consequent the consequent, therefore {D} measures {B}. [!just VII.21; VII.20]
 
-Similarly we can also show that, if *D* does not measure *B,* then it measures *A.* Therefore *D* measures one of the numbers *A* or *B.*
+Similarly we can also show that, if {D} does not measure {B}, then it measures {A}. Therefore {D} measures one of the numbers {A} or {B}.
 
 Therefore, *if two numbers, multiplied by one another make some number, and any prime number measures the product, then it also measures one of the original numbers.*
 
