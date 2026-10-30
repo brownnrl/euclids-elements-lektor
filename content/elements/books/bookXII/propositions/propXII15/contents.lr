@@ -15,16 +15,51 @@ statement: In equal cones and cylinders the bases are reciprocally proportional 
 ----
 proof:
 
-Let there be equal cones and cylinders with the circular bases *ABCD* and *EFGH.* Let *AC* and *EG* be the diameters of the bases, and *KL* and *MN* the axes, which are also the heights of the cones or cylinders
+Let there be equal cones and cylinders with the circular bases {ABCD|circABCD} and {EFGH|circEFGH}. Let {AC} and {EG} be the diameters of the bases, and {KL|LK} and {MN} the axes, which are also the heights of the cones or cylinders
 
-Complete the cylinders *AO* and *EP.*
+Complete the cylinders {AO|cylAO} and {EP|cylEP}.
 
-I say that in the cylinders *AO* and *EP* the bases are reciprocally proportional to the heights, that is, the base *ABCD* is to the base *EFGH* as the height *MN* is to the height *KL.*
+I say that in the cylinders {AO|cylAO} and {EP|cylEP} the bases are reciprocally proportional to the heights, that is, the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the height {MN} is to the height {KL|LK}.
 
 <center>
 <canvas id="canvas_0" width="550" height="270" tabindex="0"></canvas>
 <noscript><img alt="XII.15 diagram" src="propXII15.gif"/></noscript>
 <script type="text/javascript">
+    // Two cases on the heights. Equal: XII.11 gives the bases equal. Unequal
+    // (MN the greater): QN is cut off equal to KL, the plane TUS through Q
+    // cuts off the cylinder ES; V.7 with XII.11 and XII.13, through V.11,
+    // gives ABCD : EFGH :: MN : KL. The converse runs the same proportions
+    // back to V.9. The cones follow by XII.10.
+    //
+    // Joyce's figure draws the cylinders AO and EP with the cones ACL and
+    // EGM in them, the axes LK and MN, the plane TUS as the circle about Q,
+    // and the cone SUM, which the proof never names. All kept. The top of
+    // each cylinder (Lcirc, ACO, OC, AA'' / Mcirc, EGPR, ER, GP) is held
+    // back until "Complete the cylinders", Q, T, U, S and the circle TUS
+    // until the cut, and SUM until the closing slide. Everything added is
+    // transparent: faceless twins of the four circles (circABCD, circEFGH,
+    // circLO, circRP -- the originals have opaque faces, raised over the
+    // figure when lit, #140); the cylinders' outlines cylAO, cylEP, cylES and
+    // the cones' axial triangles coneACL, coneEGM (explicit ;0 faces); the
+    // diameters AC, EG and the height QN. A cylinder lights as its outline
+    // with its two circles. No angle is called right in the text.
+    // Draggables (checked against the bundle): A, K, L, E, M, N lineSliders
+    // and F a circleSlider, all givens, standing from slide 1. B, C, D, G, H,
+    // O, P, R, Q, S, T, U are derived and listed per slide.
+    var GIVEN = ["Kcirc","Ncirc","ACL","EGM","circABCD","circEFGH",
+                 "coneACL","coneEGM","A","B","C","D","K","L",
+                 "E","F","G","H","M","N","AC","EG","LK","MN"];
+    var CYL   = GIVEN.concat(["O","R","P","Lcirc","ACO","OC","AA''","Mcirc",
+                 "EGPR","ER","GP","circLO","circRP","cylAO","cylEP"]);
+    var CUT   = CYL.concat(["Q","QN"]);
+    var PLANE = CUT.concat(["Qcirc","T","U","S"]);
+    var ES    = PLANE.concat(["cylES"]);
+    var REST  = ES.concat(["SUM"]);
+    var BASES = ["circABCD","circEFGH"];
+    var CYL_AO = ["cylAO","circABCD","circLO"];
+    var CYL_EP = ["cylEP","circEFGH","circRP"];
+    var CYL_ES = ["cylES","circEFGH","Qcirc"];
+    var CONES = ["coneACL","coneEGM","circABCD","circEFGH"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -78,43 +113,195 @@ I say that in the cylinders *AO* and *EP* the bases are reciprocally proportiona
             "Qplane;plane;perpendicular;Q,Nx;0;0;0;0",
             "Qcirc;circle;radius;Q,N,E,Qplane;0;0;black;0",
             "T;point;parallelogram;F,N,Q;black;0",
-            "SUM;polygon;triangle;S,U,M;0;0;black;0"
+            "SUM;polygon;triangle;S,U,M;0;0;black;0",
+            // Faceless twins of the circles, the cylinders' outlines, the
+            // cones' axial triangles, the diameters and QN (see above).
+            "circABCD;circle;radius;K,A,Kplane;0;0;0;0",
+            "circLO;circle;radius;L,O,Lplane;0;0;0;0",
+            "circEFGH;circle;radius;N,E,Nplane;0;0;0;0",
+            "circRP;circle;radius;M,R,Mplane;0;0;0;0",
+            "cylAO;polygon;parallelogram;A,C,O;0;0;0;0",
+            "cylEP;polygon;quadrilateral;E,G,P,R;0;0;0;0",
+            "cylES;polygon;quadrilateral;E,G,S,U;0;0;0;0",
+            "coneACL;polygon;triangle;A,C,L;0;0;0;0",
+            "coneEGM;polygon;triangle;E,G,M;0;0;0;0",
+            "AC;line;connect;A,C;0;0;0",
+            "EG;line;connect;E,G;0;0;0",
+            "QN;line;connect;Q,N;0;0;0"
         ],
+        slides: [
+            { text: "“In equal cones and cylinders the bases are reciprocally proportional to the heights;",
+              visible: GIVEN,
+              highlighted: BASES.concat(["LK","MN"]),
+              justifications: [{ ref: "XII.15" }] },
+            { text: "and those cones and cylinders in which the bases are reciprocally proportional to the heights are equal.”",
+              highlighted: CONES },
+            { text: "Let there be equal cones and cylinders with the circular bases {ABCD|circABCD} and {EFGH|circEFGH}.",
+              highlighted: CONES },
+            { text: "Let {AC} and {EG} be the diameters of the bases,",
+              highlighted: ["AC","EG"] },
+            // Joyce's sentence has no closing period; left literal.
+            { text: "and {KL|LK} and {MN} the axes, which are also the heights of the cones or cylinders",
+              highlighted: ["LK","MN"] },
+            { text: "Complete the cylinders {AO|cylAO} and {EP|cylEP}.",
+              visible: CYL,
+              highlighted: ["cylAO","cylEP"],
+              transition: { animations: [
+                  { elem: "ACO", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "Lcirc", name: geomlib.A.Circle.compass },
+                  { elem: "EGPR", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "Mcirc", name: geomlib.A.Circle.compass } ] } },
+            { text: "I say that in the cylinders {AO|cylAO} and {EP|cylEP} the bases are reciprocally proportional to the heights,",
+              highlighted: CYL_AO.concat(CYL_EP) },
+            { text: "that is, the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the height {MN} is to the height {KL|LK}.",
+              highlighted: BASES.concat(["MN","LK"]) },
+            { text: "For the height {LK} is either equal to the height {MN} or unequal.",
+              highlighted: ["LK","MN"] },
+            { text: "First, let it be equal.",
+              highlighted: ["LK","MN"] },
+            { text: "Now the cylinder {AO|cylAO} also equals the cylinder {EP|cylEP}.",
+              highlighted: CYL_AO.concat(CYL_EP) },
+            { text: "But cones and cylinders of the same height are to one another as their bases,",
+              highlighted: CYL_AO.concat(CYL_EP),
+              justifications: [{ claim: "same height, as their bases", ref: "XII.11" }] },
+            { text: "therefore the base {ABCD|circABCD} equals the base {EFGH|circEFGH}.",
+              highlighted: BASES },
+            { text: "Hence, reciprocally, the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the height {MN} is to the height {KL|LK}.",
+              highlighted: BASES.concat(["MN","LK"]) },
+            { text: "Next, let the height {LK} be unequal to {MN}, and let {MN} be greater.",
+              highlighted: ["LK","MN"] },
+            { text: "Cut {QN} off the height {MN} equal to {KL|LK}.",
+              visible: CUT,
+              highlighted: ["QN","LK"],
+              transition: { animations: [
+                  { elem: "Q", name: geomlib.A.Point.appear } ] } },
+            { text: "Through the point {Q} let the cylinder {EP|cylEP} be cut by the plane {TUS|Qcirc}",
+              visible: PLANE,
+              highlighted: ["Q","Qcirc"].concat(CYL_EP),
+              transition: { animations: [
+                  { elem: "Qcirc", name: geomlib.A.Circle.compass } ] } },
+            { text: "parallel to the planes of the circles {EFGH|circEFGH} and {RP|circRP}.",
+              highlighted: ["Qcirc","circEFGH","circRP"] },
+            { text: "Erect the cylinder {ES|cylES} from the circle {EFGH|circEFGH} as base and with height {NQ|QN}.",
+              visible: ES,
+              highlighted: CYL_ES.concat(["QN"]),
+              transition: { animations: [
+                  { elem: "cylES", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Now, since the cylinder {AO|cylAO} equals the cylinder {EP|cylEP},",
+              highlighted: CYL_AO.concat(CYL_EP) },
+            { text: "therefore the cylinder {AO|cylAO} is to the cylinder {ES|cylES} as the cylinder {EP|cylEP} is to the cylinder {ES|cylES}.",
+              highlighted: CYL_AO.concat(CYL_EP).concat(CYL_ES),
+              justifications: [{ claim: "equals have the same ratio to the same", ref: "V.7" }] },
+            { text: "But the cylinder {AO|cylAO} is to the cylinder {ES|cylES} as the base {ABCD|circABCD} is to the base {EFGH|circEFGH},",
+              highlighted: CYL_AO.concat(CYL_ES) },
+            { text: "for the cylinders {AO|cylAO} and {ES|cylES} are of the same height.",
+              highlighted: CYL_AO.concat(CYL_ES).concat(["LK","QN"]),
+              justifications: [{ claim: "same height, as their bases", ref: "XII.11" }] },
+            { text: "And the cylinder {EP|cylEP} is to the cylinder {ES|cylES} as the height {MN} is to the height {QN},",
+              highlighted: CYL_EP.concat(CYL_ES).concat(["MN","QN"]) },
+            { text: "for the cylinder {EP|cylEP} is cut by a plane parallel to its opposite planes.",
+              highlighted: ["cylEP","Qcirc","circEFGH","circRP"],
+              justifications: [{ claim: "cut by a parallel plane, as the axes", ref: "XII.13" }] },
+            { text: "Therefore the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the height {MN} is to the height {QN}.",
+              highlighted: BASES.concat(["MN","QN"]),
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "But the height {QN} equals the height {KL|LK},",
+              highlighted: ["QN","LK"] },
+            { text: "therefore the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the height {MN} is to the height {KL|LK}.",
+              highlighted: BASES.concat(["MN","LK"]) },
+            { text: "Therefore in the cylinders {AO|cylAO} and {EP|cylEP} the bases are reciprocally proportional to the heights.",
+              highlighted: CYL_AO.concat(CYL_EP).concat(["LK","MN"]) },
+            // The converse: the cut is withdrawn until "With the same construction".
+            { text: "Next, in the cylinders {AO|cylAO} and {EP|cylEP} let the bases be reciprocally proportional to the heights,",
+              visible: CYL,
+              highlighted: CYL_AO.concat(CYL_EP).concat(["LK","MN"]) },
+            { text: "that is, as the base {ABCD|circABCD} is to the base {EFGH|circEFGH}, so let the height {MN} be to the height {KL|LK}.",
+              highlighted: BASES.concat(["MN","LK"]) },
+            { text: "I say that the cylinder {AO|cylAO} equals the cylinder {EP|cylEP}.",
+              highlighted: CYL_AO.concat(CYL_EP) },
+            { text: "With the same construction,",
+              visible: ES,
+              highlighted: ["QN","Qcirc","cylES"] },
+            { text: "since the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the height {MN} is to the height {KL|LK},",
+              highlighted: BASES.concat(["MN","LK"]) },
+            { text: "and the height {KL|LK} equals the height {QN},",
+              highlighted: ["LK","QN"] },
+            { text: "therefore the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the height {MN} is to the height {QN}.",
+              highlighted: BASES.concat(["MN","QN"]) },
+            { text: "But the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the cylinder {AO|cylAO} is to the cylinder {ES|cylES},",
+              highlighted: CYL_AO.concat(CYL_ES) },
+            { text: "for they have the same height.",
+              highlighted: CYL_AO.concat(CYL_ES).concat(["LK","QN"]),
+              justifications: [{ claim: "same height, as their bases", ref: "XII.11" }] },
+            { text: "And the height {MN} is to {QN} as the cylinder {EP|cylEP} is to the cylinder {ES|cylES},",
+              highlighted: CYL_EP.concat(CYL_ES).concat(["MN","QN"]),
+              justifications: [{ claim: "cut by a parallel plane, as the axes", ref: "XII.13" }] },
+            { text: "therefore the cylinder {AO|cylAO} is to the cylinder {ES|cylES} as the cylinder {EP|cylEP} is to the cylinder {ES|cylES}.",
+              highlighted: CYL_AO.concat(CYL_EP).concat(CYL_ES),
+              justifications: [{ claim: "ratios the same as the same ratio", ref: "V.11" }] },
+            { text: "Therefore the cylinder {AO|cylAO} equals the cylinder {EP|cylEP}.",
+              highlighted: CYL_AO.concat(CYL_EP),
+              justifications: [{ claim: "same ratio to the same, equal", ref: "V.9" }] },
+            { text: "And the same is true for the cones also.",
+              highlighted: CONES,
+              justifications: [{ claim: "a cone is a third of its cylinder", ref: "XII.10" }] },
+            { text: "Therefore, in equal cones and cylinders the bases are reciprocally proportional to the heights;",
+              visible: REST,
+              highlighted: BASES.concat(["LK","MN"]) },
+            { text: "and those cones and cylinders in which the bases are reciprocally proportional to the heights are equal.",
+              highlighted: CONES,
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.15") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "V.7":    "/elements/books/bookV/propositions/propV7/",
+        "V.9":    "/elements/books/bookV/propositions/propV9/",
+        "V.11":   "/elements/books/bookV/propositions/propV11/",
+        "XII.10": "/elements/books/bookXII/propositions/propXII10/",
+        "XII.11": "/elements/books/bookXII/propositions/propXII11/",
+        "XII.13": "/elements/books/bookXII/propositions/propXII13/"
     });
 </script>
 </center>
 
-For the height *LK* is either equal to the height *MN* or unequal.
+For the height {LK} is either equal to the height {MN} or unequal.
 
 First, let it be equal.
 
-Now the cylinder *AO* also equals the cylinder *EP.* But cones and cylinders of the same height are to one another as their bases, therefore the base *ABCD* equals the base *EFGH.* [!just XII.11]
+Now the cylinder {AO|cylAO} also equals the cylinder {EP|cylEP}. But cones and cylinders of the same height are to one another as their bases, therefore the base {ABCD|circABCD} equals the base {EFGH|circEFGH}. [!just XII.11]
 
-Hence, reciprocally, the base *ABCD* is to the base *EFGH* as the height *MN* is to the height *KL.*
+Hence, reciprocally, the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the height {MN} is to the height {KL|LK}.
 
-Next, let the height *LK* be unequal to *MN,* and let *MN* be greater.
+Next, let the height {LK} be unequal to {MN}, and let {MN} be greater.
 
-Cut *QN* off the height *MN* equal to *KL.* Through the point *Q* let the cylinder *EP* be cut by the plane *TUS* parallel to the planes of the circles *EFGH* and *RP.* Erect the cylinder *ES* from the circle *EFGH* as base and with height *NQ.*
+Cut {QN} off the height {MN} equal to {KL|LK}. Through the point {Q} let the cylinder {EP|cylEP} be cut by the plane {TUS|Qcirc} parallel to the planes of the circles {EFGH|circEFGH} and {RP|circRP}. Erect the cylinder {ES|cylES} from the circle {EFGH|circEFGH} as base and with height {NQ|QN}.
 
-Now, since the cylinder *AO* equals the cylinder *EP,* therefore the cylinder *AO* is to the cylinder *ES* as the cylinder *EP* is to the cylinder *ES.* [!just V.7]
+Now, since the cylinder {AO|cylAO} equals the cylinder {EP|cylEP}, therefore the cylinder {AO|cylAO} is to the cylinder {ES|cylES} as the cylinder {EP|cylEP} is to the cylinder {ES|cylES}. [!just V.7]
 
-But the cylinder *AO* is to the cylinder *ES* as the base *ABCD* is to the base *EFGH,* for the cylinders *AO* and *ES* are of the same height. And the cylinder *EP* is to the cylinder *ES* as the height *MN* is to the height *QN,* for the cylinder *EP* is cut by a plane parallel to its opposite planes. Therefore the base *ABCD* is to the base *EFGH* as the height *MN* is to the height *QN.* [!just XII.11; XII.13; V.11]
+But the cylinder {AO|cylAO} is to the cylinder {ES|cylES} as the base {ABCD|circABCD} is to the base {EFGH|circEFGH}, for the cylinders {AO|cylAO} and {ES|cylES} are of the same height. And the cylinder {EP|cylEP} is to the cylinder {ES|cylES} as the height {MN} is to the height {QN}, for the cylinder {EP|cylEP} is cut by a plane parallel to its opposite planes. Therefore the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the height {MN} is to the height {QN}. [!just XII.11; XII.13; V.11]
 
-But the height *QN* equals the height *KL,* therefore the base *ABCD* is to the base *EFGH* as the height *MN* is to the height *KL.*
+But the height {QN} equals the height {KL|LK}, therefore the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the height {MN} is to the height {KL|LK}.
 
-Therefore in the cylinders *AO* and *EP* the bases are reciprocally proportional to the heights.
+Therefore in the cylinders {AO|cylAO} and {EP|cylEP} the bases are reciprocally proportional to the heights.
 
 <hr width="50%">
 
-Next, in the cylinders *AO* and *EP* let the bases be reciprocally proportional to the heights, that is, as the base *ABCD* is to the base *EFGH,* so let the height *MN* be to the height *KL.*
+Next, in the cylinders {AO|cylAO} and {EP|cylEP} let the bases be reciprocally proportional to the heights, that is, as the base {ABCD|circABCD} is to the base {EFGH|circEFGH}, so let the height {MN} be to the height {KL|LK}.
 
-I say that the cylinder *AO* equals the cylinder *EP.*
+I say that the cylinder {AO|cylAO} equals the cylinder {EP|cylEP}.
 
-With the same construction, since the base *ABCD* is to the base *EFGH* as the height *MN* is to the height *KL,* and the height *KL* equals the height *QN,* therefore the base *ABCD* is to the base *EFGH* as the height *MN* is to the height *QN.*
+With the same construction, since the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the height {MN} is to the height {KL|LK}, and the height {KL|LK} equals the height {QN}, therefore the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the height {MN} is to the height {QN}.
 
-But the base *ABCD* is to the base *EFGH* as the cylinder *AO* is to the cylinder *ES,* for they have the same height. And the height *MN* is to *QN* as the cylinder *EP* is to the cylinder *ES,* therefore the cylinder *AO* is to the cylinder *ES* as the cylinder *EP* is to the cylinder *ES.* [!just XII.11; XII.13, V.11]
+But the base {ABCD|circABCD} is to the base {EFGH|circEFGH} as the cylinder {AO|cylAO} is to the cylinder {ES|cylES}, for they have the same height. And the height {MN} is to {QN} as the cylinder {EP|cylEP} is to the cylinder {ES|cylES}, therefore the cylinder {AO|cylAO} is to the cylinder {ES|cylES} as the cylinder {EP|cylEP} is to the cylinder {ES|cylES}. [!just XII.11; XII.13, V.11]
 
-Therefore the cylinder *AO* equals the cylinder *EP.* [!just V.9]
+Therefore the cylinder {AO|cylAO} equals the cylinder {EP|cylEP}. [!just V.9]
 
 And the same is true for the cones also. [!just XII.10]
 

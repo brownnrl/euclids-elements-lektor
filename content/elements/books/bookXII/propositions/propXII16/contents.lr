@@ -17,14 +17,42 @@ statement: Given two circles about the same center, to inscribe in the greater c
 ----
 proof:
 
-Let *ABCD* and *EFGH* be the two given circles about the same center *K.*
+Let {ABCD|circABCD} and {EFGH|circEFGH} be the two given circles about the same center {K}.
 
-It is required to inscribe in the greater circle *ABCD* an equilateral polygon with an even number of sides which does not touch the circle *EFGH.*
+It is required to inscribe in the greater circle {ABCD|circABCD} an equilateral polygon with an even number of sides which does not touch the circle {EFGH|circEFGH}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="280" tabindex="0"></canvas>
 <noscript><img alt="XII.16 diagram" src="propXII16.gif"/></noscript>
 <script type="text/javascript">
+    // BD through K; GA at right angles to BD at G touches EFGH (III.16.Cor);
+    // the semicircle BAD halved repeatedly leaves the arc LD less than AD
+    // (X.1); LM perpendicular to BD, carried through to N, gives LD = DN
+    // (III.3, I.4), and LN, parallel to AC, clears EFGH, so LD and DN do too.
+    //
+    // Joyce's figure draws the two circles, BD, the chord AC, LN, LD, DN.
+    // All kept. AC is drawn from G, as the text says, by the solid slide
+    // twins GA and GC (hidden at rest, initiallyHidden); BD, AC, L, LN, LD
+    // and DN are held back until the proof reaches them. Everything else
+    // added is transparent: faceless twins of the circles (circABCD,
+    // circEFGH -- the originals have opaque faces, raised over the figure
+    // when lit, #140); the arcs BAD, its half (Z1 the bottom of the circle,
+    // Z2 the middle of the quarter), AD and LD; the segments LM, MN. The
+    // right angles at G and M are angleMarkerRight squares. The polygon of
+    // the last step is not drawn: Joyce's L comes from an angle trisection,
+    // so chords equal to LD do not close it.
+    // Draggables (checked against the bundle): B, D free and E a
+    // lineSlider, givens standing from slide 1. K, A, C, F, G, H, L, M, N
+    // are derived and listed per slide.
+    var GIVEN = ["ABCD","EFGH","circABCD","circEFGH","K","A","B","C","D",
+                 "E","F","G","H"];
+    var BDv   = GIVEN.concat(["BD"]);
+    var PERP  = BDv.concat(["GA","GC","rtG"]);
+    var TOUCH = PERP.concat(["AC"]);
+    var LEFT  = TOUCH.concat(["L"]);
+    var LNv   = LEFT.concat(["M","N","LN","rtM"]);
+    var JOIN  = LNv.concat(["LD","DN"]);
+    var REST  = TOUCH.concat(["L","M","N","LN","LD","DN","rtM"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -52,27 +80,138 @@ It is required to inscribe in the greater circle *ABCD* an equilateral polygon w
             "N;point;extend;L,M,L,M",
             "LN;line;connect;L,N",
             "LD;line;connect;L,D",
-            "DN;line;connect;D,N"
+            "DN;line;connect;D,N",
+            // Slide twins of AC, drawn from G, hidden at rest (see above).
+            "GA;line;connect;G,A",
+            "GC;line;connect;G,C",
+            // Faceless twins of the circles, the arcs and LM, MN.
+            "circABCD;circle;radius;K,B;0;0;0;0",
+            "circEFGH;circle;radius;K,E;0;0;0;0",
+            "Z1;point;perpendicular;K,B;0;0",
+            "Z2';point;midpoint;Z1,D;0;0",
+            "Z2;point;cutoff;K,Z2',K,B;0;0",
+            "Y';point;midpoint;L,D;0;0",
+            "Y;point;cutoff;K,Y',K,B;0;0",
+            "arcBAD;sector;arc;B,Z1,D;0;0;0;0",
+            "arcZD;sector;arc;Z1,Z2,D;0;0;0;0",
+            "arcAD;sector;arc;A,L,D;0;0;0;0",
+            "arcLD;sector;arc;L,Y,D;0;0;0;0",
+            "LM;line;connect;L,M;0;0;0",
+            "MN;line;connect;M,N;0;0;0",
+            "rtG;sector;angleMarkerRight;G,D,A",
+            "rtM;sector;angleMarkerRight;M,D,L"
         ],
+        initiallyHidden: ["GA","GC"],
+        slides: [
+            { text: "“Given two circles about the same center,",
+              visible: GIVEN,
+              highlighted: ["circABCD","circEFGH","K"],
+              justifications: [{ ref: "XII.16" }] },
+            { text: "to inscribe in the greater circle an equilateral polygon with an even number of sides",
+              highlighted: ["circABCD"] },
+            { text: "which does not touch the lesser circle.”",
+              highlighted: ["circEFGH"] },
+            { text: "Let {ABCD|circABCD} and {EFGH|circEFGH} be the two given circles about the same center {K}.",
+              highlighted: ["circABCD","circEFGH","K"] },
+            { text: "It is required to inscribe in the greater circle {ABCD|circABCD} an equilateral polygon with an even number of sides",
+              highlighted: ["circABCD"] },
+            { text: "which does not touch the circle {EFGH|circEFGH}.",
+              highlighted: ["circEFGH"] },
+            { text: "Draw the straight line {BKD|BD} through the center {K},",
+              visible: BDv,
+              highlighted: ["BD","K"],
+              transition: { animations: [
+                  { elem: "BD", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and draw {GA} from the point {G} at right angles to the straight line {BD}, and carry it through to {C}.",
+              visible: PERP,
+              highlighted: ["GA","GC","rtG"],
+              transition: { animations: [
+                  { elem: "GA", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "rtG", name: geomlib.A.Sector.sweep },
+                  { elem: "GC", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "GA at right angles to BD", ref: "I.11" }] },
+            { text: "Therefore {AC} touches the circle {EFGH|circEFGH}.",
+              visible: TOUCH,
+              highlighted: ["AC","circEFGH","G"],
+              justifications: [{ claim: "at right angles to a diameter at its end", ref: "III.16.Cor" }] },
+            { text: "Then, bisecting the circumference {BAD|arcBAD},",
+              highlighted: ["arcBAD"] },
+            { text: "bisecting the half of it, and doing this repeatedly,",
+              highlighted: ["arcZD"] },
+            { text: "we shall leave a circumference less than {AD|arcAD}.",
+              highlighted: ["arcAD"],
+              justifications: [{ ref: "X.1" }] },
+            { text: "Let such be left, and let it be {LD|arcLD}.",
+              visible: LEFT,
+              highlighted: ["arcLD","L"],
+              transition: { animations: [
+                  { elem: "L", name: geomlib.A.Point.appear } ] } },
+            { text: "Draw {LM} from {L} perpendicular to {BD}, and carry it through to {N}.",
+              visible: LNv,
+              highlighted: ["LM","MN","rtM"],
+              transition: { animations: [
+                  { elem: "LN", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "rtM", name: geomlib.A.Sector.sweep } ] },
+              justifications: [{ claim: "LM perpendicular to BD", ref: "I.12" }] },
+            { text: "Join {LD} and {DN}.",
+              visible: JOIN,
+              highlighted: ["LD","DN"],
+              transition: { animations: [
+                  { elem: "LD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "DN", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore {LD} equals {DN}.",
+              highlighted: ["LD","DN","LM","MN"],
+              justifications: [{ claim: "BD bisects LN at right angles", ref: "III.3" },
+                               { claim: "LD = DN", ref: "I.4" }] },
+            { text: "Now, since {LN} is parallel to {AC}, and {AC} touches the circle {EFGH|circEFGH},",
+              highlighted: ["LN","AC","circEFGH"] },
+            { text: "therefore {LN} does not touch the circle {EFGH|circEFGH}.",
+              highlighted: ["LN","circEFGH"] },
+            { text: "Therefore {LD} and {DN} are far from touching the circle {EFGH|circEFGH}.",
+              highlighted: ["LD","DN","circEFGH"] },
+            { text: "If, then, we fit into the circle {ABCD|circABCD} straight lines equal to the straight line {LD} and placed repeatedly,",
+              visible: REST,
+              highlighted: ["circABCD","LD","DN"] },
+            { text: "then there is inscribed in the circle {ABCD|circABCD} an equilateral polygon with an even number of sides",
+              highlighted: ["circABCD","LD","DN"] },
+            { text: "which does not touch the lesser circle {EFGH|circEFGH}.",
+              highlighted: ["LD","DN","circEFGH"],
+              justifications: [{ ref: "Q.E.F." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.16") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.4":        "/elements/books/bookI/propositions/propI4/",
+        "I.11":       "/elements/books/bookI/propositions/propI11/",
+        "I.12":       "/elements/books/bookI/propositions/propI12/",
+        "III.3":      "/elements/books/bookIII/propositions/propIII3/",
+        "III.16.Cor": "/elements/books/bookIII/propositions/propIII16/#cor",
+        "X.1":        "/elements/books/bookX/propositions/propX1/"
     });
 </script>
 </figure>
 
-Draw the straight line *BKD* through the center *K,* and draw *GA* from the point *G* at right angles to the straight line *BD,* and carry it through to *C.* [!just I.11]
+Draw the straight line {BKD|BD} through the center {K}, and draw {GA} from the point {G} at right angles to the straight line {BD}, and carry it through to {C}. [!just I.11]
 
-Therefore *AC* touches the circle *EFGH.* [!just III.16.Cor]
+Therefore {AC} touches the circle {EFGH|circEFGH}. [!just III.16.Cor]
 
-Then, bisecting the circumference *BAD,* bisecting the half of it, and doing this repeatedly, we shall leave a circumference less than *AD.* [!just X.1]
+Then, bisecting the circumference {BAD|arcBAD}, bisecting the half of it, and doing this repeatedly, we shall leave a circumference less than {AD|arcAD}. [!just X.1]
 
-Let such be left, and let it be *LD.*
+Let such be left, and let it be {LD|arcLD}.
 
-Draw *LM* from *L* perpendicular to *BD,* and carry it through to *N.* Join *LD* and *DN.* [!just I.12]
+Draw {LM} from {L} perpendicular to {BD}, and carry it through to {N}. Join {LD} and {DN}. [!just I.12]
 
-Therefore *LD* equals *DN.* [!just III.3, I.4]
+Therefore {LD} equals {DN}. [!just III.3, I.4]
 
-Now, since *LN* is parallel to *AC,* and *AC* touches the circle *EFGH,* therefore *LN* does not touch the circle *EFGH.* Therefore *LD* and *DN* are far from touching the circle *EFGH.*
+Now, since {LN} is parallel to {AC}, and {AC} touches the circle {EFGH|circEFGH}, therefore {LN} does not touch the circle {EFGH|circEFGH}. Therefore {LD} and {DN} are far from touching the circle {EFGH|circEFGH}.
 
-If, then, we fit into the circle *ABCD* straight lines equal to the straight line *LD* and placed repeatedly, then there is inscribed in the circle *ABCD* an equilateral polygon with an even number of sides which does not touch the lesser circle *EFGH.*
+If, then, we fit into the circle {ABCD|circABCD} straight lines equal to the straight line {LD} and placed repeatedly, then there is inscribed in the circle {ABCD|circABCD} an equilateral polygon with an even number of sides which does not touch the lesser circle {EFGH|circEFGH}.
 
 <div class="qed">Q.E.F.</div>
 ----
