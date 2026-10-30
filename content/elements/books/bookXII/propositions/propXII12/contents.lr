@@ -15,14 +15,87 @@ statement: Similar cones and cylinders are to one another in triplicate ratio of
 ----
 proof:
 
-Let there be similar cones and cylinders, let the circles *ABCD* and *EFGH* be their bases, *BD* and *FH* the diameters of the bases, and *KL* and *MN* the axes of the cones and cylinders.
+Let there be similar cones and cylinders, let the circles {ABCD|circABCD} and {EFGH|circEFGH} be their bases, {BD} and {FH} the diameters of the bases, and {KL} and {MN} the axes of the cones and cylinders.
 
-I say that the cone with circular base *ABCD* and vertex *L* has to the cone with circular base *EFGH* and vertex *N* the ratio triplicate of that which *BD* has to *FH.*
+I say that the cone with circular base {ABCD|circABCD} and vertex {L} has to the cone with circular base {EFGH|circEFGH} and vertex {N} the ratio triplicate of that which {BD} has to {FH}.
 
 <center>
 <canvas id="canvas_0" width="560" height="280" tabindex="0"></canvas>
 <noscript><img alt="XII.12 diagram" src="propXII12.gif"/></noscript>
 <script type="text/javascript">
+    // XII.11's double reductio again, with the ratio triplicate of BD to FH
+    // in place of the ratio of the bases. Case 1: O less than the cone
+    // EFGHN. The square and octagon in EFGH carry pyramids exhausting the
+    // cone (X.1) until the pyramid on EPFQGRHS exceeds O. The similar
+    // pyramid in ABCDL is then compared piece by piece: the triangles BKL /
+    // FMN, BKT / FMP, LKT / NMP are similar (VI.6), so LTB / NPF are too
+    // (V.22, VI.5), the pyramids BKTL / FMPN are similar (XI.Def.9) and in
+    // triplicate ratio of BK to FM (XII.8), and so are the whole pyramids
+    // (V.12); V.16 then gives O greater than the pyramid in EFGHN —
+    // impossible. Case 2 inverts to case 1.
+    //
+    // Joyce's figure draws the two circles, the squares and octagons in
+    // them, the diameters BD and EG, the axes KL, MN, the edges BL, TL, FN,
+    // PN, and the solid O; the cones themselves are not drawn. All kept.
+    // The square EFGH, the octagon HRGQFPES, the square and octagon in
+    // ABCD, the edges BL, TL, FN, PN and O are held back until the proof
+    // reaches them. The joins KT and MP are solid slide twins, hidden at rest
+    // (initiallyHidden). Everything else added is transparent: faceless twins
+    // of the circles, square EFGH and octagons (circABCD, circEFGH, sqEFGH,
+    // ATBUCVDW, EPFQGRHS — the originals have opaque faces, raised over the
+    // figure when lit, #140); the diameter FH, which the proof names but
+    // Joyce's figure does not draw (it draws EG); the cones' axial triangles
+    // ABCDL, EFGHN, standing for the cones; arcs, chords and triangles on
+    // EFGH; the pyramids' apex edges; the segments BK, FM, BT, FP; the
+    // triangles of the comparison; the pyramids BKTL, FMPN as octagons
+    // walking their six edges; the joins from K and M to the other vertices;
+    // and O's twelve edges, built as on XII.5 and XII.11. Angle markers:
+    // BKL / FMN and BKT / FMP are sectors; TKL / PMN are right-angle
+    // squares, as the text calls them right. The cylinders are not drawn.
+    // Draggables (checked against the bundle): B, D, H, F, L lineSliders,
+    // givens; A0, A3, L3, N3 off-canvas; O0..O3 free, O's handles, deferred.
+    // A, C, E, G, K, M, N, P..W are derived and listed per slide.
+    var GIVEN = ["Kcirc","Mcirc","circABCD","circEFGH","ABCDL","EFGHN",
+                 "A","B","C","D","K","E","F","G","H","M","BD","FH","EG",
+                 "L","N","KL","MN"];
+    var OBOX  = ["Of","Odc","Odd","Obb","Oba","Obc"];
+    var OSET  = ["O","O0","O1","O2","O3","Oc","Ob2","Od2","Oc2"].concat(OBOX);
+    var SO    = GIVEN.concat(OSET);
+    var SQ    = SO.concat(["EFGH","sqEFGH"]);
+    var NSQ   = ["nE","nF","nG","nH"];
+    var NOCT  = ["nP","nQ","nR","nS"];
+    var LOCT  = ["lA","lT","lB","lU","lC","lV","lD","lW"];
+    var CHORDS = ["EP","PF","FQ","QG","GR","RH","HS","SE"];
+    var ARCS  = ["arcEF","arcFG","arcGH","arcHE"];
+    var TRIS  = ["EPF","FQG","GRH","HSE"];
+    var PSQ   = SQ.concat(NSQ);
+    var BIS   = SQ.concat(["P","Q","R","S"]);
+    var OCT   = BIS.concat(["HRGQFPES","EPFQGRHS"]);
+    var TRI   = OCT.concat(TRIS);
+    var PYT   = TRI.concat(NSQ).concat(NOCT);
+    var PYO   = OCT.concat(NSQ).concat(NOCT);
+    var POLY2 = PYO.concat(["T","U","V","W","ABCD","BUCVDWAT","ATBUCVDW"]);
+    var PYL   = POLY2.concat(LOCT);
+    var TRL   = PYL.concat(["BL","TL","LBT"]);
+    var TRN   = TRL.concat(["FN","PN","NFP"]);
+    var JOIN  = TRN.concat(["KT","MP"]);
+    var SIM   = JOIN.concat(["BK","FM","BT","FP","BKL","FMN","BKT","FMP",
+                 "LKT","NMP","BKTL","FMPN"]);
+    var ANG1  = SIM.concat(["angBKL","angFMN"]);
+    var ANG2  = ANG1.concat(["angBKT","angFMP"]);
+    var ANG3  = ANG2.concat(["angTKL","angPMN"]);
+    var KSP   = ["kA","kW","kD","kV","kC","kU"];
+    var MSP   = ["mE","mS","mH","mR","mG","mQ"];
+    var SPK   = SIM.concat(KSP);
+    var SPKM  = SPK.concat(MSP);
+    var CONE_L = ["circABCD","ABCDL"];
+    var CONE_N = ["circEFGH","EFGHN"];
+    var CIRCS = ["circABCD","circEFGH"];
+    var PYR_SQ = ["sqEFGH","N"].concat(NSQ);
+    var PYR_N = ["EPFQGRHS","N"].concat(NSQ).concat(NOCT);
+    var PYR_L = ["ATBUCVDW","L"].concat(LOCT);
+    var REST  = GIVEN.concat(OSET).concat(["EFGH","P","Q","R","S","HRGQFPES",
+                 "T","U","V","W","ABCD","BUCVDWAT","BL","TL","FN","PN"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -78,79 +151,542 @@ I say that the cone with circular base *ABCD* and vertex *L* has to the cone wit
             "BL;line;connect;B,L;0;0;darkGray",
             "TL;line;connect;T,L;0;0;darkGray",
             "FN;line;connect;F,N;0;0;darkGray",
-            "PN;line;connect;P,N;0;0;darkGray"
+            "PN;line;connect;P,N;0;0;darkGray",
+            // The joins KT and MP: solid slide twins, hidden at rest.
+            "KT;line;connect;K,T",
+            "MP;line;connect;M,P",
+            // Faceless twins of the circles, square EFGH and octagons.
+            "circABCD;circle;radius;K,B;0;0;0;0",
+            "circEFGH;circle;radius;M,H;0;0;0;0",
+            "sqEFGH;polygon;quadrilateral;E,F,G,H;0;0;0;0",
+            "ATBUCVDW;polygon;octagon;A,T,B,U,C,V,D,W;0;0;0;0",
+            "EPFQGRHS;polygon;octagon;E,P,F,Q,G,R,H,S;0;0;0;0",
+            // The diameter FH, and the cones' axial triangles.
+            "FH;line;connect;F,H;0;0;0",
+            "ABCDL;polygon;triangle;B,L,D;0;0;0;0",
+            "EFGHN;polygon;triangle;H,N,F;0;0;0;0",
+            // The chords, the circumferences bisected, and the triangles.
+            "EP;line;connect;E,P;0;0;0",
+            "PF;line;connect;P,F;0;0;0",
+            "FQ;line;connect;F,Q;0;0;0",
+            "QG;line;connect;Q,G;0;0;0",
+            "GR;line;connect;G,R;0;0;0",
+            "RH;line;connect;R,H;0;0;0",
+            "HS;line;connect;H,S;0;0;0",
+            "SE;line;connect;S,E;0;0;0",
+            "arcEF;sector;arc;E,P,F;0;0;0;0",
+            "arcFG;sector;arc;F,Q,G;0;0;0;0",
+            "arcGH;sector;arc;G,R,H;0;0;0;0",
+            "arcHE;sector;arc;H,S,E;0;0;0;0",
+            "EPF;polygon;triangle;E,P,F;0;0;0;0",
+            "FQG;polygon;triangle;F,Q,G;0;0;0;0",
+            "GRH;polygon;triangle;G,R,H;0;0;0;0",
+            "HSE;polygon;triangle;H,S,E;0;0;0;0",
+            // Apex edges of the pyramids set up in the cones.
+            "nE;line;connect;N,E;0;0;0",
+            "nF;line;connect;N,F;0;0;0",
+            "nG;line;connect;N,G;0;0;0",
+            "nH;line;connect;N,H;0;0;0",
+            "nP;line;connect;N,P;0;0;0",
+            "nQ;line;connect;N,Q;0;0;0",
+            "nR;line;connect;N,R;0;0;0",
+            "nS;line;connect;N,S;0;0;0",
+            "lA;line;connect;L,A;0;0;0",
+            "lT;line;connect;L,T;0;0;0",
+            "lB;line;connect;L,B;0;0;0",
+            "lU;line;connect;L,U;0;0;0",
+            "lC;line;connect;L,C;0;0;0",
+            "lV;line;connect;L,V;0;0;0",
+            "lD;line;connect;L,D;0;0;0",
+            "lW;line;connect;L,W;0;0;0",
+            // Segments and triangles of the comparison.
+            "BK;line;connect;B,K;0;0;0",
+            "FM;line;connect;F,M;0;0;0",
+            "BT;line;connect;B,T;0;0;0",
+            "FP;line;connect;F,P;0;0;0",
+            "LBT;polygon;triangle;L,B,T;0;0;0;0",
+            "NFP;polygon;triangle;N,F,P;0;0;0;0",
+            "BKL;polygon;triangle;B,K,L;0;0;0;0",
+            "FMN;polygon;triangle;F,M,N;0;0;0;0",
+            "BKT;polygon;triangle;B,K,T;0;0;0;0",
+            "FMP;polygon;triangle;F,M,P;0;0;0;0",
+            "LKT;polygon;triangle;L,K,T;0;0;0;0",
+            "NMP;polygon;triangle;N,M,P;0;0;0;0",
+            // The pyramids BKTL, FMPN: octagons walking all six edges.
+            "BKTL;polygon;octagon;B,K,T,L,B,T,L,K;0;0;0;0",
+            "FMPN;polygon;octagon;F,M,P,N,F,P,N,M;0;0;0;0",
+            // Angle markers.
+            "angBKL;sector;angleMarker;K,B,L",
+            "angFMN;sector;angleMarker;M,F,N",
+            "angBKT;sector;angleMarker;K,B,T",
+            "angFMP;sector;angleMarker;M,F,P",
+            "angTKL;sector;angleMarkerRight;K,T,L",
+            "angPMN;sector;angleMarkerRight;M,P,N",
+            // The joins from K and from M to the other vertices.
+            "kA;line;connect;K,A;0;0;0",
+            "kW;line;connect;K,W;0;0;0",
+            "kD;line;connect;K,D;0;0;0",
+            "kV;line;connect;K,V;0;0;0",
+            "kC;line;connect;K,C;0;0;0",
+            "kU;line;connect;K,U;0;0;0",
+            "mE;line;connect;M,E;0;0;0",
+            "mS;line;connect;M,S;0;0;0",
+            "mH;line;connect;M,H;0;0;0",
+            "mR;line;connect;M,R;0;0;0",
+            "mG;line;connect;M,G;0;0;0",
+            "mQ;line;connect;M,Q;0;0;0",
+            // The other four corners of O, then its twelve edges.
+            "Oc;point;parallelogram;O1,O0,O2;0;0",
+            "Ob2;point;parallelogram;O1,O0,O3;0;0",
+            "Od2;point;parallelogram;O2,O0,O3;0;0",
+            "Oc2;point;parallelogram;Oc,O0,O3;0;0",
+            "Of;polygon;octagon;O0,O1,Oc,Oc2,Od2,O3,O0,O2;0;0;0;0",
+            "Odc;line;connect;O2,Oc;0;0;0",
+            "Odd;line;connect;O2,Od2;0;0;0",
+            "Obb;line;connect;O1,Ob2;0;0;0",
+            "Oba;line;connect;Ob2,O3;0;0;0",
+            "Obc;line;connect;Ob2,Oc2;0;0;0"
         ],
+        initiallyHidden: ["KT","MP"],
+        deferDraggables: ["O0","O1","O2","O3"],
+        slides: [
+            { text: "“Similar cones and cylinders are to one another in triplicate ratio of the diameters of their bases.”",
+              visible: GIVEN,
+              highlighted: CONE_L.concat(CONE_N).concat(["BD","FH"]),
+              justifications: [{ ref: "XII.12" }] },
+            { text: "Let there be similar cones and cylinders, let the circles {ABCD|circABCD} and {EFGH|circEFGH} be their bases,",
+              highlighted: CONE_L.concat(CONE_N) },
+            { text: "{BD} and {FH} the diameters of the bases, and {KL} and {MN} the axes of the cones and cylinders.",
+              highlighted: ["BD","FH","KL","MN"] },
+            { text: "I say that the cone with circular base {ABCD|circABCD} and vertex {L}",
+              highlighted: CONE_L.concat(["L"]) },
+            { text: "has to the cone with circular base {EFGH|circEFGH} and vertex {N}",
+              highlighted: CONE_N.concat(["N"]) },
+            { text: "the ratio triplicate of that which {BD} has to {FH}.",
+              highlighted: ["BD","FH"] },
+            { text: "For, if the cone {ABCDL} does not have to the cone {EFGHN}",
+              highlighted: CONE_L.concat(CONE_N) },
+            { text: "the ratio triplicate of that which {BD} has to {FH},",
+              highlighted: ["BD","FH"] },
+            { text: "then the cone {ABCDL} has that triplicate ratio",
+              highlighted: CONE_L },
+            { text: "either to some solid less than the cone {EFGHN} or to a greater.",
+              highlighted: CONE_N },
+            { text: "First, let it have that triplicate ratio to a less solid {O|Of}.",
+              visible: SO,
+              highlighted: OBOX },
+            { text: "Inscribe the square {EFGH|sqEFGH} in the circle {EFGH|circEFGH}.",
+              visible: SQ,
+              highlighted: ["sqEFGH"],
+              transition: { animations: [
+                  { elem: "EFGH", name: geomlib.A.Polygon.outlineAndFill } ] },
+              justifications: [{ claim: "square inscribed in a circle", ref: "IV.6" }] },
+            { text: "Therefore the square {EFGH|sqEFGH} is greater than the half of the circle {EFGH|circEFGH}.",
+              highlighted: ["sqEFGH","circEFGH"] },
+            { text: "Now set up on the square {EFGH|sqEFGH} a pyramid with the same vertex as the cone.",
+              visible: PSQ,
+              highlighted: PYR_SQ,
+              transition: { mode: "parallel", animations: [
+                  { elem: "nE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "nF", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "nG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "nH", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore the pyramid so set up is greater than the half part of the cone.",
+              highlighted: PYR_SQ.concat(CONE_N) },
+            { text: "Bisect the circumferences {EF|arcEF}, {FG|arcFG}, {GH|arcGH}, and {HE|arcHE} at the points {P}, {Q}, {R}, and {S},",
+              visible: BIS,
+              highlighted: ARCS.concat(["P","Q","R","S"]),
+              transition: { mode: "parallel", animations: [
+                  { elem: "P", name: geomlib.A.Point.appear },
+                  { elem: "Q", name: geomlib.A.Point.appear },
+                  { elem: "R", name: geomlib.A.Point.appear },
+                  { elem: "S", name: geomlib.A.Point.appear } ] } },
+            { text: "and join {EP}, {PF}, {FQ}, {QG}, {GR}, {RH}, {HS}, and {SE}.",
+              visible: OCT,
+              highlighted: CHORDS,
+              transition: { animations: [
+                  { elem: "HRGQFPES", name: geomlib.A.Polygon.outline } ] } },
+            { text: "Therefore each of the triangles {EPF}, {FQG}, {GRH}, and {HSE}",
+              visible: TRI,
+              highlighted: TRIS },
+            { text: "is also greater than the half part of that segment of the circle {EFGH|circEFGH} about it.",
+              highlighted: TRIS.concat(ARCS) },
+            { text: "Now set up on each of the triangles {EPF}, {FQG}, {GRH}, and {HSE}",
+              visible: TRI,
+              highlighted: TRIS },
+            { text: "a pyramid with the same vertex as the cone.",
+              visible: PYT,
+              highlighted: TRIS.concat(NOCT).concat(["N"]),
+              transition: { mode: "parallel", animations: [
+                  { elem: "nP", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "nQ", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "nR", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "nS", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Therefore each of the pyramids so set up",
+              highlighted: TRIS.concat(NSQ).concat(NOCT) },
+            { text: "is also greater than the half part of that segment of the cone about it.",
+              highlighted: TRIS.concat(NSQ).concat(NOCT).concat(ARCS) },
+            { text: "Thus, bisecting the circumferences so left, joining straight lines,",
+              visible: PYO,
+              highlighted: ["EPFQGRHS"] },
+            { text: "setting up on each of the triangles pyramids with the same vertex as the cone, and doing this repeatedly,",
+              highlighted: PYR_N },
+            { text: "we shall leave some segments of the cone",
+              highlighted: CONE_N },
+            { text: "which are less than the excess by which the cone {EFGHN} exceeds the solid {O|Of}.",
+              highlighted: CONE_N.concat(OBOX),
+              justifications: [{ ref: "X.1" }] },
+            { text: "Let such be left, and let them be the segments on {EP}, {PF}, {FQ}, {QG}, {GR}, {RH}, {HS}, and {SE}.",
+              highlighted: CHORDS },
+            { text: "Therefore the remainder, the pyramid with the polygonal base {EPFQGRHS} and vertex {N}, is greater than the solid {O|Of}.",
+              highlighted: PYR_N.concat(OBOX) },
+            { text: "Now inscribe in the circle {ABCD|circABCD} the polygon {ATBUCVDW}",
+              visible: POLY2,
+              highlighted: ["ATBUCVDW"],
+              transition: { animations: [
+                  { elem: "ABCD", name: geomlib.A.Polygon.outlineAndFill },
+                  { elem: "T", name: geomlib.A.Point.appear },
+                  { elem: "U", name: geomlib.A.Point.appear },
+                  { elem: "V", name: geomlib.A.Point.appear },
+                  { elem: "W", name: geomlib.A.Point.appear },
+                  { elem: "BUCVDWAT", name: geomlib.A.Polygon.outline } ] } },
+            { text: "similar and similarly situated to the polygon {EPFQGRHS},",
+              highlighted: ["ATBUCVDW","EPFQGRHS"] },
+            { text: "and set up on the polygon {ATBUCVDW} a pyramid with the same vertex as the cone.",
+              visible: PYL,
+              highlighted: PYR_L,
+              transition: { mode: "parallel", animations: [
+                  { elem: "lA", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "lT", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "lB", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "lU", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "lC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "lV", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "lD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "lW", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            // Joyce's slip, left literal: "one off the triangles".
+            { text: "Let {LBT} be one off the triangles containing the pyramid with polygonal base {ATBUCVDW} and vertex {L},",
+              visible: TRL,
+              highlighted: ["LBT","BL","TL"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "BL", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "TL", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and let {NFP} be one of the triangles containing the pyramid with polygonal base {EPFQGRHS} and vertex {N}.",
+              visible: TRN,
+              highlighted: ["NFP","FN","PN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "FN", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "PN", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Join {KT} and {MP}.",
+              visible: JOIN,
+              highlighted: ["KT","MP"],
+              transition: { animations: [
+                  { elem: "KT", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "MP", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ ref: "I.Post.1" }] },
+            { text: "Now, since the cone {ABCDL} is similar to the cone {EFGHN},",
+              visible: SIM,
+              highlighted: CONE_L.concat(CONE_N) },
+            { text: "therefore {BD} is to {FH} as the axis {KL} is to the axis {MN}.",
+              highlighted: ["BD","FH","KL","MN"],
+              justifications: [{ claim: "similar cones", ref: "XI.Def.24" }] },
+            { text: "But {BD} is to {FH} as {BK} is to {FM},",
+              highlighted: ["BD","FH","BK","FM"] },
+            { text: "therefore {BK} is to {FM} as {KL} to {MN}.",
+              highlighted: ["BK","FM","KL","MN"] },
+            { text: "And, alternately {BK} is to {KL} as {FM} is to {MN}.",
+              highlighted: ["BK","KL","FM","MN"],
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "And the sides are proportional about equal angles, namely the angles {BKL|angBKL} and {FMN|angFMN},",
+              visible: ANG1,
+              highlighted: ["BK","KL","FM","MN"],
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBKL", name: geomlib.A.Sector.sweep },
+                  { elem: "angFMN", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the triangle {BKL} is similar to the triangle {FMN}.",
+              highlighted: ["BKL","FMN"],
+              justifications: [{ claim: "triangle BKL similar to FMN", ref: "VI.6" }] },
+            { text: "Again, since {BK} is to {KT} as {FM} is to {MP},",
+              highlighted: ["BK","KT","FM","MP"] },
+            { text: "and they are about equal angles, namely the angles {BKT|angBKT} and {FMP|angFMP},",
+              visible: ANG2,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angBKT", name: geomlib.A.Sector.sweep },
+                  { elem: "angFMP", name: geomlib.A.Sector.sweep } ] } },
+            { text: "for whatever part the angle {BKT|angBKT} is of the four right angles at the center {K},",
+              highlighted: ["angBKT","K"] },
+            { text: "it is the same part as the angle {FMP|angFMP} of the four right angles at the center {M}.",
+              highlighted: ["angFMP","M"] },
+            { text: "Then, since the sides are proportional about equal angles,",
+              highlighted: ["BK","KT","FM","MP","angBKT","angFMP"] },
+            { text: "therefore the triangle {BKT} is similar to the triangle {FMP}.",
+              highlighted: ["BKT","FMP"],
+              justifications: [{ claim: "triangle BKT similar to FMP", ref: "VI.6" }] },
+            { text: "Again, since it was proved that {BK} is to {KL} as {FM} is to {MN},",
+              highlighted: ["BK","KL","FM","MN"] },
+            { text: "while {BK} equals {KT}, and {FM} equals {PM|MP},",
+              highlighted: ["BK","KT","FM","MP"] },
+            { text: "therefore {TK|KT} is to {KL} as {PM|MP} is to {MN}.",
+              highlighted: ["KT","KL","MP","MN"] },
+            { text: "And the sides are proportional about equal angles, namely the angles {TKL|angTKL} and {PMN|angPMN}, for they are right,",
+              visible: ANG3,
+              transition: { mode: "parallel", animations: [
+                  { elem: "angTKL", name: geomlib.A.Sector.sweep },
+                  { elem: "angPMN", name: geomlib.A.Sector.sweep } ] } },
+            { text: "therefore the triangle {LKT} is similar to the triangle {NMP}.",
+              highlighted: ["LKT","NMP"],
+              justifications: [{ claim: "triangle LKT similar to NMP", ref: "VI.6" }] },
+            { text: "And since the triangles {LKB|BKL} and {NMF|FMN} are similar, therefore {LB|BL} is to {BK} as {NF|FN} is to {FM}.",
+              highlighted: ["BKL","FMN","BL","BK","FN","FM"] },
+            { text: "And since the triangles {BKT} and {FMP} are similar, therefore {KB|BK} is to {BT} as {MF|FM} is to {FP}.",
+              highlighted: ["BKT","FMP","BK","BT","FM","FP"] },
+            { text: "Therefore, ex aequali, {LB|BL} is to {BT} as {NF|FN} is to {FP}.",
+              highlighted: ["BL","BT","FN","FP"],
+              justifications: [{ ref: "VI.6" }] },
+            { text: "Again, since the triangles {LTK|LKT} and {NPM|NMP} are similar, therefore {LT|TL} is to {TK|KT} as {NP|PN} is to {PM|MP},",
+              highlighted: ["LKT","NMP","TL","KT","PN","MP"] },
+            { text: "and since the triangles {TKB|BKT} and {PMF|FMP} are similar, therefore {KT} is to {TB|BT} as {MP} is to {PF|FP}.",
+              highlighted: ["BKT","FMP","KT","BT","MP","FP"] },
+            { text: "Therefore, ex aequali, {LT|TL} is to {TB|BT} as {NP|PN} is to {PF|FP}.",
+              highlighted: ["TL","BT","PN","FP"],
+              justifications: [{ ref: "VI.6" }] },
+            { text: "But it was also proved that {TB|BT} is to {BL} as {PF|FP} is to {FN}.",
+              highlighted: ["BT","BL","FP","FN"] },
+            { text: "Therefore, ex aequali, {TL} is to {LB|BL} as {PN} is to {NF|FN}.",
+              highlighted: ["TL","BL","PN","FN"],
+              justifications: [{ claim: "ex aequali", ref: "V.22" }] },
+            { text: "Therefore in the triangles {LTB|LBT} and {NPF|NFP} the sides are proportional.",
+              visible: SIM,
+              highlighted: ["LBT","NFP"] },
+            { text: "Therefore the triangles {LTB|LBT} and {NPF|NFP} are equiangular, hence they are also similar.",
+              highlighted: ["LBT","NFP"],
+              justifications: [{ claim: "equiangular", ref: "VI.5" },
+                               { claim: "similar", ref: "VI.Def.1" }] },
+            { text: "Therefore the pyramid with triangular base {BKT} and vertex {L}",
+              highlighted: ["BKTL","BKT","L"] },
+            { text: "is similar to the pyramid with triangular base {FMP} and vertex {N},",
+              highlighted: ["FMPN","FMP","N"] },
+            { text: "for they are contained by similar planes equal in multitude.",
+              highlighted: ["BKTL","FMPN"],
+              justifications: [{ claim: "similar solid figures", ref: "XI.Def.9" }] },
+            { text: "But similar pyramids with triangular bases are to one another in the triplicate ratio of their corresponding sides.",
+              highlighted: ["BKTL","FMPN"],
+              justifications: [{ ref: "XII.8" }] },
+            { text: "Therefore the pyramid {BKTL} has to the pyramid {FMPN} the ratio triplicate of that which {BK} has to {FM}.",
+              highlighted: ["BKTL","FMPN","BK","FM"] },
+            { text: "Similarly, by joining straight lines from {A}, {W}, {D}, {V}, {C}, and {U} to {K},",
+              visible: SPK,
+              highlighted: KSP,
+              transition: { mode: "parallel", animations: [
+                  { elem: "kA", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "kW", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "kD", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "kV", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "kC", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "kU", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and from {E}, {S}, {H}, {R}, {G}, and {Q} to {M},",
+              visible: SPKM,
+              highlighted: MSP,
+              transition: { mode: "parallel", animations: [
+                  { elem: "mE", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "mS", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "mH", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "mR", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "mG", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "mQ", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "and setting up on each of the triangles pyramids with the same vertex as the cones,",
+              highlighted: KSP.concat(MSP).concat(LOCT).concat(NSQ).concat(NOCT) },
+            { text: "we can prove that each of the similarly arranged pyramids also has to each similarly arranged pyramid",
+              highlighted: PYR_L.concat(PYR_N) },
+            { text: "the ratio triplicate of that which the corresponding side {BK} has to the corresponding side {FM},",
+              highlighted: ["BK","FM"] },
+            { text: "that is, which {BD} has to {FH}.",
+              highlighted: ["BD","FH"] },
+            { text: "And one of the antecedents is to one of the consequents as all the antecedents are to all the consequents,",
+              visible: PYL.concat(TRN).concat(["BKTL","FMPN"]),
+              highlighted: ["BKTL","FMPN"] },
+            { text: "therefore the pyramid {BKTL} is to the pyramid {FMPN}",
+              highlighted: ["BKTL","FMPN"] },
+            { text: "as the whole pyramid with polygonal base {ATBUCVDW} and vertex {L}",
+              highlighted: PYR_L },
+            { text: "is to the whole pyramid with polygonal base {EPFQGRHS} and vertex {N},",
+              highlighted: PYR_N,
+              justifications: [{ claim: "one antecedent as all the antecedents", ref: "V.12" }] },
+            { text: "hence the pyramid with base {ATBUCVDW} and vertex {L}",
+              highlighted: PYR_L },
+            { text: "has to the pyramid with polygonal base {EPFQGRHS} and vertex {N}",
+              highlighted: PYR_N },
+            { text: "the ratio triplicate of that which {BD} has to {FH}.",
+              highlighted: ["BD","FH"] },
+            { text: "But, by hypothesis, the cone with circular base {ABCD|circABCD} and vertex {L}",
+              highlighted: CONE_L.concat(["L"]) },
+            { text: "also has to the solid {O|Of} the ratio triplicate of that which {BD} has to {FH},",
+              highlighted: OBOX.concat(["BD","FH"]) },
+            // Joyce's slip, left literal: "the solid 0" (for O).
+            { text: "therefore the cone with circular base {ABCD|circABCD} and vertex {L} is to the solid 0",
+              highlighted: CONE_L.concat(["L"]).concat(OBOX) },
+            { text: "as the pyramid with polygonal base {ATBUCVDW} and vertex {L}",
+              highlighted: PYR_L },
+            { text: "is to the pyramid with polygonal base {EPFQGRHS} and vertex {N}.",
+              highlighted: PYR_N },
+            { text: "Therefore, alternately the cone with circular base {ABCD|circABCD} and vertex {L}",
+              highlighted: CONE_L.concat(["L"]) },
+            { text: "is to the pyramid contained in it with polygonal base {ATBUCVDW} and vertex {L}",
+              highlighted: PYR_L },
+            { text: "as the solid {O|Of} is to the pyramid with the polygonal base {EPFQGRHS} and vertex {N}.",
+              highlighted: OBOX.concat(PYR_N),
+              justifications: [{ claim: "alternately", ref: "V.16" }] },
+            { text: "But the said cone is greater than the pyramid in it, for it encloses it.",
+              highlighted: CONE_L.concat(PYR_L) },
+            { text: "Therefore the solid {O|Of} is also greater than the pyramid with polygonal base {EPFQGRHS} and vertex {N}.",
+              highlighted: OBOX.concat(PYR_N) },
+            { text: "But it is also less, which is impossible.",
+              highlighted: OBOX.concat(PYR_N) },
+            // Case 1 refuted: the construction and O are withdrawn.
+            { text: "Therefore the cone with circular base {ABCD|circABCD} and vertex {L}",
+              visible: GIVEN,
+              highlighted: CONE_L.concat(["L"]) },
+            // Joyce's slip, left literal: "the cone of with circular base".
+            { text: "does not have to any solid less than the cone of with circular base {EFGH|circEFGH} and vertex {N}",
+              highlighted: CONE_N.concat(["N"]) },
+            { text: "the ratio triplicate of that which {BD} has to {FH}.",
+              highlighted: ["BD","FH"] },
+            { text: "Similarly we can prove that neither has the cone {EFGHN} to any solid less than the cone {ABCDL}",
+              highlighted: CONE_N.concat(CONE_L) },
+            { text: "the ratio triplicate of that which {FH} has to {BD}.",
+              highlighted: ["FH","BD"] },
+            { text: "I say next that neither has the cone {ABCDL} to any solid greater than the cone {EFGHN}",
+              highlighted: CONE_L.concat(CONE_N) },
+            { text: "the ratio triplicate of that which {BD} has to {FH}.",
+              highlighted: ["BD","FH"] },
+            { text: "For, if possible, let it have that ratio to a greater solid {O|Of}.",
+              visible: SO,
+              highlighted: OBOX },
+            { text: "Therefore, inversely, the solid {O|Of} has to the cone {ABCDL} the ratio triplicate of that which {FH} has to {BD}.",
+              highlighted: OBOX.concat(CONE_L).concat(["FH","BD"]) },
+            { text: "But the solid {O|Of} is to the cone {ABCDL}",
+              highlighted: OBOX.concat(CONE_L) },
+            { text: "as the cone {EFGHN} is to some solid less than the cone {ABCDL}.",
+              highlighted: CONE_N.concat(CONE_L) },
+            { text: "Therefore the cone {EFGHN} also has to some solid less than the cone {ABCDL}",
+              highlighted: CONE_N.concat(CONE_L) },
+            { text: "the ratio triplicate of that which {FH} has to {BD}, which was proved impossible.",
+              highlighted: ["FH","BD"] },
+            // Case 2 refuted: O is withdrawn again.
+            { text: "Therefore the cone {ABCDL} does not have to any solid greater than the cone {EFGHN}",
+              visible: GIVEN,
+              highlighted: CONE_L.concat(CONE_N) },
+            { text: "the ratio triplicate of that which {BD} has to {FH}.",
+              highlighted: ["BD","FH"] },
+            { text: "But it was proved that neither has it this ratio to a less solid than the cone {EFGHN}.",
+              highlighted: CONE_N },
+            { text: "Therefore the cone {ABCDL} has to the cone {EFGHN} the ratio triplicate of that which {BD} has to {FH}.",
+              highlighted: CONE_L.concat(CONE_N).concat(["BD","FH"]) },
+            { text: "But the cone is to the cone as the cylinder is to the cylinder,",
+              highlighted: ["ABCDL","EFGHN"] },
+            { text: "for the cylinder with the same base as the cone and of equal height with it is triple the cone.",
+              highlighted: CIRCS.concat(["KL","MN"]),
+              justifications: [{ claim: "a cone is a third of its cylinder", ref: "XII.10" }] },
+            { text: "Therefore the cylinder also has to the cylinder the ratio triplicate of that which {BD} has to {FH}.",
+              highlighted: CIRCS.concat(["KL","MN","BD","FH"]) },
+            { text: "Therefore, similar cones and cylinders are to one another in triplicate ratio of the diameters of their bases.",
+              visible: REST,
+              highlighted: CONE_L.concat(CONE_N).concat(["BD","FH"]),
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "XII.12") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "I.Post.1":  "/elements/books/bookI/postulates/post1/",
+        "IV.6":      "/elements/books/bookIV/propositions/propIV6/",
+        "V.12":      "/elements/books/bookV/propositions/propV12/",
+        "V.16":      "/elements/books/bookV/propositions/propV16/",
+        "V.22":      "/elements/books/bookV/propositions/propV22/",
+        "VI.5":      "/elements/books/bookVI/propositions/propVI5/",
+        "VI.6":      "/elements/books/bookVI/propositions/propVI6/",
+        "VI.Def.1":  "/elements/books/bookVI/definitions/defVI1/",
+        "X.1":       "/elements/books/bookX/propositions/propX1/",
+        "XI.Def.9":  "/elements/books/bookXI/definitions/defXI9/",
+        "XI.Def.24": "/elements/books/bookXI/definitions/defXI24/",
+        "XII.8":     "/elements/books/bookXII/propositions/propXII8/",
+        "XII.10":    "/elements/books/bookXII/propositions/propXII10/"
     });
 </script>
 </center>
 
-For, if the cone *ABCDL* does not have to the cone *EFGHN* the ratio triplicate of that which *BD* has to *FH,* then the cone *ABCDL* has that triplicate ratio either to some solid less than the cone *EFGHN* or to a greater.
+For, if the cone {ABCDL} does not have to the cone {EFGHN} the ratio triplicate of that which {BD} has to {FH}, then the cone {ABCDL} has that triplicate ratio either to some solid less than the cone {EFGHN} or to a greater.
 
-First, let it have that triplicate ratio to a less solid *O.* Inscribe the square *EFGH* in the circle *EFGH.* Therefore the square *EFGH* is greater than the half of the circle *EFGH.* [!just IV.6]
+First, let it have that triplicate ratio to a less solid {O|Of}. Inscribe the square {EFGH|sqEFGH} in the circle {EFGH|circEFGH}. Therefore the square {EFGH|sqEFGH} is greater than the half of the circle {EFGH|circEFGH}. [!just IV.6]
 
-Now set up on the square *EFGH* a pyramid with the same vertex as the cone. Therefore the pyramid so set up is greater than the half part of the cone. Bisect the circumferences *EF, FG, GH,* and *HE* at the points *P, Q, R,* and *S,* and join *EP, PF, FQ, QG, GR, RH, HS,* and *SE.*
+Now set up on the square {EFGH|sqEFGH} a pyramid with the same vertex as the cone. Therefore the pyramid so set up is greater than the half part of the cone. Bisect the circumferences {EF|arcEF}, {FG|arcFG}, {GH|arcGH}, and {HE|arcHE} at the points {P}, {Q}, {R}, and {S}, and join {EP}, {PF}, {FQ}, {QG}, {GR}, {RH}, {HS}, and {SE}.
 
-Therefore each of the triangles *EPF, FQG, GRH,* and *HSE* is also greater than the half part of that segment of the circle *EFGH* about it.
+Therefore each of the triangles {EPF}, {FQG}, {GRH}, and {HSE} is also greater than the half part of that segment of the circle {EFGH|circEFGH} about it.
 
-Now set up on each of the triangles *EPF, FQG, GRH,* and *HSE* a pyramid with the same vertex as the cone.
+Now set up on each of the triangles {EPF}, {FQG}, {GRH}, and {HSE} a pyramid with the same vertex as the cone.
 
 Therefore each of the pyramids so set up is also greater than the half part of that segment of the cone about it.
 
-Thus, bisecting the circumferences so left, joining straight lines, setting up on each of the triangles pyramids with the same vertex as the cone, and doing this repeatedly, we shall leave some segments of the cone which are less than the excess by which the cone *EFGHN* exceeds the solid *O.* [!just X.1]
+Thus, bisecting the circumferences so left, joining straight lines, setting up on each of the triangles pyramids with the same vertex as the cone, and doing this repeatedly, we shall leave some segments of the cone which are less than the excess by which the cone {EFGHN} exceeds the solid {O|Of}. [!just X.1]
 
-Let such be left, and let them be the segments on *EP, PF, FQ, QG, GR, RH, HS,* and *SE.* Therefore the remainder, the pyramid with the polygonal base *EPFQGRHS* and vertex *N,* is greater than the solid *O.*
+Let such be left, and let them be the segments on {EP}, {PF}, {FQ}, {QG}, {GR}, {RH}, {HS}, and {SE}. Therefore the remainder, the pyramid with the polygonal base {EPFQGRHS} and vertex {N}, is greater than the solid {O|Of}.
 
-Now inscribe in the circle *ABCD* the polygon *ATBUCVDW* similar and similarly situated to the polygon *EPFQGRHS,* and set up on the polygon *ATBUCVDW* a pyramid with the same vertex as the cone.
+Now inscribe in the circle {ABCD|circABCD} the polygon {ATBUCVDW} similar and similarly situated to the polygon {EPFQGRHS}, and set up on the polygon {ATBUCVDW} a pyramid with the same vertex as the cone.
 
-Let *LBT* be one off the triangles containing the pyramid with polygonal base *ATBUCVDW* and vertex *L,* and let *NFP* be one of the triangles containing the pyramid with polygonal base *EPFQGRHS* and vertex *N.* Join *KT* and *MP.*
+Let {LBT} be one off the triangles containing the pyramid with polygonal base {ATBUCVDW} and vertex {L}, and let {NFP} be one of the triangles containing the pyramid with polygonal base {EPFQGRHS} and vertex {N}. Join {KT} and {MP}.
 
-Now, since the cone *ABCDL* is similar to the cone *EFGHN,* therefore *BD* is to *FH* as the axis *KL* is to the axis *MN.* [!just XI.Def.24]
+Now, since the cone {ABCDL} is similar to the cone {EFGHN}, therefore {BD} is to {FH} as the axis {KL} is to the axis {MN}. [!just XI.Def.24]
 
-But *BD* is to *FH* as *BK* is to *FM,* therefore *BK* is to *FM* as *KL* to *MN.* And, alternately *BK* is to *KL* as *FM* is to *MN.* [!just V.16]
+But {BD} is to {FH} as {BK} is to {FM}, therefore {BK} is to {FM} as {KL} to {MN}. And, alternately {BK} is to {KL} as {FM} is to {MN}. [!just V.16]
 
-And the sides are proportional about equal angles, namely the angles *BKL* and *FMN,* therefore the triangle *BKL* is similar to the triangle *FMN.* [!just VI.6]
+And the sides are proportional about equal angles, namely the angles {BKL|angBKL} and {FMN|angFMN}, therefore the triangle {BKL} is similar to the triangle {FMN}. [!just VI.6]
 
-Again, since *BK* is to *KT* as *FM* is to *MP,* and they are about equal angles, namely the angles *BKT* and *FMP,* for whatever part the angle *BKT* is of the four right angles at the center *K,* it is the same part as the angle *FMP* of the four right angles at the center *M.* Then, since the sides are proportional about equal angles, therefore the triangle *BKT* is similar to the triangle *FMP.* [!just VI.6]
+Again, since {BK} is to {KT} as {FM} is to {MP}, and they are about equal angles, namely the angles {BKT|angBKT} and {FMP|angFMP}, for whatever part the angle {BKT|angBKT} is of the four right angles at the center {K}, it is the same part as the angle {FMP|angFMP} of the four right angles at the center {M}. Then, since the sides are proportional about equal angles, therefore the triangle {BKT} is similar to the triangle {FMP}. [!just VI.6]
 
-Again, since it was proved that *BK* is to *KL* as *FM* is to *MN,* while *BK* equals *KT,* and *FM* equals *PM,* therefore *TK* is to *KL* as *PM* is to *MN.* And the sides are proportional about equal angles, namely the angles *TKL* and *PMN,* for they are right, therefore the triangle *LKT* is similar to the triangle *NMP.* [!just VI.6]
+Again, since it was proved that {BK} is to {KL} as {FM} is to {MN}, while {BK} equals {KT}, and {FM} equals {PM|MP}, therefore {TK|KT} is to {KL} as {PM|MP} is to {MN}. And the sides are proportional about equal angles, namely the angles {TKL|angTKL} and {PMN|angPMN}, for they are right, therefore the triangle {LKT} is similar to the triangle {NMP}. [!just VI.6]
 
-And since the triangles *LKB* and *NMF* are similar, therefore *LB* is to *BK* as *NF* is to *FM.* And since the triangles *BKT* and *FMP* are similar, therefore *KB* is to *BT* as *MF* is to *FP.* Therefore, *ex aequali, LB* is to *BT* as *NF* is to *FP.* [!just VI.6]
+And since the triangles {LKB|BKL} and {NMF|FMN} are similar, therefore {LB|BL} is to {BK} as {NF|FN} is to {FM}. And since the triangles {BKT} and {FMP} are similar, therefore {KB|BK} is to {BT} as {MF|FM} is to {FP}. Therefore, *ex aequali,* {LB|BL} is to {BT} as {NF|FN} is to {FP}. [!just VI.6]
 
-Again, since the triangles *LTK* and *NPM* are similar, therefore *LT* is to *TK* as *NP* is to *PM,* and since the triangles *TKB* and *PMF* are similar, therefore *KT* is to *TB* as *MP* is to *PF.* Therefore, *ex aequali, LT* is to *TB* as *NP* is to *PF.* [!just VI.6]
+Again, since the triangles {LTK|LKT} and {NPM|NMP} are similar, therefore {LT|TL} is to {TK|KT} as {NP|PN} is to {PM|MP}, and since the triangles {TKB|BKT} and {PMF|FMP} are similar, therefore {KT} is to {TB|BT} as {MP} is to {PF|FP}. Therefore, *ex aequali,* {LT|TL} is to {TB|BT} as {NP|PN} is to {PF|FP}. [!just VI.6]
 
-But it was also proved that *TB* is to *BL* as *PF* is to *FN.* Therefore, *ex aequali, TL* is to *LB* as *PN* is to *NF.* [!just V.22]
+But it was also proved that {TB|BT} is to {BL} as {PF|FP} is to {FN}. Therefore, *ex aequali,* {TL} is to {LB|BL} as {PN} is to {NF|FN}. [!just V.22]
 
-Therefore in the triangles *LTB* and *NPF* the sides are proportional. Therefore the triangles *LTB* and *NPF* are equiangular, hence they are also similar. [!just VI.5, VI.Def.1]
+Therefore in the triangles {LTB|LBT} and {NPF|NFP} the sides are proportional. Therefore the triangles {LTB|LBT} and {NPF|NFP} are equiangular, hence they are also similar. [!just VI.5, VI.Def.1]
 
-Therefore the pyramid with triangular base *BKT* and vertex *L* is similar to the pyramid with triangular base *FMP* and vertex *N,* for they are contained by similar planes equal in multitude. [!just XI.Def.9]
+Therefore the pyramid with triangular base {BKT} and vertex {L} is similar to the pyramid with triangular base {FMP} and vertex {N}, for they are contained by similar planes equal in multitude. [!just XI.Def.9]
 
 But similar pyramids with triangular bases are to one another in the triplicate ratio of their corresponding sides. [!just XII.8]
 
-Therefore the pyramid *BKTL* has to the pyramid *FMPN* the ratio triplicate of that which *BK* has to *FM.*
+Therefore the pyramid {BKTL} has to the pyramid {FMPN} the ratio triplicate of that which {BK} has to {FM}.
 
-Similarly, by joining straight lines from *A, W, D, V, C,* and *U* to *K,* and from *E, S, H, R, G,* and *Q* to *M,* and setting up on each of the triangles pyramids with the same vertex as the cones, we can prove that each of the similarly arranged pyramids also has to each similarly arranged pyramid the ratio triplicate of that which the corresponding side *BK* has to the corresponding side *FM,* that is, which *BD* has to *FH.*
+Similarly, by joining straight lines from {A}, {W}, {D}, {V}, {C}, and {U} to {K}, and from {E}, {S}, {H}, {R}, {G}, and {Q} to {M}, and setting up on each of the triangles pyramids with the same vertex as the cones, we can prove that each of the similarly arranged pyramids also has to each similarly arranged pyramid the ratio triplicate of that which the corresponding side {BK} has to the corresponding side {FM}, that is, which {BD} has to {FH}.
 
-And one of the antecedents is to one of the consequents as all the antecedents are to all the consequents, therefore the pyramid *BKTL* is to the pyramid *FMPN* as the whole pyramid with polygonal base *ATBUCVDW* and vertex *L* is to the whole pyramid with polygonal base *EPFQGRHS* and vertex *N,* hence the pyramid with base *ATBUCVDW* and vertex *L* has to the pyramid with polygonal base *EPFQGRHS* and vertex *N* the ratio triplicate of that which *BD* has to *FH.* [!just V.12]
+And one of the antecedents is to one of the consequents as all the antecedents are to all the consequents, therefore the pyramid {BKTL} is to the pyramid {FMPN} as the whole pyramid with polygonal base {ATBUCVDW} and vertex {L} is to the whole pyramid with polygonal base {EPFQGRHS} and vertex {N}, hence the pyramid with base {ATBUCVDW} and vertex {L} has to the pyramid with polygonal base {EPFQGRHS} and vertex {N} the ratio triplicate of that which {BD} has to {FH}. [!just V.12]
 
-But, by hypothesis, the cone with circular base *ABCD* and vertex *L* also has to the solid *O* the ratio triplicate of that which *BD* has to *FH,* therefore the cone with circular base *ABCD* and vertex *L* is to the solid 0 as the pyramid with polygonal base *ATBUCVDW* and vertex *L* is to the pyramid with polygonal base *EPFQGRHS* and vertex *N.* Therefore, alternately the cone with circular base *ABCD* and vertex *L* is to the pyramid contained in it with polygonal base *ATBUCVDW* and vertex *L* as the solid *O* is to the pyramid with the polygonal base *EPFQGRHS* and vertex *N.* [!just V.16]
+But, by hypothesis, the cone with circular base {ABCD|circABCD} and vertex {L} also has to the solid {O|Of} the ratio triplicate of that which {BD} has to {FH}, therefore the cone with circular base {ABCD|circABCD} and vertex {L} is to the solid 0 as the pyramid with polygonal base {ATBUCVDW} and vertex {L} is to the pyramid with polygonal base {EPFQGRHS} and vertex {N}. Therefore, alternately the cone with circular base {ABCD|circABCD} and vertex {L} is to the pyramid contained in it with polygonal base {ATBUCVDW} and vertex {L} as the solid {O|Of} is to the pyramid with the polygonal base {EPFQGRHS} and vertex {N}. [!just V.16]
 
-But the said cone is greater than the pyramid in it, for it encloses it. Therefore the solid *O* is also greater than the pyramid with polygonal base *EPFQGRHS* and vertex *N.* But it is also less, which is impossible.
+But the said cone is greater than the pyramid in it, for it encloses it. Therefore the solid {O|Of} is also greater than the pyramid with polygonal base {EPFQGRHS} and vertex {N}. But it is also less, which is impossible.
 
-Therefore the cone with circular base *ABCD* and vertex *L* does not have to any solid less than the cone of with circular base *EFGH* and vertex *N* the ratio triplicate of that which *BD* has to *FH.*
+Therefore the cone with circular base {ABCD|circABCD} and vertex {L} does not have to any solid less than the cone of with circular base {EFGH|circEFGH} and vertex {N} the ratio triplicate of that which {BD} has to {FH}.
 
-Similarly we can prove that neither has the cone *EFGHN* to any solid less than the cone *ABCDL* the ratio triplicate of that which *FH* has to *BD.*
+Similarly we can prove that neither has the cone {EFGHN} to any solid less than the cone {ABCDL} the ratio triplicate of that which {FH} has to {BD}.
 
-I say next that neither has the cone *ABCDL* to any solid greater than the cone *EFGHN* the ratio triplicate of that which *BD* has to *FH.*
+I say next that neither has the cone {ABCDL} to any solid greater than the cone {EFGHN} the ratio triplicate of that which {BD} has to {FH}.
 
-For, if possible, let it have that ratio to a greater solid *O.* Therefore, inversely, the solid *O* has to the cone *ABCDL* the ratio triplicate of that which *FH* has to *BD.* But the solid *O* is to the cone *ABCDL* as the cone *EFGHN* is to some solid less than the cone *ABCDL.*
+For, if possible, let it have that ratio to a greater solid {O|Of}. Therefore, inversely, the solid {O|Of} has to the cone {ABCDL} the ratio triplicate of that which {FH} has to {BD}. But the solid {O|Of} is to the cone {ABCDL} as the cone {EFGHN} is to some solid less than the cone {ABCDL}.
 
-Therefore the cone *EFGHN* also has to some solid less than the cone *ABCDL* the ratio triplicate of that which *FH* has to *BD,* which was proved impossible.
+Therefore the cone {EFGHN} also has to some solid less than the cone {ABCDL} the ratio triplicate of that which {FH} has to {BD}, which was proved impossible.
 
-Therefore the cone *ABCDL* does not have to any solid greater than the cone *EFGHN* the ratio triplicate of that which *BD* has to *FH.*
+Therefore the cone {ABCDL} does not have to any solid greater than the cone {EFGHN} the ratio triplicate of that which {BD} has to {FH}.
 
-But it was proved that neither has it this ratio to a less solid than the cone *EFGHN.* Therefore the cone *ABCDL* has to the cone *EFGHN* the ratio triplicate of that which *BD* has to *FH.*
+But it was proved that neither has it this ratio to a less solid than the cone {EFGHN}. Therefore the cone {ABCDL} has to the cone {EFGHN} the ratio triplicate of that which {BD} has to {FH}.
 
-But the cone is to the cone as the cylinder is to the cylinder, for the cylinder with the same base as the cone and of equal height with it is triple the cone. Therefore the cylinder also has to the cylinder the ratio triplicate of that which *BD* has to *FH.* [!just XII.10]
+But the cone is to the cone as the cylinder is to the cylinder, for the cylinder with the same base as the cone and of equal height with it is triple the cone. Therefore the cylinder also has to the cylinder the ratio triplicate of that which {BD} has to {FH}. [!just XII.10]
 
 Therefore, *similar cones and cylinders are to one another in triplicate ratio of the diameters of their bases.*
 
