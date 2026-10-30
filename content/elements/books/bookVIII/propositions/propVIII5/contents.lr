@@ -15,12 +15,21 @@ statement: Plane numbers have to one another the ratio compounded of the ratios 
 ----
 proof:
 
-Let *A* and *B* be plane numbers, and let the numbers *C* and *D* be the sides of *A,* and *E* and *F* the sides of *B.*
+Let {A} and {B} be plane numbers, and let the numbers {C} and {D} be the sides of {A}, and {E} and {F} the sides of {B}.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="280" height="315" tabindex="0"></canvas>
 <noscript><img alt="VIII.5 diagram" src="propVIII5.gif"/></noscript>
 <script type="text/javascript">
+    // The given plane numbers A, B and their sides C, D and E, F stand from
+    // the start; G, H, K (the least numbers continuously in the ratios, by
+    // VIII.4) and L (D times E) are stroked in when the proof takes them.
+    // The rest of the walk is highlight beats on Joyce's lines.
+    // Joyce's "that, H as G is to H" and "ex aequali, L as G is to K" carry
+    // stray letters; they are left literal and untokenized.
+    var GIVEN = ["A","B","C","D","E","F","A2","B2"];
+    var GHK   = GIVEN.concat(["G","H","K","G1","G2","H1","H2","K1","K2"]);
+    var ALL   = GHK.concat(["L","L1","L2"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -75,23 +84,122 @@ Let *A* and *B* be plane numbers, and let the numbers *C* and *D* be the sides o
             "L2;point;proportion;U0,U1,D1,D2,E1,E2,L1,L3;0",
             "L;line;connect;L1,L2;black"
         ],
+        // Draggables (checked against the bundle): the lineSlider ends of
+        // every line. G1, H1, K1, L1 belong to numbers the proof introduces
+        // mid-walk, so they opt out of the every-slide union.
+        deferDraggables: ["G1","H1","K1","L1"],
+        slides: [
+            { text: "“Plane numbers have to one another the ratio compounded of the ratios of their sides.”",
+              visible: GIVEN,
+              highlighted: ["A","B"],
+              justifications: [{ ref: "VIII.5" }] },
+            { text: "Let {A} and {B} be plane numbers,",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "and let the numbers {C} and {D} be the sides of {A},",
+              visible: GIVEN,
+              highlighted: ["C","D","A"] },
+            { text: "and {E} and {F} the sides of {B}.",
+              visible: GIVEN,
+              highlighted: ["E","F","B"] },
+            { text: "I say that {A} has to {B} the ratio compounded of the ratios of the sides.",
+              visible: GIVEN,
+              highlighted: ["A","B"] },
+            { text: "The ratios being given which {C} has to {E} and {D} to {F},",
+              visible: GIVEN,
+              highlighted: ["C","E","D","F"] },
+            { text: "take the least numbers {G}, {H}, and {K} that are continuously in the ratios {C}, {E}, {D}, and {F},",
+              visible: GHK,
+              highlighted: ["G","H","K"],
+              transition: { mode: "cascade", animations: [
+                  { elem: "G", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "H", name: geomlib.A.Line.straightEdgeConnect },
+                  { elem: "K", name: geomlib.A.Line.straightEdgeConnect } ] },
+              justifications: [{ claim: "least numbers G, H, K continuously in the ratios C : E and D : F", ref: "VIII.4" }] },
+            { text: "so that {C} is to {E} as {G} is to {H},",
+              visible: GHK,
+              highlighted: ["C","E","G","H"] },
+            { text: "and {D} is to {F} as {H} is to {K}.",
+              visible: GHK,
+              highlighted: ["D","F","H","K"] },
+            { text: "Multiply {D} by {E} to make {L}.",
+              visible: ALL,
+              highlighted: ["D","E","L"],
+              transition: { animations: [
+                  { elem: "L", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Now, since {D} multiplied by {C} makes {A}, and multiplied by {E} makes {L},",
+              visible: ALL,
+              highlighted: ["D","C","A","E","L"] },
+            { text: "therefore {C} is to {E} as {A} is to {L}.",
+              visible: ALL,
+              highlighted: ["C","E","A","L"],
+              justifications: [{ claim: "C : E = A : L", ref: "VII.17" }] },
+            { text: "But {C} is to {E} as {G} is to {H},",
+              visible: ALL,
+              highlighted: ["C","E","G","H"] },
+            { text: "therefore {G} is to {H} as {A} is to {L}.",
+              visible: ALL,
+              highlighted: ["G","H","A","L"] },
+            { text: "Again, since {E} multiplied by {D} makes {L}, and further multiplied by {F} makes {B},",
+              visible: ALL,
+              highlighted: ["E","D","L","F","B"] },
+            { text: "therefore {D} is to {F} as {L} is to {B}.",
+              visible: ALL,
+              highlighted: ["D","F","L","B"],
+              justifications: [{ claim: "D : F = L : B", ref: "VII.17" }] },
+            { text: "But {D} is to {F} as {H} is to {K},",
+              visible: ALL,
+              highlighted: ["D","F","H","K"] },
+            { text: "therefore {H} is to {K} as {L} is to {B}.",
+              visible: ALL,
+              highlighted: ["H","K","L","B"] },
+            { text: "But it was also proved that, H as {G} is to {H} as {A} is to {L},",
+              visible: ALL,
+              highlighted: ["G","H","A","L"] },
+            { text: "therefore, ex aequali, L as {G} is to {K} as {A} is to {B}.",
+              visible: ALL,
+              highlighted: ["G","K","A","B"],
+              justifications: [{ claim: "ex aequali, G : K = A : B", ref: "VII.14" }] },
+            { text: "But {G} has to {K} the ratio compounded of the ratios of the sides,",
+              visible: ALL,
+              highlighted: ["G","K"] },
+            { text: "therefore {A} also has to {B} the ratio compounded of the ratios of the sides.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "Therefore, plane numbers have to one another the ratio compounded of the ratios of their sides.",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "VIII.5") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.14": "/elements/books/bookVII/propositions/propVII14/",
+        "VII.17": "/elements/books/bookVII/propositions/propVII17/",
+        "VIII.4": "/elements/books/bookVIII/propositions/propVIII4/"
     });
 </script>
 </figure>
 
-I say that *A* has to *B* the ratio compounded of the ratios of the sides.
+I say that {A} has to {B} the ratio compounded of the ratios of the sides.
 
-The ratios being given which *C* has to *E* and *D* to *F,* take the least numbers *G, H,* and *K* that are continuously in the ratios *C, E, D,* and *F,* so that *C* is to *E* as *G* is to *H,* and *D* is to *F* as *H* is to *K.* [!just VIII.4]
+The ratios being given which {C} has to {E} and {D} to {F}, take the least numbers {G}, {H}, and {K} that are continuously in the ratios {C}, {E}, {D}, and {F}, so that {C} is to {E} as {G} is to {H}, and {D} is to {F} as {H} is to {K}. [!just VIII.4]
 
-Multiply *D* by *E* to make *L.*
+Multiply {D} by {E} to make {L}.
 
-Now, since *D* multiplied by *C* makes *A,* and multiplied by *E* makes *L,* therefore *C* is to *E* as *A* is to *L.* But *C* is to *E* as *G* is to *H,* therefore *G* is to *H* as *A* is to *L.* [!just VII.17]
+Now, since {D} multiplied by {C} makes {A}, and multiplied by {E} makes {L}, therefore {C} is to {E} as {A} is to {L}. But {C} is to {E} as {G} is to {H}, therefore {G} is to {H} as {A} is to {L}. [!just VII.17]
 
-Again, since *E* multiplied by *D* makes *L,* and further multiplied by *F* makes *B,* therefore *D* is to *F* as *L* is to *B.* But *D* is to *F* as *H* is to *K,* therefore *H* is to *K* as *L* is to *B.* [!just VII.17]
+Again, since {E} multiplied by {D} makes {L}, and further multiplied by {F} makes {B}, therefore {D} is to {F} as {L} is to {B}. But {D} is to {F} as {H} is to {K}, therefore {H} is to {K} as {L} is to {B}. [!just VII.17]
 
-But it was also proved that, *H* as *G* is to *H* as *A* is to *L,* therefore, *ex aequali, L* as *G* is to *K* as *A* is to *B.* [!just VII.14]
+But it was also proved that, *H* as {G} is to {H} as {A} is to {L}, therefore, *ex aequali, L* as {G} is to {K} as {A} is to {B}. [!just VII.14]
 
-But *G* has to *K* the ratio compounded of the ratios of the sides, therefore *A* also has to *B* the ratio compounded of the ratios of the sides.
+But {G} has to {K} the ratio compounded of the ratios of the sides, therefore {A} also has to {B} the ratio compounded of the ratios of the sides.
 
 Therefore, *plane numbers have to one another the ratio compounded of the ratios of their sides.*
 
