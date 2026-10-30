@@ -15,14 +15,22 @@ statement: If a composite number multiplied by any number makes some number, the
 ----
 proof:
 
-Let the composite number *A* multiplied by any number *B* make *C.*
+Let the composite number {A} multiplied by any number {B} make {C}.
 
-I say that *C* is solid.
+I say that {C} is solid.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="175" tabindex="0"></canvas>
 <noscript><img alt="IX.7 diagram" src="propIX7.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines: the walk is highlight beats over Joyce's five lines.
+    // E is the only number the proof makes, so it is the only animation; D
+    // is taken (A is measured by some D) and simply appears. Their slider
+    // ends are deferred so neither stands on the canvas before its slide.
+    // The unit (U1-U2) sits off-canvas in Joyce's figure and is not drawn.
+    var GIVEN = ["A1","A2","A","B1","B2","B","C1","C2","C"];
+    var WITHD = GIVEN.concat(["D1","D2","D"]);
+    var ALL   = WITHD.concat(["E1","E2","E"]);
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -54,15 +62,65 @@ I say that *C* is solid.
             "E2;point;proportion;D1,D2,A1,A2,U1,U2,E1,D3;0",
             "E;line;connect;E1,E2;black"
         ],
+        deferDraggables: ["D1","D2","E1"],
+        slides: [
+            { text: "“If a composite number multiplied by any number makes some number, then the product is solid.”",
+              visible: GIVEN,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "IX.7" }] },
+            { text: "Let the composite number {A} multiplied by any number {B} make {C}.",
+              visible: GIVEN,
+              highlighted: ["A","B","C"] },
+            { text: "I say that {C} is solid.",
+              visible: GIVEN,
+              highlighted: ["C"] },
+            { text: "Since {A} is composite, it is measured by some number {D}.",
+              visible: WITHD,
+              highlighted: ["A","D"],
+              justifications: [{ claim: "a composite number is measured by some number", ref: "VII.Def.13" }] },
+            { text: "Let there be as many units in {E} as times that {D} measures {A}.",
+              visible: ALL,
+              highlighted: ["E","D","A"],
+              transition: { animations: [
+                  { elem: "E", name: geomlib.A.Line.straightEdgeConnect } ] } },
+            { text: "Since {D} measures {A} according to the units in {E}, therefore {E} multiplied by {D} makes {A}.",
+              visible: ALL,
+              highlighted: ["D","A","E"],
+              justifications: [{ claim: "E × D = A", ref: "VII.Def.15" }] },
+            { text: "And, since {A} multiplied by {B} makes {C}, and {A} is the product of {D} and {E},",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E"] },
+            { text: "therefore the product of {D} and {E} multiplied by {B} makes {C}.",
+              visible: ALL,
+              highlighted: ["D","E","B","C"] },
+            { text: "Therefore {C} is solid, and {D}, {E}, and {B} are its sides.",
+              visible: ALL,
+              highlighted: ["C","D","E","B"] },
+            { text: "Therefore, if a composite number multiplied by any number makes some number, then the product is solid.",
+              visible: ALL,
+              highlighted: ["A","B","C"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.7") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.13": "/elements/books/bookVII/definitions/defVII13/",
+        "VII.Def.15": "/elements/books/bookVII/definitions/defVII15/"
     });
 </script>
 </figure>
 
-Since *A* is composite, it is measured by some number *D.* Let there be as many units in *E* as times that *D* measures *A* [!just VII.Def.13]
+Since {A} is composite, it is measured by some number {D}. Let there be as many units in {E} as times that {D} measures {A} [!just VII.Def.13]
 
-Since *D* measures *A* according to the units in *E,* therefore *E* multiplied by *D* makes *A.* And, since *A* multiplied by *B* makes *C,* and *A* is the product of *D* and *E,* therefore the product of *D* and *E* multiplied by *B* makes *C.* [!just VII.Def.15]
+Since {D} measures {A} according to the units in {E}, therefore {E} multiplied by {D} makes {A}. And, since {A} multiplied by {B} makes {C}, and {A} is the product of {D} and {E}, therefore the product of {D} and {E} multiplied by {B} makes {C}. [!just VII.Def.15]
 
-Therefore *C* is solid, and *D, E,* and *B* are its sides.
+Therefore {C} is solid, and {D}, {E}, and {B} are its sides.
 
 Therefore, *if a composite number multiplied by any number makes some number, then the product is solid.*
 

@@ -15,12 +15,17 @@ statement: If as many numbers as we please beginning from a unit are in continue
 ----
 proof:
 
-Let there be as many numbers as we please, *A, B, C, D, E,* and *F,* beginning from a unit and in continued proportion.
+Let there be as many numbers as we please, {A}, {B}, {C}, {D}, {E}, and {F}, beginning from a unit and in continued proportion.
 
 <figure class="diagram">
 <canvas id="canvas_0" width="250" height="230" tabindex="0"></canvas>
 <noscript><img alt="IX.8 diagram" src="propIX8.gif"/></noscript>
 <script type="text/javascript">
+    // Numbers as lines. Every number is given in continued proportion and
+    // the proof makes none, so the walk is highlight beats only. The unit
+    // is not drawn in Joyce's figure. Endpoints are uncoloured, so only
+    // the lines are listed.
+    var ALL = ["A","B","C","D","E","F"];
     geomlib.init({
         canvasid: "canvas_0",
         background: "35,19,100",
@@ -57,23 +62,136 @@ Let there be as many numbers as we please, *A, B, C, D, E,* and *F,* beginning f
             "F2;point;proportion;A1,A2,B1,B2,E1,E2,F1,F3;0",
             "F;line;connect;F1,F2;black"
         ],
+        slides: [
+            { text: "“If as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"],
+              justifications: [{ ref: "IX.8" }] },
+            { text: "then the third from the unit is square as are also those which successively leave out one,",
+              visible: ALL,
+              highlighted: ["B","D","F"] },
+            { text: "the fourth is cubic as are also all those which leave out two,",
+              visible: ALL,
+              highlighted: ["C","F"] },
+            { text: "and the seventh is at once cubic and square are also those which leave out five.”",
+              visible: ALL,
+              highlighted: ["F"] },
+            { text: "Let there be as many numbers as we please, {A}, {B}, {C}, {D}, {E}, and {F},",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "beginning from a unit and in continued proportion.",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "I say that {B}, the third from the unit, is square as are all those which leave out one;",
+              visible: ALL,
+              highlighted: ["B","D","F"] },
+            { text: "{C}, the fourth, is cubic as are all those which leave out two;",
+              visible: ALL,
+              highlighted: ["C","F"] },
+            { text: "and {F}, the seventh, is at once cubic and square as are all those which leave out five.",
+              visible: ALL,
+              highlighted: ["F"] },
+            { text: "Since the unit is to {A} as {A} is to {B},",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "therefore the unit measures the number {A} the same number of times that {A} measures {B}.",
+              visible: ALL,
+              highlighted: ["A","B"],
+              justifications: [{ claim: "unit measures A as A measures B", ref: "VII.Def.20" }] },
+            { text: "But the unit measures the number {A} according to the units in it,",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "therefore {A} also measures {B} according to the units in {A}.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "Therefore {A} multiplied by itself makes {B}, therefore {B} is square.",
+              visible: ALL,
+              highlighted: ["A","B"] },
+            { text: "And, since {B}, {C}, and {D} are in continued proportion, and {B} is square, therefore {D} is also square.",
+              visible: ALL,
+              highlighted: ["B","C","D"],
+              justifications: [{ claim: "D is square", ref: "VIII.22" }] },
+            { text: "For the same reason {F} is also square.",
+              visible: ALL,
+              highlighted: ["D","E","F"],
+              justifications: [{ claim: "F is square", ref: "VIII.22" }] },
+            { text: "Similarly we can prove that all those which leave out one are square.",
+              visible: ALL,
+              highlighted: ["B","D","F"] },
+            { text: "I say next that {C}, the fourth from the unit, is cubic are also all those which leave out two.",
+              visible: ALL,
+              highlighted: ["C","F"] },
+            { text: "Since the unit is to {A} as {B} is to {C},",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "therefore the unit measures the number {A} the same number of times that {B} measures {C}.",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "But the unit measures the number {A} according to the units in {A},",
+              visible: ALL,
+              highlighted: ["A"] },
+            { text: "therefore {B} also measures {C} according to the units in {A}.",
+              visible: ALL,
+              highlighted: ["B","C","A"] },
+            { text: "Therefore {A} multiplied by {B} makes {C}.",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "Since then {A} multiplied by itself makes {B}, and multiplied by {B} makes {C}, therefore {C} is cubic.",
+              visible: ALL,
+              highlighted: ["A","B","C"] },
+            { text: "And, since {C}, {D}, {E}, and {F} are in continued proportion, and {C} is cubic, therefore {F} is also cubic.",
+              visible: ALL,
+              highlighted: ["C","D","E","F"],
+              justifications: [{ claim: "F is cubic", ref: "VIII.23" }] },
+            { text: "But it was also proved square, therefore the seventh from the unit is both cubic and square.",
+              visible: ALL,
+              highlighted: ["F"] },
+            { text: "Similarly we can prove that all the numbers which leave out five are also both cubic and square.",
+              visible: ALL,
+              highlighted: ["F"] },
+            { text: "Therefore, if as many numbers as we please beginning from a unit are in continued proportion,",
+              visible: ALL,
+              highlighted: ["A","B","C","D","E","F"] },
+            { text: "then the third from the unit is square as are also those which successively leave out one,",
+              visible: ALL,
+              highlighted: ["B","D","F"] },
+            { text: "the fourth is cubic as are also all those which leave out two,",
+              visible: ALL,
+              highlighted: ["C","F"] },
+            { text: "and the seventh is at once cubic and square are also those which leave out five.",
+              visible: ALL,
+              highlighted: ["F"],
+              justifications: [{ ref: "Q.E.D." }] }
+        ],
+        resolveJustification: function(ref) {
+            if (ref === "IX.8") return "#prop";
+            return (window.eucrefs && window.eucrefs[ref]) || null;
+        }
+    });
+
+    // Per-page citation lookup for the slideshow's resolveJustification.
+    window.eucrefs = (window.eucrefs || {});
+    Object.assign(window.eucrefs, {
+        "VII.Def.20": "/elements/books/bookVII/definitions/defVII20/",
+        "VIII.22":    "/elements/books/bookVIII/propositions/propVIII22/",
+        "VIII.23":    "/elements/books/bookVIII/propositions/propVIII23/"
     });
 </script>
 </figure>
 
-I say that *B,* the third from the unit, is square as are all those which leave out one; *C,* the fourth, is cubic as are all those which leave out two; and *F,* the seventh, is at once cubic and square as are all those which leave out five.
+I say that {B}, the third from the unit, is square as are all those which leave out one; {C}, the fourth, is cubic as are all those which leave out two; and {F}, the seventh, is at once cubic and square as are all those which leave out five.
 
-Since the unit is to *A* as *A* is to *B,* therefore the unit measures the number *A* the same number of times that *A* measures *B.* But the unit measures the number *A* according to the units in it, therefore *A* also measures *B* according to the units in *A.* [!just VII.Def.20]
+Since the unit is to {A} as {A} is to {B}, therefore the unit measures the number {A} the same number of times that {A} measures {B}. But the unit measures the number {A} according to the units in it, therefore {A} also measures {B} according to the units in {A}. [!just VII.Def.20]
 
-Therefore *A* multiplied by itself makes *B,* therefore *B* is square. And, since *B, C,* and *D* are in continued proportion, and *B* is square, therefore *D* is also square. For the same reason *F* is also square. [!just VIII.22]
+Therefore {A} multiplied by itself makes {B}, therefore {B} is square. And, since {B}, {C}, and {D} are in continued proportion, and {B} is square, therefore {D} is also square. For the same reason {F} is also square. [!just VIII.22]
 
 Similarly we can prove that all those which leave out one are square.
 
-I say next that *C,* the fourth from the unit, is cubic are also all those which leave out two.
+I say next that {C}, the fourth from the unit, is cubic are also all those which leave out two.
 
-Since the unit is to *A* as *B* is to *C,* therefore the unit measures the number *A* the same number of times that *B* measures *C.* But the unit measures the number *A* according to the units in *A,* therefore *B* also measures *C* according to the units in *A.* Therefore *A* multiplied by *B* makes *C.* Since then *A* multiplied by itself makes *B,* and multiplied by *B* makes *C,* therefore *C* is cubic.
+Since the unit is to {A} as {B} is to {C}, therefore the unit measures the number {A} the same number of times that {B} measures {C}. But the unit measures the number {A} according to the units in {A}, therefore {B} also measures {C} according to the units in {A}. Therefore {A} multiplied by {B} makes {C}. Since then {A} multiplied by itself makes {B}, and multiplied by {B} makes {C}, therefore {C} is cubic.
 
-And, since *C, D, E,* and *F* are in continued proportion, and *C* is cubic, therefore *F* is also cubic. But it was also proved square, therefore the seventh from the unit is both cubic and square. Similarly we can prove that all the numbers which leave out five are also both cubic and square. [!just VIII.23]
+And, since {C}, {D}, {E}, and {F} are in continued proportion, and {C} is cubic, therefore {F} is also cubic. But it was also proved square, therefore the seventh from the unit is both cubic and square. Similarly we can prove that all the numbers which leave out five are also both cubic and square. [!just VIII.23]
 
 Therefore, *if as many numbers as we please beginning from a unit are in continued proportion, then the third from the unit is square as are also those which successively leave out one, the fourth is cubic as are also all those which leave out two, and the seventh is at once cubic and square are also those which leave out five.*
 
